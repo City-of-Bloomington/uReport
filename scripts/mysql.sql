@@ -33,6 +33,110 @@ create table user_roles (
 	foreign key(role_id) references roles (id)
 );
 
+create table constituents (
+	id int unsigned not null primary key auto_increment,
+	firstname varchar(128) not null,
+	lastname varchar(128) not null,
+	middlename varchar(128),
+	salutation varchar(4),
+	address varchar(255),
+	city varchar(128),
+	state varchar(2),
+	zip varchar(5),
+	email varchar(255)
+);
+
+create table constituentPhones (
+	id int unsigned not null primary key auto_increment,
+	label varchar(128),
+	phoneNumber varchar(15) not null,
+	constituent_id int unsigned not null,
+	foreign key (constituent_id) references constituents(id)
+);
+
+create table issueTypes (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null,
+	department_id int unsigned not null,
+	foreign key (department_id) references departments(id)
+);
+
+create table neighborhoodAssocations (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+
 create table issues (
-	id int unsigned not null primary key auto_increment
+	id int unsigned not null primary key auto_increment,
+	type_id int unsigned not null,
+	priority int unsigned,
+	constituent_id int unsigned,
+	address varchar(128),
+	street_address_id int unsigned,
+	township varchar(128),
+	neighborhoodAssocation_id int unsigned,
+	notes text,
+	case_number varchar(10),
+	lengthOfProblem varchar(25),
+	foreign key (type_id) references issueTypes(id),
+	foreign key (constituent_id) references constituents(id)
+);
+
+create table actionTypes (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+insert actionTypes set name='Assigned';
+insert actionTypes set name='Inspected';
+insert actionTypes set name='Responded';
+insert actionTypes set name='Resolved';
+
+create table contactMethods (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+insert contactMethods set name='Phone Call';
+insert contactMethods set name='Letter';
+insert contactMethods set name='Email';
+insert contactMethods set name='Mayor Email';
+insert contactMethods set name='Constituent Meeting';
+insert contactMethods set name='Walk In';
+insert contactMethods set name='Web Form';
+insert contactMethods set name='Other';
+
+create table actions (
+	id int unsigned not null primary key auto_increment,
+	issue_id int unsigned not null,
+	actionType_id int unsigned not null,
+	user_id int unsigned,
+	target_user_id int unsigned,
+	constituent_id int unsigned,
+	department_id int unsigned,
+	date date not null,
+	contactMethod_id int unsigned,
+	notes text,
+	hours_spent double(4,1),
+	foreign key (issue_id) references issues(id),
+	foreign key (actionType_id) references actionTypes(id),
+	foreign key (user_id) references users(id),
+	foreign key (target_user_id) references users(id),
+	foreign key (constituent_id) references constituents(id),
+	foreign key (contactMethod_id) references contactMethods(id),
+	foreign key (department_id) references departments(id)
+);
+
+create table media (
+	id int unsigned not null primary key auto_increment,
+	issue_id int unsigned not null,
+	date date not null,
+	notes text,
+	foreign key (issue_id) references issues(id)
+);
+
+
+create table issueType_notes (
+	id int unsigned not null primary key auto_increment,
+	issueType_id int unsigned not null,
+	note varchar(128),
+	foreign key (issueType_id) references issueTypes(id)
 );
