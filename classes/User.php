@@ -65,7 +65,7 @@ class User extends SystemUser
 			throw new Exception('users/missingUsername');
 		}
 
-		if (!$this->firstname || !$this->lastname || !$this->department_id) {
+		if (!$this->firstname || !$this->lastname) {
 			throw new Exception('missingRequiredFields');
 		}
 
