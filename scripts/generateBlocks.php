@@ -44,7 +44,11 @@ foreach ($zend_db->listTables() as $tableName) {
 	 * Generate the list block
 	 */
 	$getId = "get".ucwords($key);
-	$HTML = "<div class=\"interfaceBox\">
+	$HTML = "<?php\n";
+	$HTML.= COPYRIGHT;
+	$HTML.= "
+?>
+<div class=\"interfaceBox\">
 	<h1>
 		<?php
 			if (userIsAllowed('$acl_resource')) {
@@ -61,7 +65,7 @@ foreach ($zend_db->listTables() as $tableName) {
 				if (userIsAllowed('$acl_resource')) {
 					\$url = new URL(BASE_URL.'/$tableName/update$className.php');
 					\$url->$key = \${$variableName}->{$getId}();
-					
+
 					\$editButton = \$this->template->linkButton(
 						'Edit',
 						BASE_URL.'/$tableName/update$className.php?$key='.\${$variableName}->{$getId}(),
@@ -74,143 +78,22 @@ foreach ($zend_db->listTables() as $tableName) {
 	</ul>
 </div>";
 
-$contents = "<?php\n";
-$contents.= COPYRIGHT;
-$contents.="
-?>
-$HTML";
 
 	$dir = APPLICATION_HOME."/scripts/stubs/blocks/$tableName";
 	if (!is_dir($dir)) {
 		mkdir($dir,0770,true);
 	}
-	file_put_contents("$dir/{$variableName}List.inc",$contents);
-
-
-/**
- * Generate the addForm
- */
-$HTML = "<h1>Add $className</h1>
-<form method=\"post\" action=\"<?php echo \$_SERVER['SCRIPT_NAME']; ?>\">
-	<fieldset><legend>$className Info</legend>
-		<table>
-";
-		foreach ($fields as $field) {
-			if ($field['field'] != $key) {
-				$fieldFunctionName = ucwords($field['field']);
-				switch ($field['type']) {
-					case 'date':
-					$HTML.="
-			<tr><td><label for=\"{$variableName}-$field[field]-mon\">$field[field]</label></td>
-				<td><select name=\"{$variableName}[$field[field]][mon]\" id=\"{$variableName}-$field[field]-mon\">
-						<option></option>
-						<?php
-							\$now = getdate();
-							for (\$i=1; \$i<=12; \$i++) {
-								\$selected = (\$i==\$now['mon']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-					<select name=\"{$variableName}[$field[field]][mday]\">
-						<option></option>
-						<?php
-							for (\$i=1; \$i<=31; \$i++) {
-								\$selected = (\$i==\$now['mday']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-					<input name=\"{$variableName}[$field[field]][year]\" id=\"{$variableName}-$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$now['year']; ?>\" />
-				</td>
-			</tr>";
-						break;
-
-					case 'datetime':
-					case 'timestamp':
-					$HTML.="
-			<tr><td><label for=\"{$variableName}-$field[field]-mon\">$field[field]</label></td>
-				<td><select name=\"{$variableName}[$field[field]][mon]\" id=\"{$variableName}-$field[field]-mon\">
-						<option></option>
-						<?php
-							\$now = getdate();
-							for (\$i=1; \$i<=12; \$i++) {
-								\$selected = (\$i==\$now['mon']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-					<select name=\"{$variableName}[$field[field]][mday]\">
-						<option></option>
-						<?php
-							for (\$i=1; \$i<=31; \$i++) {
-								\$selected = (\$i==\$now['mday']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-					<input name=\"{$variableName}[$field[field]][year]\" id=\"{$variableName}-$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$now['year']; ?>\" />
-					<select name=\"{$variableName}[$field[field]][hours]\" id=\"{$variableName}-$field[field]-hours\">
-						<?php
-							for (\$i=0; \$i<=23; \$i++) {
-								\$selected = (\$i==\$now['hours']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-					<select name=\"{$variableName}[$field[field]][minutes]\" id=\"{$variableName}-$field[field]-minutes\">
-						<?php
-							for (\$i=0; \$i<=59; \$i+=15) {
-								\$selected = (\$i==\$now['minutes']) ? 'selected=\"selected\"' : '';
-								echo \"<option \$selected>\$i</option>\";
-							}
-						?>
-					</select>
-				</td>
-			</tr>";
-						break;
-
-					case 'text':
-				$HTML.= "
-			<tr><td><label for=\"{$variableName}-$field[field]\">$field[field]</label></td>
-				<td><textarea name=\"{$variableName}[$field[field]]\" id=\"{$variableName}-$field[field]\" rows=\"3\" cols=\"60\"></textarea>
-				</td>
-			</tr>
-				";
-						break;
-
-					default:
-				$HTML.= "
-			<tr><td><label for=\"{$variableName}-$field[field]\">$field[field]</label></td>
-				<td><input name=\"{$variableName}[$field[field]]\" id=\"{$variableName}-$field[field]\" />
-				</td>
-			</tr>
-				";
-				}
-			}
-		}
-	$HTML.= "
-		</table>
-		<?php
-			echo \$this->template->formButton('Submit','submit','submit');
-			echo \$this->template->formButton(
-				'Cancel','button','cancel',null,\"document.location.href='\".BASE_URL.\"/{$variableName}s';\"
-			);
-		?>
-	</fieldset>
-</form>";
-
-$contents = "<?php\n";
-$contents.= COPYRIGHT;
-$contents.="
-?>
-$HTML";
-file_put_contents("$dir/add{$className}Form.inc",$contents);
+	file_put_contents("$dir/{$variableName}List.inc",$HTML);
 
 /**
  * Generate the Update Form
  */
-$HTML = "<h1>Update $className</h1>
+$HTML = "<?php\n";
+$HTML.= COPYRIGHT;
+$HTML.="
+\$title = \$this->{$variableName}->getId() ? 'Edit $className' : 'Add $className';
+?>
+<h1><?php echo \$title; ?></h1>
 <form method=\"post\" action=\"<?php echo \$_SERVER['SCRIPT_NAME']; ?>\">
 	<fieldset><legend>$className Info</legend>
 		<input name=\"$key\" type=\"hidden\" value=\"<?php echo \$this->{$variableName}->{$getId}(); ?>\" />
@@ -222,8 +105,8 @@ $HTML = "<h1>Update $className</h1>
 				switch ($field['type']) {
 					case 'date':
 					$HTML.="
-			<tr><td><label for=\"{$variableName}-$field[field]-mon\">$field[field]</label></td>
-				<td><select name=\"{$variableName}[$field[field]][mon]\" id=\"{$variableName}-$field[field]-mon\">
+			<tr><td><label for=\"$field[field]-mon\">$field[field]</label></td>
+				<td><select name=\"$field[field][mon]\" id=\"$field[field]-mon\">
 						<option></option>
 						<?php
 							\$$field[field] = \$this->{$variableName}->dateStringToArray(\$this->{$variableName}->get$fieldFunctionName());
@@ -233,7 +116,7 @@ $HTML = "<h1>Update $className</h1>
 							}
 						?>
 					</select>
-					<select name=\"{$variableName}[$field[field]][mday]\">
+					<select name=\"$field[field][mday]\">
 						<option></option>
 						<?php
 							for (\$i=1; \$i<=31; \$i++) {
@@ -242,7 +125,7 @@ $HTML = "<h1>Update $className</h1>
 							}
 						?>
 					</select>
-					<input name=\"{$variableName}[$field[field]][year]\" id=\"{$variableName}-$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$$field[field]['year']; ?>\" />
+					<input name=\"$field[field][year]\" id=\"$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$$field[field]['year']; ?>\" />
 				</td>
 			</tr>";
 						break;
@@ -250,8 +133,8 @@ $HTML = "<h1>Update $className</h1>
 					case 'datetime':
 					case 'timestamp':
 					$HTML.="
-			<tr><td><label for=\"{$variableName}-$field[field]-mon\">$field[field]</label></td>
-				<td><select name=\"{$variableName}[$field[field]][mon]\" id=\"{$variableName}-$field[field]-mon\">
+			<tr><td><label for=\"$field[field]-mon\">$field[field]</label></td>
+				<td><select name=\"$field[field][mon]\" id=\"$field[field]-mon\">
 						<option></option>
 						<?php
 							\$$field[field] = \$this->{$variableName}->dateStringToArray(\$this->{$variableName}->get$fieldFunctionName());
@@ -261,7 +144,7 @@ $HTML = "<h1>Update $className</h1>
 							}
 						?>
 					</select>
-					<select name=\"{$variableName}[$field[field]][mday]\">
+					<select name=\"$field[field][mday]\">
 						<option></option>
 						<?php
 							for (\$i=1; \$i<=31; \$i++) {
@@ -270,8 +153,8 @@ $HTML = "<h1>Update $className</h1>
 							}
 						?>
 					</select>
-					<input name=\"{$variableName}[$field[field]][year]\" id=\"{$variableName}-$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$$field[field]['year']; ?>\" />
-					<select name=\"{$variableName}[$field[field]][hours]\" id=\"{$variableName}-$field[field]-hours\">
+					<input name=\"$field[field][year]\" id=\"$field[field]-year\" size=\"4\" maxlength=\"4\" value=\"<?php echo \$$field[field]['year']; ?>\" />
+					<select name=\"$field[field][hours]\" id=\"$field[field]-hours\">
 					<?php
 						for (\$i=0; \$i<=23; \$i++) {
 							\$selected = (\$i==\$$field[field]['hours']) ? 'selected=\"selected\"' : '';
@@ -279,7 +162,7 @@ $HTML = "<h1>Update $className</h1>
 						}
 					?>
 					</select>
-					<select name=\"{$variableName}[$field[field]][minutes]\" id=\"{$variableName}-$field[field]-minutes\">
+					<select name=\"$field[field][minutes]\" id=\"$field[field]-minutes\">
 					<?php
 						for (\$i=0; \$i<=59; \$i+=15) {
 							\$selected = (\$i==\$$field[field]['minutes']) ? 'selected=\"selected\"' : '';
@@ -293,8 +176,8 @@ $HTML = "<h1>Update $className</h1>
 
 					case 'text':
 				$HTML.= "
-			<tr><td><label for=\"{$variableName}-$field[field]\">$field[field]</label></td>
-				<td><textarea name=\"{$variableName}[$field[field]]\" id=\"{$variableName}-$field[field]\" rows=\"3\" cols=\"60\"><?php echo \$this->{$variableName}->get$fieldFunctionName(); ?></textarea>
+			<tr><td><label for=\"$field[field]\">$field[field]</label></td>
+				<td><textarea name=\"$field[field]\" id=\"$field[field]\" rows=\"3\" cols=\"60\"><?php echo \$this->{$variableName}->get$fieldFunctionName(); ?></textarea>
 				</td>
 			</tr>
 				";
@@ -302,8 +185,8 @@ $HTML = "<h1>Update $className</h1>
 
 					default:
 				$HTML.= "
-			<tr><td><label for=\"{$variableName}-$field[field]\">$field[field]</label></td>
-				<td><input name=\"{$variableName}[$field[field]]\" id=\"{$variableName}-$field[field]\" value=\"<?php echo \$this->{$variableName}->get$fieldFunctionName(); ?>\" />
+			<tr><td><label for=\"$field[field]\">$field[field]</label></td>
+				<td><input name=\"$field[field]\" id=\"$field[field]\" value=\"<?php echo \$this->{$variableName}->get$fieldFunctionName(); ?>\" />
 				</td>
 			</tr>
 				";
@@ -320,12 +203,7 @@ $HTML = "<h1>Update $className</h1>
 		?>
 	</fieldset>
 </form>";
-$contents = "<?php\n";
-$contents.= COPYRIGHT;
-$contents.="
-?>
-$HTML";
-file_put_contents("$dir/update{$className}Form.inc",$contents);
+file_put_contents("$dir/update{$className}Form.inc",$HTML);
 
 echo "$className\n";
 }

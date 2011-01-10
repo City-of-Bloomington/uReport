@@ -62,8 +62,14 @@ $contents.= $PHP;
 	file_put_contents("$dir/home.php",$contents);
 
 /**
- * Generate the Add controller
+ * Generate the Update controller
  */
+foreach ($fields as $row) {
+	$fieldArray = array();
+	$fieldArray[] = "'$row[field]'";
+}
+$fieldArray = implode(',',$fieldArray);
+
 $PHP = "
 if (!userIsAllowed('$acl_resource')) {
 	\$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -71,47 +77,29 @@ if (!userIsAllowed('$acl_resource')) {
 	exit();
 }
 
-if (isset(\$_POST['{$variableName}'])) {
-	\${$variableName} = new {$className}();
-	foreach (\$_POST['{$variableName}'] as \$field=>\$value) {
-		\$set = 'set'.ucfirst(\$field);
-		\${$variableName}->\$set(\$value);
-	}
-
+// Load the \${$variableName} for editing
+if (isset(\$_REQUEST['$key']) && \$_REQUEST['$key']) {
 	try {
-		\${$variableName}->save();
+		\${$variableName} = new $className(\$_REQUEST['$key']);
+	}
+	catch (Exception \$e) {
+		\$_SESSION['errorMessages'][] = \$e;
 		header('Location: '.BASE_URL.'/$tableName');
 		exit();
 	}
-	catch(Exception \$e) {
-		\$_SESSION['errorMessages'][] = \$e;
-	}
+}
+else {
+	\${$variableName} = new $className();
 }
 
-\$template = new Template();
-\$template->blocks[] = new Block('{$variableName}s/add{$className}Form.inc');
-echo \$template->render();";
-$contents = "<?php\n";
-$contents.= COPYRIGHT."\n";
-$contents.= $PHP;
-	file_put_contents("$dir/add{$className}.php",$contents);
 
-
-/**
- * Generate the Update controller
- */
-$PHP = "
-if (!userIsAllowed('$acl_resource')) {
-	\$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL.'/$tableName');
-	exit();
-}
-
-\${$variableName} = new {$className}(\$_REQUEST['$key']);
-if (isset(\$_POST['$variableName'])) {
-	foreach (\$_POST['$variableName'] as \$field=>\$value) {
-		\$set = 'set'.ucfirst(\$field);
-		\${$variableName}->\$set(\$value);
+if (isset(\$_POST['$key'])) {
+	\$fields = array($fieldArray);
+	foreach (\$fields as \$field) {
+		if (isset(\$_POST[\$field])) {
+			\$set = 'set'.ucfirst(\$field);
+			\${$variableName}->\$set(\$_POST[\$field]);
+		}
 	}
 
 	try {
