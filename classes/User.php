@@ -7,12 +7,15 @@
 class User extends SystemUser
 {
 	private $id;
-	private $person_id;
 	private $username;
 	private $password;
 	private $authenticationMethod;
+	private $firstname;
+	private $lastname;
+	private $email;
+	private $department_id;
 
-	private $person;
+	private $department;
 	private $roles = array();
 	private $newPassword; // the User's new password, unencrypted
 
@@ -58,11 +61,12 @@ class User extends SystemUser
 	 */
 	public function validate()
 	{
-		if (!$this->person_id) {
-			throw new Exception('users/missingPerson_id');
-		}
 		if (!$this->username) {
 			throw new Exception('users/missingUsername');
+		}
+
+		if (!$this->firstname || !$this->lastname || !$this->department_id) {
+			throw new Exception('missingRequiredFields');
 		}
 
 	}
@@ -79,12 +83,15 @@ class User extends SystemUser
 		$this->validate();
 
 		$data = array();
-		$data['person_id'] = $this->person_id;
 		$data['username'] = $this->username;
 		// Passwords should not be updated by default.  Use the savePassword() function
 		$data['authenticationMethod'] = $this->authenticationMethod
 										? $this->authenticationMethod
 										: null;
+		$data['firstname'] = $this->firstname;
+		$data['lastname'] = $this->lastname;
+		$data['email'] = $this->email;
+		$data['department_id'] = $this->department_id;
 
 		// Do the database calls
 		if ($this->id) {
@@ -135,13 +142,7 @@ class User extends SystemUser
 	{
 		return $this->id;
 	}
-	/**
-	 * @return int
-	 */
-	public function getPerson_id()
-	{
-		return $this->person_id;
-	}
+
 	/**
 	 * @return string
 	 */
@@ -149,6 +150,7 @@ class User extends SystemUser
 	{
 		return $this->username;
 	}
+
 	/**
 	 * @return string
 	 */
@@ -156,31 +158,53 @@ class User extends SystemUser
 	{
 		return $this->authenticationMethod;
 	}
+
 	/**
-	 * @return Person
+	 * @return string
 	 */
-	public function getPerson()
+	public function getFirstname()
 	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
-			}
-			return $this->person;
+		return $this->firstname;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastname()
+	{
+		return $this->lastname;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDepartment_id()
+	{
+		return $this->department_id;
+	}
+
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if (!$this->department) {
+			$this->department = new Department($this->department_id);
 		}
-		return null;
+		return $this->department;
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-	/**
-	 * @param int $int
-	 */
-	public function setPerson_id($int)
-	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
-	}
 	/**
 	 * @param string $string
 	 */
@@ -188,6 +212,7 @@ class User extends SystemUser
 	{
 		$this->username = trim($string);
 	}
+
 	/**
 	 * Takes a user-given password and converts it to an MD5 Hash
 	 * @param String $string
@@ -198,6 +223,7 @@ class User extends SystemUser
 		$this->newPassword = trim($string);
 		$this->password = md5(trim($string));
 	}
+
 	/**
 	 * Takes a pre-existing MD5 hash
 	 * @param MD5 $hash
@@ -206,6 +232,7 @@ class User extends SystemUser
 	{
 		$this->password = trim($hash);
 	}
+
 	/**
 	 * @param string $authenticationMethod
 	 */
@@ -217,40 +244,53 @@ class User extends SystemUser
 			$this->saveLocalPassword();
 		}
 	}
+
 	/**
-	 * @param Person $person
+	 * @param string $string
 	 */
-	public function setPerson($person)
+	public function setFirstname($string)
 	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
+		$this->firstname = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setLastname($string)
+	{
+		$this->lastname = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setEmail($string)
+	{
+		$this->email = trim($string);
+	}
+
+	/**
+	 * @param int $id
+	 */
+	public function setDepartment_id($id)
+	{
+		$this->department = new Department($id);
+		$this->department_id = $this->department->getId();
+	}
+
+	/**
+	 * @param Department $department
+	 */
+	public function setDepartment($department)
+	{
+		$this->department_id = $department->getId();
+		$this->department = $department;
 	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getFirstname()
-	{
-		return $this->getPerson()->getFirstname();
-	}
-	/**
-	 * @return string
-	 */
-	public function getLastname()
-	{
-		return $this->getPerson()->getLastname();
-	}
-	/**
-	 * @return string
-	 */
-	public function getEmail()
-	{
-		return $this->getPerson()->getEmail();
-	}
 	/**
 	 * Returns an array of Role names with the role id as the array index
 	 *
@@ -274,6 +314,7 @@ class User extends SystemUser
 		}
 		return $this->roles;
 	}
+
 	/**
 	 * Takes an array of role names.  Loads the Roles from the database
 	 *
@@ -287,6 +328,7 @@ class User extends SystemUser
 			$this->roles[$role->getId()] = $role->getName();
 		}
 	}
+
 	/**
 	 * Takes a string or an array of strings and checks if the user has that role
 	 *

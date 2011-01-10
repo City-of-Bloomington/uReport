@@ -11,12 +11,48 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-$user = new User($_REQUEST['user_id']);
+if (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) {
+	try {
+		$user = new User($_REQUEST['user_id']);
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+else {
+	$user = new User();
+}
 
-if (isset($_POST['user'])) {
-	foreach ($_POST['user'] as $field=>$value) {
-		$set = 'set'.ucfirst($field);
-		$user->$set($value);
+if (isset($_POST['username'])) {
+	$fields = array(
+		'username','password','authenticationMethod','firstname','lastname','email','roles'
+	);
+
+	foreach ($fields as $field) {
+		if (isset($_POST[$field])) {
+			$set = 'set'.ucfirst($field);
+			$user->$set($_POST[$field]);
+		}
+	}
+
+	// Load their information from LDAP
+	// Delete this statement if you're not using LDAP
+	if ($user->getAuthenticationMethod() == 'LDAP') {
+		try {
+			$ldap = new LDAPEntry($user->getUsername());
+			if (!$user->getFirstname()) {
+				$user->setFirstname($ldap->getFirstname());
+			}
+			if (!$user->getLastname()) {
+				$user->setLastname($ldap->getLastname());
+			}
+			if (!$user->getEmail()) {
+				$user->setEmail($ldap->getEmail());
+			}
+		}
+		catch (Exception $e) {
+			$_SESSION['errorMessages'][] = $e;
+		}
 	}
 
 	try {
@@ -31,5 +67,4 @@ if (isset($_POST['user'])) {
 
 $template = new Template();
 $template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
-$template->blocks[] = new BlocK('people/personInfo.inc',array('person'=>$user->getPerson()));
 echo $template->render();
