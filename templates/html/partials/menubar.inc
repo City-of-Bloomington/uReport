@@ -1,8 +1,11 @@
-<div class="menuBar">
-	<ul><li><a href="<?php echo BASE_URL; ?>">Home</a></li>
-		<?php
+<div id="menuBar">
+	<ul><?php
 			if (isset($_SESSION['USER'])) {
-				echo "<li><a href=\"".BASE_URL."/login/logout.php\">Logout</a></li>";
+				$name = View::escape("{$_SESSION['USER']->getFirstname()} {$_SESSION['USER']->getLastname()}");
+				echo "
+				<li><a href=\"".BASE_URL."/login/logout.php\">Logout</a></li>
+				<li>Signed in as $name</li>
+				";
 			}
 			else {
 				echo "
@@ -15,4 +18,3 @@
 		?>
 	</ul>
 </div>
-

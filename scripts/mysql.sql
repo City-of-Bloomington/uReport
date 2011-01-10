@@ -15,7 +15,7 @@ create table users (
 	firstname varchar(128) not null,
 	lastname varchar(128) not null,
 	email varchar(255),
-	department_id int unsigned not null,
+	department_id int unsigned,
 	foreign key (department_id) references departments(id)
 );
 

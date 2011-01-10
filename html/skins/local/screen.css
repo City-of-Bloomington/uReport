@@ -1,0 +1,37 @@
+h1 { font-size:21pt; font-weight:bold; }
+a { text-decoration:none; }
+th { padding:0 .25em; font-weight:bold; }
+td { padding:0 .25em; }
+
+#banner { background-color:#3366CC; color:white; padding:.5em; border-bottom:2px solid black; }
+#banner a { color:white; }
+#application_name { font-size:21pt; font-weight:bold; }
+
+#menuBar { border-bottom:2px solid black; }
+#menuBar ul { margin:.5em; padding:0; list-style-type:none; }
+#menuBar li { display:inline; margin-right:1em; font-size:10pt; }
+#menuBar a { color:#3366CC; font-size:14pt; font-weight:bold; }
+
+#footer { border-top:2px solid black; padding:.5em; font-size:10pt; }
+#footer ul { margin:0; padding:0; list-style-type:none; }
+#footer li { list-style-type:none; display:inline; margin-right:.5em; }
+#footer a { font-weight:bold; color:black; }
+
+#panel-one { padding:2px; }
+#panel-one div { border:2px solid black; }
+#panel-one div h1 { background-color:#3366CC; color:white; font-size:14pt; border-bottom:2px solid black; padding:.25em; }
+#panel-one div ul { margin:.25em; padding:0; list-style-type:none; }
+#panel-one div li { list-style-type:none; }
+#panel-one a { font-weight:bold; color:black; }
+
+.button { }
+.button a {
+	display:inline-block;
+	text-indent:-9999px; overflow:hidden;
+	width:14px; height:14px;
+	background-repeat:no-repeat;
+	vertical-align:middle;
+}
+.button .add a { width:14px; height:14px; background:url('images/add.png'); }
+.button .edit a { width:14px; height:14px; background:url('images/edit.png'); }
+.button .delete a { width:14px; height:14px; background:url('images/delete.png'); }

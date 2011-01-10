@@ -1,3 +1,6 @@
 * text=auto !eol
+html/skins/local/images/add.png -text
+html/skins/local/images/delete.png -text
+html/skins/local/images/edit.png -text
 scripts/mysql.sql -text
 templates/html/default.inc -text
