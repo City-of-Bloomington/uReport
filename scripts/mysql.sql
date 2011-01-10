@@ -128,9 +128,17 @@ create table actions (
 create table media (
 	id int unsigned not null primary key auto_increment,
 	issue_id int unsigned not null,
-	date date not null,
+	user_id int unsigned not null,
+	filename varchar(128) not null,
+	mime_type varchar(128) not null,
+	media_type varchar(24) not null,
+	title varchar(128),
+	description varchar(255),
+	md5 varchar(32) not null unique,
+	uploaded timestamp not null default CURRENT_TIMESTAMP,
 	notes text,
-	foreign key (issue_id) references issues(id)
+	foreign key (issue_id) references issues(id),
+	foreign key (user_id) references users(id)
 );
 
 
