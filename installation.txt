@@ -1,0 +1,139 @@
+---------------------------------------------------------------------
+Contents
+---------------------------------------------------------------------
+	About
+
+	Copyright
+
+	Requirements
+
+	Installation
+
+---------------------------------------------------------------------
+About
+---------------------------------------------------------------------
+	This scaffolding is really just a template for our web
+applications.  It provides us the basics to get a web application up
+and running very quickly.  It also means our applications will be
+relatively uniform and easier to extend and maintain down the road.
+	While not fully MVC, it has borrowed ideas from Rails
+and Struts.  It has developed over time, and will continue to develop
+as we come across better solutions to problems run into while creating
+new applications.
+
+---------------------------------------------------------------------
+Copyright
+---------------------------------------------------------------------
+	This scaffolding is written and copyrighted by the
+City of Bloomington, IN.  It is being released as free software;
+you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation;
+either version 3 of the License, or (at your option) any later version.
+
+	This scaffolding includes code generators to create classes to
+work with your database.  While the generators fall under the GPL,
+any code you generate with them belongs to you.  However, we highly
+encourage you to uphold the values of Free Software and release your
+application as Free Software as well.
+
+	In any case, you own the copyright to any generated code and should
+edit the copyright statement in the configuration. This will be the
+copyright statement that will be included in all generated code.
+
+
+---------------------------------------------------------------------
+Requirements
+---------------------------------------------------------------------
+framework:
+This scaffolding requires our framework to be on the server somewhere.
+It ships with a working version of framework installed in /libraries.
+In the configuration, you can point the application to another copy
+of the framework, if you like.  If you make changes to the code in
+the /libraries/framework, you might consider sending those changes
+back to us, so we can improve this scaffolding.
+
+ZendFramework:
+Database interaction for this application is done using Zend_Db.  You must
+have downloaded a copy of the ZendFramework for this to work.  In the
+configuration, you will point the application to wherever you've installed
+your copy of the ZendFramework.  The ZendFramework is available under a
+BSD license at:
+http://framework.zend.com/
+
+Apache:
+This application was written assuming you have control over your own web
+server.  If you are on a hosted system, you may need to make changes to
+the code to accomodate your server.
+
+All webserver instructions assume the Apache webserver.  It is certainly
+possible to set this using a different web server. However, we don't have
+any experience with other webservers and cannot provide information on
+their configuration.
+
+All include files have been kept out of the web directory, and a configuration
+file has been included. You will need to make sure that every .php script
+in the HTML directory includes configuration.inc.  If you control your own
+webserver, you can add a <Directory> command to your httpd.conf.
+
+PHP:
+PHP must be compiled with support for:
+	PDO
+	MySQL
+	LDAP
+
+	Actually, you can substitute any database support for MySQL, as our
+framework uses PDO for database interaction.  However, the initial SQL
+schema provided is specific to MySQL.  The schema would need to be modified
+for other databases.
+
+MySQL:
+	MySQL should have support for InnoDB.  Foreign keys are written into
+the database load scripts.  While MyISAM tables will just ignore them,
+you database and your application will be that much more robust with InnoDB
+support.
+
+LDAP:
+	LDAP is only used for doing LDAP authentication for users.
+If you're not going to do any LDAP authentication, you can delete or
+comment out the LDAP stuff.
+
+---------------------------------------------------------------------
+Installation
+---------------------------------------------------------------------
+	This scaffolding is essentially a working web application that is
+ready to be extended.  It has authentication and user management
+already built.
+
+	The best way is to have PHP auto_prepend the configuration.inc.
+If this is the only web application on your apache server, you can just point
+your apache's web directory to the html directory inside the application and
+edit the auto_prepend in your php.ini file.
+
+	For us, we're running multiple applications, and have a seperate entry in
+our Apache config for each one.  This does essentially the same thing.
+
+Add to httpd.conf:
+
+Alias /application_name "/path/to/application_name/html"
+<Directory "/path/to/application_name/html">
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+
+        php_value auto_prepend_file /path/to/application_name/configuration.inc
+</Directory>
+
+
+	If you're running in a shared hosting environment, you cannot do Alias or
+Directory commands.  However the html can be moved into your web directory.
+To make sure the configuration file gets loaded, create an htaccess file in
+this application's html directory with the php_value line from above.
+
+	If you cannot edit your httpd.conf or use htaccess files, you will need to
+add an include() command to the top of every last PHP script in the html directory.
+
+---------------------------------------------------------------------
+Configuration
+---------------------------------------------------------------------
+	Edit configuration.inc with appropriate values for your installation.

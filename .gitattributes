@@ -1,2 +1,3 @@
 * text=auto !eol
 scripts/mysql.sql -text
+templates/html/default.inc -text

@@ -1,0 +1,7 @@
+#!/bin/bash
+PHP=/usr/local/bin/php
+$PHP generateBlocks.php
+$PHP generateControllers.php
+$PHP generateClasses.php
+$PHP generateLists.php
+$PHP generateTests.php

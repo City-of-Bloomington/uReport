@@ -1,0 +1,125 @@
+<?php
+/**
+ * Replace this copyright statement with your own.  All the generated code
+ * will include this copyright statement
+ */
+define('COPYRIGHT',"/**
+ * @copyright 2007-2009 City of Bloomington, Indiana
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */");
+/**
+ * Used to keep sessions on the same webserver seperate;
+ */
+define('APPLICATION_NAME','application_name');
+
+/**
+ * Where on the filesystem this application is installed
+ */
+define('APPLICATION_HOME','/var/www/sites/application_name');
+
+/**
+ * The URL to get to this site
+ * Do NOT use a trailing slash
+ */
+define('BASE_URL','http://localhost');
+
+/**
+ * Where on the filesystem the framework is installed.
+ */
+define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
+
+/**
+ * This needs to point to the library directory inside your
+ * installation of the ZendFramework
+ * http://framework.zend.com
+ */
+define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+ini_set('include_path','.'.PATH_SEPARATOR.ZEND);
+require_once 'Zend/Loader/Autoloader.php';
+Zend_Loader_Autoloader::getInstance();
+
+
+/**
+ * Used when there's an error on the site.  The Framework will
+ * print out a nice error message, encouraging users to report any problems
+ * See: FRAMEWORK/ITSFunctions.inc
+ *
+ * This is also the default Admin user information that gets added to the database
+ */
+define('ADMINISTRATOR_NAME','Site Admin');
+define('ADMINISTRATOR_EMAIL','admin@servername.com');
+
+/**
+ * Set how we want to handle errors
+ * PHP_DEFAULT - do whatever's configured in php.ini
+ *
+ * If you do not define error handling to PHP_DEFAULT
+ * the custom error handlers kick in.  All of the custom error display
+ * frunctions are in FRAMEWORK/globalFunctions.inc.  The custom error
+ * function decide what to do based on $ERROR_REPORING array values
+ *
+ * PRETTY_PRINT - Display a message in the browser
+ * EMAIL_ADMIN - email the Administrator
+ * EMAIL_USER - email the logged in user
+ * SKIDDER - post errors to a Skidder server (see config below)
+*/
+define('ERROR_REPORTING','PHP_DEFAULT');
+//define('ERROR_REPORTING','CUSTOM');
+//$ERROR_REPORTING = array('PRETTY_PRINT','SKIDDER');
+/**
+ * Skidder is a web service for error notifications.  Error reporting supports
+ * posting errors to a Skidder server.  You must register for an application_id
+ * on the skidder server you want to post errors to.
+ */
+//define('SKIDDER_URL','http://localhost/skidder/home.php');
+//define('SKIDDER_APPLICATION_ID',);
+
+/**
+ * Database Setup
+ * Refer to the PDO documentation for DSN sytnax for your database type
+ * http://www.php.net/manual/en/pdo.drivers.php
+ */
+define('DB_ADAPTER','Pdo_Mysql');
+define('DB_HOST','localhost');
+define('DB_NAME',APPLICATION_NAME);
+define('DB_USER',APPLICATION_NAME);
+define('DB_PASS','password');
+
+/**
+ * LDAP Configuration
+ * This is required in order to use the LDAP authentication
+ * If you do not want to use LDAP authentication, you can comment this out
+ */
+define('LDAP_DOMAIN','ldap.domain.somewhere');
+define('LDAP_DN','ou=people,o='.LDAP_DOMAIN);
+define('LDAP_USERNAME_ATTRIBUTE','uid');
+define('LDAP_ADMIN_USER','username');
+define('LDAP_ADMIN_PASS','password');
+define('LDAP_SERVER','ldap.somewhere.com');
+define('LDAP_PASSWORD_ATTRIBUTE','userpassword');
+
+/**
+ * Import global functions that we use for many applications we write
+ */
+include FRAMEWORK.'/globalFunctions.php';
+spl_autoload_register('autoload');
+
+/**
+ * Session Startup
+ * Don't start a session for CLI usage.
+ * We only want sessions when PHP code is executed from the webserver
+ */
+if (!defined('STDIN')) {
+	ini_set('session.save_path',APPLICATION_HOME.'/data/sessions');
+	session_start();
+}
+
+/**
+ * Load the Zend_Acl
+ * Access control is going to handled using the Zend_Acl
+ * We only need to load it, if someone is logged in
+ */
+if (isset($_SESSION['USER'])) {
+	include APPLICATION_HOME.'/access_control.inc';
+}

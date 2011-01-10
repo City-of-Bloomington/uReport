@@ -1,0 +1,6 @@
+#panel-container { overflow:auto; }
+#panel-one { float:left; width:180px; }
+#panel-two { float:right; width:180px; }
+#content-panel { margin-left: 190px; margin-right: 190px; }
+
+#footer { clear:both; }
