@@ -40,6 +40,6 @@ if (isset($_POST['name'])) {
 	}
 }
 
-$template = new Template();
+$template = new Template('two-column');
 $template->blocks[] = new Block('departments/updateDepartmentForm.inc',array('department'=>$department));
 echo $template->render();

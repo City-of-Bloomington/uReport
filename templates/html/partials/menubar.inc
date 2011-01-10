@@ -1,5 +1,8 @@
 <div id="menuBar">
 	<ul><?php
+			if (userIsAllowed('Users')) {
+				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
+			}
 			if (isset($_SESSION['USER'])) {
 				$name = View::escape("{$_SESSION['USER']->getFirstname()} {$_SESSION['USER']->getLastname()}");
 				echo "

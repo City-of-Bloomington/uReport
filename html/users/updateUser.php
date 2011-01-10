@@ -65,6 +65,6 @@ if (isset($_POST['username'])) {
 	}
 }
 
-$template = new Template();
+$template = new Template('two-column');
 $template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
 echo $template->render();

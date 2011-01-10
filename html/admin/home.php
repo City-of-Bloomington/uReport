@@ -4,10 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
-$departmentList = new DepartmentList();
-$departmentList->find();
+if (!(isset($_SESSION['USER']) && $_SESSION['USER']->hasRole('Administrator'))) {
+	throw new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('departments/departmentList.inc',array('departmentList'=>$departmentList));
 echo $template->render();
