@@ -19,6 +19,8 @@ foreach ($roles as $role) {
  */
 $ZEND_ACL->add(new Zend_Acl_Resource('Users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Departments'));
+$ZEND_ACL->add(new Zend_Acl_Resource('ContactMethods'));
+
 
 /**
  * Assign permissions to the resources

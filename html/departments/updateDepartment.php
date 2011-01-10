@@ -6,7 +6,7 @@
  */
 if (!userIsAllowed('Departments')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL.'/departments');
+	header('Location: '.BASE_URL);
 	exit();
 }
 
