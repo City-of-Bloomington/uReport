@@ -53,7 +53,7 @@ foreach ($zend_db->listTables() as $tableName) {
 		<?php
 			if (userIsAllowed('$acl_resource')) {
 				echo \$this->template->linkButton(
-					'Add',BASE_URL.'/$tableName/add$className.php','add'
+					'Add',BASE_URL.'/$tableName/update$className.php','add'
 				);
 			}
 		?>

@@ -61,7 +61,7 @@ create table issueTypes (
 	foreign key (department_id) references departments(id)
 );
 
-create table neighborhoodAssocations (
+create table neighborhoodAssociations (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
 );
