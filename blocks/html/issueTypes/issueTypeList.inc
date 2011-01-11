@@ -20,6 +20,7 @@
 			<tr><th></th>
 				<th>Type</th>
 				<th>Department</th>
+				<th>Notes</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -38,10 +39,15 @@
 				}
 				$type = View::escape($issueType->getName());
 				$department = View::escape($issueType->getDepartment()->getName());
+				$notes = count($issueType->getNotes());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$type</td>
 					<td>$department</td>
+					<td><a href=\"".BASE_URL."/issueTypes/notes.php?issueType_id={$issueType->getId()}\">
+							$notes
+						</a>
+					</td>
 				</tr>
 				";
 			}

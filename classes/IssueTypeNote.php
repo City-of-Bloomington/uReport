@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class IssueType
+class IssueTypeNote
 {
 	private $id;
-	private $name;
-	private $department_id;
+	private $issueType_id;
+	private $note;
 
-	private $department;
+	private $issueType;
 
 	/**
 	 * Populates the object with data
@@ -32,7 +32,7 @@ class IssueType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from issueTypes where id=?';
+				$sql = 'select * from issueType_notes where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
@@ -44,7 +44,7 @@ class IssueType
 				}
 			}
 			else {
-				throw new Exception('issueTypes/unknownIssueType');
+				throw new Exception('issueType_notes/unknownIssueTypeNote');
 			}
 		}
 		else {
@@ -60,7 +60,11 @@ class IssueType
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->name || !$this->department) {
+		if (!$this->issueType_id) {
+			throw new Exception('issueTypeNotes/missingIssueType');
+		}
+
+		if (!$this->note) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -73,8 +77,8 @@ class IssueType
 		$this->validate();
 
 		$data = array();
-		$data['name'] = $this->name;
-		$data['department_id'] = $this->department_id;
+		$data['issueType_id'] = $this->issueType_id;
+		$data['note'] = $this->note;
 
 		if ($this->id) {
 			$this->update($data);
@@ -87,14 +91,20 @@ class IssueType
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('issueTypes',$data,"id='{$this->id}'");
+		$zend_db->update('issueType_notes',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('issueTypes',$data);
-		$this->id = $zend_db->lastInsertId('issueTypes','id');
+		$zend_db->insert('issueType_notes',$data);
+		$this->id = $zend_db->lastInsertId('issueType_notes','id');
+	}
+
+	public function delete()
+	{
+		$zend_db = Database::getConnection();
+		$zend_db->delete('issueType_notes','id='.$this->id);
 	}
 
 	//----------------------------------------------------------------
@@ -110,31 +120,31 @@ class IssueType
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
 	 * @return int
 	 */
-	public function getDepartment_id()
+	public function getIssueType_id()
 	{
-		return $this->department_id;
+		return $this->issueType_id;
 	}
 
 	/**
-	 * @return Department
+	 * @return string
 	 */
-	public function getDepartment()
+	public function getNote()
 	{
-		if ($this->department_id) {
-			if (!$this->department) {
-				$this->department = new Department($this->department_id);
+		return $this->note;
+	}
+
+	/**
+	 * @return IssueType
+	 */
+	public function getIssueType()
+	{
+		if ($this->issueType_id) {
+			if (!$this->issueType) {
+				$this->issueType = new IssueType($this->issueType_id);
 			}
-			return $this->department;
+			return $this->issueType;
 		}
 		return null;
 	}
@@ -144,29 +154,29 @@ class IssueType
 	//----------------------------------------------------------------
 
 	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->name = trim($string);
-	}
-
-	/**
 	 * @param int $int
 	 */
-	public function setDepartment_id($int)
+	public function setIssueType_id($int)
 	{
-		$this->department = new Department($int);
-		$this->department_id = $int;
+		$this->issueType = new IssueType($int);
+		$this->issueType_id = $int;
 	}
 
 	/**
-	 * @param Department $department
+	 * @param string $string
 	 */
-	public function setDepartment($department)
+	public function setNote($string)
 	{
-		$this->department_id = $department->getId();
-		$this->department = $department;
+		$this->note = trim($string);
+	}
+
+	/**
+	 * @param IssueType $issueType
+	 */
+	public function setIssueType($issueType)
+	{
+		$this->issueType_id = $issueType->getId();
+		$this->issueType = $issueType;
 	}
 
 
@@ -176,22 +186,6 @@ class IssueType
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @return IssueTypeNoteList
-	 */
-	public function getNotes()
-	{
-		return new IssueTypeNoteList(array('issueType_id'=>$this->id));
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasNotes()
-	{
-		return count($this->getNotes()) ? true : false;
+		return "{$this->note}";
 	}
 }
