@@ -61,6 +61,13 @@ create table issueTypes (
 	foreign key (department_id) references departments(id)
 );
 
+create table issueType_notes (
+	id int unsigned not null primary key auto_increment,
+	issueType_id int unsigned not null,
+	note varchar(128),
+	foreign key (issueType_id) references issueTypes(id)
+);
+
 create table neighborhoodAssociations (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
@@ -139,12 +146,4 @@ create table media (
 	notes text,
 	foreign key (issue_id) references issues(id),
 	foreign key (user_id) references users(id)
-);
-
-
-create table issueType_notes (
-	id int unsigned not null primary key auto_increment,
-	issueType_id int unsigned not null,
-	note varchar(128),
-	foreign key (issueType_id) references issueTypes(id)
 );

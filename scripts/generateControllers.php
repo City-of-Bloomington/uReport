@@ -64,8 +64,8 @@ $contents.= $PHP;
 /**
  * Generate the Update controller
  */
+$fieldArray = array();
 foreach ($fields as $row) {
-	$fieldArray = array();
 	$fieldArray[] = "'$row[field]'";
 }
 $fieldArray = implode(',',$fieldArray);
