@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$title = $this->issueType->getId() ? 'Edit Issue Type' : 'Add Issue Type';
+$title = $this->issueType->getId() ? 'Edit IssueType' : 'Add IssueType';
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
@@ -13,13 +13,7 @@ $title = $this->issueType->getId() ? 'Edit Issue Type' : 'Add Issue Type';
 		<table>
 
 			<tr><td><label for="name" class="required">Name</label></td>
-				<td><input name="name" id="name"
-						value="<?php echo View::escape($this->issueType->getName()); ?>" />
-				</td>
-			</tr>
-
-			<tr><td><label for="department_id">department_id</label></td>
-				<td><input name="department_id" id="department_id" value="<?php echo $this->issueType->getDepartment_id(); ?>" />
+				<td><input name="name" id="name" value="<?php echo $this->issueType->getName(); ?>" />
 				</td>
 			</tr>
 

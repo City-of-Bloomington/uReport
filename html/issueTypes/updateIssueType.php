@@ -4,10 +4,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
 if (!userIsAllowed('IssueTypes')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
+	header('Location: '.BASE_URL.'/issueTypes');
 	exit();
 }
 
@@ -27,14 +26,8 @@ else {
 }
 
 
-if (isset($_POST['id'])) {
-	$fields = array('name','department_id');
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			$set = 'set'.ucfirst($field);
-			$issueType->$set($_POST[$field]);
-		}
-	}
+if (isset($_POST['name'])) {
+	$issueType->setName($_POST['name']);
 
 	try {
 		$issueType->save();

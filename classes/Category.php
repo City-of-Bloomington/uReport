@@ -4,10 +4,13 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class IssueType
+class Category
 {
 	private $id;
 	private $name;
+	private $department_id;
+
+	private $department;
 
 	/**
 	 * Populates the object with data
@@ -29,7 +32,7 @@ class IssueType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from issueTypes where id=?';
+				$sql = 'select * from categories where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
@@ -41,7 +44,7 @@ class IssueType
 				}
 			}
 			else {
-				throw new Exception('issueTypes/unknownIssueType');
+				throw new Exception('categories/unknownCategory');
 			}
 		}
 		else {
@@ -57,7 +60,7 @@ class IssueType
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name) {
+		if(!$this->name || !$this->department) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -71,6 +74,7 @@ class IssueType
 
 		$data = array();
 		$data['name'] = $this->name;
+		$data['department_id'] = $this->department_id;
 
 		if ($this->id) {
 			$this->update($data);
@@ -83,14 +87,14 @@ class IssueType
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('issueTypes',$data,"id='{$this->id}'");
+		$zend_db->update('categories',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('issueTypes',$data);
-		$this->id = $zend_db->lastInsertId('issueTypes','id');
+		$zend_db->insert('categories',$data);
+		$this->id = $zend_db->lastInsertId('categories','id');
 	}
 
 	//----------------------------------------------------------------
@@ -113,6 +117,28 @@ class IssueType
 		return $this->name;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getDepartment_id()
+	{
+		return $this->department_id;
+	}
+
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if ($this->department_id) {
+			if (!$this->department) {
+				$this->department = new Department($this->department_id);
+			}
+			return $this->department;
+		}
+		return null;
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -125,6 +151,24 @@ class IssueType
 		$this->name = trim($string);
 	}
 
+	/**
+	 * @param int $int
+	 */
+	public function setDepartment_id($int)
+	{
+		$this->department = new Department($int);
+		$this->department_id = $int;
+	}
+
+	/**
+	 * @param Department $department
+	 */
+	public function setDepartment($department)
+	{
+		$this->department_id = $department->getId();
+		$this->department = $department;
+	}
+
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -132,6 +176,22 @@ class IssueType
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return "{$this->name}";
+		return $this->name;
+	}
+
+	/**
+	 * @return CategoryNoteList
+	 */
+	public function getNotes()
+	{
+		return new CategoryNoteList(array('category_id'=>$this->id));
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasNotes()
+	{
+		return count($this->getNotes()) ? true : false;
 	}
 }

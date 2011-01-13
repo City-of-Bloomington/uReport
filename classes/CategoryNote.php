@@ -4,10 +4,13 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class IssueType
+class CategoryNote
 {
 	private $id;
-	private $name;
+	private $category_id;
+	private $note;
+
+	private $category;
 
 	/**
 	 * Populates the object with data
@@ -29,7 +32,7 @@ class IssueType
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from issueTypes where id=?';
+				$sql = 'select * from category_notes where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
@@ -41,7 +44,7 @@ class IssueType
 				}
 			}
 			else {
-				throw new Exception('issueTypes/unknownIssueType');
+				throw new Exception('category_notes/unknownCategoryNote');
 			}
 		}
 		else {
@@ -57,7 +60,11 @@ class IssueType
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name) {
+		if (!$this->category_id) {
+			throw new Exception('categoryNotes/missingCategory');
+		}
+
+		if (!$this->note) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -70,7 +77,8 @@ class IssueType
 		$this->validate();
 
 		$data = array();
-		$data['name'] = $this->name;
+		$data['category_id'] = $this->category_id;
+		$data['note'] = $this->note;
 
 		if ($this->id) {
 			$this->update($data);
@@ -83,14 +91,20 @@ class IssueType
 	private function update($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->update('issueTypes',$data,"id='{$this->id}'");
+		$zend_db->update('category_notes',$data,"id='{$this->id}'");
 	}
 
 	private function insert($data)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->insert('issueTypes',$data);
-		$this->id = $zend_db->lastInsertId('issueTypes','id');
+		$zend_db->insert('category_notes',$data);
+		$this->id = $zend_db->lastInsertId('category_notes','id');
+	}
+
+	public function delete()
+	{
+		$zend_db = Database::getConnection();
+		$zend_db->delete('category_notes','id='.$this->id);
 	}
 
 	//----------------------------------------------------------------
@@ -106,11 +120,33 @@ class IssueType
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getCategory_id()
+	{
+		return $this->category_id;
+	}
+
+	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getNote()
 	{
-		return $this->name;
+		return $this->note;
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategory()
+	{
+		if ($this->category_id) {
+			if (!$this->category) {
+				$this->category = new Category($this->category_id);
+			}
+			return $this->category;
+		}
+		return null;
 	}
 
 	//----------------------------------------------------------------
@@ -118,11 +154,29 @@ class IssueType
 	//----------------------------------------------------------------
 
 	/**
+	 * @param int $int
+	 */
+	public function setCategory_id($int)
+	{
+		$this->category = new Category($int);
+		$this->category_id = $int;
+	}
+
+	/**
 	 * @param string $string
 	 */
-	public function setName($string)
+	public function setNote($string)
 	{
-		$this->name = trim($string);
+		$this->note = trim($string);
+	}
+
+	/**
+	 * @param Category $category
+	 */
+	public function setCategory($category)
+	{
+		$this->category_id = $category->getId();
+		$this->category = $category;
 	}
 
 
@@ -132,6 +186,6 @@ class IssueType
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return "{$this->name}";
+		return "{$this->note}";
 	}
 }

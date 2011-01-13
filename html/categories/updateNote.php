@@ -1,47 +1,47 @@
 <?php
 /**
- * Handles adding or editing IssueTypeNotes
+ * Handles adding or editing CategoryNotes
  *
- * Either a note_id or an issueType_id is required
+ * Either a note_id or an category_id is required
  *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST note_id
- * @param REQUEST issueType_id
+ * @param REQUEST category_id
  */
 
-if (!userIsAllowed('IssueTypes')) {
+if (!userIsAllowed('Categories')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
-// Load the IssueTypeNote for editing
+// Load the CategoryNote for editing
 if (isset($_REQUEST['note_id']) && $_REQUEST['note_id']) {
 	try {
-		$note = new IssueTypeNote($_REQUEST['note_id']);
+		$note = new CategoryNote($_REQUEST['note_id']);
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
-		header('Location: '.BASE_URL.'/issueTypes');
+		header('Location: '.BASE_URL.'/categories');
 		exit();
 	}
 }
-elseif (isset($_REQUEST['issueType_id']) && $_REQUEST['issueType_id']) {
+elseif (isset($_REQUEST['category_id']) && $_REQUEST['category_id']) {
 	try {
-		$note = new IssueTypeNote();
-		$note->setIssueType(new IssueType($_REQUEST['issueType_id']));
+		$note = new CategoryNote();
+		$note->setCategory(new Category($_REQUEST['category_id']));
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
-		header('Location: '.BASE_URL.'/issueTypes');
+		header('Location: '.BASE_URL.'/categories');
 		exit();
 	}
 }
 else {
-	$_SESSION['errorMessages'][] = new Exception('issueTypes/unknownIssueType');
-	header('Location: '.BASE_URL.'/issueTypes');
+	$_SESSION['errorMessages'][] = new Exception('categories/unknownCategory');
+	header('Location: '.BASE_URL.'/categories');
 	exit();
 }
 
@@ -52,7 +52,7 @@ if (isset($_POST['note'])) {
 
 	try {
 		$note->save();
-		header('Location: '.BASE_URL.'/issueTypes/notes.php?issueType_id='.$note->getIssueType_id());
+		header('Location: '.BASE_URL.'/categories/notes.php?category_id='.$note->getCategory_id());
 		exit();
 	}
 	catch (Exception $e) {
@@ -61,5 +61,5 @@ if (isset($_POST['note'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('issueTypes/updateNoteForm.inc',array('note'=>$note));
+$template->blocks[] = new Block('categories/updateNoteForm.inc',array('note'=>$note));
 echo $template->render();

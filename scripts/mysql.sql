@@ -57,16 +57,21 @@ create table constituentPhones (
 
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+
+create table categories (
+	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null,
 	department_id int unsigned not null,
 	foreign key (department_id) references departments(id)
 );
 
-create table issueType_notes (
+create table category_notes (
 	id int unsigned not null primary key auto_increment,
-	issueType_id int unsigned not null,
+	category_id int unsigned not null,
 	note varchar(128),
-	foreign key (issueType_id) references issueTypes(id)
+	foreign key (category_id) references categories(id)
 );
 
 create table neighborhoodAssociations (
@@ -77,8 +82,9 @@ create table neighborhoodAssociations (
 create table issues (
 	id int unsigned not null primary key auto_increment,
 	type_id int unsigned not null,
-	priority int unsigned,
+	category_id int unsigned not null,
 	constituent_id int unsigned not null,
+	contactMethod_id int unsigned,
 	address varchar(128),
 	street_address_id int unsigned,
 	township varchar(128),
@@ -87,6 +93,7 @@ create table issues (
 	case_number varchar(10),
 	lengthOfProblem varchar(25),
 	foreign key (type_id) references issueTypes(id),
+	foreign key (category_id) references categories(id),
 	foreign key (constituent_id) references constituents(id)
 );
 

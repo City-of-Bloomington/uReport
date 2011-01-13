@@ -6,7 +6,7 @@
  */
 if (!userIsAllowed('IssueTypes')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
+	header('Location: '.BASE_URL.'/issueTypes');
 	exit();
 }
 
