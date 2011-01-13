@@ -45,6 +45,7 @@ create table constituents (
 	zip varchar(5),
 	email varchar(255)
 );
+insert constituents set firstname='Anonymous',lastname='Anonymous';
 
 create table constituentPhones (
 	id int unsigned not null primary key auto_increment,
@@ -77,11 +78,11 @@ create table issues (
 	id int unsigned not null primary key auto_increment,
 	type_id int unsigned not null,
 	priority int unsigned,
-	constituent_id int unsigned,
+	constituent_id int unsigned not null,
 	address varchar(128),
 	street_address_id int unsigned,
 	township varchar(128),
-	neighborhoodAssocation_id int unsigned,
+	neighborhoodAssociation_id int unsigned,
 	notes text,
 	case_number varchar(10),
 	lengthOfProblem varchar(25),

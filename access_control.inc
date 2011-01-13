@@ -24,7 +24,9 @@ $ZEND_ACL->add(new Zend_Acl_Resource('ActionTypes'));
 $ZEND_ACL->add(new Zend_Acl_Resource('ContactMethods'));
 $ZEND_ACL->add(new Zend_Acl_Resource('NeighborhoodAssociations'));
 
-
+$ZEND_ACL->add(new Zend_Acl_Resource('Constituents'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Actions'));
 /**
  * Assign permissions to the resources
  */

@@ -1,5 +1,8 @@
 <div id="menuBar">
 	<ul><?php
+			if (userIsAllowed('Constituents')) {
+				echo "<li><a href=\"".BASE_URL."/constituents\">Constituents</a></li>";
+			}
 			if (userIsAllowed('Users')) {
 				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
 			}
