@@ -15,38 +15,16 @@ class LDAP implements ExternalAuthentication
 	{
 		$connection = ldap_connect(LDAP_SERVER) or die("Couldn't connect to LDAP");
 		ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_bind($connection);
-
-		$result = ldap_search($connection,LDAP_DN,LDAP_USERNAME_ATTRIBUTE."=$username");
-		if (ldap_count_entries($connection,$result)) {
-			$entries = ldap_get_entries($connection, $result);
-
-			if (preg_match("/^\{crypt\}(.+)/i",$entries[0][LDAP_PASSWORD_ATTRIBUTE][0],$matches)) {
-				$ldapPassword = $matches[1];
-				$salt = substr($ldapPassword,0,2);
-
-				$encryptedPassword = crypt($password,$salt);
-				if ($encryptedPassword === $ldapPassword) {
-					return true;
-				}
-				else {
-					throw new Exception('wrongPassword');
-				}
-			}
-			else {
-				throw new Exception("passwordIsCorrupted");
-			}
-		}
-		else {
-			throw new Exception("unknownUser");
+		if (ldap_bind($connection,LDAP_USERNAME_ATTRIBUTE."=$username,".LDAP_DN,"$password")) {
+			return true;
 		}
 	}
 
 	/**
-	 * Saves a user's password to the LDAP server
+	 * Encrypts and saves a user's password to LDAP
 	 *
 	 * @param string $username
-	 * @param string $password
+	 * @param string $password Unencryped password string
 	 */
 	public static function savePassword($username,$password)
 	{
@@ -60,9 +38,10 @@ class LDAP implements ExternalAuthentication
 		$entries = ldap_get_entries($connection, $result);
 
 		$dn = LDAP_USERNAME_ATTRIBUTE."=$username,ou=people,o=".LDAP_DOMAIN;
-		if ($this->getPassword()) {
-			$salt = substr(md5(time()),0,2);
-			$encryptedPassword = "{CRYPT}".crypt($password,$salt);
+		if ($password) {
+			// We're going to use SSHA, instead of just plain SHA1
+			$salt = substr(md5(time()),0,4);
+			$encryptedPassword = '{SSHA}'.base64_encode(pack('H*',sha1($password.$salt)).$salt);
 
 			$password = array(LDAP_PASSWORD_ATTRIBUTE=>$encryptedPassword);
 
