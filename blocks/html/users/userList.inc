@@ -10,17 +10,18 @@
 	<h1><?php
 			if (userIsAllowed('Users')) {
 				echo $this->linkButton(
-					'Add User',BASE_URL.'/users/updateUser.php','add'
+					'Add User Account',BASE_URL.'/users/updateUser.php','add'
 				);
 			}
 		?>
-		Users
+		User Accounts
 	</h1>
 	<table>
 		<thead>
 			<tr><th></th>
 				<th>Username</th>
 				<th>Name</th>
+				<th>Department</th>
 				<th>Authentication</th>
 				<th>Roles</th>
 			</tr>
@@ -45,12 +46,14 @@
 				}
 
 				$username = View::escape($user->getUsername());
-				$firstname = View::escape($user->getFirstname());
-				$lastname = View::escape($user->getLastname());
+				$name = View::escape("{$user->getFirstname()} {$user->getLastname()}");
+				$email = View::escape($user->getEmail());
+				$department = View::escape($user->getDepartment()->getName());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$username</td>
-					<td>$firstname $lastname</td>
+					<td>$name</td>
+					<td>$department</td>
 					<td>{$user->getAuthenticationMethod()}</td>
 					<td>
 				";

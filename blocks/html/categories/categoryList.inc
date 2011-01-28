@@ -19,7 +19,6 @@
 		<thead>
 			<tr><th></th>
 				<th>Type</th>
-				<th>Department</th>
 				<th>Notes</th>
 			</tr>
 		</thead>
@@ -33,17 +32,15 @@
 
 					$editButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/categories/updateCategory.php?id='.$category->getId(),
+						BASE_URL.'/categories/updateCategory.php?category_id='.$category->getId(),
 						'edit'
 					);
 				}
 				$type = View::escape($category->getName());
-				$department = View::escape($category->getDepartment()->getName());
 				$notes = count($category->getNotes());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$type</td>
-					<td>$department</td>
 					<td><a href=\"".BASE_URL."/categories/notes.php?category_id={$category->getId()}\">
 							$notes
 						</a>

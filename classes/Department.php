@@ -8,9 +8,10 @@ class Department
 {
 	private $id;
 	private $name;
-	private $default_user_id;
+	private $default_person_id;
 
-	private $default_user;
+	private $categories = array();
+	private $default_person;
 
 	/**
 	 * Populates the object with data
@@ -60,7 +61,7 @@ class Department
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name || !$this->default_user_id) {
+		if (!$this->name || !$this->default_person_id) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -74,7 +75,7 @@ class Department
 
 		$data = array();
 		$data['name'] = $this->name;
-		$data['default_user_id'] = $this->default_user_id;
+		$data['default_person_id'] = $this->default_person_id;
 
 		if ($this->id) {
 			$this->update($data);
@@ -120,21 +121,21 @@ class Department
 	/**
 	 * @return int
 	 */
-	public function getDefault_user_id()
+	public function getDefault_person_id()
 	{
-		return $this->default_user_id;
+		return $this->default_person_id;
 	}
 
 	/**
-	 * @return User
+	 * @return Person
 	 */
-	public function getDefault_user()
+	public function getDefault_person()
 	{
-		if ($this->default_user_id) {
-			if (!$this->default_user) {
-				$this->default_user = new User($this->default_user_id);
+		if ($this->default_person_id) {
+			if (!$this->default_person) {
+				$this->default_person = new Person($this->default_person_id);
 			}
-			return $this->default_user;
+			return $this->default_person;
 		}
 		return null;
 	}
@@ -154,19 +155,19 @@ class Department
 	/**
 	 * @param int $int
 	 */
-	public function setDefault_user_id($int)
+	public function setDefault_person_id($int)
 	{
-		$this->default_user = new User($int);
-		$this->default_user_id = $int;
+		$this->default_person = new Person($int);
+		$this->default_person_id = $int;
 	}
 
 	/**
-	 * @param User $user
+	 * @param Person $person
 	 */
-	public function setDefault_user($user)
+	public function setDefault_person($person)
 	{
-		$this->default_user_id = $user->getId();
-		$this->default_user = $user;
+		$this->default_person_id = $person->getId();
+		$this->default_person = $person;
 	}
 
 
@@ -174,4 +175,58 @@ class Department
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * @return array
+	 */
+	public function getCategories()
+	{
+		if (!count($this->categories)) {
+			$list = new CategoryList(array('department_id'=>$this->id));
+			foreach ($list as $category) {
+				$this->categories[$category->getId()] = $category;
+			}
+		}
+		return $this->categories;
+	}
+
+	/**
+	 * @param Category $category
+	 * @return bool
+	 */
+	public function hasCategory(Category $category)
+	{
+		return array_key_exists($category->getId(),$this->getCategories());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasCategories()
+	{
+		return count($this->getCategories()) ? true : false;
+	}
+
+	/**
+	 * Saves a set of categories to the database
+	 *
+	 * Replaces the database records for the department
+	 * with a new set of categories
+	 *
+	 * @param array|CategoryList $categories
+	 */
+	public function saveCategories($categories)
+	{
+		if ($this->id) {
+			$zend_db = Database::getConnection();
+			$zend_db->delete('department_categories','department_id='.$this->id);
+			foreach ($categories as $category) {
+				if (!$category instanceof Category) {
+					$category = new Category($category);
+				}
+
+				$zend_db->insert('department_categories',
+								array('department_id'=>$this->id,'category_id'=>$category->getId()));
+			}
+		}
+	}
 }

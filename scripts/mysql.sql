@@ -1,29 +1,47 @@
--- @copyright 2011 City of Bloomington, Indiana
+-- @copyright 2006-2010 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 -- @author Cliff Ingham <inghamn@bloomington.in.gov>
+
+/*! set foreign_key_checks=0 */;
+create table people (
+	id int unsigned not null primary key auto_increment,
+	firstname varchar(128) not null,
+	middlename varchar(128),
+	lastname varchar(128),
+	email varchar(255),
+	phone varchar(30),
+	address varchar(128),
+	-- The rest of these fields are used as cache
+	-- This information will ultimately come from other applications webservices
+	street_address_id int unsigned,
+	subunit_id int unsigned,
+	neighborhoodAssociation varchar(128),
+	township varchar(128)
+);
+
 create table departments (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null,
-	default_user_id int unsigned not null
+	default_person_id int unsigned not null,
+	foreign key (default_person_id) references people(id)
 );
 
 create table users (
 	id int unsigned not null primary key auto_increment,
+	person_id int unsigned not null unique,
 	username varchar(30) not null unique,
 	password varchar(32),
 	authenticationMethod varchar(40) not null default 'LDAP',
-	firstname varchar(128) not null,
-	lastname varchar(128) not null,
-	email varchar(255),
 	department_id int unsigned,
+	foreign key (person_id) references people(id),
 	foreign key (department_id) references departments(id)
 );
 
 create table roles (
 	id int unsigned not null primary key auto_increment,
 	name varchar(30) not null unique
-) engine=InnoDB;
-insert roles values(1,'Administrator');
+);
+insert roles set name='Administrator';
 
 create table user_roles (
 	user_id int unsigned not null,
@@ -33,38 +51,9 @@ create table user_roles (
 	foreign key(role_id) references roles (id)
 );
 
-create table constituents (
-	id int unsigned not null primary key auto_increment,
-	firstname varchar(128) not null,
-	lastname varchar(128) not null,
-	middlename varchar(128),
-	salutation varchar(4),
-	address varchar(255),
-	city varchar(128),
-	state varchar(2),
-	zip varchar(5),
-	email varchar(255)
-);
-insert constituents set firstname='Anonymous',lastname='Anonymous';
-
-create table constituentPhones (
-	id int unsigned not null primary key auto_increment,
-	label varchar(128),
-	phoneNumber varchar(15) not null,
-	constituent_id int unsigned not null,
-	foreign key (constituent_id) references constituents(id)
-);
-
-create table issueTypes (
-	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null
-);
-
 create table categories (
 	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null,
-	department_id int unsigned not null,
-	foreign key (department_id) references departments(id)
+	name varchar(128) not null
 );
 
 create table category_notes (
@@ -74,84 +63,60 @@ create table category_notes (
 	foreign key (category_id) references categories(id)
 );
 
-create table neighborhoodAssociations (
+create table department_categories (
+	department_id int unsigned not null,
+	category_id int unsigned not null,
+	foreign key (department_id) references departments(id),
+	foreign key (category_id) references categories(id),
+	primary key (department_id,category_id)
+);
+
+create table tickets (
+	id int unsigned not null primary key auto_increment,
+	date date not null,
+	person_id int unsigned,
+	location varchar(128),
+	-- The rest of these fields are used as cache
+	-- This information will ultimately come from other applications webservices
+	street_address_id int unsigned,
+	subunit_id int unsigned,
+	neighborhoodAssociation varchar(128),
+	township varchar(128),
+	foreign key (person_id) references people(id)
+);
+
+create table issueTypes (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+
+create table contactMethods (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
 );
 
 create table issues (
 	id int unsigned not null primary key auto_increment,
-	type_id int unsigned not null,
-	category_id int unsigned not null,
-	constituent_id int unsigned not null,
+	date date not null,
+	ticket_id int unsigned not null,
+	issueType_id int unsigned not null,
+	constituent_id int unsigned,
 	contactMethod_id int unsigned,
-	address varchar(128),
-	street_address_id int unsigned,
-	township varchar(128),
-	neighborhoodAssociation_id int unsigned,
+	person_id int unsigned,
 	notes text,
 	case_number varchar(10),
-	lengthOfProblem varchar(25),
-	foreign key (type_id) references issueTypes(id),
-	foreign key (category_id) references categories(id),
-	foreign key (constituent_id) references constituents(id)
-);
-
-create table actionTypes (
-	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null
-);
-insert actionTypes set name='Assigned';
-insert actionTypes set name='Inspected';
-insert actionTypes set name='Responded';
-insert actionTypes set name='Resolved';
-
-create table contactMethods (
-	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null
-);
-insert contactMethods set name='Phone Call';
-insert contactMethods set name='Letter';
-insert contactMethods set name='Email';
-insert contactMethods set name='Mayor Email';
-insert contactMethods set name='Constituent Meeting';
-insert contactMethods set name='Walk In';
-insert contactMethods set name='Web Form';
-insert contactMethods set name='Other';
-
-create table actions (
-	id int unsigned not null primary key auto_increment,
-	issue_id int unsigned not null,
-	actionType_id int unsigned not null,
-	user_id int unsigned,
-	target_user_id int unsigned,
-	constituent_id int unsigned,
-	department_id int unsigned,
-	date date not null,
-	contactMethod_id int unsigned,
-	notes text,
-	hours_spent double(4,1),
-	foreign key (issue_id) references issues(id),
-	foreign key (actionType_id) references actionTypes(id),
-	foreign key (user_id) references users(id),
-	foreign key (target_user_id) references users(id),
-	foreign key (constituent_id) references constituents(id),
+	foreign key (ticket_id) references tickets(id),
+	foreign key (issueType_id) references issueTypes(id),
+	foreign key (constituent_id) references people(id),
 	foreign key (contactMethod_id) references contactMethods(id),
-	foreign key (department_id) references departments(id)
+	foreign key (person_id) references people(id)
 );
 
-create table media (
-	id int unsigned not null primary key auto_increment,
+create table issue_categories (
 	issue_id int unsigned not null,
-	user_id int unsigned not null,
-	filename varchar(128) not null,
-	mime_type varchar(128) not null,
-	media_type varchar(24) not null,
-	title varchar(128),
-	description varchar(255),
-	md5 varchar(32) not null unique,
-	uploaded timestamp not null default CURRENT_TIMESTAMP,
-	notes text,
+	category_id int unsigned not null,
 	foreign key (issue_id) references issues(id),
-	foreign key (user_id) references users(id)
+	foreign key (category_id) references categories(id),
+	primary key (issue_id,category_id)
 );
+/*! set foreign_key_checks=1 */;

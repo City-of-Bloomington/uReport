@@ -14,3 +14,6 @@
 		?>
 	</fieldset>
 </form>
+<script type="text/javascript">
+document.getElementById('username').focus();
+</script>

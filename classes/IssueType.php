@@ -28,8 +28,10 @@ class IssueType
 				$result = $id;
 			}
 			else {
+				$sql = ctype_digit($id)
+					? 'select * from issueTypes where id=?'
+					: 'select * from issueTypes where name=?';
 				$zend_db = Database::getConnection();
-				$sql = 'select * from issueTypes where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 

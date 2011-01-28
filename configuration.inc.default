@@ -4,7 +4,7 @@
  * will include this copyright statement
  */
 define('COPYRIGHT',"/**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2007-2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */");
@@ -96,7 +96,7 @@ define('LDAP_DN','ou=people,o='.LDAP_DOMAIN);
 define('LDAP_USERNAME_ATTRIBUTE','uid');
 define('LDAP_ADMIN_USER','username');
 define('LDAP_ADMIN_PASS','password');
-define('LDAP_SERVER','ldap.somewhere.com');
+define('LDAP_SERVER','ldaps://ldap.somewhere.com:636'); // Example for SSL
 define('LDAP_PASSWORD_ATTRIBUTE','userpassword');
 
 /**
@@ -123,3 +123,8 @@ if (!defined('STDIN')) {
 if (isset($_SESSION['USER'])) {
 	include APPLICATION_HOME.'/access_control.inc';
 }
+
+/**
+ * Addresses are validated against a Master Address web service
+ */
+define('MASTER_ADDRESS','http://');

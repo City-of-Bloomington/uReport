@@ -8,9 +8,6 @@ class Category
 {
 	private $id;
 	private $name;
-	private $department_id;
-
-	private $department;
 
 	/**
 	 * Populates the object with data
@@ -31,8 +28,13 @@ class Category
 				$result = $id;
 			}
 			else {
+				if (ctype_digit($id)) {
+					$sql = 'select * from categories where id=?';
+				}
+				else {
+					$sql = 'select * from categories where name=?';
+				}
 				$zend_db = Database::getConnection();
-				$sql = 'select * from categories where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
@@ -60,7 +62,7 @@ class Category
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->name || !$this->department) {
+		if(!$this->name) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -74,7 +76,6 @@ class Category
 
 		$data = array();
 		$data['name'] = $this->name;
-		$data['department_id'] = $this->department_id;
 
 		if ($this->id) {
 			$this->update($data);
@@ -117,28 +118,6 @@ class Category
 		return $this->name;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getDepartment_id()
-	{
-		return $this->department_id;
-	}
-
-	/**
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		if ($this->department_id) {
-			if (!$this->department) {
-				$this->department = new Department($this->department_id);
-			}
-			return $this->department;
-		}
-		return null;
-	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -150,25 +129,6 @@ class Category
 	{
 		$this->name = trim($string);
 	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setDepartment_id($int)
-	{
-		$this->department = new Department($int);
-		$this->department_id = $int;
-	}
-
-	/**
-	 * @param Department $department
-	 */
-	public function setDepartment($department)
-	{
-		$this->department_id = $department->getId();
-		$this->department = $department;
-	}
-
 
 	//----------------------------------------------------------------
 	// Custom Functions

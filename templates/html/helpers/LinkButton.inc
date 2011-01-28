@@ -7,17 +7,17 @@
 class LinkButton
 {
 	public function __construct() { }
-	
-	public function linkButton($label,$url=null,$class=null,$id=null,$onclick=null)
+
+	public function linkButton($label,$url=null,$innerClass=null,$id=null,$onclick=null,$outerClass='button')
 	{
 		$href = $url ? "href=\"$url\"" : '';
-		$class = $class ? "class=\"$class\"" : '';
+		$innerClass = $innerClass ? "class=\"$innerClass\"" : '';
 		$id = $id ? "id=\"$id\"" : '';
 		$onclick = $onclick ? "onclick=\"$onclick\"" : '';
-		
+
 		return "
-		<span class=\"button\">
-			<span $class>
+		<span class=\"$outerClass\">
+			<span $innerClass>
 				<a $id $href $onclick>$label</a>
 			</span>
 		</span>

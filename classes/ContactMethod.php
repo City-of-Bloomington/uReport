@@ -28,8 +28,14 @@ class ContactMethod
 				$result = $id;
 			}
 			else {
+				if (ctype_digit($id)) {
+					$sql = 'select * from contactMethods where id=?';
+				}
+				else {
+					$sql = 'select * from contactMethods where name=?';
+				}
+
 				$zend_db = Database::getConnection();
-				$sql = 'select * from contactMethods where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
@@ -130,4 +136,8 @@ class ContactMethod
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return "{$this->name}";
+	}
 }

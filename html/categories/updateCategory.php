@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-
 if (!userIsAllowed('Categories')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
@@ -12,9 +11,9 @@ if (!userIsAllowed('Categories')) {
 }
 
 // Load the $category for editing
-if (isset($_REQUEST['id']) && $_REQUEST['id']) {
+if (isset($_REQUEST['category_id']) && $_REQUEST['category_id']) {
 	try {
-		$category = new Category($_REQUEST['id']);
+		$category = new Category($_REQUEST['category_id']);
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -27,14 +26,8 @@ else {
 }
 
 
-if (isset($_POST['id'])) {
-	$fields = array('name','department_id');
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			$set = 'set'.ucfirst($field);
-			$category->$set($_POST[$field]);
-		}
-	}
+if (isset($_POST['name'])) {
+	$category->setName($_POST['name']);
 
 	try {
 		$category->save();

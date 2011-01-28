@@ -3,6 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param DepartmentList $this->departmentList
  */
 ?>
 <div class="interfaceBox">
@@ -20,6 +21,7 @@
 			<tr><th></th>
 				<th>Name</th>
 				<th>Default User</th>
+				<th>Categories</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,6 +44,18 @@
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$user</td>
+					<td>
+				";
+					if ($department->hasCategories()) {
+						echo '<ul>';
+						foreach ($department->getCategories() as $category) {
+							$name = View::escape($category);
+							echo "<li>$name</li>";
+						}
+						echo '</ul>';
+					}
+				echo "
+					</td>
 				</tr>
 				";
 			}

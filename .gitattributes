@@ -1,5 +1,7 @@
 * text=auto !eol
 html/skins/local/images/add.png -text
+html/skins/local/images/buttonBackground.png -text
+html/skins/local/images/check.png -text
 html/skins/local/images/delete.png -text
 html/skins/local/images/edit.png -text
 scripts/mysql.sql -text

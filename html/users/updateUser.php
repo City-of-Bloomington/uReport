@@ -11,43 +11,54 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-if (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) {
-	try {
+// Load the user for editing
+try {
+	if (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) {
 		$user = new User($_REQUEST['user_id']);
 	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
+	else {
+		$user = new User();
+		if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
+			$person = new Person($_REQUEST['person_id']);
+			$user->setPerson($person);
+		}
 	}
 }
-else {
-	$user = new User();
+catch (Exception $e) {
+	$_SESSION['errorMessages'][] = $e;
+	header('Location: '.BASE_URL.'/users');
+	exit();
 }
 
+// Handle POST data
 if (isset($_POST['username'])) {
-	$fields = array(
-		'username','password','authenticationMethod','firstname','lastname','email','roles'
-	);
-
+	$fields = array('username','password','authenticationMethod','roles','department_id');
 	foreach ($fields as $field) {
 		if (isset($_POST[$field])) {
 			$set = 'set'.ucfirst($field);
 			$user->$set($_POST[$field]);
 		}
 	}
-
-	// Load their information from LDAP
+	// Load any missing information from LDAP
 	// Delete this statement if you're not using LDAP
 	if ($user->getAuthenticationMethod() == 'LDAP') {
 		try {
 			$ldap = new LDAPEntry($user->getUsername());
-			if (!$user->getFirstname()) {
-				$user->setFirstname($ldap->getFirstname());
+			$person = $user->getPerson_id() ? $user->getPerson() : new Person();
+
+			if (!$person->getFirstname()) {
+				$person->setFirstname($ldap->getFirstname());
 			}
-			if (!$user->getLastname()) {
-				$user->setLastname($ldap->getLastname());
+			if (!$person->getLastname()) {
+				$person->setLastname($ldap->getLastname());
 			}
-			if (!$user->getEmail()) {
-				$user->setEmail($ldap->getEmail());
+			if (!$person->getEmail()) {
+				$person->setEmail($ldap->getEmail());
+			}
+
+			$person->save();
+			if (!$user->getPerson_id()) {
+				$user->setPerson($person);
 			}
 		}
 		catch (Exception $e) {
@@ -65,6 +76,10 @@ if (isset($_POST['username'])) {
 	}
 }
 
-$template = new Template('two-column');
+// Display the form
+$template = new Template();
 $template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
+if ($user->getPerson_id()) {
+	$template->blocks[] = new BlocK('people/personInfo.inc',array('person'=>$user->getPerson()));
+}
 echo $template->render();

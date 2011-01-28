@@ -10,7 +10,7 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-$template = new Template('two-column');
+$template = new Template();
 $template->title = 'User accounts';
 
 $userList = new UserList();

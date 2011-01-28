@@ -44,21 +44,32 @@ class CategoryList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='id',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='c.id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('categories');
+		$this->select->from(array('c'=>'categories'));
 
 		// Finding on fields from the categories table is handled here
-		if (count($fields)) {
-			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
-			}
+		if (isset($fields['name'])) {
+			$this->select->where('c.name=?',$fields['name']);
 		}
 
 		// Finding on fields from other tables requires joining those tables.
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the categories table.
+		if (isset($fields['department_id'])) {
+			$this->select->joinLeft(array('d'=>'department_categories'),
+									'c.id=d.category_id',
+									array());
+			$this->select->where('d.department_id=?',$fields['department_id']);
+		}
+
+		if (isset($fields['issue_id'])) {
+			$this->select->joinLeft(array('i'=>'issue_categories'),
+									'c.id=i.category_id',
+									array());
+			$this->select->where('i.issue_id=?',$fields['issue_id']);
+		}
 
 		$this->select->order($order);
 		if ($limit) {

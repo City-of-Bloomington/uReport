@@ -17,10 +17,7 @@
  */
 class UserList extends ZendDbResultIterator
 {
-	private $columns = array(
-		'id','username','password','authenticationMethod',
-		'firstname','lastname','email','department_id'
-	);
+	private $columns = array('id','person_id','username','password','authenticationMethod');
 
 	/**
 	 * @param array $fields
@@ -60,6 +57,20 @@ class UserList extends ZendDbResultIterator
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the users table.
 		$joins = array();
+
+		// Firstname, lastname, and email come from the People table
+		if (isset($fields['firstname'])) {
+			$joins['p'] = array('table'=>'people','condition'=>'u.id=p.user_id');
+			$this->select->where('p.firstname=?',$fields['firstname']);
+		}
+		if (isset($fields['lastname'])) {
+			$joins['p'] = array('table'=>'people','condition'=>'u.id=p.user_id');
+			$this->select->where('p.lastname=?',$fields['lastname']);
+		}
+		if (isset($fields['email'])) {
+			$joins['p'] = array('table'=>'people','condition'=>'u.id=p.user_id');
+			$this->select->where('p.email=?',$fields['email']);
+		}
 
 		// To get the Role, we have to join the user_roles and roles tables
 		if (isset($fields['role'])) {

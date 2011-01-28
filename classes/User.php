@@ -7,15 +7,15 @@
 class User extends SystemUser
 {
 	private $id;
+	private $person_id;
 	private $username;
 	private $password;
 	private $authenticationMethod;
-	private $firstname;
-	private $lastname;
-	private $email;
 	private $department_id;
 
+	private $person;
 	private $department;
+
 	private $roles = array();
 	private $newPassword; // the User's new password, unencrypted
 
@@ -61,14 +61,15 @@ class User extends SystemUser
 	 */
 	public function validate()
 	{
+		if (!$this->person_id) {
+			throw new Exception('users/missingPerson_id');
+		}
 		if (!$this->username) {
 			throw new Exception('users/missingUsername');
 		}
-
-		if (!$this->firstname || !$this->lastname) {
-			throw new Exception('missingRequiredFields');
-		}
-
+		#if (!$this->department_id) {
+		#	throw new Exception('users/missingDepartment');
+		#}
 	}
 
 	/**
@@ -83,15 +84,13 @@ class User extends SystemUser
 		$this->validate();
 
 		$data = array();
+		$data['person_id'] = $this->person_id;
 		$data['username'] = $this->username;
+		$data['department_id'] = $this->department_id;
 		// Passwords should not be updated by default.  Use the savePassword() function
 		$data['authenticationMethod'] = $this->authenticationMethod
 										? $this->authenticationMethod
 										: null;
-		$data['firstname'] = $this->firstname;
-		$data['lastname'] = $this->lastname;
-		$data['email'] = $this->email;
-		$data['department_id'] = $this->department_id;
 
 		// Do the database calls
 		if ($this->id) {
@@ -144,6 +143,28 @@ class User extends SystemUser
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getPerson_id()
+	{
+		return $this->person_id;
+	}
+
+	/**
+	 * @return Person
+	 */
+	public function getPerson()
+	{
+		if ($this->person_id) {
+			if (!$this->person) {
+				$this->person = new Person($this->person_id);
+			}
+			return $this->person;
+		}
+		return null;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getUsername()
@@ -157,30 +178,6 @@ class User extends SystemUser
 	public function getAuthenticationMethod()
 	{
 		return $this->authenticationMethod;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFirstname()
-	{
-		return $this->firstname;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getLastname()
-	{
-		return $this->lastname;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEmail()
-	{
-		return $this->email;
 	}
 
 	/**
@@ -205,6 +202,24 @@ class User extends SystemUser
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
+	/**
+	 * @param int $int
+	 */
+	public function setPerson_id($int)
+	{
+		$this->person = new Person($int);
+		$this->person_id = $int;
+	}
+
+	/**
+	 * @param Person $person
+	 */
+	public function setPerson($person)
+	{
+		$this->person_id = $person->getId();
+		$this->person = $person;
+	}
+
 	/**
 	 * @param string $string
 	 */
@@ -246,30 +261,6 @@ class User extends SystemUser
 	}
 
 	/**
-	 * @param string $string
-	 */
-	public function setFirstname($string)
-	{
-		$this->firstname = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setLastname($string)
-	{
-		$this->lastname = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEmail($string)
-	{
-		$this->email = trim($string);
-	}
-
-	/**
 	 * @param int $id
 	 */
 	public function setDepartment_id($id)
@@ -291,6 +282,27 @@ class User extends SystemUser
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * @return string
+	 */
+	public function getFirstname()
+	{
+		return $this->getPerson()->getFirstname();
+	}
+	/**
+	 * @return string
+	 */
+	public function getLastname()
+	{
+		return $this->getPerson()->getLastname();
+	}
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->getPerson()->getEmail();
+	}
 	/**
 	 * Returns an array of Role names with the role id as the array index
 	 *
@@ -314,7 +326,6 @@ class User extends SystemUser
 		}
 		return $this->roles;
 	}
-
 	/**
 	 * Takes an array of role names.  Loads the Roles from the database
 	 *
@@ -328,7 +339,6 @@ class User extends SystemUser
 			$this->roles[$role->getId()] = $role->getName();
 		}
 	}
-
 	/**
 	 * Takes a string or an array of strings and checks if the user has that role
 	 *

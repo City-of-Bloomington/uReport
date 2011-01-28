@@ -24,14 +24,35 @@ td { padding:0 .25em; }
 #panel-one div li { list-style-type:none; }
 #panel-one a { font-weight:bold; color:black; }
 
+#content-panel .left { float:left; width:290px; border-right:1px solid gray; padding:5px; }
+#content-panel .right { margin-left:295px; padding:5px; }
+
+#location-panel { border-top:1px solid gray; clear:both; }
+#location-panel .left { height:160px; }
+#location-panel .right { height:160px; overflow:auto; }
+
+#ticket-panel { border-top:1px solid gray; clear:both; }
+
+
 .button { }
 .button a {
 	display:inline-block;
 	text-indent:-9999px; overflow:hidden;
-	width:14px; height:14px;
 	background-repeat:no-repeat;
 	vertical-align:middle;
 }
 .button .add a { width:14px; height:14px; background:url('images/add.png'); }
 .button .edit a { width:14px; height:14px; background:url('images/edit.png'); }
 .button .delete a { width:14px; height:14px; background:url('images/delete.png'); }
+
+.largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
+.largeButton .add a {
+	color:black; font-size:12pt; font-weight:bold;
+	padding-left:16px;
+	background:url('images/add.png') no-repeat;
+}
+
+
+tr.verified { background:url('images/check.png') no-repeat; }
+tr.verified > td:first-child { padding-left:16px; }
+
