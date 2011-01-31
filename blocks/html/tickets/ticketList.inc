@@ -5,8 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+$title = $this->title ? View::escape($this->title) : 'Tickets';
 echo "
-<h1>Tickets</h1>
+<h1>$title</h1>
 ";
 $url = new URL(BASE_URL.'/tickets/viewTicket.php');
 

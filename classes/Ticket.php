@@ -308,6 +308,11 @@ class Ticket
 		return new IssueList(array('ticket_id'=>$this->id));
 	}
 
+	public function getCategories()
+	{
+		return new CategoryList(array('ticket_id'=>$this->id));
+	}
+
 	/**
 	 * Used only for importing data
 	 * @param int $int

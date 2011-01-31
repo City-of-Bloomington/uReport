@@ -23,6 +23,10 @@ class TicketList extends ZendDbResultIterator
 		'neighborhoodAssociation','township'
 	);
 
+	private $issueColumns = array(
+		'issueType_id','constituent_id','contactMethod_id','case_number'
+	);
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -63,7 +67,6 @@ class TicketList extends ZendDbResultIterator
 	{
 		$this->createSelection();
 
-		// Finding on fields from the tickets table is handled here
 		if (count($fields)) {
 			foreach ($this->columns as $column) {
 				if (array_key_exists($column,$fields)) {
@@ -73,13 +76,25 @@ class TicketList extends ZendDbResultIterator
 					}
 				}
 			}
+
+			if (count(array_intersect($fields,$this->issueColumns))) {
+				foreach ($this->issueColumns as $column) {
+					if (in_array($column,$fields)) {
+						$fields[$column] = trim($fields[$collumn]);
+						if ($fields[$column]) {
+							$this->select->where("i.$column=?",$fields[$column]);
+						}
+					}
+				}
+			}
+
+			if (isset($fields['category_id'])) {
+				echo "Adding category_id\n";
+				$this->select->where('c.category_id=?',$fields['category_id']);
+			}
 		}
 
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the tickets table.
-
+		$this->doJoins($fields);
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
@@ -110,13 +125,24 @@ class TicketList extends ZendDbResultIterator
 					}
 				}
 			}
+
+			if (count(array_intersect($fields,$this->issueColumns))) {
+				foreach ($this->issueColumns as $column) {
+					if (in_array($column,$fields)) {
+						$fields[$column] = trim($fields[$collumn]);
+						if ($fields[$column]) {
+							$this->select->where("i.$column=?",$fields[$column]);
+						}
+					}
+				}
+			}
+
+			if (isset($fields['category_id']) && $fields['category_id']) {
+				$this->select->where('c.category_id=?',$fields['category_id']);
+			}
 		}
 
-		// Finding on fields from other tables requires joining those tables.
-		// You can handle fields from other tables by adding the joins here
-		// If you add more joins you probably want to make sure that the
-		// above foreach only handles fields from the tickets table.
-
+		$this->doJoins($fields);
 		$this->runSelection($order,$limit,$groupBy);
 	}
 
@@ -137,6 +163,33 @@ class TicketList extends ZendDbResultIterator
 			$this->select->group($groupBy);
 		}
 		$this->populateList();
+	}
+
+	/**
+	 * Adds any needed joins to this->select
+	 *
+	 * Finding on fields from other tables requires joining those tables.
+	 * You can handle fields from other tables by adding the joins here
+	 * Pass in the fields that are currently being requested
+	 *
+	 * @param array $fields
+	 */
+	public function doJoins($fields)
+	{
+		$joins = array();
+
+		if (count(array_intersect($fields,$this->issueColumns))) {
+			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
+		}
+
+		if (isset($fields['category_id'])) {
+			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
+			$joins['c'] = array('table'=>'issue_categories','condition'=>'i.id=c.issue_id');
+		}
+
+		foreach ($joins as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
+		}
 	}
 
 	/**

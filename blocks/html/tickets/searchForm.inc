@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<h1>Find Tickets</h1>
+<h1>Find Requests</h1>
 <form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 	<fieldset><legend>Ticket Information</legend>
 		<table>
@@ -61,7 +61,65 @@
 				</td>
 			</tr>
 		</table>
+	</fieldset>
 
+	<fieldset><legend>Issue Information</legend>
+		<table>
+			<tr><td><label for="issueType_id">Type</label></td>
+				<td><select name="issueType_id" id="issueType_id">
+						<option></option>
+						<?php
+							$list = new IssueTypeList();
+							$list->find();
+							foreach ($list as $type) {
+								$selected = (isset($_GET['issueType_id']) && $_GET['issueType_id']==$type->getId())
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($type);
+								echo "<option value=\"{$type->getId()}\" $selected>$name</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr><td><label for="category_id">Category</label></td>
+				<td><select name="category_id" id="category_id">
+						<option></option>
+						<?php
+							$list = new CategoryList();
+							$list->find();
+							foreach ($list as $category) {
+								$selected = (isset($_GET['category_id']) && $_GET['category_id']==$category->getId())
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($category);
+								echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr><td><label for="contactMethod_id">Contact Method</label></td>
+				<td><select name="contactMethod_id" id="contactMethod_id">
+						<option></option>
+						<?php
+							$list = new ContactMethodList();
+							$list->find();
+							foreach ($list as $contactMethod) {
+								$selected = (isset($_GET['contactMethod_id']) && $_GET['contactMethod_id']==$contactMethod->getId())
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($contactMethod);
+								echo "<option value=\"{$contactMethod->getId()}\" $selected>$name</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<fieldset><legend>Submit</legend>
 		<?php
 			echo $this->template->formButton(
 				'Search','submit','search'

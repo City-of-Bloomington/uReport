@@ -57,18 +57,26 @@ class CategoryList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the categories table.
+		$joins = array();
+
 		if (isset($fields['department_id'])) {
-			$this->select->joinLeft(array('d'=>'department_categories'),
-									'c.id=d.category_id',
-									array());
+			$joins['d'] = array('table'=>'department_categories','condition'=>'c.id=d.category_id');
 			$this->select->where('d.department_id=?',$fields['department_id']);
 		}
 
 		if (isset($fields['issue_id'])) {
-			$this->select->joinLeft(array('i'=>'issue_categories'),
-									'c.id=i.category_id',
-									array());
+			$joins['i'] = array('table'=>'issue_categories','condition'=>'c.id=i.category_id');
 			$this->select->where('i.issue_id=?',$fields['issue_id']);
+		}
+
+		if (isset($fields['ticket_id'])) {
+			$joins['i'] = array('table'=>'issue_categories','condition'=>'c.id=i.category_id');
+			$joins['x'] = array('table'=>'issues','condition'=>'i.issue_id=x.id');
+			$this->select->where('x.ticket_id=?',$fields['ticket_id']);
+		}
+
+		foreach ($joins as $key=>$join) {
+			$this->select->joinLeft(array($key=>$join['table']),$join['condition'],array());
 		}
 
 		$this->select->order($order);
