@@ -8,6 +8,7 @@
 $url = new URL(BASE_URL.'/tickets/viewTicket.php');
 
 echo "
+<div class=\"searchResults\">
 <table>
 	<thead>
 		<tr><th>Ticket #</th>
@@ -51,4 +52,5 @@ echo "
 echo "
 	</tbody>
 </table>
+</div>
 ";

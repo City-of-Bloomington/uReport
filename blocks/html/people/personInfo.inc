@@ -25,9 +25,11 @@ $address = View::escape($this->person->getAddress());
 $phone = View::escape($this->person->getPhone());
 $email = View::escape($this->person->getEmail());
 echo "
-<h1>$name</h1>
-<div>$username</div>
-<div>$address</div>
-<div>$phone</div>
-<div>$email</div>
+<div class=\"personInfo\">
+	<h1>$name</h1>
+	<div>$username</div>
+	<div>$address</div>
+	<div>$phone</div>
+	<div>$email</div>
+</div>
 ";

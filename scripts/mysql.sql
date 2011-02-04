@@ -82,6 +82,8 @@ create table tickets (
 	subunit_id int unsigned,
 	neighborhoodAssociation varchar(128),
 	township varchar(128),
+	latitude decimal(8,6),
+	longitude decimal(8,6),
 	foreign key (person_id) references people(id)
 );
 
@@ -119,4 +121,25 @@ create table issue_categories (
 	foreign key (category_id) references categories(id),
 	primary key (issue_id,category_id)
 );
+
+create table actionTypes (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null,
+	verb varchar(128) not null
+);
+
+create table actions (
+	id int unsigned not null primary key auto_increment,
+	actionType_id int  unsigned not null,
+	date date not null,
+	ticket_id int unsigned not null,
+	person_id int unsigned not null,
+	targetPerson_id int unsigned,
+	notes text,
+	foreign key (actionType_id) references actionTypes(id),
+	foreign key (ticket_id) references tickets(id),
+	foreign key (person_id) references people(id),
+	foreign key (targetPerson_id) references people(id)
+);
+
 /*! set foreign_key_checks=1 */;

@@ -1,39 +1,45 @@
-h1 { font-size:21pt; font-weight:bold; }
+h1 { font-size:16pt; font-weight:bold; margin-bottom:.5em; }
 a { text-decoration:none; }
-th { padding:0 .25em; font-weight:bold; }
+table { margin-bottom:.5em; }
+th { color:gray; }
 td { padding:0 .25em; }
+ul { list-style-type:none; margin:0; padding:0; }
 
 #banner { background-color:#3366CC; color:white; padding:.5em; border-bottom:2px solid black; }
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; }
 
 #menuBar { border-bottom:2px solid black; }
-#menuBar ul { margin:.5em; padding:0; list-style-type:none; }
+#menuBar ul { margin:.5em; padding:0; }
 #menuBar li { display:inline; margin-right:1em; font-size:10pt; }
 #menuBar a { color:#3366CC; font-size:14pt; font-weight:bold; }
 
 #footer { border-top:2px solid black; padding:.5em; font-size:10pt; }
-#footer ul { margin:0; padding:0; list-style-type:none; }
-#footer li { list-style-type:none; display:inline; margin-right:.5em; }
+#footer li { display:inline; margin-right:.5em; }
 #footer a { font-weight:bold; color:black; }
 
 #panel-one { padding:2px; }
 #panel-one div { border:2px solid black; }
 #panel-one div h1 { background-color:#3366CC; color:white; font-size:14pt; border-bottom:2px solid black; padding:.25em; }
-#panel-one div ul { margin:.25em; padding:0; list-style-type:none; }
-#panel-one div li { list-style-type:none; }
+#panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#content-panel .left { float:left; width:290px; border-right:1px solid gray; padding:5px; }
-#content-panel .right { margin-left:295px; padding:5px; }
+#ticket-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
+#issue-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
+#action-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
+#location-panel { border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
+#person-panel	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
 
-#location-panel { border-top:1px solid gray; clear:both; }
-#location-panel .left { height:160px; }
-#location-panel .right { height:160px; overflow:auto; }
+/* Blocks we want to show up in the left column of a Panel */
+#ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid gray; }
+#location-panel .locationInfo 		{ width:290px; float:left; border-right:1px solid gray; }
+#location-panel .findLocationForm	{ width:290px; float:left; border-right:1px solid gray; }
 
-#ticket-panel { border-top:1px solid gray; clear:both; }
+/* Blocks we want to show up in the right column of a Panel */
+#location-panel .locationList			{ margin-left:295px; overflow:auto; }
+#location-panel .findLocationResults	{ margin-left:295px; overflow:auto; }
 
-
+/* Buttons */
 .button { }
 .button a {
 	display:inline-block;

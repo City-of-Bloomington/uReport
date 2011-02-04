@@ -14,9 +14,11 @@ if (!count($ticketList)) {
 	exit();
 }
 
-$template = new Template();
-$template->blocks[] = new Block('locations/locationPanel.inc',array('location'=>$_GET['location']));
-$template->blocks[] = new Block('tickets/ticketList.inc',array('ticketList'=>$ticketList));
+$template = new Template('locations');
+$template->blocks['location-panel'][] = new Block(
+	'locations/locationInfo.inc',array('location'=>$_GET['location'])
+);
+$template->blocks['ticket-panel'][] = new Block('tickets/ticketList.inc',array('ticketList'=>$ticketList));
 
 
 echo $template->render();

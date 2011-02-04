@@ -4,12 +4,15 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$template = new Template();
+$template = new Template('locations');
 
-$block = new Block('locations/locationPanel.inc');
+$template->blocks['location-panel'][] = new Block('locations/findLocationForm.inc');
+
 if (isset($_GET['location_query'])) {
-	$block->results = Location::search($_GET['location_query']);
+	$template->blocks['location-panel'][] = new Block(
+		'locations/findLocationResults.inc',
+		array('results'=>Location::search($_GET['location_query']))
+	);
 }
-$template->blocks[] = $block;
 
 echo $template->render();

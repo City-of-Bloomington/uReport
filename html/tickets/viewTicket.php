@@ -7,7 +7,14 @@
  */
 $ticket = new Ticket($_GET['ticket_id']);
 
-$template = new Template();
-$template->blocks[] = new Block('tickets/ticketInfoPanel.inc',array('ticket'=>$ticket));
-$template->blocks[] = new Block('locations/locationPanel.inc',array('location'=>$ticket->getLocation()));
+$template = new Template('tickets');
+$template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
+$template->blocks['action-panel'][] = new Block('actions/actionList.inc',
+												array('actionList'=>$ticket->getActions()));
+$template->blocks['issue-panel'][] = new Block('issues/issueList.inc',
+												array('issueList'=>$ticket->getIssues()));
+$template->blocks['location-panel'][] = new Block('locations/locationInfo.inc',
+													array('location'=>$ticket->getLocation()));
+$template->blocks['location-panel'][] = new Block('tickets/searchResults.inc',
+													array('ticketList'=>new TicketList(array('location'=>$ticket->getLocation()))));
 echo $template->render();

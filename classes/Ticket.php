@@ -14,6 +14,8 @@ class Ticket
 	private $subunit_id;
 	private $neighborhoodAssociation;
 	private $township;
+	private $latitude;
+	private $longitude;
 
 	private $person;
 
@@ -90,6 +92,8 @@ class Ticket
 		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
 		$data['neighborhoodAssociation'] = $this->neighborhoodAssociation ? $this->neighborhoodAssociation : null;
 		$data['township'] = $this->township ? $this->township : null;
+		$data['latitude'] = $this->latitude ? $this->latitude : null;
+		$data['longitude'] = $this->longitude ? $this->longitude : null;
 
 		if ($this->id) {
 			$this->update($data);
@@ -206,6 +210,22 @@ class Ticket
 		return $this->township;
 	}
 
+	/**
+	 * @return float
+	 */
+	public function getLatitude()
+	{
+		return $this->latitude;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getLongitude()
+	{
+		return $this->longitude;
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -288,6 +308,22 @@ class Ticket
 		$this->township = trim($string);
 	}
 
+	/**
+	 * @param float $float
+	 */
+	public function setLatitude($float)
+	{
+		$this->latitude = (float)$float;
+	}
+
+	/**
+	 * @param float $float
+	 */
+	public function setLongitude($float)
+	{
+		$this->longitude = (float)$float;
+	}
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
@@ -308,9 +344,20 @@ class Ticket
 		return new IssueList(array('ticket_id'=>$this->id));
 	}
 
+	/**
+	 * @return CategoryList
+	 */
 	public function getCategories()
 	{
 		return new CategoryList(array('ticket_id'=>$this->id));
+	}
+
+	/**
+	 * @return ActionList
+	 */
+	public function getActions()
+	{
+		return new ActionList(array('ticket_id'=>$this->id));
 	}
 
 	/**

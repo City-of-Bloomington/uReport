@@ -104,8 +104,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				$ticket->setNeighborhoodAssociation($neighborhood[0]);
 			}
 
-			$ticket->setTownship($xml->township);
-
+			$ticket->setTownship($xml->address->township);
+			$ticket->setLatitude($xml->address->latitude);
+			$ticket->setLongitude($xml->address->longitude);
 		}
 		else {
 			if (is_numeric($row['street_num'])) {
@@ -160,5 +161,43 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 
 	$issue->save();
-	$issue->saveCategories(array($row['comp_desc']));
+	$category = trim($row['comp_desc']);
+	if ($category) {
+		$issue->saveCategories(array($category));
+	}
+
+	// Create the Action history
+	if ($row['assigned_to']) {
+		list($username,$fullname) = explode(':',$row['assigned_to']);
+		$action = new Action();
+		$action->setActionType('assignment');
+		$action->setDate($row['assigned_date']);
+		$action->setTicket($ticket);
+		try {
+			$user = new User($username);
+			$action->setTargetPerson($user->getPerson());
+			if ($ticket->getPerson()) {
+				$action->setPerson($ticket->getPerson());
+			}
+			else {
+				$action->setPerson($user->getPerson());
+			}
+			$action->save();
+		}
+		catch (Exception $e) {
+			// Any problems with the action, and we won't save it
+			// These problems should all be assignments to people we don't
+			// have in the system
+			if ($e->getMessage() != 'users/unknownUser') {
+				echo $e->getMessage();
+				echo "Problem saving assignment\n";
+				print_r($action);
+				exit();
+			}
+		}
+	}
+
+	if ($row['insp_date']) {
+
+	}
 }

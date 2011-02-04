@@ -7,7 +7,18 @@
  */
 $person = new Person($_GET['person_id']);
 
-$template = new Template();
+$template = new Template('people');
 $template->title = $person->getFullname();
-$template->blocks[] = new Block('people/personPanel.inc',array('person'=>$person));
+$template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
+
+$reportedTickets = $person->getReportedTickets();
+if (count($reportedTickets)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$person->getReportedTickets(),
+			'title'=>'Tickets With Issues Reported By '.$person->getFullname()
+		)
+	);
+}
 echo $template->render();

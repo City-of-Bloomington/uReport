@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
+<div class="searchForm">
 <h1>Find Requests</h1>
 <form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 	<fieldset><legend>Ticket Information</legend>
@@ -127,3 +128,4 @@
 		?>
 	</fieldset>
 </form>
+</div>

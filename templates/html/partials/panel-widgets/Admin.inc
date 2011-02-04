@@ -5,7 +5,7 @@
 		<li><a href="<?php echo BASE_URL; ?>/departments">Departments</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/categories">Categories</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/issueTypes">Issue Types</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/actionTypes">Action Types</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/actions">Actions</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/contactMethods">Contact Methods</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/neighborhoodAssociations">Neighborhood Associations</a></li>
 	</ul>

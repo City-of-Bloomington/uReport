@@ -5,11 +5,15 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  */
-echo '<h1>Search Results</h1>';
-
-if (count($this->personList)) {
-	include APPLICATION_HOME.'/blocks/html/people/personList.inc';
-}
-else {
-	echo '<p>No results found</p>';
-}
+?>
+<div class="searchResults">
+	<h1>Search Results</h1>
+	<?php
+		if (count($this->personList)) {
+			include APPLICATION_HOME.'/blocks/html/people/personList.inc';
+		}
+		else {
+			echo '<p>No results found</p>';
+		}
+	?>
+</div>

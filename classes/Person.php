@@ -348,4 +348,8 @@ class Person
 			return $this->getUser()->getUsername();
 		}
 	}
+
+	public function getReportedTickets() {
+		return new TicketList(array('constituent_id'=>$this->id));
+	}
 }

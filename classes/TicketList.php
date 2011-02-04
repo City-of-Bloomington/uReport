@@ -77,10 +77,10 @@ class TicketList extends ZendDbResultIterator
 				}
 			}
 
-			if (count(array_intersect($fields,$this->issueColumns))) {
+			if (count(array_intersect(array_keys($fields),$this->issueColumns))) {
 				foreach ($this->issueColumns as $column) {
-					if (in_array($column,$fields)) {
-						$fields[$column] = trim($fields[$collumn]);
+					if (isset($fields[$column])) {
+						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
 							$this->select->where("i.$column=?",$fields[$column]);
 						}
@@ -89,7 +89,6 @@ class TicketList extends ZendDbResultIterator
 			}
 
 			if (isset($fields['category_id'])) {
-				echo "Adding category_id\n";
 				$this->select->where('c.category_id=?',$fields['category_id']);
 			}
 		}
@@ -126,10 +125,10 @@ class TicketList extends ZendDbResultIterator
 				}
 			}
 
-			if (count(array_intersect($fields,$this->issueColumns))) {
+			if (count(array_intersect(array_keys($fields),$this->issueColumns))) {
 				foreach ($this->issueColumns as $column) {
-					if (in_array($column,$fields)) {
-						$fields[$column] = trim($fields[$collumn]);
+					if (isset($fields[$column])) {
+						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
 							$this->select->where("i.$column=?",$fields[$column]);
 						}
@@ -178,7 +177,7 @@ class TicketList extends ZendDbResultIterator
 	{
 		$joins = array();
 
-		if (count(array_intersect($fields,$this->issueColumns))) {
+		if (count(array_intersect(array_keys($fields),$this->issueColumns))) {
 			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
 		}
 

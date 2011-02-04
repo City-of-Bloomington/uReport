@@ -10,6 +10,7 @@ $location = View::escape($this->location);
 $neighborhoods = Location::getNeighborhoodAssociations($this->location);
 
 echo "
+<div class=\"locationInfo\">
 <h1>Location Information</h1>
 <div><a href=\"$url\">$location</a></div>
 ";
@@ -43,3 +44,6 @@ if (count($constituents)) {
 	</ul>
 	";
 }
+echo "
+</div>
+";

@@ -9,6 +9,7 @@ foreach ($fields as $field) {
 	$$field = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
 }
 ?>
+<div class="searchForm">
 <h1>Find Someone</h1>
 <form method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 	<fieldset>
@@ -33,3 +34,4 @@ foreach ($fields as $field) {
 		?>
 	</fieldset>
 </form>
+</div>

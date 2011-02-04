@@ -6,6 +6,7 @@
  * @param Array $this->results
  */
 echo "
+<div class=\"findLocationResults\">
 <table>
 	<thead>
 		<tr><th>Location</th>
@@ -42,4 +43,5 @@ echo "
 		</td>
 	</tr>
 </table>
+</div>
 ";
