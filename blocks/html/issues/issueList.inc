@@ -7,7 +7,7 @@
  */
 ?>
 <div class="issueList">
-<h1>Issues</h1>
+<h3>Issues</h3>
 <table>
 	<thead>
 		<tr><th>Date</th>

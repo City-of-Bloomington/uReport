@@ -11,8 +11,8 @@ $neighborhoods = Location::getNeighborhoodAssociations($this->location);
 
 echo "
 <div class=\"locationInfo\">
-<h1>Location Information</h1>
-<div><a href=\"$url\">$location</a></div>
+	<h1>Location Information</h1>
+	<div><a href=\"$url\">$location</a></div>
 ";
 
 if (count($neighborhoods)) {
@@ -29,21 +29,23 @@ if (count($neighborhoods)) {
 	";
 }
 
+?>
+</div>
+<?php
 $constituents = new PersonList(array('address'=>$this->location));
 if (count($constituents)) {
 	echo "
-	<h2>Constituents</h2>
-	<ul>
-	";
-		foreach ($constituents as $person) {
-			$url = BASE_URL.'/people/viewPerson.php?person_id='.$person->getId();
-			$name = View::escape($person->getFullname());
-			echo "<li><a href=\"$url\">$name</a></li>";
-		}
-	echo "
-	</ul>
+	<div class=\"locationResidents\">
+		<h2>Associated Residents</h2>
+		<ul>
+		";
+			foreach ($constituents as $person) {
+				$url = BASE_URL.'/people/viewPerson.php?person_id='.$person->getId();
+				$name = View::escape($person->getFullname());
+				echo "<li><a href=\"$url\">$name</a></li>";
+			}
+		echo "
+		</ul>
+	</div>	
 	";
 }
-echo "
-</div>
-";

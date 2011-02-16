@@ -1,43 +1,53 @@
-h1 { font-size:16pt; font-weight:bold; margin-bottom:.5em; }
-a { text-decoration:none; }
+html {font:sans-serif 10pt; }
+h1 { font-size:1.5em; margin-bottom:.25em; }
+h2 {font:bold 1em; margin-bottom:.25em;}
+a { text-decoration:none; color:blue; }
 table { margin-bottom:.5em; }
-th { color:gray; }
-td { padding:0 .25em; }
+th { color:#333333; font-size:.9em; padding:0em .25em .5em; }
+td { padding:.25em; }
 ul { list-style-type:none; margin:0; padding:0; }
+
 
 #banner { background-color:#3366CC; color:white; padding:.5em; border-bottom:2px solid black; }
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; }
 
-#menuBar { border-bottom:2px solid black; }
+#menuBar { border-bottom:1px solid #CCCCCC; }
 #menuBar ul { margin:.5em; padding:0; }
-#menuBar li { display:inline; margin-right:1em; font-size:10pt; }
-#menuBar a { color:#3366CC; font-size:14pt; font-weight:bold; }
+#menuBar li { display:inline; margin-right:1em;}
+#menuBar a { font-size:1.25em; }
+#menuBar a:visited { color:blue; }
 
-#footer { border-top:2px solid black; padding:.5em; font-size:10pt; }
+#footer { border-top:2px solid black; padding:.5em; }
 #footer li { display:inline; margin-right:.5em; }
 #footer a { font-weight:bold; color:black; }
-
-#panel-one { padding:2px; }
-#panel-one div { border:2px solid black; }
-#panel-one div h1 { background-color:#3366CC; color:white; font-size:14pt; border-bottom:2px solid black; padding:.25em; }
+#panel-container {}
+#content-panel {}
+#panel-one { }
+#panel-one div { }
+#panel-one div h1 { background-color:#3366CC; color:white; border-bottom:2px solid black; padding:.25em; }
 #panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#ticket-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
-#issue-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
-#action-panel 	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
-#location-panel { border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
-#person-panel	{ border-top:1px solid gray; clear:both; padding:5px; overflow:auto; }
+#ticket-panel 	{ clear:both; padding:10px; overflow:auto; }
+#issue-panel 	{ border-top:1px solid gray; clear:both; padding:10px; overflow:auto; }
+#action-panel 	{ border-top:1px solid gray; clear:both; padding:10px; overflow:auto; }
+#location-panel { border-bottom:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#person-panel	{ clear:both; padding:10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid gray; }
-#location-panel .locationInfo 		{ width:290px; float:left; border-right:1px solid gray; }
+#location-panel .locationInfo 		{ width:290px; float:left; }
+.locationInfo > div {margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; border-right:1px solid gray; }
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList			{ margin-left:295px; overflow:auto; }
+#location-panel .locationResidents { }
 #location-panel .findLocationResults	{ margin-left:295px; overflow:auto; }
+.searchResults {
+	
+}
 
 /* Buttons */
 .button { }
@@ -47,15 +57,15 @@ ul { list-style-type:none; margin:0; padding:0; }
 	background-repeat:no-repeat;
 	vertical-align:middle;
 }
-.button .add a { width:14px; height:14px; background:url('images/add.png'); }
-.button .edit a { width:14px; height:14px; background:url('images/edit.png'); }
-.button .delete a { width:14px; height:14px; background:url('images/delete.png'); }
+.button .add a { width:11px; height:10px; background:url('images/add.gif'); }
+.button .edit a { width:16px; height:16px; background:url('images/edit.png'); }
+.button .delete a { width:12px; height:12px; background:url('images/delete.gif'); }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
 	color:black; font-size:12pt; font-weight:bold;
-	padding-left:16px;
-	background:url('images/add.png') no-repeat;
+	padding-left:11px;
+	background:url('images/add.gif') no-repeat;
 }
 
 
