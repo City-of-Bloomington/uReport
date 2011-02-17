@@ -1,18 +1,26 @@
 html {font:sans-serif 10pt; }
-h1 { font-size:1.5em; margin-bottom:.25em; }
-h2 {font:bold 1em; margin-bottom:.25em;}
+h1 { font-size:1.25em; font-weight:bold; margin-bottom:.25em; }
+h2 {font-size:1; font-weight:bold; margin-bottom:.25em;}
 a { text-decoration:none; color:blue; }
 table { margin-bottom:.5em; }
-th { color:#333333; font-size:.9em; padding:0em .25em .5em; }
-td { padding:.25em; }
+th { font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
+td { padding:.5em .75em; }
+.date, .issueType {font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
 
 
-#banner { background-color:#3366CC; color:white; padding:.5em; border-bottom:2px solid black; }
+#banner {
+	width:100%; height:90px;
+	background-color:#003366;
+	background-image: -moz-linear-gradient( rgba(6,42,78,1), rgba(15,98,180,.5), rgba(6,42,78,1));
+	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(6,42,78,1)), color-stop(.5, rgba(15,98,180,.5)), color-stop(1, rgba(6,42,78,1)));
+	margin:0; padding:5px 0;
+	position:relative;
+}
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; }
 
-#menuBar { border-bottom:1px solid #CCCCCC; }
+#menuBar { }
 #menuBar ul { margin:.5em; padding:0; }
 #menuBar li { display:inline; margin-right:1em;}
 #menuBar a { font-size:1.25em; }
@@ -29,14 +37,14 @@ ul { list-style-type:none; margin:0; padding:0; }
 #panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#ticket-panel 	{ clear:both; padding:10px; overflow:auto; }
-#issue-panel 	{ border-top:1px solid gray; clear:both; padding:10px; overflow:auto; }
-#action-panel 	{ border-top:1px solid gray; clear:both; padding:10px; overflow:auto; }
-#location-panel { border-bottom:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#person-panel	{ clear:both; padding:10px; overflow:auto; }
+#ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#action-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#location-panel { border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
-#ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid gray; }
+#ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid #cccccc; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div {margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; border-right:1px solid gray; }

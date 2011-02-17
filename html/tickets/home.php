@@ -21,7 +21,7 @@ $fields = array(
 if (count(array_intersect($fields,array_keys($_GET)))) {
 	$ticketList = new TicketList();
 	$ticketList->search($_GET);
-	$template->blocks[] = new Block('tickets/searchResults.inc',array('ticketList'=>$ticketList));
+	$template->blocks[] = new Block('tickets/searchResults.inc',array('ticketList'=>$ticketList,'title'=>'Search Results'));
 }
 
 

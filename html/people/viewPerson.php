@@ -11,14 +11,17 @@ $template = new Template('people');
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
 
+
+
 $reportedTickets = $person->getReportedTickets();
 if (count($reportedTickets)) {
 	$template->blocks['ticket-panel'][] = new Block(
-		'tickets/ticketList.inc',
+		'tickets/searchResults.inc',
 		array(
 			'ticketList'=>$person->getReportedTickets(),
 			'title'=>'Tickets With Issues Reported By '.$person->getFullname()
 		)
 	);
 }
+
 echo $template->render();

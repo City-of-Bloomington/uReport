@@ -18,7 +18,17 @@ $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',array('location'=>$_GET['location'])
 );
-$template->blocks['ticket-panel'][] = new Block('tickets/ticketList.inc',array('ticketList'=>$ticketList));
-
+$fields = array(
+	'person_id','location',
+	'street_address_id','subunit_id',
+	'neighborhoodAssociation','township',
+	'issueType_id','category_id','contactMethod_id'
+);
+if (count(array_intersect($fields,array_keys($_GET)))) {
+	$ticketList = new TicketList();
+	$ticketList->search($_GET);
+$template->blocks['ticket-panel'][] = new Block('tickets/searchResults.inc',array('ticketList'=>$ticketList));
+}
 
 echo $template->render();
+

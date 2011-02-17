@@ -9,19 +9,21 @@ $url = new URL(BASE_URL.'/tickets/viewTicket.php');
 
 echo "
 <div class=\"searchResults\">
+<h1>Tickets</h1>
 <table>
 	<thead>
 		<tr><th>Ticket #</th>
-			<th>Category</th>
+			<th>Categories</th>
+			<th>Status</th>
 			<th>Location</th>
-			<th>Received Date</th>
-			<th>Received By</th>
+			<th>Opened Date</th>
+			<th>Assigned to</th>
 		</tr>
 	</thead>
 	<tbody>
 ";
 	foreach ($this->ticketList as $ticket) {
-		$date = $ticket->getDate('Y-m-d');
+		$date = $ticket->getDate('m-d-y');
 		$person = $ticket->getPerson() ? View::escape($ticket->getPerson()->getFullname()) : '';
 		$location = View::escape($ticket->getLocation());
 
@@ -42,9 +44,10 @@ echo "
 					}
 			echo "
 				</td>
+				<td>Status</td>
 				<td>$location</td>
 				<td>$date</td>
-				<td>$person</td>
+				<td>Staff</td>
 			</tr>
 			";
 		}

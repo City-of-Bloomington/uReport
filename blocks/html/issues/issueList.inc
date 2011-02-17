@@ -7,18 +7,8 @@
  */
 ?>
 <div class="issueList">
-<h3>Issues</h3>
+<h1>Associated Issues</h1>
 <table>
-	<thead>
-		<tr><th>Date</th>
-			<th>Type</th>
-			<th>Categories</th>
-			<th>Entered By</th>
-			<th>Reported By</th>
-			<th>Contacted By</th>
-			<th>Comments</th>
-		</tr>
-	</thead>
 	<tbody>
 	<?php
 		foreach ($this->issueList as $issue) {
@@ -43,9 +33,28 @@
 			$contactMethod = View::escape($issue->getContactMethod());
 			$notes = View::escape($issue->getNotes());
 			echo "
-			<tr><td>{$issue->getDate('Y-m-d')}</td>
-				<td>$type</td>
-				<td>
+			<tr><td class=\"date\">{$issue->getDate('m-d-y')}</td>
+				<td class=\"issueType\">$type</td>
+				<td>Edit Issue</td>
+				<td>Add Response</td>
+			</tr>
+			</tbody>
+			</table>
+			<table>
+			<thead>
+				<tr>
+					<th>Created by</th>
+					<th>Issue Lenght</th>
+					<th>Categories</th>
+					<th>Reported By</th>
+					<th>Contacted By</th>
+					<th>Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td>$username</td>
+					<td>10 days</td>
+					<td>
 			";
 					if ($issue->hasCategories()) {
 						echo '<ul>';
@@ -57,7 +66,6 @@
 					}
 			echo "
 				</td>
-				<td>$username</td>
 				<td>$constituent</td>
 				<td>$contactMethod</td>
 				<td>$notes</td>
