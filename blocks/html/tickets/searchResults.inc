@@ -9,7 +9,7 @@ $url = new URL(BASE_URL.'/tickets/viewTicket.php');
 
 echo "
 <div class=\"searchResults\">
-<h1>Tickets</h1>
+<h1>$this->title</h1>
 <table>
 	<thead>
 		<tr><th>Ticket #</th>
