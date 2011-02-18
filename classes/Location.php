@@ -25,7 +25,7 @@ class Location
 
 			$xml = new SimpleXMLElement($url,null,true);
 			foreach ($xml as $address) {
-				$results["$address->streetAddress"] = "$address->id";
+				$results["{$address->streetAddress}"] = "{$address->id}";
 			}
 		}
 		return $results;
