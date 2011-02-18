@@ -19,9 +19,9 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 				</td>
 			</tr>
 
-			<tr><td><label for="default_user_id" class="required">Default User</label></td>
-				<td><input name="default_user_id" id="default_user_id"
-						value="<?php echo $this->department->getDefault_user_id(); ?>" />
+			<tr><td><label for="default_person_id" class="required">Default Person</label></td>
+				<td><input name="default_person_id" id="default_person_id"
+						value="<?php echo $this->department->getDefault_person_id(); ?>" />
 				</td>
 			</tr>
 

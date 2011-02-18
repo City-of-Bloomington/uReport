@@ -20,7 +20,7 @@
 		<thead>
 			<tr><th></th>
 				<th>Name</th>
-				<th>Default User</th>
+				<th>Default Person</th>
 				<th>Categories</th>
 			</tr>
 		</thead>
@@ -39,11 +39,11 @@
 					);
 				}
 				$name = View::escape($department->getName());
-				$user = View::escape($department->getDefault_user()->getUsername());
+				$person = View::escape($department->getDefault_person()->getFullname());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
-					<td>$user</td>
+					<td>$person</td>
 					<td>
 				";
 					if ($department->hasCategories()) {

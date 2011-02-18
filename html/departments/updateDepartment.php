@@ -28,7 +28,7 @@ else {
 
 if (isset($_POST['name'])) {
 	$department->setName($_POST['name']);
-	$department->setDefault_user_id($_POST['default_user_id']);
+	$department->setDefault_person_id($_POST['default_person_id']);
 
 	try {
 		$department->save();
