@@ -39,6 +39,11 @@ ini_set('include_path','.'.PATH_SEPARATOR.ZEND);
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();
 
+/**
+ * YUI
+ * What host do you want to use for the YUI libraries
+ */
+define('YUI','http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build');
 
 /**
  * Used when there's an error on the site.  The Framework will
@@ -127,4 +132,4 @@ if (isset($_SESSION['USER'])) {
 /**
  * Addresses are validated against a Master Address web service
  */
-define('MASTER_ADDRESS','http://');
+define('MASTER_ADDRESS','http://localhost/master_address');
