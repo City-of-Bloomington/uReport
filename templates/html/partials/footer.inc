@@ -1,6 +1,5 @@
 <div id="footer">
-	<p>
-		<?php
+	<p><?php
 			# Calculate the process time
 			$endTime = microtime(1);
 			$processTime = $endTime - $startTime;
@@ -8,3 +7,10 @@
 		?>
 	</p>
 </div>
+<?php
+	if (isset($this->assets['scripts'])) {
+		foreach ($this->assets['scripts'] as $url) {
+			echo "<script type=\"text/javascript\" src=\"$url\"></script>\n";
+		}
+	}
+?>
