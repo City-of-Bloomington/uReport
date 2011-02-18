@@ -7,7 +7,7 @@
 ?>
 <div class="findLocationForm">
 	<h1>Find a Location</h1>
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="get" action="<?php echo BASE_URL; ?>/locations">
 		<fieldset>
 			<input name="location_query"
 				value="<?php echo isset($_GET['location_query']) ? View::escape($_GET['location_query']) : ''; ?>" />
