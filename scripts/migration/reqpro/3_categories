@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../../configuration.inc';
-include '../../migrationConfig.inc';
+include '../../../configuration.inc';
+include './migrationConfig.inc';
 $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
 $sql = "select comp_desc from c_types where c_type1!=0";
@@ -29,17 +29,4 @@ foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
 		}
 	}
 	echo $category->getName()."\n";
-}
-
-
-$actionTypes = array(
-	'assignment'=>'assigned',
-	'inspection'=>'inspected',
-	'resolution'=>'resolved'
-);
-foreach ($actionTypes as $name=>$verb) {
-	$actionType = new ActionType();
-	$actionType->setName($name);
-	$actionType->setVerb($verb);
-	$actionType->save();
 }

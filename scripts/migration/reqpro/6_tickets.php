@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../../configuration.inc';
-include '../../migrationConfig.inc';
+include '../../../configuration.inc';
+include './migrationConfig.inc';
 
 $townships = array(
 	1=>'Bean Blossom',
@@ -168,19 +168,28 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 	// Create the Action history
 	if ($row['assigned_to']) {
-		list($username,$fullname) = explode(':',$row['assigned_to']);
 		$action = new Action();
 		$action->setActionType('assignment');
-		$action->setDate($row['assigned_date']);
+		$action->setActionDate($row['assigned_date']);
 		$action->setTicket($ticket);
+		$action->setEnteredDate($row['received']);
+		$action->setNotes("$row[action_taken]\n$row[next_action]");
 		try {
+			$user = new User(strtolower($row['received_by']));
+		}
+		catch (Exception $e) {
+			$user = new User('inghamn');
+		}
+		$action->setEnteredByPerson($user->getPerson());
+		try {
+			list($username,$fullname) = explode(':',$row['assigned_to']);
 			$user = new User($username);
-			$action->setTargetPerson($user->getPerson());
+			$action->setActionPerson($user->getPerson());
 			if ($ticket->getPerson()) {
-				$action->setPerson($ticket->getPerson());
+				$action->setActionPerson($ticket->getPerson());
 			}
 			else {
-				$action->setPerson($user->getPerson());
+				$action->setActionPerson($user->getPerson());
 			}
 			$action->save();
 		}

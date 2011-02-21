@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../../configuration.inc';
-include '../../migrationConfig.inc';
+include '../../../configuration.inc';
+include './migrationConfig.inc';
 
 $lookup = array(
 	'Housing Authority'=>'simsd',
