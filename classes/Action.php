@@ -7,17 +7,18 @@
 class Action
 {
 	private $id;
-	private $actionType_id;
-	private $date;
 	private $ticket_id;
-	private $person_id;
-	private $targetPerson_id;
+	private $actionType_id;
+	private $enteredDate;
+	private $enteredByPerson_id;
+	private $actionDate;
+	private $actionPerson_id;
 	private $notes;
 
-	private $actionType;
 	private $ticket;
-	private $person;
-	private $targetPerson;
+	private $actionType;
+	private $enteredByPerson;
+	private $actionPerson;
 
 	/**
 	 * Populates the object with data
@@ -46,12 +47,9 @@ class Action
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-						if ($field=='date') {
-							if (substr($value,0,4)!='0000') {
+						if (preg_match('/Date/',$field)) {
+							if (substr($value,0,4) != '0000') {
 								$value = new Date($value);
-							}
-							else {
-								$value = new Date();
 							}
 						}
 						$this->$field = $value;
@@ -65,7 +63,7 @@ class Action
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->date = new Date();
+			$this->enteredDate = new Date();
 		}
 	}
 
@@ -76,10 +74,17 @@ class Action
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->actionType_id || !$this->ticket_id || !$this->person_id) {
+		if (!$this->actionType_id || !$this->enteredByPerson_id) {
 			throw new Exception('missingRequiredFields');
 		}
 
+		if (!$this->enteredDate) {
+			$this->enteredDate = new Date();
+		}
+
+		if (!$this->actionDate) {
+			$this->actionDate = new Date();
+		}
 	}
 
 	/**
@@ -90,11 +95,12 @@ class Action
 		$this->validate();
 
 		$data = array();
-		$data['actionType_id'] = $this->actionType_id;
-		$data['date'] = $this->date->format('Y-m-d');
 		$data['ticket_id'] = $this->ticket_id;
-		$data['person_id'] = $this->person_id;
-		$data['targetPerson_id'] = $this->targetPerson_id ? $this->targetPerson_id : null;
+		$data['actionType_id'] = $this->actionType_id;
+		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
+		$data['enteredByPerson_id'] = $this->enteredByPerson_id;
+		$data['actionDate'] = $this->actionDate->format('Y-m-d');
+		$data['actionPerson_id'] = $this->actionPerson_id ? $this->actionPerson_id : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->id) {
@@ -133,6 +139,28 @@ class Action
 	/**
 	 * @return int
 	 */
+	public function getTicket_id()
+	{
+		return $this->ticket_id;
+	}
+
+	/**
+	 * @return Ticket
+	 */
+	public function getTicket()
+	{
+		if ($this->ticket_id) {
+			if (!$this->ticket) {
+				$this->ticket = new Ticket($this->ticket_id);
+			}
+			return $this->ticket;
+		}
+		return null;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getActionType_id()
 	{
 		return $this->actionType_id;
@@ -162,78 +190,76 @@ class Action
 	 * @param string $format
 	 * @return string|DateTime
 	 */
-	public function getDate($format=null)
+	public function getEnteredDate($format=null)
 	{
-		if ($format && $this->date) {
-			return $this->date->format($format);
+		if ($format && $this->enteredDate) {
+			return $this->enteredDate->format($format);
 		}
 		else {
-			return $this->date;
+			return $this->enteredDate;
 		}
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getTicket_id()
+	public function getEnteredByPerson_id()
 	{
-		return $this->ticket_id;
-	}
-
-	/**
-	 * @return Ticket
-	 */
-	public function getTicket()
-	{
-		if ($this->ticket_id) {
-			if (!$this->ticket) {
-				$this->ticket = new Ticket($this->ticket_id);
-			}
-			return $this->ticket;
-		}
-		return null;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPerson_id()
-	{
-		return $this->person_id;
+		return $this->enteredByPerson_id;
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getPerson()
+	public function getEnteredByPerson()
 	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
+		if ($this->enteredByPerson_id) {
+			if (!$this->enteredByPerson) {
+				$this->enteredByPerson = new Person($this->enteredByPerson_id);
 			}
-			return $this->person;
+			return $this->enteredByPerson;
 		}
 		return null;
 	}
 
 	/**
+	 * Returns the date/time in the desired format
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the Date object is returned
+	 *
+	 * @param string $format
+	 * @return string|DateTime
+	 */
+	public function getActionDate($format=null)
+	{
+		if ($format && $this->actionDate) {
+			return $this->actionDate->format($format);
+		}
+		else {
+			return $this->actionDate;
+		}
+	}
+
+	/**
 	 * @return int
 	 */
-	public function getTargetPerson_id()
+	public function getActionPerson_id()
 	{
-		return $this->targetPerson_id;
+		return $this->actionPerson_id;
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getTargetPerson()
+	public function getActionPerson()
 	{
-		if ($this->targetPerson_id) {
-			if (!$this->targetPerson) {
-				$this->targetPerson = new Person($this->targetPerson_id);
+		if ($this->actionPerson_id) {
+			if (!$this->actionPerson) {
+				$this->actionPerson = new Person($this->actionPerson_id);
 			}
-			return $this->targetPerson;
+			return $this->actionPerson;
 		}
 		return null;
 	}
@@ -249,50 +275,6 @@ class Action
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
-	/**
-	 * @param int $int
-	 */
-	public function setActionType_id($int)
-	{
-		$this->actionType = new ActionType($int);
-		$this->actionType_id = $int;
-	}
-
-	/**
-	 * @param string|ActionType $actionType
-	 */
-	public function setActionType($actionType)
-	{
-		if (!$actionType instanceof ActionType) {
-			$actionType = new ActionType($actionType);
-		}
-		$this->actionType_id = $actionType->getId();
-		$this->actionType = $actionType;
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setDate($date)
-	{
-		if ($date instanceof Date) {
-			$this->date = $date;
-		}
-		elseif ($date) {
-			$this->date = new Date($date);
-		}
-		else {
-			$this->date = null;
-		}
-	}
 
 	/**
 	 * @param int $int
@@ -315,37 +297,98 @@ class Action
 	/**
 	 * @param int $int
 	 */
-	public function setPerson_id($int)
+	public function setActionType_id($int)
 	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
+		$this->actionType = new ActionType($int);
+		$this->actionType_id = $int;
 	}
 
 	/**
-	 * @param Person $person
+	 * @param ActionType|string $actionType
 	 */
-	public function setPerson($person)
+	public function setActionType($actionType)
 	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
+		if (!$actionType instanceof ActionType) {
+			$actionType = new ActionType($actionType);
+		}
+		$this->actionType_id = $actionType->getId();
+		$this->actionType = $actionType;
+	}
+
+	/**
+	 * Sets the date
+	 *
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
+	 */
+	public function setEnteredDate($date)
+	{
+		if ($date) {
+			$this->enteredDate = new Date($date);
+		}
+		else {
+			$this->enteredDate = null;
+		}
 	}
 
 	/**
 	 * @param int $int
 	 */
-	public function setTargetPerson_id($int)
+	public function setEnteredByPerson_id($int)
 	{
-		$this->targetPerson = new Person($int);
-		$this->targetPerson_id = $int;
+		$this->enteredByPerson = new Person($int);
+		$this->enteredByPerson_id = $int;
 	}
 
 	/**
-	 * @param Person $targetPerson
+	 * @param Person $person
 	 */
-	public function setTargetPerson($targetPerson)
+	public function setEnteredByPerson($person)
 	{
-		$this->targetPerson_id = $targetPerson->getId();
-		$this->targetPerson = $targetPerson;
+		$this->enteredByPerson_id = $person->getId();
+		$this->enteredByPerson = $person;
+	}
+
+	/**
+	 * Sets the date
+	 *
+	 * Date arrays should match arrays produced by getdate()
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param int|string|array $date
+	 */
+	public function setActionDate($date)
+	{
+		if ($date) {
+			$this->actionDate = new Date($date);
+		}
+		else {
+			$this->actionDate = null;
+		}
+	}
+
+	/**
+	 * @param int $int
+	 */
+	public function setActionPerson_id($int)
+	{
+		$this->actionPerson = new Person($int);
+		$this->actionPerson_id = $int;
+	}
+
+	/**
+	 * @param Person $person
+	 */
+	public function setActionPerson($person)
+	{
+		$this->actionPerson_id = $person->getId();
+		$this->actionPerson = $person;
 	}
 
 	/**
@@ -360,21 +403,4 @@ class Action
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * Alias for getActionType()
-	 *
-	 * @return ActionType
-	 */
-	public function getType()
-	{
-		return $this->getActionType();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getVerb()
-	{
-		return $this->getActionType()->getVerb();
-	}
 }

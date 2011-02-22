@@ -125,21 +125,32 @@ create table issue_categories (
 create table actionTypes (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null,
-	verb varchar(128) not null
+	description varchar(128) not null,
+	formLabel varchar(128) not null,
+	status varchar(128) not null
 );
 
 create table actions (
 	id int unsigned not null primary key auto_increment,
-	actionType_id int  unsigned not null,
-	date date not null,
 	ticket_id int unsigned not null,
-	person_id int unsigned not null,
-	targetPerson_id int unsigned,
+	actionType_id int  unsigned not null,
+	enteredDate date not null,
+	enteredByPerson_id int unsigned not null,
+	actionDate date not null,
+	actionPerson_id int unsigned,
 	notes text,
-	foreign key (actionType_id) references actionTypes(id),
 	foreign key (ticket_id) references tickets(id),
-	foreign key (person_id) references people(id),
-	foreign key (targetPerson_id) references people(id)
+	foreign key (actionType_id) references actionTypes(id),
+	foreign key (enteredByPerson_id) references people(id),
+	foreign key (actionPerson_id) references people(id)
+);
+
+create table department_actions (
+	department_id int unsigned not null,
+	action_id int unsigned not null,
+	foreign key (department_id) references departments(id),
+	foreign key (action_id) references actions(id),
+	primary key (department_id,action_id)
 );
 
 /*! set foreign_key_checks=1 */;

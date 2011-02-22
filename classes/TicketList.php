@@ -27,6 +27,10 @@ class TicketList extends ZendDbResultIterator
 		'issueType_id','constituent_id','contactMethod_id','case_number'
 	);
 
+	private $actionColumns = array(
+		'actionType_id','actionPerson_id','enteredByPerson_id'
+	);
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -52,7 +56,7 @@ class TicketList extends ZendDbResultIterator
 	 */
 	public function createSelection()
 	{
-		$this->select->from(array('t'=>'tickets'));
+		$this->select->distinct()->from(array('t'=>'tickets'));
 	}
 
 	/**
@@ -83,6 +87,17 @@ class TicketList extends ZendDbResultIterator
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
 							$this->select->where("i.$column=?",$fields[$column]);
+						}
+					}
+				}
+			}
+
+			if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
+				foreach ($this->actionColumns as $column) {
+					if (isset($fields[$column])) {
+						$fields[$column] = trim($fields[$column]);
+						if ($fields[$column]) {
+							$this->select->where("a.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -136,6 +151,17 @@ class TicketList extends ZendDbResultIterator
 				}
 			}
 
+			if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
+				foreach ($this->actionColumns as $column) {
+					if (isset($fields[$column])) {
+						$fields[$column] = trim($fields[$column]);
+						if ($fields[$column]) {
+							$this->select->where("a.$column=?",$fields[$column]);
+						}
+					}
+				}
+			}
+
 			if (isset($fields['category_id']) && $fields['category_id']) {
 				$this->select->where('c.category_id=?',$fields['category_id']);
 			}
@@ -184,6 +210,10 @@ class TicketList extends ZendDbResultIterator
 		if (isset($fields['category_id'])) {
 			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
 			$joins['c'] = array('table'=>'issue_categories','condition'=>'i.id=c.issue_id');
+		}
+
+		if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
+			$joins['a'] = array('table'=>'actions','condition'=>'t.id=a.ticket_id');
 		}
 
 		foreach ($joins as $key=>$join) {

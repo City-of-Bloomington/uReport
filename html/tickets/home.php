@@ -16,12 +16,16 @@ $fields = array(
 	'person_id','location',
 	'street_address_id','subunit_id',
 	'neighborhoodAssociation','township',
-	'issueType_id','category_id','contactMethod_id'
+	'issueType_id','category_id','contactMethod_id',
+	'actionType_id','actionPerson_id'
 );
 if (count(array_intersect($fields,array_keys($_GET)))) {
 	$ticketList = new TicketList();
 	$ticketList->search($_GET);
-	$template->blocks[] = new Block('tickets/searchResults.inc',array('ticketList'=>$ticketList,'title'=>'Search Results'));
+	$template->blocks[] = new Block(
+		'tickets/searchResults.inc',
+		array('ticketList'=>$ticketList,'title'=>'Search Results')
+	);
 }
 
 

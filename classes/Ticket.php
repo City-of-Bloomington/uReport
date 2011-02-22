@@ -361,32 +361,14 @@ class Ticket
 	}
 
 	/**
-	 * Used only for importing data
-	 * @param int $int
+	 * @return string
 	 */
-	public function setId($id)
+	public function getStatus()
 	{
-		if (!$this->id) {
-			// Make sure we're not duplicating an ID
-			try {
-				$ticket = new Ticket($id);
-			}
-			catch (Exception $e) {
-				$this->id = (int)$id;
-
-				$data = array();
-				$data['id'] = $this->id;
-				$data['date'] = $this->date->format('Y-m-d');
-				$data['person_id'] = $this->person_id ? $this->person_id : null;
-				$data['location'] = $this->location ? $this->location : null;
-				$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
-				$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
-
-				$zend_db = Database::getConnection();
-				$zend_db->insert('tickets',$data);
-				return;
-			}
-			throw new Exception('tickets/duplicateID');
+		$list = new ActionList();
+		$list->find(array('ticket_id'=>$this->id),'enteredDate desc');
+		if (count($list)) {
+			return $list[0]->getActionType()->getStatus();
 		}
 	}
 }

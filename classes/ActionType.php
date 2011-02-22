@@ -8,7 +8,9 @@ class ActionType
 {
 	private $id;
 	private $name;
-	private $verb;
+	private $description;
+	private $formLabel;
+	private $status;
 
 	/**
 	 * Populates the object with data
@@ -60,7 +62,7 @@ class ActionType
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name || !$this->verb) {
+		if (!$this->name || !$this->description || !$this->formLabel || !$this->status) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -74,7 +76,9 @@ class ActionType
 
 		$data = array();
 		$data['name'] = $this->name;
-		$data['verb'] = $this->verb;
+		$data['description'] = $this->description;
+		$data['formLabel'] = $this->formLabel;
+		$data['status'] = $this->status;
 
 		if ($this->id) {
 			$this->update($data);
@@ -120,10 +124,27 @@ class ActionType
 	/**
 	 * @return string
 	 */
-	public function getVerb()
+	public function getDescription()
 	{
-		return $this->verb;
+		return $this->description;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getFormLabel()
+	{
+		return $this->formLabel;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStatus()
+	{
+		return $this->status;
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -139,9 +160,25 @@ class ActionType
 	/**
 	 * @param string $string
 	 */
-	public function setVerb($string)
+	public function setDescription($string)
 	{
-		$this->verb = trim($string);
+		$this->description = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setFormLabel($string)
+	{
+		$this->formLabel = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setStatus($string)
+	{
+		$this->status = trim($string);
 	}
 
 	//----------------------------------------------------------------

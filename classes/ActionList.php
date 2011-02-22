@@ -10,8 +10,7 @@
  *
  * Beyond the basic $fields handled, you will need to write your own handling
  * of whatever extra $fields you need
- */
-/**
+ *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -45,7 +44,7 @@ class ActionList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='date',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='enteredDate',$limit=null,$groupBy=null)
 	{
 		$this->select->from('actions');
 

@@ -20,7 +20,9 @@
 		<thead>
 			<tr><th></th>
 				<th>Noun</th>
-				<th>Verb</th>
+				<th>Description</th>
+				<th>Form Label</th>
+				<th>Status</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,12 +39,16 @@
 						'edit'
 					);
 				}
-				$type = View::escape($actionType->getName());
-				$verb = View::escape($actionType->getVerb());
+				$name = View::escape($actionType->getName());
+				$description = View::escape($actionType->getDescription());
+				$formLabel = View::escape($actionType->getFormLabel());
+				$status = View::escape($actionType->getStatus());
 				echo "
 				<tr><td>$editButton</td>
-					<td>$type</td>
-					<td>$verb</td>
+					<td>$name</td>
+					<td>$description</td>
+					<td>$formLabel</td>
+					<td>$status</td>
 				</tr>
 				";
 			}

@@ -6,7 +6,6 @@
  * @param TicketList $this->ticketList
  */
 $url = new URL(BASE_URL.'/tickets/viewTicket.php');
-
 echo "
 <div class=\"searchResults\">
 <h1>$this->title</h1>
@@ -24,9 +23,9 @@ echo "
 ";
 	foreach ($this->ticketList as $ticket) {
 		$date = $ticket->getDate('m-d-y');
+		$status = View::escape($ticket->getStatus());
 		$person = $ticket->getPerson() ? View::escape($ticket->getPerson()->getFullname()) : '';
 		$location = View::escape($ticket->getLocation());
-
 		$url->ticket_id = $ticket->getId();
 		foreach ($ticket->getIssues() as $issue) {
 			echo "
@@ -44,7 +43,7 @@ echo "
 					}
 			echo "
 				</td>
-				<td>Status</td>
+				<td>$status</td>
 				<td>$location</td>
 				<td>$date</td>
 				<td>Staff</td>

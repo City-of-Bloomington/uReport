@@ -29,7 +29,9 @@ else {
 
 if (isset($_POST['name'])) {
 	$actionType->setName($_POST['name']);
-	$actionType->setVerb($_POST['verb']);
+	$actionType->setDescription($_POST['description']);
+	$actionType->setFormLabel($_POST['formLabel']);
+	$actionType->setStatus($_POST['status']);
 
 	try {
 		$actionType->save();

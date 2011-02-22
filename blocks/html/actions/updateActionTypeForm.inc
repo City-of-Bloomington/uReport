@@ -5,30 +5,40 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $title = $this->actionType->getId() ? 'Edit Action Type' : 'Add Action Type';
+
 $name = View::escape($this->actionType->getName());
-$verb = View::escape($this->actionType->getVerb());
+$description = View::escape($this->actionType->getDescription());
+$formLabel = View::escape($this->actionType->getFormLabel());
+$status = View::escape($this->actionType->getStatus());
 ?>
-<h1><?php echo $title; ?></h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<fieldset><legend>Action Type</legend>
-		<input name="actionType_id" type="hidden" value="<?php echo $this->actionType->getId(); ?>" />
-		<table>
+<div class="updateActionTypeForm">
+	<h1><?php echo $title; ?></h1>
+	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+		<fieldset><legend>Action Type</legend>
+			<input name="actionType_id" type="hidden" value="<?php echo $this->actionType->getId(); ?>" />
+			<table>
 
-			<tr><td><label for="name" class="required">Name</label></td>
-				<td><input name="name" id="name" value="<?php echo $name; ?>" />
-				</td>
-			</tr>
+				<tr><td><label for="name" class="required">Name</label></td>
+					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
+				</tr>
 
-			<tr><td><label for="verb" class="required">Verb</label></td>
-				<td><input name="verb" id="verb" value="<?php echo $verb; ?>" /></td>
-			</tr>
+				<tr><td><label for="description" class="required">Description</label></td>
+					<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
+				</tr>
 
-		</table>
-		<?php
-			echo $this->template->formButton('Submit','submit','submit');
-			echo $this->template->formButton(
-				'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/actions';"
-			);
-		?>
-	</fieldset>
-</form>
+				<tr><td><label for="formLabel" class="required">Form Label</label></td>
+					<td><input name="formLabel" id="formLabel" value="<?php echo $formLabel; ?>" /></td>
+				</tr>
+
+				<tr><td><label for="status" class="required">Status</label></td>
+					<td><input name="status" id="status" value="<?php echo $status; ?>" /></td>
+			</table>
+			<?php
+				echo $this->template->formButton('Submit','submit','submit');
+				echo $this->template->formButton(
+					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/actions';"
+				);
+			?>
+		</fieldset>
+	</form>
+</div>
