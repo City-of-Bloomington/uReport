@@ -18,6 +18,17 @@ $sql = "select distinct
 $result = $pdo->query($sql);
 
 foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
+	// Skip people who are already in the system
+	if ($row['e_mail_address']) {
+		$list = new PersonList(array('email'=>$row['e_mail_address']));
+		if (count($list)) {
+			continue;
+		}
+	}
+	$list = new PersonList(array('firstname'=>$row['first_name'],'lastname'=>$row['last_name']));
+	if (count($list)) {
+		continue;
+	}
 
 	$person = new Person();
 	$person->setFirstname(ucwords(strtolower($row['first_name'])));
