@@ -185,4 +185,17 @@ class ActionType
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Returns an array of status strings
+	 *
+	 * Returns the distinct list of statuses that are used across all ActionTypes
+	 *
+	 * @return array
+	 */
+	public static function getStatuses()
+	{
+		$zend_db = Database::getConnection();
+		$result = $zend_db->query('select distinct status from actionTypes');
+		return $result->fetchAll(Zend_Db::FETCH_COLUMN);
+	}
 }

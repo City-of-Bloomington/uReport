@@ -16,7 +16,7 @@ echo "
 			<th>Status</th>
 			<th>Location</th>
 			<th>Opened Date</th>
-			<th>Assigned to</th>
+			<th>Entered By</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -46,7 +46,7 @@ echo "
 				<td>$status</td>
 				<td>$location</td>
 				<td>$date</td>
-				<td>Staff</td>
+				<td>$person</td>
 			</tr>
 			";
 		}

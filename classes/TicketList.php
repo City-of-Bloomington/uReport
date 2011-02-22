@@ -28,7 +28,7 @@ class TicketList extends ZendDbResultIterator
 	);
 
 	private $actionColumns = array(
-		'actionType_id','actionPerson_id','enteredByPerson_id'
+		'actionType_id','actionPerson_id','enteredByPerson_id','status'
 	);
 
 	/**
@@ -97,7 +97,8 @@ class TicketList extends ZendDbResultIterator
 					if (isset($fields[$column])) {
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
-							$this->select->where("a.$column=?",$fields[$column]);
+							$a = $column=='status' ? 'at' : 'a';
+							$this->select->where("$a.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -156,7 +157,8 @@ class TicketList extends ZendDbResultIterator
 					if (isset($fields[$column])) {
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
-							$this->select->where("a.$column=?",$fields[$column]);
+							$a = $column=='status' ? 'at' : 'a';
+							$this->select->where("$a.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -214,6 +216,7 @@ class TicketList extends ZendDbResultIterator
 
 		if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
 			$joins['a'] = array('table'=>'actions','condition'=>'t.id=a.ticket_id');
+			$joins['at'] = array('table'=>'actionTypes','condition'=>'a.actionType_id=at.id');
 		}
 
 		foreach ($joins as $key=>$join) {

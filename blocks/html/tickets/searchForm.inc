@@ -132,6 +132,22 @@
 
 		<fieldset><legend>Actions</legend>
 			<table>
+				<tr><td><label for="status">Status</label></td>
+					<td><select name="status" id="status">
+							<option></option>
+							<?php
+								$list = ActionType::getStatuses();
+								foreach ($list as $status) {
+									$selected = (isset($_GET['status']) && $_GET['status']==$status)
+										? 'selected="selected"'
+										: '';
+									$status = View::escape($status);
+									echo "<option $selected>$status</option>";
+								}
+							?>
+						</select>
+					</td>
+				</tr>
 				<tr><td><label for="actionType_id">Action</label></td>
 					<td><select name="actionType_id" id="actionType_id">
 							<option></option>

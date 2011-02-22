@@ -71,6 +71,8 @@ class Ticket
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		# This needs to remain commented out until we're finished with the migration
+		# The migration data does not have all the required fields
 		#if (!$this->person_id) {
 		#	throw new Exception('tickets/missingPerson');
 		#}
