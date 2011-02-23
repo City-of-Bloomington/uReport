@@ -18,14 +18,13 @@
 		<tbody>
 		<?php
 			foreach ($this->actionList as $action) {
-				$person = $action->getTargetPerson() ? $action->getTargetPerson() : $action->getPerson();
-				$name = View::escape($person->getFullname());
-				$verb = View::escape($action->getVerb());
+				$notes = View::escape($action->getNotes());
+				$description = View::escape($action->getDescription());
 				$notes = View::escape($action->getNotes());
 
 				echo "
-				<tr><td>{$action->getDate('Y-m-d')}</td>
-					<td>$verb $name</td>
+				<tr><td>{$action->getActionDate('Y-m-d')}</td>
+					<td>$description</td>
 					<td>$notes</td>
 				</tr>
 				";

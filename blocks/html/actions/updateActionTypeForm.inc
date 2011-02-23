@@ -13,6 +13,16 @@ $status = View::escape($this->actionType->getStatus());
 ?>
 <div class="updateActionTypeForm">
 	<h1><?php echo $title; ?></h1>
+	<h2>Description variables</h2>
+	<p>You can call for data by using these strings inside the description</p>
+	<table>
+		<tr><th>{enteredBy}</th>
+			<td>The person who entered the action</td>
+		</tr>
+		<tr><th>{actionPerson}</th>
+			<td>The person the action is about</td>
+		</tr>
+	</table>
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 		<fieldset><legend>Action Type</legend>
 			<input name="actionType_id" type="hidden" value="<?php echo $this->actionType->getId(); ?>" />

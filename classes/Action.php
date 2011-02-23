@@ -403,4 +403,24 @@ class Action
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		$enteredBy = $this->getEnteredByPerson() ? $this->getEnteredByPerson()->getFullname() : '';
+		$actionPerson = $this->getActionPerson() ? $this->getActionPerson()->getFullname() : '';
+
+		return preg_replace(
+			array(
+				'/\{enteredBy\}/',
+				'/\{actionPerson\}/'
+			),
+			array(
+				$enteredBy,
+				$actionPerson
+			),
+			$this->getActionType()->getDescription()
+		);
+	}
 }
