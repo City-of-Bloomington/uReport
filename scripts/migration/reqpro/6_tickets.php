@@ -24,10 +24,12 @@ $townships = array(
 
 $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
-$sql = "select c.*, t.comp_desc, a.name as neighborhood
+$sql = "select c.*, t.comp_desc, a.name as neighborhood,
+			i.username,i.needed,i.existing
 		from ce_eng_comp c
 		left join c_types t on c.c_type=t.c_type1
-		left join comp_associations a on c.assoc_id=a.id";
+		left join comp_associations a on c.assoc_id=a.id
+		left join inspectors i on c.inspector=i.inspector";
 $result = $pdo->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
@@ -207,6 +209,74 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 
 	if ($row['insp_date']) {
+		$action = new Action();
+		$action->setActionType('inspection');
+		$action->setActionDate($row['insp_date']);
+		$action->setTicket($ticket);
+		$action->setEnteredDate($row['insp_date']);
+		$action->setNotes("$row[action_taken]\n$row[next_action]");
+		if ($row['username']) {
+			try {
+				$user = new User($row['username']);
+				$action->setActionPerson($user->getPerson());
+			}
+			catch (Exception $e) {
+				$user = new User();
+				$user->setUsername($row['username']);
+				$user->setAuthenticationMethod('LDAP');
 
+				try {
+					$person = new Person();
+					$ldap = new LDAPEntry($user->getUsername());
+					$person->setFirstname($ldap->getFirstname());
+					$person->setLastname($ldap->getLastname());
+					$person->setEmail($ldap->getEmail());
+
+					$person->save();
+					$user->setPerson($person);
+					$user->save();
+				}
+				catch (Exception $e) {
+					$person = new Person();
+					$person->setFirstname($row['username']);
+					$person->save();
+				}
+				$action->setActionPerson($person);
+			}
+		}
+		elseif ($row['needed'] || $row['existing']) {
+			$name = $row['needed'] ? $row['needed'] : $row['existing'];
+			list($firstname,$lastname) = explode(' ',$name);
+			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
+			if (count($list)) {
+				$action->setActionPerson($list[0]);
+			}
+		}
+		else {
+			$name = explode(' ',$row['inspector']);
+			$search = array('firstname'=>$name[0]);
+			if (isset($name[1])) {
+				$search['lastname'] = $name[1];
+			}
+			$list = new PersonList($search);
+			if (count($list)) {
+				$action->setActionPerson($list[0]);
+			}
+		}
+
+		if ($action->getActionPerson()) {
+			$action->setEnteredByPerson($action->getActionPerson());
+		}
+		elseif ($ticket->getPerson()) {
+			$action->setEnteredByPerson($ticket->getPerson());
+		}
+
+		try {
+			$action->save();
+		}
+		catch (Exception $e) {
+			// Any problems when creating the inspection, and we'll just not bother
+			// to create it.  We're missing important information
+		}
 	}
 }
