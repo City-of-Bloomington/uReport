@@ -21,15 +21,19 @@ else {
 }
 
 $name = View::escape($this->person->getFullname());
-$address = View::escape($this->person->getAddress());
 $phone = View::escape($this->person->getPhone());
 $email = View::escape($this->person->getEmail());
+$address = View::escape($this->person->getAddress());
+$city = View::escape($this->person->getCity());
+$state = View::escape($this->person->getState());
+$zip = View::escape($this->person->getZip());
 echo "
 <div class=\"personInfo\">
 	<h1>$name</h1>
 	<div>$username</div>
-	<div>$address</div>
 	<div>$phone</div>
 	<div>$email</div>
+	<div>$address</div>
+	<div>$city $state $zip</div>
 </div>
 ";

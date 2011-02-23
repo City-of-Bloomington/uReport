@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Request person_id
@@ -27,7 +27,10 @@ else {
 
 
 if (isset($_POST['firstname'])) {
-	$fields = array('firstname','middlename','lastname','email','address','phone');
+	$fields = array(
+		'firstname','middlename','lastname','email','phone',
+		'address','city','state','zip'
+	);
 	foreach ($fields as $field) {
 		if (isset($_POST[$field])) {
 			$set = 'set'.ucfirst($field);

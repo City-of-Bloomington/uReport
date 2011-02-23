@@ -9,7 +9,8 @@
 class PersonList extends ZendDbResultIterator
 {
 	private $columns = array(
-		'firstname','middlename','lastname','email','address','phone',
+		'firstname','middlename','lastname','email','phone',
+		'address','city','state','zip',
 		'street_address_id','subunit_id','township','neighborhoodAssociation'
 	);
 

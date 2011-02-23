@@ -13,6 +13,9 @@ create table people (
 	address varchar(128),
 	-- The rest of these fields are used as cache
 	-- This information will ultimately come from other applications webservices
+	city varchar(128),
+	state varchar(2),
+	zip varchar(5),
 	street_address_id int unsigned,
 	subunit_id int unsigned,
 	neighborhoodAssociation varchar(128),

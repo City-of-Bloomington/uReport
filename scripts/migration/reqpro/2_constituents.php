@@ -11,7 +11,8 @@ $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
 $sql = "select distinct
 		first_name,middle_initial,last_name,
-		address,home_phone,bus_phone,e_mail_address
+		home_phone,bus_phone,e_mail_address,
+		address,city,state,zip_code
 		from ce_eng_comp
 		where first_name is not null
 		and last_name is not null";
@@ -55,6 +56,9 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 			if (count($xml)==1) {
 				// Set the address
 				$person->setAddress($xml->address->streetAddress);
+				$person->setCity($xml->address->city);
+				$person->setState($xml->address->state);
+				$person->setZip($xml->address->zip);
 				$person->setStreet_address_id($xml->address->id);
 
 				// See if there's a subunit
@@ -77,6 +81,9 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
 		if (!$person->getAddress()) {
 			$person->setAddress(ucwords(strtolower($row['address'])));
+			$person->setCity(ucwords(strtolower($row['city'])));
+			$person->setState(substr(strtoupper($row['state']),0,2));
+			$person->setZip(substr(preg_replace('/[^0-9]/','',$row['zip_code']),0,5));
 		}
 	}
 

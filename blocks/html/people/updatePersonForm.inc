@@ -5,7 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
-$fields = array('firstname','middlename','lastname','email','address','phone');
+$fields = array(
+	'firstname','middlename','lastname','email','phone',
+	'address','city','state','zip'
+);
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = View::escape($this->person->$get());
@@ -34,15 +37,32 @@ echo "<h1>$title</h1>";
 				<td><input name="email" id="email" value="<?php echo $email; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="address">Address</label></td>
-				<td><input name="address" id="address" value="<?php echo $address; ?>" /></td>
-			</tr>
-
 			<tr><td><label for="phone">Phone</label></td>
 				<td><input name="phone" id="phone" value="<?php echo $phone; ?>" /></td>
 			</tr>
 		</table>
+	</fieldset>
 
+	<fieldset><legend>Address</legend>
+		<table>
+			<tr><td><label for="address">Address</label></td>
+				<td><input name="address" id="address" value="<?php echo $address; ?>" /></td>
+			</tr>
+
+			<tr><td><label for="city">City</label></td>
+				<td><input name="city" id="city" value="<?php echo $city; ?>" /></td>
+			</tr>
+
+			<tr><td><label for="state">State</label></td>
+				<td><input name="state" id="state" size="2" maxlength="2" />
+					<label for="zip">Zip</label>
+					<input name="zip" id="zip" size="5" maxlength="5" />
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<fieldset><legend>Submit</legend>
 		<?php
 			echo $this->formButton('Submit','submit','submit');
 			echo $this->formButton(

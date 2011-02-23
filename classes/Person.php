@@ -13,6 +13,9 @@ class Person
 	private $email;
 	private $phone;
 	private $address;
+	private $city;
+	private $state;
+	private $zip;
 	private $street_address_id;
 	private $subunit_id;
 	private $neighborhoodAssociation;
@@ -96,6 +99,9 @@ class Person
 		$data['email'] = $this->email ? $this->email : null;
 		$data['phone'] = $this->phone ? $this->phone : null;
 		$data['address'] = $this->address ? $this->address : null;
+		$data['city'] = $this->city ? $this->city : null;
+		$data['state'] = $this->state ? $this->state : null;
+		$data['zip'] = $this->zip ? $this->zip : null;
 		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
 		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
 		$data['neighborhoodAssociation'] = $this->neighborhoodAssociation ? $this->neighborhoodAssociation : null;
@@ -182,6 +188,30 @@ class Person
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCity()
+	{
+		return $this->city;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getState()
+	{
+		return $this->state;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getZip()
+	{
+		return $this->zip;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getStreet_address_id()
@@ -262,6 +292,30 @@ class Person
 	public function setAddress($string)
 	{
 		$this->address = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setCity($string)
+	{
+		$this->city = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setState($string)
+	{
+		$this->state = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setZip($string)
+	{
+		$this->zip = trim($string);
 	}
 
 	/**
