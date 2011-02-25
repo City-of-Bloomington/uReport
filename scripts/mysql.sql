@@ -141,10 +141,10 @@ create table actions (
 create table ticketHistory (
 	id int unsigned not null primary key auto_increment,
 	ticket_id int unsigned not null,
-	action varchar(128),
-	description varchar(128),
+	eventType varchar(50) not null,
+	eventDescription varchar(128) not null,
 	enteredDate date not null,
-	actionDate date not null,
+	eventDate date not null,
 	person_id int unsigned,
 	notes text,
 	foreign key (ticket_id) references tickets(id),

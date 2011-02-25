@@ -41,10 +41,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$ticket = new Ticket();
 	if ($row['received']) {
 		$ticket->setEnteredDate($row['received']);
-		$ticket->setReceivedDate($row['received']);
-	}
-	elseif ($row['completed_date']) {
-		$ticket->setDate($row['completed_date']);
 	}
 	else {
 		continue;
@@ -145,10 +141,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 	// Create the issue on this ticket
 	$issue = new Issue();
-	$issue->setDate($ticket->getDate());
+	$issue->setDate($ticket->getEnteredDate());
 	$issue->setTicket($ticket);
-	if ($ticket->getPerson()) {
-		$issue->setPerson($ticket->getPerson());
+	if ($ticket->getEnteredByPerson()) {
+		$issue->setPerson($ticket->getEnteredByPerson());
 	}
 	$issue->setNotes($row['comments']);
 	$issue->setCase_number($row['case_number']);
@@ -183,9 +179,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	// Create the Ticket History
 	if ($row['assigned_to']) {
 		$history = new TicketHistory();
-		$history->setAction('assigned');
+		$history->setEventLabel('assigned');
 		$history->setEnteredDate($row['assigned_date']);
-		$history->setActionDate($row['assigned_date']);
+		$history->setEventDate($row['assigned_date']);
 		$history->setTicket($ticket);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		try {
@@ -194,25 +190,29 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$history->setPerson($user->getPerson());
 		}
 		catch (Exception $e) {
-			if ($ticket->getPerson()) {
-				$history->setPerson($ticket->getPerson());
+			if ($ticket->getEnteredByPerson()) {
+				$history->setPerson($ticket->getEnteredByPerson());
 			}
 		}
-		$history->setDescription("Ticket assigned to {$history->getPerson()->getFullname()}");
-		try {
-			$history->save();
-		}
-		catch  (Exception $e) {
-			// Any problems with the action, and we won't save it
-			// These problems should all be assignments to people we don't
-			// have in the system
+		// Assignments really do need a person
+		// Saying something is assigned without knowing who is useless.
+		if ($history->getPerson()) {
+			try {
+				$history->setEventDescription("Ticket assigned to {$history->getPerson()->getFullname()}");
+				$history->save();
+			}
+			catch  (Exception $e) {
+				// Any problems with the action, and we won't save it
+				// These problems should all be assignments to people we don't
+				// have in the system
+			}
 		}
 	}
 
 	if ($row['insp_date']) {
 		$history = new TicketHistory();
-		$history->setAction('inspection');
-		$history->setActionDate($row['insp_date']);
+		$history->setEventLabel('inspection');
+		$history->setEventDate($row['insp_date']);
 		$history->setTicket($ticket);
 		$history->setEnteredDate($row['insp_date']);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
@@ -264,7 +264,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				$history->setPerson($list[0]);
 			}
 		}
-		$history->setDescription("Location inspected by {$history->getPerson()->getFullname()}");
+		if ($history->getPerson()) {
+			$history->setEventDescription("Location inspected by {$history->getPerson()->getFullname()}");
+		}
+		else {
+			$history->setEventDescription('Location inspected');
+		}
 
 		try {
 			$history->save();
@@ -278,12 +283,21 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$list = $ticket->getHistory();
 			if (count($list)) {
 				$history = new TicketHistory();
-				$history->setAction('followup');
-				$history->setActionDate($row['followup_date']);
+				$history->setEventLabel('followup');
+				$history->setEventDate($row['followup_date']);
 				$history->setTicket($ticket);
 				$history->setEnteredDate($row['followup_date']);
 				$history->setNotes("$row[action_taken]\n$row[next_action]");
-				$history->setPerson($list[0]->getActionPerson());
+				foreach ($list as $h) {
+					if ($h->getPerson()) {
+						$history->setPerson($h->getPerson());
+						$history->setEventDescription("{$h->getPerson()->getFullname()} followed up on this ticket");
+						break;
+					}
+				}
+				if (!$history->getEventDescription()) {
+					$history->setEventDescription('Followed up on the ticket');
+				}
 				try {
 					$history->save();
 				}

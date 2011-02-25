@@ -8,15 +8,14 @@ class TicketHistory
 {
 	private $id;
 	private $ticket_id;
-	private $action;
-	private $description;
+	private $eventLabel;
+	private $eventDescription;
 	private $enteredDate;
-	private $actionDate;
+	private $eventDate;
 	private $person_id;
 	private $notes;
 
 	private $ticket;
-	private $action;
 	private $person;
 
 	/**
@@ -61,6 +60,7 @@ class TicketHistory
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->enteredDate = new Date();
+			$this->eventDate = new Date();
 		}
 	}
 
@@ -71,8 +71,16 @@ class TicketHistory
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->ticket_id || !$this->action_id) {
+		if (!$this->ticket_id || !$this->eventLabel || !$this->eventDescription) {
 			throw new Exception('missingRequiredFields');
+		}
+
+		if (!$this->enteredDate) {
+			$this->enteredDate = new Date();
+		}
+
+		if (!$this->eventDate) {
+			$this->eventDate = new Date();
 		}
 	}
 
@@ -85,10 +93,10 @@ class TicketHistory
 
 		$data = array();
 		$data['ticket_id'] = $this->ticket_id;
-		$data['action'] = $this->action ? $this->action : null;
-		$data['description'] = $this->description ? $this->description : null;
-		$data['enteredDate'] = $this->enteredDate ? $this->enteredDate : null;
-		$data['actionDate'] = $this->actionDate ? $this->actionDate : null;
+		$data['eventLabel'] = $this->eventLabel;
+		$data['eventDescription'] = $this->eventDescription;
+		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
+		$data['eventDate'] = $this->eventDate->format('Y-m-d');
 		$data['person_id'] = $this->person_id ? $this->person_id : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
@@ -150,17 +158,17 @@ class TicketHistory
 	/**
 	 * @return string
 	 */
-	public function getAction()
+	public function getEventLabel()
 	{
-		return $this->action;
+		return $this->eventLabel;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getDescription()
+	public function getEventDescription()
 	{
-		return $this->description;
+		return $this->eventDescription;
 	}
 
 	/**
@@ -193,13 +201,13 @@ class TicketHistory
 	 * @param string $format
 	 * @return string|DateTime
 	 */
-	public function getActionDate($format=null)
+	public function getEventDate($format=null)
 	{
-		if ($format && $this->actionDate) {
-			return $this->actionDate->format($format);
+		if ($format && $this->eventDate) {
+			return $this->eventDate->format($format);
 		}
 		else {
-			return $this->actionDate;
+			return $this->eventDate;
 		}
 	}
 
@@ -258,17 +266,17 @@ class TicketHistory
 	/**
 	 * @param string $string
 	 */
-	public function setAction($string)
+	public function setEventLabel($string)
 	{
-		$this->action = trim($string);
+		$this->eventLabel = trim($string);
 	}
 
 	/**
 	 * @param string $string
 	 */
-	public function setDescription($string)
+	public function setEventDescription($string)
 	{
-		$this->description = trim($string);
+		$this->eventDescription = trim($string);
 	}
 
 	/**
@@ -301,13 +309,13 @@ class TicketHistory
 	 *
 	 * @param int|string|array $date
 	 */
-	public function setActionDate($date)
+	public function setEventDate($date)
 	{
 		if ($date) {
-			$this->actionDate = new Date($date);
+			$this->eventDate = new Date($date);
 		}
 		else {
-			$this->actionDate = null;
+			$this->eventDate = null;
 		}
 	}
 
