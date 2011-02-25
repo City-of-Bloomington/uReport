@@ -7,8 +7,11 @@
 class Ticket
 {
 	private $id;
-	private $date;
-	private $person_id;
+	private $enteredDate;
+	private $enteredByPerson_id;
+	private $assignedPerson_id;
+	private $referredPerson_id;
+	private $status;
 	private $location;
 	private $street_address_id;
 	private $subunit_id;
@@ -17,7 +20,9 @@ class Ticket
 	private $latitude;
 	private $longitude;
 
-	private $person;
+	private $enteredByPerson;
+	private $assignedPerson;
+	private $referredPerson;
 
 	/**
 	 * Populates the object with data
@@ -46,7 +51,7 @@ class Ticket
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-						if ($field=='date') {
+						if (preg_match('/Date/',$field)) {
 							$value = new Date($value);
 						}
 						$this->$field = $value;
@@ -61,6 +66,7 @@ class Ticket
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->date = new Date();
+			$this->status = 'open';
 		}
 	}
 
@@ -71,12 +77,9 @@ class Ticket
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		# This needs to remain commented out until we're finished with the migration
-		# The migration data does not have all the required fields
-		#if (!$this->person_id) {
-		#	throw new Exception('tickets/missingPerson');
-		#}
-
+		if (!$this->status) {
+			$this->status = 'open';
+		}
 	}
 
 	/**
@@ -87,8 +90,11 @@ class Ticket
 		$this->validate();
 
 		$data = array();
-		$data['date'] = $this->date->format('Y-m-d');
-		$data['person_id'] = $this->person_id;
+		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
+		$data['enteredByPerson_id'] = $this->enteredByPerson_id ? $this->enteredByPerson_id : null;
+		$data['assignedPerson_id'] = $this->assignedPerson_id ? $this->assignedPerson_id : null;
+		$data['referredPerson_id'] = $this->referredPerson_id ? $this->referredPerson_id : null;
+		$data['status'] = $this->status;
 		$data['location'] = $this->location ? $this->location : null;
 		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
 		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
@@ -140,36 +146,88 @@ class Ticket
 	 * @param string $format
 	 * @return string|DateTime
 	 */
-	public function getDate($format=null)
+	public function getEnteredDate($format=null)
 	{
-		if ($format && $this->date) {
-			return $this->date->format($format);
+		if ($format && $this->enteredDate) {
+			return $this->enteredDate->format($format);
 		}
 		else {
-			return $this->date;
+			return $this->enteredDate;
 		}
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getPerson_id()
+	public function getEnteredByPerson_id()
 	{
-		return $this->person_id;
+		return $this->enteredByPerson_id;
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getPerson()
+	public function getEnteredByPerson()
 	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
+		if ($this->enteredByPerson_id) {
+			if (!$this->enteredByPerson) {
+				$this->enteredByPerson = new Person($this->enteredByPerson_id);
 			}
-			return $this->person;
+			return $this->enteredByPerson;
 		}
 		return null;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAssignedPerson_id()
+	{
+		return $this->assignedPerson_id;
+	}
+
+	/**
+	 * @return Person
+	 */
+	public function getAssignedPerson()
+	{
+		if ($this->assignedPerson_id) {
+			if (!$this->assignedPerson) {
+				$this->assignedPerson = new Person($this->assignedPerson_id);
+			}
+			return $this->assignedPerson;
+		}
+		return null;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getReferredPerson_id()
+	{
+		return $this->referredPerson_id;
+	}
+
+	/**
+	 * @return ReferredPerson
+	 */
+	public function getReferredPerson()
+	{
+		if ($this->referredPerson_id) {
+			if (!$this->referredPerson) {
+				$this->referredPerson = new ReferredPerson($this->referredPerson_id);
+			}
+			return $this->referredPerson;
+		}
+		return null;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStatus()
+	{
+		return $this->status;
 	}
 
 	/**
@@ -242,32 +300,76 @@ class Ticket
 	 *
 	 * @param int|string|array $date
 	 */
-	public function setDate($date)
+	public function setEnteredDate($date)
 	{
 		if ($date) {
-			$this->date = new Date($date);
+			$this->enteredDate = new Date($date);
 		}
 		else {
-			$this->date = null;
+			$this->enteredDate = null;
 		}
 	}
 
 	/**
 	 * @param int $int
 	 */
-	public function setPerson_id($int)
+	public function setEnteredByPerson_id($int)
 	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
+		$this->enteredByPerson = new Person($int);
+		$this->enteredByPerson_id = $int;
 	}
 
 	/**
 	 * @param Person $person
 	 */
-	public function setPerson($person)
+	public function setEnteredByPerson($person)
 	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
+		$this->enteredByPerson_id = $person->getId();
+		$this->enteredByPerson = $person;
+	}
+
+	/**
+	 * @param int $int
+	 */
+	public function setAssignedPerson_id($int)
+	{
+		$this->assignedPerson = new Person($int);
+		$this->assignedPerson_id = $int;
+	}
+
+	/**
+	 * @param Person $person
+	 */
+	public function setAssignedPerson($person)
+	{
+		$this->assignedPerson_id = $person->getId();
+		$this->assignedPerson = $person;
+	}
+
+	/**
+	 * @param int $int
+	 */
+	public function setReferredPerson_id($int)
+	{
+		$this->referredPerson = new Person($int);
+		$this->referredPerson_id = $int;
+	}
+
+	/**
+	 * @param Person $person
+	 */
+	public function setReferredPerson($person)
+	{
+		$this->referredPerson_id = $person->getId();
+		$this->referredPerson = $person;
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setStatus($string)
+	{
+		$this->status = trim($string);
 	}
 
 	/**
@@ -355,22 +457,10 @@ class Ticket
 	}
 
 	/**
-	 * @return ActionList
+	 * @return TicketHistoryList
 	 */
-	public function getActions()
+	public function getHistory()
 	{
-		return new ActionList(array('ticket_id'=>$this->id));
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getStatus()
-	{
-		$list = new ActionList();
-		$list->find(array('ticket_id'=>$this->id),'enteredDate desc');
-		if (count($list)) {
-			return $list[0]->getActionType()->getStatus();
-		}
+		return new TicketHistoryList(array('ticket_id'=>$this->id));
 	}
 }

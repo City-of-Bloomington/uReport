@@ -5,16 +5,16 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 
-if (!userIsAllowed('ActionTypes')) {
+if (!userIsAllowed('Actions')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
-// Load the $actionType for editing
-if (isset($_REQUEST['actionType_id']) && $_REQUEST['actionType_id']) {
+// Load the $action for editing
+if (isset($_REQUEST['action_id']) && $_REQUEST['action_id']) {
 	try {
-		$actionType = new ActionType($_REQUEST['actionType_id']);
+		$action = new Action($_REQUEST['action_id']);
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -23,18 +23,18 @@ if (isset($_REQUEST['actionType_id']) && $_REQUEST['actionType_id']) {
 	}
 }
 else {
-	$actionType = new ActionType();
+	$action = new Action();
 }
 
 
 if (isset($_POST['name'])) {
-	$actionType->setName($_POST['name']);
-	$actionType->setDescription($_POST['description']);
-	$actionType->setFormLabel($_POST['formLabel']);
-	$actionType->setStatus($_POST['status']);
+	$action->setName($_POST['name']);
+	$action->setDescription($_POST['description']);
+	$action->setFormLabel($_POST['formLabel']);
+	$action->setStatus($_POST['status']);
 
 	try {
-		$actionType->save();
+		$action->save();
 		header('Location: '.BASE_URL.'/actions');
 		exit();
 	}
@@ -44,5 +44,5 @@ if (isset($_POST['name'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('actions/updateActionTypeForm.inc',array('actionType'=>$actionType));
+$template->blocks[] = new Block('actions/updateActionForm.inc',array('action'=>$action));
 echo $template->render();

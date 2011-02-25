@@ -18,8 +18,8 @@
 class TicketList extends ZendDbResultIterator
 {
 	private $columns = array(
-		'person_id','location',
-		'street_address_id','subunit_id',
+		'enteredByPerson_id','assignedPerson_id','referredPerson_id','status',
+		'location','street_address_id','subunit_id',
 		'neighborhoodAssociation','township'
 	);
 
@@ -27,8 +27,8 @@ class TicketList extends ZendDbResultIterator
 		'issueType_id','constituent_id','contactMethod_id','case_number'
 	);
 
-	private $actionColumns = array(
-		'actionType_id','actionPerson_id','enteredByPerson_id','status'
+	private $historyColumns = array(
+		'action','actionDate','person_id'
 	);
 
 	/**
@@ -92,13 +92,12 @@ class TicketList extends ZendDbResultIterator
 				}
 			}
 
-			if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
-				foreach ($this->actionColumns as $column) {
+			if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
+				foreach ($this->historyColumns as $column) {
 					if (isset($fields[$column])) {
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
-							$a = $column=='status' ? 'at' : 'a';
-							$this->select->where("$a.$column=?",$fields[$column]);
+							$this->select->where("h.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -152,13 +151,12 @@ class TicketList extends ZendDbResultIterator
 				}
 			}
 
-			if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
-				foreach ($this->actionColumns as $column) {
+			if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
+				foreach ($this->historyColumns as $column) {
 					if (isset($fields[$column])) {
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
-							$a = $column=='status' ? 'at' : 'a';
-							$this->select->where("$a.$column=?",$fields[$column]);
+							$this->select->where("h.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -214,9 +212,8 @@ class TicketList extends ZendDbResultIterator
 			$joins['c'] = array('table'=>'issue_categories','condition'=>'i.id=c.issue_id');
 		}
 
-		if (count(array_intersect(array_keys($fields),$this->actionColumns))) {
-			$joins['a'] = array('table'=>'actions','condition'=>'t.id=a.ticket_id');
-			$joins['at'] = array('table'=>'actionTypes','condition'=>'a.actionType_id=at.id');
+		if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
+			$joins['h'] = array('table'=>'ticketHistory','condition'=>'t.id=h.ticket_id');
 		}
 
 		foreach ($joins as $key=>$join) {

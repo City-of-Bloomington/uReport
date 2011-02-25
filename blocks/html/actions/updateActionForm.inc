@@ -4,14 +4,14 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$title = $this->actionType->getId() ? 'Edit Action Type' : 'Add Action Type';
+$title = $this->action->getId() ? 'Edit Action' : 'Add Action';
 
-$name = View::escape($this->actionType->getName());
-$description = View::escape($this->actionType->getDescription());
-$formLabel = View::escape($this->actionType->getFormLabel());
-$status = View::escape($this->actionType->getStatus());
+$name = View::escape($this->action->getName());
+$description = View::escape($this->action->getDescription());
+$formLabel = View::escape($this->action->getFormLabel());
+$status = View::escape($this->action->getStatus());
 ?>
-<div class="updateActionTypeForm">
+<div class="updateActionForm">
 	<h1><?php echo $title; ?></h1>
 	<h2>Description variables</h2>
 	<p>You can call for data by using these strings inside the description</p>
@@ -24,8 +24,8 @@ $status = View::escape($this->actionType->getStatus());
 		</tr>
 	</table>
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Action Type</legend>
-			<input name="actionType_id" type="hidden" value="<?php echo $this->actionType->getId(); ?>" />
+		<fieldset><legend>Action</legend>
+			<input name="action_id" type="hidden" value="<?php echo $this->action->getId(); ?>" />
 			<table>
 
 				<tr><td><label for="name" class="required">Name</label></td>

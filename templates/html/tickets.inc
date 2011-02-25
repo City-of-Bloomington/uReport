@@ -20,7 +20,7 @@
 				<?php echo $this->includeBlocks('ticket-panel'); ?>
 			</div>
 			<div id="action-panel">
-				<?php echo $this->includeBlocks('action-panel'); ?>
+				<?php echo $this->includeBlocks('history-panel'); ?>
 			</div>
 			<div id="issue-panel">
 				<?php echo $this->includeBlocks('issue-panel'); ?>

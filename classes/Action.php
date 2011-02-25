@@ -7,18 +7,10 @@
 class Action
 {
 	private $id;
-	private $ticket_id;
-	private $actionType_id;
-	private $enteredDate;
-	private $enteredByPerson_id;
-	private $actionDate;
-	private $actionPerson_id;
-	private $notes;
-
-	private $ticket;
-	private $actionType;
-	private $enteredByPerson;
-	private $actionPerson;
+	private $name;
+	private $description;
+	private $formLabel;
+	private $status;
 
 	/**
 	 * Populates the object with data
@@ -39,19 +31,16 @@ class Action
 				$result = $id;
 			}
 			else {
+				$sql = ctype_digit($id)
+					? 'select * from actions where id=?'
+					: 'select * from actions where name=?';
 				$zend_db = Database::getConnection();
-				$sql = 'select * from actions where id=?';
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 
 			if ($result) {
 				foreach ($result as $field=>$value) {
 					if ($value) {
-						if (preg_match('/Date/',$field)) {
-							if (substr($value,0,4) != '0000') {
-								$value = new Date($value);
-							}
-						}
 						$this->$field = $value;
 					}
 				}
@@ -63,7 +52,6 @@ class Action
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->enteredDate = new Date();
 		}
 	}
 
@@ -74,16 +62,8 @@ class Action
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->actionType_id || !$this->enteredByPerson_id) {
+		if (!$this->name || !$this->description || !$this->formLabel || !$this->status) {
 			throw new Exception('missingRequiredFields');
-		}
-
-		if (!$this->enteredDate) {
-			$this->enteredDate = new Date();
-		}
-
-		if (!$this->actionDate) {
-			$this->actionDate = new Date();
 		}
 	}
 
@@ -95,13 +75,10 @@ class Action
 		$this->validate();
 
 		$data = array();
-		$data['ticket_id'] = $this->ticket_id;
-		$data['actionType_id'] = $this->actionType_id;
-		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
-		$data['enteredByPerson_id'] = $this->enteredByPerson_id;
-		$data['actionDate'] = $this->actionDate->format('Y-m-d');
-		$data['actionPerson_id'] = $this->actionPerson_id ? $this->actionPerson_id : null;
-		$data['notes'] = $this->notes ? $this->notes : null;
+		$data['name'] = $this->name;
+		$data['description'] = $this->description;
+		$data['formLabel'] = $this->formLabel;
+		$data['status'] = $this->status;
 
 		if ($this->id) {
 			$this->update($data);
@@ -137,139 +114,35 @@ class Action
 	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
-	public function getTicket_id()
+	public function getName()
 	{
-		return $this->ticket_id;
+		return $this->name;
 	}
 
 	/**
-	 * @return Ticket
+	 * @return string
 	 */
-	public function getTicket()
+	public function getDescription()
 	{
-		if ($this->ticket_id) {
-			if (!$this->ticket) {
-				$this->ticket = new Ticket($this->ticket_id);
-			}
-			return $this->ticket;
-		}
-		return null;
+		return $this->description;
 	}
 
 	/**
-	 * @return int
+	 * @return string
 	 */
-	public function getActionType_id()
+	public function getFormLabel()
 	{
-		return $this->actionType_id;
+		return $this->formLabel;
 	}
 
 	/**
-	 * @return ActionType
+	 * @return string
 	 */
-	public function getActionType()
+	public function getStatus()
 	{
-		if ($this->actionType_id) {
-			if (!$this->actionType) {
-				$this->actionType = new ActionType($this->actionType_id);
-			}
-			return $this->actionType;
-		}
-		return null;
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getEnteredDate($format=null)
-	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
-		}
-		else {
-			return $this->enteredDate;
-		}
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getEnteredByPerson_id()
-	{
-		return $this->enteredByPerson_id;
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if ($this->enteredByPerson_id) {
-			if (!$this->enteredByPerson) {
-				$this->enteredByPerson = new Person($this->enteredByPerson_id);
-			}
-			return $this->enteredByPerson;
-		}
-		return null;
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getActionDate($format=null)
-	{
-		if ($format && $this->actionDate) {
-			return $this->actionDate->format($format);
-		}
-		else {
-			return $this->actionDate;
-		}
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getActionPerson_id()
-	{
-		return $this->actionPerson_id;
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getActionPerson()
-	{
-		if ($this->actionPerson_id) {
-			if (!$this->actionPerson) {
-				$this->actionPerson = new Person($this->actionPerson_id);
-			}
-			return $this->actionPerson;
-		}
-		return null;
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		return $this->notes;
+		return $this->status;
 	}
 
 	//----------------------------------------------------------------
@@ -277,126 +150,35 @@ class Action
 	//----------------------------------------------------------------
 
 	/**
-	 * @param int $int
+	 * @param string $string
 	 */
-	public function setTicket_id($int)
+	public function setName($string)
 	{
-		$this->ticket = new Ticket($int);
-		$this->ticket_id = $int;
+		$this->name = trim($string);
 	}
 
 	/**
-	 * @param Ticket $ticket
+	 * @param string $string
 	 */
-	public function setTicket($ticket)
+	public function setDescription($string)
 	{
-		$this->ticket_id = $ticket->getId();
-		$this->ticket = $ticket;
+		$this->description = trim($string);
 	}
 
 	/**
-	 * @param int $int
+	 * @param string $string
 	 */
-	public function setActionType_id($int)
+	public function setFormLabel($string)
 	{
-		$this->actionType = new ActionType($int);
-		$this->actionType_id = $int;
+		$this->formLabel = trim($string);
 	}
 
 	/**
-	 * @param ActionType|string $actionType
+	 * @param string $string
 	 */
-	public function setActionType($actionType)
+	public function setStatus($string)
 	{
-		if (!$actionType instanceof ActionType) {
-			$actionType = new ActionType($actionType);
-		}
-		$this->actionType_id = $actionType->getId();
-		$this->actionType = $actionType;
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setEnteredDate($date)
-	{
-		if ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
-		}
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setEnteredByPerson_id($int)
-	{
-		$this->enteredByPerson = new Person($int);
-		$this->enteredByPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setEnteredByPerson($person)
-	{
-		$this->enteredByPerson_id = $person->getId();
-		$this->enteredByPerson = $person;
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setActionDate($date)
-	{
-		if ($date) {
-			$this->actionDate = new Date($date);
-		}
-		else {
-			$this->actionDate = null;
-		}
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setActionPerson_id($int)
-	{
-		$this->actionPerson = new Person($int);
-		$this->actionPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setActionPerson($person)
-	{
-		$this->actionPerson_id = $person->getId();
-		$this->actionPerson = $person;
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setNotes($text)
-	{
-		$this->notes = $text;
+		$this->status = trim($string);
 	}
 
 	//----------------------------------------------------------------
@@ -404,23 +186,36 @@ class Action
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	/**
+	 * Returns an array of status strings
+	 *
+	 * Returns the distinct list of statuses that are used across all Actions
+	 *
+	 * @return array
+	 */
+	public static function getStatuses()
+	{
+		$zend_db = Database::getConnection();
+		$result = $zend_db->query('select distinct status from actions');
+		return $result->fetchAll(Zend_Db::FETCH_COLUMN);
+	}
+
+	/**
+	 * Substitutes actual data for the placeholders in the description
+	 *
+	 * Specify the placeholders as an associative array
+	 * $placeholders = array('enteredByPerson'=>'Joe Smith',
+	 *						'actionPerson'=>'Mary Sue')
+	 *
+	 * @param array $placeholders
 	 * @return string
 	 */
-	public function getDescription()
+	public function parseDescription($placeholders)
 	{
-		$enteredBy = $this->getEnteredByPerson() ? $this->getEnteredByPerson()->getFullname() : '';
-		$actionPerson = $this->getActionPerson() ? $this->getActionPerson()->getFullname() : '';
+		$output = $this->description;
 
-		return preg_replace(
-			array(
-				'/\{enteredBy\}/',
-				'/\{actionPerson\}/'
-			),
-			array(
-				$enteredBy,
-				$actionPerson
-			),
-			$this->getActionType()->getDescription()
-		);
+		foreach ($placeholders as $key=>$value) {
+			$output = preg_replace("/\{$key\}/",$value,$output);
+		}
+		return $output;
 	}
 }

@@ -40,7 +40,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	// Import the Dates
 	$ticket = new Ticket();
 	if ($row['received']) {
-		$ticket->setDate($row['received']);
+		$ticket->setEnteredDate($row['received']);
+		$ticket->setReceivedDate($row['received']);
 	}
 	elseif ($row['completed_date']) {
 		$ticket->setDate($row['completed_date']);
@@ -49,11 +50,22 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		continue;
 	}
 
+	// Status
+	switch ($row['status']) {
+		case 'NOT VALID':
+		case 'NOT PROCESSED':
+		case 'COMPLETED':
+			$ticket->setStatus('closed');
+			break;
+		default:
+			$ticket->setStatus('open');
+	}
+
 	// Import the Person
 	if (isset($row['received_by']) && $row['received_by']) {
 		try {
 			$user = new User(strtolower($row['received_by']));
-			$ticket->setPerson($user->getPerson());
+			$ticket->setEnteredByPerson($user->getPerson());
 		}
 		catch (Exception $e) {
 		}
@@ -168,57 +180,46 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$issue->saveCategories(array($category));
 	}
 
-	// Create the Action history
+	// Create the Ticket History
 	if ($row['assigned_to']) {
-		$action = new Action();
-		$action->setActionType('assignment');
-		$action->setActionDate($row['assigned_date']);
-		$action->setTicket($ticket);
-		$action->setEnteredDate($row['received']);
-		$action->setNotes("$row[action_taken]\n$row[next_action]");
-		try {
-			$user = new User(strtolower($row['received_by']));
-		}
-		catch (Exception $e) {
-			$user = new User('inghamn');
-		}
-		$action->setEnteredByPerson($user->getPerson());
+		$history = new TicketHistory();
+		$history->setAction('assigned');
+		$history->setEnteredDate($row['assigned_date']);
+		$history->setActionDate($row['assigned_date']);
+		$history->setTicket($ticket);
+		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		try {
 			list($username,$fullname) = explode(':',$row['assigned_to']);
 			$user = new User($username);
-			$action->setActionPerson($user->getPerson());
-			if ($ticket->getPerson()) {
-				$action->setActionPerson($ticket->getPerson());
-			}
-			else {
-				$action->setActionPerson($user->getPerson());
-			}
-			$action->save();
+			$history->setPerson($user->getPerson());
 		}
 		catch (Exception $e) {
+			if ($ticket->getPerson()) {
+				$history->setPerson($ticket->getPerson());
+			}
+		}
+		$history->setDescription("Ticket assigned to {$history->getPerson()->getFullname()}");
+		try {
+			$history->save();
+		}
+		catch  (Exception $e) {
 			// Any problems with the action, and we won't save it
 			// These problems should all be assignments to people we don't
 			// have in the system
-			if ($e->getMessage() != 'users/unknownUser') {
-				echo $e->getMessage();
-				echo "Problem saving assignment\n";
-				print_r($action);
-				exit();
-			}
 		}
 	}
 
 	if ($row['insp_date']) {
-		$action = new Action();
-		$action->setActionType('inspection');
-		$action->setActionDate($row['insp_date']);
-		$action->setTicket($ticket);
-		$action->setEnteredDate($row['insp_date']);
-		$action->setNotes("$row[action_taken]\n$row[next_action]");
+		$history = new TicketHistory();
+		$history->setAction('inspection');
+		$history->setActionDate($row['insp_date']);
+		$history->setTicket($ticket);
+		$history->setEnteredDate($row['insp_date']);
+		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		if ($row['username']) {
 			try {
 				$user = new User($row['username']);
-				$action->setActionPerson($user->getPerson());
+				$history->setPerson($user->getPerson());
 			}
 			catch (Exception $e) {
 				$user = new User();
@@ -241,7 +242,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					$person->setFirstname($row['username']);
 					$person->save();
 				}
-				$action->setActionPerson($person);
+				$history->setPerson($person);
 			}
 		}
 		elseif ($row['needed'] || $row['existing']) {
@@ -249,7 +250,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			list($firstname,$lastname) = explode(' ',$name);
 			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
 			if (count($list)) {
-				$action->setActionPerson($list[0]);
+				$history->setPerson($list[0]);
 			}
 		}
 		else {
@@ -260,23 +261,37 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			$list = new PersonList($search);
 			if (count($list)) {
-				$action->setActionPerson($list[0]);
+				$history->setPerson($list[0]);
 			}
 		}
-
-		if ($action->getActionPerson()) {
-			$action->setEnteredByPerson($action->getActionPerson());
-		}
-		elseif ($ticket->getPerson()) {
-			$action->setEnteredByPerson($ticket->getPerson());
-		}
+		$history->setDescription("Location inspected by {$history->getPerson()->getFullname()}");
 
 		try {
-			$action->save();
+			$history->save();
 		}
 		catch (Exception $e) {
 			// Any problems when creating the inspection, and we'll just not bother
 			// to create it.  We're missing important information
+		}
+
+		if ($row['followup_date']) {
+			$list = $ticket->getHistory();
+			if (count($list)) {
+				$history = new TicketHistory();
+				$history->setAction('followup');
+				$history->setActionDate($row['followup_date']);
+				$history->setTicket($ticket);
+				$history->setEnteredDate($row['followup_date']);
+				$history->setNotes("$row[action_taken]\n$row[next_action]");
+				$history->setPerson($list[0]->getActionPerson());
+				try {
+					$history->save();
+				}
+				catch (Exception $e) {
+					// Anything that doesn't save, we're just going to ignore
+					// No sense bringing over bad data.
+				}
+			}
 		}
 	}
 }

@@ -10,9 +10,9 @@ if (!userIsAllowed('Actions')) {
 	exit();
 }
 
-$actionTypeList = new ActionTypeList();
-$actionTypeList->find();
+$actionList = new ActionList();
+$actionList->find();
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('actions/actionTypeList.inc',array('actionTypeList'=>$actionTypeList));
+$template->blocks[] = new Block('actions/actionList.inc',array('actionList'=>$actionList));
 echo $template->render();

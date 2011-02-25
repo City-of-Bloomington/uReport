@@ -39,7 +39,7 @@ ul { list-style-type:none; margin:0; padding:0; }
 
 #ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
 #issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#action-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
 #location-panel { border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
 #person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
 
@@ -54,7 +54,7 @@ ul { list-style-type:none; margin:0; padding:0; }
 #location-panel .locationResidents { }
 #location-panel .findLocationResults	{ margin-left:295px; overflow:auto; }
 .searchResults {
-	
+
 }
 
 /* Buttons */

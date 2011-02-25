@@ -1,4 +1,4 @@
--- @copyright 2006-2010 City of Bloomington, Indiana
+-- @copyright 2011 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 -- @author Cliff Ingham <inghamn@bloomington.in.gov>
 
@@ -76,9 +76,12 @@ create table department_categories (
 
 create table tickets (
 	id int unsigned not null primary key auto_increment,
-	date date not null,
-	person_id int unsigned,
+	enteredDate date not null,
+	enteredByPerson_id int unsigned,
+	assignedPerson_id int unsigned,
+	referredPerson_id int unsigned,
 	location varchar(128),
+	status varchar(50),
 	-- The rest of these fields are used as cache
 	-- This information will ultimately come from other applications webservices
 	street_address_id int unsigned,
@@ -87,7 +90,9 @@ create table tickets (
 	township varchar(128),
 	latitude decimal(8,6),
 	longitude decimal(8,6),
-	foreign key (person_id) references people(id)
+	foreign key (enteredByPerson_id) references people(id),
+	foreign key (assignedPerson_id) references people(id),
+	foreign key (referredPerson_id) references people(id)
 );
 
 create table issueTypes (
@@ -125,7 +130,7 @@ create table issue_categories (
 	primary key (issue_id,category_id)
 );
 
-create table actionTypes (
+create table actions (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null,
 	description varchar(128) not null,
@@ -133,19 +138,17 @@ create table actionTypes (
 	status varchar(128) not null
 );
 
-create table actions (
+create table ticketHistory (
 	id int unsigned not null primary key auto_increment,
 	ticket_id int unsigned not null,
-	actionType_id int  unsigned not null,
+	action varchar(128),
+	description varchar(128),
 	enteredDate date not null,
-	enteredByPerson_id int unsigned not null,
 	actionDate date not null,
-	actionPerson_id int unsigned,
+	person_id int unsigned,
 	notes text,
 	foreign key (ticket_id) references tickets(id),
-	foreign key (actionType_id) references actionTypes(id),
-	foreign key (enteredByPerson_id) references people(id),
-	foreign key (actionPerson_id) references people(id)
+	foreign key (person_id) references people(id)
 );
 
 create table department_actions (
