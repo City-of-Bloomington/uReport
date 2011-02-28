@@ -31,6 +31,7 @@
 
 			$type = View::escape($issue->getIssueType());
 			$contactMethod = View::escape($issue->getContactMethod());
+			$caseNumber = View::escape($issue->getCase_number());
 			$notes = View::escape($issue->getNotes());
 			echo "
 			<tr><td class=\"date\">{$issue->getDate('m-d-y')}</td>
@@ -44,16 +45,15 @@
 			<thead>
 				<tr>
 					<th>Created by</th>
-					<th>Issue Length</th>
 					<th>Categories</th>
 					<th>Reported By</th>
 					<th>Contacted By</th>
+					<th>Case #</th>
 					<th>Comments</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr><td>$username</td>
-					<td>10 days</td>
 					<td>
 			";
 					if ($issue->hasCategories()) {
@@ -68,6 +68,7 @@
 				</td>
 				<td>$constituent</td>
 				<td>$contactMethod</td>
+				<td>$caseNumber</td>
 				<td>$notes</td>
 			</tr>
 			";
