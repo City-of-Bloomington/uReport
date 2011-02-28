@@ -24,7 +24,7 @@
 				echo "
 				<tr><td>{$action->getEventDate('Y-m-d')}</td>
 					<td>$description</td>
-					<td>$notes</td>
+					<td><pre>$notes</pre></td>
 				</tr>
 				";
 
