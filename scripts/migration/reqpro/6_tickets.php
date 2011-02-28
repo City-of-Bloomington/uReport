@@ -176,7 +176,32 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$issue->saveCategories(array($category));
 	}
 
-	// Create the Ticket History
+	/**
+	 * Create the Ticket History
+	 *
+	 * We're going to run through the workflow of a ticket.
+	 * To help us out, we'll want to keep track of the last person who worked
+	 * on the ticket at each step of the workflow
+	 */
+	$lastPerson = null;
+	if ($ticket->getEnteredByPerson()) {
+		$lastPerson = $ticket->getEnteredByPerson();
+	}
+
+	$history = new TicketHistory();
+	$history->setEventLabel('opened');
+	$history->setEnteredDate($ticket->getEnteredDate());
+	$history->setEventDate($ticket->getEnteredDate());
+	$history->setTicket($ticket);
+	if ($lastPerson) {
+		$history->setPerson($lastPerson);
+		$history->setEventDescription("Ticket opened by {$lastPerson->getFullname()}");
+	}
+	else {
+		$history->setEventDescription('Ticket opened');
+	}
+	$history->save();
+
 	if ($row['assigned_to']) {
 		$history = new TicketHistory();
 		$history->setEventLabel('assigned');
@@ -197,6 +222,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		// Assignments really do need a person
 		// Saying something is assigned without knowing who is useless.
 		if ($history->getPerson()) {
+			$lastPerson = $history->getPerson();
+
 			try {
 				$history->setEventDescription("Ticket assigned to {$history->getPerson()->getFullname()}");
 				$history->save();
@@ -269,7 +296,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 		}
 		if ($history->getPerson()) {
-			$history->setEventDescription("Location inspected by {$history->getPerson()->getFullname()}");
+			$lastPerson = $history->getPerson();
+			$history->setEventDescription("Location inspected by {$lastPerson->getFullname()}");
 		}
 		else {
 			$history->setEventDescription('Location inspected');
@@ -288,36 +316,48 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 
 		if ($row['followup_date']) {
-			$list = $ticket->getHistory();
-			if (count($list)) {
-				$history = new TicketHistory();
-				$history->setEventLabel('followup');
-				$history->setEventDate($row['followup_date']);
-				$history->setTicket($ticket);
-				$history->setEnteredDate($row['followup_date']);
-				$history->setNotes("$row[action_taken]\n$row[next_action]");
-				foreach ($list as $h) {
-					if ($h->getPerson()) {
-						$history->setPerson($h->getPerson());
-						$history->setEventDescription("{$h->getPerson()->getFullname()} followed up on this ticket");
-						break;
-					}
-				}
-				if (!$history->getEventDescription()) {
-					$history->setEventDescription('Followed up on the ticket');
-				}
-				try {
-					$history->save();
-				}
-				catch (Exception $e) {
-					// Anything that doesn't save, we're just going to ignore
-					// No sense bringing over bad data.
-					echo "Couldn't save followup\n";
-					echo $e->getMessage()."\n";
-					print_r($history);
-					exit();
-				}
+			$history = new TicketHistory();
+			$history->setEventLabel('followup');
+			$history->setEventDate($row['followup_date']);
+			$history->setTicket($ticket);
+			$history->setEnteredDate($row['followup_date']);
+			$history->setNotes("$row[action_taken]\n$row[next_action]");
+			if ($lastPerson) {
+				$history->setPerson($lastPerson);
+				$history->setEventDescription("{$lastPerson->getFullname()} followed up on this ticket");
 			}
+			else {
+				$history->setEventDescription('Ticket followup');
+			}
+
+
+			try {
+				$history->save();
+			}
+			catch (Exception $e) {
+				// Anything that doesn't save, we're just going to ignore
+				// No sense bringing over bad data.
+				echo "Couldn't save followup\n";
+				echo $e->getMessage()."\n";
+				print_r($history);
+				exit();
+			}
+		}
+
+		if ($row['completed_date']) {
+			$history = new TicketHistory();
+			$history->setEventLabel('closed');
+			$history->setEventDate($row['completed_date']);
+			$history->setTicket($ticket);
+			$history->setEnteredDate($row['completed_date']);
+			if ($lastPerson) {
+				$history->setPerson($lastPerson);
+				$history->setEventDescription("{$lastPerson->getFullname()} closed this ticket");
+			}
+			else {
+				$history->setEventDescription('Ticket closed');
+			}
+
 		}
 	}
 }

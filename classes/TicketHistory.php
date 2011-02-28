@@ -291,7 +291,10 @@ class TicketHistory
 	 */
 	public function setEnteredDate($date)
 	{
-		if ($date) {
+		if ($date instanceof Date) {
+			$this->enteredDate = $date;
+		}
+		elseif ($date) {
 			$this->enteredDate = new Date($date);
 		}
 		else {
@@ -311,7 +314,10 @@ class TicketHistory
 	 */
 	public function setEventDate($date)
 	{
-		if ($date) {
+		if ($date instanceof Date) {
+			$this->eventDate = $date;
+		}
+		elseif ($date) {
 			$this->eventDate = new Date($date);
 		}
 		else {

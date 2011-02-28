@@ -302,7 +302,10 @@ class Ticket
 	 */
 	public function setEnteredDate($date)
 	{
-		if ($date) {
+		if ($date instanceof Date) {
+			$this->enteredDate = $date;
+		}
+		elseif ($date) {
 			$this->enteredDate = new Date($date);
 		}
 		else {
