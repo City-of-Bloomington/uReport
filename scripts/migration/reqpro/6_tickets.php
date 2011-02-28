@@ -205,6 +205,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				// Any problems with the action, and we won't save it
 				// These problems should all be assignments to people we don't
 				// have in the system
+				echo "Couldn't save assignment\n";
+				echo $e->getMessage()."\n";
+				print_r($history);
+				exit();
 			}
 		}
 	}
@@ -277,6 +281,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		catch (Exception $e) {
 			// Any problems when creating the inspection, and we'll just not bother
 			// to create it.  We're missing important information
+			echo "Couldn't save inspection\n";
+			echo $e->getMessage()."\n";
+			print_r($history);
+			exit();
 		}
 
 		if ($row['followup_date']) {
@@ -304,6 +312,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				catch (Exception $e) {
 					// Anything that doesn't save, we're just going to ignore
 					// No sense bringing over bad data.
+					echo "Couldn't save followup\n";
+					echo $e->getMessage()."\n";
+					print_r($history);
+					exit();
 				}
 			}
 		}

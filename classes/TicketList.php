@@ -67,7 +67,7 @@ class TicketList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='t.date desc',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='t.enteredDate desc',$limit=null,$groupBy=null)
 	{
 		$this->createSelection();
 
@@ -120,7 +120,7 @@ class TicketList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null,$order='t.date desc',$limit=null,$groupBy=null)
+	public function search($fields=null,$order='t.enteredDate desc',$limit=null,$groupBy=null)
 	{
 		$this->createSelection();
 

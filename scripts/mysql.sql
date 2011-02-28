@@ -141,7 +141,7 @@ create table actions (
 create table ticketHistory (
 	id int unsigned not null primary key auto_increment,
 	ticket_id int unsigned not null,
-	eventType varchar(50) not null,
+	eventLabel varchar(50) not null,
 	eventDescription varchar(128) not null,
 	enteredDate date not null,
 	eventDate date not null,

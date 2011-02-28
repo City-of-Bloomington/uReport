@@ -22,9 +22,9 @@ echo "
 	<tbody>
 ";
 	foreach ($this->ticketList as $ticket) {
-		$date = $ticket->getDate('m-d-y');
+		$enteredDate = $ticket->getEnteredDate('m-d-y');
 		$status = View::escape($ticket->getStatus());
-		$person = $ticket->getPerson() ? View::escape($ticket->getPerson()->getFullname()) : '';
+		$enteredBy = $ticket->getEnteredByPerson() ? View::escape($ticket->getEnteredByPerson()->getFullname()) : '';
 		$location = View::escape($ticket->getLocation());
 		$url->ticket_id = $ticket->getId();
 		foreach ($ticket->getIssues() as $issue) {
@@ -45,8 +45,8 @@ echo "
 				</td>
 				<td>$status</td>
 				<td>$location</td>
-				<td>$date</td>
-				<td>$person</td>
+				<td>$enteredDate</td>
+				<td>$enteredBy</td>
 			</tr>
 			";
 		}

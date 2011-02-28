@@ -20,8 +20,8 @@
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 		<fieldset><legend>Ticket Information</legend>
 			<table>
-				<tr><td><label for="person_id">Entered By</label></td>
-					<td><select name="person_id" id="person_id">
+				<tr><td><label for="enteredByPerson_id">Entered By</label></td>
+					<td><select name="enteredByPerson_id" id="enteredByPerson_id">
 							<option></option>
 							<?php
 								$people = new PersonList(array('enteredTicket'=>true));
@@ -136,8 +136,7 @@
 					<td><select name="status" id="status">
 							<option></option>
 							<?php
-								$list = ActionType::getStatuses();
-								foreach ($list as $status) {
+								foreach (TicketHistory::getStatuses() as $status) {
 									$selected = (isset($_GET['status']) && $_GET['status']==$status)
 										? 'selected="selected"'
 										: '';
@@ -148,26 +147,24 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="actionType_id">Action</label></td>
-					<td><select name="actionType_id" id="actionType_id">
+				<tr><td><label for="eventLabel">Action</label></td>
+					<td><select name="eventLabel" id="eventLabel">
 							<option></option>
 							<?php
-								$list = new ActionTypeList();
-								$list->find();
-								foreach ($list as $action) {
-									$name = View::escape($action->getFormLabel());
-									$selected = (isset($_GET['actionType_id']) && $_GET['actionType_id']==$action->getId())
+								foreach (TicketHistory::getEventLabels() as $eventLabel) {
+									$selected = (isset($_GET['eventLabel']) && $_GET['eventLabel']==$eventLabel)
 										? 'selected="selected"'
 										: '';
-									echo "<option value=\"{$action->getId()}\" $selected>$name</option>";
+									$eventLabel = View::escape($eventLabel);
+									echo "<option $selected>$eventLabel</option>";
 								}
 							?>
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="actionPerson_id">Person</label></td>
-					<td><input name="actionPerson_id" id="actionPerson_id"
-							value="<?php echo isset($_GET['actionPerson_id']) ? View::escape($_GET['actionPerson_id']) : ''; ?>" />
+				<tr><td><label for="person_id">Person ID</label></td>
+					<td><input name="person_id" id="person_id"
+							value="<?php echo isset($_GET['person_id']) ? View::escape($_GET['person_id']) : ''; ?>" />
 					</td>
 				</tr>
 			</table>

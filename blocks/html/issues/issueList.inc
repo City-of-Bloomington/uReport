@@ -44,7 +44,7 @@
 			<thead>
 				<tr>
 					<th>Created by</th>
-					<th>Issue Lenght</th>
+					<th>Issue Length</th>
 					<th>Categories</th>
 					<th>Reported By</th>
 					<th>Contacted By</th>

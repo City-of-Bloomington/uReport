@@ -60,7 +60,7 @@ class PersonList extends ZendDbResultIterator
 		if (isset($fields['enteredTicket'])) {
 			$count = $fields['enteredTicket'] ? '> 1' : '= 0';
 			$this->select->join(array('t'=>'tickets'),
-								'p.id=t.person_id',
+								'p.id=t.enteredByPerson_id',
 								array('ticketCount'=>'count(*)'));
 			$this->select->group('p.id');
 			$this->select->having("ticketCount $count");

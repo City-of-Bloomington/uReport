@@ -349,4 +349,31 @@ class TicketHistory
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * Returns an array of status strings
+	 *
+	 * Returns the distinct list of statuses that are used across all tickets
+	 *
+	 * @return array
+	 */
+	public static function getStatuses()
+	{
+		$zend_db = Database::getConnection();
+		$result = $zend_db->query('select distinct status from tickets');
+		return $result->fetchAll(Zend_Db::FETCH_COLUMN);
+	}
+
+	/**
+	 * Returns an array of action strings
+	 *
+	 * Returns the distinct list of eventLabels that are used across all tickets
+	 *
+	 * @return array
+	 */
+	public static function getEventLabels()
+	{
+		$zend_db = Database::getConnection();
+		$query = $zend_db->query('select distinct eventLabel from ticketHistory order by eventLabel');
+		return $query->fetchAll(Zend_Db::FETCH_COLUMN);
+	}
 }

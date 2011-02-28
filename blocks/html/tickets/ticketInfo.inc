@@ -6,17 +6,17 @@
  * @param Ticket $this->ticket
  */
 $location = View::escape($this->ticket->getLocation());
-$person = $this->ticket->getPerson() ? $this->ticket->getPerson()->getFullname() : '';
+$enteredBy = $this->ticket->getEnteredByPerson() ? $this->ticket->getEnteredByPerson()->getFullname() : '';
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
 	<div>$location</div>
 	<table>
 		<tr><th>Date Opened</th>
-			<td>{$this->ticket->getDate('Y-m-d')}</td>
+			<td>{$this->ticket->getEnteredDate('Y-m-d')}</td>
 		</tr>
 		<tr><th>Received By</th>
-			<td>$person</td>
+			<td>$enteredBy</td>
 		</tr>
 	</table>
 </div>

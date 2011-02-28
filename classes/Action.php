@@ -186,20 +186,6 @@ class Action
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	/**
-	 * Returns an array of status strings
-	 *
-	 * Returns the distinct list of statuses that are used across all Actions
-	 *
-	 * @return array
-	 */
-	public static function getStatuses()
-	{
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select distinct status from actions');
-		return $result->fetchAll(Zend_Db::FETCH_COLUMN);
-	}
-
-	/**
 	 * Substitutes actual data for the placeholders in the description
 	 *
 	 * Specify the placeholders as an associative array

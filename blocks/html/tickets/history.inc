@@ -18,12 +18,11 @@
 		<tbody>
 		<?php
 			foreach ($this->ticketHistory as $action) {
-				$notes = View::escape($action->getNotes());
-				$description = View::escape($action->getDescription());
+				$description = View::escape($action->getEventDescription());
 				$notes = View::escape($action->getNotes());
 
 				echo "
-				<tr><td>{$action->getActionDate('Y-m-d')}</td>
+				<tr><td>{$action->getEventDate('Y-m-d')}</td>
 					<td>$description</td>
 					<td>$notes</td>
 				</tr>
