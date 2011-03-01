@@ -1,11 +1,11 @@
-html {font:sans-serif 10pt; }
+html { font:sans-serif 10pt; }
 h1 { font-size:1.25em; font-weight:bold; margin-bottom:.25em; }
-h2 {font-size:1; font-weight:bold; margin-bottom:.25em;}
+h2 { font-size:1; font-weight:bold; margin-bottom:.25em; }
 a { text-decoration:none; color:blue; }
 table { margin-bottom:.5em; }
 th { font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
-.date, .issueType {font-weight:bold; }
+.date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
 
 
@@ -46,7 +46,7 @@ ul { list-style-type:none; margin:0; padding:0; }
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid #cccccc; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
-.locationInfo > div {margin:.5em 0; }
+.locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; border-right:1px solid gray; }
 
 /* Blocks we want to show up in the right column of a Panel */
@@ -76,6 +76,9 @@ ul { list-style-type:none; margin:0; padding:0; }
 	background:url('images/add.gif') no-repeat;
 }
 
+.pageNavigation { margin:.5em; }
+.pageNavigation li { display:inline; margin:.5em; }
+.pageNavigation .current { border:2px solid green; }
 
 tr.verified { background:url('images/check.png') no-repeat; }
 tr.verified > td:first-child { padding-left:16px; }
