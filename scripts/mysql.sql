@@ -74,6 +74,12 @@ create table department_categories (
 	primary key (department_id,category_id)
 );
 
+create table resolutions (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null,
+	description varchar(128)
+);
+
 create table tickets (
 	id int unsigned not null primary key auto_increment,
 	enteredDate date not null,
@@ -82,6 +88,7 @@ create table tickets (
 	referredPerson_id int unsigned,
 	location varchar(128),
 	status varchar(50),
+	resolution_id int unsigned,
 	-- The rest of these fields are used as cache
 	-- This information will ultimately come from other applications webservices
 	street_address_id int unsigned,
@@ -92,7 +99,8 @@ create table tickets (
 	longitude decimal(8,6),
 	foreign key (enteredByPerson_id) references people(id),
 	foreign key (assignedPerson_id) references people(id),
-	foreign key (referredPerson_id) references people(id)
+	foreign key (referredPerson_id) references people(id),
+	foreign key (resolution_id) references resolutions(id)
 );
 
 create table issueTypes (

@@ -20,12 +20,14 @@ $fields = array(
 	'actionType_id','actionPerson_id'
 );
 if (count(array_intersect($fields,array_keys($_GET)))) {
-	$ticketList = new TicketList();
+	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
+	$ticketList = new TicketList(null,50,$page);
 	$ticketList->search($_GET);
 	$template->blocks[] = new Block(
 		'tickets/searchResults.inc',
 		array('ticketList'=>$ticketList,'title'=>'Search Results')
 	);
+	$template->blocks[] = new Block('pageNavigation.inc',array('list'=>$ticketList));
 }
 
 

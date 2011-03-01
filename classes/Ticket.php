@@ -12,6 +12,7 @@ class Ticket
 	private $assignedPerson_id;
 	private $referredPerson_id;
 	private $status;
+	private $resolution_id;
 	private $location;
 	private $street_address_id;
 	private $subunit_id;
@@ -23,6 +24,7 @@ class Ticket
 	private $enteredByPerson;
 	private $assignedPerson;
 	private $referredPerson;
+	private $resolution;
 
 	/**
 	 * Populates the object with data
@@ -95,6 +97,7 @@ class Ticket
 		$data['assignedPerson_id'] = $this->assignedPerson_id ? $this->assignedPerson_id : null;
 		$data['referredPerson_id'] = $this->referredPerson_id ? $this->referredPerson_id : null;
 		$data['status'] = $this->status;
+		$data['resolution_id'] = $this->resolution_id ? $this->resolution_id : null;
 		$data['location'] = $this->location ? $this->location : null;
 		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
 		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
@@ -228,6 +231,27 @@ class Ticket
 	public function getStatus()
 	{
 		return $this->status;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResolution_id()
+	{
+		return $this->resolution_id;
+	}
+
+	/**
+	 * @return Resolution
+	 */
+	public function getResolution()
+	{
+		if ($this->resolution_id) {
+			if (!$this->resolution) {
+				$this->resolution = new Resolution($this->resolution_id);
+			}
+			return $this->resolution;
+		}
 	}
 
 	/**
@@ -373,6 +397,27 @@ class Ticket
 	public function setStatus($string)
 	{
 		$this->status = trim($string);
+	}
+
+	/**
+	 * @param int $id
+	 */
+	public function setResolution_id($id)
+	{
+		$this->resolution = new Resolution($id);
+		$this->resolution_id = $this->resolution->getId();
+	}
+
+	/**
+	 * @param Resolution|string $resolution
+	 */
+	public function setResolution($resolution)
+	{
+		if (!$resolution instanceof Resolution) {
+			$resolution = new Resolution($resolution);
+		}
+		$this->resolution_id = $resolution->getId();
+		$this->resolution = $resolution;
 	}
 
 	/**

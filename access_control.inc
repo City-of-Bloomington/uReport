@@ -21,15 +21,15 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('People'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Departments'));
 
+$ZEND_ACL->add(new Zend_Acl_Resource('Actions'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Categories'));
 $ZEND_ACL->add(new Zend_Acl_Resource('IssueTypes'));
-$ZEND_ACL->add(new Zend_Acl_Resource('ActionTypes'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Resolutions'));
 $ZEND_ACL->add(new Zend_Acl_Resource('ContactMethods'));
 $ZEND_ACL->add(new Zend_Acl_Resource('NeighborhoodAssociations'));
 
 $ZEND_ACL->add(new Zend_Acl_Resource('Tickets'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Actions'));
 /**
  * Assign permissions to the resources
  */

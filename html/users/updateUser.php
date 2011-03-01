@@ -77,7 +77,7 @@ if (isset($_POST['username'])) {
 }
 
 // Display the form
-$template = new Template();
+$template = new Template('two-column');
 $template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
 if ($user->getPerson_id()) {
 	$template->blocks[] = new BlocK('people/personInfo.inc',array('person'=>$user->getPerson()));

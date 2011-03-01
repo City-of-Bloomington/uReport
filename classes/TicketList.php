@@ -18,7 +18,8 @@
 class TicketList extends ZendDbResultIterator
 {
 	private $columns = array(
-		'enteredByPerson_id','assignedPerson_id','referredPerson_id','status',
+		'enteredByPerson_id','assignedPerson_id','referredPerson_id',
+		'status','resolution_id',
 		'location','street_address_id','subunit_id',
 		'neighborhoodAssociation','township'
 	);

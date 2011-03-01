@@ -7,6 +7,7 @@
  */
 $location = View::escape($this->ticket->getLocation());
 $enteredBy = $this->ticket->getEnteredByPerson() ? $this->ticket->getEnteredByPerson()->getFullname() : '';
+$status = $this->ticket->getStatus();
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
@@ -14,6 +15,9 @@ echo "
 	<table>
 		<tr><th>Date Opened</th>
 			<td>{$this->ticket->getEnteredDate('Y-m-d')}</td>
+		</tr>
+		<tr><th>Status</th>
+			<td>$status</td>
 		</tr>
 		<tr><th>Received By</th>
 			<td>$enteredBy</td>

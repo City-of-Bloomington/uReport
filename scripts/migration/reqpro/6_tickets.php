@@ -50,8 +50,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	switch ($row['status']) {
 		case 'NOT VALID':
 		case 'NOT PROCESSED':
+			$ticket->setStatus('closed');
+			$ticket->setResolution('Bogus');
+			break;
 		case 'COMPLETED':
 			$ticket->setStatus('closed');
+			$ticket->setResolution('Resolved');
 			break;
 		default:
 			$ticket->setStatus('open');
@@ -357,7 +361,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			else {
 				$history->setEventDescription('Ticket closed');
 			}
-
+			$history->save();
 		}
 	}
 }
