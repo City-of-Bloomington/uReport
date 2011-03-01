@@ -8,6 +8,9 @@
 $location = View::escape($this->ticket->getLocation());
 $enteredBy = $this->ticket->getEnteredByPerson() ? $this->ticket->getEnteredByPerson()->getFullname() : '';
 $status = $this->ticket->getStatus();
+if ($this->ticket->getResolution()) {
+	$status.= ': '.$this->ticket->getResolution();
+}
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
