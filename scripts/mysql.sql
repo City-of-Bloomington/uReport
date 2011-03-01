@@ -159,4 +159,19 @@ create table department_actions (
 	primary key (department_id,action_id)
 );
 
+create table issueHistory (
+	id int unsigned not null primary key auto_increment,
+	issue_id int unsigned not null,
+	eventLabel varchar(50) not null,
+	eventDescription varchar(128) not null,
+	enteredDate date not null,
+	eventDate date not null,
+	person_id int unsigned,
+	contactMethod_id int unsigned,
+	notes text,
+	foreign key (issue_id) references issues(id),
+	foreign key (person_id) references people(id),
+	foreign key (contactMethod_id) references contactMethods(id)
+);
+
 /*! set foreign_key_checks=1 */;
