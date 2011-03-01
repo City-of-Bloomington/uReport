@@ -11,8 +11,7 @@ $neighborhoods = Location::getNeighborhoodAssociations($this->location);
 
 echo "
 <div class=\"locationInfo\">
-	<h1>Location Information</h1>
-	<div><a href=\"$url\">$location</a></div>
+	<h1><a href=\"$url\">$location</a></h1>
 ";
 
 if (count($neighborhoods)) {
