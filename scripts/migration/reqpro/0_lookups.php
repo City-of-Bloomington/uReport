@@ -18,3 +18,10 @@ foreach ($resolutions as $name=>$description) {
 	$resolution->save();
 	echo "$resolution\n";
 }
+
+$issueTypes = array('Request','Complaint','Violation');
+foreach ($issueTypes as $name) {
+	$type = new IssueType();
+	$type->setName($name);
+	$type->save();
+}
