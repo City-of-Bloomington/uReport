@@ -31,7 +31,9 @@
 					$get = 'get'.ucfirst($field);
 					$value = $$var->$get();
 					if (preg_match('/Person/',$name) || $field=='constituent') {
-						$value = $value->getFullname();
+						if ($value) {
+							$value = $value->getFullname();
+						}
 					}
 					echo "<td>$value</td>";
 				}
