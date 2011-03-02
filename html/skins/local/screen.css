@@ -51,15 +51,12 @@ tbody th { align:right; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
-#pers
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; }
 #location-panel .locationResidents { }
-#location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
-.searchResults {
-
-}
+#location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+.searchResults {}
 
 .issueList .issue {
 	padding:.5em; margin:.5em;
