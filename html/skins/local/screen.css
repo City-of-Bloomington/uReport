@@ -56,6 +56,9 @@ tbody th { align:right; }
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; }
 #location-panel .locationResidents { }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+
+.searchForm {}
+.searchForm .fields {  }
 .searchResults {}
 
 .issueList .issue {

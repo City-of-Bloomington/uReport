@@ -4,55 +4,41 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
+ * @param array $this->fields The ticket fields to display.
+ *							These will be indexes from TicketList::getDisplayableFields
  */
-$url = new URL(BASE_URL.'/tickets/viewTicket.php');
-echo "
-<div class=\"searchResults\">
-<h1>$this->title</h1>
+?>
+<div class="searchResults">
+<h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
 <table>
 	<thead>
-		<tr><th>Ticket #</th>
-			<th>Categories</th>
-			<th>Status</th>
-			<th>Location</th>
-			<th>Opened Date</th>
-			<th>Entered By</th>
+		<tr>
+		<?php
+			$fields = TicketList::getDisplayableFields();
+			foreach ($this->fields as $name=>$value) {
+				echo "<th>$fields[$name]</th>";
+			}
+		?>
 		</tr>
 	</thead>
 	<tbody>
-";
-	foreach ($this->ticketList as $ticket) {
-		$enteredDate = $ticket->getEnteredDate('m-d-y');
-		$status = View::escape($ticket->getStatus());
-		$enteredBy = $ticket->getEnteredByPerson() ? View::escape($ticket->getEnteredByPerson()->getFullname()) : '';
-		$location = View::escape($ticket->getLocation());
-		$url->ticket_id = $ticket->getId();
-		foreach ($ticket->getIssues() as $issue) {
-			echo "
-			<tr><td><a href=\"$url\">{$ticket->getId()}</a></td>
-				<td>
-			";
-					$categories = $ticket->getCategories();
-					if (count($categories)) {
-						echo '<ul>';
-						foreach ($categories as $category) {
-							$name = View::escape($category);
-							echo "<li>$name</li>";
-						}
-						echo '</ul>';
+	<?php
+		foreach ($this->ticketList as $ticket) {
+			foreach ($ticket->getIssues() as $issue) {
+				echo '<tr>';
+				foreach ($this->fields as $name=>$value) {
+					list($var,$field) = explode('-',$name);
+					$get = 'get'.ucfirst($field);
+					$value = $$var->$get();
+					if (preg_match('/Person/',$name) || $field=='constituent') {
+						$value = $value->getFullname();
 					}
-			echo "
-				</td>
-				<td>$status</td>
-				<td>$location</td>
-				<td>$enteredDate</td>
-				<td>$enteredBy</td>
-			</tr>
-			";
+					echo "<td>$value</td>";
+				}
+				echo '</tr>';
+			}
 		}
-	}
-echo "
+	?>
 	</tbody>
 </table>
 </div>
-";

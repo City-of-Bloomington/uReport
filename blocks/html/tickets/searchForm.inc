@@ -170,6 +170,34 @@
 			</table>
 		</fieldset>
 
+		<fieldset class="fields"><legend>Fields to display</legend>
+			<ul>
+			<?php
+				// Default columns to display
+				if (!isset($_GET['fields'])) {
+					$_GET['fields'] = array(
+						'ticket-id'=>'on',
+						'ticket-status'=>'on',
+						'ticket-location'=>'on',
+						'ticket-enteredDate'=>'on',
+						'ticket-enteredByPerson'=>'on'
+					);
+				}
+
+				foreach (TicketList::getDisplayableFields() as $name=>$label) {
+					$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
+					echo "
+					<li><label>
+							<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
+							$label
+						</label>
+					</li>
+					";
+				}
+			?>
+			</ul>
+		</fieldset>
+
 		<fieldset><legend>Submit</legend>
 			<?php
 				echo $this->template->formButton(

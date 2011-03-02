@@ -235,4 +235,37 @@ class TicketList extends ZendDbResultIterator
 	{
 		return new Ticket($this->result[$key]);
 	}
+
+	/**
+	 * Returns fields that can be displayed in a single line
+	 *
+	 * When displaying TicketLists, it is useful to try to display each ticket on a single line
+	 * These are the fields that are possible to be joined into a single line for any single ticket
+	 *
+	 * @return array(fieldname=>human_readable_label)
+	 */
+	public static function getDisplayableFields()
+	{
+		// All possible columns to display
+		return array(
+			'ticket-id'=>'Ticket #',
+			'ticket-enteredDate'=>'Ticket Date',
+			'ticket-enteredByPerson'=>'Ticket Entered By',
+			'ticket-assignedPerson'=>'Assigned To',
+			'ticket-referredPerson'=>'Referred To',
+			'ticket-status'=>'Status',
+			'ticket-resolution'=>'Resolution',
+			'ticket-location'=>'Location',
+			'ticket-neighborhoodAssociation'=>'Neighborhood Association',
+			'ticket-township'=>'Township',
+			'ticket-latitude'=>'Latitude',
+			'ticket-longitude'=>'Longitude',
+			'issue-date'=>'Issue Date',
+			'issue-issueType'=>'Type',
+			'issue-constituent'=>'Constituent',
+			'issue-contactMethod'=>'Contact Method',
+			'issue-person'=>'Issue Entered By',
+			'issue-case_number'=>'Case Number'
+		);
+	}
 }

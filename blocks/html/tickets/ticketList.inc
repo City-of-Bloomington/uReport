@@ -8,7 +8,7 @@
 $title = $this->title ? View::escape($this->title) : 'Tickets';
 echo "
 <div class=\"ticketList\">
-<h1>Tickets associated with this Address</h1>
+<h1>$title</h1>
 ";
 $url = new URL(BASE_URL.'/tickets/viewTicket.php');
 

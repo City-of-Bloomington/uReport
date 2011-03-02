@@ -25,7 +25,11 @@ if (count(array_intersect($fields,array_keys($_GET)))) {
 	$ticketList->search($_GET);
 	$template->blocks[] = new Block(
 		'tickets/searchResults.inc',
-		array('ticketList'=>$ticketList,'title'=>'Search Results')
+		array(
+			'ticketList'=>$ticketList,
+			'title'=>'Search Results',
+			'fields'=>$_GET['fields']
+		)
 	);
 	$template->blocks[] = new Block('pageNavigation.inc',array('list'=>$ticketList));
 }
