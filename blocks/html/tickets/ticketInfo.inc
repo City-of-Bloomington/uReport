@@ -17,7 +17,7 @@ echo "
 	<div>$location</div>
 	<table>
 		<tr><th>Date Opened</th>
-			<td>{$this->ticket->getEnteredDate('Y-m-d')}</td>
+			<td>{$this->ticket->getEnteredDate('m-d-y')}</td>
 		</tr>
 		<tr><th>Status</th>
 			<td>$status</td>

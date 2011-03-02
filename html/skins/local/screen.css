@@ -7,7 +7,9 @@ th { font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
-
+fieldset {padding:1em 0; }
+thead th {align:left; }
+tbody th {align:right; }
 
 #banner {
 	width:100%; height:60px;
@@ -37,22 +39,23 @@ ul { list-style-type:none; margin:0; padding:0; }
 #panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#location-panel { border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
-#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px; overflow:auto; }
+#ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#location-panel { border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#action-panel {border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid #cccccc; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div { margin:.5em 0; }
-#location-panel .findLocationForm	{ width:290px; float:left; border-right:1px solid gray; }
+#location-panel .findLocationForm	{ width:290px; float:left; }
 
 /* Blocks we want to show up in the right column of a Panel */
-#location-panel .locationList			{ margin-left:295px; overflow:auto; }
+#location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; }
 #location-panel .locationResidents { }
-#location-panel .findLocationResults	{ margin-left:295px; overflow:auto; }
+#location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
 .searchResults {
 
 }
@@ -80,6 +83,5 @@ ul { list-style-type:none; margin:0; padding:0; }
 .pageNavigation li { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified { background:url('images/check.png') no-repeat; }
-tr.verified > td:first-child { padding-left:16px; }
+tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
 
