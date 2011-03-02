@@ -7,9 +7,9 @@ th { font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
-fieldset {padding:1em 0; }
-thead th {align:left; }
-tbody th {align:right; }
+fieldset { padding:1em 0; }
+thead th { align:left; }
+tbody th { align:right; }
 
 #banner {
 	width:100%; height:60px;
@@ -44,7 +44,7 @@ tbody th {align:right; }
 #history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #location-panel { border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#action-panel {border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#action-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid #cccccc; }
@@ -60,6 +60,14 @@ tbody th {align:right; }
 .searchResults {
 
 }
+
+.issueList .issue {
+	padding:.5em; margin:.5em;
+	border:1px solid gray;
+	-moz-border-radius:10px;
+	border-radius:10px;
+}
+.issueList .issue th { font-weight:normal; color:#cccccc; }
 
 /* Buttons */
 .button { }
@@ -85,4 +93,3 @@ tbody th {align:right; }
 .pageNavigation .current { border:2px solid green; }
 
 tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
-
