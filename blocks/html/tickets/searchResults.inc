@@ -1,11 +1,21 @@
 <?php
 /**
+ * Displays a list of Tickets
+ *
+ * This page only displays Ticket and Issue fields that are asked for
+ * The fields desired need to be the indexes of an associative array
+ * The values for each field just needs to be truthy
+ *
+ * $exampleFields = array('ticket-id'=>1,'ticket-status'=>1,'issue-issueType'=>1);
+ *
+ * For the full list of possible fields for use here,
+ * See: TicketList::getDisplayableFields()
+ *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  * @param array $this->fields The ticket fields to display.
- *							These will be indexes from TicketList::getDisplayableFields
  */
 ?>
 <div class="searchResults">
