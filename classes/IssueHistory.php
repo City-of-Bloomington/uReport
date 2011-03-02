@@ -7,7 +7,7 @@
 class IssueHistory
 {
 	private $id;
-	private $ticket_id;
+	private $issue_id;
 	private $eventLabel;
 	private $eventDescription;
 	private $enteredDate;
@@ -16,7 +16,7 @@ class IssueHistory
 	private $contactMethod_id;
 	private $notes;
 
-	private $ticket;
+	private $issue;
 	private $person;
 
 	/**
@@ -72,7 +72,7 @@ class IssueHistory
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->ticket_id || !$this->eventLabel || !$this->eventDescription) {
+		if (!$this->issue_id || !$this->eventLabel || !$this->eventDescription) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -93,7 +93,7 @@ class IssueHistory
 		$this->validate();
 
 		$data = array();
-		$data['ticket_id'] = $this->ticket_id;
+		$data['issue_id'] = $this->issue_id;
 		$data['eventLabel'] = $this->eventLabel;
 		$data['eventDescription'] = $this->eventDescription;
 		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
@@ -138,21 +138,21 @@ class IssueHistory
 	/**
 	 * @return int
 	 */
-	public function getTicket_id()
+	public function getIssue_id()
 	{
-		return $this->ticket_id;
+		return $this->issue_id;
 	}
 
 	/**
-	 * @return Ticket
+	 * @return Issue
 	 */
-	public function getTicket()
+	public function getIssue()
 	{
-		if ($this->ticket_id) {
-			if (!$this->ticket) {
-				$this->ticket = new Ticket($this->ticket_id);
+		if ($this->issue_id) {
+			if (!$this->issue) {
+				$this->issue = new Issue($this->issue_id);
 			}
-			return $this->ticket;
+			return $this->issue;
 		}
 		return null;
 	}
@@ -271,19 +271,19 @@ class IssueHistory
 	/**
 	 * @param int $int
 	 */
-	public function setTicket_id($int)
+	public function setIssue_id($int)
 	{
-		$this->ticket = new Ticket($int);
-		$this->ticket_id = $int;
+		$this->issue = new Issue($int);
+		$this->issue_id = $int;
 	}
 
 	/**
-	 * @param Ticket $ticket
+	 * @param Issue $issue
 	 */
-	public function setTicket(Ticket $ticket)
+	public function setIssue(Issue $issue)
 	{
-		$this->ticket_id = $ticket->getId();
-		$this->ticket = $ticket;
+		$this->issue_id = $issue->getId();
+		$this->issue = $issue;
 	}
 
 	/**
@@ -399,7 +399,7 @@ class IssueHistory
 	/**
 	 * Returns an array of action strings
 	 *
-	 * Returns the distinct list of eventLabels that are used across all tickets
+	 * Returns the distinct list of eventLabels that are used across all issues
 	 *
 	 * @return array
 	 */
