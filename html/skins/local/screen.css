@@ -58,7 +58,7 @@ tbody th { align:right; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 
 .searchForm {}
-.searchForm .fields {  }
+.searchForm .fields { float:right; margin:1em; }
 .searchResults {}
 
 .issueList .issue {

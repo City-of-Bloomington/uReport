@@ -17,6 +17,13 @@
  * @param TicketList $this->ticketList
  * @param array $this->fields The ticket fields to display.
  */
+// Default fields to be used
+if (!$this->fields) {
+	$this->fields = array(
+		'ticket-id'=>1,'issue-issueType'=>1,'ticket-status'=>1,
+		'ticket-location'=>1,'ticket-enteredDate'=>1,'ticket-enteredByPerson'=>1
+	);
+}
 ?>
 <div class="searchResults">
 <h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
@@ -44,6 +51,10 @@
 						if ($value) {
 							$value = $value->getFullname();
 						}
+					}
+					// Only put the href on the ticket_id
+					if ($field == 'id') {
+						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
 					}
 					echo "<td>$value</td>";
 				}

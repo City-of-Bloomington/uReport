@@ -15,10 +15,11 @@ $template->blocks['issue-panel'][] = new Block('issues/issueList.inc',
 												array('issueList'=>$ticket->getIssues()));
 $template->blocks['location-panel'][] = new Block('locations/locationInfo.inc',
 													array('location'=>$ticket->getLocation()));
-$template->blocks['location-panel'][] = new Block('tickets/searchResults.inc',
-													array('ticketList'=>new TicketList(array('location'=>$ticket->getLocation()
-																							)
-																						),'title'=>'Other tickets for this location'
-														)
-												);
+$template->blocks['location-panel'][] = new Block(
+	'tickets/searchResults.inc',
+	array(
+		'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
+		'title'=>'Other tickets for this location'
+	)
+);
 echo $template->render();
