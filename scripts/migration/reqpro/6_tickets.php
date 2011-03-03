@@ -148,7 +148,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$issue->setDate($ticket->getEnteredDate());
 	$issue->setTicket($ticket);
 	if ($ticket->getEnteredByPerson()) {
-		$issue->setPerson($ticket->getEnteredByPerson());
+		$issue->setEnteredByPerson($ticket->getEnteredByPerson());
 	}
 	$issue->setNotes($row['comments']);
 	$issue->setCase_number($row['case_number']);
@@ -171,7 +171,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		'email'=>$row['e_mail_address']
 	));
 	if (count($personList)) {
-		$issue->setConstituent($personList[0]);
+		$issue->setReportedBy($personList[0]);
 	}
 
 	$issue->save();

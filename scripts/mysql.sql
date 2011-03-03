@@ -118,16 +118,16 @@ create table issues (
 	date date not null,
 	ticket_id int unsigned not null,
 	issueType_id int unsigned not null,
-	constituent_id int unsigned,
+	reportedByPerson_id int unsigned,
 	contactMethod_id int unsigned,
-	person_id int unsigned,
+	enteredByPerson_id int unsigned,
 	notes text,
 	case_number varchar(10),
 	foreign key (ticket_id) references tickets(id),
 	foreign key (issueType_id) references issueTypes(id),
-	foreign key (constituent_id) references people(id),
+	foreign key (reportedByPerson_id) references people(id),
 	foreign key (contactMethod_id) references contactMethods(id),
-	foreign key (person_id) references people(id)
+	foreign key (enteredByPerson_id) references people(id)
 );
 
 create table issue_categories (

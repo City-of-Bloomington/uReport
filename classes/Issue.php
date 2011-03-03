@@ -10,17 +10,17 @@ class Issue
 	private $date;
 	private $ticket_id;
 	private $issueType_id;
-	private $constituent_id;
+	private $reportedByPerson_id;
 	private $contactMethod_id;
-	private $person_id;
+	private $enteredByPerson_id;
 	private $notes;
 	private $case_number;
 
 	private $ticket;
 	private $issueType;
-	private $constituent;
+	private $reportedByPerson;
 	private $contactMethod;
-	private $person;
+	private $enteredByPerson;
 
 	private $categories = array();
 
@@ -85,7 +85,7 @@ class Issue
 			throw new Exception('missingRequiredFields');
 		}
 
-		#if (!$this->person_id) {
+		#if (!$this->enteredByPerson_id) {
 		#	throw new Exception('missingRequiredFields');
 		#}
 
@@ -105,9 +105,9 @@ class Issue
 		$data['date'] = $this->getDate('Y-m-d');
 		$data['ticket_id'] = $this->ticket_id;
 		$data['issueType_id'] = $this->issueType_id;
-		$data['constituent_id'] = $this->constituent_id ? $this->constituent_id : null;
+		$data['reportedByPerson_id'] = $this->reportedByPerson_id ? $this->reportedByPerson_id : null;
 		$data['contactMethod_id'] = $this->contactMethod_id ? $this->contactMethod_id : null;
-		$data['person_id'] = $this->person_id;
+		$data['enteredByPerson_id'] = $this->enteredByPerson_id;
 		$data['notes'] = $this->notes ? $this->notes : null;
 		$data['case_number'] = $this->case_number ? $this->case_number : null;
 
@@ -211,21 +211,21 @@ class Issue
 	/**
 	 * @return int
 	 */
-	public function getConstituent_id()
+	public function getReportedByPerson_id()
 	{
-		return $this->constituent_id;
+		return $this->reportedByPerson_id;
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getConstituent()
+	public function getReportedByPerson()
 	{
-		if ($this->constituent_id) {
-			if (!$this->constituent) {
-				$this->constituent = new Person($this->constituent_id);
+		if ($this->reportedByPerson_id) {
+			if (!$this->reportedByPerson) {
+				$this->reportedByPerson = new Person($this->reportedByPerson_id);
 			}
-			return $this->constituent;
+			return $this->reportedByPerson;
 		}
 		return null;
 	}
@@ -255,21 +255,21 @@ class Issue
 	/**
 	 * @return int
 	 */
-	public function getPerson_id()
+	public function getEnteredByPerson_id()
 	{
-		return $this->person_id;
+		return $this->enteredByPerson_id;
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getPerson()
+	public function getEnteredByPerson()
 	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
+		if ($this->enteredByPerson_id) {
+			if (!$this->enteredByPerson) {
+				$this->enteredByPerson = new Person($this->enteredByPerson_id);
 			}
-			return $this->person;
+			return $this->enteredByPerson;
 		}
 		return null;
 	}
@@ -365,19 +365,19 @@ class Issue
 	/**
 	 * @param int $int
 	 */
-	public function setConstituent_id($int)
+	public function setReportedByPerson_id($int)
 	{
-		$this->constituent = new Constituent($int);
-		$this->constituent_id = $int;
+		$this->reportedByPerson = new ReportedByPerson($int);
+		$this->reportedByPerson_id = $int;
 	}
 
 	/**
 	 * @param Person $person
 	 */
-	public function setConstituent(Person $person)
+	public function setReportedByPerson(Person $person)
 	{
-		$this->constituent_id = $person->getId();
-		$this->constituent = $person;
+		$this->reportedByPerson_id = $person->getId();
+		$this->reportedByPerson = $person;
 	}
 
 	/**
@@ -410,19 +410,19 @@ class Issue
 	/**
 	 * @param int $int
 	 */
-	public function setPerson_id($int)
+	public function setEnteredByPerson_id($int)
 	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
+		$this->enteredByPerson = new Person($int);
+		$this->enteredByPerson_id = $int;
 	}
 
 	/**
 	 * @param Person $person
 	 */
-	public function setPerson($person)
+	public function setEnteredByPerson(Person $person)
 	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
+		$this->enteredByPerson_id = $person->getId();
+		$this->enteredByPerson = $person;
 	}
 
 	/**

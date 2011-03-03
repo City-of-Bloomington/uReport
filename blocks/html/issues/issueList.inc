@@ -7,26 +7,42 @@
  */
 ?>
 <div class="issueList">
-<h1>Associated Issues</h1>
-<table>
-	<tbody>
+	<h1>Associated Issues</h1>
+	<div class="issue">
 	<?php
 		foreach ($this->issueList as $issue) {
-			if ($issue->getPerson()) {
-				$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getPerson_id();
-				$username = View::escape($issue->getPerson()->getUsername());
-				$username = "<a href=\"$href\">$username</a>";
+			$editButton = '';
+			$responseButton = '';
+			if (userIsAllowed('Issues')) {
+				$editButton = $this->template->formButton(
+					'Edit Issue',
+					'button',
+					'edit',
+					null,
+					"document.location.href='".BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';"
+				);
+				$responseButton = $this->template->formButton(
+					'Add Response',
+					'button',
+					'add',
+					null,
+					BASE_URL.'/issues/addResponse.php?issue_id='.$issue->getId()
+				);
 			}
-			else {
-				$username = '';
+
+
+			$enteredBy = '';
+			if ($issue->getEnteredByPerson()) {
+				$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getEnteredByPerson_id();
+				$enteredBy = View::escape($issue->getEnteredByPerson()->getUsername());
+				$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 			}
-			if ($issue->getConstituent()) {
-				$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getConstituent_id();
-				$constituent = View::escape($issue->getConstituent()->getFullname());
-				$constituent = "<a href=\"$href\">$constituent</a>";
-			}
-			else {
-				$constituent = '';
+
+			$reportedBy = '';
+			if ($issue->getReportedByPerson()) {
+				$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getReportedByPerson_id();
+				$reportedBy = View::escape($issue->getReportedByPerson()->getFullname());
+				$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 			}
 
 			$type = View::escape($issue->getIssueType());
@@ -34,46 +50,43 @@
 			$caseNumber = View::escape($issue->getCase_number());
 			$notes = View::escape($issue->getNotes());
 			echo "
-			<tr><td class=\"date\">{$issue->getDate('m-d-y')}</td>
-				<td class=\"issueType\">$type</td>
-				<td>Edit Issue</td>
-				<td>Add Response</td>
-			</tr>
-			</tbody>
-			</table>
+			<h1><span class=\"date\">{$issue->getDate()}</span>
+				<span class=\"issueType\">$type</span>
+				$editButton
+				$responseButton
+			</h1>
 			<table>
-			<thead>
-				<tr>
-					<th>Created by</th>
-					<th>Categories</th>
-					<th>Reported By</th>
-					<th>Contacted By</th>
-					<th>Case #</th>
-					<th>Comments</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr><td>$username</td>
-					<td>
+				<thead>
+					<tr><th>Created by</th>
+						<th>Categories</th>
+						<th>Reported By</th>
+						<th>Contacted By</th>
+						<th>Case #</th>
+						<th>Comments</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td>$enteredBy</td>
+						<td>
 			";
-					if ($issue->hasCategories()) {
-						echo '<ul>';
-						foreach ($issue->getCategories() as $category) {
-							$name = View::escape($category);
-							echo "<li>$name</li>";
+						if ($issue->hasCategories()) {
+							echo '<ul>';
+							foreach ($issue->getCategories() as $category) {
+								$name = View::escape($category);
+								echo "<li>$name</li>";
+							}
+							echo '</ul>';
 						}
-						echo '</ul>';
-					}
 			echo "
-				</td>
-				<td>$constituent</td>
-				<td>$contactMethod</td>
-				<td>$caseNumber</td>
-				<td>$notes</td>
-			</tr>
+						</td>
+						<td>$reportedBy</td>
+						<td>$contactMethod</td>
+						<td>$caseNumber</td>
+						<td>$notes</td>
+					</tr>
+				</tbody>
+			</table>
 			";
 		}
 	?>
-	</tbody>
-</table>
 </div>
