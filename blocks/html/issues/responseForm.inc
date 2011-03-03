@@ -8,7 +8,7 @@
 $person = View::escape($_SESSION['USER']->getPerson()->getFullname());
 $constituent = View::escape($this->issue->getReportedByPerson()->getFullname());
 $date = new Date();
-$description = View::escape("$person resonded to $constituent on $date");
+$description = View::escape("$person resonded to $constituent");
 ?>
 <div class="responseForm">
 	<h1>Respond</h1>

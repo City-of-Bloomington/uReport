@@ -38,8 +38,7 @@ if (isset($_POST['contactMethod_id'])) {
 
 	try {
 		$history->save();
-		print_r($history);
-		#header('Location: '.$issue->getTicket()->getURL());
+		header('Location: '.$issue->getTicket()->getURL());
 		exit();
 	}
 	catch (Exception $e) {

@@ -3,18 +3,11 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param ActionList $this->ticketHistory
+ * @param TicketHistoryList $this->ticketHistory
  */
 ?>
 <div class="history">
-	<h1>History</h1>
 	<table>
-		<thead>
-			<tr><th>Date</th>
-				<th>Action</th>
-				<th>Comments</th>
-			</tr>
-		</thead>
 		<tbody>
 		<?php
 			foreach ($this->ticketHistory as $action) {
