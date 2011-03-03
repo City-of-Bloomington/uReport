@@ -25,6 +25,10 @@ try {
 	if (isset($_REQUEST['person_id'])) {
 		$issue->setReportedByPerson_id($_REQUEST['person_id']);
 	}
+
+	if (!$issue->getReportedByPerson_id()) {
+		throw new Exception('issues/noReportedByPerson');
+	}
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;

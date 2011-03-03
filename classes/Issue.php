@@ -505,4 +505,12 @@ class Issue
 	{
 		return count($this->getCategories()) ? true : false;
 	}
+
+	/**
+	 * @return IssueHistoryList
+	 */
+	public function getHistory()
+	{
+		return new IssueHistoryList(array('issue_id'=>$this->id));
+	}
 }

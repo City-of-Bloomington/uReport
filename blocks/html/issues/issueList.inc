@@ -21,13 +21,16 @@
 					null,
 					"document.location.href='".BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';"
 				);
-				$responseButton = $this->template->formButton(
-					'Add Response',
-					'button',
-					'add',
-					null,
-					BASE_URL.'/issues/addResponse.php?issue_id='.$issue->getId()
-				);
+
+				if ($issue->getReportedByPerson_id()) {
+					$responseButton = $this->template->formButton(
+						'Add Response',
+						'button',
+						'add',
+						null,
+						"document.location.href='".BASE_URL."/issues/addResponse.php?issue_id={$issue->getId()}';"
+					);
+				}
 			}
 
 
@@ -87,6 +90,9 @@
 				</tbody>
 			</table>
 			";
+
+			$block = new Block('tickets/history.inc',array('ticketHistory'=>$issue->getHistory()));
+			echo $block->render('html',$this->template);
 		}
 	?>
 </div>

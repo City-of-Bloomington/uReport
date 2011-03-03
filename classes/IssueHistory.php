@@ -121,6 +121,7 @@ class IssueHistory
 		$zend_db = Database::getConnection();
 		$zend_db->insert('issueHistory',$data);
 		$this->id = $zend_db->lastInsertId('issueHistory','id');
+		echo "IssueHistory inserted\n";
 	}
 
 	//----------------------------------------------------------------
