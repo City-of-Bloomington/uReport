@@ -22,7 +22,7 @@
 				$notes = View::escape($action->getNotes());
 
 				echo "
-				<tr><td>{$action->getEventDate('Y-m-d')}</td>
+				<tr><td>{$action->getEventDate()}</td>
 					<td>$description</td>
 					<td>$notes</td>
 				</tr>
