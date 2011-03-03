@@ -1,9 +1,10 @@
 <?php
 /**
- * @copyright 2009-2010 City of Bloomington, Indiana
+ * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
+ * @param string $this->return_url
  */
 $fields = array(
 	'firstname','middlename','lastname','email','phone',
@@ -63,10 +64,11 @@ echo "<h1>$title</h1>";
 	</fieldset>
 
 	<fieldset><legend>Submit</legend>
+		<input name="return_url" type="hidden" value="<?php echo View::escape($this->return_url); ?>" />
 		<?php
 			echo $this->formButton('Submit','submit','submit');
 			echo $this->formButton(
-				'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/people';"
+				'Cancel','button','cancel',null,"document.location.href='{$this->return_url}';"
 			);
 		?>
 	</fieldset>

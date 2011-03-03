@@ -3,11 +3,17 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Request person_id
+ * @param REQUEST person_id
+ * @param REQUEST return_url (optional)
  */
+$errorURL = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/people';
+$return_url = isset($_REQUEST['return_url'])
+	? new URL($_REQUEST['return_url'])
+	: new URL(BASE_URL.'/viewPerson.php');
+
 if (!userIsAllowed('Users')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
+	header("Location: $errorURL");
 	exit();
 }
 
@@ -17,14 +23,13 @@ if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
-		header('Location: '.BASE_URL.'/people');
+		header("Location: $errorURL");
 		exit();
 	}
 }
 else {
 	$person = new Person();
 }
-
 
 if (isset($_POST['firstname'])) {
 	$fields = array(
@@ -40,7 +45,9 @@ if (isset($_POST['firstname'])) {
 
 	try {
 		$person->save();
-		header('Location: '.BASE_URL.'/people');
+		$return_url->person_id = $person->getId();
+
+		header("Location: $return_url");
 		exit();
 	}
 	catch (Exception $e) {
@@ -50,5 +57,8 @@ if (isset($_POST['firstname'])) {
 
 $template = new Template();
 $template->title = 'Update a person';
-$template->blocks[] = new Block('people/updatePersonForm.inc',array('person'=>$person));
+$template->blocks[] = new Block(
+	'people/updatePersonForm.inc',
+	array('person'=>$person,'return_url'=>$return_url)
+);
 echo $template->render();

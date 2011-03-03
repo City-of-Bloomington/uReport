@@ -25,7 +25,7 @@ class TicketList extends ZendDbResultIterator
 	);
 
 	private $issueColumns = array(
-		'issueType_id','constituent_id','contactMethod_id','case_number'
+		'issueType_id','reportedByPerson_id','contactMethod_id','case_number'
 	);
 
 	private $historyColumns = array(
@@ -262,9 +262,9 @@ class TicketList extends ZendDbResultIterator
 			'ticket-longitude'=>'Longitude',
 			'issue-date'=>'Issue Date',
 			'issue-issueType'=>'Type',
-			'issue-constituent'=>'Constituent',
+			'issue-reportedByPerson'=>'Constituent',
 			'issue-contactMethod'=>'Contact Method',
-			'issue-person'=>'Issue Entered By',
+			'issue-enteredByPerson'=>'Issue Entered By',
 			'issue-case_number'=>'Case Number'
 		);
 	}

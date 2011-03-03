@@ -367,7 +367,7 @@ class Issue
 	 */
 	public function setReportedByPerson_id($int)
 	{
-		$this->reportedByPerson = new ReportedByPerson($int);
+		$this->reportedByPerson = new Person($int);
 		$this->reportedByPerson_id = $int;
 	}
 
@@ -465,7 +465,7 @@ class Issue
 	 * Replaces the database records for the issue
 	 * with a new set of categories
 	 *
-	 * @param array|CategoryList $categories
+	 * @param string|array|CategoryList $categories
 	 */
 	public function saveCategories($categories)
 	{
@@ -473,6 +473,10 @@ class Issue
 			$this->categories = array();
 			$zend_db = Database::getConnection();
 			$zend_db->delete('issue_categories','issue_id='.$this->id);
+
+			if (is_string($categories)) {
+				$categories = explode(',',$categories);
+			}
 			foreach ($categories as $category) {
 				if (!$category instanceof Category) {
 					$category = new Category($category);

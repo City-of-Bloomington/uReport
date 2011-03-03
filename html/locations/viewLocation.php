@@ -25,10 +25,11 @@ $template->blocks['ticket-panel'][] = new Block(
 		'title'=>'Tickets Associated with this Location',
 		'fields'=>array(
 			'ticket-id'=>1,
+			'ticket-enteredDate'=>1,
 			'ticket-assignedPerson'=>1,
 			'ticket-status'=>1,
 			'issue-issueType'=>1,
-			'issue-constituent'=>1
+			'issue-reportedByPerson'=>1
 		)
 	)
 );

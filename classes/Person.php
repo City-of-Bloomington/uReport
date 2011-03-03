@@ -404,6 +404,6 @@ class Person
 	}
 
 	public function getReportedTickets() {
-		return new TicketList(array('constituent_id'=>$this->id));
+		return new TicketList(array('reportedByPerson_id'=>$this->id));
 	}
 }

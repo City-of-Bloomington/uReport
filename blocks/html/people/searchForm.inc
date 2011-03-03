@@ -28,6 +28,11 @@ foreach ($fields as $field) {
 			</tr>
 		</table>
 		<?php
+			if (isset($this->return_url)) {
+				$return_url = View::escape($this->return_url);
+				echo "<input type=\"hidden\" name=\"return_url\" value=\"$return_url\" />";
+			}
+
 			echo $this->template->formButton(
 				'Search','submit','search'
 			);
