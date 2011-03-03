@@ -133,3 +133,9 @@ if (isset($_SESSION['USER'])) {
  * Addresses are validated against a Master Address web service
  */
 define('MASTER_ADDRESS','http://localhost/master_address');
+
+/**
+ * Date format
+ * All dates will use this format
+ */
+define('DATE_FORMAT','Y-m-d');

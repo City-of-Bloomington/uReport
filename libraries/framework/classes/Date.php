@@ -41,6 +41,6 @@ class Date extends DateTime
 
 	public function __toString()
 	{
-		return $this->format('n/j/Y');
+		return $this->format(DATE_FORMAT);
 	}
 }
