@@ -127,20 +127,15 @@ foreach($results as $row){
 	$lastPerson = $ticket->getEnteredByPerson();
   }
   $history = new TicketHistory();
-  $history->setEventLabel('opened');
+  $history->setAction(new Action('open'));
   $history->setEnteredDate($ticket->getEnteredDate());
-  $history->setEventDate($ticket->getEnteredDate());
+  $history->setActionDate($ticket->getEnteredDate());
   $history->setTicket($ticket);
   if ($lastPerson) {
-	$history->setPerson($lastPerson);
-	$history->setEventDescription("Ticket opened by {$lastPerson->getFullname()}");
-  }
-  else {
-	$history->setEventDescription('Ticket opened');
+	$history->setEnteredByPerson($lastPerson);
   }
   $history->setNotes('Ticket opened');
   $history->save();
-  
   //
   // looking for resolutions,responses related to this request
   // these will be considered as actions
@@ -152,25 +147,35 @@ foreach($results as $row){
   $result2 = $pdo->query($sql);
   while ($row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
 	$history = new TicketHistory();
-	$history->setEventLabel('referral');
+	$history->setAction(new Action('referral'));
 	$history->setEnteredDate($row2['date']);
-	$history->setEventDate($row2['date']);
+	$history->setActionDate($row2['date']);
 	$history->setTicket($ticket);
-	$history->setEventDescription('This ticket was referred');	  
 	$history->setNotes($row2['notes']);
-	list($firstname,$lastname) = explode(' ',$row2['person']);
-	$personList = new PersonList(array(
-									   'firstname'=>$firstname,
-									   'lastname'=>$lastname));
-	if (count($personList)) {
-	  $history->setPerson($personList[0]);
+	if ($lastPerson) {
+	  $history->setEnteredByPerson($lastPerson);
+	}
+	$personList = null;
+	$list = explode(' ',$row2['person']);
+	if(count($list) > 1){
+	  $personList = new PersonList(array('firstname'=>$list[0],
+										 'lastname'=>$list[1]));
+	  // if (count($personList)) {
+	  //	$history->setActionPerson($personList[0]);
+	  //}
+	  if (!count($personList)) {  
+		$personList = new PersonList(array('firstname'=>$row2['person']));
+	  }
+	}
+	if($personList && count($personList)){
+	  $history->setActionPerson($personList[0]);							   
 	}
 	else{
 	  // if no match found, we put all in first name
 	  $person = new Person();
 	  $person->setFirstname($row2['person']); 
 	  $person->save();
-	  $history->setPerson($person);		
+	  $history->setActionPerson($person);		
 	}
 	$history->save();
   }
@@ -184,14 +189,14 @@ foreach($results as $row){
   $result2 = $pdo->query($sql);
   while ($row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
 	$history = new TicketHistory();
-	$history->setEventLabel('resolution');
+	$history->setAction(new Action('close'));
+	$history->setActionDate($row2['date']);
 	$history->setEnteredDate($row2['date']);
-	$history->setEventDate($row2['date']);
 	$history->setTicket($ticket);
-	$history->setEventDescription('This ticket was resolved');
 	$history->setNotes($row['notes']);
 	$user = new User(strtolower($row2['username']));
-	$history->setPerson($user->getPerson());
+	$history->setEnteredByPerson($user->getPerson());		
+	$history->setActionPerson($user->getPerson());
 	$history->save();
   }
   //
@@ -207,14 +212,32 @@ foreach($results as $row){
   $result2 = $pdo->query($sql);
   while ($result2 && $row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
 	$history = new IssueHistory();
-	$history->setEventLabel('response');
+	$history->setAction(new Action('response'));
 	$history->setEnteredDate($row2['date']);
-	$history->setEventDate($row2['date']);
+	$history->setActionDate($row2['date']);
 	$history->setIssue($issue);
-	$history->setEventDescription('Response to this issue by '.$row2['contactMethod']);
 	$history->setNotes($row2['notes']);	  
 	$user = new User(strtolower($row2['username']));
-	$history->setPerson($user->getPerson());
+	$history->setEnteredByPerson($user->getPerson());
+	$history->setActionPerson($issue->getReportedByPerson());
+	if($row2['contactMethod']){
+	  switch ($row2['contactMethod']) {
+	  case 'phone':
+		$history->setContactMethod('Phone Call');
+		break;
+	  case 'email':			  
+		$history->setContactMethod('Email');
+		break;
+	  case 'letter':			  
+		$history->setContactMethod('Letter');
+		break;	  
+	  case 'in-person':			  
+		$history->setContactMethod('Walk In');
+		break;	  
+	  default:  // fax
+		$history->setContactMethod('Other');
+	  }
+	}
 	$history->save();
 	// print_r($history);
   }
