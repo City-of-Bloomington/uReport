@@ -31,7 +31,7 @@ if (isset($_POST['contactMethod_id'])) {
 	$history->setIssue($issue);
 	$history->setAction('response');
 	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
+	$history->setActionPerson_id($issue->getReportedByPerson_id());
 
 	$history->setContactMethod_id($_POST['contactMethod_id']);
 	$history->setNotes($_POST['notes']);

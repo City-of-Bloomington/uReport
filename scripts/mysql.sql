@@ -146,7 +146,7 @@ create table actions (
 	formLabel varchar(128) not null,
 	status varchar(128) not null
 );
-insert into actions set type='system',name='open',description='Ticket opened by {actionPerson}',formLabel='open',status='open';
+insert into actions set type='system',name='open',description='Ticket opened by {enteredByPerson}',formLabel='open',status='open';
 insert into actions set type='system',name='close',description='Ticket closed by {actionPerson}',formLabel='close',status='closed';
 insert into actions set type='system',name='assignment',description='{enteredByPerson} assigned the ticket to {actionPerson}',formLabel='assign to',status='open';
 insert into actions set type='system',name='referral',description='{enteredByPerson} referred the ticket to {actionPerson}',formLabel='refer to',status='open';
