@@ -158,6 +158,7 @@ class TicketList extends ZendDbResultIterator
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
 							$this->select->where("th.$column=?",$fields[$column]);
+							$this->select->orWhere("ih.$column=?",$fields[$column]);
 						}
 					}
 				}
