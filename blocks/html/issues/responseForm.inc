@@ -16,7 +16,6 @@ $description = View::escape("$person resonded to $constituent");
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 		<fieldset><legend></legend>
 			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
-			<input name="eventDescription" type="hidden" value="<?php echo $description; ?>" />
 			<table>
 				<tr><td><label for="contactMethod_id">Contact Method</label></td>
 					<td><select name="contactMethod_id" id="contactMethod_id">

@@ -29,7 +29,7 @@ class TicketList extends ZendDbResultIterator
 	);
 
 	private $historyColumns = array(
-		'action','actionDate','person_id'
+		'action_id','actionDate','actionPerson_id'
 	);
 
 	/**
@@ -157,7 +157,7 @@ class TicketList extends ZendDbResultIterator
 					if (isset($fields[$column])) {
 						$fields[$column] = trim($fields[$column]);
 						if ($fields[$column]) {
-							$this->select->where("h.$column=?",$fields[$column]);
+							$this->select->where("th.$column=?",$fields[$column]);
 						}
 					}
 				}
@@ -214,7 +214,9 @@ class TicketList extends ZendDbResultIterator
 		}
 
 		if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
-			$joins['h'] = array('table'=>'ticketHistory','condition'=>'t.id=h.ticket_id');
+			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
+			$joins['th'] = array('table'=>'ticketHistory','condition'=>'t.id=th.ticket_id');
+			$joins['ih'] = array('table'=>'issueHistory','condition'=>'i.id=ih.issue_id');
 		}
 
 		foreach ($joins as $key=>$join) {

@@ -29,9 +29,9 @@ catch (Exception $e) {
 if (isset($_POST['contactMethod_id'])) {
 	$history = new IssueHistory();
 	$history->setIssue($issue);
-	$history->setEventLabel('Response');
-	$history->setEventDescription($_POST['eventDescription']);
-	$history->setPerson_id($_SESSION['USER']->getPerson_id());
+	$history->setAction('response');
+	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
+	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
 
 	$history->setContactMethod_id($_POST['contactMethod_id']);
 	$history->setNotes($_POST['notes']);

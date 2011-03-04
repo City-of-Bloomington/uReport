@@ -4,20 +4,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class IssueHistory
+class IssueHistory extends History
 {
-	private $id;
 	private $issue_id;
-	private $eventLabel;
-	private $eventDescription;
-	private $enteredDate;
-	private $eventDate;
-	private $person_id;
 	private $contactMethod_id;
-	private $notes;
 
 	private $issue;
-	private $person;
 
 	/**
 	 * Populates the object with data
@@ -61,7 +53,7 @@ class IssueHistory
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->enteredDate = new Date();
-			$this->eventDate = new Date();
+			$this->actionDate = new Date();
 		}
 	}
 
@@ -72,7 +64,7 @@ class IssueHistory
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->issue_id || !$this->eventLabel || !$this->eventDescription) {
+		if (!$this->issue_id || !$this->action_id) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -80,8 +72,8 @@ class IssueHistory
 			$this->enteredDate = new Date();
 		}
 
-		if (!$this->eventDate) {
-			$this->eventDate = new Date();
+		if (!$this->actionDate) {
+			$this->actionDate = new Date();
 		}
 	}
 
@@ -94,11 +86,11 @@ class IssueHistory
 
 		$data = array();
 		$data['issue_id'] = $this->issue_id;
-		$data['eventLabel'] = $this->eventLabel;
-		$data['eventDescription'] = $this->eventDescription;
+		$data['action_id'] = $this->action_id;
 		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
-		$data['eventDate'] = $this->eventDate->format('Y-m-d');
-		$data['person_id'] = $this->person_id ? $this->person_id : null;
+		$data['enteredByPerson_id'] = $this->enteredByPerson_id ? $this->enteredByPerson_id : null;
+		$data['actionDate'] = $this->actionDate->format('Y-m-d');
+		$data['actionPerson_id'] = $this->actionPerson_id ? $this->actionPerson_id : null;
 		$data['contactMethod_id'] = $this->contactMethod_id ? $this->contactMethod_id : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
@@ -121,21 +113,11 @@ class IssueHistory
 		$zend_db = Database::getConnection();
 		$zend_db->insert('issueHistory',$data);
 		$this->id = $zend_db->lastInsertId('issueHistory','id');
-		echo "IssueHistory inserted\n";
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
 	/**
 	 * @return int
 	 */
@@ -154,84 +136,6 @@ class IssueHistory
 				$this->issue = new Issue($this->issue_id);
 			}
 			return $this->issue;
-		}
-		return null;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEventLabel()
-	{
-		return $this->eventLabel;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEventDescription()
-	{
-		return $this->eventDescription;
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getEnteredDate($format=null)
-	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
-		}
-		else {
-			return $this->enteredDate;
-		}
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getEventDate($format=null)
-	{
-		if ($format && $this->eventDate) {
-			return $this->eventDate->format($format);
-		}
-		else {
-			return $this->eventDate;
-		}
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPerson_id()
-	{
-		return $this->person_id;
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getPerson()
-	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
-			}
-			return $this->person;
 		}
 		return null;
 	}
@@ -257,18 +161,9 @@ class IssueHistory
 		}
 	}
 
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		return $this->notes;
-	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param int $int
 	 */
@@ -281,90 +176,10 @@ class IssueHistory
 	/**
 	 * @param Issue $issue
 	 */
-	public function setIssue(Issue $issue)
+	public function setIssue($issue)
 	{
 		$this->issue_id = $issue->getId();
 		$this->issue = $issue;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEventLabel($string)
-	{
-		$this->eventLabel = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEventDescription($string)
-	{
-		$this->eventDescription = trim($string);
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setEnteredDate($date)
-	{
-		if ($date instanceof Date) {
-			$this->enteredDate = $date;
-		}
-		elseif ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
-		}
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setEventDate($date)
-	{
-		if ($date instanceof Date) {
-			$this->eventDate = $date;
-		}
-		elseif ($date) {
-			$this->eventDate = new Date($date);
-		}
-		else {
-			$this->eventDate = null;
-		}
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setPerson_id($int)
-	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setPerson(Person $person)
-	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
 	}
 
 	/**
@@ -377,20 +192,15 @@ class IssueHistory
 	}
 
 	/**
-	 * @param ContactMethod $contactMethod
+	 * @param string|ContactMethod $method
 	 */
-	public function setContactMethod(ContactMethod $contactMethod)
+	public function setContactMethod($method)
 	{
-		$this->contactMethod_id = $contactMethod->getId();
-		$this->contactMethod = $contactMethod;
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setNotes($text)
-	{
-		$this->notes = $text;
+		if (!$method instanceof ContactMethod) {
+			$method = new ContactMethod($method);
+		}
+		$this->contactMethod_id = $method->getId();
+		$this->contactMethod = $method;
 	}
 
 	//----------------------------------------------------------------

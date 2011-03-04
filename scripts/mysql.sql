@@ -140,23 +140,30 @@ create table issue_categories (
 
 create table actions (
 	id int unsigned not null primary key auto_increment,
+	type enum('system','user') not null default 'user',
 	name varchar(128) not null,
 	description varchar(128) not null,
 	formLabel varchar(128) not null,
 	status varchar(128) not null
 );
+insert into actions set type='system',name='open',description='Ticket opened by {actionPerson}',formLabel='open',status='open';
+insert into actions set type='system',name='close',description='Ticket closed by {actionPerson}',formLabel='close',status='closed';
+insert into actions set type='system',name='assignment',description='{enteredByPerson} assigned the ticket to {actionPerson}',formLabel='assign to',status='open';
+insert into actions set type='system',name='referral',description='{enteredByPerson} referred the ticket to {actionPerson}',formLabel='refer to',status='open';
+insert into actions set type='system',name='response',description='{enteredByPerson} responded to {actionPerson}',formLabel='respond',status='open';
 
 create table ticketHistory (
 	id int unsigned not null primary key auto_increment,
 	ticket_id int unsigned not null,
-	eventLabel varchar(50) not null,
-	eventDescription varchar(128) not null,
+	action_id int unsigned not null,
 	enteredDate date not null,
-	eventDate date not null,
-	person_id int unsigned,
+	enteredByPerson_id int unsigned,
+	actionDate date not null,
+	actionPerson_id int unsigned,
 	notes text,
 	foreign key (ticket_id) references tickets(id),
-	foreign key (person_id) references people(id)
+	foreign key (enteredByPerson_id) references people(id),
+	foreign key (actionPerson_id) references people(id)
 );
 
 create table department_actions (
@@ -170,15 +177,16 @@ create table department_actions (
 create table issueHistory (
 	id int unsigned not null primary key auto_increment,
 	issue_id int unsigned not null,
-	eventLabel varchar(50) not null,
-	eventDescription varchar(128) not null,
+	action_id int unsigned not null,
 	enteredDate date not null,
-	eventDate date not null,
-	person_id int unsigned,
+	enteredByPerson_id int unsigned,
+	actionDate date not null,
+	actionPerson_id int unsigned,
 	contactMethod_id int unsigned,
 	notes text,
 	foreign key (issue_id) references issues(id),
-	foreign key (person_id) references people(id),
+	foreign key (enteredByPerson_id) references people(id),
+	foreign key (actionPerson_id) references people(id),
 	foreign key (contactMethod_id) references contactMethods(id)
 );
 

@@ -7,6 +7,7 @@
 class Action
 {
 	private $id;
+	private $type;
 	private $name;
 	private $description;
 	private $formLabel;
@@ -52,6 +53,7 @@ class Action
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->type = 'user';
 		}
 	}
 
@@ -75,6 +77,7 @@ class Action
 		$this->validate();
 
 		$data = array();
+		$data['type'] = $this->type;
 		$data['name'] = $this->name;
 		$data['description'] = $this->description;
 		$data['formLabel'] = $this->formLabel;
@@ -111,6 +114,14 @@ class Action
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->type;
 	}
 
 	/**

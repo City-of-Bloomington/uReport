@@ -24,4 +24,19 @@ foreach ($issueTypes as $name) {
 	$type = new IssueType();
 	$type->setName($name);
 	$type->save();
+	echo "$type\n";
+}
+
+$actions = array(
+	array('name'=>'inspection','description'=>'{actionPerson} inspected this Location','formLabel'=>'inspected by'),
+	array('name'=>'followup','description'=>'{actionPerson} followed up on this ticket','formLabel'=>'followed up')
+);
+foreach ($actions as $a) {
+	$action = new Action();
+	$action->setName($a['name']);
+	$action->setDescription($a['description']);
+	$action->setFormLabel($a['formLabel']);
+	$action->setStatus('open');
+	$action->save();
+	echo "{$action->getName()}\n";
 }

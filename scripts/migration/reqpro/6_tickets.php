@@ -171,7 +171,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		'email'=>$row['e_mail_address']
 	));
 	if (count($personList)) {
-		$issue->setReportedBy($personList[0]);
+		$issue->setReportedByPerson($personList[0]);
 	}
 
 	$issue->save();
@@ -193,43 +193,40 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 
 	$history = new TicketHistory();
-	$history->setEventLabel('opened');
+	$history->setAction('open');
 	$history->setEnteredDate($ticket->getEnteredDate());
-	$history->setEventDate($ticket->getEnteredDate());
+	$history->setActionDate($ticket->getEnteredDate());
 	$history->setTicket($ticket);
 	if ($lastPerson) {
-		$history->setPerson($lastPerson);
-		$history->setEventDescription("Ticket opened by {$lastPerson->getFullname()}");
-	}
-	else {
-		$history->setEventDescription('Ticket opened');
+		$history->setEnteredByPerson($lastPerson);
 	}
 	$history->save();
 
 	if ($row['assigned_to']) {
 		$history = new TicketHistory();
-		$history->setEventLabel('assigned');
+		$history->setAction('assignment');
 		$history->setEnteredDate($row['assigned_date']);
-		$history->setEventDate($row['assigned_date']);
+		$history->setActionDate($row['assigned_date']);
 		$history->setTicket($ticket);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
+		if ($lastPerson) {
+			$history->setEnteredByPerson($lastPerson);
+		}
 		try {
 			list($username,$fullname) = explode(':',$row['assigned_to']);
 			$user = new User($username);
-			$history->setPerson($user->getPerson());
+			$history->setActionPerson($user->getPerson());
 		}
 		catch (Exception $e) {
 			if ($ticket->getEnteredByPerson()) {
-				$history->setPerson($ticket->getEnteredByPerson());
+				$history->setActionPerson($ticket->getEnteredByPerson());
 			}
 		}
 		// Assignments really do need a person
 		// Saying something is assigned without knowing who is useless.
-		if ($history->getPerson()) {
-			$lastPerson = $history->getPerson();
-
+		if ($history->getActionPerson()) {
+			$lastPerson = $history->getActionPerson();
 			try {
-				$history->setEventDescription("Ticket assigned to {$history->getPerson()->getFullname()}");
 				$history->save();
 			}
 			catch  (Exception $e) {
@@ -246,15 +243,16 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 	if ($row['insp_date']) {
 		$history = new TicketHistory();
-		$history->setEventLabel('inspection');
-		$history->setEventDate($row['insp_date']);
-		$history->setTicket($ticket);
+		$history->setAction('inspection');
 		$history->setEnteredDate($row['insp_date']);
+		$history->setActionDate($row['insp_date']);
+		$history->setTicket($ticket);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		if ($row['username']) {
 			try {
 				$user = new User($row['username']);
-				$history->setPerson($user->getPerson());
+				$history->setEnteredByPerson($user->getPerson());
+				$history->setActionPerson($user->getPerson());
 			}
 			catch (Exception $e) {
 				$user = new User();
@@ -277,7 +275,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					$person->setFirstname($row['username']);
 					$person->save();
 				}
-				$history->setPerson($person);
+				$history->setEnteredByPerson($person);
+				$history->setActionPerson($person);
 			}
 		}
 		elseif ($row['needed'] || $row['existing']) {
@@ -285,7 +284,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			list($firstname,$lastname) = explode(' ',$name);
 			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
 			if (count($list)) {
-				$history->setPerson($list[0]);
+				$history->setEnteredByPerson($list[0]);
+				$history->setActionPerson($list[0]);
 			}
 		}
 		else {
@@ -296,17 +296,13 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			$list = new PersonList($search);
 			if (count($list)) {
-				$history->setPerson($list[0]);
+				$history->setEnteredByPerson($list[0]);
+				$history->setActionPerson($list[0]);
 			}
 		}
-		if ($history->getPerson()) {
-			$lastPerson = $history->getPerson();
-			$history->setEventDescription("Location inspected by {$lastPerson->getFullname()}");
+		if ($history->getActionPerson()) {
+			$lastPerson = $history->getActionPerson();
 		}
-		else {
-			$history->setEventDescription('Location inspected');
-		}
-
 		try {
 			$history->save();
 		}
@@ -321,20 +317,15 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 		if ($row['followup_date']) {
 			$history = new TicketHistory();
-			$history->setEventLabel('followup');
-			$history->setEventDate($row['followup_date']);
+			$history->setAction('followup');
+			$history->setActionDate($row['followup_date']);
 			$history->setTicket($ticket);
 			$history->setEnteredDate($row['followup_date']);
 			$history->setNotes("$row[action_taken]\n$row[next_action]");
 			if ($lastPerson) {
-				$history->setPerson($lastPerson);
-				$history->setEventDescription("{$lastPerson->getFullname()} followed up on this ticket");
+				$history->setEnteredByPerson($lastPerson);
+				$history->setActionPerson($lastPerson);
 			}
-			else {
-				$history->setEventDescription('Ticket followup');
-			}
-
-
 			try {
 				$history->save();
 			}
@@ -350,16 +341,13 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 		if ($row['completed_date']) {
 			$history = new TicketHistory();
-			$history->setEventLabel('closed');
-			$history->setEventDate($row['completed_date']);
+			$history->setAction('close');
+			$history->setActionDate($row['completed_date']);
 			$history->setTicket($ticket);
 			$history->setEnteredDate($row['completed_date']);
 			if ($lastPerson) {
-				$history->setPerson($lastPerson);
-				$history->setEventDescription("{$lastPerson->getFullname()} closed this ticket");
-			}
-			else {
-				$history->setEventDescription('Ticket closed');
+				$history->setEnteredByPerson($lastPerson);
+				$history->setActionPerson($lastPerson);
 			}
 			$history->save();
 		}

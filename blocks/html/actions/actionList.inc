@@ -19,7 +19,7 @@
 	<table>
 		<thead>
 			<tr><th></th>
-				<th>Noun</th>
+				<th>Action</th>
 				<th>Description</th>
 				<th>Form Label</th>
 				<th>Status</th>
@@ -29,7 +29,7 @@
 		<?php
 			foreach ($this->actionList as $action) {
 				$editButton = '';
-				if (userIsAllowed('Actions')) {
+				if ($action->getType()=='user' && userIsAllowed('Actions')) {
 					$url = new URL(BASE_URL.'/actions/updateAction.php');
 					$url->id = $action->getId();
 

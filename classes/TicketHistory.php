@@ -4,19 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class TicketHistory
+class TicketHistory extends History
 {
-	private $id;
 	private $ticket_id;
-	private $eventLabel;
-	private $eventDescription;
-	private $enteredDate;
-	private $eventDate;
-	private $person_id;
-	private $notes;
 
 	private $ticket;
-	private $person;
 
 	/**
 	 * Populates the object with data
@@ -60,7 +52,7 @@ class TicketHistory
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->enteredDate = new Date();
-			$this->eventDate = new Date();
+			$this->actionDate = new Date();
 		}
 	}
 
@@ -71,7 +63,7 @@ class TicketHistory
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->ticket_id || !$this->eventLabel || !$this->eventDescription) {
+		if (!$this->ticket_id || !$this->action_id) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -79,8 +71,8 @@ class TicketHistory
 			$this->enteredDate = new Date();
 		}
 
-		if (!$this->eventDate) {
-			$this->eventDate = new Date();
+		if (!$this->actionDate) {
+			$this->actionDate = new Date();
 		}
 	}
 
@@ -93,11 +85,11 @@ class TicketHistory
 
 		$data = array();
 		$data['ticket_id'] = $this->ticket_id;
-		$data['eventLabel'] = $this->eventLabel;
-		$data['eventDescription'] = $this->eventDescription;
+		$data['action_id'] = $this->action_id;
 		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
-		$data['eventDate'] = $this->eventDate->format('Y-m-d');
-		$data['person_id'] = $this->person_id ? $this->person_id : null;
+		$data['enteredByPerson_id'] = $this->enteredByPerson_id ? $this->enteredByPerson_id : null;
+		$data['actionDate'] = $this->actionDate->format('Y-m-d');
+		$data['actionPerson_id'] = $this->actionPerson_id ? $this->actionPerson_id : null;
 		$data['notes'] = $this->notes ? $this->notes : null;
 
 		if ($this->id) {
@@ -124,15 +116,6 @@ class TicketHistory
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
 	/**
 	 * @return int
 	 */
@@ -154,97 +137,9 @@ class TicketHistory
 		}
 		return null;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function getEventLabel()
-	{
-		return $this->eventLabel;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEventDescription()
-	{
-		return $this->eventDescription;
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getEnteredDate($format=null)
-	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
-		}
-		else {
-			return $this->enteredDate;
-		}
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getEventDate($format=null)
-	{
-		if ($format && $this->eventDate) {
-			return $this->eventDate->format($format);
-		}
-		else {
-			return $this->eventDate;
-		}
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getPerson_id()
-	{
-		return $this->person_id;
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getPerson()
-	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
-			}
-			return $this->person;
-		}
-		return null;
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		return $this->notes;
-	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param int $int
 	 */
@@ -261,94 +156,6 @@ class TicketHistory
 	{
 		$this->ticket_id = $ticket->getId();
 		$this->ticket = $ticket;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEventLabel($string)
-	{
-		$this->eventLabel = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEventDescription($string)
-	{
-		$this->eventDescription = trim($string);
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setEnteredDate($date)
-	{
-		if ($date instanceof Date) {
-			$this->enteredDate = $date;
-		}
-		elseif ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
-		}
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setEventDate($date)
-	{
-		if ($date instanceof Date) {
-			$this->eventDate = $date;
-		}
-		elseif ($date) {
-			$this->eventDate = new Date($date);
-		}
-		else {
-			$this->eventDate = null;
-		}
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setPerson_id($int)
-	{
-		$this->person = new Person($int);
-		$this->person_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setPerson($person)
-	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setNotes($text)
-	{
-		$this->notes = $text;
 	}
 
 	//----------------------------------------------------------------

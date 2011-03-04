@@ -175,24 +175,26 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="eventLabel">Action</label></td>
-					<td><select name="eventLabel" id="eventLabel">
+				<tr><td><label for="action_id">Action</label></td>
+					<td><select name="action_id" id="action_id">
 							<option></option>
 							<?php
-								foreach (TicketHistory::getEventLabels() as $eventLabel) {
-									$selected = (isset($_GET['eventLabel']) && $_GET['eventLabel']==$eventLabel)
+								$list = new ActionList();
+								$list->find();
+								foreach ($list as $action) {
+									$name = View::escape($action->getName());
+									$selected = (isset($_GET['action_id']) && $_GET['action_id'])
 										? 'selected="selected"'
 										: '';
-									$eventLabel = View::escape($eventLabel);
-									echo "<option $selected>$eventLabel</option>";
+									echo "<option value=\"{$action->getId()}\" $selected>$name</option>";
 								}
 							?>
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="person_id">Person ID</label></td>
-					<td><input name="person_id" id="person_id"
-							value="<?php echo isset($_GET['person_id']) ? View::escape($_GET['person_id']) : ''; ?>" />
+				<tr><td><label for="actionPerson_id">Person ID</label></td>
+					<td><input name="actionPerson_id" id="actionPerson_id"
+							value="<?php echo isset($_GET['actionPerson_id']) ? View::escape($_GET['actionPerson_id']) : ''; ?>" />
 					</td>
 				</tr>
 			</table>

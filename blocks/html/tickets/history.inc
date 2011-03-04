@@ -11,16 +11,14 @@
 		<tbody>
 		<?php
 			foreach ($this->ticketHistory as $action) {
-				$description = View::escape($action->getEventDescription());
+				$description = View::escape($action->getDescription());
 				$notes = View::escape($action->getNotes());
-
 				echo "
-				<tr><td>{$action->getEventDate()}</td>
+				<tr><td>{$action->getActionDate()}</td>
 					<td>$description</td>
 					<td>$notes</td>
 				</tr>
 				";
-
 			}
 		?>
 		</tbody>
