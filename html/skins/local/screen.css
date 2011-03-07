@@ -67,7 +67,7 @@ tbody th { align:right; }
 	-moz-border-radius:10px;
 	border-radius:10px;
 }
-.issueList .issue th { font-weight:normal; color:#cccccc; }
+.issueList .issue th { font-weight:normal; }
 
 /* Buttons */
 .button { }
