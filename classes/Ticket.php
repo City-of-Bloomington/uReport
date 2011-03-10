@@ -11,7 +11,7 @@ class Ticket
 	private $enteredByPerson_id;
 	private $assignedPerson_id;
 	private $referredPerson_id;
-	private $status;
+	private $status;           // open, closed, 
 	private $resolution_id;
 	private $location;
 	private $street_address_id;
