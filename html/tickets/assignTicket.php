@@ -13,16 +13,17 @@
  * @param REQUEST department_id The new person to be assigned to the ticket
  */
 // Make sure they're supposed to be here
-if (!userIsAllowed('Ticket')) {
+
+if (!userIsAllowed('Tickets')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
-
+$ticket;
 // Load the ticket
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
-	$department = new Department($_REQUEST['department_id']); 
+	// $department = new Department($_REQUEST['department_id']); 
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -55,13 +56,11 @@ if (isset($_POST['ticket'])) {
 	$history->setAction('assignment');
 	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setActionPerson_id($ticket->getAssignedPerson_id());
-
-	$history->setContactMethod_id($_POST['contactMethod_id']);
 	$history->setNotes($_POST['notes']);
 
 	try {
 		$history->save();
-		header('Location: '.$issue->getTicket()->getURL());
+		header('Location: '.$ticket->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -73,11 +72,11 @@ if (isset($_POST['ticket'])) {
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/assignTicketForm.inc',
-	array('ticket'=>$ticket,'department'=>$department)
+	array('ticket'=>$ticket)
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('history'=>$ticket->getHistory())
+	array('ticketHistory'=>$ticket->getHistory())
 );
 $template->blocks['issue-panel'][] = new Block(
 	'issues/issueList.inc',

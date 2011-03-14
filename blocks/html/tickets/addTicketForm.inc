@@ -51,6 +51,19 @@ $title = $this->ticket->getId() ? "Edit Ticket #{$this->ticket->getId()}" : 'New
 					<td><input name="ticket[longitude]" id="ticket-longitude" value="<?php echo $this->ticket->getLongitude(); ?>" />
 					</td>
 				</tr>
+				
+				<tr><td>Assign Ticket</td>
+					<td><a href="<?php echo BASE_URL; ?>/tickets/assignTicket.php?ticket_id=9135">Assign Ticket</a>
+					</td>
+				</tr>
+				<tr><td>Change Status</td>
+					<td><a href="<?php echo BASE_URL; ?>/tickets/changeStatusTicket.php?ticket_id=9135">Change Status</a>
+					<td></td>
+				</tr>
+				<tr><td>Add/Change Action</td>
+					<td><a href="<?php echo BASE_URL; ?>/tickets/addActionTicket.php?ticket_id=9135">Add/Change Action</a>
+					<td></td>
+				</tr>
 
 			</table>
 		</fieldset>

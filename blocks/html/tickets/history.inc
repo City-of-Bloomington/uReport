@@ -6,16 +6,20 @@
  * @param TicketHistoryList $this->ticketHistory
  */
 ?>
+<h1>History</h1>
 <div class="history">
 	<table>
+		<tr><th>Date</th><th>Staff<th>Action</th><th>Comments</th></tr>
 		<tbody>
 		<?php
-			foreach ($this->ticketHistory as $action) {
-				$description = View::escape($action->getDescription());
-				$notes = View::escape($action->getNotes());
+			foreach ($this->ticketHistory as $event) {
+				$action = View::escape($event->getAction()->getName());
+				$notes = View::escape($event->getNotes());
+				$name = View::escape($event->getEnteredByPerson()->getFullName());
 				echo "
-				<tr><td>{$action->getActionDate()}</td>
-					<td>$description</td>
+				<tr><td>{$event->getEnteredDate()}</td>
+					<td>$name</td>	
+					<td>$action</td>
 					<td>$notes</td>
 				</tr>
 				";

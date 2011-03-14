@@ -17,7 +17,7 @@
  */
 class UserList extends ZendDbResultIterator
 {
-	private $columns = array('id','person_id','username','password','authenticationMethod');
+	private $columns = array('id'=>1,'person_id'=>2,'username'=>3,'password'=>4,'authenticationMethod'=>5,'department_id'=>6);
 
 	/**
 	 * @param array $fields
@@ -46,7 +46,11 @@ class UserList extends ZendDbResultIterator
 		// Finding on fields from the Users table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (array_key_exists($key,$this->columns)) {
+				 
+				 
+				if (array_key_exists($key,$this->columns)
+					) {
+					 echo "*** after \n";
 					$this->select->where("u.$key=?",$value);
 				}
 			}

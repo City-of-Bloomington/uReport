@@ -15,23 +15,24 @@ if ($this->ticket->getResolution()) {
 $assignedPerson = $this->ticket->getAssignedPerson();
 $department;
 if($assignedPerson){
-	$department = $asignedPerson->getDepartment();
+	$department = $assignedPerson->getUser()->getDepartment();
 }
 ?>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-	<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
-	<div class=\"ticketInfo\">
-	<h1>Ticket #{$this->ticket->getId()}</h1>
-	<div>$location</div>
-		<table>
-			<tr><th>Date Opened</th>
-				<td>{$this->ticket->getEnteredDate()}</td>
-			</tr>
-			<tr><th>Status</th>
-				<td>$status</td>
-			</tr>
-			<tr><th>Department</th>
-				<td><select name="department_id" id="ticket-department_id" onchange="getUsers()">
+	<fieldset><legend>Assign Ticket</legend>
+		<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+		<div class=\"ticketInfo\">
+			<h1>Ticket #<?php echo $this->ticket->getId(); ?></h1>
+			<div>$location</div>
+			<table>
+				<tr><th>Date Opened</th>
+					<td><?php echo $this->ticket->getEnteredDate() ?></td>
+				</tr>
+				<tr><th>Status</th>
+					<td><?php echo $status ?></td>
+				</tr>
+				<tr><th>Department</th>
+					<td><select name="department_id" id="ticket-department_id" onchange="getUsers()">
 					<option id="">Pick Department</option>
 					<?php
 						$list = new DepartmentList();
@@ -43,37 +44,41 @@ if($assignedPerson){
 							echo "<option value=\"{$dept->getId()} $selected\">$name</option>";
 						}
 					?>
-				</select></td>
-			</tr>
-			<tr><th>Staff Assigned</th>
-				<td>Staff Member</td>
-				<td>Comments</td>
-			</tr>
-			<tr><th>&nbsp;</th><!-- use ajax to populate the list -->
-				<td><select name="ticket[assignedPerson_id]" id="ticket-assignedPerson_id">
+					</select></td>
+				</tr>
+				<tr><th>Staff Assigned</th>
+					<td>Staff Member</td>
+					<td>Comments</td>
+				</tr>
+				<tr><th>&nbsp;</th><!-- use ajax to populate the list -->
+					<td><select name="ticket[assignedPerson_id]" id="ticket-assignedPerson_id">
 					 <?php
 						if($department){
-							$users = new UserList(array('department_id'=>$department->getId()));
-							$users->find();
+							$fields = array('department_id'=>$department->getId());
+							$users = new UserList();
+							$users->find($fields);
 							foreach($users as $user){
 $selected="";
 								$name = View::escape($user->getPerson()->getFullname());
-								($user->getId() == $assingedPerson->getId()) ? $selected="selected=\"selected\"":""; 
-								echo "<option value=\"{$user->getId()} $selected\">$name</option>";
+								$selected = ($user->getPerson_id() == $assignedPerson->getId()) ? "selected=\"selected\"":""; 
+								echo "<option value=\"{$user->getPerson_id()}\" $selected>$name</option>";
 							}
 						}
 					?>
-				</select></td>
-				<td><textarea name="notes" id="notes" rows="3" cols="60"></textarea></td>
-					
-			</tr>
-		</table>
-	</div>
+					</select></td>
+					<td><textarea name="notes" id="notes" rows="3" cols="30"></textarea></td>
+						
+				</tr>
+			</table>
+		</div>
+	</fieldset>
+	<fieldset><legend>Submit</legend>
 	<?php
 		echo $this->template->formButton('Submit','submit','submit');
 		echo $this->template->formButton(
 			'Cancel','button','cancel',null,"document.location.href='{$this->ticket->getURL()}';"
 		);
 	?>
+	</fieldset>
 </form>
 

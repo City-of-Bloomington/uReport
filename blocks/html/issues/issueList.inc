@@ -37,7 +37,7 @@
 			$enteredBy = '';
 			if ($issue->getEnteredByPerson()) {
 				$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getEnteredByPerson_id();
-				$enteredBy = View::escape($issue->getEnteredByPerson()->getUsername());
+				$enteredBy = View::escape($issue->getEnteredByPerson()->getFullname());
 				$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 			}
 

@@ -78,8 +78,7 @@ if(isset($_POST['ticket'])){
 $template = new Template('locations');
 
 $locationPanel = $ticket->getLocation() ?
-	// new Block('locations/locationInfo.inc',array('location'=>$ticket->getLocation()))
-	new Block('tickets/addTicketForm.inc',array('ticket'=>$ticket))
+	new Block('locations/locationInfo.inc',array('location'=>$ticket->getLocation()))
 	: new Block(
 		'locations/findLocationForm.inc',
 		array('return_url'=>BASE_URL.'/tickets/addTicket.php','includeExternalResults'=>true)
