@@ -9,6 +9,7 @@ html/skins/local/images/edit.png -text
 html/tickets/addTicket.php -text
 html/tickets/assignTicket.php -text
 html/tickets/recordAction.php -text
+html/tickets/referTicket.php -text
 html/tickets/updateTicket.php -text
 scripts/migration/calltrack/1_users.php -text
 scripts/migration/calltrack/2_constituents.php -text
