@@ -22,6 +22,7 @@
 				<th>Name</th>
 				<th>Default Person</th>
 				<th>Categories</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,22 +41,32 @@
 				}
 				$name = View::escape($department->getName());
 				$person = View::escape($department->getDefault_person()->getFullname());
+
+				$categories = '';
+				if ($department->hasCategories()) {
+					$categories = '<ul>';
+					foreach ($department->getCategories() as $category) {
+						$c = View::escape($category);
+						$categories.="<li>$c</li>";
+					}
+					$categories.='</ul>';
+				}
+
+				$actions = '';
+				if ($department->hasActions()) {
+					$actions = '<ul>';
+					foreach ($department->getActions() as $action) {
+						$a = View::escape($action->getName());
+						$actions.="<li>$a</li>";
+					}
+					$actions.='</ul>';
+				}
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$person</td>
-					<td>
-				";
-					if ($department->hasCategories()) {
-						echo '<ul>';
-						foreach ($department->getCategories() as $category) {
-							$name = View::escape($category);
-							echo "<li>$name</li>";
-						}
-						echo '</ul>';
-					}
-				echo "
-					</td>
+					<td>$categories</td>
+					<td>$actions</td>
 				</tr>
 				";
 			}
