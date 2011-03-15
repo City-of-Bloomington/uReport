@@ -13,16 +13,18 @@ if ($this->ticket->getResolution()) {
 	$status.= ': '.$this->ticket->getResolution();
 }
 
-if (userIsAllowed('Tickets')) {
+$assignButton = '';
+$closeTicketButton = '';
+if (userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
 	$assignButton = $this->template->linkButton(
 		'Assign',
 		BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
 		'edit'
 	);
-	$changeStatusButton = $this->template->linkButton(
-		'Change Status',
-		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
-		'edit'
+	$closeTicketButton = $this->template->linkButton(
+		'Close Ticket',
+		BASE_URL.'/tickets/closeTicket.php?ticket_id='.$this->ticket->getId(),
+		'delete'
 	);
 }
 echo "
@@ -36,7 +38,7 @@ echo "
 		</tr>
 		<tr><th>Status</th>
 			<td>$status</td>
-			<td>$changeStatusButton</td>
+			<td>$closeTicketButton</td>
 		</tr>
 		<tr><th>Assigned To:</th>
 			<td>$assigned</td>

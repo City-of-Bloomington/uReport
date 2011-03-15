@@ -2,7 +2,6 @@
 blocks/html/tickets/addActionTicketForm.inc -text
 blocks/html/tickets/addTicketForm.inc -text
 blocks/html/tickets/assignTicketForm.inc -text
-blocks/html/tickets/changeStatusForm.inc -text
 html/skins/local/images/add.gif -text
 html/skins/local/images/buttonBackground.png -text
 html/skins/local/images/check.png -text
@@ -11,7 +10,6 @@ html/skins/local/images/edit.png -text
 html/tickets/addActionTicket.php -text
 html/tickets/addTicket.php -text
 html/tickets/assignTicket.php -text
-html/tickets/changeStatus.php -text
 html/tickets/updateTicket.php -text
 scripts/migration/calltrack/1_users.php -text
 scripts/migration/calltrack/2_constituents.php -text

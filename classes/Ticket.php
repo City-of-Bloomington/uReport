@@ -11,7 +11,7 @@ class Ticket
 	private $enteredByPerson_id;
 	private $assignedPerson_id;
 	private $referredPerson_id;
-	private $status;           // open, closed, 
+	private $status;           // open, closed,
 	private $resolution_id;
 	private $location;
 	private $street_address_id;
@@ -406,6 +406,8 @@ class Ticket
 	{
 		$this->resolution = new Resolution($id);
 		$this->resolution_id = $this->resolution->getId();
+
+		$this->status = 'closed';
 	}
 
 	/**
@@ -418,6 +420,8 @@ class Ticket
 		}
 		$this->resolution_id = $resolution->getId();
 		$this->resolution = $resolution;
+
+		$this->status = 'closed';
 	}
 
 	/**
