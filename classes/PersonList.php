@@ -47,12 +47,10 @@ class PersonList extends ZendDbResultIterator
 		$this->createSelection();
 
 		if (count($fields)) {
-			foreach ($this->columns as $column) {
-				if (array_key_exists($column,$fields)) {
-					$fields[$column] = trim($fields[$column]);
-					if ($fields[$column]) {
-						$this->select->where("p.$column=?",$fields[$column]);
-					}
+			foreach ($fields as $key=>$value) {
+				if (in_array($key,$this->columns)) {
+					$value = trim($value);
+					$this->select->where("p.$key=?",$value);
 				}
 			}
 		}
@@ -84,18 +82,16 @@ class PersonList extends ZendDbResultIterator
 		$this->createSelection();
 
 		if (count($fields)) {
-			foreach ($this->columns as $column) {
-				if (array_key_exists($column,$fields)) {
-					$fields[$column] = trim($fields[$column]);
-					if ($fields[$column]) {
-						$this->select->where("p.$column like ?","%$fields[$column]%");
-					}
+			foreach ($fields as $key=>$value) {
+				if (in_array($key,$this->columns)) {
+					$value = addslashes(trim($value));
+					$this->select->where("p.$key like ?","%$value%");
 				}
 			}
 		}
 
 		if (isset($fields['name'])) {
-			$name = trim($fields['name']);
+			$name = addslashes(trim($fields['name']));
 			$this->select->where("p.firstname like '%$name%' or p.lastname like '%$name%'");
 		}
 
