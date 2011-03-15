@@ -1,29 +1,20 @@
 <?php
 /**
- * The controller for handling issue editing.
- *
- * Choosing a person involves going through a whole person finding process
- * at a different url.  Once the user has chosen a new person, they will
- * return here, passing in the person_id they have chosen
- *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST ticket_id
- * @param REQUEST department_id The new person to be assigned to the ticket
  */
 // Make sure they're supposed to be here
-
 if (!userIsAllowed('Tickets')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
-$ticket;
+
 // Load the ticket
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
-	// $department = new Department($_REQUEST['department_id']); 
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -32,25 +23,10 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['ticket'])) {
-	 
-	$fields = array(
-		'assignedPerson_id'
-	);
-	foreach ($fields as $field) {
-		$set = 'set'.ucfirst($field);
-		$ticket->$set($_POST['ticket'][$field]);
-	}
+if (isset($_POST['assignedPerson_id'])) {
+	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
 
-	try {
-		$ticket->save();		
-	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-	}
-	//
-        // add a record to ticket history 
-	//
+	// add a record to ticket history
 	$history = new TicketHistory();
 	$history->setTicket($ticket);
 	$history->setAction('assignment');
@@ -59,6 +35,7 @@ if (isset($_POST['ticket'])) {
 	$history->setNotes($_POST['notes']);
 
 	try {
+		$ticket->save();
 		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
@@ -70,6 +47,8 @@ if (isset($_POST['ticket'])) {
 
 // Display the view
 $template = new Template('tickets');
+$template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
+
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/assignTicketForm.inc',
 	array('ticket'=>$ticket)
