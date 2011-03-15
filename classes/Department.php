@@ -10,6 +10,7 @@ class Department
 	private $name;
 	private $default_person_id;
 
+	private $actions = array();
 	private $categories = array();
 	private $default_person;
 
@@ -226,6 +227,63 @@ class Department
 
 				$zend_db->insert('department_categories',
 								array('department_id'=>$this->id,'category_id'=>$category->getId()));
+			}
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getActions()
+	{
+		if (!count($this->actions)) {
+			$list = new ActionList(array('department_id'=>$this->id));
+			foreach ($list as $action) {
+				$this->actions[$action->getId()] = $action;
+			}
+		}
+		return $this->actions;
+	}
+
+	/**
+	 * @param Action $action
+	 * @return bool
+	 */
+	public function hasAction(Action $action)
+	{
+		return array_key_exists($action->getId(),$this->getActions());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasActions()
+	{
+		return count($this->getActions()) ? true : false;
+	}
+
+	/**
+	 * Saves a set of actions to the database
+	 *
+	 * Replaces the database records for the department
+	 * with a new set of actions
+	 *
+	 * @param array|ActionList $actions
+	 */
+	public function saveActions($actions)
+	{
+		if ($this->id) {
+			$zend_db = Database::getConnection();
+			$zend_db->delete('department_actions','department_id='.$this->id);
+			foreach ($actions as $action) {
+				if (!$action instanceof Action) {
+					$action = new Action($action);
+				}
+
+				$zend_db->insert(
+					'department_actions',
+					array('department_id'=>$this->id,'action_id'=>$action->getId())
+				);
 			}
 		}
 	}

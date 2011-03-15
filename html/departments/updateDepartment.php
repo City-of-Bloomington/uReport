@@ -32,6 +32,9 @@ if (isset($_POST['name'])) {
 
 	try {
 		$department->save();
+		$department->saveCategories(array_keys($_POST['categories']));
+		$department->saveActions(array_keys($_POST['actions']));
+
 		header('Location: '.BASE_URL.'/departments');
 		exit();
 	}

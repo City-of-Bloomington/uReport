@@ -17,6 +17,8 @@
  */
 class ActionList extends ZendDbResultIterator
 {
+	private $columns = array('type','name','description','formLabel','status');
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -44,14 +46,16 @@ class ActionList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='a.name',$limit=null,$groupBy=null)
 	{
-		$this->select->from('actions');
+		$this->select->from(array('a'=>'actions'));
 
 		// Finding on fields from the actions table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$this->select->where("$key=?",$value);
+				if (in_array($key,$this->columns)) {
+					$this->select->where("a.$key=?",$value);
+				}
 			}
 		}
 
@@ -59,6 +63,10 @@ class ActionList extends ZendDbResultIterator
 		// You can handle fields from other tables by adding the joins here
 		// If you add more joins you probably want to make sure that the
 		// above foreach only handles fields from the actions table.
+		if (isset($fields['department_id'])) {
+			$this->select->joinLeft(array('d'=>'department_actions'),'a.id=d.action_id',array());
+			$this->select->where('d.department_id=?',$fields['department_id']);
+		}
 
 		$this->select->order($order);
 		if ($limit) {
