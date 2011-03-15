@@ -7,25 +7,11 @@
  */
 $referredPerson = $this->ticket->getReferredPerson() ? $this->ticket->getReferredPerson() : new Person();
 ?>
-<div class="assignTicketForm">
+<div class="referTicketForm">
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 		<fieldset><legend>Refer Ticket</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="department_id">Department</label></td>
-					<td><select name="department_id" id="department_id">
-							<option></option>
-							<?php
-								$list = new DepartmentList();
-								$list->find();
-								foreach ($list as $department) {
-									$name = View::escape($department->getName());
-									echo "<option value=\"{$department->getId()}\">$name</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
 				<tr><td><label for="referredPerson_id">person_id</label></td>
 					<td><input name="referredPerson_id" id="referredPerson_id"
 							value="<?php echo $referredPerson->getId(); ?>" />
