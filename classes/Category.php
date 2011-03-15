@@ -28,7 +28,7 @@ class Category
 				$result = $id;
 			}
 			else {
-				if (ctype_digit($id)) {
+				if (is_numeric($id)) {
 					$sql = 'select * from categories where id=?';
 				}
 				else {

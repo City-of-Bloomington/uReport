@@ -44,7 +44,7 @@ class Person
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)) {
+				if (is_numeric($id)) {
 					$sql = 'select * from people where id=?';
 				}
 				elseif (false !== strpos($id,'@')) {

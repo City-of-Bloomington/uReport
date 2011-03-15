@@ -29,7 +29,7 @@ class Resolution
 				$result = $id;
 			}
 			else {
-				$sql = ctype_digit($id)
+				$sql = is_numeric($id)
 					? 'select * from resolutions where id=?'
 					: 'select * from resolutions where name=?';
 

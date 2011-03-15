@@ -29,12 +29,10 @@ class User extends SystemUser
 				$result = $id;
 			}
 			else {
-				if (ctype_digit($id)) {
-					$sql = 'select * from users where id=?';
-				}
-				else {
-					$sql = 'select * from users where username=?';
-				}
+				$sql = is_numeric($id)
+					? 'select * from users where id=?'
+					: 'select * from users where username=?';
+
 				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql,array($id));
 			}

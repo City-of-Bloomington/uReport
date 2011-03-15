@@ -28,7 +28,7 @@ class IssueType
 				$result = $id;
 			}
 			else {
-				$sql = ctype_digit($id)
+				$sql = is_numeric($id)
 					? 'select * from issueTypes where id=?'
 					: 'select * from issueTypes where name=?';
 				$zend_db = Database::getConnection();

@@ -32,7 +32,7 @@ class Action
 				$result = $id;
 			}
 			else {
-				$sql = ctype_digit($id)
+				$sql = is_numeric($id)
 					? 'select * from actions where id=?'
 					: 'select * from actions where name=?';
 				$zend_db = Database::getConnection();

@@ -27,14 +27,11 @@ class Role
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$sql = is_numeric($id)
+					? 'select * from roles where id=?'
+					: 'select * from roles where name=?';
 
-				if (is_int($id) || ctype_digit($id)) {
-					$sql = 'select * from roles where id=?';
-				}
-				else {
-					$sql = 'select * from roles where name=?';
-				}
+				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql,array($id));
 			}
 			if ($result) {

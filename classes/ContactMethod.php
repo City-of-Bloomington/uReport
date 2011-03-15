@@ -28,12 +28,9 @@ class ContactMethod
 				$result = $id;
 			}
 			else {
-				if (ctype_digit($id)) {
-					$sql = 'select * from contactMethods where id=?';
-				}
-				else {
-					$sql = 'select * from contactMethods where name=?';
-				}
+				$sql = is_numeric($id)
+					? 'select * from contactMethods where id=?'
+					: 'select * from contactMethods where name=?';
 
 				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql,array($id));
