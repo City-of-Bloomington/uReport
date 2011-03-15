@@ -8,17 +8,25 @@
 $location = View::escape($this->ticket->getLocation());
 $assigned = $this->ticket->getAssignedPerson() ? View::escape($this->ticket->getAssignedPerson()->getFullname()) : '';
 $enteredBy = $this->ticket->getEnteredByPerson() ? View::escape($this->ticket->getEnteredByPerson()->getFullname()) : '';
+$referred = $this->ticket->getReferredPerson() ? View::escape($this->ticket->getReferredPerson()->getFullname()) : '';
+
 $status = $this->ticket->getStatus();
 if ($this->ticket->getResolution()) {
 	$status.= ': '.$this->ticket->getResolution();
 }
 
 $assignButton = '';
+$referralButton = '';
 $closeTicketButton = '';
 if (userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
 	$assignButton = $this->template->linkButton(
 		'Assign',
 		BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
+		'edit'
+	);
+	$referralButton = $this->template->linkButton(
+		'Refer',
+		BASE_URL.'/tickets/referTicket.php?ticket_id'.$this->ticket->getId(),
 		'edit'
 	);
 	$closeTicketButton = $this->template->linkButton(
@@ -43,6 +51,10 @@ echo "
 		<tr><th>Assigned To:</th>
 			<td>$assigned</td>
 			<td>$assignButton</td>
+		</tr>
+		<tr><th>Referred To:</th>
+			<td>$referred</td>
+			<td>$referralButton</td>
 		</tr>
 		<tr><th>Received By</th>
 			<td>$enteredBy</td>
