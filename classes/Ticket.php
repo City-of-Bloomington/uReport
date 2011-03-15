@@ -218,7 +218,7 @@ class Ticket
 	{
 		if ($this->referredPerson_id) {
 			if (!$this->referredPerson) {
-				$this->referredPerson = new ReferredPerson($this->referredPerson_id);
+				$this->referredPerson = new Person($this->referredPerson_id);
 			}
 			return $this->referredPerson;
 		}
