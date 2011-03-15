@@ -60,6 +60,11 @@ $title = $this->ticket->getId() ? "Edit Ticket #{$this->ticket->getId()}" : 'New
 					<td><a href="<?php echo BASE_URL; ?>/tickets/changeStatusTicket.php?ticket_id=9135">Change Status</a>
 					<td></td>
 				</tr>
+				<tr><td>Refer Ticket</td>
+					<td><a href="<?php echo BASE_URL; ?>/tickets/referTicket.php?ticket_id=9135">Refer Ticket</a>
+					<td></td>
+				</tr>				
+				
 				<tr><td>Add/Change Action</td>
 					<td><a href="<?php echo BASE_URL; ?>/tickets/addActionTicket.php?ticket_id=9135">Add/Change Action</a>
 					<td></td>

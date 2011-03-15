@@ -1,2 +1,3 @@
+blocks/html/tickets/changeStatusTicketForm.inc
 html/tickets/changeStatusTicket.php
 scripts/migration/calltrack/migrationConfig.inc

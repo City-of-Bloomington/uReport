@@ -1,6 +1,7 @@
 * text=auto !eol
 blocks/html/tickets/addTicketForm.inc -text
 blocks/html/tickets/assignTicketForm.inc -text
+blocks/html/tickets/referTicketForm.inc -text
 html/skins/local/images/add.gif -text
 html/skins/local/images/buttonBackground.png -text
 html/skins/local/images/check.png -text
