@@ -78,11 +78,13 @@ $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',
 	array('location'=>$issue->getTicket()->getLocation())
 );
-$template->blocks['location-panel'][] = new Block(
-	'tickets/searchResults.inc',
-	array(
-		'ticketList'=>new TicketList(array('location'=>$issue->getTicket()->getLocation())),
-		'title'=>'Other tickets for this location'
-	)
-);
+if ($issue->getTicket()->getLocation()) {
+	$template->blocks['location-panel'][] = new Block(
+		'tickets/searchResults.inc',
+		array(
+			'ticketList'=>new TicketList(array('location'=>$issue->getTicket()->getLocation())),
+			'title'=>'Other tickets for this location'
+		)
+	);
+}
 echo $template->render();

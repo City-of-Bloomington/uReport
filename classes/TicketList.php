@@ -73,39 +73,22 @@ class TicketList extends ZendDbResultIterator
 		$this->createSelection();
 
 		if (count($fields)) {
-			foreach ($this->columns as $column) {
-				if (array_key_exists($column,$fields)) {
-					$fields[$column] = trim($fields[$column]);
-					if ($fields[$column]) {
-						$this->select->where("t.$column=?",$fields[$column]);
+			foreach ($fields as $key=>$value) {
+				$value = trim($value);
+				if ($value) {
+					if (in_array($key,$this->columns)) {
+						$this->select->where("t.$key=?",$value);
+					}
+					elseif (in_array($key,$this->issueColumns)) {
+						$this->select->where("i.$key=?",$value);
+					}
+					elseif (in_array($key,$this->historyColumns)) {
+						$this->select->where("h.$key=?",$value);
+					}
+					elseif ($key=='category_id') {
+						$this->select->where('c.category_id=?',$value);
 					}
 				}
-			}
-
-			if (count(array_intersect(array_keys($fields),$this->issueColumns))) {
-				foreach ($this->issueColumns as $column) {
-					if (isset($fields[$column])) {
-						$fields[$column] = trim($fields[$column]);
-						if ($fields[$column]) {
-							$this->select->where("i.$column=?",$fields[$column]);
-						}
-					}
-				}
-			}
-
-			if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
-				foreach ($this->historyColumns as $column) {
-					if (isset($fields[$column])) {
-						$fields[$column] = trim($fields[$column]);
-						if ($fields[$column]) {
-							$this->select->where("h.$column=?",$fields[$column]);
-						}
-					}
-				}
-			}
-
-			if (isset($fields['category_id'])) {
-				$this->select->where('c.category_id=?',$fields['category_id']);
 			}
 		}
 
@@ -127,45 +110,29 @@ class TicketList extends ZendDbResultIterator
 
 		// Finding on fields from the tickets table is handled here
 		if (count($fields)) {
-			foreach ($this->columns as $column) {
-				if (array_key_exists($column,$fields)) {
-					$fields[$column] = trim($fields[$column]);
-					if ($fields[$column]) {
-						if (in_array($column,array('person_id','street_address_id','subunit_id'))) {
-							$this->select->where("t.$column=?",$fields[$column]);
+			foreach ($fields as $key=>$value) {
+				$value = trim($value);
+				if ($value) {
+					if (in_array($key,$this->columns)) {
+						if (in_array($key,array('person_id','street_address_id','subunit_id'))) {
+							$this->select->where("t.$key=?",$value);
 						}
 						else {
-							$this->select->where("t.$column like ?","%{$fields[$column]}%");
+							$value = addslashes($value);
+							$this->select->where("t.$key like ?","%$value%");
 						}
 					}
-				}
-			}
-
-			if (count(array_intersect(array_keys($fields),$this->issueColumns))) {
-				foreach ($this->issueColumns as $column) {
-					if (isset($fields[$column])) {
-						$fields[$column] = trim($fields[$column]);
-						if ($fields[$column]) {
-							$this->select->where("i.$column=?",$fields[$column]);
-						}
+					elseif (in_array($key,$this->issueColumns)) {
+						$this->select->where("i.$key=?",$value);
+					}
+					elseif (in_array($key,$this->historyColumns)) {
+						$this->select->where("th.$column=?",$fields[$column]);
+						$this->select->orWhere("ih.$column=?",$fields[$column]);
+					}
+					elseif ($key=='category_id') {
+						$this->select->where('c.category_id=?',$value);
 					}
 				}
-			}
-
-			if (count(array_intersect(array_keys($fields),$this->historyColumns))) {
-				foreach ($this->historyColumns as $column) {
-					if (isset($fields[$column])) {
-						$fields[$column] = trim($fields[$column]);
-						if ($fields[$column]) {
-							$this->select->where("th.$column=?",$fields[$column]);
-							$this->select->orWhere("ih.$column=?",$fields[$column]);
-						}
-					}
-				}
-			}
-
-			if (isset($fields['category_id']) && $fields['category_id']) {
-				$this->select->where('c.category_id=?',$fields['category_id']);
 			}
 		}
 
