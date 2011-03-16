@@ -74,7 +74,7 @@ class TicketList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$value = trim($value);
+				$value = is_string($value) ? trim($value) : '';
 				if ($value) {
 					if (in_array($key,$this->columns)) {
 						$this->select->where("t.$key=?",$value);
@@ -111,7 +111,7 @@ class TicketList extends ZendDbResultIterator
 		// Finding on fields from the tickets table is handled here
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$value = trim($value);
+				$value = is_string($value) ? trim($value) : '';
 				if ($value) {
 					if (in_array($key,$this->columns)) {
 						if (in_array($key,array('person_id','street_address_id','subunit_id'))) {

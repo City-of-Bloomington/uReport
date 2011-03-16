@@ -17,7 +17,7 @@ $fields = array(
 	'street_address_id','subunit_id',
 	'neighborhoodAssociation','township',
 	'issueType_id','category_id','contactMethod_id',
-	'actionType_id','actionPerson_id'
+	'status','actionType_id','actionPerson_id'
 );
 if (count(array_intersect($fields,array_keys($_GET)))) {
 	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
