@@ -385,7 +385,8 @@ class Person
 	/**
 	 * @return User
 	 */
-	public function getUser() {
+	public function getUser()
+	{
 		if (!$this->user) {
 			if ($this->getUser_id()) {
 				$this->user = new User($this->getUser_id());
@@ -397,12 +398,26 @@ class Person
 	/**
 	 * @return string
 	 */
-	public function getUsername() {
+	public function getUsername()
+	{
 		if ($this->getUser()) {
 			return $this->getUser()->getUsername();
 		}
 	}
 
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if ($this->getUser() && $this->getUser()->getDepartment_id()) {
+			return $this->getUser()->getDepartment();
+		}
+	}
+
+	/**
+	 * @return TicketList
+	 */
 	public function getReportedTickets() {
 		return new TicketList(array('reportedByPerson_id'=>$this->id));
 	}

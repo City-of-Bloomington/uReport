@@ -10,11 +10,24 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-$template = new Template('two-column');
-$template->title = 'User accounts';
-
 $userList = new UserList();
-$userList->find();
+if (isset($_GET['department_id'])) {
+	$userList->find(array('department_id'=>$_GET['department_id']));
+}
+else {
+	$userList->find();
+}
+
+
+if (isset($_GET['format'])) {
+	$template = new Template('default',$_GET['format']);
+}
+else {
+	$template = new Template('two-column');
+	$template->title = 'User accounts';
+	$template->blocks[] = new Block('users/findForm.inc');
+}
+
 $template->blocks[] = new Block('users/userList.inc',array('userList'=>$userList));
 
 echo $template->render();

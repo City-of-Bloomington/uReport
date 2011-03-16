@@ -287,4 +287,12 @@ class Department
 			}
 		}
 	}
+
+	/**
+	 * @return UserList
+	 */
+	public function getUsers()
+	{
+		return new UserList(array('department_id'=>$this->id));
+	}
 }
