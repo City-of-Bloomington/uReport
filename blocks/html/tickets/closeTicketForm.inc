@@ -8,7 +8,7 @@
 ?>
 <div class="closeTicketForm">
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Close Ticket</legend>
+		<fieldset><legend>Close This Ticket</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
 				<tr><td><label for="resolution_id">Resolution</label></td>
@@ -24,10 +24,12 @@
 						</select>
 					</td>
 				</tr>
+			<tr>
+			<td>
+			<label id="notes">Comment</label></td>
+			<td><textarea id="notes" name="notes" rows="3" cols="50"></textarea>
+			</td>
 			</table>
-			<div>
-				<textarea name="notes" rows="3" cols="50"></textarea>
-			</div>
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(

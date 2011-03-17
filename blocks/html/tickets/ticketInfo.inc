@@ -34,7 +34,7 @@ if (userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
 	$closeTicketButton = $this->template->linkButton(
 		'Close Ticket',
 		BASE_URL.'/tickets/closeTicket.php?ticket_id='.$this->ticket->getId(),
-		'delete'
+		'edit'
 	);
 }
 echo "
