@@ -67,8 +67,25 @@ $title = $this->issue->getId() ? 'Edit Issue' : 'Add Issue';
 			</tr>
 
 			<tr><td><label for="issue-categories">Categories</label></td>
-				<td><input name="issue[categories]" id="issue-categories"
-						value="<?php echo View::escape(implode(', ',$this->issue->getCategories())); ?>" />
+				<td><select name="issue[categories][]" id="issue-categories" multiple="true" size="5">
+						<?php
+							foreach ($this->issue->getCategories() as $category) {
+								$name = View::escape($category);
+								$selected = $this->issue->hasCategory($category)
+									? 'selected="selected"'
+									: '';
+								echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
+							}
+
+							if ($_SESSION['USER']->getDepartment()) {
+								foreach ($_SESSION['USER']->getDepartment()->getCategories() as $category) {
+									$name = View::escape($category);
+									echo "<option value=\"{$category->getId()}\">$name</option>";
+								}
+							}
+
+						?>
+					</select>
 				</td>
 			</tr>
 
