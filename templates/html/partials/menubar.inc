@@ -13,6 +13,10 @@
 			if (isset($_SESSION['USER'])) {
 				$name = View::escape("{$_SESSION['USER']->getFirstname()} {$_SESSION['USER']->getLastname()}");
 				echo "
+				<li><a href=\"".BASE_URL."/departments/updateMyDepartment.php?return_url=$_SERVER[REQUEST_URI]\">
+						My Department
+					</a>
+				</li>
 				<li><a href=\"".BASE_URL."/login/logout.php\">Logout</a></li>
 				<li>Signed in as $name</li>
 				";

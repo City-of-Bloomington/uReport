@@ -26,6 +26,8 @@ else {
 }
 
 
+$return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/departments';
+
 if (isset($_POST['name'])) {
 	$department->setName($_POST['name']);
 	$department->setDefault_person_id($_POST['default_person_id']);
@@ -35,7 +37,7 @@ if (isset($_POST['name'])) {
 		$department->saveCategories(array_keys($_POST['categories']));
 		$department->saveActions(array_keys($_POST['actions']));
 
-		header('Location: '.BASE_URL.'/departments');
+		header('Location: '.$return_url);
 		exit();
 	}
 	catch (Exception $e) {
@@ -44,5 +46,8 @@ if (isset($_POST['name'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('departments/updateDepartmentForm.inc',array('department'=>$department));
+$template->blocks[] = new Block(
+	'departments/updateDepartmentForm.inc',
+	array('department'=>$department,'return_url'=>$return_url)
+);
 echo $template->render();

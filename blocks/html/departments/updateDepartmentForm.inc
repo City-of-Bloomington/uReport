@@ -4,7 +4,9 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
+ * @param string $this->return_url (optional)
  */
+$return_url = $this->return_url ? $this->return_url : BASE_URL.'/departments';
 $title = $this->department->getId() ? 'Edit' : 'Add';
 ?>
 <div class="updateDepartmentForm">
@@ -74,10 +76,11 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 		</ul>
 	</fieldset>
 	<fieldset>
+		<input name="return_url" type="hidden" value="<?php echo $return_url; ?>" />
 		<?php
 			echo $this->template->formButton('Submit','submit','submit');
 			echo $this->template->formButton(
-				'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/departments';"
+				'Cancel','button','cancel',null,"document.location.href='$return_url';"
 			);
 		?>
 	</fieldset>
