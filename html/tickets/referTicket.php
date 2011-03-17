@@ -15,6 +15,9 @@ if (!userIsAllowed('Tickets')) {
 // Load the ticket
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
+	if (isset($_GET['person_id'])) {
+		$ticket->setReferredPerson_id($_GET['person_id']);
+	}
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;

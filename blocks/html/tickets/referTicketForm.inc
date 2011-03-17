@@ -12,9 +12,21 @@ $referredPerson = $this->ticket->getReferredPerson() ? $this->ticket->getReferre
 		<fieldset><legend>Refer Ticket</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="referredPerson_id">person_id</label></td>
-					<td><input name="referredPerson_id" id="referredPerson_id"
+				<tr><td><label for="referredPerson_id">Person</label></td>
+					<td><input name="referredPerson_id" id="referredPerson_id" type="hidden"
 							value="<?php echo $referredPerson->getId(); ?>" />
+						<?php
+							echo View::escape($referredPerson->getFullname());
+
+							$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+
+							$url = new URL(BASE_URL.'/people');
+							$url->return_url = "$return_url";
+
+							echo $this->template->linkButton(
+								'Choose Person',$url,'edit'
+							);
+						?>
 					</td>
 				</tr>
 			</table>

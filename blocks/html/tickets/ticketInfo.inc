@@ -24,9 +24,11 @@ if (userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
 		BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
 		'edit'
 	);
+
+	$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
 	$referralButton = $this->template->linkButton(
 		'Refer',
-		BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId(),
+		BASE_URL."/people?return_url=$return_url",
 		'edit'
 	);
 	$closeTicketButton = $this->template->linkButton(

@@ -48,9 +48,11 @@ class PersonList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (in_array($key,$this->columns)) {
-					$value = trim($value);
-					$this->select->where("p.$key=?",$value);
+				$value = trim($value);
+				if ($value) {
+					if (in_array($key,$this->columns)) {
+						$this->select->where("p.$key=?",$value);
+					}
 				}
 			}
 		}
@@ -83,16 +85,17 @@ class PersonList extends ZendDbResultIterator
 
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (in_array($key,$this->columns)) {
-					$value = addslashes(trim($value));
-					$this->select->where("p.$key like ?","%$value%");
+				$value = trim($value);
+				if ($value) {
+					$value = addslashes($value);
+					if (in_array($key,$this->columns)) {
+						$this->select->where("p.$key like ?","%$value%");
+					}
+					if ($key=='name') {
+						$this->select->where("p.firstname like '%$value%' or p.lastname like '%$value%'");
+					}
 				}
 			}
-		}
-
-		if (isset($fields['name'])) {
-			$name = addslashes(trim($fields['name']));
-			$this->select->where("p.firstname like '%$name%' or p.lastname like '%$name%'");
 		}
 
 		$this->runSelection($order,$limit,$groupBy);

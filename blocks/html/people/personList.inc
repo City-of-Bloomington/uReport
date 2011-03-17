@@ -41,7 +41,7 @@
 				}
 
 				if (isset($return_url)) {
-					$return_url->person_id=$person->getId();
+					$return_url->person_id = $person->getId();
 					$url = "$return_url";
 				}
 				else {
