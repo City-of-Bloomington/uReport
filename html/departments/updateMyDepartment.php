@@ -15,7 +15,7 @@ if (isset($_POST['default_person_id'])) {
 		$department->saveCategories(array_keys($_POST['categories']));
 		$department->saveActions(array_keys($_POST['actions']));
 
-		header('Location: ');
+		header('Location: '.$return_url);
 		exit();
 	}
 	catch (Exception $e) {
