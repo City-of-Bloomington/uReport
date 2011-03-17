@@ -23,6 +23,9 @@
 						</select>
 					</td>
 				</tr>
+				<tr><td><label for="actionDate">Date</label></td>
+					<td><input name="actionDate" id="actionDate" value="<?php echo new Date(); ?>" /></td>
+				</tr>
 			</table>
 			<div>
 				<textarea name="notes" id="notes" rows="3" cols="50"></textarea>

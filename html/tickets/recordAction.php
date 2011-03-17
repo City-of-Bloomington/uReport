@@ -28,6 +28,7 @@ if (isset($_POST['action_id'])) {
 	$history = new TicketHistory();
 	$history->setTicket($ticket);
 	$history->setAction_id($_POST['action_id']);
+	$history->setActionDate($_POST['actionDate']);
 	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setNotes($_POST['notes']);
