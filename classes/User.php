@@ -14,7 +14,6 @@ class User extends SystemUser
 	private $department_id;
 
 	private $person;
-	private $department;
 
 	private $roles = array();
 	private $newPassword; // the User's new password, unencrypted
@@ -191,10 +190,9 @@ class User extends SystemUser
 	 */
 	public function getDepartment()
 	{
-		if (!$this->department) {
-			$this->department = new Department($this->department_id);
+		if ($this->department_id) {
+			return new Department($this->department_id);
 		}
-		return $this->department;
 	}
 
 	//----------------------------------------------------------------
@@ -263,8 +261,8 @@ class User extends SystemUser
 	 */
 	public function setDepartment_id($id)
 	{
-		$this->department = new Department($id);
-		$this->department_id = $this->department->getId();
+		$department = new Department($id);
+		$this->department_id = $department->getId();
 	}
 
 	/**
@@ -273,7 +271,6 @@ class User extends SystemUser
 	public function setDepartment($department)
 	{
 		$this->department_id = $department->getId();
-		$this->department = $department;
 	}
 
 	//----------------------------------------------------------------
