@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
+ * @param string $this->return_url (optional)
  */
 echo "
 <div class=\"findLocationResults\">
@@ -15,8 +16,10 @@ echo "
 	</thead>
 	<tbody>
 ";
+$url = isset($this->return_url)
+	? new URL($this->return_url)
+	: new URL(BASE_URL.'/locations/viewLocation.php');
 foreach ($this->results as $location=>$street_address_id) {
-	$url = new URL(BASE_URL.'/locations/viewLocation.php');
 	$url->location = $location;
 
 	$tickets = new TicketList(array('location'=>$location));

@@ -44,7 +44,7 @@ tbody th { align:right; }
 #issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #location-panel { border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 10px 10px; overflow:auto; }
 #action-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
@@ -57,6 +57,10 @@ tbody th { align:right; }
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; }
 #location-panel .locationResidents { }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+
+#ticket-panel .addTicketForm .ticketFields { display:none; }
+#ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
+#ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
 .searchForm {}
 .searchForm .fields { float:right; margin:1em; }

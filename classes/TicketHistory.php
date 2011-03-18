@@ -58,12 +58,21 @@ class TicketHistory extends History
 
 	/**
 	 * Throws an exception if anything's wrong
+	 *
+	 * Setting $preliminary will make the validation ignore the Ticket_id.
+	 * This is usefull for validing all the user-input data before assigning
+	 * the issue to a Ticket.
+	 *
+	 * @param bool $preliminary
 	 * @throws Exception $e
 	 */
-	public function validate()
+	public function validate($preliminary=false)
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->ticket_id || !$this->action_id) {
+		if (!$preliminary && !$this->ticket_id) {
+			throw new Exception('missingTicket_id');
+		}
+
+		if (!$this->action_id) {
 			throw new Exception('missingRequiredFields');
 		}
 

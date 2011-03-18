@@ -67,7 +67,7 @@ class Ticket
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->date = new Date();
+			$this->enteredDate = new Date();
 			$this->status = 'open';
 		}
 	}
@@ -82,6 +82,14 @@ class Ticket
 		if (!$this->status) {
 			$this->status = 'open';
 		}
+
+		if (!$this->enteredDate) {
+			$this->enteredDate = new Date();
+		}
+
+		#if (!$this->enteredByPerson_id) {
+		#	throw new Exception('tickets/missingEnteredByPerson');
+		#}
 	}
 
 	/**

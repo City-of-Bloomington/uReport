@@ -3,6 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param string $this->return_url
  */
 $fields = array('name','email','address','phone');
 foreach ($fields as $field) {
@@ -11,7 +12,7 @@ foreach ($fields as $field) {
 ?>
 <div class="searchForm">
 <h1>Find Someone</h1>
-<form method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+<form method="get" action="<?php echo BASE_URL; ?>/people">
 	<fieldset>
 		<table>
 			<tr><td><label for="name">Name</label></td>

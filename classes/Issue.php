@@ -76,12 +76,21 @@ class Issue
 
 	/**
 	 * Throws an exception if anything's wrong
+	 *
+	 * Setting $preliminary will make the validation ignore the Ticket_id.
+	 * This is usefull for validing all the user-input data before assigning
+	 * the issue to a Ticket.
+	 *
+	 * @param bool $preliminary
 	 * @throws Exception $e
 	 */
-	public function validate()
+	public function validate($preliminary=false)
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->ticket_id || !$this->issueType_id) {
+		if (!$preliminary && !$this->ticket_id) {
+			throw new Exception('missingTicket_id');
+		}
+
+		if (!$this->issueType_id) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -450,7 +459,7 @@ class Issue
 	 */
 	public function getCategories()
 	{
-		if (!count($this->categories)) {
+		if (!count($this->categories) && $this->id) {
 			$categories = new CategoryList(array('issue_id'=>$this->id));
 			foreach ($categories as $category) {
 				$this->categories[$category->getId()] = $category;
@@ -495,7 +504,9 @@ class Issue
 	 */
 	public function hasCategory(Category $category)
 	{
-		return array_key_exists($category->getId(),$this->getCategories());
+		if (count($this->getCategories())) {
+			return array_key_exists($category->getId(),$this->getCategories());
+		}
 	}
 
 	/**

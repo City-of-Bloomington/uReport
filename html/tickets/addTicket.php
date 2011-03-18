@@ -11,8 +11,10 @@ if (!userIsAllowed('Tickets')) {
 }
 
 $ticket = new Ticket();
+$issue = new Issue();
+
 // If the user has chosen a location, they'll pass it in here
-if (isset($_GET['location'])) {
+if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setLocation($_GET['location']);
 
 	// Look up the rest of the data in Master Address
@@ -49,49 +51,102 @@ if (isset($_GET['location'])) {
 		}
 	}
 }
+if (isset($_REQUEST['person_id'])) {
+	$issue->setReportedByPerson_id($_REQUEST['person_id']);
+}
+
 if(isset($_POST['ticket'])){
-	try {
-		$fields = array('location','street_address_id','subunit_id',
-			'neighborhoodAssociation','township','latitude','logitude'
-		);
-		foreach ($fields as $field) {
+	// Create the ticket
+	$fields = array(
+		'location',
+		'street_address_id','subunit_id','neighborhoodAssociation','township',
+		'latitude','longitude'
+	);
+	foreach ($fields as $field) {
+		if (isset($_POST['ticket'][$field])) {
 			$set = 'set'.ucfirst($field);
 			$ticket->$set($_POST['ticket'][$field]);
 		}
-		$ticket->setEnteredDate(new Date());
-		$ticket->setStatus("open");
-		$ticket->setAssignedPerson_id($_SESSION['USER']->getPerson_id());
-		$ticket->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-		$ticket->save();
-		//
-		// add a record to the history
-		//
-		
+	}
+	$ticket->setEnteredDate(new Date());
+	$ticket->setStatus("open");
+	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
+	$ticket->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 
+	// Create the issue
+	$fields = array(
+		'issueType_id','reportedByPerson_id','contactMethod_id','case_number','notes'
+	);
+	foreach ($fields as $field) {
+		$set = 'set'.ucfirst($field);
+		$issue->$set($_POST['issue'][$field]);
+	}
+	$issue->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
+
+	// Create the TicketHistory entries
+	$open = new TicketHistory();
+	$open->setAction('open');
+	$open->setEnteredDate($ticket->getEnteredDate());
+	$open->setActionDate($ticket->getEnteredDate());
+	$open->setEnteredByPerson($_SESSION['USER']->getPerson());
+	$open->setActionPerson($_SESSION['USER']->getPerson());
+
+	$assignment = new TicketHistory();
+	$assignment->setAction('assignment');
+	$assignment->setEnteredDate($ticket->getEnteredDate());
+	$assignment->setActionDate($ticket->getEnteredDate());
+	$assignment->setEnteredByPerson($_SESSION['USER']->getPerson());
+	$assignment->setActionPerson_id($_POST['assignedPerson_id']);
+
+	// Validate Everything and save
+	try {
+		$ticket->validate();
+		$issue->validate(true);
+		$open->validate(true);
+		$assignment->validate(true);
+
+		$ticket->save();
+
+		$issue->setTicket($ticket);
+		$open->setTicket($ticket);
+		$assignment->setTicket($ticket);
+
+		$issue->save();
+		$open->save();
+		$assignment->save();
+
+		header('Location: '.$ticket->getURL());
+		exit();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
+		print_r($e);
+		exit();
 	}
 }
 
 
-$template = new Template('locations');
+$template = new Template('ticketCreation');
 
-$locationPanel = $ticket->getLocation() ?
-	new Block('locations/locationInfo.inc',array('location'=>$ticket->getLocation()))
+$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+
+$locationPanel = $ticket->getLocation()
+	? new Block('locations/locationInfo.inc',array('location'=>$ticket->getLocation()))
 	: new Block(
 		'locations/findLocationForm.inc',
-		array('return_url'=>BASE_URL.'/tickets/addTicket.php','includeExternalResults'=>true)
+		array('return_url'=>$return_url,'includeExternalResults'=>true)
 	);
-	
 $template->blocks['location-panel'][] = $locationPanel;
 
-#$template->blocks['person-panel'][] = new Block('people/searchForm.inc');
+$personPanel = $issue->getReportedByPerson()
+	? new Block('people/personInfo.inc',array('person'=>$issue->getReportedByPerson()))
+	: new Block('people/searchForm.inc',array('return_url'=>$return_url));
+$template->blocks['person-panel'][] = $personPanel;
 
-$addTicketForm = new Block('tickets/addTicketForm.inc',array('ticket'=>$ticket));
-// If we've chosen a location, look up whatever data we can in Master Address
-if ($ticket->getLocation()) {
-}
+$addTicketForm = new Block(
+	'tickets/addTicketForm.inc',
+	array('ticket'=>$ticket,'issue'=>$issue)
+);
 $template->blocks['ticket-panel'][] = $addTicketForm;
 
 

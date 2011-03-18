@@ -4,15 +4,14 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
+ * @param Issue $this->issue
  */
-$title = $this->ticket->getId() ? "Edit Ticket #{$this->ticket->getId()}" : 'New Ticket';
 ?>
-<div class="updateTicketForm">
-	<h1><?php echo $title; ?></h1>
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/updateTicket.php">
-		<fieldset><legend>Ticket Info</legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
-
+<div class="addTicketForm">
+	<h1>New Ticket</h1>
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
+		<fieldset class="ticketFields">
+			<legend>Ticket Info</legend>
 			<table>
 				<tr><td><label for="ticket-location">location</label></td>
 					<td><input name="ticket[location]" id="ticket-location"
@@ -54,6 +53,19 @@ $title = $this->ticket->getId() ? "Edit Ticket #{$this->ticket->getId()}" : 'New
 
 			</table>
 		</fieldset>
+		<fieldset class="issueFields">
+			<legend>Issue Information</legend>
+		<?php
+			include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
+		?>
+		</fieldset>
+		<fieldset class="assignmentFields">
+			<legend>Assignment Information</legend>
+		<?php
+			include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
+		?>
+		</fieldset>
+
 
 		<fieldset>
 			<?php

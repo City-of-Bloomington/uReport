@@ -10,7 +10,7 @@
 	<?php
 		if (userIsAllowed('Tickets')) {
 			echo $this->linkButton(
-				'Add New Request',BASE_URL.'/tickets/updateTicket.php','add',null,null,'largeButton'
+				'Add New Request',BASE_URL.'/tickets/addTicket.php','add',null,null,'largeButton'
 			);
 		}
 	?>
