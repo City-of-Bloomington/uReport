@@ -52,6 +52,9 @@ if (!$this->fields) {
 							$value = $value->getFullname();
 						}
 					}
+					if ($field=='categories') {
+						$value = implode(', ',$value);
+					}
 					// Only put the href on the ticket_id
 					if ($field == 'id') {
 						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";

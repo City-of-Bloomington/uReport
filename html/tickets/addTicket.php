@@ -130,13 +130,34 @@ $template = new Template('ticketCreation');
 
 $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-$locationPanel = $ticket->getLocation()
-	? new Block('locations/locationInfo.inc',array('location'=>$ticket->getLocation()))
-	: new Block(
+if ($ticket->getLocation()) {
+	$template->blocks['location-panel'][] = new Block(
+		'locations/locationInfo.inc',
+		array('location'=>$ticket->getLocation())
+	);
+
+	$template->blocks['location-panel'][] = new Block(
+		'tickets/searchResults.inc',
+		array(
+			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
+			'title'=>'Tickets Associated with this Location',
+			'fields'=>array(
+				'ticket-id'=>1,
+				'ticket-enteredDate'=>1,
+				'ticket-assignedPerson'=>1,
+				'ticket-status'=>1,
+				'issue-issueType'=>1,
+				'issue-categories'=>1
+			)
+		)
+	);
+}
+else {
+	$template->blocks['location-panel'][] = new Block(
 		'locations/findLocationForm.inc',
 		array('return_url'=>$return_url,'includeExternalResults'=>true)
 	);
-$template->blocks['location-panel'][] = $locationPanel;
+}
 
 $personPanel = $issue->getReportedByPerson()
 	? new Block('people/personInfo.inc',array('person'=>$issue->getReportedByPerson()))

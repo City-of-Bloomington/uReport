@@ -235,7 +235,8 @@ class TicketList extends ZendDbResultIterator
 			'issue-reportedByPerson'=>'Constituent',
 			'issue-contactMethod'=>'Contact Method',
 			'issue-enteredByPerson'=>'Issue Entered By',
-			'issue-case_number'=>'Case Number'
+			'issue-case_number'=>'Case Number',
+			'issue-categories'=>'Categories'
 		);
 	}
 }

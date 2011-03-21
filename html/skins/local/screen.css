@@ -54,9 +54,10 @@ tbody th { align:right; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
 
 /* Blocks we want to show up in the right column of a Panel */
-#location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; }
-#location-panel .locationResidents { }
+#location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+#location-panel .locationResidents		{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+#location-panel .searchResults 			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }

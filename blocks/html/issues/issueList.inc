@@ -102,4 +102,7 @@ echo "
 		$block = new Block('tickets/history.inc',array('ticketHistory'=>$issue->getHistory()));
 		echo $block->render('html',$this->template);
 	}
-echo "</div>";
+echo "
+	</div>
+</div>
+";
