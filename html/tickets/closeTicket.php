@@ -34,6 +34,7 @@ if (isset($_POST['resolution_id'])) {
 
 	try {
 		$ticket->save();
+		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}

@@ -60,6 +60,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		default:
 			$ticket->setStatus('open');
 	}
+	// ReqPro was not very good at keeping it's status and completed_date in sync
+	if ($row['completed_date'] && $ticket->getStatus()=='open') {
+		$ticket->setStatus('closed');
+	}
 
 	// Import the Person
 	if (isset($row['received_by']) && $row['received_by']) {
