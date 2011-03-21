@@ -72,6 +72,7 @@ class TicketList extends ZendDbResultIterator
 	{
 		$this->createSelection();
 
+		$fields = array_filter($fields);
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				$value = is_string($value) ? trim($value) : '';
@@ -108,7 +109,7 @@ class TicketList extends ZendDbResultIterator
 	{
 		$this->createSelection();
 
-		// Finding on fields from the tickets table is handled here
+		$fields = array_filter($fields);
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				$value = is_string($value) ? trim($value) : '';
@@ -126,8 +127,8 @@ class TicketList extends ZendDbResultIterator
 						$this->select->where("i.$key=?",$value);
 					}
 					elseif (in_array($key,$this->historyColumns)) {
-						$this->select->where("th.$column=?",$fields[$column]);
-						$this->select->orWhere("ih.$column=?",$fields[$column]);
+						$this->select->where("th.$key=?",$value);
+						$this->select->orWhere("ih.$key=?",$value);
 					}
 					elseif ($key=='category_id') {
 						$this->select->where('c.category_id=?',$value);
@@ -176,7 +177,7 @@ class TicketList extends ZendDbResultIterator
 			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
 		}
 
-		if (isset($fields['category_id'])) {
+		if (isset($fields['category_id']) && $fields['category_id']) {
 			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
 			$joins['c'] = array('table'=>'issue_categories','condition'=>'i.id=c.issue_id');
 		}

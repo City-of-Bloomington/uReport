@@ -183,7 +183,7 @@
 								$list->find();
 								foreach ($list as $action) {
 									$name = View::escape($action->getName());
-									$selected = (isset($_GET['action_id']) && $_GET['action_id'])
+									$selected = (isset($_GET['action_id']) && $_GET['action_id']==$action->getId())
 										? 'selected="selected"'
 										: '';
 									echo "<option value=\"{$action->getId()}\" $selected>$name</option>";
