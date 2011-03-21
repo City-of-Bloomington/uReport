@@ -16,11 +16,15 @@ if (userIsAllowed('Tickets')
 	$template->blocks['ticket-panel'][] = new Block('tickets/actionForm.inc',array('ticket'=>$ticket));
 }
 
-$template->blocks['history-panel'][] = new Block('tickets/history.inc',
-												array('ticketHistory'=>$ticket->getHistory()));
+$template->blocks['history-panel'][] = new Block(
+	'tickets/history.inc',
+	array('ticketHistory'=>$ticket->getHistory())
+);
 
-$template->blocks['issue-panel'][] = new Block('issues/issueList.inc',
-												array('issueList'=>$ticket->getIssues()));
+$template->blocks['issue-panel'][] = new Block(
+	'issues/issueList.inc',
+	array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
+);
 
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(

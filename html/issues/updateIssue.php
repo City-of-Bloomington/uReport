@@ -12,31 +12,58 @@
  * @param REQUEST issue_id
  * @param REQUEST person_id The new person to apply to the issue
  */
+//-------------------------------------------------------------------
 // Make sure they're supposed to be here
+//-------------------------------------------------------------------
 if (!userIsAllowed('Issues')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
-// Load the issue
-try {
-	$issue = new Issue($_REQUEST['issue_id']);
-	if (isset($_REQUEST['person_id'])) {
+//-------------------------------------------------------------------
+// Load all the data that's passed in
+//-------------------------------------------------------------------
+if (isset($_REQUEST['issue_id']) && $_REQUEST['issue_id']) {
+	try {
+		$issue = new Issue($_REQUEST['issue_id']);
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+else {
+	$issue = new Issue();
+}
+
+if (isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id']) {
+	try {
+		$issue->setTicket_id($_REQUEST['ticket_id']);
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+		header('Location: '.BASE_URL);
+		exit();
+	}
+}
+
+if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
+	try {
 		$issue->setReportedByPerson_id($_REQUEST['person_id']);
 	}
-
-	if (!$issue->getReportedByPerson_id()) {
-		throw new Exception('issues/noReportedByPerson');
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+		// No need to send them away.
+		// They can just choose another person
 	}
 }
-catch (Exception $e) {
-	$_SESSION['errorMessages'][] = $e;
-	header('Location: '.BASE_URL);
-	exit();
+else {
+	$issue->setReportedByPerson($_SESSION['USER']->getPerson());
 }
 
+//-------------------------------------------------------------------
 // Handle any stuff the user posts
+//-------------------------------------------------------------------
 if (isset($_POST['issue'])) {
 	if (!$issue->getEnteredByPerson_id()) {
 		$issue->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
@@ -60,7 +87,9 @@ if (isset($_POST['issue'])) {
 	}
 }
 
+//-------------------------------------------------------------------
 // Display the view
+//-------------------------------------------------------------------
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/ticketInfo.inc',

@@ -11,6 +11,7 @@ $title = $this->issue->getId() ? 'Edit Issue' : 'Add Issue';
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Issue Info</legend>
 		<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
+		<input name="ticket_id" type="hidden" value="<?php echo $this->issue->getTicket_id(); ?>" />
 		<?php
 			include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
 
