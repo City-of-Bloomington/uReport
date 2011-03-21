@@ -61,11 +61,11 @@ echo "
 		$caseNumber = View::escape($issue->getCase_number());
 		$notes = View::escape($issue->getNotes());
 		echo "
-		<h1><span class=\"date\">{$issue->getDate()}</span>
+		<h2><span class=\"date\">{$issue->getDate()}</span>
 			<span class=\"issueType\">$type</span>
 			$editButton
 			$responseButton
-		</h1>
+		</h2>
 		<table>
 			<thead>
 				<tr><th>Created by</th>

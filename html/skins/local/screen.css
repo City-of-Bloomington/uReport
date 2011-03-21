@@ -58,6 +58,7 @@ tbody th { align:right; }
 #location-panel .locationResidents		{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .searchResults 			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
+.closeTicketForm, .assignTicketForm, .actionForm, .referTicketForm {padding-left:10px; overflow:auto; }
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
@@ -68,12 +69,8 @@ tbody th { align:right; }
 .searchResults {}
 
 .issueList .issue {
-	padding:.5em; margin:.5em;
-	border:1px solid gray;
-	-moz-border-radius:10px;
-	border-radius:10px;
+	padding:0; margin:.25em;
 }
-.issueList .issue th { font-weight:normal; }
 
 /* Buttons */
 .button { }
