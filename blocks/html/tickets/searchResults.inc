@@ -29,13 +29,13 @@ if (!$this->fields) {
 <h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
 <table>
 	<thead>
-		<tr>
-		<?php
-			$fields = TicketList::getDisplayableFields();
-			foreach ($this->fields as $name=>$value) {
-				echo "<th>$fields[$name]</th>";
-			}
-		?>
+		<tr><?php
+				$fields = TicketList::getDisplayableFields();
+				foreach ($this->fields as $name=>$value) {
+					echo "<th>$fields[$name]</th>";
+				}
+			?>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -60,6 +60,14 @@ if (!$this->fields) {
 						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
 					}
 					echo "<td>$value</td>";
+				}
+				if (userIsAllowed('Issues')) {
+					echo '<td>';
+					echo $this->template->formButton(
+						'Add Issue','button','add',null,
+						"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$ticket->getId()}';"
+					);
+					echo '</td>';
 				}
 				echo '</tr>';
 			}
