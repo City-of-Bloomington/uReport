@@ -421,4 +421,23 @@ class Person
 	public function getReportedTickets() {
 		return new TicketList(array('reportedByPerson_id'=>$this->id));
 	}
+	
+	/**
+	 * Transfers all data from a person, then deletes that person
+	 *
+	 * This person will end up containing all information from both people
+	 *
+	 * @param Person $person
+	 */
+	public function mergeFrom(Person $person)
+	{
+		if ($this->id && $person->getId()) {
+			$zend_db = Database::getConnection();
+			// find all related tickets, history and swap id's
+			//
+			// last action do delete
+			// $zend_db->delete('people','id='.$person->getId());
+		}
+	}
+	
 }

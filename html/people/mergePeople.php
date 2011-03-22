@@ -21,9 +21,32 @@ catch (Exception $e) {
 	header('Location: '.BASE_URL);
 	exit();
 }
+// When the user chooses a target, merge the other ticket into the target
+if (isset($_POST['targetPerson'])) {
+	try {
+		if ($_POST['targetPerson']=='a') {
+			$personA->mergeFrom($personB);
+			$targetPerson = $personA;
+		}
+		else {
+			$personB->mergeFrom($personA);
+			$targetPerson = $personB;
+		}
+
+		header('Location: '.$targetPerson->getURL());
+		exit();
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+
 
 $template = new Template('merging');
-
+$template->blocks[] = new Block(
+	'people/mergeForm.inc',
+	array('personA'=>$personA,'personB'=>$personB)
+);
 $template->blocks['merge-panel-one'][] = new Block(
 	'people/personInfo.inc',
 	array('person'=>$personA,'disableButtons'=>true)
