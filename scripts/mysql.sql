@@ -144,13 +144,14 @@ create table actions (
 	name varchar(128) not null,
 	description varchar(128) not null,
 	formLabel varchar(128) not null,
-	status varchar(128) not null
+	status varchar(128)
 );
 insert into actions set type='system',name='open',description='Ticket opened by {enteredByPerson}',formLabel='open',status='open';
 insert into actions set type='system',name='close',description='Ticket closed by {actionPerson}',formLabel='close',status='closed';
 insert into actions set type='system',name='assignment',description='{enteredByPerson} assigned the ticket to {actionPerson}',formLabel='assign to',status='open';
 insert into actions set type='system',name='referral',description='{enteredByPerson} referred the ticket to {actionPerson}',formLabel='refer to',status='open';
 insert into actions set type='system',name='response',description='{enteredByPerson} responded to {actionPerson}',formLabel='respond',status='open';
+insert into actions set type='system',name='comment',description='{actionPerson} commented on this the ticket',formLabel='comment',status=null;
 
 create table ticketHistory (
 	id int unsigned not null primary key auto_increment,

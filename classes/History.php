@@ -271,4 +271,14 @@ abstract class History
 			array('enteredByPerson'=>$enteredByPerson,'actionPerson'=>$actionPerson)
 		);
 	}
+
+	/**
+	 * Returns the status that should be set on the ticket
+	 *
+	 * @return string
+	 */
+	public function getStatus()
+	{
+		return $this->getAction()->getStatus();
+	}
 }

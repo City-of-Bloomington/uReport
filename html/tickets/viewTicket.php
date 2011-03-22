@@ -10,9 +10,7 @@ $ticket = new Ticket($_GET['ticket_id']);
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
 
-if (userIsAllowed('Tickets')
-	&& $_SESSION['USER']->getDepartment()
-	&& $_SESSION['USER']->getDepartment()->getActions()) {
+if (userIsAllowed('Tickets')) {
 	$template->blocks['ticket-panel'][] = new Block('tickets/actionForm.inc',array('ticket'=>$ticket));
 }
 

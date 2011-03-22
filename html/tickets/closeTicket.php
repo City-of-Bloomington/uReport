@@ -32,6 +32,10 @@ if (isset($_POST['resolution_id'])) {
 	$history->setActionPerson_id($ticket->getAssignedPerson_id());
 	$history->setNotes($_POST['notes']);
 
+	if ($history->getStatus()) {
+		$ticket->setStatus($history->getStatus());
+	}
+
 	try {
 		$ticket->save();
 		$history->save();

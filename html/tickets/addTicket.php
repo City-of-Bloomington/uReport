@@ -69,7 +69,6 @@ if(isset($_POST['ticket'])){
 		}
 	}
 	$ticket->setEnteredDate(new Date());
-	$ticket->setStatus("open");
 	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
 	$ticket->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 
@@ -97,6 +96,8 @@ if(isset($_POST['ticket'])){
 	$assignment->setActionDate($ticket->getEnteredDate());
 	$assignment->setEnteredByPerson($_SESSION['USER']->getPerson());
 	$assignment->setActionPerson_id($_POST['assignedPerson_id']);
+
+	$ticket->setStatus($assignment->getStatus());
 
 	// Validate Everything and save
 	try {

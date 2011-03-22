@@ -35,6 +35,10 @@ if (isset($_POST['action_id'])) {
 
 	try {
 		$history->save();
+		if ($history->getStatus()) {
+			$ticket->setStatus($history->getStatus());
+			$ticket->save();
+		}
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
