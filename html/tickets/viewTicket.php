@@ -35,7 +35,8 @@ if ($ticket->getLocation()) {
 		'tickets/searchResults.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location'
+			'title'=>'Other tickets for this location',
+			'filterTicket'=>$ticket
 		)
 	);
 }

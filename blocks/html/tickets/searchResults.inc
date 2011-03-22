@@ -17,6 +17,7 @@
  * @param TicketList $this->ticketList
  * @param array $this->fields The ticket fields to display.
  * @param bool $this->disableButtons
+ * @param Ticket $this->filterTicket A ticket to leave out of the results
  */
 // Default fields to be used
 if (!$this->fields) {
@@ -42,6 +43,9 @@ if (!$this->fields) {
 		<tbody>
 		<?php
 			foreach ($this->ticketList as $ticket) {
+				if ($this->filterTicket && $ticket->getId()==$this->filterTicket->getId()) {
+					continue;
+				}
 				foreach ($ticket->getIssues() as $issue) {
 					echo '<tr>';
 					foreach ($this->fields as $name=>$value) {
