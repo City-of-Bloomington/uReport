@@ -16,7 +16,7 @@ $status = View::escape($this->action->getStatus());
 	<h2>Description variables</h2>
 	<p>You can call for data by using these strings inside the description</p>
 	<table>
-		<tr><th>{enteredBy}</th>
+		<tr><th>{enteredByPerson}</th>
 			<td>The person who entered the action</td>
 		</tr>
 		<tr><th>{actionPerson}</th>
