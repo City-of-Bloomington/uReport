@@ -79,7 +79,7 @@ if (!$this->fields) {
 	<?php
 		if (!$this->disableButtons) {
 			echo "
-			<form method=\"get\" action=\"<?php echo BASE_URL; ?>/tickets/mergeTickets.php\">
+			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
 				<fieldset><legend>Merge Two Tickets</legend>
 					<p>Add two ticket IDs to compare tickets and move data between them.</p>
 					<div>

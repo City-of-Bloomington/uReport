@@ -12,9 +12,10 @@ if (!userIsAllowed('Tickets')) {
 	exit();
 }
 
+// Load the two tickets
 try {
-	$ticketA = new Ticket($_GET['ticket_id_a']);
-	$ticketB = new Ticket($_GET['ticket_id_b']);
+	$ticketA = new Ticket($_REQUEST['ticket_id_a']);
+	$ticketB = new Ticket($_REQUEST['ticket_id_b']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -22,7 +23,32 @@ catch (Exception $e) {
 	exit();
 }
 
+// When the user chooses a target, merge the other ticket into the target
+if (isset($_POST['targetTicket'])) {
+	try {
+		if ($_POST['targetTicket']=='a') {
+			$ticketA->mergeFrom($ticketB);
+			$targetTicket = $ticketA;
+		}
+		else {
+			$ticketB->mergeFrom($ticketA);
+			$targetTicket = $ticketB;
+		}
+
+		header('Location: '.$targetTicket->getURL());
+		exit();
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+	}
+}
+
+// Display the form
 $template = new Template('merging');
+$template->blocks[] = new Block(
+	'tickets/mergeForm.inc',
+	array('ticketA'=>$ticketA,'ticketB'=>$ticketB)
+);
 
 $template->blocks['merge-panel-one'][] = new Block(
 	'tickets/ticketInfo.inc',

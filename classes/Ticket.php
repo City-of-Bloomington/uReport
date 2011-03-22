@@ -523,4 +523,21 @@ class Ticket
 	{
 		return new TicketHistoryList(array('ticket_id'=>$this->id));
 	}
+
+	/**
+	 * Transfers all data from a ticket, then deletes the ticket
+	 *
+	 * This ticket will end up containing all information from both tickets
+	 *
+	 * @param Ticket $ticket
+	 */
+	public function mergeFrom(Ticket $ticket)
+	{
+		if ($this->id && $ticket->getId()) {
+			$zend_db = Database::getConnection();
+			$zend_db->update('issues',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
+			$zend_db->update('ticketHistory',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
+			$zend_db->delete('tickets','id='.$ticket->getId());
+		}
+	}
 }

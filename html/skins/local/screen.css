@@ -64,6 +64,10 @@ tbody th { align:right; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
 #ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
+.mergeForm .target_a { float:left; width:48%; }
+.mergeForm .target_b { float:right; width:48%; }
+.mergeForm .button { position:absolute; left:40%; }
+
 .searchForm {}
 .searchForm .fields { float:right; margin:1em; }
 .searchResults {}
