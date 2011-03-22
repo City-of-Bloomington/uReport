@@ -26,53 +26,68 @@ if (!$this->fields) {
 }
 ?>
 <div class="searchResults">
-<h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
-<table>
-	<thead>
-		<tr><?php
-				$fields = TicketList::getDisplayableFields();
-				foreach ($this->fields as $name=>$value) {
-					echo "<th>$fields[$name]</th>";
-				}
-			?>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php
-		foreach ($this->ticketList as $ticket) {
-			foreach ($ticket->getIssues() as $issue) {
-				echo '<tr>';
-				foreach ($this->fields as $name=>$value) {
-					list($var,$field) = explode('-',$name);
-					$get = 'get'.ucfirst($field);
-					$value = $$var->$get();
-					if (preg_match('/Person/',$name) || $field=='constituent') {
-						if ($value) {
-							$value = $value->getFullname();
+	<h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
+	<table>
+		<thead>
+			<tr><?php
+					$fields = TicketList::getDisplayableFields();
+					foreach ($this->fields as $name=>$value) {
+						echo "<th>$fields[$name]</th>";
+					}
+				?>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php
+			foreach ($this->ticketList as $ticket) {
+				foreach ($ticket->getIssues() as $issue) {
+					echo '<tr>';
+					foreach ($this->fields as $name=>$value) {
+						list($var,$field) = explode('-',$name);
+						$get = 'get'.ucfirst($field);
+						$value = $$var->$get();
+						if (preg_match('/Person/',$name) || $field=='constituent') {
+							if ($value) {
+								$value = $value->getFullname();
+							}
 						}
+						if ($field=='categories') {
+							$value = implode(', ',$value);
+						}
+						// Only put the href on the ticket_id
+						if ($field == 'id') {
+							$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
+						}
+						echo "<td>$value</td>";
 					}
-					if ($field=='categories') {
-						$value = implode(', ',$value);
+					if (userIsAllowed('Issues')) {
+						echo '<td>';
+						echo $this->template->formButton(
+							'Add Issue','button','add',null,
+							"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$ticket->getId()}';"
+						);
+						echo '</td>';
 					}
-					// Only put the href on the ticket_id
-					if ($field == 'id') {
-						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
-					}
-					echo "<td>$value</td>";
+					echo '</tr>';
 				}
-				if (userIsAllowed('Issues')) {
-					echo '<td>';
-					echo $this->template->formButton(
-						'Add Issue','button','add',null,
-						"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$ticket->getId()}';"
-					);
-					echo '</td>';
-				}
-				echo '</tr>';
 			}
-		}
-	?>
-	</tbody>
-</table>
+		?>
+		</tbody>
+	</table>
+	<form method="get" action="<?php echo BASE_URL; ?>/tickets/mergeTickets.php">
+		<fieldset><legend>Merge Two Tickets</legend>
+			<p>Add two ticket IDs to compare tickets and move data between them.</p>
+			<div>
+				<input name="ticket_id_a" id="ticket_id_a" />
+				<input name="ticket_id_b" id="ticket_id_b" />
+				<?php
+					echo $this->template->formButton(
+						'Submit','submit','submit'
+					);
+				?>
+			</div>
+		</fieldset>
+	</form>
 </div>
+
