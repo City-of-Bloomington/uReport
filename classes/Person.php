@@ -421,7 +421,7 @@ class Person
 	public function getReportedTickets() {
 		return new TicketList(array('reportedByPerson_id'=>$this->id));
 	}
-	
+
 	/**
 	 * Transfers all data from a person, then deletes that person
 	 *
@@ -433,11 +433,17 @@ class Person
 	{
 		if ($this->id && $person->getId()) {
 			$zend_db = Database::getConnection();
-			// find all related tickets, history and swap id's
-			//
-			// last action do delete
-			// $zend_db->delete('people','id='.$person->getId());
+			$zend_db->update('departments',array('default_person_id'=>$this->id),'default_person_id='.$person->getId());
+			$zend_db->update('issueHistory',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
+			$zend_db->update('issueHistory',array('actionPerson_id'=>$this->id),'actionPerson_id='.$person->getId());
+			$zend_db->update('issues',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
+			$zend_db->update('issues',array('reportedByPerson_id'=>$this->id),'reportedByPerson_id='.$person->getId());
+			$zend_db->update('ticketHistory',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
+			$zend_db->update('ticketHistory',array('actionPerson_id'=>$this->id),'actionPerson_id='.$person->getId());
+			$zend_db->update('tickets',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
+			$zend_db->update('tickets',array('assignedPerson_id'=>$this->id),'assignedPerson_id='.$person->getId());
+			$zend_db->update('tickets',array('referredPerson_id'=>$this->id),'referredPerson_id='.$person->getId());
+			$zend_db->delete('people','id='.$person->getId());
 		}
 	}
-	
 }
