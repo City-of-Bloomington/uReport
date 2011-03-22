@@ -7,7 +7,7 @@
  */
 if (userIsAllowed('Users')) {
 	$username = $this->person->getUsername();
-	if (!$username && userIsAllowed('Users')) {
+	if (!$username && userIsAllowed('Users') && !$this->disableButtons) {
 		$username = $this->template->linkButton(
 			'Create Account',
 			BASE_URL.'/users/updateUser.php?person_id='.$this->person->getId(),

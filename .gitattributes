@@ -3,6 +3,7 @@ blocks/html/tickets/addTicketForm.inc -text
 blocks/html/tickets/assignTicketForm.inc -text
 blocks/html/tickets/referTicketForm.inc -text
 html/departments/updateMyDepartment.php -text
+html/people/mergePeople.php -text
 html/skins/local/images/add.gif -text
 html/skins/local/images/buttonBackground.png -text
 html/skins/local/images/check.png -text
