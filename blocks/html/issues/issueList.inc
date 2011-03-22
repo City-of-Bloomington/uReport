@@ -5,9 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
  * @param Ticket $this->ticket (optional)
+ * @param bool $this->disableButtons
+ * @param bool $this->disableComments
  */
 $addButton = '';
-if ($this->ticket && userIsAllowed('Issues')) {
+if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
 	$addButton = $this->template->formButton(
 		'Add Issue','button','add',null,
 		"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$this->ticket->getId()}';"
@@ -21,7 +23,7 @@ echo "
 	foreach ($this->issueList as $issue) {
 		$editButton = '';
 		$responseButton = '';
-		if (userIsAllowed('Issues')) {
+		if (!$this->disableButtons && userIsAllowed('Issues')) {
 			$editButton = $this->template->formButton(
 				'Edit Issue',
 				'button',
@@ -59,7 +61,6 @@ echo "
 		$type = View::escape($issue->getIssueType());
 		$contactMethod = View::escape($issue->getContactMethod());
 		$caseNumber = View::escape($issue->getCase_number());
-		$notes = View::escape($issue->getNotes());
 		echo "
 		<h2><span class=\"date\">{$issue->getDate()}</span>
 			<span class=\"issueType\">$type</span>
@@ -73,7 +74,11 @@ echo "
 					<th>Reported By</th>
 					<th>Contacted By</th>
 					<th>Case #</th>
-					<th>Comments</th>
+		";
+					if (!$this->disableComments) {
+						echo '<th>Comments</th>';
+					}
+		echo "
 				</tr>
 			</thead>
 			<tbody>
@@ -93,14 +98,25 @@ echo "
 					<td>$reportedBy</td>
 					<td>$contactMethod</td>
 					<td>$caseNumber</td>
-					<td>$notes</td>
+		";
+					if (!$this->disableComments) {
+						$notes = View::escape($issue->getNotes());
+						echo "<td>$notes</td>";
+					}
+		echo "
 				</tr>
 			</tbody>
 		</table>
 		";
 
-		$block = new Block('tickets/history.inc',array('ticketHistory'=>$issue->getHistory()));
-		echo $block->render('html',$this->template);
+		$history = $issue->getHistory();
+		if (count($history)) {
+			$block = new Block(
+				'tickets/history.inc',
+				array('ticketHistory'=>$history,'disableComments'=>$this->disableComments)
+			);
+			echo $block->render('html',$this->template);
+		}
 	}
 echo "
 	</div>

@@ -50,19 +50,21 @@ if (isset($_POST['referredPerson_id'])) {
 
 // Display the view
 $template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
-
+$template->blocks['ticket-panel'][] = new Block(
+	'tickets/ticketInfo.inc',
+	array('ticket'=>$ticket,'disableButtons'=>true)
+);
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/referTicketForm.inc',
 	array('ticket'=>$ticket)
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory())
+	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
 	'issues/issueList.inc',
-	array('issueList'=>$ticket->getIssues())
+	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 );
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
@@ -73,7 +75,8 @@ if ($ticket->getLocation()) {
 		'tickets/searchResults.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location'
+			'title'=>'Other tickets for this location',
+			'disableButtons'=>true
 		)
 	);
 }

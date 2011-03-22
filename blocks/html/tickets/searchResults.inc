@@ -16,6 +16,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  * @param array $this->fields The ticket fields to display.
+ * @param bool $this->disableButtons
  */
 // Default fields to be used
 if (!$this->fields) {
@@ -61,7 +62,7 @@ if (!$this->fields) {
 						}
 						echo "<td>$value</td>";
 					}
-					if (userIsAllowed('Issues')) {
+					if (!$this->disableButtons && userIsAllowed('Issues')) {
 						echo '<td>';
 						echo $this->template->formButton(
 							'Add Issue','button','add',null,
@@ -75,19 +76,25 @@ if (!$this->fields) {
 		?>
 		</tbody>
 	</table>
-	<form method="get" action="<?php echo BASE_URL; ?>/tickets/mergeTickets.php">
-		<fieldset><legend>Merge Two Tickets</legend>
-			<p>Add two ticket IDs to compare tickets and move data between them.</p>
-			<div>
-				<input name="ticket_id_a" id="ticket_id_a" />
-				<input name="ticket_id_b" id="ticket_id_b" />
-				<?php
-					echo $this->template->formButton(
-						'Submit','submit','submit'
-					);
-				?>
-			</div>
-		</fieldset>
-	</form>
+	<?php
+		if (!$this->disableButtons) {
+			echo "
+			<form method=\"get\" action=\"<?php echo BASE_URL; ?>/tickets/mergeTickets.php\">
+				<fieldset><legend>Merge Two Tickets</legend>
+					<p>Add two ticket IDs to compare tickets and move data between them.</p>
+					<div>
+						<input name=\"ticket_id_a\" id=\"ticket_id_a\" />
+						<input name=\"ticket_id_b\" id=\"ticket_id_b\" />
+			";
+							echo $this->template->formButton(
+								'Submit','submit','submit'
+							);
+			echo "
+					</div>
+				</fieldset>
+			</form>
+			";
+		}
+	?>
 </div>
 

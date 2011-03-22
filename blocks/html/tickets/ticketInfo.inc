@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
+ * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
 $assigned = $this->ticket->getAssignedPerson() ? View::escape($this->ticket->getAssignedPerson()->getFullname()) : '';
@@ -18,7 +19,8 @@ if ($this->ticket->getResolution()) {
 $assignButton = '';
 $referralButton = '';
 $closeTicketButton = '';
-if (userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
+if (!$this->disableButtons
+	&& userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
 	$assignButton = $this->template->linkButton(
 		'Assign',
 		BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
