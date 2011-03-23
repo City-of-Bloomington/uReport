@@ -1,12 +1,10 @@
 <div id="menuBar">
 	<ul><?php
-			if (userIsAllowed('Tickets')) {
-				echo "<li><a href=\"".BASE_URL."/tickets\">Requests</a></li>";
-				echo "<li><a href=\"".BASE_URL."/locations\">Locations</a></li>";
-			}
-			if (userIsAllowed('People')) {
-				echo "<li><a href=\"".BASE_URL."/people\">Constituents</a></li>";
-			}
+			echo "
+			<li><a href=\"".BASE_URL."/tickets\">Tickets</a></li>
+			<li><a href=\"".BASE_URL."/locations\">Locations</a></li>
+			<li><a href=\"".BASE_URL."/people\">Constituents</a></li>
+			";
 			if (userIsAllowed('Users')) {
 				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
 			}
