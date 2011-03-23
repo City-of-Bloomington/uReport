@@ -1,4 +1,5 @@
 * text=auto !eol
+blocks/html/errorMessages/mergerNotAllowed.inc -text
 blocks/html/people/mergeForm.inc -text
 blocks/html/tickets/addTicketForm.inc -text
 blocks/html/tickets/assignTicketForm.inc -text

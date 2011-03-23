@@ -443,7 +443,7 @@ class Person
 				throw new Exception('mergerNotAllowed');
 			}
 			$zend_db = Database::getConnection();
-			// $zend_db->update('departments',array('default_person_id'=>$this->id),'default_person_id='.$person->getId());
+			$zend_db->update('departments',array('default_person_id'=>$this->id),'default_person_id='.$person->getId());
 			$zend_db->update('issueHistory',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
 			$zend_db->update('issueHistory',array('actionPerson_id'=>$this->id),'actionPerson_id='.$person->getId());
 			$zend_db->update('issues',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
