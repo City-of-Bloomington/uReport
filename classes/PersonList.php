@@ -9,7 +9,7 @@
 class PersonList extends ZendDbResultIterator
 {
 	private $columns = array(
-		'firstname','middlename','lastname','email','phone',
+		'firstname','middlename','lastname','email','phone','organization',
 		'address','city','state','zip',
 		'street_address_id','subunit_id','township','neighborhoodAssociation'
 	);
@@ -92,7 +92,7 @@ class PersonList extends ZendDbResultIterator
 						$this->select->where("p.$key like ?","%$value%");
 					}
 					if ($key=='name') {
-						$this->select->where("p.firstname like '%$value%' or p.lastname like '%$value%'");
+						$this->select->where("p.firstname like '%$value%' or p.lastname like '%$value%' or p.organization like '%$value%'");
 					}
 				}
 			}

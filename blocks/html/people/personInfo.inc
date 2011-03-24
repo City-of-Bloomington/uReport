@@ -20,16 +20,27 @@ else {
 	$username = '';
 }
 
+$editButton = '';
+if (userIsAllowed('People')) {
+	$editButton = $this->template->linkButton(
+		'Edit',
+		BASE_URL.'/people/updatePerson.php?person_id='.$this->person->getId(),
+		'edit'
+	);
+}
+
 $name = View::escape($this->person->getFullname());
 $phone = View::escape($this->person->getPhone());
 $email = View::escape($this->person->getEmail());
+$organization = View::escape($this->person->getOrganization());
 $address = View::escape($this->person->getAddress());
 $city = View::escape($this->person->getCity());
 $state = View::escape($this->person->getState());
 $zip = View::escape($this->person->getZip());
 echo "
 <div class=\"personInfo\">
-	<h1>$name</h1>
+	<h1>$name $editButton</h1>
+	<h2>$organization</h2>
 	<div>$username</div>
 	<div>$phone</div>
 	<div>$email</div>

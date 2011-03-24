@@ -12,6 +12,7 @@ class Person
 	private $lastname;
 	private $email;
 	private $phone;
+	private $organization;
 	private $address;
 	private $city;
 	private $state;
@@ -80,7 +81,7 @@ class Person
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->firstname) {
+		if (!$this->firstname && !$this->lastname && !$this->organization) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -93,11 +94,12 @@ class Person
 		$this->validate();
 
 		$data = array();
-		$data['firstname'] = $this->firstname;
+		$data['firstname'] = $this->firstname ? $this->firstname : null;
 		$data['middlename'] = $this->middlename ? $this->middlename : null;
 		$data['lastname'] = $this->lastname ? $this->lastname : null;
 		$data['email'] = $this->email ? $this->email : null;
 		$data['phone'] = $this->phone ? $this->phone : null;
+		$data['organization'] = $this->organization ? $this->organization : null;
 		$data['address'] = $this->address ? $this->address : null;
 		$data['city'] = $this->city ? $this->city : null;
 		$data['state'] = $this->state ? $this->state : null;
@@ -177,6 +179,14 @@ class Person
 	public function getPhone()
 	{
 		return $this->phone;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getOrganization()
+	{
+		return $this->organization;
 	}
 
 	/**
@@ -289,6 +299,14 @@ class Person
 	/**
 	 * @param string $string
 	 */
+	public function setOrganization($string)
+	{
+		$this->organization = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
 	public function setAddress($string)
 	{
 		$this->address = trim($string);
@@ -359,7 +377,12 @@ class Person
 	 */
 	public function getFullname()
 	{
-		return "{$this->firstname} {$this->lastname}";
+		if ($this->firstname || $this->lastname) {
+			return "{$this->firstname} {$this->lastname}";
+		}
+		else {
+			return $this->organization;
+		}
 	}
 
 	/**
@@ -419,7 +442,9 @@ class Person
 	 * @return TicketList
 	 */
 	public function getReportedTickets() {
-		return new TicketList(array('reportedByPerson_id'=>$this->id));
+		if ($this->id) {
+			return new TicketList(array('reportedByPerson_id'=>$this->id));
+		}
 	}
 
 	/**
@@ -433,7 +458,7 @@ class Person
 	{
 		if ($this->id && $person->getId()) {
 			if($this->id == $person->getId()){
-				// 
+				//
 				// can not merge same person throw exception
 				throw new Exception('mergerNotAllowed');
 			}

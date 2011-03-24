@@ -9,7 +9,7 @@
 $errorURL = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/people';
 $return_url = isset($_REQUEST['return_url'])
 	? new URL($_REQUEST['return_url'])
-	: new URL(BASE_URL.'/viewPerson.php');
+	: new URL(BASE_URL.'/people/viewPerson.php');
 
 if (!userIsAllowed('Users')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -20,6 +20,7 @@ if (!userIsAllowed('Users')) {
 if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 	try {
 		$person = new Person($_REQUEST['person_id']);
+		$return_url->person_id = $person->getId();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -33,7 +34,7 @@ else {
 
 if (isset($_POST['firstname'])) {
 	$fields = array(
-		'firstname','middlename','lastname','email','phone',
+		'firstname','middlename','lastname','email','phone','organization',
 		'address','city','state','zip'
 	);
 	foreach ($fields as $field) {

@@ -24,6 +24,7 @@
 				<th>Username</th>
 				<th>Name</th>
 				<th>Email</th>
+				<th>Organization</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -50,12 +51,14 @@
 				}
 
 				$name = View::escape($person->getFullname());
+				$organization = View::escape($person->getOrganization());
 				echo "
 				<tr><td>$editButton</td>
 					<td>{$person->getId()}</td>
 					<td>{$person->getUsername()}</td>
 					<td><a href=\"$url\">$name</a></td>
 					<td>{$person->getEmail()}</td>
+					<td>$organization</td>
 				</tr>
 				";
 			}

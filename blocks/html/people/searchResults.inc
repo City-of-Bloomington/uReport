@@ -26,7 +26,7 @@
 				'Add Person','button','add',null,"document.location.href='$url';"
 			);
 		}
-		if (!$this->disableButtons && count($this->personList)){
+		if (!$this->disableButtons && count($this->personList)>1) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/people/mergePeople.php\">
 				<fieldset><legend>Merge Two People</legend>

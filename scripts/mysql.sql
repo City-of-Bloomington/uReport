@@ -5,12 +5,13 @@
 /*! set foreign_key_checks=0 */;
 create table people (
 	id int unsigned not null primary key auto_increment,
-	firstname varchar(128) not null,
+	firstname varchar(128),
 	middlename varchar(128),
 	lastname varchar(128),
 	email varchar(255),
 	phone varchar(30),
 	address varchar(128),
+	organization varchar(128),
 	-- The rest of these fields are used as cache
 	-- This information will ultimately come from other applications webservices
 	city varchar(128),
