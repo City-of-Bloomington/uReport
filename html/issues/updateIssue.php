@@ -109,10 +109,12 @@ $template->blocks['location-panel'][] = new Block(
 );
 if ($issue->getTicket()->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/searchResults.inc',
+		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$issue->getTicket()->getLocation())),
-			'title'=>'Other tickets for this location'
+			'title'=>'Other tickets for this location',
+			'disableButtons'=>true,
+			'filterTicket'=>$issue->getTicket()
 		)
 	);
 }

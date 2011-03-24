@@ -6,13 +6,32 @@
  * @param bool $this->includeExternalResults (optional)
  * @param string $this->return_url (optional)
  */
-$location_query = isset($_GET['location_query']) ? View::escape($_GET['location_query']) : '';
+$address = isset($_GET['location']['address']) ? View::escape($_GET['location']['address']) : '';
+$street = isset($_GET['location']['street']) ? View::escape($_GET['location']['street']) : '';
+$text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text']) : '';
 ?>
 <div class="findLocationForm">
 	<h1>Find a Location</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/locations">
 		<fieldset>
-			<input name="location_query" value="<?php echo $location_query; ?>" />
+			<div>
+				<label>
+					Address
+					<input name="location[address]" value="<?php echo $address; ?>" />
+				</label>
+			</div>
+			<div>
+				<label>
+					Street
+					<input name="location[street]" value="<?php echo $street; ?>" />
+				</label>
+			</div>
+			<div>
+				<label>
+					Text
+					<input name="location[text]" value="<?php echo $text; ?>" />
+				</label>
+			</div>
 			<?php
 				$return_url = isset($this->return_url) ? View::escape($this->return_url) : '';
 				if ($return_url) {

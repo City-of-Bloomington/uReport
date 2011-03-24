@@ -29,13 +29,17 @@ if ($ticket->getLocation()) {
 		'locations/locationInfo.inc',
 		array('location'=>$ticket->getLocation())
 	);
-	$template->blocks['location-panel'][] = new Block(
-		'tickets/searchResults.inc',
-		array(
-			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location',
-			'filterTicket'=>$ticket
-		)
-	);
+
+	$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
+	if (count($ticketList) > 1) {
+		$template->blocks['location-panel'][] = new Block(
+			'tickets/ticketList.inc',
+			array(
+				'ticketList'=>$ticketList,
+				'title'=>'Other tickets for this location',
+				'filterTicket'=>$ticket
+			)
+		);
+	}
 }
 echo $template->render();

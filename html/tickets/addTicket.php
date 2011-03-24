@@ -138,18 +138,10 @@ if ($ticket->getLocation()) {
 	);
 
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/searchResults.inc',
+		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Tickets Associated with this Location',
-			'fields'=>array(
-				'ticket-id'=>1,
-				'ticket-enteredDate'=>1,
-				'ticket-assignedPerson'=>1,
-				'ticket-status'=>1,
-				'issue-issueType'=>1,
-				'issue-categories'=>1
-			)
+			'title'=>'Tickets Associated with this Location'
 		)
 	);
 }

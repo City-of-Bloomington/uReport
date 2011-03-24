@@ -76,7 +76,7 @@ if ($ticket->getLocation()) {
 		array('location'=>$ticket->getLocation())
 	);
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/searchResults.inc',
+		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
 			'title'=>'Other tickets for this location',

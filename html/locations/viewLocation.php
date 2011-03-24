@@ -18,20 +18,14 @@ $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',array('location'=>$_GET['location'])
 );
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/searchResults.inc',
-	array(
-		'ticketList'=>new TicketList(array('location'=>$_GET['location'])),
-		'title'=>'Tickets Associated with this Location',
-		'fields'=>array(
-			'ticket-id'=>1,
-			'ticket-enteredDate'=>1,
-			'ticket-assignedPerson'=>1,
-			'ticket-status'=>1,
-			'issue-issueType'=>1,
-			'issue-reportedByPerson'=>1
+if (count($ticketList)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$ticketList,
+			'title'=>'Tickets Associated with this Location'
 		)
-	)
-);
+	);
+}
 
 echo $template->render();
