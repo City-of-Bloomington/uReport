@@ -8,13 +8,7 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1><?php
-			if (userIsAllowed('Users')) {
-				echo $this->linkButton(
-					'Add a Person',BASE_URL.'/people/updatePerson.php','add'
-				);
-			}
-		?>
+	<h1>
 		People
 	</h1>
 	<table>
@@ -54,4 +48,11 @@
 		?>
 		</tbody>
 	</table>
+<?php
+	if (userIsAllowed('Users')) {
+		echo $this->linkButton(
+			'Add a Person',BASE_URL.'/people/updatePerson.php','add',null,null,'largeButton'
+		);
+	}
+?>
 </div>
