@@ -29,7 +29,7 @@ if (isset($_POST['resolution_id'])) {
 	$history->setTicket($ticket);
 	$history->setAction('close');
 	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($ticket->getAssignedPerson_id());
+	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setNotes($_POST['notes']);
 
 	if ($history->getStatus()) {
