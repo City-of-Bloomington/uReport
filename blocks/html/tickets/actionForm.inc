@@ -26,12 +26,10 @@
 				<tr><td><label for="actionDate">Date</label></td>
 					<td><input name="actionDate" id="actionDate" value="<?php echo new Date(); ?>" /></td>
 				</tr>
-			<tr>
-				<td>Comment
-				</td>			
-				<td>
-					<textarea name="notes" id="notes" rows="3" cols="50"></textarea>
-				</td>
+				<tr>
+					<td><label for="notes">Comment</label></td>
+					<td><textarea name="notes" id="notes" rows="3" cols="50"></textarea></td>
+				</tr>
 			</table>
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
