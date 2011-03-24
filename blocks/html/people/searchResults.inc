@@ -17,15 +17,6 @@
 			echo '<p>No results found</p>';
 		}
 
-		if (userIsAllowed('People')) {
-			$url = new URL(BASE_URL.'/people/updatePerson.php');
-			if ($this->return_url) {
-				$url->return_url = $this->return_url;
-			}
-			echo $this->formButton(
-				'Add Person','button','add',null,"document.location.href='$url';"
-			);
-		}
 		if (!$this->disableButtons && count($this->personList)>1) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/people/mergePeople.php\">
