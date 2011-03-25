@@ -24,11 +24,9 @@
 						</select>
 					</td>
 				</tr>
-			<tr>
-			<td>
-			<label id="notes">Comment</label></td>
-			<td><textarea id="notes" name="notes" rows="3" cols="50"></textarea>
-			</td>
+			<tr><td><label id="notes">Comment</label></td>
+				<td><textarea id="notes" name="notes" rows="3" cols="50"></textarea></td>
+			</tr>
 			</table>
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
