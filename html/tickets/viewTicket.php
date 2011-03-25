@@ -10,7 +10,7 @@ $ticket = new Ticket($_GET['ticket_id']);
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
 
-if (userIsAllowed('Tickets')) {
+if (userIsAllowed('Tickets') && $ticket->getStatus()!='closed') {
 	$template->blocks['ticket-panel'][] = new Block('tickets/actionForm.inc',array('ticket'=>$ticket));
 }
 

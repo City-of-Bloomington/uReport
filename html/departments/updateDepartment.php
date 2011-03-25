@@ -34,6 +34,7 @@ if (isset($_POST['name'])) {
 
 	try {
 		$department->save();
+		$department->saveCustomStatuses($_POST['customStatuses']);
 		$department->saveCategories(array_keys($_POST['categories']));
 		$department->saveActions(array_keys($_POST['actions']));
 

@@ -12,6 +12,7 @@ class Department
 
 	private $actions = array();
 	private $categories = array();
+	private $customStatuses = array();
 	private $default_person;
 
 	/**
@@ -294,5 +295,56 @@ class Department
 	public function getUsers()
 	{
 		return new UserList(array('department_id'=>$this->id));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCustomStatuses()
+	{
+		if (!count($this->customStatuses)) {
+			if ($this->id) {
+				$zend_db = Database::getConnection();
+				$query = $zend_db->query(
+					'select status from customStatuses where department_id=?',
+					array($this->id)
+				);
+				$this->customStatuses = $query->fetchAll(Zend_Db::FETCH_COLUMN);
+			}
+		}
+		return $this->customStatuses;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasCustomStatuses()
+	{
+		return count($this->getCustomStatuses()) ? true : false;
+	}
+
+	/**
+	 * Immediately saves an array of status strings to the database
+	 *
+	 * @param string|array $statuses
+	 */
+	public function saveCustomStatuses($statuses)
+	{
+		if ($this->id) {
+			$zend_db = Database::getConnection();
+			$zend_db->delete('customStatuses','department_id='.$this->id);
+
+			if (!is_array($statuses)) {
+				$statuses = explode(',',$statuses);
+			}
+			$this->customStatuses = $statuses;
+
+			foreach ($statuses as $status) {
+				$zend_db->insert(
+					'customStatuses',
+					array('department_id'=>$this->id,'status'=>$status)
+				);
+			}
+		}
 	}
 }

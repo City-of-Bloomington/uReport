@@ -400,11 +400,19 @@ class Ticket
 	}
 
 	/**
+	 * Sets the status and clears resolution, if necessary
+	 *
+	 * Setting status to anything other than closed will clear any previously set resolution
+	 *
 	 * @param string $string
 	 */
 	public function setStatus($string)
 	{
 		$this->status = trim($string);
+		if ($this->status != 'closed') {
+			$this->resolution = null;
+			$this->resolution_id = null;
+		}
 	}
 
 	/**

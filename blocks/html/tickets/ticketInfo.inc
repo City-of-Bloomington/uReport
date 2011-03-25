@@ -19,26 +19,38 @@ if ($this->ticket->getResolution()) {
 $assignButton = '';
 $referralButton = '';
 $closeTicketButton = '';
-if (!$this->disableButtons
-	&& userIsAllowed('Tickets') && $this->ticket->getStatus()!='closed') {
-	$assignButton = $this->template->linkButton(
-		'Assign',
-		BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
+$editStatusButton = '';
+
+if (!$this->disableButtons && userIsAllowed('Tickets')) {
+	$editStatusButton = $this->template->linkButton(
+		'Edit Status',
+		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
 		'edit'
 	);
 
-	$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
-	$referralButton = $this->template->linkButton(
-		'Refer',
-		BASE_URL."/people?return_url=$return_url",
-		'edit'
-	);
-	$closeTicketButton = $this->template->linkButton(
-		'Close Ticket',
-		BASE_URL.'/tickets/closeTicket.php?ticket_id='.$this->ticket->getId(),
-		'edit'
-	);
+	if ($this->ticket->getStatus()!='closed') {
+		$assignButton = $this->template->linkButton(
+			'Assign',
+			BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
+			'edit'
+		);
+
+		$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
+		$referralButton = $this->template->linkButton(
+			'Refer',
+			BASE_URL."/people?return_url=$return_url",
+			'edit'
+		);
+
+		$closeTicketButton = $this->template->linkButton(
+			'Close Ticket',
+			BASE_URL.'/tickets/closeTicket.php?ticket_id='.$this->ticket->getId(),
+			'delete'
+		);
+	}
 }
+
+
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
@@ -50,7 +62,7 @@ echo "
 		</tr>
 		<tr><th>Status</th>
 			<td>$status</td>
-			<td>$closeTicketButton</td>
+			<td>$editStatusButton $closeTicketButton</td>
 		</tr>
 		<tr><th>Assigned To:</th>
 			<td>$assigned</td>

@@ -23,6 +23,7 @@
 				<th>Default Person</th>
 				<th>Categories</th>
 				<th>Actions</th>
+				<th>Statuses</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -61,12 +62,24 @@
 					}
 					$actions.='</ul>';
 				}
+
+				$statuses = '';
+				$s = $department->getCustomStatuses();
+				if (count($s)) {
+					$statuses = '<ul>';
+					foreach ($s as $status) {
+						$statuses.= '<li>'.View::escape($status).'</li>';
+					}
+					$statuses.= '</ul>';
+				}
+
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$person</td>
 					<td>$categories</td>
 					<td>$actions</td>
+					<td>$statuses</td>
 				</tr>
 				";
 			}

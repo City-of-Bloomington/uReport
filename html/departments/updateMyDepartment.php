@@ -8,10 +8,12 @@ $department = $_SESSION['USER']->getDepartment();
 $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
 
 if (isset($_POST['default_person_id'])) {
+	$department->setName($_POST['name']);
 	$department->setDefault_person_id($_POST['default_person_id']);
 
 	try {
 		$department->save();
+		$department->saveCustomStatuses($_POST['customStatuses']);
 		$department->saveCategories(array_keys($_POST['categories']));
 		$department->saveActions(array_keys($_POST['actions']));
 

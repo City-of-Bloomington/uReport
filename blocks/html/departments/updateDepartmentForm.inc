@@ -31,6 +31,13 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 
 		</table>
 	</fieldset>
+	<fieldset><legend>Custom Statuses</legend>
+		<p>Enter the statuses you want for the department, each separated by commas</p>
+		<div>
+			<input name="customStatuses" id="customStatuses"
+				value="<?php echo View::escape(implode(',',$this->department->getCustomStatuses())); ?>" />
+		</div>
+	</fieldset>
 	<fieldset class="actions">
 		<legend>Actions</legend>
 		<ul>
