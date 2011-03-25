@@ -36,7 +36,6 @@ foreach ($actions as $a) {
 	$action->setName($a['name']);
 	$action->setDescription($a['description']);
 	$action->setFormLabel($a['formLabel']);
-	$action->setStatus('open');
 	$action->save();
 	echo "{$action->getName()}\n";
 }

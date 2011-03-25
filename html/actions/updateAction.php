@@ -31,7 +31,6 @@ if (isset($_POST['name'])) {
 	$action->setName($_POST['name']);
 	$action->setDescription($_POST['description']);
 	$action->setFormLabel($_POST['formLabel']);
-	$action->setStatus($_POST['status']);
 
 	try {
 		$action->save();

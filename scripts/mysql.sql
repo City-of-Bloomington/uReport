@@ -144,15 +144,23 @@ create table actions (
 	type enum('system','user') not null default 'user',
 	name varchar(128) not null,
 	description varchar(128) not null,
-	formLabel varchar(128) not null,
-	status varchar(128)
+	formLabel varchar(128) not null
 );
-insert into actions set type='system',name='open',description='Ticket opened by {enteredByPerson}',formLabel='open',status='open';
-insert into actions set type='system',name='close',description='Ticket closed by {actionPerson}',formLabel='close',status='closed';
-insert into actions set type='system',name='assignment',description='{enteredByPerson} assigned the ticket to {actionPerson}',formLabel='assign to',status='open';
-insert into actions set type='system',name='referral',description='{enteredByPerson} referred the ticket to {actionPerson}',formLabel='refer to',status='open';
-insert into actions set type='system',name='response',description='{enteredByPerson} responded to {actionPerson}',formLabel='respond',status='open';
-insert into actions set type='system',name='comment',description='{actionPerson} commented on this the ticket',formLabel='comment',status=null;
+insert into actions set type='system',name='open',description='Ticket opened by {enteredByPerson}',formLabel='open';
+insert into actions set type='system',name='close',description='Ticket closed by {actionPerson}',formLabel='close';
+insert into actions set type='system',name='assignment',description='{enteredByPerson} assigned the ticket to {actionPerson}',formLabel='assign to';
+insert into actions set type='system',name='referral',description='{enteredByPerson} referred the ticket to {actionPerson}',formLabel='refer to';
+insert into actions set type='system',name='response',description='{enteredByPerson} responded to {actionPerson}',formLabel='respond';
+insert into actions set type='system',name='comment',description='{actionPerson} commented on this the ticket',formLabel='comment';
+insert into actions set type='system',name='statusChange',description='{actionPerson} changed the status on this ticket',formLabel='change status';
+
+
+create table customStatuses (
+	department_id int unsigned not null,
+	status varchar(25) not null,
+	primary key (department_id,status),
+	foreign key (department_id) references departments(id)
+);
 
 create table ticketHistory (
 	id int unsigned not null primary key auto_increment,

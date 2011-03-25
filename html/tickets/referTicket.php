@@ -37,10 +37,6 @@ if (isset($_POST['referredPerson_id'])) {
 	$history->setActionPerson_id($ticket->getReferredPerson_id());
 	$history->setNotes($_POST['notes']);
 
-	if ($history->getStatus()) {
-		$ticket->setStatus($history->getStatus());
-	}
-
 	try {
 		$ticket->save();
 		$history->save();

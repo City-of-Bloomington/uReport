@@ -11,7 +11,6 @@ class Action
 	private $name;
 	private $description;
 	private $formLabel;
-	private $status;
 
 	/**
 	 * Populates the object with data
@@ -64,7 +63,7 @@ class Action
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name || !$this->description || !$this->formLabel || !$this->status) {
+		if (!$this->name || !$this->description || !$this->formLabel) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -81,7 +80,6 @@ class Action
 		$data['name'] = $this->name;
 		$data['description'] = $this->description;
 		$data['formLabel'] = $this->formLabel;
-		$data['status'] = $this->status;
 
 		if ($this->id) {
 			$this->update($data);
@@ -148,14 +146,6 @@ class Action
 		return $this->formLabel;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getStatus()
-	{
-		return $this->status;
-	}
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -182,14 +172,6 @@ class Action
 	public function setFormLabel($string)
 	{
 		$this->formLabel = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setStatus($string)
-	{
-		$this->status = trim($string);
 	}
 
 	//----------------------------------------------------------------

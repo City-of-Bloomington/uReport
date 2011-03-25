@@ -23,6 +23,7 @@ catch (Exception $e) {
 
 if (isset($_POST['resolution_id'])) {
 	$ticket->setResolution_id($_POST['resolution_id']);
+	$ticket->setStatus='closed';
 
 	// add a record to ticket history
 	$history = new TicketHistory();
@@ -31,10 +32,6 @@ if (isset($_POST['resolution_id'])) {
 	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
 	$history->setNotes($_POST['notes']);
-
-	if ($history->getStatus()) {
-		$ticket->setStatus($history->getStatus());
-	}
 
 	try {
 		$ticket->save();

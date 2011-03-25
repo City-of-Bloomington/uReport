@@ -22,7 +22,6 @@
 				<th>Action</th>
 				<th>Description</th>
 				<th>Form Label</th>
-				<th>Status</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,13 +41,11 @@
 				$name = View::escape($action->getName());
 				$description = View::escape($action->getDescription());
 				$formLabel = View::escape($action->getFormLabel());
-				$status = View::escape($action->getStatus());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$description</td>
 					<td>$formLabel</td>
-					<td>$status</td>
 				</tr>
 				";
 			}

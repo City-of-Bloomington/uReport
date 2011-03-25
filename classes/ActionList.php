@@ -17,7 +17,7 @@
  */
 class ActionList extends ZendDbResultIterator
 {
-	private $columns = array('type','name','description','formLabel','status');
+	private $columns = array('type','name','description','formLabel');
 
 	/**
 	 * Creates a basic select statement for the collection.

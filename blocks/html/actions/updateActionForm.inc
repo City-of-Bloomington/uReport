@@ -9,7 +9,6 @@ $title = $this->action->getId() ? 'Edit Action' : 'Add Action';
 $name = View::escape($this->action->getName());
 $description = View::escape($this->action->getDescription());
 $formLabel = View::escape($this->action->getFormLabel());
-$status = View::escape($this->action->getStatus());
 ?>
 <div class="updateActionForm">
 	<h1><?php echo $title; ?></h1>
@@ -40,8 +39,6 @@ $status = View::escape($this->action->getStatus());
 					<td><input name="formLabel" id="formLabel" value="<?php echo $formLabel; ?>" /></td>
 				</tr>
 
-				<tr><td><label for="status" class="required">Status</label></td>
-					<td><input name="status" id="status" value="<?php echo $status; ?>" /></td>
 			</table>
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');

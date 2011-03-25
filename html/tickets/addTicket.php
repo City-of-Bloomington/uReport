@@ -97,8 +97,6 @@ if(isset($_POST['ticket'])){
 	$assignment->setEnteredByPerson($_SESSION['USER']->getPerson());
 	$assignment->setActionPerson_id($_POST['assignedPerson_id']);
 
-	$ticket->setStatus($assignment->getStatus());
-
 	// Validate Everything and save
 	try {
 		$ticket->validate();
