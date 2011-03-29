@@ -41,9 +41,7 @@ echo "
 
 <table>
 	<tr class=\"verified\">
-		<td>The address is verified with Master Address as a registered address.
-			Master Address will supply information about the address.
-		</td>
+		<td>The location is verified with Master Address.</td>
 	</tr>
 </table>
 </div>

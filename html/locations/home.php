@@ -12,14 +12,11 @@ if ($template->outputFormat=='html') {
 	$template->blocks['location-panel'][] = new Block('locations/findLocationForm.inc');
 }
 
-if (isset($_GET['location_query']) && $_GET['location_query']) {
+if (isset($_GET['location'])) {
 	$results = new Block(
 		'locations/findLocationResults.inc',
 		array(
-			'results'=>Location::search(
-				$_GET['location_query'],
-				isset($_GET['includeExternalResults'])
-			)
+			'results'=>Location::search($_GET['location'])
 		)
 	);
 	if (isset($_GET['return_url'])) {

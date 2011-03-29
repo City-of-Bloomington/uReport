@@ -40,7 +40,7 @@ if (isset($_GET['location']) && $_GET['location']) {
 		// See if this is a subunit
 		$url = new URL(MASTER_ADDRESS.'/addresses/parse.php');
 		$url->format = 'xml';
-		$url->address = $ticket->getLocation();
+		$url->address = $_GET['location'];
 		$parsed = new SimpleXMLElement($url,null,true);
 		if ($parsed->subunitIdentifier) {
 			$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
