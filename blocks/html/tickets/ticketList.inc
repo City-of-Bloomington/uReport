@@ -52,9 +52,19 @@
 					}
 					if (!$this->disableButtons && userIsAllowed('Issues')) {
 						echo '<td>';
+						$url = new URL(BASE_URL.'/issues/updateIssue.php');
+						$url->ticket_id = $ticket->getId();
+						if (isset($_GET['person_id'])) {
+							try {
+								$person = new Person($_GET['person_id']);
+								$url->person_id = $person->getId();
+							}
+							catch (Exception $e) {
+								// Just ignore invalid people
+							}
+						}
 						echo $this->template->formButton(
-							'Add Issue','button','add',null,
-							"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$ticket->getId()}';"
+							'Add Issue','button','add',null,"document.location.href='$url';"
 						);
 						echo '</td>';
 					}
