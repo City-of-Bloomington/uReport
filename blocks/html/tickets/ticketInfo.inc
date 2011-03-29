@@ -18,7 +18,6 @@ if ($this->ticket->getResolution()) {
 
 $assignButton = '';
 $referralButton = '';
-$closeTicketButton = '';
 $editStatusButton = '';
 
 if (!$this->disableButtons && userIsAllowed('Tickets')) {
@@ -41,12 +40,6 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 			BASE_URL."/people?return_url=$return_url",
 			'edit'
 		);
-
-		$closeTicketButton = $this->template->linkButton(
-			'Close Ticket',
-			BASE_URL.'/tickets/closeTicket.php?ticket_id='.$this->ticket->getId(),
-			'delete'
-		);
 	}
 }
 
@@ -62,7 +55,7 @@ echo "
 		</tr>
 		<tr><th>Status</th>
 			<td>$status</td>
-			<td>$editStatusButton $closeTicketButton</td>
+			<td>$editStatusButton</td>
 		</tr>
 		<tr><th>Assigned To:</th>
 			<td>$assigned</td>

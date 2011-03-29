@@ -23,7 +23,6 @@
 									echo "<option $selected>$status</option>";
 								}
 							?>
-							<option>closed</option>
 						</select>
 					</td>
 				</tr>

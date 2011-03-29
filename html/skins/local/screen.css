@@ -58,7 +58,12 @@ tbody th { text-align:right; }
 #location-panel .locationResidents		{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .ticketList 			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-.closeTicketForm, .assignTicketForm, .actionForm, .referTicketForm { padding-left:10px; overflow:auto; }
+
+#ticket-panel .closeTicketForm, #ticket-panel .assignTicketForm,
+#ticket-panel .actionForm, #ticket-panel .referTicketForm,
+#ticket-panel .changeStatusForm {
+	margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;
+}
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }

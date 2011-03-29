@@ -61,6 +61,12 @@ $template->blocks['ticket-panel'][] = new Block(
 	'tickets/changeStatusForm.inc',
 	array('ticket'=>$ticket)
 );
+if ($ticket->getStatus() != 'closed') {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/closeTicketForm.inc',
+		array('ticket'=>$ticket)
+	);
+}
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
 	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
