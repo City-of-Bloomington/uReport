@@ -12,6 +12,7 @@ class Issue
 	private $issueType_id;
 	private $reportedByPerson_id;
 	private $contactMethod_id;
+	private $responseMethod_id;
 	private $enteredByPerson_id;
 	private $notes;
 	private $case_number;
@@ -20,6 +21,7 @@ class Issue
 	private $issueType;
 	private $reportedByPerson;
 	private $contactMethod;
+	private $responseMethod;
 	private $enteredByPerson;
 
 	private $categories = array();
@@ -116,6 +118,7 @@ class Issue
 		$data['issueType_id'] = $this->issueType_id;
 		$data['reportedByPerson_id'] = $this->reportedByPerson_id ? $this->reportedByPerson_id : null;
 		$data['contactMethod_id'] = $this->contactMethod_id ? $this->contactMethod_id : null;
+		$data['responseMethod_id'] = $this->responseMethod_id ? $this->responseMethod_id : null;
 		$data['enteredByPerson_id'] = $this->enteredByPerson_id;
 		$data['notes'] = $this->notes ? $this->notes : null;
 		$data['case_number'] = $this->case_number ? $this->case_number : null;
@@ -257,6 +260,28 @@ class Issue
 				$this->contactMethod = new ContactMethod($this->contactMethod_id);
 			}
 			return $this->contactMethod;
+		}
+		return null;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getResponseMethod_id()
+	{
+		return $this->responseMethod_id;
+	}
+
+	/**
+	 * @return ContactMethod
+	 */
+	public function getResponseMethod()
+	{
+		if ($this->responseMethod_id) {
+			if (!$this->responseMethod) {
+				$this->responseMethod = new ContactMethod($this->responseMethod_id);
+			}
+			return $this->responseMethod;
 		}
 		return null;
 	}
@@ -413,6 +438,33 @@ class Issue
 		else {
 			$this->contactMethod = null;
 			$this->contactMethod_id = null;
+		}
+	}
+
+	/**
+	 * @param int $int
+	 */
+	public function setResponseMethod_id($int)
+	{
+		$this->responseMethod = new ContactMethod($int);
+		$this->responseMethod_id = $int;
+	}
+
+	/**
+	 * @param string|ContactMethod $responseMethod
+	 */
+	public function setResponseMethod($responseMethod)
+	{
+		if ($responseMethod) {
+			if (!$responseMethod instanceof ContactMethod) {
+				$responseMethod = new ContactMethod($responseMethod);
+			}
+			$this->responseMethod_id = $responseMethod->getId();
+			$this->responseMethod = $responseMethod;
+		}
+		else {
+			$this->responseMethod = null;
+			$this->responseMethod_id = null;
 		}
 	}
 

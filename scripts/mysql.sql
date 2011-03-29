@@ -121,6 +121,7 @@ create table issues (
 	issueType_id int unsigned not null,
 	reportedByPerson_id int unsigned,
 	contactMethod_id int unsigned,
+	responseMethod_id int unsigned,
 	enteredByPerson_id int unsigned,
 	notes text,
 	case_number varchar(10),
@@ -128,6 +129,7 @@ create table issues (
 	foreign key (issueType_id) references issueTypes(id),
 	foreign key (reportedByPerson_id) references people(id),
 	foreign key (contactMethod_id) references contactMethods(id),
+	foreign key (responseMethod_id) references contactMethods(id),
 	foreign key (enteredByPerson_id) references people(id)
 );
 

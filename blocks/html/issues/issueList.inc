@@ -60,6 +60,7 @@ echo "
 
 		$type = View::escape($issue->getIssueType());
 		$contactMethod = View::escape($issue->getContactMethod());
+		$responseMethod = View::escape($issue->getResponseMethod());
 		$caseNumber = View::escape($issue->getCase_number());
 		echo "
 		<h2><span class=\"date\">{$issue->getDate()}</span>
@@ -72,7 +73,8 @@ echo "
 				<tr><th>Created by</th>
 					<th>Categories</th>
 					<th>Reported By</th>
-					<th>Contacted By</th>
+					<th>Contacted Via</th>
+					<th>Respond Via</th>
 					<th>Case #</th>
 		";
 					if (!$this->disableComments) {
@@ -97,6 +99,7 @@ echo "
 					</td>
 					<td>$reportedBy</td>
 					<td>$contactMethod</td>
+					<td>$responseMethod</td>
 					<td>$caseNumber</td>
 		";
 					if (!$this->disableComments) {

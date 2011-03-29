@@ -59,6 +59,23 @@
 		</td>
 	</tr>
 
+	<tr><td><label for="issue-responseMethod_id">Response Method</label></td>
+		<td><select name="issue[responseMethod_id]" id="issue-responseMethod_id">
+				<option></option>
+				<?php
+					// Use the same drop down as the contact method
+					foreach ($list as $method) {
+						$name = View::escape($method);
+						$selected = $this->issue->getResponseMethod_id()==$method->getId()
+							? 'selected="selected"'
+							: '';
+						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
+					}
+				?>
+			</select>
+		</td>
+	</tr>
+
 	<tr><td><label for="issue-categories">Categories</label></td>
 		<td><select name="issue[categories][]" id="issue-categories" multiple="true" size="5">
 				<?php

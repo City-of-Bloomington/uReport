@@ -74,7 +74,9 @@ if(isset($_POST['ticket'])){
 
 	// Create the issue
 	$fields = array(
-		'issueType_id','reportedByPerson_id','contactMethod_id','case_number','notes'
+		'issueType_id','reportedByPerson_id',
+		'contactMethod_id','responseMethod_id',
+		'case_number','notes'
 	);
 	foreach ($fields as $field) {
 		$set = 'set'.ucfirst($field);

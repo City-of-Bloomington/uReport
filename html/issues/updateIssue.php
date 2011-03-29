@@ -69,7 +69,9 @@ if (isset($_POST['issue'])) {
 		$issue->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
 	}
 	$fields = array(
-		'issueType_id','reportedByPerson_id','contactMethod_id','case_number','notes'
+		'issueType_id','reportedByPerson_id',
+		'contactMethod_id','responseMethod_id',
+		'case_number','notes'
 	);
 	foreach ($fields as $field) {
 		$set = 'set'.ucfirst($field);
