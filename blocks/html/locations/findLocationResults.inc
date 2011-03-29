@@ -35,6 +35,11 @@ foreach ($this->results as $location=>$street_address_id) {
 	</tr>
 	";
 }
+if (isset($_GET['location']['text']) && $this->return_url) {
+	$url->location = $_GET['location']['text'];
+	$location = View::escape($_GET['location']['text']);
+	echo "<tr><td><a href=\"$url\">$location</a></td><td></td></tr>";
+}
 echo "
 	</tbody>
 </table>
