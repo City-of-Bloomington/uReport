@@ -24,21 +24,21 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	$editStatusButton = $this->template->linkButton(
 		'Edit Status',
 		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
-		'edit'
+		'edit','icon'
 	);
 
 	if ($this->ticket->getStatus()!='closed') {
 		$assignButton = $this->template->linkButton(
 			'Assign',
 			BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
-			'edit'
+			'edit','icon'
 		);
 
 		$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
 		$referralButton = $this->template->linkButton(
 			'Refer',
 			BASE_URL."/people?return_url=$return_url",
-			'edit'
+			'edit','icon'
 		);
 	}
 }

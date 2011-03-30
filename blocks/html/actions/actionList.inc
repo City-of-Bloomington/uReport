@@ -10,7 +10,7 @@
 	<h1><?php
 			if (userIsAllowed('Actions')) {
 				echo $this->template->linkButton(
-					'Add',BASE_URL.'/actions/updateAction.php','add'
+					'Add',BASE_URL.'/actions/updateAction.php','add','icon'
 				);
 			}
 		?>
