@@ -47,5 +47,5 @@
 		</td>
 	</tr>
 </table>
-<div><label for="notes">Comment about the assignment</label></div>
+<div><label for="notes">Note to the assignee</label></div>
 <div><textarea name="notes" id="notes" rows="3" cols="50"></textarea></div>
