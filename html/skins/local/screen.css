@@ -48,14 +48,14 @@ tbody th { text-align:right; }
 #action-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 
 /* Blocks we want to show up in the left column of a Panel */
-#ticket-panel .ticketInfo			{ width:290px; float:left; border-right:1px solid #cccccc; }
+#ticket-panel .ticketInfo			{ width:290px; float:left; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
+#location-panel .locationResidents		{ }
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-#location-panel .locationResidents		{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .ticketList 			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 

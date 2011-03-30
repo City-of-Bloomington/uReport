@@ -28,9 +28,6 @@ if ($this->location) {
 		</ul>
 		";
 	}
-	echo "
-	</div>
-	";
 
 	$constituents = new PersonList(array('address'=>$this->location));
 	if (count($constituents)) {
@@ -50,3 +47,7 @@ if ($this->location) {
 		";
 	}
 }
+
+echo "
+	</div>
+	";
