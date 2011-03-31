@@ -7,12 +7,6 @@
  */
 // Make sure we have the location in the system
 $ticketList = new TicketList(array('location'=>$_GET['location']));
-if (!count($ticketList)) {
-	$url = new URL(BASE_URL.'/locations');
-	$url->location_query = $_GET['location'];
-	header("Location: $url");
-	exit();
-}
 
 $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(

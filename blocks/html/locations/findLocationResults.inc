@@ -16,37 +16,39 @@ echo "
 	</thead>
 	<tbody>
 ";
-$url = isset($this->return_url)
-	? new URL($this->return_url)
-	: new URL(BASE_URL.'/locations/viewLocation.php');
-foreach ($this->results as $location=>$street_address_id) {
-	$url->location = $location;
+	$url = isset($this->return_url)
+		? new URL($this->return_url)
+		: new URL(BASE_URL.'/locations/viewLocation.php');
 
-	$tickets = new TicketList(array('location'=>$location));
-	$c = count($tickets);
-	$c = $c==0 ? '' : $c;
+	foreach ($this->results as $location=>$flag) {
+		$url->location = $location;
 
-	$location = View::escape($location);
-	$class = $street_address_id ? 'class="verified"' : '';
-	echo "
-	<tr $class>
-		<td><a href=\"$url\">$location</a></td>
-		<td>$c</td>
-	</tr>
-	";
-}
-if (isset($_GET['location']['text']) && $this->return_url) {
-	$url->location = $_GET['location']['text'];
-	$location = View::escape($_GET['location']['text']);
-	echo "<tr><td><a href=\"$url\">$location</a></td><td></td></tr>";
-}
+		$tickets = new TicketList(array('location'=>$location));
+		$c = count($tickets);
+		$c = $c==0 ? '' : $c;
+
+		$location = View::escape($location);
+		$class = $flag ? 'class="verified"' : '';
+		echo "
+		<tr $class>
+			<td><a href=\"$url\">$location</a></td>
+			<td>$c</td>
+		</tr>
+		";
+	}
+
+	if (isset($_GET['location']['text']) && $this->return_url) {
+		$url->location = $_GET['location']['text'];
+		$location = View::escape($_GET['location']['text']);
+		echo "<tr><td><a href=\"$url\">$location</a></td><td></td></tr>";
+	}
 echo "
 	</tbody>
 </table>
 
 <table>
 	<tr class=\"verified\">
-		<td>The location is verified with Master Address.</td>
+		<td>The location has been verified.</td>
 	</tr>
 </table>
 </div>

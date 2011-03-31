@@ -18,10 +18,8 @@
 class TicketList extends ZendDbResultIterator
 {
 	private $columns = array(
-		'enteredByPerson_id','assignedPerson_id','referredPerson_id',
-		'status','resolution_id',
-		'location','street_address_id','subunit_id',
-		'neighborhoodAssociation','township'
+		'enteredByPerson_id','assignedPerson_id','referredPerson_id','status','resolution_id',
+		'location','latitude','longitude','address_id','zip'
 	);
 
 	private $issueColumns = array(
@@ -115,7 +113,7 @@ class TicketList extends ZendDbResultIterator
 				$value = is_string($value) ? trim($value) : '';
 				if ($value) {
 					if (in_array($key,$this->columns)) {
-						if (in_array($key,array('person_id','street_address_id','subunit_id'))) {
+						if ($key == 'person_id') {
 							$this->select->where("t.$key=?",$value);
 						}
 						else {
@@ -227,10 +225,9 @@ class TicketList extends ZendDbResultIterator
 			'ticket-status'=>'Status',
 			'ticket-resolution'=>'Resolution',
 			'ticket-location'=>'Location',
-			'ticket-neighborhoodAssociation'=>'Neighborhood Association',
-			'ticket-township'=>'Township',
 			'ticket-latitude'=>'Latitude',
 			'ticket-longitude'=>'Longitude',
+			'ticket-zip'=>'Zip',
 			'issue-date'=>'Issue Date',
 			'issue-issueType'=>'Type',
 			'issue-reportedByPerson'=>'Constituent',

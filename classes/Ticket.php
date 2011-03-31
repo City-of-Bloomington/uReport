@@ -14,12 +14,12 @@ class Ticket
 	private $status;           // open, closed,
 	private $resolution_id;
 	private $location;
-	private $street_address_id;
-	private $subunit_id;
-	private $neighborhoodAssociation;
-	private $township;
 	private $latitude;
 	private $longitude;
+	private $address_id;
+	private $zip;
+
+	private $addressServiceCache = array();
 
 	private $enteredByPerson;
 	private $assignedPerson;
@@ -63,6 +63,8 @@ class Ticket
 			else {
 				throw new Exception('tickets/unknownTicket');
 			}
+
+			$this->addressServiceCache = AddressService::getTicketData($this);
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
@@ -107,12 +109,10 @@ class Ticket
 		$data['status'] = $this->status;
 		$data['resolution_id'] = $this->resolution_id ? $this->resolution_id : null;
 		$data['location'] = $this->location ? $this->location : null;
-		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
-		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
-		$data['neighborhoodAssociation'] = $this->neighborhoodAssociation ? $this->neighborhoodAssociation : null;
-		$data['township'] = $this->township ? $this->township : null;
 		$data['latitude'] = $this->latitude ? $this->latitude : null;
 		$data['longitude'] = $this->longitude ? $this->longitude : null;
+		$data['address_id'] = $this->address_id ? $this->address_id : null;
+		$data['zip'] = $this->zip ? $this->zip : null;
 
 		if ($this->id) {
 			$this->update($data);
@@ -120,6 +120,8 @@ class Ticket
 		else {
 			$this->insert($data);
 		}
+
+		AddressService::saveTicketData($this->addressServiceCache,$this);
 	}
 
 	private function update($data)
@@ -138,7 +140,6 @@ class Ticket
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
 	 * @return int
 	 */
@@ -271,38 +272,6 @@ class Ticket
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getStreet_address_id()
-	{
-		return $this->street_address_id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getSubunit_id()
-	{
-		return $this->subunit_id;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getNeighborhoodAssociation()
-	{
-		return $this->neighborhoodAssociation;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTownship()
-	{
-		return $this->township;
-	}
-
-	/**
 	 * @return float
 	 */
 	public function getLatitude()
@@ -318,10 +287,33 @@ class Ticket
 		return $this->longitude;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getAddress_id()
+	{
+		return $this->address_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getZip()
+	{
+		return $this->zip;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAddressServiceCache()
+	{
+		return $this->addressServiceCache;
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * Sets the date
 	 *
@@ -449,38 +441,6 @@ class Ticket
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setStreet_address_id($int)
-	{
-		$this->street_address_id = (int)$int;
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setSubunit_id($int)
-	{
-		$this->subunit_id = (int)$int;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setNeighborhoodAssociation($string)
-	{
-		$this->neighborhoodAssociation = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setTownship($string)
-	{
-		$this->township = trim($string);
-	}
-
-	/**
 	 * @param float $float
 	 */
 	public function setLatitude($float)
@@ -494,6 +454,44 @@ class Ticket
 	public function setLongitude($float)
 	{
 		$this->longitude = (float)$float;
+	}
+
+	/**
+	 * @param int $id
+	 */
+	public function setAddress_id($id)
+	{
+		$this->address_id = (int)$id;
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setZip($string)
+	{
+		$this->zip = trim($string);
+	}
+
+	/**
+	 * Populates ticket fields from the data passed in
+	 *
+	 * Data fields that have the same name as Ticket properties will
+	 * update the appropriate property.  These fields will be removed from the
+	 * cache, so we only store any piece of data in one, an only one place.
+	 *
+	 * @param array $data
+	 */
+	public function setAddressServiceCache($data)
+	{
+		$locationFields = array('location','address_id','zip','latitude','longitude');
+		foreach ($data as $key=>$value) {
+			if (in_array($key,$locationFields)) {
+				$set = 'set'.ucfirst($key);
+				$this->$set($value);
+				unset($data[$key]);
+			}
+		}
+		$this->addressServiceCache = $data;
 	}
 
 	//----------------------------------------------------------------
@@ -545,6 +543,7 @@ class Ticket
 			$zend_db = Database::getConnection();
 			$zend_db->update('issues',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
 			$zend_db->update('ticketHistory',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
+			$zend_db->delete('addressServiceCache',array('ticket_id'=>$ticket->getId()));
 			$zend_db->delete('tickets','id='.$ticket->getId());
 		}
 	}

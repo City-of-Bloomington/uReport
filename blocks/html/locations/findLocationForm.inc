@@ -18,19 +18,7 @@ $subunit_identifier = isset($_GET['location']['subunit_identifier'])
 	<h1>Find a Location</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/locations">
 		<fieldset><legend>Find a specific address</legend>
-			<table>
-				<tr><td><label for="location-address">Address</label></td>
-					<td><label for="location-subunit_identifier">Subunit #</label></td>
-				</tr>
-				<tr><td><input name="location[address]" id="location-address"
-							value="<?php echo $address; ?>" />
-					</td>
-					<td><input name="location[subunit_identifier]" id="location-subunit_identifier"
-							size="3" maxlength="3"
-							value="<?php echo $subunit_identifier; ?>" />
-					</td>
-				</tr>
-			</table>
+			<input name="location[address]" id="location-address" value="<?php echo $address; ?>" />
 			<?php
 				if ($return_url) {
 					echo "<input type=\"hidden\" name=\"return_url\" value=\"$return_url\" />";

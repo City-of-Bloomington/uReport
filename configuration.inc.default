@@ -130,9 +130,9 @@ if (isset($_SESSION['USER'])) {
 }
 
 /**
- * Addresses are validated against a Master Address web service
+ * Addresses can be validated against a master address web service
  */
-define('MASTER_ADDRESS','http://localhost/master_address');
+define('ADDRESS_SERVICE','http://localhost/master_address');
 
 /**
  * Date format

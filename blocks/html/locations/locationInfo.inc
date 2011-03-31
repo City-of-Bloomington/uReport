@@ -8,25 +8,25 @@
 if ($this->location) {
 	$url = new URL(BASE_URL.'/locations/viewLocation.php?location='.$this->location);
 	$location = View::escape($this->location);
-	$neighborhoods = Location::getNeighborhoodAssociations($this->location);
 
 	echo "
 	<div class=\"locationInfo\">
 		<h1><a href=\"$url\">$location</a></h1>
 	";
-
-	if (count($neighborhoods)) {
-		echo "
-		<h2>Neighborhood Associations</h2>
-		<ul>
-		";
-			foreach ($neighborhoods as $neighborhood) {
-				$neighborhood = View::escape($neighborhood);
-				echo "<li>$neighborhood</li>";
+	if (defined('ADDRESS_SERVICE')) {
+		$data = AddressService::getLocationData($this->location);
+		if (count($data)) {
+			echo '<table>';
+			foreach ($data as $key=>$value) {
+				$value = View::escape(trim($value));
+				if (array_key_exists($key,AddressService::$customFieldDescriptions)
+					&& $value) {
+					$label = AddressService::$customFieldDescriptions[$key];
+					echo "<tr><th>$label</th><td>$value</td></tr>";
+				}
 			}
-		echo "
-		</ul>
-		";
+			echo '</table>';
+		}
 	}
 
 	$constituents = new PersonList(array('address'=>$this->location));

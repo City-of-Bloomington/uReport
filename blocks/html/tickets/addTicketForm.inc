@@ -18,52 +18,39 @@
 							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
 					</td>
 				</tr>
-
-				<tr><td><label for="ticket-street_address_id">street_address_id</label></td>
-					<td><input name="ticket[street_address_id]" id="ticket-street_address_id" value="<?php echo $this->ticket->getStreet_address_id(); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="ticket-subunit_id">subunit_id</label></td>
-					<td><input name="ticket[subunit_id]" id="ticket-subunit_id" value="<?php echo $this->ticket->getSubunit_id(); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="ticket-neighborhoodAssociation">neighborhoodAssociation</label></td>
-					<td><input name="ticket[neighborhoodAssociation]" id="ticket-neighborhoodAssociation"
-							value="<?php echo View::escape($this->ticket->getNeighborhoodAssociation()); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="ticket-township">township</label></td>
-					<td><input name="ticket[township]" id="ticket-township"
-							value="<?php echo View::escape($this->ticket->getTownship()); ?>" />
-					</td>
-				</tr>
-
 				<tr><td><label for="ticket-latitude">latitude</label></td>
-					<td><input name="ticket[latitude]" id="ticket-latitude" value="<?php echo $this->ticket->getLatitude(); ?>" />
+					<td><input name="ticket[latitude]" id="ticket-latitude"
+							value="<?php echo $this->ticket->getLatitude(); ?>" />
 					</td>
 				</tr>
-
 				<tr><td><label for="ticket-longitude">longitude</label></td>
-					<td><input name="ticket[longitude]" id="ticket-longitude" value="<?php echo $this->ticket->getLongitude(); ?>" />
+					<td><input name="ticket[longitude]" id="ticket-longitude"
+							value="<?php echo $this->ticket->getLongitude(); ?>" />
 					</td>
 				</tr>
-
+				<tr><td><label for="ticket-address_id">address_id</label></td>
+					<td><input name="ticket[address_id]" id="ticket-address_id"
+							value="<?php echo $this->ticket->getAddress_id(); ?>" />
+					</td>
+				</tr>
+				<tr><td><label for="ticket-zip">zip</label></td>
+					<td><input name="ticket[zip]" id="ticket-zip"
+							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
+					</td>
+				</tr>
 			</table>
 		</fieldset>
 		<fieldset class="issueFields">
 			<legend>Issue Information</legend>
-		<?php
-			include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
-		?>
+			<?php
+				include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
+			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
 			<legend>Assignment Information</legend>
-		<?php
-			include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
-		?>
+			<?php
+				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
+			?>
 		</fieldset>
 
 

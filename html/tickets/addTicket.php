@@ -16,40 +16,7 @@ $issue = new Issue();
 // If the user has chosen a location, they'll pass it in here
 if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setLocation($_GET['location']);
-
-	// Look up the rest of the data in Master Address
-	$url = new URL(MASTER_ADDRESS.'/home.php');
-	$url->queryType = 'address';
-	$url->format = 'xml';
-	$url->query = $ticket->getLocation();
-
-	$xml = new SimpleXMLElement($url,null,true);
-	if (count($xml)==1) {
-		$ticket->setLocation($xml->address->streetAddress);
-		$ticket->setStreet_address_id($xml->address->id);
-		$ticket->setTownship($xml->address->township);
-		$ticket->setLatitude($xml->address->latitude);
-		$ticket->setLongitude($xml->address->longitude);
-
-		// See if there's a neighborhood association
-		$neighborhood = $xml->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
-		if ($neighborhood) {
-			$ticket->setNeighborhoodAssociation($neighborhood[0]);
-		}
-
-		// See if this is a subunit
-		$url = new URL(MASTER_ADDRESS.'/addresses/parse.php');
-		$url->format = 'xml';
-		$url->address = $_GET['location'];
-		$parsed = new SimpleXMLElement($url,null,true);
-		if ($parsed->subunitIdentifier) {
-			$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
-			if ($subunit) {
-				$ticket->setSubunit_id($subunit[0]['id']);
-				$ticket->setLocation($ticket->getLocation()." {$subunit[0]->type} {$subunit[0]->identifier}");
-			}
-		}
-	}
+	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
 }
 if (isset($_REQUEST['person_id'])) {
 	$issue->setReportedByPerson_id($_REQUEST['person_id']);
@@ -58,9 +25,7 @@ if (isset($_REQUEST['person_id'])) {
 if(isset($_POST['ticket'])){
 	// Create the ticket
 	$fields = array(
-		'location',
-		'street_address_id','subunit_id','neighborhoodAssociation','township',
-		'latitude','longitude'
+		'location','latitude','longitude','address_id','zip'
 	);
 	foreach ($fields as $field) {
 		if (isset($_POST['ticket'][$field])) {
@@ -68,6 +33,8 @@ if(isset($_POST['ticket'])){
 			$ticket->$set($_POST['ticket'][$field]);
 		}
 	}
+	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
+
 	$ticket->setEnteredDate(new Date());
 	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
 	$ticket->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());

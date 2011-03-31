@@ -13,9 +13,7 @@ if (!userIsAllowed('Tickets')) {
 $template = new Template();
 $template->blocks[] = new Block('tickets/searchForm.inc');
 $fields = array(
-	'person_id','location',
-	'street_address_id','subunit_id',
-	'neighborhoodAssociation','township',
+	'enteredByPerson_id','zip',
 	'issueType_id','category_id','contactMethod_id',
 	'status','action_id','actionType_id','actionPerson_id'
 );

@@ -87,21 +87,30 @@ create table tickets (
 	enteredByPerson_id int unsigned,
 	assignedPerson_id int unsigned,
 	referredPerson_id int unsigned,
-	location varchar(128),
 	status varchar(50),
 	resolution_id int unsigned,
-	-- The rest of these fields are used as cache
-	-- This information will ultimately come from other applications webservices
-	street_address_id int unsigned,
-	subunit_id int unsigned,
-	neighborhoodAssociation varchar(128),
-	township varchar(128),
+	location varchar(128),
 	latitude decimal(8,6),
 	longitude decimal(8,6),
+	address_id int unsigned,
+	zip varchar(10),
 	foreign key (enteredByPerson_id) references people(id),
 	foreign key (assignedPerson_id) references people(id),
 	foreign key (referredPerson_id) references people(id),
 	foreign key (resolution_id) references resolutions(id)
+);
+
+-- This information will ultimately come from other applications webservices
+-- Different organizations will need to customize this table accordingly
+create table addressServiceCache (
+	ticket_id int unsigned not null primary key,
+	subunit_id int unsigned,
+	city varchar(128),
+	state char(2),
+	jurisdiction varchar(128),
+	neighborhoodAssociation varchar(128),
+	township varchar(128),
+	foreign key (ticket_id) references tickets(id)
 );
 
 create table issueTypes (

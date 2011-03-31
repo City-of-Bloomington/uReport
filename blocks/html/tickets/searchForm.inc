@@ -64,39 +64,9 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="location">Location</label></td>
-					<td><input name="location" id="location"
-							value="<?php echo isset($_GET['location']) ? View::escape($_GET['location']) : ''; ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="neighborhoodAssociation">Neighborhood Assocation</label></td>
-					<td><select name="neighborhoodAssociation" id="neighborhoodAssociation">
-							<option></option>
-							<?php
-								foreach (Location::getNeighborhoodAssociations() as $neighborhoodAssociation) {
-									$selected = (isset($_GET['neighborhoodAssociation']) && $_GET['neighborhoodAssociation']==$neighborhoodAssociation)
-										? 'selected="selected"'
-										: '';
-									$neighborhoodAssociation = View::escape($neighborhoodAssociation);
-									echo "<option $selected>$neighborhoodAssociation</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
-				<tr><td><label for="township">Township</label></td>
-					<td><select name="township" id="township">
-							<option></option>
-							<?php
-								foreach (Location::getTownships() as $township) {
-									$selected = (isset($_GET['township']) && $_GET['township']==$township)
-										? 'selected="selected"'
-										: '';
-									$township = View::escape($township);
-									echo "<option $selected>$township</option>";
-								}
-							?>
-						</select>
+				<tr><td><label for="zip">Zip</label></td>
+					<td><input name="zip" id="zip"
+							value="<?php echo isset($_GET['zip']) ? View::escape($_GET['zip']) : ''; ?>" />
 					</td>
 				</tr>
 			</table>
