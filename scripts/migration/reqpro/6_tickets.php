@@ -24,11 +24,9 @@ $townships = array(
 
 $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
-$sql = "select c.*, t.comp_desc, a.name as neighborhood,
-			i.username,i.needed,i.existing
+$sql = "select c.*, t.comp_desc, i.username, i.needed, i.existing
 		from ce_eng_comp c
 		left join c_types t on c.c_type=t.c_type1
-		left join comp_associations a on c.assoc_id=a.id
 		left join inspectors i on c.inspector=i.inspector";
 $result = $pdo->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -75,56 +73,19 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 	}
 
-	// Township
-	if (isset($row['township']) && array_key_exists($row['township'],$townships)) {
-		$ticket->setTownship($townships[$row['township']]);
-	}
-
-	// Neighborhood Association
-	if (isset($row['neighborhood']) && $row['neighborhood']
-		&& $row['neighborhood']!='Unspecified') {
-		$ticket->setNeighborhoodAssociation($row['neighborhood']);
-	}
-
 	// Check the location against Master Address
 	// Master Address data should overwrite information from ReqPro
 	$row['street_num'] = preg_replace('/[^a-zA-Z0-9\-\&\s\'\/]/','',$row['street_num']);
 	if ($row['street_num']) {
-		$url = new URL(MASTER_ADDRESS.'/home.php');
-		$url->queryType = 'address';
-		$url->format = 'xml';
-
-		$url->query = preg_match('/[a-zA-Z]/',$row['street_num'])
+		$query = preg_match('/[a-zA-Z]/',$row['street_num'])
 			? $row['street_num']
 			: "$row[street_num] $row[street_dir] $row[street_name] $row[street_type] $row[sud_type] $row[sud_num]";
+		$data = AddressService::getLocationData($query);
 
-		echo $url->query.' ==> ';
-		$xml = new SimpleXMLElement($url,null,true);
 
-		if (count($xml)==1) {
-			// Set the address
-			$location = $xml->address->streetAddress;
-
-			// See if there's a subunit
-			$ticket->setStreet_address_id($xml->address->id);
-			if ($row['sud_num']) {
-				$subunit = $xml->xpath("//subunit[identifier='$row[sud_num]']");
-				if ($subunit) {
-					$ticket->setSubunit_id($subunit[0]['id']);
-					$location.= " {$subunit[0]->type} {$subunit[0]->identifier}";
-				}
-			}
-			$ticket->setLocation($location);
-
-			// See if there's a neighborhood association
-			$neighborhood = $xml->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
-			if ($neighborhood) {
-				$ticket->setNeighborhoodAssociation($neighborhood[0]);
-			}
-
-			$ticket->setTownship($xml->address->township);
-			$ticket->setLatitude($xml->address->latitude);
-			$ticket->setLongitude($xml->address->longitude);
+		echo $query.' ==> ';
+		if (count($data)) {
+			$ticket->setAddressServiceCache($data);
 		}
 		else {
 			if (is_numeric($row['street_num'])) {
