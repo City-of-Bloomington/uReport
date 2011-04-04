@@ -21,7 +21,7 @@ if ($this->location) {
 				$value = View::escape(trim($value));
 				if (array_key_exists($key,AddressService::$customFieldDescriptions)
 					&& $value) {
-					$label = AddressService::$customFieldDescriptions[$key];
+					$label = AddressService::$customFieldDescriptions[$key]['description'];
 					echo "<tr><th>$label</th><td>$value</td></tr>";
 				}
 			}
