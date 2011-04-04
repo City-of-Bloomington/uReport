@@ -65,10 +65,21 @@
 					</td>
 				</tr>
 				<tr><td><label for="zip">Zip</label></td>
-					<td><input name="zip" id="zip"
+					<td><input name="zip" id="zip" size="5"
 							value="<?php echo isset($_GET['zip']) ? View::escape($_GET['zip']) : ''; ?>" />
 					</td>
 				</tr>
+				<?php
+					foreach (AddressService::$customFieldDescriptions as $key=>$description) {
+						$value = isset($_GET[$key]) ? View::escape($_GET[$key]) : '';
+						echo "
+						<tr><td><label for=\"$key\">$description</label></td>
+							<td><input name=\"$key\" id=\"$key\" value=\"$value\" />
+							</td>
+						</tr>
+						";
+					}
+				?>
 			</table>
 		</fieldset>
 

@@ -30,6 +30,8 @@ class TicketList extends ZendDbResultIterator
 		'action_id','actionDate','actionPerson_id'
 	);
 
+	private $addressServiceCacheColumns;
+
 	/**
 	 * Creates a basic select statement for the collection.
 	 *
@@ -44,6 +46,8 @@ class TicketList extends ZendDbResultIterator
 	public function __construct($fields=null,$itemsPerPage=null,$currentPage=null)
 	{
 		parent::__construct($itemsPerPage,$currentPage);
+		$this->addressServiceCacheColumns = array_keys(AddressService::$customFieldDescriptions);
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -83,6 +87,9 @@ class TicketList extends ZendDbResultIterator
 					}
 					elseif (in_array($key,$this->historyColumns)) {
 						$this->select->where("h.$key=?",$value);
+					}
+					elseif (in_array($key,$this->addressServiceCacheColumns)) {
+						$this->select->where("a.$key=?",$value);
 					}
 					elseif ($key=='category_id') {
 						$this->select->where('c.category_id=?',$value);
@@ -127,6 +134,9 @@ class TicketList extends ZendDbResultIterator
 					elseif (in_array($key,$this->historyColumns)) {
 						$this->select->where("th.$key=?",$value);
 						$this->select->orWhere("ih.$key=?",$value);
+					}
+					elseif (in_array($key,$this->addressServiceCacheColumns)) {
+						$this->select->where("a.$key like ?","%$value%");
 					}
 					elseif ($key=='category_id') {
 						$this->select->where('c.category_id=?',$value);
@@ -184,6 +194,9 @@ class TicketList extends ZendDbResultIterator
 			$joins['i'] = array('table'=>'issues','condition'=>'t.id=i.ticket_id');
 			$joins['th'] = array('table'=>'ticketHistory','condition'=>'t.id=th.ticket_id');
 			$joins['ih'] = array('table'=>'issueHistory','condition'=>'i.id=ih.issue_id');
+		}
+		if (count(array_intersect(array_keys($fields),$this->addressServiceCacheColumns))) {
+			$joins['a'] = array('table'=>'addressServiceCache','condition'=>'t.id=a.ticket_id');
 		}
 
 		foreach ($joins as $key=>$join) {
