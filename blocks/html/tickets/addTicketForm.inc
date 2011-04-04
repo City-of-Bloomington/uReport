@@ -33,6 +33,16 @@
 							value="<?php echo $this->ticket->getAddress_id(); ?>" />
 					</td>
 				</tr>
+				<tr><td><label for="ticket-city">city</label></td>
+					<td><input name="ticket[city]" id="ticket-city"
+							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
+					</td>
+				</tr>
+				<tr><td><label for="ticket-state">state</label></td>
+					<td><input name="ticket[state]" id="ticket-state"
+							value="<?php echo View::escape($this->ticket->getState()); ?>" />
+					</td>
+				</tr>
 				<tr><td><label for="ticket-zip">zip</label></td>
 					<td><input name="ticket[zip]" id="ticket-zip"
 							value="<?php echo View::escape($this->ticket->getZip()); ?>" />

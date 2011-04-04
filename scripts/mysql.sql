@@ -93,6 +93,8 @@ create table tickets (
 	latitude decimal(8,6),
 	longitude decimal(8,6),
 	address_id int unsigned,
+	city varchar(128),
+	state char(2),
 	zip varchar(10),
 	foreign key (enteredByPerson_id) references people(id),
 	foreign key (assignedPerson_id) references people(id),
@@ -105,9 +107,6 @@ create table tickets (
 create table addressServiceCache (
 	ticket_id int unsigned not null primary key,
 	subunit_id int unsigned,
-	city varchar(128),
-	state char(2),
-	jurisdiction varchar(128),
 	neighborhoodAssociation varchar(128),
 	township varchar(128),
 	foreign key (ticket_id) references tickets(id)

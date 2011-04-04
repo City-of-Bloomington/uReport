@@ -7,9 +7,6 @@
 class AddressService
 {
 	public static $customFieldDescriptions = array(
-		'city'=>'City',
-		'state'=>'State',
-		'jurisdiction'=>'Jurisdiction',
 		'neighborhoodAssociation'=>'Neighborhood Association',
 		'township'=>'Township'
 	);
@@ -52,7 +49,6 @@ class AddressService
 				$data['zip'] = "{$xml->address->zip}";
 				$data['latitude'] = "{$xml->address->latitude}";
 				$data['longitude'] = "{$xml->address->longitude}";
-				$data['jurisdiction'] = "{$xml->address->jurisdiction}";
 				$data['township'] = "{$xml->address->township}";
 
 				// See if there's a neighborhood association
@@ -190,6 +186,20 @@ class AddressService
 				$data['ticket_id'] = $ticket->getId();
 				$zend_db->insert('addressServiceCache',$data);
 			}
+		}
+	}
+
+	/**
+	 * Returns the array of distinct values used for custom fields in the addressServiceCache
+	 *
+	 * @param string $fieldname
+	 * @return array
+	 */
+	public static function getDistinct($fieldname)
+	{
+		if (array_key_exists($fieldname,self::customFieldDescriptions)) {
+			$zend_db = Database::getConnection();
+			return $zend_db->fetchCol("select distinct $fieldname from addressServiceCache order by $fieldname");
 		}
 	}
 

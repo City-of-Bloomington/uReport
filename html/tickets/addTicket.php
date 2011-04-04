@@ -25,7 +25,7 @@ if (isset($_REQUEST['person_id'])) {
 if(isset($_POST['ticket'])){
 	// Create the ticket
 	$fields = array(
-		'location','latitude','longitude','address_id','zip'
+		'location','latitude','longitude','address_id','city','state','zip'
 	);
 	foreach ($fields as $field) {
 		if (isset($_POST['ticket'][$field])) {

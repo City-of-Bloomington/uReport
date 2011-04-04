@@ -17,6 +17,8 @@ class Ticket
 	private $latitude;
 	private $longitude;
 	private $address_id;
+	private $city;
+	private $state;
 	private $zip;
 
 	private $addressServiceCache = array();
@@ -112,6 +114,8 @@ class Ticket
 		$data['latitude'] = $this->latitude ? $this->latitude : null;
 		$data['longitude'] = $this->longitude ? $this->longitude : null;
 		$data['address_id'] = $this->address_id ? $this->address_id : null;
+		$data['city'] = $this->city ? $this->city : null;
+		$data['state'] = $this->state ? $this->state : null;
 		$data['zip'] = $this->zip ? $this->zip : null;
 
 		if ($this->id) {
@@ -298,6 +302,22 @@ class Ticket
 	/**
 	 * @return string
 	 */
+	public function getCity()
+	{
+		return $this->city;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getState()
+	{
+		return $this->state;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getZip()
 	{
 		return $this->zip;
@@ -467,6 +487,22 @@ class Ticket
 	/**
 	 * @param string $string
 	 */
+	public function setCity($string)
+	{
+		$this->city = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setState($string)
+	{
+		$this->state = trim($string);
+	}
+
+	/**
+	 * @param string $string
+	 */
 	public function setZip($string)
 	{
 		$this->zip = trim($string);
@@ -483,7 +519,9 @@ class Ticket
 	 */
 	public function setAddressServiceCache($data)
 	{
-		$locationFields = array('location','address_id','zip','latitude','longitude');
+		$locationFields = array(
+			'location','address_id','city','state','zip','latitude','longitude'
+		);
 		foreach ($data as $key=>$value) {
 			if (in_array($key,$locationFields)) {
 				$set = 'set'.ucfirst($key);
@@ -545,6 +583,20 @@ class Ticket
 			$zend_db->update('ticketHistory',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
 			$zend_db->delete('addressServiceCache',array('ticket_id'=>$ticket->getId()));
 			$zend_db->delete('tickets','id='.$ticket->getId());
+		}
+	}
+
+	/**
+	 * Returns the array of distinct values used for Tickets in the system
+	 *
+	 * @param string $fieldname
+	 * @return array
+	 */
+	public static function getDistinct($fieldname)
+	{
+		if (property_exists('ticket',$fieldname)) {
+			$zend_db = Database::getConnection();
+			return $zend_db->fetchCol("select distinct $fieldname from tickets order by $fieldname");
 		}
 	}
 }

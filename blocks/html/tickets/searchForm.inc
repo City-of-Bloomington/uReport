@@ -64,9 +64,50 @@
 						</select>
 					</td>
 				</tr>
+				<tr><td><label for="city">City</label></td>
+					<td><select name="city" id="city">
+							<option></option>
+							<?php
+								foreach (Ticket::getDistinct('city') as $city) {
+									$selected = (isset($_GET['city']) && $_GET['city']==$city)
+										? 'selected="selected"'
+										: '';
+									$city = View::escape($city);
+									echo "<option $selected>$city</option>";
+								}
+
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr><td><label for="state">State</label></td>
+					<td><select name="state" id="state">
+							<option></option>
+							<?php
+								foreach (Ticket::getDistinct('state') as $state) {
+									$selected = (isset($_GET['state']) && $_GET['state']==$state)
+										? 'selected="selected"'
+										: '';
+									$state = View::escape($state);
+									echo "<option $selected>$state</option>";
+								}
+							?>
+						</select>
+					</td>
+				</tr>
 				<tr><td><label for="zip">Zip</label></td>
-					<td><input name="zip" id="zip" size="5"
-							value="<?php echo isset($_GET['zip']) ? View::escape($_GET['zip']) : ''; ?>" />
+					<td><select name="zip" id="zip">
+							<option></option>
+							<?php
+								foreach (Ticket::getDistinct('zip') as $zip) {
+									$selected = (isset($_GET['zip']) && $_GET['state']==$zip)
+										? 'selected="selected"'
+										: '';
+									$zip = View::escape($zip);
+									echo "<option $selected>$zip</option>";
+								}
+							?>
+						</select>
 					</td>
 				</tr>
 				<?php
