@@ -111,11 +111,28 @@
 					</td>
 				</tr>
 				<?php
-					foreach (AddressService::$customFieldDescriptions as $key=>$description) {
-						$value = isset($_GET[$key]) ? View::escape($_GET[$key]) : '';
+					foreach (AddressService::$customFieldDescriptions as $key=>$config) {
 						echo "
-						<tr><td><label for=\"$key\">$description</label></td>
-							<td><input name=\"$key\" id=\"$key\" value=\"$value\" />
+						<tr><td><label for=\"$key\">$config[description]</label></td>
+							<td>
+						";
+							switch ($config['formElement']) {
+								case 'select':
+									echo "<select name=\"$key\" id=\"$key\"><option></option>";
+									foreach (AddressService::getDistinct($key) as $value) {
+										$selected = (isset($_GET[$key]) && $_GET[$key]==$value)
+											? 'selected="selected"'
+											: '';
+										echo "<option $selected>$value</option>";
+									}
+									echo "</select>";
+									break;
+
+								default:
+									$value = isset($_GET[$key]) ? View::escape($_GET[$key]) : '';
+									echo "<input name=\"$key\" id=\"$key\" value=\"$value\" />";
+							}
+						echo "
 							</td>
 						</tr>
 						";
