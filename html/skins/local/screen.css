@@ -85,13 +85,15 @@ tbody th { text-align:right; }
 .button { }
 .button a {
 	display:inline-block;
-	text-indent:-9999px; overflow:hidden;
+	overflow:hidden;
 	background-repeat:no-repeat;
-	vertical-align:middle;
+	margin:0 2px;
+	font:10pt;
+	font-weight:normal;
 }
-.button .add a { width:11px; height:10px; background:url('images/add.gif'); }
-.button .edit a { width:16px; height:16px; background:url('images/edit.png'); }
-.button .delete a { width:12px; height:12px; background:url('images/delete.gif'); }
+.button .add a {font:10pt; padding-left:12px; height:14px; background:url('images/add.gif') no-repeat; }
+.button .edit a { padding-left:18px;height:16px; background:url('images/edit.png') no-repeat; }
+.button .delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {

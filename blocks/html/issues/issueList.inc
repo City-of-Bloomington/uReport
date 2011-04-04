@@ -10,9 +10,8 @@
  */
 $addButton = '';
 if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
-	$addButton = $this->template->formButton(
-		'Add Issue','button','add',null,
-		"document.location.href='".BASE_URL."/issues/updateIssue.php?ticket_id={$this->ticket->getId()}';"
+	$addButton = $this->template->linkButton(
+		'Add Issue',BASE_URL."/issues/updateIssue.php?ticket_id={$this->ticket->getId()}';",'add',null,null
 	);
 }
 echo "
@@ -24,21 +23,13 @@ echo "
 		$editButton = '';
 		$responseButton = '';
 		if (!$this->disableButtons && userIsAllowed('Issues')) {
-			$editButton = $this->template->formButton(
-				'Edit Issue',
-				'button',
-				'edit',
-				null,
-				"document.location.href='".BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';"
+			$editButton = $this->template->linkButton(
+				'Edit Issue',BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';",'edit',null,null
 			);
 
 			if ($issue->getReportedByPerson_id()) {
-				$responseButton = $this->template->formButton(
-					'Add Response',
-					'button',
-					'add',
-					null,
-					"document.location.href='".BASE_URL."/issues/addResponse.php?issue_id={$issue->getId()}';"
+				$responseButton = $this->template->linkButton(
+					'Add Response',BASE_URL."/issues/addResponse.php?issue_id={$issue->getId()}';",'add',null,null
 				);
 			}
 		}
