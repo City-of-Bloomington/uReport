@@ -151,6 +151,7 @@ class Media
 		if ($this->id) {
 			// Clear out the database
 			$zend_db = Database::getConnection();
+			$zend_db->delete('issue_media','media_id='.$this->id);
 			$zend_db->delete('media','id='.$this->id);
 		}
 	}
@@ -407,5 +408,21 @@ class Media
 		}
 
 		return $string;
+	}
+
+	/**
+	 * @return Issue
+	 */
+	public function getIssue()
+	{
+		if ($this->id) {
+			$zend_db = Database::getConnection();
+
+			$issue_id = $zend_db->fetchOne(
+				'select issue_id from issue_media where media_id=?',
+				array($this->id)
+			);
+			return new Issue($issue_id);
+		}
 	}
 }

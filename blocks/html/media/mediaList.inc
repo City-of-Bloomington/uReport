@@ -15,12 +15,21 @@
 			<table>
 			";
 			foreach ($this->mediaList as $media) {
+				$deleteButton = '';
+				if (!$this->disableButtons) {
+					$deleteButton = $this->template->linkButton(
+						'Delete Attachment',
+						BASE_URL.'/media/delete.php?media_id='.$media->getId(),
+						'delete'
+					);
+				}
 				echo "
 				<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
 							{$media->getFilename()}
 						</a>
+						$deleteButton
 					</td>
-					<td></td>
+					<td>{$media->getUploaded()}</td>
 				</tr>
 				";
 			}
