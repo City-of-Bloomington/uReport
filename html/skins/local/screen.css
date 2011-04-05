@@ -102,6 +102,31 @@ tbody th { text-align:right; }
 	background:url('images/add.gif') no-repeat;
 }
 
+/* ICONS FOR MIME TYPES */
+.jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
+.png  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
+.gif  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
+.tiff { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
+.pdf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/pdf.png') no-repeat; }
+.doc  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/doc.png') no-repeat; }
+.xls  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/xls.png') no-repeat; }
+.rtf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
+.zip  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/zip.png') no-repeat; }
+.gz   { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/zip.png') no-repeat; }
+.txt  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
+.wmv  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/windowsMedia.png') no-repeat; }
+.mov  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/quicktime.png') no-repeat; }
+.rm   { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/real.png') no-repeat; }
+.ram  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/real.png') no-repeat; }
+.mp3  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/sound.png') no-repeat; }
+.mp4  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/video.png') no-repeat; }
+.wma  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/sound.png') no-repeat; }
+.tar  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/tar.png') no-repeat; }
+.dxf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
+.kml  { height:16px; padding: 0px 0px 10px 22px; background: url('images/mime/kml_feed_small.png') no-repeat; }
+.swf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/flash.gif') no-repeat; }
+
+
 .pageNavigation { margin:.5em; }
 .pageNavigation li { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }

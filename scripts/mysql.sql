@@ -210,4 +210,21 @@ create table issueHistory (
 	foreign key (contactMethod_id) references contactMethods(id)
 );
 
+create table media (
+	id int unsigned not null primary key auto_increment,
+	filename varchar(128) not null,
+	mime_type varchar(128) not null,
+	media_type varchar(24) not null,
+	uploaded timestamp not null default CURRENT_TIMESTAMP,
+	person_id int unsigned not null,
+	foreign key (person_id) references people(id)
+);
+
+create table issue_media (
+	issue_id int unsigned not null,
+	media_id int unsigned not null,
+	primary key (issue_id,media_id),
+	foreign key (issue_id) references issues(id),
+	foreign key (media_id) references media(id)
+);
 /*! set foreign_key_checks=1 */;

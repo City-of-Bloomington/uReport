@@ -576,4 +576,32 @@ class Issue
 	{
 		return new IssueHistoryList(array('issue_id'=>$this->id));
 	}
+
+	/**
+	 * @param Media $media
+	 */
+	public function attachMedia(Media $media)
+	{
+		$zend_db = Database::getConnection();
+		$zend_db->insert('issue_media',array('issue_id'=>$this->id,'media_id'=>$media->getId()));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getMedia()
+	{
+		$media = array();
+		if ($this->id) {
+			$zend_db = Database::getConnection();
+			$result = $zend_db->fetchCol(
+				'select media_id from issue_media where issue_id=?',
+				array($this->id)
+			);
+			foreach ($result as $media_id) {
+				$media[] = new Media($media_id);
+			}
+		}
+		return $media;
+	}
 }
