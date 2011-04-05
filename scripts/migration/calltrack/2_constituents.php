@@ -65,12 +65,11 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
 		if (!$person->getAddress()) {
 			$person->setAddress(ucwords(strtolower($row['address'])));
-			$person->setCity($row['city']);
-			$person->setState($row['state']);
-			$person->setZip($row['zip']);
+			$person->setCity(ucwords(strtolower($row['city'])));
+			$person->setState(substr(strtoupper($row['state']),0,2));
+			$person->setZip(substr(preg_replace('/[^0-9]/','',$row['zip']),0,5));
 		}
 	}
-
 
 	try {
 		$person->save();
