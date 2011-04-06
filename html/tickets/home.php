@@ -27,7 +27,6 @@ if (count(array_intersect($fields,array_keys($_GET)))) {
 			'ticketList'=>$ticketList,
 			'title'=>'Search Results',
 			'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
-			
 		)
 	);
 	$template->blocks['search-results'][] = new Block('pageNavigation.inc',array('list'=>$ticketList));

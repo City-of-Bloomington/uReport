@@ -11,20 +11,17 @@
 		include $dir.'/partials/banner.inc';
 		include $dir.'/partials/menubar.inc';
 	?>
-<div id="panel-container">
-	<div id="search-form">
-				<?php echo $this->includeBlocks('search-form'); ?>
+	<div id="panel-container">
+		<div id="search-form">
+			<?php echo $this->includeBlocks('search-form'); ?>
+		</div>
+		<div id="search-results">
+			<?php
+				include FRAMEWORK.'/errorMessages.php';
+				echo $this->includeBlocks('search-results');
+			?>
+		</div>
 	</div>
-	<div id="search-results">
-		<?php
-			include FRAMEWORK.'/errorMessages.php';
-		?>
-		
-		<?php 
-			echo $this->includeBlocks('search-results');
-		?>
-	</div>
-</div>
 	<?php include $dir.'/partials/footer.inc'; ?>
 </body>
 </html>
