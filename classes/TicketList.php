@@ -94,6 +94,9 @@ class TicketList extends ZendDbResultIterator
 					elseif ($key=='category_id') {
 						$this->select->where('c.category_id=?',$value);
 					}
+					elseif ($key=='department_id') {
+						$this->select->where('u.department_id=?',$value);
+					}
 				}
 			}
 		}
@@ -140,6 +143,9 @@ class TicketList extends ZendDbResultIterator
 					}
 					elseif ($key=='category_id') {
 						$this->select->where('c.category_id=?',$value);
+					}
+					elseif ($key=='department_id') {
+						$this->select->where('u.department_id=?',$value);
 					}
 				}
 			}
@@ -197,6 +203,11 @@ class TicketList extends ZendDbResultIterator
 		}
 		if (count(array_intersect(array_keys($fields),$this->addressServiceCacheColumns))) {
 			$joins['a'] = array('table'=>'addressServiceCache','condition'=>'t.id=a.ticket_id');
+		}
+
+		if (isset($fields['department_id'])) {
+			$joins['p'] = array('table'=>'people','condition'=>'t.assignedPerson_id=p.id');
+			$joins['u'] = array('table'=>'users','condition'=>'p.id=u.person_id');
 		}
 
 		foreach ($joins as $key=>$join) {
