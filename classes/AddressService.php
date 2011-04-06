@@ -52,8 +52,9 @@ class AddressService
 	{
 		$data = array();
 		$location = trim($location);
+		$parsed = self::parseAddress($location);
 
-		if (defined('ADDRESS_SERVICE') && $location) {
+		if (defined('ADDRESS_SERVICE') && $location && isset($parsed->street_number)) {
 			$url = new URL(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
@@ -77,7 +78,6 @@ class AddressService
 				}
 
 				// See if this is a subunit
-				$parsed = self::parseAddress($location);
 				if ($parsed->subunitIdentifier) {
 					$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
 					if ($subunit) {
@@ -199,7 +199,12 @@ class AddressService
 
 			$sql = 'select ticket_id from addressServiceCache where ticket_id=?';
 			if ($zend_db->fetchOne($sql,array($ticket->getId()))) {
-				$zend_db->update('addressServiceCache',$data,'ticket_id='.$ticket->getId());
+				if (count($data)) {
+					$zend_db->update('addressServiceCache',$data,'ticket_id='.$ticket->getId());
+				}
+				else {
+					$zend_db->delete('addressServiceCache','ticket_id='.$ticket->getId());
+				}
 			}
 			else {
 				$data['ticket_id'] = $ticket->getId();

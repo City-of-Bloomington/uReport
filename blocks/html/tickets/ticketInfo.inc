@@ -19,35 +19,42 @@ if ($this->ticket->getResolution()) {
 $assignButton = '';
 $referralButton = '';
 $editStatusButton = '';
+$changeLocationButton = '';
 
 if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	$editStatusButton = $this->template->linkButton(
 		'Edit Status',
 		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
-		'edit','icon'
+		'edit'
 	);
 
 	if ($this->ticket->getStatus()!='closed') {
 		$assignButton = $this->template->linkButton(
 			'Assign',
 			BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
-			'edit','icon'
+			'edit'
 		);
 
 		$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
 		$referralButton = $this->template->linkButton(
 			'Refer',
 			BASE_URL."/people?return_url=$return_url",
-			'edit','icon'
+			'edit'
 		);
 	}
+
+	$changeLocationButton = $this->template->linkButton(
+		'Change Location',
+		BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
+		'edit'
+	);
 }
 
 
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
-	<div>$location</div>
+	<div>$location $changeLocationButton</div>
 	<table>
 		<tr><th>Date Opened</th>
 			<td>{$this->ticket->getEnteredDate()}</td>

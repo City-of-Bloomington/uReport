@@ -28,6 +28,11 @@ class Ticket
 	private $referredPerson;
 	private $resolution;
 
+	// Used to identify fields that can be updated from the AddressService
+	private	$addressServiceFields = array(
+		'location','address_id','city','state','zip','latitude','longitude'
+	);
+
 	/**
 	 * Populates the object with data
 	 *
@@ -519,11 +524,8 @@ class Ticket
 	 */
 	public function setAddressServiceCache($data)
 	{
-		$locationFields = array(
-			'location','address_id','city','state','zip','latitude','longitude'
-		);
 		foreach ($data as $key=>$value) {
-			if (in_array($key,$locationFields)) {
+			if (in_array($key,$this->addressServiceFields)) {
 				$set = 'set'.ucfirst($key);
 				$this->$set($value);
 				unset($data[$key]);
@@ -597,6 +599,17 @@ class Ticket
 		if (property_exists('ticket',$fieldname)) {
 			$zend_db = Database::getConnection();
 			return $zend_db->fetchCol("select distinct $fieldname from tickets order by $fieldname");
+		}
+	}
+
+	/**
+	 * Empties out the fields that can be populated from the AddressService
+	 */
+	public function clearAddressServiceCache()
+	{
+		foreach ($this->addressServiceFields as $field) {
+			$set = 'set'.ucfirst($field);
+			$this->$set('');
 		}
 	}
 }
