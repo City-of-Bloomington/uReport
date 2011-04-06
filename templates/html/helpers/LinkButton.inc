@@ -8,7 +8,7 @@ class LinkButton
 {
 	public function __construct() { }
 
-	public function linkButton($label,$url=null,$innerClass=null,$id=null,$onclick=null,$outerClass='button')
+	public function linkButton($label,$url=null,$innerClass=null,$id=null,$onclick=null,$outerClass='icon')
 	{
 		$href = $url ? "href=\"$url\"" : '';
 		$innerClass = $innerClass ? "class=\"$innerClass\"" : '';
