@@ -1,9 +1,9 @@
-html { font:sans-serif 10pt; }
-h1 { font-size:1.25em; font-weight:bold; margin-bottom:.25em; }
+html { font:10pt sans-serif; }
+h1 { font-size:1.25em; font-weight:bold; margin-bottom:.25em;  }
 h2 { font-size:1; font-weight:bold; margin-bottom:.25em; }
 a { text-decoration:none; color:blue; }
 table { margin-bottom:.5em; }
-th { font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
+th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
@@ -88,12 +88,18 @@ tbody th { text-align:right; }
 	overflow:hidden;
 	background-repeat:no-repeat;
 	margin:0 2px;
-	font:10pt;
+	font-size:10pt;
 	font-weight:normal;
+	vertical-align:bottom;
+	padding:0;
 }
-.button .add a {font:10pt; padding-left:12px; height:14px; background:url('images/add.gif') no-repeat; }
-.button .edit a { padding-left:18px;height:16px; background:url('images/edit.png') no-repeat; }
-.button .delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
+.icon {display:inline-block; height:16px; overflow:hidden; }
+.icon a {}
+.icon .edit {display:block; width:18px; overflow:hidden; }
+
+.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; }
+.edit a { padding-left:18px;height:16px; background:url('images/edit.png') no-repeat; }
+.delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
@@ -101,6 +107,8 @@ tbody th { text-align:right; }
 	padding-left:11px;
 	background:url('images/add.gif') no-repeat;
 }
+
+.mediaList {margin-left:.5em; }
 
 /* ICONS FOR MIME TYPES */
 .jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
@@ -132,3 +140,6 @@ tbody th { text-align:right; }
 .pageNavigation .current { border:2px solid green; }
 
 tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
+.issue {margin-top:.25em; }
+.issueList h1 {display:inline; }
+.ticketList .add a {height:2em; }

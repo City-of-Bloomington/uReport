@@ -18,7 +18,8 @@ if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
 }
 echo "
 <div class=\"issueList\">
-	<h1>Associated Issues $addButton</h1>
+	<h1>Associated Issues</h1>
+	$addButton
 	<div class=\"issue\">
 ";
 	foreach ($this->issueList as $issue) {
@@ -28,14 +29,20 @@ echo "
 			$editButton = $this->template->linkButton(
 				'Edit Issue',
 				BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';",
-				'edit'
+				'edit',
+				null,
+				null,
+				'button'
 			);
 
 			if ($issue->getReportedByPerson_id()) {
 				$responseButton = $this->template->linkButton(
 					'Add Response',
 					BASE_URL."/issues/addResponse.php?issue_id={$issue->getId()}';",
-					'add'
+					'add',
+					null,
+					null,
+					'button'
 				);
 			}
 		}

@@ -63,8 +63,8 @@
 								// Just ignore invalid people
 							}
 						}
-						echo $this->template->formButton(
-							'Add Issue','button','add',null,"document.location.href='$url';"
+						echo $this->template->linkButton(
+							'Add Issue to ticket',$url,'add',null,null,'button'
 						);
 						echo '</td>';
 					}
