@@ -10,8 +10,8 @@ if (!userIsAllowed('Tickets')) {
 	exit();
 }
 
-$template = new Template();
-$template->blocks[] = new Block('tickets/searchForm.inc');
+$template = new Template('search');
+$template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 $fields = array(
 	'enteredByPerson_id','assignedPerson_id','department_id','zip',
 	'issueType_id','category_id','contactMethod_id',
@@ -21,15 +21,16 @@ if (count(array_intersect($fields,array_keys($_GET)))) {
 	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 	$ticketList = new TicketList(null,50,$page);
 	$ticketList->search($_GET);
-	$template->blocks[] = new Block(
+	$template->blocks['search-results'][] = new Block(
 		'tickets/searchResults.inc',
 		array(
 			'ticketList'=>$ticketList,
 			'title'=>'Search Results',
 			'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
+			
 		)
 	);
-	$template->blocks[] = new Block('pageNavigation.inc',array('list'=>$ticketList));
+	$template->blocks['search-results'][] = new Block('pageNavigation.inc',array('list'=>$ticketList));
 }
 
 

@@ -10,7 +10,7 @@
 	<?php
 		if (userIsAllowed('Tickets')) {
 			echo $this->linkButton(
-				'Add New Ticket',BASE_URL.'/tickets/addTicket.php','add',null,null,'largeButton'
+				'Add New Ticket',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
 			);
 			echo "
 			<h1>Quick Search</h1>
