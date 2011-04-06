@@ -55,7 +55,7 @@
 								$people = new PersonList(array('enteredTicket'=>true));
 								foreach ($people as $person) {
 									$name = View::escape($person->getFullname());
-									$selected = (isset($_GET['person_id']) && $_GET['person_id']==$person->getId())
+									$selected = (isset($_GET['enteredByPerson_id']) && $_GET['enteredByPerson_id']==$person->getId())
 										? 'selected="selected"'
 										: '';
 									echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
