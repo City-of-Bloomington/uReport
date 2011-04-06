@@ -40,13 +40,13 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
 	if ($row['address']) {
 		$row['address'] = preg_replace('/[^a-zA-Z0-9\-\&\s\'\/]/','',$row['address']);
-		$url = new URL(MASTER_ADDRESS.'/addresses/parse.php');
+		$url = new URL(ADDRESS_SERVICE.'/addresses/parse.php');
 		$url->format = 'xml';
 		$url->address = $row['address'];
 		$parsed = new SimpleXMLElement($url,null,true);
 		if ($parsed->street_number && $parsed->street_name) {
 			// Look up their address in Master Address
-			$url = new URL(MASTER_ADDRESS.'/home.php');
+			$url = new URL(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
 			$url->query = $row['address'];
