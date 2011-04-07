@@ -40,7 +40,7 @@
 
 	<h1>Advanced Search</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
-		<fieldset><legend>Ticket Information</legend>
+			<fieldset>
 			<table>
 				<tr><td><label for="enteredByPerson_id">Entered By</label></td>
 					<td><select name="enteredByPerson_id" id="enteredByPerson_id">
@@ -167,11 +167,6 @@
 						";
 					}
 				?>
-			</table>
-		</fieldset>
-
-		<fieldset><legend>Issue Information</legend>
-			<table>
 				<tr><td><label for="issueType_id">Type</label></td>
 					<td><select name="issueType_id" id="issueType_id">
 							<option></option>
@@ -223,11 +218,6 @@
 						</select>
 					</td>
 				</tr>
-			</table>
-		</fieldset>
-
-		<fieldset><legend>Actions</legend>
-			<table>
 				<tr><td><label for="status">Status</label></td>
 					<td><select name="status" id="status">
 							<option></option>

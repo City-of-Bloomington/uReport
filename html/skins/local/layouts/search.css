@@ -1,6 +1,14 @@
 /*Search panel with two vertical columns*/
-#search-form {width:40%; float:left; }
-#search-results {width:60%; margin-left:40%; }
+#search-form {width:39%; float:left; padding:0 1em; }
+#search-results {width:59%; margin-left:40%; padding:0 1em; }
 #search-form .search-checkboxes {-webkit-column-count:2; -webkit-column-gap:.5em;
 								-moz-column-count:2; -moz-column-gap:.5em;
 								}
+td select {max-width:200px; overflow:hidden; }
+#search-form .add a {margin:1.25em 0; }
+
+#search-form li {margin:.25em; }
+
+h1 {margin:2em 0; }
+
+#search-form label {text-align:right; display:block; max-width:100px; }

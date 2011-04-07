@@ -1,7 +1,8 @@
 html { font:10pt sans-serif; }
-h1 { font-size:1.25em; font-weight:bold; margin-bottom:.25em;  }
-h2 { font-size:1; font-weight:bold; margin-bottom:.25em; }
+h1 { font-size:1.25em; font-weight:bold; margin:.5em 0;  }
+h2 { font-size:1; font-weight:bold; margin:.5em 0; }
 a { text-decoration:none; color:blue; }
+p {margin:.25em; }
 table { margin-bottom:.5em; }
 th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
@@ -23,13 +24,13 @@ tbody th { text-align:right; }
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; }
 
-#menuBar { }
+#menuBar { margin-bottom:.5em; }
 #menuBar ul { margin:.5em; padding:0; }
 #menuBar li { display:inline; margin-right:1em;}
 #menuBar a { font-size:1.25em; }
 #menuBar a:visited { color:blue; }
 
-#footer { border-top:2px solid black; padding:.5em; }
+#footer { padding:.5em; }
 #footer li { display:inline; margin-right:.5em; }
 #footer a { font-weight:bold; color:black; }
 #panel-container {}
@@ -98,7 +99,7 @@ tbody th { text-align:right; }
 .icon a {}
 .icon .edit {display:block; width:18px; overflow:hidden; }
 
-.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; }
+.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; margin:.25em; }
 .edit a { padding-left:18px;height:16px; background:url('images/edit.png') no-repeat; }
 .delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
 
