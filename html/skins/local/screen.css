@@ -47,6 +47,7 @@ tbody th { text-align:right; }
 #person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 10px 10px; overflow:auto; }
 #action-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 
+
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo			{ width:290px; float:left; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
@@ -74,7 +75,7 @@ tbody th { text-align:right; }
 .mergeForm .button { position:absolute; left:40%; }
 
 .searchForm {}
-.searchForm .fields { float:right; margin:1em; }
+.searchForm .fields { margin:1em; }
 .searchResults {}
 
 .issueList .issue {
