@@ -10,7 +10,7 @@ foreach ($fields as $field) {
 	$$field = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
 }
 ?>
-<div class="searchForm">
+<div class="findPeople">
 	<h1>Find Someone</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>

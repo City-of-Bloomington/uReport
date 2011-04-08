@@ -13,7 +13,7 @@ if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
 	$addButton = $this->template->linkButton(
 		'Add Issue',
 		BASE_URL."/issues/updateIssue.php?ticket_id={$this->ticket->getId()}';",
-		'add'
+		'add',null, null,'button'
 	);
 }
 echo "

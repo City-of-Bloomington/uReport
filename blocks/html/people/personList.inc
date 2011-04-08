@@ -51,7 +51,7 @@
 <?php
 	if (userIsAllowed('Users')) {
 		echo $this->linkButton(
-			'Add a Person',BASE_URL.'/people/updatePerson.php','add',null,null,'largeButton'
+			'Add a Person',BASE_URL.'/people/updatePerson.php','add',null,null,'button'
 		);
 	}
 ?>

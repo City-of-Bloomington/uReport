@@ -1,13 +1,14 @@
 html { font:10pt sans-serif; }
 h1 { font-size:1.25em; font-weight:bold; margin:.5em 0;  }
-h2 { font-size:1; font-weight:bold; margin:.5em 0; }
+h2 { font-size:1em; font-weight:bold; margin:.5em 0; }
 a { text-decoration:none; color:blue; }
-p {margin:.25em; }
+p {margin:.5em; }
 table { margin-bottom:.5em; }
 th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
+li {margin:.5em 0 }
 fieldset { padding:1em 0; }
 legend {font-weight:bold; }
 thead th { text-align:left; }
@@ -55,17 +56,14 @@ tbody th { text-align:right; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
 #location-panel .locationResidents		{ }
+.findPeople { width:290px; float:left; }
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-#location-panel .ticketList 			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-
-#ticket-panel .closeTicketForm, #ticket-panel .assignTicketForm,
+#location-panel .ticketList, #ticket-panel .closeTicketForm, #ticket-panel .assignTicketForm,
 #ticket-panel .actionForm, #ticket-panel .referTicketForm,
-#ticket-panel .changeStatusForm {
-	margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;
-}
+#ticket-panel .changeStatusForm, .findpeopleResults { padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
@@ -96,11 +94,14 @@ tbody th { text-align:right; }
 	padding:0;
 }
 .icon {display:inline-block; height:16px; overflow:hidden; }
-.icon a {}
-.icon .edit {display:block; width:18px; overflow:hidden; }
+.icon a {height:0px; }
+.icon .edit {display:block; width:14px; overflow:hidden; }
+.icon .edit a {display:block; padding: 13px 0 0 0; height:0px; width:14px; overflow:hidden; }
+.icon .add a {padding: 12px 0 0 18px; height:0px; }
+.icon .delete a {padding:12px 0 0 18px; height:0px; }
 
-.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; margin:.25em; }
-.edit a { padding-left:18px;height:16px; background:url('images/edit.png') no-repeat; }
+.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; margin:.5em .25em; }
+.edit a { padding:0 0 0 18px; height:15px; background:url('images/edit.png') no-repeat; }
 .delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
@@ -112,7 +113,7 @@ tbody th { text-align:right; }
 
 .mediaList {margin-left:.5em; }
 
-/* ICONS FOR MIME TYPES */
+/* ICONS FOR MIME TYPES */ 
 .jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
 .png  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
 .gif  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }

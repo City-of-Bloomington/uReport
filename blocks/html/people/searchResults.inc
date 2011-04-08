@@ -7,7 +7,7 @@
  * @param string $this->return_url (optional) The url to use for each of th search results
  */
 ?>
-<div class="searchResults">
+<div class="findPeopleResults">
 	<h1>Search Results</h1>
 	<?php
 		if (count($this->personList)) {
