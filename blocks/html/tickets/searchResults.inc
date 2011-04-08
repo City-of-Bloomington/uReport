@@ -20,7 +20,7 @@
 // Default fields to be used
 if (!$this->fields) {
 	$this->fields = array(
-		'ticket-id'=>1,'issue-issueType'=>1,'ticket-status'=>1,
+		'ticket-id'=>1,'ticket-status'=>1,
 		'ticket-location'=>1,'ticket-enteredDate'=>1,'ticket-enteredByPerson'=>1
 	);
 }
@@ -41,28 +41,23 @@ if (!$this->fields) {
 		<tbody>
 		<?php
 			foreach ($this->ticketList as $ticket) {
-				foreach ($ticket->getIssues() as $issue) {
-					echo '<tr>';
-					foreach ($this->fields as $name=>$value) {
-						list($var,$field) = explode('-',$name);
-						$get = 'get'.ucfirst($field);
-						$value = $$var->$get();
-						if (preg_match('/Person/',$name) || $field=='constituent') {
-							if ($value) {
-								$value = $value->getFullname();
-							}
+				echo '<tr>';
+				foreach ($this->fields as $name=>$value) {
+					list($var,$field) = explode('-',$name);
+					$get = 'get'.ucfirst($field);
+					$value = $ticket->$get();
+					if (preg_match('/Person/',$name) || $field=='constituent') {
+						if ($value) {
+							$value = $value->getFullname();
 						}
-						if ($field=='categories') {
-							$value = implode(', ',$value);
-						}
-						// Only put the href on the ticket_id
-						if ($field == 'id') {
-							$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
-						}
-						echo "<td>$value</td>";
 					}
-					echo '</tr>';
+					// Only put the href on the ticket_id
+					if ($field == 'id') {
+						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
+					}
+					echo "<td>$value</td>";
 				}
+				echo '</tr>';
 			}
 		?>
 		</tbody>

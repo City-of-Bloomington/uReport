@@ -251,14 +251,10 @@ class TicketList extends ZendDbResultIterator
 			'ticket-location'=>'Location',
 			'ticket-latitude'=>'Latitude',
 			'ticket-longitude'=>'Longitude',
+			'ticket-city'=>'City',
+			'ticket-state'=>'State',
 			'ticket-zip'=>'Zip',
-			'issue-date'=>'Issue Date',
-			'issue-issueType'=>'Type',
-			'issue-reportedByPerson'=>'Constituent',
-			'issue-contactMethod'=>'Contact Method',
-			'issue-enteredByPerson'=>'Issue Entered By',
-			'issue-case_number'=>'Case Number',
-			'issue-categories'=>'Categories'
+			'ticket-categories'=>'Categories'
 		);
 	}
 }

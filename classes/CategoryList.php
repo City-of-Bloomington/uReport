@@ -102,4 +102,16 @@ class CategoryList extends ZendDbResultIterator
 	{
 		return new Category($this->result[$key]);
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$categories = array();
+		foreach ($this as $category) {
+			$categories[] = "{$category}";
+		}
+		return implode(', ',$categories);
+	}
 }
