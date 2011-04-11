@@ -146,3 +146,6 @@ tr.verified > td:first-of-type { background:url('images/check.png') center left 
 .issue { margin-top:.25em; }
 .issueList h1 { display:inline; }
 .ticketList .add a { height:2em; }
+
+/* JavaScript will apply this style to stuff it wants to hide */
+.hidden { display:none; }
