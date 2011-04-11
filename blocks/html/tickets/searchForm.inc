@@ -40,7 +40,7 @@
 
 	<h1>Advanced Search</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
-			<fieldset>
+		<fieldset id="advanced-search">
 			<table>
 				<tr><td><label for="enteredByPerson_id">Entered By</label></td>
 					<td><select name="enteredByPerson_id" id="enteredByPerson_id">
@@ -257,35 +257,34 @@
 				</tr>
 			</table>
 		</fieldset>
-		<div class="search-checkboxes">
-			<fieldset class="fields"><legend>Fields to display</legend>
-				<ul>
-				<?php
-					// Default columns to display
-					if (!isset($_GET['fields'])) {
-						$_GET['fields'] = array(
-							'ticket-id'=>'on',
-							'ticket-status'=>'on',
-							'ticket-location'=>'on',
-							'ticket-enteredDate'=>'on',
-							'ticket-enteredByPerson'=>'on'
-						);
-					}
-	
-					foreach (TicketList::getDisplayableFields() as $name=>$label) {
-						$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
-						echo "
-						<li><label>
-								<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
-								$label
-							</label>
-						</li>
-						";
-					}
-				?>
-				</ul>
-			</fieldset>
-		</div>
+
+		<fieldset class="fields"><legend>Fields to display</legend>
+			<ul>
+			<?php
+				// Default columns to display
+				if (!isset($_GET['fields'])) {
+					$_GET['fields'] = array(
+						'ticket-id'=>'on',
+						'ticket-status'=>'on',
+						'ticket-location'=>'on',
+						'ticket-enteredDate'=>'on',
+						'ticket-enteredByPerson'=>'on'
+					);
+				}
+
+				foreach (TicketList::getDisplayableFields() as $name=>$label) {
+					$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
+					echo "
+					<li><label>
+							<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
+							$label
+						</label>
+					</li>
+					";
+				}
+			?>
+			</ul>
+		</fieldset>
 
 
 		<fieldset><legend>Submit</legend>
@@ -297,3 +296,7 @@
 		</fieldset>
 	</form>
 </div>
+<?php
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
+?>
