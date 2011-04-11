@@ -24,22 +24,27 @@ if (!$this->fields) {
 		'ticket-location'=>1,'ticket-enteredDate'=>1,'ticket-enteredByPerson'=>1
 	);
 }
-?>
-<div class="searchResults">
-	<h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
-	<table>
-		<thead>
-			<tr><?php
-					$fields = TicketList::getDisplayableFields();
-					foreach ($this->fields as $name=>$value) {
-						echo "<th>$fields[$name]</th>";
-					}
-				?>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php
+$title = $this->title ? View::escape($this->title) : 'Tickets';
+echo "
+<div class=\"searchResults\">
+	<h1>$title</h1>
+";
+	if (count($this->ticketList)) {
+		echo "
+		<table>
+			<thead>
+				<tr>
+		";
+				$fields = TicketList::getDisplayableFields();
+				foreach ($this->fields as $name=>$value) {
+					echo "<th>$fields[$name]</th>";
+				}
+		echo "
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+		";
 			foreach ($this->ticketList as $ticket) {
 				echo '<tr>';
 				foreach ($this->fields as $name=>$value) {
@@ -59,7 +64,14 @@ if (!$this->fields) {
 				}
 				echo '</tr>';
 			}
-		?>
-		</tbody>
-	</table>
+		echo "
+			</tbody>
+		</table>
+		";
+	}
+	else {
+		echo "<h2>No tickets found</h2>";
+	}
+echo "
 </div>
+";
