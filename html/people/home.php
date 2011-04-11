@@ -27,7 +27,7 @@ $template->blocks[] = $searchForm;
 
 
 // Include the search form and results
-$fields = array('name','email','address','phone');
+$fields = array('firstname','lastname','organization','email','address','phone');
 foreach ($fields as $field) {
 	if (isset($_GET[$field]) && trim($_GET[$field])) {
 		$personList = new PersonList();
