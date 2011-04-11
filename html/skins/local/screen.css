@@ -2,15 +2,15 @@ html { font:10pt sans-serif; }
 h1 { font-size:1.25em; font-weight:bold; margin:.5em 0;  }
 h2 { font-size:1em; font-weight:bold; margin:.5em 0; }
 a { text-decoration:none; color:blue; }
-p {margin:.5em; }
+p { margin:.5em; }
 table { margin-bottom:.5em; }
 th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
-li {margin:.5em 0 }
+li { margin:.5em 0 }
 fieldset { padding:1em 0; }
-legend {font-weight:bold; }
+legend { font-weight:bold; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
@@ -93,14 +93,14 @@ tbody th { text-align:right; }
 	vertical-align:bottom;
 	padding:0;
 }
-.icon {display:inline-block; height:16px; overflow:hidden; }
-.icon a {height:0px; }
-.icon .edit {display:block; width:14px; overflow:hidden; }
-.icon .edit a {display:block; padding: 13px 0 0 0; height:0px; width:14px; overflow:hidden; }
-.icon .add a {padding: 12px 0 0 18px; height:0px; }
-.icon .delete a {padding:12px 0 0 18px; height:0px; }
+.icon { display:inline-block; height:16px; overflow:hidden; }
+.icon a { height:0px; }
+.icon .edit { display:block; width:14px; overflow:hidden; }
+.icon .edit a { display:block; padding: 13px 0 0 0; height:0px; width:14px; overflow:hidden; }
+.icon .add a { padding: 12px 0 0 18px; height:0px; }
+.icon .delete a { padding:12px 0 0 18px; height:0px; }
 
-.add a {font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; margin:.5em .25em; }
+.add a { font-size:10pt; padding:0 0 0 12px; height:12px; background:url('images/add.gif') 0px 2px no-repeat; margin:.5em .25em; }
 .edit a { padding:0 0 0 18px; height:15px; background:url('images/edit.png') no-repeat; }
 .delete a { padding-left:12px; height:14px; background:url('images/delete.gif') no-repeat; }
 
@@ -143,6 +143,6 @@ tbody th { text-align:right; }
 .pageNavigation .current { border:2px solid green; }
 
 tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
-.issue {margin-top:.25em; }
-.issueList h1 {display:inline; }
-.ticketList .add a {height:2em; }
+.issue { margin-top:.25em; }
+.issueList h1 { display:inline; }
+.ticketList .add a { height:2em; }
