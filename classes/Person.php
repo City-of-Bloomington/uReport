@@ -1,29 +1,12 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class Person
 {
-	private $id;
-	private $firstname;
-	private $middlename;
-	private $lastname;
-	private $email;
-	private $phone;
-	private $organization;
-	private $address;
-	private $city;
-	private $state;
-	private $zip;
-	private $street_address_id;
-	private $subunit_id;
-	private $neighborhoodAssociation;
-	private $township;
-
-	private $user_id;
-	private $user;
+	private $data = array();
 
 	/**
 	 * Populates the object with data
@@ -41,28 +24,26 @@ class Person
 	{
 		if ($id) {
 			if (is_array($id)) {
+				echo "array passed in\n";
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
+				echo "trying to load from db\n";
+				$mongo = Database::getConnection();
 				if (is_numeric($id)) {
-					$sql = 'select * from people where id=?';
+					$search = array('_id'=>new MongoId($id));
 				}
 				elseif (false !== strpos($id,'@')) {
-					$sql = 'select * from people where email=?';
+					$search = array('email'=>$id);
 				}
 				else {
-					$sql = 'select p.* from people p left join users on p.id=person_id where username=?';
+					$search = array('username'=>$id);
 				}
-				$result = $zend_db->fetchRow($sql,array($id));
+				$result = $mongo->people->findOne($search);
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('people/unknownPerson');
@@ -81,7 +62,9 @@ class Person
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->firstname && !$this->lastname && !$this->organization) {
+		if (!$this->data['firstname']
+			&& !$this->data['lastname']
+			&& !$this->data['organization']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -92,42 +75,14 @@ class Person
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['firstname'] = $this->firstname ? $this->firstname : null;
-		$data['middlename'] = $this->middlename ? $this->middlename : null;
-		$data['lastname'] = $this->lastname ? $this->lastname : null;
-		$data['email'] = $this->email ? $this->email : null;
-		$data['phone'] = $this->phone ? $this->phone : null;
-		$data['organization'] = $this->organization ? $this->organization : null;
-		$data['address'] = $this->address ? $this->address : null;
-		$data['city'] = $this->city ? $this->city : null;
-		$data['state'] = $this->state ? $this->state : null;
-		$data['zip'] = $this->zip ? $this->zip : null;
-		$data['street_address_id'] = $this->street_address_id ? $this->street_address_id : null;
-		$data['subunit_id'] = $this->subunit_id ? $this->subunit_id : null;
-		$data['neighborhoodAssociation'] = $this->neighborhoodAssociation ? $this->neighborhoodAssociation : null;
-		$data['township'] = $this->township ? $this->township : null;
-
-		if ($this->id) {
-			$this->update($data);
+		$mongo = Database::getConnection();
+		try {
+			$mongo->people->save($this->data,array('safe'=>true));
 		}
-		else {
-			$this->insert($data);
+		catch (Exception $e) {
+			die($e->getMessage());
 		}
-	}
 
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('people',$data,"id={$this->id}");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('people',$data);
-		$this->id = $zend_db->lastInsertId('people','id');
 	}
 
 	//----------------------------------------------------------------
@@ -138,7 +93,9 @@ class Person
 	 */
 	public function getId()
 	{
-		return $this->id;
+		if (isset($this->data['_id'])) {
+			return $this->data['_id'];
+		}
 	}
 
 	/**
@@ -146,7 +103,9 @@ class Person
 	 */
 	public function getFirstname()
 	{
-		return $this->firstname;
+		if (isset($this->data['firstname'])) {
+			return $this->data['firstname'];
+		}
 	}
 
 	/**
@@ -154,7 +113,9 @@ class Person
 	 */
 	public function getMiddlename()
 	{
-		return $this->middlename;
+		if (isset($this->data['middlename'])) {
+			return $this->data['middlename'];
+		}
 	}
 
 	/**
@@ -162,7 +123,9 @@ class Person
 	 */
 	public function getLastname()
 	{
-		return $this->lastname;
+		if (isset($this->data['lastname'])) {
+			return $this->data['lastname'];
+		}
 	}
 
 	/**
@@ -170,7 +133,9 @@ class Person
 	 */
 	public function getEmail()
 	{
-		return $this->email;
+		if (isset($this->data['email'])) {
+			return $this->data['email'];
+		}
 	}
 
 	/**
@@ -178,7 +143,9 @@ class Person
 	 */
 	public function getPhone()
 	{
-		return $this->phone;
+		if (isset($this->data['phone'])) {
+			return $this->data['phone'];
+		}
 	}
 
 	/**
@@ -186,7 +153,9 @@ class Person
 	 */
 	public function getOrganization()
 	{
-		return $this->organization;
+		if (isset($this->data['organization'])) {
+			return $this->data['organization'];
+		}
 	}
 
 	/**
@@ -194,7 +163,9 @@ class Person
 	 */
 	public function getAddress()
 	{
-		return $this->address;
+		if (isset($this->data['address'])) {
+			return $this->data['address'];
+		}
 	}
 
 	/**
@@ -202,7 +173,9 @@ class Person
 	 */
 	public function getCity()
 	{
-		return $this->city;
+		if (isset($this->data['city'])) {
+			return $this->data['city'];
+		}
 	}
 
 	/**
@@ -210,7 +183,9 @@ class Person
 	 */
 	public function getState()
 	{
-		return $this->state;
+		if (isset($this->data['state'])) {
+			return $this->data['state'];
+		}
 	}
 
 	/**
@@ -218,39 +193,23 @@ class Person
 	 */
 	public function getZip()
 	{
-		return $this->zip;
+		if (isset($this->data['zip'])) {
+			return $this->data['zip'];
+		}
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getStreet_address_id()
+	public function getUsername()
 	{
-		return $this->street_address_id;
+		if (isset($this->data['username'])) {
+			return $this->data['username'];
+		}
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getSubunit_id()
+	public function getAuthenticationMethod()
 	{
-		return $this->subunit_id;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getNeighborhoodAssociation()
-	{
-		return $this->neighborhoodAssociation;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTownship()
-	{
-		return $this->township;
+		if (isset($this->data['authenticationMethod'])) {
+			return $this->data['authenticationMethod'];
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -261,7 +220,7 @@ class Person
 	 */
 	public function setFirstname($string)
 	{
-		$this->firstname = trim($string);
+		$this->data['firstname'] = trim($string);
 	}
 
 	/**
@@ -269,7 +228,7 @@ class Person
 	 */
 	public function setMiddlename($string)
 	{
-		$this->middlename = trim($string);
+		$this->data['middlename'] = trim($string);
 	}
 
 	/**
@@ -277,7 +236,7 @@ class Person
 	 */
 	public function setLastname($string)
 	{
-		$this->lastname = trim($string);
+		$this->data['lastname'] = trim($string);
 	}
 
 	/**
@@ -285,7 +244,7 @@ class Person
 	 */
 	public function setEmail($string)
 	{
-		$this->email = trim($string);
+		$this->data['email'] = trim($string);
 	}
 
 	/**
@@ -293,7 +252,7 @@ class Person
 	 */
 	public function setPhone($string)
 	{
-		$this->phone = trim($string);
+		$this->data['phone'] = trim($string);
 	}
 
 	/**
@@ -301,7 +260,7 @@ class Person
 	 */
 	public function setOrganization($string)
 	{
-		$this->organization = trim($string);
+		$this->data['organization'] = trim($string);
 	}
 
 	/**
@@ -309,7 +268,7 @@ class Person
 	 */
 	public function setAddress($string)
 	{
-		$this->address = trim($string);
+		$this->data['address'] = trim($string);
 	}
 
 	/**
@@ -317,7 +276,7 @@ class Person
 	 */
 	public function setCity($string)
 	{
-		$this->city = trim($string);
+		$this->data['city'] = trim($string);
 	}
 
 	/**
@@ -325,7 +284,7 @@ class Person
 	 */
 	public function setState($string)
 	{
-		$this->state = trim($string);
+		$this->data['state'] = trim($string);
 	}
 
 	/**
@@ -333,40 +292,19 @@ class Person
 	 */
 	public function setZip($string)
 	{
-		$this->zip = trim($string);
+		$this->data['zip'] = trim($string);
 	}
 
-	/**
-	 * @param int $int
-	 */
-	public function setStreet_address_id($int)
+	public function setUsername($string)
 	{
-		$this->street_address_id = $int;
+		$this->data['username'] = trim($string);
 	}
 
-	/**
-	 * @param int $int
-	 */
-	public function setSubunit_id($int)
+	public function setAuthenticationMethod($string)
 	{
-		$this->subunit_id = $int;
+		$this->data['authenticationMethod'] = trim($string);
 	}
 
-	/**
-	 * @param string $string
-	 */
-	public function setNeighborhoodAssociation($string)
-	{
-		$this->neighborhoodAssociation = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setTownship($string)
-	{
-		$this->township = trim($string);
-	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -377,11 +315,11 @@ class Person
 	 */
 	public function getFullname()
 	{
-		if ($this->firstname || $this->lastname) {
-			return "{$this->firstname} {$this->lastname}";
+		if ($this->getFirstname() || $this->getLastname()) {
+			return "{$this->getFirstname()} {$this->getLastname()}";
 		}
 		else {
-			return $this->organization;
+			return $this->getOrganization();
 		}
 	}
 
@@ -390,41 +328,8 @@ class Person
 	 */
 	public function getURL()
 	{
-		return BASE_URL.'/people/viewPerson.php?person_id='.$this->id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getUser_id()
-	{
-		if (!$this->user_id) {
-			$zend_db = Database::getConnection();
-			$this->user_id = $zend_db->fetchOne('select id from users where person_id=?',$this->id);
-		}
-		return $this->user_id;
-	}
-
-	/**
-	 * @return User
-	 */
-	public function getUser()
-	{
-		if (!$this->user) {
-			if ($this->getUser_id()) {
-				$this->user = new User($this->getUser_id());
-			}
-		}
-		return $this->user;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUsername()
-	{
-		if ($this->getUser()) {
-			return $this->getUser()->getUsername();
+		if ($this->getId()) {
+			return BASE_URL.'/people/viewPerson.php?person_id='.$this->getId();
 		}
 	}
 
@@ -433,8 +338,8 @@ class Person
 	 */
 	public function getDepartment()
 	{
-		if ($this->getUser() && $this->getUser()->getDepartment_id()) {
-			return $this->getUser()->getDepartment();
+		if (isset($this->data['department'])) {
+			return $this->data['department'];
 		}
 	}
 

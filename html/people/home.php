@@ -11,11 +11,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET return_url
  */
-if (!userIsAllowed('People')) {
-	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
-	exit();
-}
+#if (!userIsAllowed('People')) {
+#	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+#	header('Location: '.BASE_URL);
+#	exit();
+#}
 
 $template = new Template();
 $searchForm = new Block('people/searchForm.inc');

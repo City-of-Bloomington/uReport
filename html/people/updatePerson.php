@@ -11,11 +11,11 @@ $return_url = isset($_REQUEST['return_url'])
 	? new URL($_REQUEST['return_url'])
 	: new URL(BASE_URL.'/people/viewPerson.php');
 
-if (!userIsAllowed('Users')) {
-	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header("Location: $errorURL");
-	exit();
-}
+#if (!userIsAllowed('Users')) {
+#	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+#	header("Location: $errorURL");
+#	exit();
+#}
 
 if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 	try {
