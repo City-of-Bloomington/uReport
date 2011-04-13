@@ -8,10 +8,9 @@ $ZEND_ACL = new Zend_Acl();
 /**
  * Load the roles from the database
  */
-$roles = new RoleList();
-$roles->find();
+$roles = array('Administrator');
 foreach ($roles as $role) {
-	$ZEND_ACL = $ZEND_ACL->addRole(new Zend_Acl_Role($role->getName()));
+	$ZEND_ACL = $ZEND_ACL->addRole(new Zend_Acl_Role($role));
 }
 
 /**

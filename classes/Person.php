@@ -24,13 +24,11 @@ class Person
 	{
 		if ($id) {
 			if (is_array($id)) {
-				echo "array passed in\n";
 				$result = $id;
 			}
 			else {
-				echo "trying to load from db\n";
 				$mongo = Database::getConnection();
-				if (is_numeric($id)) {
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
 					$search = array('_id'=>new MongoId($id));
 				}
 				elseif (false !== strpos($id,'@')) {
@@ -52,6 +50,7 @@ class Person
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setAuthenticationMethod('local');
 		}
 	}
 
@@ -76,13 +75,7 @@ class Person
 	{
 		$this->validate();
 		$mongo = Database::getConnection();
-		try {
-			$mongo->people->save($this->data,array('safe'=>true));
-		}
-		catch (Exception $e) {
-			die($e->getMessage());
-		}
-
+		$mongo->people->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -94,7 +87,7 @@ class Person
 	public function getId()
 	{
 		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
+			return $this->data['_id']->__toString();
 		}
 	}
 
@@ -198,19 +191,6 @@ class Person
 		}
 	}
 
-	public function getUsername()
-	{
-		if (isset($this->data['username'])) {
-			return $this->data['username'];
-		}
-	}
-
-	public function getAuthenticationMethod()
-	{
-		if (isset($this->data['authenticationMethod'])) {
-			return $this->data['authenticationMethod'];
-		}
-	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -295,16 +275,102 @@ class Person
 		$this->data['zip'] = trim($string);
 	}
 
+
+	//----------------------------------------------------------------
+	// User Authentication implementation
+	//----------------------------------------------------------------
+	public function getUsername()
+	{
+		if (isset($this->data['username'])) {
+			return $this->data['username'];
+		}
+	}
+	public function getAuthenticationMethod()
+	{
+		if (isset($this->data['authenticationMethod'])) {
+			return $this->data['authenticationMethod'];
+		}
+	}
+	public function getRoles()
+	{
+		if (isset($this->data['roles'])) {
+			return $this->data['roles'];
+		}
+	}
+	public function hasRole($role)
+	{
+		if (isset($this->data['roles'])) {
+			return in_array($role,$this->data['roles']);
+		}
+	}
 	public function setUsername($string)
 	{
 		$this->data['username'] = trim($string);
 	}
-
 	public function setAuthenticationMethod($string)
 	{
 		$this->data['authenticationMethod'] = trim($string);
 	}
+	public function setRoles($roles)
+	{
+		$this->data['roles'] = $roles;
+	}
+	public function setPassword($string)
+	{
+		$this->data['password'] = sha1($string);
+	}
 
+	/**
+	 * Determines which authentication scheme to use for the user and calls the appropriate method
+	 *
+	 * Local users will get authenticated against the database
+	 * Other authenticationMethods will need to write a class implementing ExternalAuthentication
+	 * See: /libraries/framework/classes/ExternalAuthentication.php
+	 *
+	 * LDAP authentication is already provided
+	 * /libraries/framework/classes/LDAP.php
+	 *
+	 * @param string $password
+	 * @return boolean
+	 */
+	public function authenticate($password)
+	{
+		if ($this->getUsername())
+		{
+			switch ($this->getAuthenticationMethod()) {
+				case 'local':
+					return $this->getPassword()==sha1($password);
+					break;
+				default:
+					return call_user_func(
+						array($this->getAuthenticationMethod(),'authenticate'),
+						$this->getUsername(),
+						$password
+					);
+			}
+		}
+	}
+
+	/**
+	 * Checks if the user is supposed to have acces to the resource
+	 *
+	 * This is implemented by checking against a Zend_Acl object
+	 * The Zend_Acl should be created in configuration.inc
+	 *
+	 * @param Zend_Acl_Resource|string $resource
+	 * @return boolean
+	 */
+	public function IsAllowed($resource)
+	{
+		global $ZEND_ACL;
+		if ($this->getRoles()) {
+			foreach ($this->getRoles() as $role) {
+				if ($ZEND_ACL->isAllowed($role,$resource)) {
+					return true;
+				}
+			}
+		}
+	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -347,8 +413,8 @@ class Person
 	 * @return TicketList
 	 */
 	public function getReportedTickets() {
-		if ($this->id) {
-			return new TicketList(array('reportedByPerson_id'=>$this->id));
+		if ($this->getId()) {
+			#return new TicketList(array('reportedByPerson_id'=>$this->getId()));
 		}
 	}
 
@@ -363,13 +429,11 @@ class Person
 	{
 		if ($this->id && $person->getId()) {
 			if($this->id == $person->getId()){
-				//
-				// can not merge same person throw exception
+				// can not merge same person
 				throw new Exception('mergerNotAllowed');
 			}
 			if($this->getUser_id() || $person->getUser_id()){
-				//
-				// do not allow merger of two users with different userid's throw exception
+				// do not allow merger of two users
 				throw new Exception('mergerNotAllowed');
 			}
 			$zend_db = Database::getConnection();

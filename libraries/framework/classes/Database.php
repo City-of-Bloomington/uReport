@@ -32,7 +32,8 @@ class Database
 				die($e->getMessage());
 			}
 		}
-		return self::$connection->DB_NAME;
+		$db = DB_NAME;
+		return self::$connection->$db;
 	}
 
 	/**

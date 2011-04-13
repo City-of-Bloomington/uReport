@@ -11,11 +11,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET return_url
  */
-#if (!userIsAllowed('People')) {
-#	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-#	header('Location: '.BASE_URL);
-#	exit();
-#}
+if (!userIsAllowed('People')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
 
 $template = new Template();
 $searchForm = new Block('people/searchForm.inc');
@@ -31,7 +31,7 @@ $fields = array('firstname','lastname','organization','email','address','phone')
 foreach ($fields as $field) {
 	if (isset($_GET[$field]) && trim($_GET[$field])) {
 		$personList = new PersonList();
-		$personList->search($_GET);
+		$personList->find($_GET);
 
 		$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
 		if (isset($_GET['return_url'])) {

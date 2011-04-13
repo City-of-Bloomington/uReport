@@ -1,11 +1,11 @@
 <?php
 /**
- * @copyright 2009-2010 City of Bloomington, Indiana
+ * @copyright 2009-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
-if (userIsAllowed('Users')) {
+if (userIsAllowed('People')) {
 	$username = $this->person->getUsername();
 	if (!$username && userIsAllowed('Users') && !$this->disableButtons) {
 		$username = $this->template->linkButton(

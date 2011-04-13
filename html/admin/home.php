@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 if (!(isset($_SESSION['USER']) && $_SESSION['USER']->hasRole('Administrator'))) {
-	throw new Exception('noAccessAllowed');
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }

@@ -6,14 +6,7 @@
  */
 class Department
 {
-	private $id;
-	private $name;
-	private $default_person_id;
-
-	private $actions = array();
-	private $categories = array();
-	private $customStatuses = array();
-	private $default_person;
+	private $data = array();
 
 	/**
 	 * Populates the object with data
@@ -34,9 +27,8 @@ class Department
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
-				$sql = 'select * from departments where id=?';
-				$result = $zend_db->fetchRow($sql,array($id));
+				$mongo = Database::getConnection();
+				$result = $mongo->departments->findOne(array('_id'=>new MongoId($id)));
 			}
 
 			if ($result) {
@@ -63,7 +55,7 @@ class Department
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name || !$this->default_person_id) {
+		if (!$this->data['name'] || !$this->data['default_person']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -75,29 +67,8 @@ class Department
 	{
 		$this->validate();
 
-		$data = array();
-		$data['name'] = $this->name;
-		$data['default_person_id'] = $this->default_person_id;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('departments',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('departments',$data);
-		$this->id = $zend_db->lastInsertId('departments','id');
+		$mongo = Database::getConnection();
+		$mongo->departments->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -105,11 +76,13 @@ class Department
 	//----------------------------------------------------------------
 
 	/**
-	 * @return int
+	 * @return string Mongo's unique identifier
 	 */
 	public function getId()
 	{
-		return $this->id;
+		if (isset($this->data['_id'])) {
+			return (string)$this->data['_id'];
+		}
 	}
 
 	/**
@@ -117,30 +90,31 @@ class Department
 	 */
 	public function getName()
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getDefault_person_id()
-	{
-		return $this->default_person_id;
+		if (isset($this->data['name'])) {
+			return $this->data['name'];
+		}
 	}
 
 	/**
 	 * @return Person
 	 */
-	public function getDefault_person()
+	public function getDefaultPerson()
 	{
-		if ($this->default_person_id) {
-			if (!$this->default_person) {
-				$this->default_person = new Person($this->default_person_id);
-			}
-			return $this->default_person;
+		if ($this->data['default_person']) {
+			return $this->data['default_person'];
 		}
-		return null;
 	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCategories()
+	{
+		if (isset($this->data['categories'])) {
+			return $this->data['categories'];
+		}
+	}
+	
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -155,41 +129,25 @@ class Department
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setDefault_person_id($int)
-	{
-		$this->default_person = new Person($int);
-		$this->default_person_id = $int;
-	}
-
-	/**
 	 * @param Person $person
 	 */
-	public function setDefault_person($person)
+	public function setDefaultPerson($person)
 	{
-		$this->default_person_id = $person->getId();
-		$this->default_person = $person;
+		$this->data['default_person'] = array(
+			'id'=>$person->getId(),
+			'firstname'=>$person->getFirstname(),
+			'lastname'=>$person->getLastname()
+		);
 	}
 
+	public function setCategories($categories)
+	{
+	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * @return array
-	 */
-	public function getCategories()
-	{
-		if (!count($this->categories)) {
-			$list = new CategoryList(array('department_id'=>$this->id));
-			foreach ($list as $category) {
-				$this->categories[$category->getId()] = $category;
-			}
-		}
-		return $this->categories;
-	}
 
 	/**
 	 * @param Category $category
