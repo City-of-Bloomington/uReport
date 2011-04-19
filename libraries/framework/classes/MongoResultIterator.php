@@ -24,6 +24,14 @@ abstract class MongoResultIterator implements Iterator,Countable
 		$this->mongo = Database::getConnection();
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getExplain()
+	{
+		return $this->cursor->explain();
+	}
+	
 	// SPLIterator Section
 	/**
 	 * Reset the pionter to the first element
