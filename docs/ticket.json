@@ -15,15 +15,13 @@
 	}
 	status:'',
 	resolution:'',
-	location:{
-		description:'',
-		latitude:'',
-		longitude:'',
-		city:'',
-		state:'',
-		zip:'',
-		address_id:''
-	},
+	location:'',
+	latitude:'',
+	longitude:'',
+	city:'',
+	state:'',
+	zip:'',
+	address_id:'',
 	issues:[
 		{
 			date:'',
