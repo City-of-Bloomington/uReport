@@ -158,13 +158,15 @@ class Department
 	public function setCategories($categories)
 	{
 		if($categories && is_array($categories)){
-			$mongo = Database::getConnection();
 			$cats = array();			
-			foreach ($categories as $category_id) {
+			foreach ($categories as $id) {
 				try{
-					$result = $mongo->categories->findOne(array('_id'=>new MongoId($category_id)));				
-					if($result){
-						$cats[] = $result;
+					$category = new Category($id);				
+					if($category){
+						$cats[] = array(
+							'_id'=>$category->getId(),
+							'name'=>$category->getName()
+						);
 					}
 				}catch(Eexception $ex){}
 			}
