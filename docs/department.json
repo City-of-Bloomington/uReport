@@ -1,0 +1,25 @@
+{
+	_id:'',
+	name:'',
+	defaultPerson:{
+		_id:'',
+		firstname:'',
+		middlename:'',
+		lastname:'',
+		email:''
+	},
+	categories:[
+		{
+			_id:'',
+			name:''
+		}
+	],
+	customStatuses:[],
+	actions:[
+		{
+			name:'',
+			description:'',
+			formLabel:''
+		}
+	]
+}
