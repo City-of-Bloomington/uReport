@@ -36,5 +36,4 @@ html/tickets/referTicket.php -text
 scripts/migration/calltrack/1_users.php -text
 scripts/migration/calltrack/2_constituents.php -text
 scripts/migration/calltrack/3_tickets.php -text
-scripts/mysql.sql -text
 templates/html/default.inc -text
