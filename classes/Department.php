@@ -32,11 +32,14 @@ class Department
 			}
 
 			if ($result) {
+				/*
 				foreach ($result as $field=>$value) {
 					if ($value) {
 						$this->$field = $value;
 					}
 				}
+				*/
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('departments/unknownDepartment');
@@ -115,7 +118,6 @@ class Department
 		}
 	}
 	
-
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -125,7 +127,7 @@ class Department
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->data['name'] = trim($string);
 	}
 
 	/**
@@ -142,6 +144,17 @@ class Department
 
 	public function setCategories($categories)
 	{
+		if($categories && is_array($categories)){
+			$cats = array();
+			
+			foreach ($categories as $category) {
+				$cats['category'] = array(
+				'id'=>$category->getId(),
+				'name'=>$category->getName());
+			}
+			$this->data['categories']= $cats;				
+		}
+
 	}
 
 	//----------------------------------------------------------------
@@ -155,7 +168,10 @@ class Department
 	 */
 	public function hasCategory(Category $category)
 	{
-		return array_key_exists($category->getId(),$this->getCategories());
+		if(isset($this->data['categories'])){
+			return in_array($category,$this->data['categories']);	
+		}
+		return false;
 	}
 
 	/**
