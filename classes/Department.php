@@ -32,13 +32,6 @@ class Department
 			}
 
 			if ($result) {
-				/*
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
-				*/
 				$this->data = $result;
 			}
 			else {
@@ -149,18 +142,18 @@ class Department
 	}
 
 	/**
-	 * @param Person $person
+	 * @param string $string as either person id or email or username
 	 */
-	public function setDefaultPerson($person)
+	public function setDefaultPerson($string)
 	{
+		$person = new Person($string);
 		$this->data['default_person'] = array(
 			'_id'=>$person->getId(),
-			'firstname'=>$person->getFirstname(),
-			'middlename'=>$person->getMiddlename(),			
-			'lastname'=>$person->getLastname(),
+			'fullname'=>$person->getFullname(),
 			'email'=>$person->getEmail()
 		);
 	}
+	
 
 	public function setCategories($categories)
 	{
@@ -173,7 +166,7 @@ class Department
 					if($result){
 						$cats[] = $result;
 					}
-				}catch($exception ex){}
+				}catch(Eexception $ex){}
 			}
 			$this->data['categories']= $cats;				
 		}
@@ -185,19 +178,6 @@ class Department
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 
-	/**
-	 * @param Category $category
-	 * @return bool
-	 */
-	/*
-	public function hasCategory(Category $category)
-	{
-		if(isset($this->data['categories'])){
-			return in_array($category->getId(),$this->getCategories());	
-		}
-		return false;
-	}
-	*/
 	/**
 	 * @return bool
 	 */
