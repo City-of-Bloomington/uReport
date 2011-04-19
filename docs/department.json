@@ -3,10 +3,7 @@
 	name:'',
 	defaultPerson:{
 		_id:'',
-		firstname:'',
-		middlename:'',
-		lastname:'',
-		email:''
+		fullname:''
 	},
 	categories:[
 		{

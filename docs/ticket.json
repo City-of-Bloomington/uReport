@@ -3,24 +3,15 @@
 	enteredDate:'',
 	enteredByPerson:{
 		_id:'',
-		firstname:'',
-		middlename:'',
-		lastname:'',
-		email:''
+		fullname:''
 	},
 	assignedPerson:{
 		_id:'',
-		firstname:'',
-		middlename:'',
-		lastname:'',
-		email:''
+		fullname:''
 	},
 	referredPerson:{
 		_id:'',
-		firstname:'',
-		middlename:'',
-		lastname:'',
-		email:''
+		fullname:''
 	}
 	status:'',
 	resolution:'',
@@ -40,17 +31,11 @@
 			responseMethod:'',
 			enteredByPerson:{
 				_id:'',
-				firstname:'',
-				middlename:'',
-				lastname:'',
-				email:''
+				fullname:''
 			},
 			reportedByPerson:{
 				_id:'',
-				firstname:'',
-				middlename:'',
-				lastname:'',
-				email:''
+				fullname:''
 			},
 			category:{
 				_id:'',
@@ -66,10 +51,7 @@
 					date:''
 					person:{
 						_id:'',
-						firstname:'',
-						middlename:'',
-						lastname:'',
-						email:''
+						fullname:''
 					}
 				}
 			]
@@ -82,18 +64,12 @@
 			enteredDate:'',
 			enteredByPerson:{
 				_id:'',
-				firstname:'',
-				middlename:'',
-				lastname:'',
-				email:''
+				fullname:''
 			},
 			actionDate:'',
 			actionPerson:{
 				_id:'',
-				firstname:'',
-				middlename:'',
-				lastname:'',
-				email:''
+				fullname:''
 			},
 			notes:''
 		}
