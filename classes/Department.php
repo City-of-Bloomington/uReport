@@ -51,7 +51,7 @@ class Department
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->data['name'] || !$this->data['default_person']) {
+		if (!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -90,14 +90,14 @@ class Department
 			return $this->data['name'];
 		}
 	}
-
+	
 	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getDefaultPerson()
 	{
 		if (isset($this->data['default_person'])) {
-			return $this->data['default_person'];
+			return (String)$this->data['default_person'];
 		}
 	}
 	
@@ -221,7 +221,7 @@ class Department
 	 */
 	public function getUsers()
 	{
-		return new UserList(array('department_id'=>$this->data['_id']));
+		return new PersonList(array('department_id'=>$this->data['_id']));
 	}
 
 	/**
