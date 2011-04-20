@@ -117,7 +117,7 @@ class Department
 	public function getCustomStatuses()
 	{
 		if (isset($this->data['customStatuses'])) {
-			return $this->data['castomStatuses'];
+			return $this->data['customStatuses'];
 		}
 	}
 	/**
@@ -153,7 +153,9 @@ class Department
 			'email'=>$person->getEmail()
 		);
 	}
-	
+	/*
+	 *@param array $array
+	 */
 
 	public function setCategories($categories)
 	{
@@ -172,7 +174,19 @@ class Department
 			}
 			$this->data['categories']= $cats;				
 		}
+	}
 
+	/*
+	 *@param string $string
+	 */
+
+	public function setCustomStatuses($string)
+	{
+		$statuses = explode(',',$string);
+		
+		if($statuses && is_array($statuses)){
+			$this->data['customStatuses']= $statuses;				
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -186,16 +200,6 @@ class Department
 	public function hasCategories()
 	{
 		return count($this->getCategories()) ? true : false;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getActions()
-	{
-		if (isset($this->data['actions')) {
-			return $this->data['actions'];
-		}
 	}
 
 	/**
@@ -222,16 +226,6 @@ class Department
 	public function getUsers()
 	{
 		return new PersonList(array('department_id'=>$this->data['_id']));
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getCustomStatuses()
-	{
-		if (isset($this->data['customStatuses'])) {
-			return $this->data['customStatuses'];
-		}
 	}
 
 	/**

@@ -30,12 +30,16 @@ $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_UR
 
 if (isset($_POST['name'])) {
 	$department->setName($_POST['name']);
-	$department->setDefaultPerson($_POST['defaultPerson']);
 
 	try {
-		$department->setCustomStatuses($_POST['customStatuses']);
-		$department->setCategories(array_keys($_POST['categories']));
-		$department->setActions(array_keys($_POST['actions']));
+		if(isset($_POST['defaultPerson']))
+			$department->setDefaultPerson($_POST['defaultPerson']);
+		if(isset($_POST['customStatuses']))
+			$department->setCustomStatuses($_POST['customStatuses']);
+		if(isset($_POST['categories']))			
+			$department->setCategories(array_keys($_POST['categories']));
+		if(isset($_POST['actions']))
+			$department->setActions(array_keys($_POST['actions']));
 		$department->save();
 		header('Location: '.$return_url);
 		exit();

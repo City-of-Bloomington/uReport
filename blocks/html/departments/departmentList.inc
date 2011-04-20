@@ -41,7 +41,11 @@
 					);
 				}
 				$name = View::escape($department->getName());
-				$person = View::escape($department->getDefault_person()->getFullname());
+				$person = $department->getDefaultPerson();
+				$fullname = "";
+				if($person){
+					$fullname = View::escape($person['fullname']);
+				}
 
 				$categories = '';
 				if ($department->hasCategories()) {
@@ -76,7 +80,7 @@
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
-					<td>$person</td>
+					<td>$fullname</td>
 					<td>$categories</td>
 					<td>$actions</td>
 					<td>$statuses</td>

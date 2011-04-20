@@ -7,10 +7,25 @@
  * @param string $this->return_url (optional)
  */
 $return_url = $this->return_url ? $this->return_url : BASE_URL.'/departments';
-$title = $this->department->getId() ? 'Edit' : 'Add';
-$name=View::escape($this->department->getName());
+$id = $this->department->getId();
+$title = $id ? 'Edit' : 'Add';
+$name = View::escape($this->department->getName());
 $defaultPerson = $this->department->getDefaultPerson();
-$defaultPersonName = View::escape($defaultPerson->getFullname());
+$defaultPersonName;
+$defaultPerson_id;
+if($defaultPerson){
+	$defaultPerson_id = (String)$defaultPerson['_id'];
+	$defaultPersonName = View::escape($defaultPerson['fullname']);
+}
+$users;
+$statuses="";
+if($id){
+	$users = $this->department->getUsers();
+	$statuses = $this->department->getCustomStatuses();
+	if($statuses){
+		$statuses = implode(',',$statuses);
+	}
+}
 ?>
 
 <div class="updateDepartmentForm">
@@ -27,8 +42,23 @@ $defaultPersonName = View::escape($defaultPerson->getFullname());
 			</tr>
 
 			<tr><td><label for="defaultPerson">Default Person</label></td>
-				<td><input name="defaultPerson" id="defaultPerson"
-						value="<?php echo $defaultPerson->getId(); ?>" />
+				<td>
+					<?php
+						if(isset($users)){
+						echo "
+							<select name=\"defaultPerson\" id=\"defaultPerson\" >";
+							foreach($users as $person){
+								$selected = ($person->getId() == $defaultPerson_id)? "selected=\"selected\"":"";
+								echo "<option value=\"{$person->getId()}\" $selected>{View::escapet($person->getFullname())}</option>";
+							}
+							echo "</select>";
+						}
+						else{
+							echo "
+							<input name=\"defaultPerson\" id=\"defaultPerson\"
+						value=\"\" />";
+						}
+					?>
 				</td>
 			</tr>
 
@@ -37,8 +67,8 @@ $defaultPersonName = View::escape($defaultPerson->getFullname());
 	<fieldset><legend>Custom Statuses</legend>
 		<p>Enter the statuses you want for the department, each separated by commas</p>
 		<div>
-			<input name="customStatuses" id="customStatuses"
-				value="<?php echo View::escape(implode(',',$this->department->getCustomStatuses())); ?>" />
+			<input name="customStatuses" id="customStatuses" size="40"
+				value="<?php echo $statuses; ?>" />
 		</div>
 	</fieldset>
 	<fieldset class="categories">
