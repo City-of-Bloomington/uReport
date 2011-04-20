@@ -21,5 +21,5 @@ catch (Exception $e) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('categories/noteList.inc',array('category'=>$category));
+$template->blocks[] = new Block('categories/problemList.inc',array('category'=>$category));
 echo $template->render();

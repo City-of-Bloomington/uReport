@@ -3,6 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param CategoryList $this->categoryList
  */
 ?>
 <div class="interfaceBox">
@@ -18,8 +19,8 @@
 	<table>
 		<thead>
 			<tr><th></th>
-				<th>Type</th>
-				<th>Notes</th>
+				<th>Name</th>
+				<th>Problems</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,13 +37,13 @@
 						'edit'
 					);
 				}
-				$type = View::escape($category->getName());
-				$notes = count($category->getNotes());
+				$name = View::escape($category->getName());
+				$problems = count($category->getProblems());
 				echo "
 				<tr><td>$editButton</td>
-					<td>$type</td>
-					<td><a href=\"".BASE_URL."/categories/notes.php?category_id={$category->getId()}\">
-							$notes
+					<td>$name</td>
+					<td><a href=\"".BASE_URL."/categories/problems.php?category_id={$category->getId()}\">
+							$problems
 						</a>
 					</td>
 				</tr>

@@ -37,10 +37,10 @@ class CategoryList extends MongoResultIterator
 			}
 		}
 		if (count($search)) {
-			$this->cursor = $this->mongo->tickets->find($search);
+			$this->cursor = $this->mongo->categories->find($search);
 		}
 		else {
-			$this->cursor = $this->mongo->tickets->find();
+			$this->cursor = $this->mongo->categories->find();
 		}
 		if ($order) {
 			$this->cursor->sort($order);
@@ -53,15 +53,12 @@ class CategoryList extends MongoResultIterator
 	/**
 	 * Hydrates all the Category objects from a database result set
 	 *
-	 * This is a callback function, called from ZendDbResultIterator.  It is
-	 * called once per row of the result.
-	 *
 	 * @param int $key The index of the result row to load
 	 * @return Category
 	 */
-	protected function loadResult($key)
+	protected function loadResult($data)
 	{
-		return new Category($this->result[$key]);
+		return new Category($data);
 	}
 	
 	/**

@@ -81,7 +81,9 @@ class Category
 	 */
 	public function getId()
 	{
-		return $this->data['_id'];
+		if (isset($this->data['_id'])) {
+			return $this->data['_id'];
+		}
 	}
 
 	/**
@@ -89,15 +91,9 @@ class Category
 	 */
 	public function getName()
 	{
-		return $this->data['name'];
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getTypes()
-	{
-		return $this->data['types'];
+		if (isset($this->data['name'])) {
+			return $this->data['name'];
+		}
 	}
 	
 	/**
@@ -105,7 +101,10 @@ class Category
 	 */
 	public function getProblems()
 	{
-		return $this->data['problems'];
+		if (isset($this->data['problems'])) {
+			return $this->data['problems'];
+		}
+		return array();
 	}
 	
 	/**
@@ -113,7 +112,10 @@ class Category
 	 */
 	public function getCustomFields()
 	{
-		return $this->data['customFields'];
+		if (isset($this->data['customFields'])) {
+			return $this->data['customFields'];
+		}
+		return array();
 	}
 
 	//----------------------------------------------------------------
@@ -134,5 +136,33 @@ class Category
 	public function __toString()
 	{
 		return $this->getName();
+	}
+	
+	/**
+	 * @param string $problem
+	 * @param int $index
+	 */
+	public function updateProblems($problem, $index=null)
+	{
+		if (!isset($this->data['problems'])) {
+			$this->data['problems'] = array();
+		}
+		
+		if (isset($index) && isset($this->data['problems'][$index])) {
+			$this->data['problems'][$index] = trim($problem);
+		}
+		else {
+			$this->data['problems'][] = trim($problem);
+		}
+	}
+	
+	/**
+	 * @param int $index
+	 */
+	public function removeProblem($index)
+	{
+		if (isset($this->data['problems'][$index])) {
+			unset($this->data['problems'][$index]);
+		}
 	}
 }

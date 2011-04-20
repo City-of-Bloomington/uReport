@@ -1,7 +1,6 @@
 {
 	_id:'',
 	name:'',
-	types:[],
 	problems:[],
 	customFields:[
 		{
