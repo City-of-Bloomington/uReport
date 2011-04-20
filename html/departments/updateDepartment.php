@@ -29,17 +29,16 @@ else {
 $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/departments';
 
 if (isset($_POST['name'])) {
-	$department->setName($_POST['name']);
+	$fields = array('name','defaultPerson','customStatuses','categories');
 
 	try {
-		if(isset($_POST['defaultPerson']))
-			$department->setDefaultPerson($_POST['defaultPerson']);
-		if(isset($_POST['customStatuses']))
-			$department->setCustomStatuses($_POST['customStatuses']);
-		if(isset($_POST['categories']))			
-			$department->setCategories(array_keys($_POST['categories']));
-		if(isset($_POST['actions']))
-			$department->setActions(array_keys($_POST['actions']));
+		foreach ($fields as $field) {
+			if (isset($_POST[$field])) {
+				$set = 'set'.ucfirst($field);
+				$department->$set($_POST[$field]);
+			}
+		}
+		
 		$department->save();
 		header('Location: '.$return_url);
 		exit();

@@ -41,11 +41,13 @@
 					);
 				}
 				$name = View::escape($department->getName());
+				
+				$fullname = '';
 				$person = $department->getDefaultPerson();
-				$fullname = "";
-				if($person){
-					if(isset($person['fullname']))
+				if ($person) {
+					if (isset($person['fullname'])) {
 						$fullname = View::escape($person['fullname']);
+					}
 				}
 
 				$categories = '';

@@ -96,8 +96,8 @@ class Department
 	 */
 	public function getDefaultPerson()
 	{
-		if (isset($this->data['default_person'])) {
-			return $this->data['default_person'];
+		if (isset($this->data['defaultPerson'])) {
+			return $this->data['defaultPerson'];
 		}
 	}
 	
@@ -146,48 +146,54 @@ class Department
 	 */
 	public function setDefaultPerson($string)
 	{
-		if($string){
+		$string = trim($string);
+		if ($string) {
 			$person = new Person($string);
-			$this->data['default_person'] = array(
+			$this->data['defaultPerson'] = array(
 				'_id'=>$person->getId(),
 				'fullname'=>$person->getFullname(),
 				'email'=>$person->getEmail()
 			);
 		}
+		else {
+			unset($this->data['defaultPerson']);
+		}
 	}
+	
 	/*
 	 *@param array $array
 	 */
-
 	public function setCategories($categories)
 	{
-		if($categories && is_array($categories)){
-			$cats = array();			
+		if ($categories && is_array($categories)) {
+			$this->data['categories'] = array();
+			
 			foreach ($categories as $id) {
-				try{
-					$category = new Category($id);				
-					if($category){
-						$cats[] = array(
-							'_id'=>$category->getId(),
-							'name'=>$category->getName()
-						);
-					}
-				}catch(Eexception $ex){}
+				try {
+					$category = new Category($id);
+					$this->data['categories'][] = array(
+						'_id'=>$category->getId(),
+						'name'=>$category->getName()
+					);
+				}
+				catch (Eexception $ex) {
+					// Just ignore the bad ones
+				}
 			}
-			$this->data['categories']= $cats;				
 		}
 	}
 
 	/*
 	 *@param string $string
 	 */
-
 	public function setCustomStatuses($string)
 	{
-		$statuses = explode(',',$string);
-		
-		if($statuses && is_array($statuses)){
-			$this->data['customStatuses']= $statuses;				
+		$this->data['customStatuses'] = array();
+		foreach (explode(',',$string) as $status) {
+			$status = trim($status);
+			if ($status) {
+				$this->data['customStatuses'] = $status;
+			}
 		}
 	}
 
@@ -201,13 +207,13 @@ class Department
 	 */
 	public function hasCategory($string)
 	{
-		if($this->hasCategories()){
-			foreach($this->getCategories() as $category){
-				if($string == $category['name']) return true;		
+		foreach ($this->getCategories() as $category) {
+			if ($string == $category['name']) {
+				return true;
 			}
 		}
-		return false;
 	}
+	
 	/**
 	 * @return bool
 	 */
@@ -217,15 +223,16 @@ class Department
 	}
 
 	/**
-	 * @param string $action
+	 * @param string $string
 	 * @return bool
 	 */
-	public function hasAction($action)
+	public function hasAction($string)
 	{
-		if($this->hasActions()){
-			return array_key_exists($action,$this->getActions());
+		foreach ($this->getActions() as $action) {
+			if ($string == $action['name']) {
+				return true;
+			}
 		}
-		return false;
 	}
 
 	/**
@@ -240,9 +247,9 @@ class Department
 	/**
 	 * @return UserList
 	 */
-	public function getUsers()
+	public function getPeople()
 	{
-		return new PersonList(array('department_id'=>$this->data['_id']));
+		return new PersonList(array('department._id'=>$this->data['_id']));
 	}
 
 	/**
@@ -252,5 +259,4 @@ class Department
 	{
 		return count($this->getCustomStatuses()) ? true : false;
 	}
-
 }

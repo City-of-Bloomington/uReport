@@ -7,78 +7,57 @@
  * @param string $this->return_url (optional)
  */
 $return_url = $this->return_url ? $this->return_url : BASE_URL.'/departments';
-$id = $this->department->getId();
-$title = $id ? 'Edit' : 'Add';
-$name = View::escape($this->department->getName());
-$defaultPerson = $this->department->getDefaultPerson();
-$defaultPersonName;
-$defaultPerson_id;
-if($defaultPerson){
-	$defaultPerson_id = (String)$defaultPerson['_id'];
-	$defaultPersonName = View::escape($defaultPerson['fullname']);
-}
-$users;
-$statuses="";
-if($id){
-	$users = $this->department->getUsers();
-	if(!$users || !count($users)){
-		$users = null;
-	}
-	$statuses = $this->department->getCustomStatuses();
-	if($statuses){
-		$statuses = implode(',',$statuses);
-	}
-}
+$title = $this->department->getId() ? 'Edit' : 'Add';
 ?>
-
 <div class="updateDepartmentForm">
 <h1><?php echo $title; ?> Department</h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>
-
 			<tr><td><label for="name" class="required">Name</label></td>
 				<td><input name="name" id="name"
-						value="<?php echo $name; ?>" />
+						value="<?php echo View::escape($this->department->getName()); ?>" />
 				</td>
 			</tr>
 
 			<tr><td><label for="defaultPerson">Default Person</label></td>
-				<td>
+				<td><select name="defaultPerson" id="defaultPerson">
 					<?php
-						if(isset($users)){
-							echo "
-							<select name=\"defaultPerson\" id=\"defaultPerson\" >
-							<option>\n</option>";
-							foreach($users as $person){
-								$selected = ($person->getId() == $defaultPerson_id)? "selected=\"selected\"":"";
-								echo "<option value=\"{$person->getId()}\" $selected>{View::escapet($person->getFullname())}</option>";
+						$defaultPerson = $this->department->getDefaultPerson();
+						$defaultPerson_id = '';
+						if ($defaultPerson) {
+							$defaultPerson_id = $defaultPerson['_id'];
+						}
+						foreach ($this->department->getPeople() as $person) {
+							$name = View::escape($person['fullname']);
+							if ($name) {
+								$selected = $person['_id']==$defaultPerson_id
+									? 'selected="selected"'
+									: '';
+								echo "<option value=\"$person[_id]\" $selected>$name</option>";
 							}
-							echo "</select>";
-						}
-						else if($defaultPerson){												echo "
-							<select name=\"defaultPerson\" id=\"defaultPerson\" >
-							<option>\n</option>";
-							echo "<option selected value=\"$defaultPerson_id\">$defaultPersonName</option>";
-							echo "</select>";
-						}
-						else{
-							echo "
-							<input name=\"defaultPerson\" id=\"defaultPerson\"
-						value=\"\" />";
 						}
 					?>
+					</select>
 				</td>
 			</tr>
-
 		</table>
 	</fieldset>
 	<fieldset><legend>Custom Statuses</legend>
 		<p>Enter the statuses you want for the department, each separated by commas</p>
 		<div>
-			<input name="customStatuses" id="customStatuses" size="40"
-				value="<?php echo $statuses; ?>" />
+		<?php
+			$statuses = array();
+			foreach ($this->department->getCustomStatuses() as $status) {
+				$statuses[] = View::escape($status);
+			}
+			$statuses = implode(',',$statuses);
+			echo "
+			<input name=\"customStatuses\" id=\"customStatuses\"
+				value=\"$statuses\" />
+			";
+		?>
 		</div>
 	</fieldset>
 	<fieldset class="categories">
