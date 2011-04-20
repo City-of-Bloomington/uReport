@@ -109,6 +109,7 @@ class Department
 		if (isset($this->data['categories'])) {
 			return $this->data['categories'];
 		}
+		return array();
 	}
 	
 	/**
@@ -119,6 +120,7 @@ class Department
 		if (isset($this->data['customStatuses'])) {
 			return $this->data['customStatuses'];
 		}
+		return array();
 	}
 	/**
 	 * @return array
@@ -128,6 +130,7 @@ class Department
 		if (isset($this->data['actions'])) {
 			return $this->data['actions'];
 		}
+		return array();
 	}	
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -192,7 +195,7 @@ class Department
 		foreach (explode(',',$string) as $status) {
 			$status = trim($status);
 			if ($status) {
-				$this->data['customStatuses'] = $status;
+				$this->data['customStatuses'][] = $status;
 			}
 		}
 	}
