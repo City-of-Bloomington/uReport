@@ -191,6 +191,15 @@ class Person
 		}
 	}
 
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if (isset($this->data['department'])) {
+			return $this->data['department'];
+		}
+	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -275,7 +284,18 @@ class Person
 		$this->data['zip'] = trim($string);
 	}
 
-
+	/**
+	 * @param string $string
+	 */
+	public function setDepartment($string)
+	{
+		$department = new Department($string);
+		
+		$this->data['department'] = array(
+			'_id'=>$department->getId(),
+			'name'=>$department->getName()
+		);
+	}
 	//----------------------------------------------------------------
 	// User Authentication implementation
 	//----------------------------------------------------------------
@@ -388,6 +408,16 @@ class Person
 			return $this->getOrganization();
 		}
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function getDepartment_id()
+	{
+		if (isset($this->data['department']['_id'])) {
+			return $this->data['department']['_id'];
+		}
+	}
 
 	/**
 	 * @return string
@@ -396,16 +426,6 @@ class Person
 	{
 		if ($this->getId()) {
 			return BASE_URL.'/people/viewPerson.php?person_id='.$this->getId();
-		}
-	}
-
-	/**
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		if (isset($this->data['department'])) {
-			return $this->data['department'];
 		}
 	}
 

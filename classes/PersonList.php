@@ -32,7 +32,7 @@ class PersonList extends MongoResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$search[$key] = (string)$value;
+					$search[$key] = $value;
 				}
 			}
 		}
