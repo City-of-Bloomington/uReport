@@ -6,28 +6,8 @@
  */
 class Ticket
 {
-	private $id;
-	private $enteredDate;
-	private $enteredByPerson_id;
-	private $assignedPerson_id;
-	private $referredPerson_id;
-	private $status;           // open, closed,
-	private $resolution_id;
-	private $location;
-	private $latitude;
-	private $longitude;
-	private $address_id;
-	private $city;
-	private $state;
-	private $zip;
-
-	private $addressServiceCache = array();
-
-	private $enteredByPerson;
-	private $assignedPerson;
-	private $referredPerson;
-	private $resolution;
-
+	private $data = array();
+	
 	// Used to identify fields that can be updated from the AddressService
 	private	$addressServiceFields = array(
 		'location','address_id','city','state','zip','latitude','longitude'
@@ -52,20 +32,12 @@ class Ticket
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
-				$sql = 'select * from tickets where id=?';
-				$result = $zend_db->fetchRow($sql,array($id));
+				$mongo = Database::getConnection();
+				$result = $mongo->tickets->findOne(array('_id'=>new MongoId($id)));
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						if (preg_match('/Date/',$field)) {
-							$value = new Date($value);
-						}
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('tickets/unknownTicket');
@@ -107,43 +79,8 @@ class Ticket
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
-		$data['enteredByPerson_id'] = $this->enteredByPerson_id ? $this->enteredByPerson_id : null;
-		$data['assignedPerson_id'] = $this->assignedPerson_id ? $this->assignedPerson_id : null;
-		$data['referredPerson_id'] = $this->referredPerson_id ? $this->referredPerson_id : null;
-		$data['status'] = $this->status;
-		$data['resolution_id'] = $this->resolution_id ? $this->resolution_id : null;
-		$data['location'] = $this->location ? $this->location : null;
-		$data['latitude'] = $this->latitude ? $this->latitude : null;
-		$data['longitude'] = $this->longitude ? $this->longitude : null;
-		$data['address_id'] = $this->address_id ? $this->address_id : null;
-		$data['city'] = $this->city ? $this->city : null;
-		$data['state'] = $this->state ? $this->state : null;
-		$data['zip'] = $this->zip ? $this->zip : null;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-
-		AddressService::saveTicketData($this->addressServiceCache,$this);
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('tickets',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('tickets',$data);
-		$this->id = $zend_db->lastInsertId('tickets','id');
+		$mongo = Database::getConnection();
+		$mongo->tickets->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -154,7 +91,7 @@ class Ticket
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->data['_id'];
 	}
 
 	/**
@@ -162,85 +99,44 @@ class Ticket
 	 *
 	 * Format is specified using PHP's date() syntax
 	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
+	 * If no format is given, the MongoDate object is returned
 	 *
 	 * @param string $format
-	 * @return string|DateTime
+	 * @return string|MongoDate
 	 */
 	public function getEnteredDate($format=null)
 	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
+		if ($format) {
+			list($microseconds,$timestamp) = explode(' ',$this->data['enteredDate']);
+			return date($format,$timestamp);
 		}
 		else {
-			return $this->enteredDate;
+			return $this->date['enteredDate'];
 		}
 	}
-
+	
 	/**
-	 * @return int
-	 */
-	public function getEnteredByPerson_id()
-	{
-		return $this->enteredByPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getEnteredByPerson()
 	{
-		if ($this->enteredByPerson_id) {
-			if (!$this->enteredByPerson) {
-				$this->enteredByPerson = new Person($this->enteredByPerson_id);
-			}
-			return $this->enteredByPerson;
-		}
-		return null;
+		return $this->data['enteredByPerson'];
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getAssignedPerson_id()
-	{
-		return $this->assignedPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getAssignedPerson()
 	{
-		if ($this->assignedPerson_id) {
-			if (!$this->assignedPerson) {
-				$this->assignedPerson = new Person($this->assignedPerson_id);
-			}
-			return $this->assignedPerson;
-		}
-		return null;
+		return $this->data['assignedPerson'];
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getReferredPerson_id()
-	{
-		return $this->referredPerson_id;
-	}
-
-	/**
-	 * @return ReferredPerson
+	 * @return array
 	 */
 	public function getReferredPerson()
 	{
-		if ($this->referredPerson_id) {
-			if (!$this->referredPerson) {
-				$this->referredPerson = new Person($this->referredPerson_id);
-			}
-			return $this->referredPerson;
-		}
-		return null;
+		return $this->data['referredPerson'];
 	}
 
 	/**
@@ -248,28 +144,15 @@ class Ticket
 	 */
 	public function getStatus()
 	{
-		return $this->status;
+		return $this->data['status'];
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getResolution_id()
-	{
-		return $this->resolution_id;
-	}
-
-	/**
-	 * @return Resolution
+	 * @return string
 	 */
 	public function getResolution()
 	{
-		if ($this->resolution_id) {
-			if (!$this->resolution) {
-				$this->resolution = new Resolution($this->resolution_id);
-			}
-			return $this->resolution;
-		}
+		return $this->data['resolution'];
 	}
 
 	/**
@@ -277,7 +160,7 @@ class Ticket
 	 */
 	public function getLocation()
 	{
-		return $this->location;
+		return $this->data['location'];
 	}
 
 	/**
@@ -285,7 +168,7 @@ class Ticket
 	 */
 	public function getLatitude()
 	{
-		return $this->latitude;
+		return $this->data['latitude'];
 	}
 
 	/**
@@ -293,7 +176,7 @@ class Ticket
 	 */
 	public function getLongitude()
 	{
-		return $this->longitude;
+		return $this->data['longitude'];
 	}
 
 	/**
@@ -301,7 +184,7 @@ class Ticket
 	 */
 	public function getAddress_id()
 	{
-		return $this->address_id;
+		return $this->data['address_id'];
 	}
 
 	/**
@@ -309,7 +192,7 @@ class Ticket
 	 */
 	public function getCity()
 	{
-		return $this->city;
+		return $this->data['city'];
 	}
 
 	/**
@@ -317,7 +200,7 @@ class Ticket
 	 */
 	public function getState()
 	{
-		return $this->state;
+		return $this->data['state'];
 	}
 
 	/**
@@ -325,15 +208,7 @@ class Ticket
 	 */
 	public function getZip()
 	{
-		return $this->zip;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getAddressServiceCache()
-	{
-		return $this->addressServiceCache;
+		return $this->data['zip'];
 	}
 
 	//----------------------------------------------------------------
@@ -342,78 +217,53 @@ class Ticket
 	/**
 	 * Sets the date
 	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
+	 * Dates should be in something strtotime() understands
 	 * http://www.php.net/manual/en/function.strtotime.php
 	 *
-	 * @param int|string|array $date
+	 * @param string $date
 	 */
 	public function setEnteredDate($date)
 	{
-		if ($date instanceof Date) {
-			$this->enteredDate = $date;
-		}
-		elseif ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
+		$date = trim($date);
+		if ($date) {
+			$this->data['enteredDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
 	/**
-	 * @param int $int
+	 * @param string $id
 	 */
-	public function setEnteredByPerson_id($int)
+	public function setEnteredByPerson($id)
 	{
-		$this->enteredByPerson = new Person($int);
-		$this->enteredByPerson_id = $int;
+		$person = new Person($id);
+		$this->data['enteredByPerson'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person-getFullname()
+		);
 	}
 
 	/**
-	 * @param Person $person
+	 * @param string $id
 	 */
-	public function setEnteredByPerson($person)
+	public function setAssignedPerson($id)
 	{
-		$this->enteredByPerson_id = $person->getId();
-		$this->enteredByPerson = $person;
+		$person = new Person($id);
+		$this->data['assignedPerson'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person-getFullname()
+		);
 	}
 
 	/**
-	 * @param int $int
+	 * @param string $id
 	 */
-	public function setAssignedPerson_id($int)
+	public function setReferredPerson($id)
 	{
-		$this->assignedPerson = new Person($int);
-		$this->assignedPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setAssignedPerson($person)
-	{
-		$this->assignedPerson_id = $person->getId();
-		$this->assignedPerson = $person;
-	}
-
-	/**
-	 * @param int $int
-	 */
-	public function setReferredPerson_id($int)
-	{
-		$this->referredPerson = new Person($int);
-		$this->referredPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
-	 */
-	public function setReferredPerson($person)
-	{
-		$this->referredPerson_id = $person->getId();
-		$this->referredPerson = $person;
+		$person = new Person($id);
+		$this->data['referredPerson'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person-getFullname()
+		);
 	}
 
 	/**
@@ -425,36 +275,25 @@ class Ticket
 	 */
 	public function setStatus($string)
 	{
-		$this->status = trim($string);
-		if ($this->status != 'closed') {
-			$this->resolution = null;
-			$this->resolution_id = null;
+		$this->data['status'] = trim($string);
+		if ($this->data['status'] != 'closed') {
+			unset($this->data['resolution']);
 		}
 	}
 
 	/**
-	 * @param int $id
-	 */
-	public function setResolution_id($id)
-	{
-		$this->resolution = new Resolution($id);
-		$this->resolution_id = $this->resolution->getId();
-
-		$this->status = 'closed';
-	}
-
-	/**
-	 * @param Resolution|string $resolution
+	 * @param string $resolution
 	 */
 	public function setResolution($resolution)
 	{
-		if (!$resolution instanceof Resolution) {
-			$resolution = new Resolution($resolution);
+		$resolution = trim($resolution);
+		if ($resolution) {
+			$this->data['resolution'] = $resolution;
 		}
-		$this->resolution_id = $resolution->getId();
-		$this->resolution = $resolution;
-
-		$this->status = 'closed';
+		elseif (isset($this->data['resolution'])) {
+			unset($this->data['resolution']);
+		}
+		$this->data['status'] = 'closed';
 	}
 
 	/**
@@ -514,24 +353,19 @@ class Ticket
 	}
 
 	/**
-	 * Populates ticket fields from the data passed in
-	 *
-	 * Data fields that have the same name as Ticket properties will
-	 * update the appropriate property.  These fields will be removed from the
-	 * cache, so we only store any piece of data in one, an only one place.
-	 *
-	 * @param array $data
+	 * @return array
 	 */
-	public function setAddressServiceCache($data)
+	public function getIssues()
 	{
-		foreach ($data as $key=>$value) {
-			if (in_array($key,$this->addressServiceFields)) {
-				$set = 'set'.ucfirst($key);
-				$this->$set($value);
-				unset($data[$key]);
-			}
-		}
-		$this->addressServiceCache = $data;
+		return $this->data['issues'];
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getHistory()
+	{
+		return $this->data['history'];
 	}
 
 	//----------------------------------------------------------------
@@ -546,28 +380,17 @@ class Ticket
 		return BASE_URL.'/tickets/viewTicket.php?ticket_id='.$this->id;
 	}
 
-	/**
-	 * @return IssueList
-	 */
-	public function getIssues()
-	{
-		return new IssueList(array('ticket_id'=>$this->id));
-	}
 
 	/**
-	 * @return CategoryList
+	 * @return array
 	 */
 	public function getCategories()
 	{
-		return new CategoryList(array('ticket_id'=>$this->id));
-	}
-
-	/**
-	 * @return TicketHistoryList
-	 */
-	public function getHistory()
-	{
-		return new TicketHistoryList(array('ticket_id'=>$this->id));
+		$categories = array();
+		foreach ($this->data['issues'] as $issue) {
+			$categories[] = $issue['category'];
+		}
+		return $categories;
 	}
 
 	/**
@@ -579,13 +402,7 @@ class Ticket
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
-		if ($this->id && $ticket->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->update('issues',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
-			$zend_db->update('ticketHistory',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
-			$zend_db->delete('addressServiceCache',array('ticket_id'=>$ticket->getId()));
-			$zend_db->delete('tickets','id='.$ticket->getId());
-		}
+
 	}
 
 	/**
@@ -596,20 +413,7 @@ class Ticket
 	 */
 	public static function getDistinct($fieldname)
 	{
-		if (property_exists('ticket',$fieldname)) {
-			$zend_db = Database::getConnection();
-			return $zend_db->fetchCol("select distinct $fieldname from tickets order by $fieldname");
-		}
-	}
-
-	/**
-	 * Empties out the fields that can be populated from the AddressService
-	 */
-	public function clearAddressServiceCache()
-	{
-		foreach ($this->addressServiceFields as $field) {
-			$set = 'set'.ucfirst($field);
-			$this->$set('');
-		}
+		$mongo = Database::getConnection();
+		return $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
 	}
 }

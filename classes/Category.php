@@ -6,8 +6,7 @@
  */
 class Category
 {
-	private $id;
-	private $name;
+	private $data = array();
 
 	/**
 	 * Populates the object with data
@@ -28,22 +27,19 @@ class Category
 				$result = $id;
 			}
 			else {
-				if (is_numeric($id)) {
-					$sql = 'select * from categories where id=?';
+				$mongo = Database::getConnection();
+				
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
+					$search = array('_id'=>new MongoId($id));
 				}
 				else {
-					$sql = 'select * from categories where name=?';
+					$search = array('name'=>(string)$id);
 				}
-				$zend_db = Database::getConnection();
-				$result = $zend_db->fetchRow($sql,array($id));
+				$result = $mongo->categories->findOne($search);
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('categories/unknownCategory');
@@ -62,7 +58,7 @@ class Category
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->name) {
+		if(!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -73,41 +69,19 @@ class Category
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['name'] = $this->name;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
+		$mongo = Database::getConnection();
+		$mongo->categories->save($this->data,array('safe'=>true));
 	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('categories',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('categories',$data);
-		$this->id = $zend_db->lastInsertId('categories','id');
-	}
-
+	
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
-	 * @return int
+	 * @return string
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->data['_id'];
 	}
 
 	/**
@@ -115,43 +89,50 @@ class Category
 	 */
 	public function getName()
 	{
-		return $this->name;
+		return $this->data['name'];
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getTypes()
+	{
+		return $this->data['types'];
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getProblems()
+	{
+		return $this->data['problems'];
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCustomFields()
+	{
+		return $this->data['customFields'];
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param string $string
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->data['name'] = trim($string);
 	}
-
+	
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @return CategoryNoteList
-	 */
-	public function getNotes()
-	{
-		return new CategoryNoteList(array('category_id'=>$this->id));
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasNotes()
-	{
-		return count($this->getNotes()) ? true : false;
+		return $this->getName();
 	}
 }
