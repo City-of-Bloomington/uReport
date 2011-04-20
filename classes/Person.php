@@ -299,24 +299,40 @@ class Person
 	//----------------------------------------------------------------
 	// User Authentication implementation
 	//----------------------------------------------------------------
+	/**
+	 * @return string
+	 */
 	public function getUsername()
 	{
 		if (isset($this->data['username'])) {
 			return $this->data['username'];
 		}
 	}
+	
+	/**
+	 * @return string
+	 */
 	public function getAuthenticationMethod()
 	{
 		if (isset($this->data['authenticationMethod'])) {
 			return $this->data['authenticationMethod'];
 		}
 	}
+	
+	/**
+	 * @return array
+	 */
 	public function getRoles()
 	{
 		if (isset($this->data['roles'])) {
 			return $this->data['roles'];
 		}
+		return array();
 	}
+	
+	/**
+	 * @return bool
+	 */
 	public function hasRole($role)
 	{
 		if (isset($this->data['roles'])) {
