@@ -16,25 +16,20 @@ $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
 $result = $pdo->query('select username,authenticationMethod,firstname,lastname from users u,people p where p.id=u.person_id');
 foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
-	$person = new Person();
-
 	try {
-		$user = new User($row['username']);
+		$person = new Person($row['username']);
 	}
 	catch (Exception $e) {
-		$user = new User();
-		$user->setUsername($row['username']);
-		$user->setAuthenticationMethod($row['authenticationMethod']);
+		$person = new Person();
+		$person->setUsername($row['username']);
+		$person->setAuthenticationMethod($row['authenticationMethod']);
 		if($row['authenticationMethod'] == 'LDAP'){
 			try {
-				$ldap = new LDAPEntry($user->getUsername());
+				$ldap = new LDAPEntry($person->getUsername());
 				$person->setFirstname($ldap->getFirstname());
 				$person->setLastname($ldap->getLastname());
 				$person->setEmail($ldap->getEmail());
-				if($ldap->getDepartment()){
-				  $department = new Department($ldap->getDepartment());
-				  $user->setDepartment($department);
-				}
+				$person->setDepartment($ldap->getDepartment());
 			}
 			catch (Exception $e) {
 				$person->setEmail($row['username'].'@bloomington.in.gov');
@@ -46,15 +41,12 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 		}
 		try {
 			$person->save();
-			$user->setPerson($person);
-			$user->save();
 		}
 		catch (Exception $e) {
 			print_r($e);
 			print_r($person);
-			print_r($user);
 			exit();
 		}
 	}
-	echo $user->getUsername()."\n";
+	echo $person->getFullname()."\n";
 }

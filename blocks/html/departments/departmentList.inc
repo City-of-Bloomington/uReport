@@ -44,14 +44,15 @@
 				$person = $department->getDefaultPerson();
 				$fullname = "";
 				if($person){
-					$fullname = View::escape($person['fullname']);
+					if(isset($person['fullname']))
+						$fullname = View::escape($person['fullname']);
 				}
 
 				$categories = '';
 				if ($department->hasCategories()) {
 					$categories = '<ul>';
 					foreach ($department->getCategories() as $category) {
-						$c = View::escape($category);
+						$c = View::escape($category['name']);
 						$categories.="<li>$c</li>";
 					}
 					$categories.='</ul>';

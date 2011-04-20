@@ -21,6 +21,9 @@ $users;
 $statuses="";
 if($id){
 	$users = $this->department->getUsers();
+	if(!$users || !count($users)){
+		$users = null;
+	}
 	$statuses = $this->department->getCustomStatuses();
 	if($statuses){
 		$statuses = implode(',',$statuses);
@@ -45,12 +48,19 @@ if($id){
 				<td>
 					<?php
 						if(isset($users)){
-						echo "
-							<select name=\"defaultPerson\" id=\"defaultPerson\" >";
+							echo "
+							<select name=\"defaultPerson\" id=\"defaultPerson\" >
+							<option>\n</option>";
 							foreach($users as $person){
 								$selected = ($person->getId() == $defaultPerson_id)? "selected=\"selected\"":"";
 								echo "<option value=\"{$person->getId()}\" $selected>{View::escapet($person->getFullname())}</option>";
 							}
+							echo "</select>";
+						}
+						else if($defaultPerson){												echo "
+							<select name=\"defaultPerson\" id=\"defaultPerson\" >
+							<option>\n</option>";
+							echo "<option selected value=\"$defaultPerson_id\">$defaultPersonName</option>";
 							echo "</select>";
 						}
 						else{
@@ -78,13 +88,14 @@ if($id){
 			$list = new CategoryList();
 			$list->find();
 			foreach ($list as $category) {
-				$name = View::escape($category);
-				$checked = $this->department->hasCategory($category)
+				$id = $category->getId();
+				$name = View::escape($category->getName());
+				$checked = $this->department->hasCategory($name)
 					? 'checked="checked"'
 					: '';
 				echo "
 				<li><label>
-						<input name=\"categories[{$category->getId()}]\" type=\"checkbox\" $checked />
+						<input name=\"categories[$id]\" type=\"checkbox\" $checked />
 						$name
 					</label>
 				</li>

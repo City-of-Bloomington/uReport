@@ -97,7 +97,7 @@ class Department
 	public function getDefaultPerson()
 	{
 		if (isset($this->data['default_person'])) {
-			return (String)$this->data['default_person'];
+			return $this->data['default_person'];
 		}
 	}
 	
@@ -146,12 +146,14 @@ class Department
 	 */
 	public function setDefaultPerson($string)
 	{
-		$person = new Person($string);
-		$this->data['default_person'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname(),
-			'email'=>$person->getEmail()
-		);
+		if($string){
+			$person = new Person($string);
+			$this->data['default_person'] = array(
+				'_id'=>$person->getId(),
+				'fullname'=>$person->getFullname(),
+				'email'=>$person->getEmail()
+			);
+		}
 	}
 	/*
 	 *@param array $array
@@ -193,7 +195,19 @@ class Department
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-
+	/**
+	 * @param string $string
+	 * @return bool
+	 */
+	public function hasCategory($string)
+	{
+		if($this->hasCategories()){
+			foreach($this->getCategories() as $category){
+				if($string == $category['name']) return true;		
+			}
+		}
+		return false;
+	}
 	/**
 	 * @return bool
 	 */
@@ -203,12 +217,15 @@ class Department
 	}
 
 	/**
-	 * @param Action $action
+	 * @param string $action
 	 * @return bool
 	 */
-	public function hasAction(Action $action)
+	public function hasAction($action)
 	{
-		return array_key_exists($action,$this->getActions());
+		if($this->hasActions()){
+			return array_key_exists($action,$this->getActions());
+		}
+		return false;
 	}
 
 	/**
