@@ -25,13 +25,13 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 	 
 	if ($row['address'] && (strtolower($row['city']) == 'bloomington')) {
 		$row['address'] = preg_replace('/[^a-zA-Z0-9\-\&\s\'\/]/','',$row['address']);
-		$url = new URL(MASTER_ADDRESS.'/addresses/parse.php');
+		$url = new URL(ADDRESS_SERVICE.'/addresses/parse.php');
 		$url->format = 'xml';
 		$url->address = $row['address'];
 		$parsed = new SimpleXMLElement($url,null,true);
 		if ($parsed->street_number && $parsed->street_name) {
 			// Look up their address in Master Address
-			$url = new URL(MASTER_ADDRESS.'/home.php');
+			$url = new URL(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
 			$url->query = $row['address'];
@@ -44,20 +44,14 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$person->setCity($xml->address->city);
 				$person->setState($xml->address->state);				
 				$person->setZip($xml->address->zip);				
-				$person->setStreet_address_id($xml->address->id);
+				// $person->setStreet_address_id($xml->address->id);
 				// See if there's a subunit
 				if ($parsed->subunitIdentifier) {
 					$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
 					if ($subunit) {
-						$person->setSubunit_id($subunit[0]['id']);
+						// $person->setSubunit_id($subunit[0]['id']);
 						$person->setAddress("{$person->getAddress()} {$subunit[0]->type} {$subunit[0]->identifier}");
 					}
-				}
-
-				// See if there's a neighborhood association
-				$neighborhood = $xml->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
-				if ($neighborhood) {
-					$person->setNeighborhoodAssociation($neighborhood[0]);
 				}
 				echo "{$person->getAddress()} ==>";
 			}
