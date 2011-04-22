@@ -34,12 +34,12 @@
 				if (userIsAllowed('Departments')) {
 					$editButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/departments/updateDepartment.php?department_id='.$department->getId(),
+						BASE_URL.'/departments/updateDepartment.php?department_id='.(string)$department->getId(),
 						'edit'
 					);
 					$editActionsButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/departments/actions.php?department_id='.$department->getId(),
+						BASE_URL.'/departments/actions.php?department_id='.(string)$department->getId(),
 						'edit'
 					);
 				}

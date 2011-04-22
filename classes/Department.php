@@ -218,7 +218,7 @@ class Department
 	{
 		return $this->getName();
 	}
-	
+
 	/**
 	 * @param string $string
 	 * @return bool
@@ -238,10 +238,10 @@ class Department
 	 */
 	public function updateActions($action,$index=null)
 	{
-		if (!isset($this->data['action'])) {
+		if (!isset($this->data['actions'])) {
 			$this->data['actions'] = array();
 		}
-		foreach ($action as $key=>$vale) {
+		foreach ($action as $key=>$value) {
 			$action[$key] = (string)$value;
 		}
 		if (isset($index) && isset($this->data['actions'][$index])) {
