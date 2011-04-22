@@ -26,7 +26,7 @@ class DepartmentList extends MongoResultIterator
 	 * @param array $order
 	 * @param int $limit
 	 */
-	public function find($fields=null,$order=null,$limit=null)
+	public function find($fields=null,$order=array('name'=>1),$limit=null)
 	{
 		$search = array();
 		if (count($fields)) {

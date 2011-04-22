@@ -26,7 +26,7 @@ class PersonList extends MongoResultIterator
 	 * @param array $order
 	 * @param int $limit
 	 */
-	public function find($fields=null,$order=null,$limit=null)
+	public function find($fields=null,$order=array('lastname'=>1,'firstname'=>1),$limit=null)
 	{
 		$search = array();
 		if (count($fields)) {
