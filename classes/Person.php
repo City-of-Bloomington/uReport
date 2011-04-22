@@ -339,18 +339,34 @@ class Person
 			return in_array($role,$this->data['roles']);
 		}
 	}
+	
+	/**
+	 * @param string $string
+	 */
 	public function setUsername($string)
 	{
 		$this->data['username'] = trim($string);
 	}
+	
+	/**
+	 * @param string $string
+	 */
 	public function setAuthenticationMethod($string)
 	{
 		$this->data['authenticationMethod'] = trim($string);
 	}
+	
+	/**
+	 * @param array $roles
+	 */
 	public function setRoles($roles)
 	{
 		$this->data['roles'] = $roles;
 	}
+	
+	/**
+	 * @param string $string
+	 */
 	public function setPassword($string)
 	{
 		$this->data['password'] = sha1($string);
@@ -463,27 +479,6 @@ class Person
 	 */
 	public function mergeFrom(Person $person)
 	{
-		if ($this->id && $person->getId()) {
-			if($this->id == $person->getId()){
-				// can not merge same person
-				throw new Exception('mergerNotAllowed');
-			}
-			if($this->getUser_id() || $person->getUser_id()){
-				// do not allow merger of two users
-				throw new Exception('mergerNotAllowed');
-			}
-			$zend_db = Database::getConnection();
-			$zend_db->update('departments',array('default_person_id'=>$this->id),'default_person_id='.$person->getId());
-			$zend_db->update('issueHistory',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
-			$zend_db->update('issueHistory',array('actionPerson_id'=>$this->id),'actionPerson_id='.$person->getId());
-			$zend_db->update('issues',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
-			$zend_db->update('issues',array('reportedByPerson_id'=>$this->id),'reportedByPerson_id='.$person->getId());
-			$zend_db->update('ticketHistory',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
-			$zend_db->update('ticketHistory',array('actionPerson_id'=>$this->id),'actionPerson_id='.$person->getId());
-			$zend_db->update('tickets',array('enteredByPerson_id'=>$this->id),'enteredByPerson_id='.$person->getId());
-			$zend_db->update('tickets',array('assignedPerson_id'=>$this->id),'assignedPerson_id='.$person->getId());
-			$zend_db->update('tickets',array('referredPerson_id'=>$this->id),'referredPerson_id='.$person->getId());
-			$zend_db->delete('people','id='.$person->getId());
-		}
+	
 	}
 }

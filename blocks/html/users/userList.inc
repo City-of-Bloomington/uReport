@@ -48,14 +48,14 @@
 				$username = View::escape($user->getUsername());
 				$name = View::escape("{$user->getFirstname()} {$user->getLastname()}");
 				$email = View::escape($user->getEmail());
-				
+
 				$department = $user->getDepartment();
-				$deptartmentName = View::escape($department['name']);
+				$departmentName = View::escape($department['name']);
 				echo "
 				<tr><td>$editButton</td>
 					<td>$username</td>
 					<td>$name</td>
-					<td>$department</td>
+					<td>$departmentName</td>
 					<td>{$user->getAuthenticationMethod()}</td>
 					<td>
 				";

@@ -30,18 +30,21 @@
 		<?php
 			foreach ($this->departmentList as $department) {
 				$editButton = '';
+				$editActionsButton = '';
 				if (userIsAllowed('Departments')) {
-					$url = new URL(BASE_URL.'/departments/updateDepartment.php');
-					$url->id = $department->getId();
-
 					$editButton = $this->template->linkButton(
 						'Edit',
 						BASE_URL.'/departments/updateDepartment.php?department_id='.$department->getId(),
 						'edit'
 					);
+					$editActionsButton = $this->template->linkButton(
+						'Edit',
+						BASE_URL.'/departments/actions.php?department_id='.$department->getId(),
+						'edit'
+					);
 				}
 				$name = View::escape($department->getName());
-				
+
 				$fullname = '';
 				$person = $department->getDefaultPerson();
 				if ($person) {
@@ -50,43 +53,35 @@
 					}
 				}
 
-				$categories = '';
-				if ($department->hasCategories()) {
-					$categories = '<ul>';
-					foreach ($department->getCategories() as $category) {
-						$c = View::escape($category['name']);
-						$categories.="<li>$c</li>";
-					}
-					$categories.='</ul>';
-				}
-
-				$actions = '';
-				if ($department->hasActions()) {
-					$actions = '<ul>';
-					foreach ($department->getActions() as $action) {
-						$a = View::escape($action->getName());
-						$actions.="<li>$a</li>";
-					}
-					$actions.='</ul>';
-				}
-
-				$statuses = '';
-				$s = $department->getCustomStatuses();
-				if (count($s)) {
-					$statuses = '<ul>';
-					foreach ($s as $status) {
-						$statuses.= '<li>'.View::escape($status).'</li>';
-					}
-					$statuses.= '</ul>';
-				}
-
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
 					<td>$fullname</td>
-					<td>$categories</td>
-					<td>$actions</td>
-					<td>$statuses</td>
+					<td><ul>
+				";
+						foreach ($department->getCategories() as $category) {
+							echo '<li>'.View::escape($category['name']).'</li>';
+						}
+				echo "
+						</ul>
+					</td>
+					<td><ul>
+				";
+						foreach ($department->getActions() as $action) {
+							echo '<li>'.View::escape($action['name']).'</li>';
+						}
+				echo "
+						</ul>
+						$editActionsButton
+					</td>
+					<td><ul>
+				";
+						foreach ($department->getCustomStatuses() as $status) {
+							echo '<li>'.View::escape($status).'</li>';
+						}
+				echo "
+						</ul>
+					</td>
 				</tr>
 				";
 			}

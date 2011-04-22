@@ -28,7 +28,13 @@ class Department
 			}
 			else {
 				$mongo = Database::getConnection();
-				$result = $mongo->departments->findOne(array('_id'=>new MongoId($id)));
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
+					$search = array('_id'=>new MongoId($id));
+				}
+				else {
+					$search = array('name'=>$id);
+				}
+				$result = $mongo->departments->findOne($search);
 			}
 
 			if ($result) {
@@ -77,7 +83,7 @@ class Department
 	public function getId()
 	{
 		if (isset($this->data['_id'])) {
-			return (string)$this->data['_id'];
+			return $this->data['_id'];
 		}
 	}
 
@@ -90,7 +96,7 @@ class Department
 			return $this->data['name'];
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -100,7 +106,7 @@ class Department
 			return $this->data['defaultPerson'];
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -111,7 +117,7 @@ class Department
 		}
 		return array();
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -131,7 +137,7 @@ class Department
 			return $this->data['actions'];
 		}
 		return array();
-	}	
+	}
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -145,13 +151,17 @@ class Department
 	}
 
 	/**
-	 * @param string $string as either person id or email or username
+	 * @param string|Person $person
 	 */
-	public function setDefaultPerson($string)
+	public function setDefaultPerson($person)
 	{
-		$string = trim($string);
-		if ($string) {
-			$person = new Person($string);
+		if (!$person instanceof Person) {
+			$person = trim($person);
+			if ($person) {
+				$person = new Person($person);
+			}
+		}
+		if ($person->getId()) {
 			$this->data['defaultPerson'] = array(
 				'_id'=>$person->getId(),
 				'fullname'=>$person->getFullname(),
@@ -162,7 +172,7 @@ class Department
 			unset($this->data['defaultPerson']);
 		}
 	}
-	
+
 	/*
 	 *@param array $array
 	 */
@@ -170,7 +180,7 @@ class Department
 	{
 		if ($categories && is_array($categories)) {
 			$this->data['categories'] = array();
-			
+
 			foreach ($categories as $id) {
 				try {
 					$category = new Category($id);
@@ -204,6 +214,11 @@ class Department
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->getName();
+	}
+	
 	/**
 	 * @param string $string
 	 * @return bool
@@ -216,13 +231,35 @@ class Department
 			}
 		}
 	}
-	
+
 	/**
-	 * @return bool
+	 * @param array $action
+	 * @param int $index
 	 */
-	public function hasCategories()
+	public function updateActions($action,$index=null)
 	{
-		return count($this->getCategories()) ? true : false;
+		if (!isset($this->data['action'])) {
+			$this->data['actions'] = array();
+		}
+		foreach ($action as $key=>$vale) {
+			$action[$key] = (string)$value;
+		}
+		if (isset($index) && isset($this->data['actions'][$index])) {
+			$this->data['actions'][$index] = $action;
+		}
+		else {
+			$this->data['actions'][] = $action;
+		}
+	}
+
+	/**
+	 * @param int $index
+	 */
+	public function removeAction($index)
+	{
+		if (isset($this->data['actions'][$index])) {
+			unset($this->data['actions'][$index]);
+		}
 	}
 
 	/**
@@ -239,27 +276,10 @@ class Department
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function hasActions()
-	{
-		return count($this->getActions()) ? true : false;
-	}
-
-
-	/**
 	 * @return UserList
 	 */
 	public function getPeople()
 	{
 		return new PersonList(array('department._id'=>$this->data['_id']));
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasCustomStatuses()
-	{
-		return count($this->getCustomStatuses()) ? true : false;
 	}
 }
