@@ -25,6 +25,8 @@
 	issues:[
 		{
 			date:'',
+			type:'',
+			problem:''
 			contactMethod:'',
 			responseMethod:'',
 			enteredByPerson:{
@@ -37,9 +39,7 @@
 			},
 			category:{
 				_id:'',
-				name:'',
-				type:'',
-				problem:''
+				name:''
 			},
 			media:[
 				{
@@ -58,7 +58,6 @@
 	history:[
 		{
 			action:'',
-			description:'',
 			enteredDate:'',
 			enteredByPerson:{
 				_id:'',
