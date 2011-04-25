@@ -87,7 +87,7 @@ class Person
 	public function getId()
 	{
 		if (isset($this->data['_id'])) {
-			return $this->data['_id']->__toString();
+			return $this->data['_id'];
 		}
 	}
 

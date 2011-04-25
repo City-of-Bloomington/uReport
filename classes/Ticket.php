@@ -292,7 +292,7 @@ class Ticket
 		}
 		$this->data['enteredByPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 
@@ -306,7 +306,7 @@ class Ticket
 		}
 		$this->data['assignedPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 
@@ -320,7 +320,7 @@ class Ticket
 		}
 		$this->data['referredPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 
@@ -359,7 +359,7 @@ class Ticket
 	 */
 	public function setLocation($string)
 	{
-		$this->location = trim($string);
+		$this->data['location'] = trim($string);
 	}
 
 	/**
@@ -367,7 +367,7 @@ class Ticket
 	 */
 	public function setLatitude($float)
 	{
-		$this->latitude = (float)$float;
+		$this->data['latitude'] = (float)$float;
 	}
 
 	/**
@@ -375,7 +375,7 @@ class Ticket
 	 */
 	public function setLongitude($float)
 	{
-		$this->longitude = (float)$float;
+		$this->data['longitude'] = (float)$float;
 	}
 
 	/**
@@ -383,7 +383,7 @@ class Ticket
 	 */
 	public function setAddress_id($id)
 	{
-		$this->address_id = (int)$id;
+		$this->data['address_id'] = (int)$id;
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Ticket
 	 */
 	public function setCity($string)
 	{
-		$this->city = trim($string);
+		$this->data['city'] = trim($string);
 	}
 
 	/**
@@ -399,7 +399,7 @@ class Ticket
 	 */
 	public function setState($string)
 	{
-		$this->state = trim($string);
+		$this->data['state'] = trim($string);
 	}
 
 	/**
@@ -407,7 +407,7 @@ class Ticket
 	 */
 	public function setZip($string)
 	{
-		$this->zip = trim($string);
+		$this->data['zip'] = trim($string);
 	}
 
 	//----------------------------------------------------------------
@@ -468,10 +468,10 @@ class Ticket
 		}
 		
 		if (isset($index) && isset($this->data['history'][$index])) {
-			$this->data['history'][$index] = $history;
+			$this->data['history'][$index] = $history->getData();
 		}
 		else {
-			$this->data['history'][] = $history;
+			$this->data['history'][] = $history->getData();
 		}
 	}
 	/**

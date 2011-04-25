@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-abstract class History
+class History
 {
 	private $data;
 	
@@ -205,7 +205,7 @@ abstract class History
 		}
 		$this->data['enteredByPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 
@@ -219,7 +219,7 @@ abstract class History
 		}
 		$this->data['actionPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 

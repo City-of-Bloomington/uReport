@@ -16,10 +16,15 @@ class Issue
 	 *
 	 * @param array $data
 	 */
-	public function __construct($data)
+	public function __construct($data=null)
 	{
-		if (is_array($data)) {
-			$this->data = $data;
+		if (isset($data)) {
+			if (is_array($data)) {
+				$this->data = $data;
+			}
+			else {
+				throw new Exception('issue/invalidData');
+			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
@@ -94,6 +99,16 @@ class Issue
 			return $this->data['type'];
 		}
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function getProblem()
+	{
+		if (isset($this->data['problem'])) {
+			return $this->data['problem'];
+		}
+	}
 
 	/**
 	 * @return array
@@ -112,6 +127,16 @@ class Issue
 	{
 		if (isset($this->data['reportedByPerson'])) {
 			return $this->data['reportedByPerson'];
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCategory()
+	{
+		if (isset($this->data['category'])) {
+			return $this->data['category'];
 		}
 	}
 
@@ -172,6 +197,14 @@ class Issue
 	{
 		$this->data['type'] = trim($string);
 	}
+	
+	/**
+	 * @param string $string
+	 */
+	public function setProblem($string)
+	{
+		$this->data['problem'] = trim($string);
+	}
 
 	/**
 	 * @param string|Person $person
@@ -183,7 +216,7 @@ class Issue
 		}
 		$this->data['enteredByPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
 		);
 	}
 
@@ -197,7 +230,21 @@ class Issue
 		}
 		$this->data['reportedByPerson'] = array(
 			'_id'=>$person->getId(),
-			'fullname'=>$person-getFullname()
+			'fullname'=>$person->getFullname()
+		);
+	}
+	
+	/**
+	 * @param string|Category $category
+	 */
+	public function setCategory($category)
+	{
+		if (!$category instanceof Category) {
+			$category = new Category($category);
+		}
+		$this->data['category'] = array(
+			'_id'=>$category->getId(),
+			'name'=>$category->getName()
 		);
 	}
 
@@ -249,7 +296,7 @@ class Issue
 			'person'=>array(
 				'_id'=>$media->getPerson()->getId(),
 				'fullname'=>$media->getPerson()->getFullname()
-			);
+			)
 		);
 	}
 

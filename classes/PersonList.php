@@ -49,6 +49,25 @@ class PersonList extends MongoResultIterator
 			$this->cursor->limit($limit);
 		}
 	}
+	
+	/**
+	 * Populates the collection, using regular expressions for matching
+	 *
+	 * @param array $fields
+	 * @param array $order
+	 * @param int $limit
+	 */
+	public function search($fields=null,$order=array('lastname'=>1,'firstname'=>1),$limit=null)
+	{
+		$search = array();
+		if (count($fields)) {
+			foreach ($fields as $key=>$value) {
+				if ($value) {
+					$search[$key] = $value;
+				}
+			}
+		}
+	}
 
 	/**
 	 * Loads a single Person object for the row returned from ZendDbResultIterator

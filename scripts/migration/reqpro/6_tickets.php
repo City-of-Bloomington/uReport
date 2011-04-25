@@ -104,7 +104,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 	echo $ticket->getLocation()."\n";
 
-
 	// Create the issue on this ticket
 	$issue = new Issue();
 	$issue->setDate($ticket->getEnteredDate());
@@ -137,7 +136,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		'email'=>$row['e_mail_address']
 	));
 	if (count($personList)) {
-		$issue->setReportedByPerson($personList[0]);
+		$issue->setReportedByPerson($personList->current());
 	}
 	$ticket->updateIssues($issue);
 
@@ -305,5 +304,14 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			$ticket->updateHistory($history);
 		}
+	}
+	
+	try {
+		$ticket->save();
+	}
+	catch (Exception $e) {
+		echo $e->getMessage()."\n";
+		print_r($e);
+		exit();
 	}
 }
