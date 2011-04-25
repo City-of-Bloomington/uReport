@@ -59,21 +59,13 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$person->setCity($xml->address->city);
 				$person->setState($xml->address->state);
 				$person->setZip($xml->address->zip);
-				$person->setStreet_address_id($xml->address->id);
 
 				// See if there's a subunit
 				if ($parsed->subunitIdentifier) {
 					$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
 					if ($subunit) {
-						$person->setSubunit_id($subunit[0]['id']);
 						$person->setAddress("{$person->getAddress()} {$subunit[0]->type} {$subunit[0]->identifier}");
 					}
-				}
-
-				// See if there's a neighborhood association
-				$neighborhood = $xml->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
-				if ($neighborhood) {
-					$person->setNeighborhoodAssociation($neighborhood[0]);
 				}
 				echo "{$person->getAddress()} ==>";
 			}

@@ -111,7 +111,7 @@ class Ticket
 			return date($format,$timestamp);
 		}
 		else {
-			return $this->date['enteredDate'];
+			return $this->data['enteredDate'];
 		}
 	}
 	
@@ -120,7 +120,9 @@ class Ticket
 	 */
 	public function getEnteredByPerson()
 	{
-		return $this->data['enteredByPerson'];
+		if (isset($this->data['enteredByPerson'])) {
+			return $this->data['enteredByPerson'];
+		}
 	}
 
 	/**
@@ -128,7 +130,9 @@ class Ticket
 	 */
 	public function getAssignedPerson()
 	{
-		return $this->data['assignedPerson'];
+		if (isset($this->data['assignedPerson'])) {
+			return $this->data['assignedPerson'];
+		}
 	}
 
 	/**
@@ -136,7 +140,9 @@ class Ticket
 	 */
 	public function getReferredPerson()
 	{
-		return $this->data['referredPerson'];
+		if (isset($this->data['referredPerson'])) {
+			return $this->data['referredPerson'];
+		}
 	}
 
 	/**
@@ -144,7 +150,9 @@ class Ticket
 	 */
 	public function getStatus()
 	{
-		return $this->data['status'];
+		if (isset($this->data['status'])) {
+			return $this->data['status'];
+		}
 	}
 
 	/**
@@ -152,7 +160,9 @@ class Ticket
 	 */
 	public function getResolution()
 	{
-		return $this->data['resolution'];
+		if (isset($this->data['resolution'])) {
+			return $this->data['resolution'];
+		}
 	}
 
 	/**
@@ -160,7 +170,9 @@ class Ticket
 	 */
 	public function getLocation()
 	{
-		return $this->data['location'];
+		if (isset($this->data['location'])) {
+			return $this->data['location'];
+		}
 	}
 
 	/**
@@ -168,7 +180,9 @@ class Ticket
 	 */
 	public function getLatitude()
 	{
-		return $this->data['latitude'];
+		if (isset($this->data['latitude'])) {
+			return $this->data['latitude'];
+		}
 	}
 
 	/**
@@ -176,7 +190,9 @@ class Ticket
 	 */
 	public function getLongitude()
 	{
-		return $this->data['longitude'];
+		if (isset($this->data['longitude'])) {
+			return $this->data['longitude'];
+		}
 	}
 
 	/**
@@ -184,7 +200,9 @@ class Ticket
 	 */
 	public function getAddress_id()
 	{
-		return $this->data['address_id'];
+		if (isset($this->data['address_id'])) {
+			return $this->data['address_id'];
+		}
 	}
 
 	/**
@@ -192,7 +210,9 @@ class Ticket
 	 */
 	public function getCity()
 	{
-		return $this->data['city'];
+		if (isset($this->data['city'])) {
+			return $this->data['city'];
+		}
 	}
 
 	/**
@@ -200,7 +220,9 @@ class Ticket
 	 */
 	public function getState()
 	{
-		return $this->data['state'];
+		if (isset($this->data['state'])) {
+			return $this->data['state'];
+		}
 	}
 
 	/**
@@ -208,7 +230,37 @@ class Ticket
 	 */
 	public function getZip()
 	{
-		return $this->data['zip'];
+		if (isset($this->data['zip'])) {
+			return $this->data['zip'];
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getIssues()
+	{
+		$issues = array();
+		if (isset($this->data['issues'])) {
+			foreach ($this->data['issues'] as $data) {
+				$issues = new Issue($data);
+			}
+		}
+		return $issues;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getHistory()
+	{
+		$history = array();
+		if (isset($this->data['history'])) {
+			foreach ($this->data['history'] as $data) {
+				$history = new History($data);
+			}
+		}
+		return $history;
 	}
 
 	//----------------------------------------------------------------
@@ -231,11 +283,13 @@ class Ticket
 	}
 
 	/**
-	 * @param string $id
+	 * @param string|Person $person
 	 */
-	public function setEnteredByPerson($id)
+	public function setEnteredByPerson($person)
 	{
-		$person = new Person($id);
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
 		$this->data['enteredByPerson'] = array(
 			'_id'=>$person->getId(),
 			'fullname'=>$person-getFullname()
@@ -243,11 +297,13 @@ class Ticket
 	}
 
 	/**
-	 * @param string $id
+	 * @param string|Person $person
 	 */
-	public function setAssignedPerson($id)
+	public function setAssignedPerson($person)
 	{
-		$person = new Person($id);
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
 		$this->data['assignedPerson'] = array(
 			'_id'=>$person->getId(),
 			'fullname'=>$person-getFullname()
@@ -255,11 +311,13 @@ class Ticket
 	}
 
 	/**
-	 * @param string $id
+	 * @param string|Person $person
 	 */
-	public function setReferredPerson($id)
+	public function setReferredPerson($person)
 	{
-		$person = new Person($id);
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
 		$this->data['referredPerson'] = array(
 			'_id'=>$person->getId(),
 			'fullname'=>$person-getFullname()
@@ -352,22 +410,6 @@ class Ticket
 		$this->zip = trim($string);
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getIssues()
-	{
-		return $this->data['issues'];
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getHistory()
-	{
-		return $this->data['history'];
-	}
-
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
@@ -392,7 +434,46 @@ class Ticket
 		}
 		return $categories;
 	}
+	
+	/**
+	 * @param Issue $issue
+	 * @param int $index
+	 */
+	public function updateIssues(Issue $issue, $index=null)
+	{
+		$issue->validate();
+		
+		if (!isset($this->data['issues'])) {
+			$this->data['issues'] = array();
+		}
+		
+		if (isset($index) && isset($this->data['issues'][$index])) {
+			$this->data['issues'][$index] = $issue->getData();
+		}
+		else {
+			$this->data['issues'][] = $issue->getData();
+		}
+	}
 
+	/**
+	 * @param History $history
+	 * @param int $index
+	 */
+	public function updateHistory(History $history, $index=null)
+	{
+		$history->validate();
+		
+		if (!isset($this->data['history'])) {
+			$this->data['history'] = array();
+		}
+		
+		if (isset($index) && isset($this->data['history'][$index])) {
+			$this->data['history'][$index] = $history;
+		}
+		else {
+			$this->data['history'][] = $history;
+		}
+	}
 	/**
 	 * Transfers all data from a ticket, then deletes the ticket
 	 *
@@ -415,5 +496,21 @@ class Ticket
 	{
 		$mongo = Database::getConnection();
 		return $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+	}
+	
+	/**
+	 * @param array $data
+	 */
+	public function setAddressServiceData($data)
+	{
+		foreach ($data as $key=>$value) {
+			$set = 'set'.ucfirst($key);
+			if (method_exists($this,$set)) {
+				$this->$set($value);
+			}
+			else {
+				$this->data[$key] = (string)$value;
+			}
+		}
 	}
 }

@@ -6,47 +6,77 @@
  */
 abstract class History
 {
-	protected $id;
-	protected $action_id;
-	protected $enteredDate;
-	protected $enteredByPerson_id;
-	protected $actionDate;
-	protected $actionPerson_id;
-	protected $notes;
+	private $data;
+	
+	/**
+	 * @param array $data
+	 */
+	public function __construct($data=null)
+	{
+		if (isset($data)) {
+			$this->data = $data;
+		}
+		else {
+			$this->data['enteredDate'] = new MongoDate();
+			$this->data['actionDate'] = new MongoDate();
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getData()
+	{
+		return $this->data;
+	}
 
-	protected $action;
-	protected $enteredByPerson;
-	protected $actionPerson;
+	/**
+	 * Throws an exception if anything's wrong
+	 *
+	 * @throws Exception $e
+	 */
+	public function validate()
+	{
+		if (!$this->data['action']) {
+			throw new Exception('missingRequiredFields');
+		}
 
+		if (!$this->data['enteredDate']) {
+			$this->data['enteredDate'] = new MongoDate();
+		}
+
+		if (!$this->data['actionDate']) {
+			$this->data['actionDate'] = new MongoDate();
+		}
+	}
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAction_id()
-	{
-		return $this->action_id;
-	}
-
-	/**
-	 * @return Action
+	 * @return string
 	 */
 	public function getAction()
 	{
-		if ($this->action_id) {
-			if (!$this->action) {
-				$this->action = new Action($this->action_id);
-			}
-			return $this->action;
+		if (isset($this->data['action'])) {
+			return $this->data['action'];
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		if (isset($this->data['description'])) {
+			$enteredByPerson = isset($this->data['enteredByPerson']['fullname'])
+				? $this->data['enteredByPerson']['fullname']
+				: '';
+			$actionPerson = isset($this->data['actionPerson']['fullname'])
+				? $this->data['actionPerson']['fullname']
+				: '';
+			return $this->parseDescription(
+				array('enteredByPerson'=>$enteredByPerson,'actionPerson'=>$actionPerson)
+			);
 		}
 	}
 
@@ -58,15 +88,16 @@ abstract class History
 	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
-	 * @return string|DateTime
+	 * @return string|MongoDate
 	 */
 	public function getEnteredDate($format=null)
 	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
+		if ($format) {
+			list($microseconds,$timestamp) = explode(' ',$this->data['enteredDate']);
+			return date($format,$timestamp);
 		}
 		else {
-			return $this->enteredDate;
+			return $this->date['enteredDate'];
 		}
 	}
 
@@ -78,60 +109,37 @@ abstract class History
 	 * If no format is given, the Date object is returned
 	 *
 	 * @param string $format
-	 * @return string|DateTime
+	 * @return string|MongoDate
 	 */
 	public function getActionDate($format=null)
 	{
-		if ($format && $this->actionDate) {
-			return $this->actionDate->format($format);
+		if ($format) {
+			list($microseconds,$timestamp) = explode(' ',$this->data['actionDate']);
+			return date($format,$timestamp);
 		}
 		else {
-			return $this->actionDate;
+			return $this->date['actionDate'];
 		}
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getEnteredByPerson_id()
-	{
-		return $this->enteredByPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getEnteredByPerson()
 	{
-		if ($this->enteredByPerson_id) {
-			if (!$this->enteredByPerson) {
-				$this->enteredByPerson = new Person($this->enteredByPerson_id);
-			}
-			return $this->enteredByPerson;
+		if (isset($this->data['enteredByPerson'])) {
+			return $this->data['enteredByPerson'];
 		}
-		return null;
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getActionPerson_id()
-	{
-		return $this->actionPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getActionPerson()
 	{
-		if ($this->actionPerson_id) {
-			if (!$this->actionPerson) {
-				$this->actionPerson = new Person($this->actionPerson_id);
-			}
-			return $this->actionPerson;
+		if (isset($this->data['actionPerson'])) {
+			return $this->data['actionPerson'];
 		}
-		return null;
 	}
 
 	/**
@@ -139,60 +147,40 @@ abstract class History
 	 */
 	public function getNotes()
 	{
-		return $this->notes;
+		if (isset($this->data['notes'])) {
+			return $this->data['notes'];
+		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
 	/**
-	 * @param int $int
+	 * @param string $string
 	 */
-	public function setAction_id($int)
+	public function setAction($string)
 	{
-		$this->action = new Action($int);
-		$this->action_id = $this->action->getId();
+		$this->data['action'] = trim($string);
 	}
-
-	/**
-	 * @param string|Action $action
-	 */
-	public function setAction($action)
-	{
-		if (!$action instanceof Action) {
-			$action = new Action($action);
-		}
-		$this->action_id = $action->getId();
-		$this->action = $action;
-	}
-
+	
 	/**
 	 * Sets the date
 	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
+	 * Dates should be in something strtotime() understands
 	 * http://www.php.net/manual/en/function.strtotime.php
 	 *
-	 * @param int|string|array $date
+	 * @param string $date
 	 */
 	public function setEnteredDate($date)
 	{
-		if ($date instanceof Date) {
-			$this->enteredDate = $date;
-		}
-		elseif ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
+		$date = trim($date);
+		if ($date) {
+			$this->data['enteredDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
 	/**
 	 * Sets the date
-	 *
-	 * Date arrays should match arrays produced by getdate()
 	 *
 	 * Date string formats should be in something strtotime() understands
 	 * http://www.php.net/manual/en/function.strtotime.php
@@ -201,51 +189,38 @@ abstract class History
 	 */
 	public function setActionDate($date)
 	{
-		if ($date instanceof Date) {
-			$this->actionDate = $date;
-		}
-		elseif ($date) {
-			$this->actionDate = new Date($date);
-		}
-		else {
-			$this->actionDate = null;
+		$date = trim($date);
+		if ($date) {
+			$this->data['enteredDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setEnteredByPerson_id($int)
-	{
-		$this->enteredByPerson = new Person($int);
-		$this->enteredByPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
+	 * @param string|Person $person
 	 */
 	public function setEnteredByPerson($person)
 	{
-		$this->enteredByPerson_id = $person->getId();
-		$this->enteredByPerson = $person;
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
+		$this->data['enteredByPerson'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person-getFullname()
+		);
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setActionPerson_id($int)
-	{
-		$this->actionPerson = new Person($int);
-		$this->actionPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
+	 * @param string|Person $person
 	 */
 	public function setActionPerson($person)
 	{
-		$this->actionPerson_id = $person->getId();
-		$this->actionPerson = $person;
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
+		$this->data['actionPerson'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person-getFullname()
+		);
 	}
 
 	/**
@@ -253,32 +228,29 @@ abstract class History
 	 */
 	public function setNotes($text)
 	{
-		$this->notes = $text;
+		$this->data['notes'] = trim($text);
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		$enteredByPerson = $this->getEnteredByPerson() ? $this->getEnteredByPerson()->getFullname() : '';
-		$actionPerson = $this->getActionPerson() ? $this->getActionPerson()->getFullname() : '';
-
-		return $this->getAction()->parseDescription(
-			array('enteredByPerson'=>$enteredByPerson,'actionPerson'=>$actionPerson)
-		);
-	}
-
-	/**
-	 * Returns the status that should be set on the ticket
+	 * Substitutes actual data for the placeholders in the description
 	 *
+	 * Specify the placeholders as an associative array
+	 * $placeholders = array('enteredByPerson'=>'Joe Smith',
+	 *						'actionPerson'=>'Mary Sue')
+	 *
+	 * @param array $placeholders
 	 * @return string
 	 */
-	public function getStatus()
+	public function parseDescription($placeholders)
 	{
-		return $this->getAction()->getStatus();
+		$output = $this->description;
+
+		foreach ($placeholders as $key=>$value) {
+			$output = preg_replace("/\{$key\}/",$value,$output);
+		}
+		return $output;
 	}
 }
