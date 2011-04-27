@@ -212,10 +212,6 @@ class Issue
 	public function setEnteredByPerson($person)
 	{
 		if (!$person instanceof Person) {
-			$person = trim($person);
-			if (!$person) {
-				return false;
-			}
 			$person = new Person($person);
 		}
 		$this->data['enteredByPerson'] = array(
@@ -230,10 +226,6 @@ class Issue
 	public function setReportedByPerson($person)
 	{
 		if (!$person instanceof Person) {
-			$person = trim($person);
-			if (!$person) {
-				return false;
-			}
 			$person = new Person($person);
 		}
 		$this->data['reportedByPerson'] = array(

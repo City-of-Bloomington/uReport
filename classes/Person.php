@@ -27,17 +27,23 @@ class Person
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
+				// Mongo is case-sensitive
+				// We need to clean and lowercase anything we're using
+				// to do an exact match
+				$id = strtolower(trim($id));
+				if ($id) {
+					$mongo = Database::getConnection();
+					if (preg_match('/[0-9a-f]{24}/',$id)) {
+						$search = array('_id'=>new MongoId($id));
+					}
+					elseif (false !== strpos($id,'@')) {
+						$search = array('email'=>$id);
+					}
+					else {
+						$search = array('username'=>$id);
+					}
+					$result = $mongo->people->findOne($search);
 				}
-				elseif (false !== strpos($id,'@')) {
-					$search = array('email'=>$id);
-				}
-				else {
-					$search = array('username'=>$id);
-				}
-				$result = $mongo->people->findOne($search);
 			}
 
 			if ($result) {
@@ -233,7 +239,7 @@ class Person
 	 */
 	public function setEmail($string)
 	{
-		$this->data['email'] = trim($string);
+		$this->data['email'] = strtolower(trim($string));
 	}
 
 	/**
@@ -345,7 +351,7 @@ class Person
 	 */
 	public function setUsername($string)
 	{
-		$this->data['username'] = trim($string);
+		$this->data['username'] = strtolower(trim($string));
 	}
 	
 	/**
