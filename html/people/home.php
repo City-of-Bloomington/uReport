@@ -27,19 +27,25 @@ $template->blocks[] = $searchForm;
 
 
 // Include the search form and results
+$search = array();
 $fields = array('firstname','lastname','organization','email','address','phone');
 foreach ($fields as $field) {
-	if (isset($_GET[$field]) && trim($_GET[$field])) {
-		$personList = new PersonList();
-		$personList->find($_GET);
-
-		$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
-		if (isset($_GET['return_url'])) {
-			$searchResults->return_url = $_GET['return_url'];
+	if (isset($_GET[$field])) {
+		$value = trim($_GET[$field]);
+		if ($value) {
+			$search[$field] = $value;
 		}
-		$template->blocks[] = $searchResults;
-		break;
 	}
+}
+if (count($search)) {
+	$personList = new PersonList();
+	$personList->search($search);
+
+	$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
+	if (isset($_GET['return_url'])) {
+		$searchResults->return_url = $_GET['return_url'];
+	}
+	$template->blocks[] = $searchResults;
 }
 
 echo $template->render();
