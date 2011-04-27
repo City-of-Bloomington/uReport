@@ -36,18 +36,7 @@ class PersonList extends MongoResultIterator
 				}
 			}
 		}
-		if (count($search)) {
-			$this->cursor = $this->mongo->people->find($search);
-		}
-		else {
-			$this->cursor = $this->mongo->people->find();
-		}
-		if ($order) {
-			$this->cursor->sort($order);
-		}
-		if ($limit) {
-			$this->cursor->limit($limit);
-		}
+		$this->runSearch($search,$order,$limit);
 	}
 	
 	/**
@@ -63,12 +52,29 @@ class PersonList extends MongoResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$search[$key] = $value;
+					$search[$key] = new MongoRegex("/$value/i");
 				}
 			}
 		}
+		$this->runSearch($search,$order,$limit);
 	}
 
+	private function runSearch($search=null,$order=null,$limit=null)
+	{
+		if (count($search)) {
+			$this->cursor = $this->mongo->people->find($search);
+		}
+		else {
+			$this->cursor = $this->mongo->people->find();
+		}
+		if ($order) {
+			$this->cursor->sort($order);
+		}
+		if ($limit) {
+			$this->cursor->limit($limit);
+		}
+	}
+	
 	/**
 	 * Loads a single Person object for the row returned from ZendDbResultIterator
 	 *
