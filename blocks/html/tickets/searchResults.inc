@@ -47,20 +47,26 @@ echo "
 		";
 			foreach ($this->ticketList as $ticket) {
 				echo '<tr>';
-				foreach ($this->fields as $name=>$value) {
-					list($var,$field) = explode('-',$name);
+				foreach ($this->fields as $field=>$value) {
 					$get = 'get'.ucfirst($field);
 					$value = $ticket->$get();
-					if (preg_match('/Person/',$name) || $field=='constituent') {
+					if (preg_match('/Person/',$field) || $field=='constituent') {
 						if ($value) {
-							$value = $value->getFullname();
+							$value = $value['fullname'];
 						}
 					}
-					// Only put the href on the ticket_id
-					if ($field == 'id') {
-						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
+					if (false !== strpos($field,'Date')) {
+						$value = date(DATE_FORMAT,$value->sec);
 					}
-					echo "<td>$value</td>";
+					if ($field=='categories') {
+						$c = array();
+						foreach ($value as $category) {
+							$c[] = $category['name'];
+						}
+						$value = implode(',',$c);
+					}
+					$value = View::escape($value);
+					echo "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
 				}
 				echo '</tr>';
 			}

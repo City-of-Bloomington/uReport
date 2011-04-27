@@ -7,11 +7,6 @@
 class Ticket
 {
 	private $data = array();
-	
-	// Used to identify fields that can be updated from the AddressService
-	private	$addressServiceFields = array(
-		'location','address_id','city','state','zip','latitude','longitude'
-	);
 
 	/**
 	 * Populates the object with data
@@ -42,8 +37,6 @@ class Ticket
 			else {
 				throw new Exception('tickets/unknownTicket');
 			}
-
-			$this->addressServiceCache = AddressService::getTicketData($this);
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
@@ -419,7 +412,7 @@ class Ticket
 	 */
 	public function getURL()
 	{
-		return BASE_URL.'/tickets/viewTicket.php?ticket_id='.$this->id;
+		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
 	}
 
 
@@ -430,7 +423,9 @@ class Ticket
 	{
 		$categories = array();
 		foreach ($this->data['issues'] as $issue) {
-			$categories[] = $issue['category'];
+			if (isset($issue['category'])) {
+				$categories[] = $issue['category'];
+			}
 		}
 		return $categories;
 	}
@@ -495,7 +490,8 @@ class Ticket
 	public static function getDistinct($fieldname)
 	{
 		$mongo = Database::getConnection();
-		return $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+		$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+		return $result['values'];
 	}
 	
 	/**

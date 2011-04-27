@@ -32,6 +32,9 @@ class TicketList extends MongoResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
+					if (false !== strpos($key,'_id')) {
+						$value = new MongoId($value);
+					}
 					$search[$key] = $value;
 				}
 			}
@@ -76,20 +79,20 @@ class TicketList extends MongoResultIterator
 	{
 		// All possible columns to display
 		return array(
-			'ticket-id'=>'Ticket #',
-			'ticket-enteredDate'=>'Ticket Date',
-			'ticket-enteredByPerson'=>'Ticket Entered By',
-			'ticket-assignedPerson'=>'Assigned To',
-			'ticket-referredPerson'=>'Referred To',
-			'ticket-status'=>'Status',
-			'ticket-resolution'=>'Resolution',
-			'ticket-location'=>'Location',
-			'ticket-latitude'=>'Latitude',
-			'ticket-longitude'=>'Longitude',
-			'ticket-city'=>'City',
-			'ticket-state'=>'State',
-			'ticket-zip'=>'Zip',
-			'ticket-categories'=>'Categories'
+			'id'=>'Ticket #',
+			'enteredDate'=>'Ticket Date',
+			'enteredByPerson'=>'Ticket Entered By',
+			'assignedPerson'=>'Assigned To',
+			'referredPerson'=>'Referred To',
+			'status'=>'Status',
+			'resolution'=>'Resolution',
+			'location'=>'Location',
+			'latitude'=>'Latitude',
+			'longitude'=>'Longitude',
+			'city'=>'City',
+			'state'=>'State',
+			'zip'=>'Zip',
+			'categories'=>'Categories'
 		);
 	}
 }
