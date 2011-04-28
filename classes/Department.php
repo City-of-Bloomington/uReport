@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Department
+class Department extends MongoRecord
 {
-	private $data = array();
-
 	/**
 	 * Populates the object with data
 	 *
@@ -151,26 +149,15 @@ class Department
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setDefaultPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = trim($person);
-			if ($person) {
-				$person = new Person($person);
-			}
-		}
-		if ($person->getId()) {
-			$this->data['defaultPerson'] = array(
-				'_id'=>$person->getId(),
-				'fullname'=>$person->getFullname(),
-				'email'=>$person->getEmail()
-			);
-		}
-		else {
-			unset($this->data['defaultPerson']);
-		}
+		$this->setPersonData('defaultPerson',$person);
 	}
 
 	/*

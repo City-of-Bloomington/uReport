@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Issue
+class Issue extends MongoRecord
 {
-	private $data = array();
-	
 	/**
 	 * Populates the object with data
 	 *
@@ -31,14 +29,6 @@ class Issue
 			// Set any default values for properties that need it here
 			$this->data['date'] = new MongoDate();
 		}
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->data;
 	}
 
 	/**
@@ -82,8 +72,7 @@ class Issue
 	public function getDate($format=null)
 	{
 		if ($format) {
-			list($microseconds,$timestamp) = explode(' ',$this->data['date']);
-			return date($format,$timestamp);
+			return date($format,$this->data['date']->sec);
 		}
 		else {
 			return $this->data['date'];
@@ -207,31 +196,27 @@ class Issue
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setEnteredByPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['enteredByPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('enteredByPerson',$person);
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setReportedByPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['reportedByPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('reportedByPerson',$person);
 	}
 	
 	/**
@@ -284,7 +269,9 @@ class Issue
 	 */
 	public function getHistory()
 	{
-		return $this->data['history'];
+		if (isset($this->data['history'])) {
+			return $this->data['history'];
+		}
 	}
 
 	/**
@@ -310,16 +297,6 @@ class Issue
 	public function getMedia()
 	{
 		$media = array();
-		if ($this->id) {
-			$zend_db = Database::getConnection();
-			$result = $zend_db->fetchCol(
-				'select media_id from issue_media where issue_id=?',
-				array($this->id)
-			);
-			foreach ($result as $media_id) {
-				$media[] = new Media($media_id);
-			}
-		}
 		return $media;
 	}
 }

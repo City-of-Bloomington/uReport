@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class History
+class History extends MongoRecord
 {
-	private $data;
-	
 	/**
 	 * @param array $data
 	 */
@@ -20,14 +18,6 @@ class History
 			$this->data['enteredDate'] = new MongoDate();
 			$this->data['actionDate'] = new MongoDate();
 		}
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->data;
 	}
 
 	/**
@@ -93,8 +83,7 @@ class History
 	public function getEnteredDate($format=null)
 	{
 		if ($format) {
-			list($microseconds,$timestamp) = explode(' ',$this->data['enteredDate']);
-			return date($format,$timestamp);
+			return date($format,$this->data['enteredDate']->sec);
 		}
 		else {
 			return $this->date['enteredDate'];
@@ -114,8 +103,7 @@ class History
 	public function getActionDate($format=null)
 	{
 		if ($format) {
-			list($microseconds,$timestamp) = explode(' ',$this->data['actionDate']);
-			return date($format,$timestamp);
+			return date($format,$this->data['actionDate']->sec);
 		}
 		else {
 			return $this->date['actionDate'];
@@ -196,31 +184,27 @@ class History
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setEnteredByPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['enteredByPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('enteredByPerson',$person);
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setActionPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['actionPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('actionPerson',$person);
 	}
 
 	/**
@@ -252,5 +236,24 @@ class History
 			$output = preg_replace("/\{$key\}/",$value,$output);
 		}
 		return $output;
+	}
+	
+	/**
+	 * Returns data from person structures in the Mongo record
+	 *
+	 * If the data doesn't exist an empty string will be returned
+	 * Examples:
+	 * 	getPersonData('enteredByPerson','id')
+	 *  getPersonData('referredPerson','fullname')
+	 *
+	 * @param string $personField
+	 * @param string $dataField
+	 * @return string
+	 */
+	public function getPersonData($personField,$dataField)
+	{
+		return isset($this->data[$personField][$dataField])
+			? $this->data[$personField][$dataField]
+			: '';
 	}
 }

@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Ticket
+class Ticket extends MongoRecord
 {
-	private $data = array();
-
 	/**
 	 * Populates the object with data
 	 *
@@ -41,7 +39,7 @@ class Ticket
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->enteredDate = new Date();
+			$this->enteredDate = new MongoDate();
 			$this->status = 'open';
 		}
 	}
@@ -58,7 +56,7 @@ class Ticket
 		}
 
 		if (!$this->enteredDate) {
-			$this->enteredDate = new Date();
+			$this->enteredDate = new MongoDate();
 		}
 
 		#if (!$this->enteredByPerson_id) {
@@ -100,8 +98,7 @@ class Ticket
 	public function getEnteredDate($format=null)
 	{
 		if ($format) {
-			list($microseconds,$timestamp) = explode(' ',$this->data['enteredDate']);
-			return date($format,$timestamp);
+			return date($format,$this->data['enteredDate']->sec);
 		}
 		else {
 			return $this->data['enteredDate'];
@@ -236,7 +233,7 @@ class Ticket
 		$issues = array();
 		if (isset($this->data['issues'])) {
 			foreach ($this->data['issues'] as $data) {
-				$issues = new Issue($data);
+				$issues[] = new Issue($data);
 			}
 		}
 		return $issues;
@@ -250,7 +247,7 @@ class Ticket
 		$history = array();
 		if (isset($this->data['history'])) {
 			foreach ($this->data['history'] as $data) {
-				$history = new History($data);
+				$history[] = new History($data);
 			}
 		}
 		return $history;
@@ -276,45 +273,39 @@ class Ticket
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setEnteredByPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['enteredByPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('enteredByPerson',$person);
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setAssignedPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['assignedPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('assignedPerson',$person);
 	}
 
 	/**
-	 * @param string|Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setReferredPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['referredPerson'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('referredPerson',$person);
 	}
 
 	/**
@@ -508,5 +499,24 @@ class Ticket
 				$this->data[$key] = (string)$value;
 			}
 		}
+	}
+	
+	/**
+	 * Returns data from person structures in the Mongo record
+	 *
+	 * If the data doesn't exist an empty string will be returned
+	 * Examples:
+	 * 	getPersonData('enteredByPerson','id')
+	 *  getPersonData('referredPerson','fullname')
+	 *
+	 * @param string $personField
+	 * @param string $dataField
+	 * @return string
+	 */
+	public function getPersonData($personField,$dataField)
+	{
+		return isset($this->data[$personField][$dataField])
+			? $this->data[$personField][$dataField]
+			: '';
 	}
 }

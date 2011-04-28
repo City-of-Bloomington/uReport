@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
- * @param Ticket $this->ticket (optional)
+ * @param Ticket $this->ticket
  * @param bool $this->disableButtons
  * @param bool $this->disableComments
  */
@@ -22,23 +22,23 @@ echo "
 	$addButton
 	<div class=\"issue\">
 ";
-	foreach ($this->issueList as $issue) {
+	foreach ($this->issueList as $index=>$issue) {
 		$editButton = '';
 		$responseButton = '';
 		if (!$this->disableButtons && userIsAllowed('Issues')) {
 			$editButton = $this->template->linkButton(
 				'Edit Issue',
-				BASE_URL."/issues/updateIssue.php?issue_id={$issue->getId()}';",
+				BASE_URL."/issues/updateIssue.php?ticket_id={$this->ticket->getId()};index=$index';",
 				'edit',
 				null,
 				null,
 				'button'
 			);
 
-			if ($issue->getReportedByPerson_id()) {
+			if ($issue->getReportedByPerson()) {
 				$responseButton = $this->template->linkButton(
 					'Add Response',
-					BASE_URL."/issues/addResponse.php?issue_id={$issue->getId()}';",
+					BASE_URL."/issues/addResponse.php?ticket_id={$this->ticket->getId()};index=$index';",
 					'add',
 					null,
 					null,
@@ -50,24 +50,23 @@ echo "
 
 		$enteredBy = '';
 		if ($issue->getEnteredByPerson()) {
-			$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getEnteredByPerson_id();
-			$enteredBy = View::escape($issue->getEnteredByPerson()->getFullname());
+			$href = BASE_URL."/people/viewPerson.php?person_id={$issue->getData('enteredByPerson._id')}";
+			$enteredBy = View::escape($issue->getData('enteredByPerson.fullname'));
 			$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 		}
 
 		$reportedBy = '';
 		if ($issue->getReportedByPerson()) {
-			$href = BASE_URL.'/people/viewPerson.php?person_id='.$issue->getReportedByPerson_id();
-			$reportedBy = View::escape($issue->getReportedByPerson()->getFullname());
+			$href = BASE_URL."/people/viewPerson.php?person_id={$issue->getData('reportedByPerson._id')}";
+			$reportedBy = View::escape($issue->getData('reportedByPerson.fullname'));
 			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 		}
 
-		$type = View::escape($issue->getIssueType());
+		$type = View::escape($issue->getType());
 		$contactMethod = View::escape($issue->getContactMethod());
 		$responseMethod = View::escape($issue->getResponseMethod());
-		$caseNumber = View::escape($issue->getCase_number());
 		echo "
-		<h2><span class=\"date\">{$issue->getDate()}</span>
+		<h2><span class=\"date\">{$issue->getDate(DATE_FORMAT)}</span>
 			<span class=\"issueType\">$type</span>
 			$editButton
 			$responseButton
@@ -79,7 +78,6 @@ echo "
 					<th>Reported By</th>
 					<th>Contacted Via</th>
 					<th>Respond Via</th>
-					<th>Case #</th>
 		";
 					if (!$this->disableComments) {
 						echo '<th>Comments</th>';
@@ -89,22 +87,10 @@ echo "
 			</thead>
 			<tbody>
 				<tr><td>$enteredBy</td>
-					<td>
-		";
-					if ($issue->hasCategories()) {
-						echo '<ul>';
-						foreach ($issue->getCategories() as $category) {
-							$name = View::escape($category);
-							echo "<li>$name</li>";
-						}
-						echo '</ul>';
-					}
-		echo "
-					</td>
+					<td>{$issue->getData('category.name')}</td>
 					<td>$reportedBy</td>
 					<td>$contactMethod</td>
 					<td>$responseMethod</td>
-					<td>$caseNumber</td>
 		";
 					if (!$this->disableComments) {
 						$notes = View::escape($issue->getNotes());
@@ -117,7 +103,8 @@ echo "
 		";
 
 		$block = new Block('media/mediaList.inc',array(
-			'issue'=>$issue,
+			'ticket'=>$this->ticket,
+			'index'=>$index,
 			'mediaList'=>$issue->getMedia(),
 			'disableButtons'=>$this->disableButtons)
 		);
@@ -127,7 +114,7 @@ echo "
 		if (count($history)) {
 			$block = new Block(
 				'tickets/history.inc',
-				array('ticketHistory'=>$history,'disableComments'=>$this->disableComments)
+				array('history'=>$history,'disableComments'=>$this->disableComments)
 			);
 			echo $block->render('html',$this->template);
 		}

@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Media
+class Media extends MongoRecord
 {
-	private $data;
-
 	public static $extensions = array(
 		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),
 		'gif' =>array('mime_type'=>'image/gif','media_type'=>'image'),

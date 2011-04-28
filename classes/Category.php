@@ -4,10 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Category
+class Category extends MongoRecord
 {
-	private $data = array();
-
 	/**
 	 * Populates the object with data
 	 *

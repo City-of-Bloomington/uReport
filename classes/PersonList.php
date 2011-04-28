@@ -35,7 +35,7 @@ class PersonList extends MongoResultIterator
 				}
 			}
 		}
-		$this->runSearch($search,$order,$limit);
+		$this->runSearch($search,$order);
 	}
 	
 	/**
@@ -54,10 +54,10 @@ class PersonList extends MongoResultIterator
 				}
 			}
 		}
-		$this->runSearch($search,$order,$limit);
+		$this->runSearch($search,$order);
 	}
 
-	private function runSearch($search=null,$order=null,$limit=null)
+	private function runSearch($search=null,$order=null)
 	{
 		if (count($search)) {
 			$this->cursor = $this->mongo->people->find($search);
@@ -77,6 +77,11 @@ class PersonList extends MongoResultIterator
 	 */
 	public function loadResult($data)
 	{
-		return new Person($data);
+		if ($data) {
+			return new Person($data);
+		}
+		else {
+			throw new Exception('resultIteratorSentEmptyData');
+		}
 	}
 }
