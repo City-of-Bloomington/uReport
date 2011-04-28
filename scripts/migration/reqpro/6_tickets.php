@@ -136,6 +136,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		'email'=>$row['e_mail_address']
 	));
 	if (count($personList)) {
+		$personList->next();
 		$issue->setReportedByPerson($personList->current());
 	}
 	$ticket->updateIssues($issue);
@@ -239,6 +240,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			list($firstname,$lastname) = explode(' ',$name);
 			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
 			if (count($list)) {
+				$list->next();
 				$history->setEnteredByPerson($list->current());
 				$history->setActionPerson($list->current());
 			}
@@ -251,6 +253,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			$list = new PersonList($search);
 			if (count($list)) {
+				$list->next();
 				$history->setEnteredByPerson($list->current());
 				$history->setActionPerson($list->current());
 			}
@@ -277,8 +280,16 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$history->setEnteredDate($row['followup_date']);
 			$history->setNotes("$row[action_taken]\n$row[next_action]");
 			if ($lastPerson) {
-				$history->setEnteredByPerson($lastPerson);
-				$history->setActionPerson($lastPerson);
+				try {
+					$history->setEnteredByPerson($lastPerson);
+					$history->setActionPerson($lastPerson);
+				}
+				catch (Exception $e) {
+					echo "Could not set a person for the followup\n";
+					print_r($ticket);
+					print_r($lastPerson);
+					exit();
+				}
 			}
 			try {
 				$ticket->updateHistory($history);

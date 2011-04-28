@@ -110,6 +110,7 @@ foreach($results as $row){
 					 'phone'=>$row['phone']
 					 ));
   if (count($personList)) {
+	$personList->next();
 	$issue->setReportedByPerson($personList->current());
   }
   $ticket->updateIssues($issue);	
@@ -163,6 +164,7 @@ foreach($results as $row){
 	  }
 	}
 	if($personList && count($personList)){
+		$personList->next();
 	  $history->setActionPerson($personList->current());							   
 	}
 	else{
