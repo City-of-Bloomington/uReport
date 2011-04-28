@@ -24,9 +24,8 @@ class PersonList extends MongoResultIterator
 	 *
 	 * @param array $fields
 	 * @param array $order
-	 * @param int $limit
 	 */
-	public function find($fields=null,$order=array('lastname'=>1,'firstname'=>1),$limit=null)
+	public function find($fields=null,$order=array('lastname'=>1,'firstname'=>1))
 	{
 		$search = array();
 		if (count($fields)) {
@@ -44,9 +43,8 @@ class PersonList extends MongoResultIterator
 	 *
 	 * @param array $fields
 	 * @param array $order
-	 * @param int $limit
 	 */
-	public function search($fields=null,$order=array('lastname'=>1,'firstname'=>1),$limit=null)
+	public function search($fields=null,$order=array('lastname'=>1,'firstname'=>1))
 	{
 		$search = array();
 		if (count($fields)) {
@@ -70,9 +68,6 @@ class PersonList extends MongoResultIterator
 		if ($order) {
 			$this->cursor->sort($order);
 		}
-		if ($limit) {
-			$this->cursor->limit($limit);
-		}
 	}
 	
 	/**
@@ -80,7 +75,7 @@ class PersonList extends MongoResultIterator
 	 *
 	 * @param array $key
 	 */
-	protected function loadResult($data)
+	public function loadResult($data)
 	{
 		return new Person($data);
 	}

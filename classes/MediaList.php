@@ -83,7 +83,7 @@ class MediaList extends ZendDbResultIterator
 	 * @param int $key The index of the result row to load
 	 * @return Media
 	 */
-	protected function loadResult($key)
+	public function loadResult($key)
 	{
 		return new Media($this->result[$key]);
 	}

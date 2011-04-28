@@ -2,12 +2,12 @@
 /**
  * Displays page navigation for any list that has pagination turned on
  *
- * @copyright 2007-2009 City of Bloomington, Indiana
+ * @copyright 2007-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param ZendDbResultIterator $this->list
+ * @param Zend_Paginator $this->paginator
  */
-$pages = $this->list->getPaginator()->getPages();
+$pages = $this->paginator->getPages();
 if ($pages->pageCount > 1) {
 	$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 	$url->purgeEmptyParameters();

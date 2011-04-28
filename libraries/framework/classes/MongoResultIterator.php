@@ -9,15 +9,12 @@ abstract class MongoResultIterator implements Iterator,Countable
 {
 	protected $mongo;
 	protected $cursor;
-
-	abstract public function find($fields=null,$order=null,$limit=null);
-	abstract protected function loadResult($key);
+	
+	abstract public function find($fields=null,$order=null);
+	abstract public function loadResult($key);
 
 	/**
 	 * Creates an empty collection
-	 *
-	 * Setting itemsPerPage turns on pagination mode
-	 * In pagination mode, this will only load the results for one page
 	 */
 	public function __construct()
 	{
@@ -30,6 +27,19 @@ abstract class MongoResultIterator implements Iterator,Countable
 	public function getExplain()
 	{
 		return $this->cursor->explain();
+	}
+	
+	/**
+	 * @param int $itemsPerPage
+	 * @param int $currentPage
+	 * @return Zend_Paginator
+	 */
+	public function getPaginator($itemsPerPage,$currentPage=1)
+	{
+		$paginator = new Zend_Paginator(new MongoPaginatorAdapter($this->cursor,$this));
+		$paginator->setItemCountPerPage($itemsPerPage);
+		$paginator->setCurrentPageNumber($currentPage);
+		return $paginator;
 	}
 	
 	// SPLIterator Section

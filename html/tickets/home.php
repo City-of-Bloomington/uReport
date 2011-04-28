@@ -28,7 +28,6 @@ $fields = array(
 	'actionPerson'=>'history.actionPerson._id'
 );
 if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
-	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 	$search = array();
 	foreach ($fields as $field=>$key) {
 		if (isset($_GET[$field])) {
@@ -41,14 +40,22 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	
 	if (count($search)) {
 		$ticketList = new TicketList($search);
+
+		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
+		$paginator = $ticketList->getPaginator(50,$page);
+		
 		$template->blocks['search-results'][] = new Block(
 			'tickets/searchResults.inc',
 			array(
-				'ticketList'=>$ticketList,
+				'ticketList'=>$paginator,
 				'title'=>'Search Results',
 				'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
 			)
 		);
+		$template->blocks['search-results'][] = new Block(
+			'pageNavigation.inc',array('paginator'=>$paginator)
+		);
+
 	}
 }
 

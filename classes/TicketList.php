@@ -24,9 +24,8 @@ class TicketList extends MongoResultIterator
 	 *
 	 * @param array $fields
 	 * @param array $order
-	 * @param int $limit
 	 */
-	public function find($fields=null,$order=null,$limit=null)
+	public function find($fields=null,$order=null)
 	{
 		$search = array();
 		if (count($fields)) {
@@ -48,9 +47,6 @@ class TicketList extends MongoResultIterator
 		if ($order) {
 			$this->cursor->sort($order);
 		}
-		if ($limit) {
-			$this->cursor->limit($limit);
-		}
 	}
 
 	/**
@@ -62,7 +58,7 @@ class TicketList extends MongoResultIterator
 	 * @param int $key The index of the result row to load
 	 * @return Ticket
 	 */
-	protected function loadResult($data)
+	public function loadResult($data)
 	{
 		return new Ticket($data);
 	}

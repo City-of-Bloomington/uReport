@@ -24,9 +24,8 @@ class CategoryList extends MongoResultIterator
 	 *
 	 * @param array $fields
 	 * @param array $order
-	 * @param int $limit
 	 */
-	public function find($fields=null,$order=array('name'=>1),$limit=null)
+	public function find($fields=null,$order=array('name'=>1))
 	{
 		$search = array();
 		if (count($fields)) {
@@ -45,9 +44,6 @@ class CategoryList extends MongoResultIterator
 		if ($order) {
 			$this->cursor->sort($order);
 		}
-		if ($limit) {
-			$this->cursor->limit($limit);
-		}
 	}
 
 	/**
@@ -56,7 +52,7 @@ class CategoryList extends MongoResultIterator
 	 * @param int $key The index of the result row to load
 	 * @return Category
 	 */
-	protected function loadResult($data)
+	public function loadResult($data)
 	{
 		return new Category($data);
 	}
