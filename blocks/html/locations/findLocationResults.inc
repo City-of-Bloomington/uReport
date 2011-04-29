@@ -20,19 +20,16 @@ echo "
 		? new URL($this->return_url)
 		: new URL(BASE_URL.'/locations/viewLocation.php');
 
-	foreach ($this->results as $location=>$flag) {
+	foreach ($this->results as $location=>$data) {
 		$url->location = $location;
 
-		$tickets = new TicketList(array('location'=>$location));
-		$c = count($tickets);
-		$c = $c==0 ? '' : $c;
-
 		$location = View::escape($location);
-		$class = $flag ? 'class="verified"' : '';
+		$class = $data['address_id'] ? 'class="verified"' : '';
+		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
 		echo "
 		<tr $class>
 			<td><a href=\"$url\">$location</a></td>
-			<td>$c</td>
+			<td>$count</td>
 		</tr>
 		";
 	}
