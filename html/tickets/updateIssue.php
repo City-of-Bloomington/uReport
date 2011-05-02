@@ -102,7 +102,7 @@ $template->blocks['history-panel'][] = new Block(
 	array('ticketHistory'=>$issue->getTicket()->getHistory())
 );
 $template->blocks['issue-panel'][] = new Block(
-	'issues/updateIssueForm.inc',
+	'tickets/updateIssueForm.inc',
 	array('issue'=>$issue)
 );
 $template->blocks['location-panel'][] = new Block(

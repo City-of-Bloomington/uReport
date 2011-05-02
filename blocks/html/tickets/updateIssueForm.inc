@@ -13,7 +13,7 @@ $title = $this->issue->getId() ? 'Edit Issue' : 'Add Issue';
 		<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 		<input name="ticket_id" type="hidden" value="<?php echo $this->issue->getTicket_id(); ?>" />
 		<?php
-			include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
+			include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
 
 			echo $this->template->formButton('Submit','submit','submit');
 			echo $this->template->formButton(

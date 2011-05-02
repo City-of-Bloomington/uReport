@@ -49,7 +49,7 @@ $template->blocks['history-panel'][] = new Block(
 );
 
 $template->blocks['issue-panel'][] = new Block(
-	'issues/issueList.inc',
+	'tickets/issueList.inc',
 	array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
 );
 

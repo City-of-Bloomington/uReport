@@ -72,7 +72,7 @@ $template->blocks['history-panel'][] = new Block(
 	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
-	'issues/issueList.inc',
+	'tickets/issueList.inc',
 	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 );
 if ($ticket->getLocation()) {

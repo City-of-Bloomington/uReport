@@ -51,7 +51,7 @@
 					}
 					if (!$this->disableButtons && userIsAllowed('Issues')) {
 						echo '<td>';
-						$url = new URL(BASE_URL.'/issues/updateIssue.php');
+						$url = new URL(BASE_URL.'/tickets/updateIssue.php');
 						$url->ticket_id = $ticket->getId();
 						if (isset($_GET['person_id'])) {
 							try {

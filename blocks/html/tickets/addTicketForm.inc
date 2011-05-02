@@ -53,7 +53,7 @@
 		<fieldset class="issueFields">
 			<legend>Issue Information</legend>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/issues/issueFields.inc';
+				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
