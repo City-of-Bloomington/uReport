@@ -60,7 +60,7 @@ class Location
 				'mapreduce'=>'tickets',
 				'map'=>$map,
 				'reduce'=>$reduce,
-				'query'=>array('location'=>new MongoRegex('/Walnut/i')),
+				'query'=>array('location'=>new MongoRegex("/$crm_query/i")),
 				'out'=>array('inline'=>1)
 			));
 			
