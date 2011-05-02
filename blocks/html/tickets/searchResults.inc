@@ -20,8 +20,8 @@
 // Default fields to be used
 if (!$this->fields) {
 	$this->fields = array(
-		'ticket-id'=>1,'ticket-status'=>1,
-		'ticket-location'=>1,'ticket-enteredDate'=>1,'ticket-enteredByPerson'=>1
+		'id'=>1,'status'=>1,
+		'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
 	);
 }
 $title = $this->title ? View::escape($this->title) : 'Tickets';
