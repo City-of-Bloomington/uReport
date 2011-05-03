@@ -23,20 +23,19 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['assignedPerson_id'])) {
-	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
-
-	// add a record to ticket history
-	$history = new TicketHistory();
-	$history->setTicket($ticket);
-	$history->setAction('assignment');
-	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($ticket->getAssignedPerson_id());
-	$history->setNotes($_POST['notes']);
-
+if (isset($_POST['assignedPerson'])) {
 	try {
+		$ticket->setAssignedPerson($_POST['assignedPerson']);
+
+		// add a record to ticket history
+		$history = new History();
+		$history->setAction('assignment');
+		$history->setEnteredByPerson($_SESSION['USER']);
+		$history->setActionPerson($ticket->getAssignedPerson());
+		$history->setNotes($_POST['notes']);
+		$ticket->updateHistory($history);
+
 		$ticket->save();
-		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
@@ -57,7 +56,7 @@ $template->blocks['ticket-panel'][] = new Block(
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
+	array('history'=>$ticket->getHistory(),'disableButton'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
 	'tickets/issueList.inc',

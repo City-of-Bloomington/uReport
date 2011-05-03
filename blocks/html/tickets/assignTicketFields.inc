@@ -5,46 +5,17 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+if ($this->ticket->getAssignedPerson()) {
+	$person = $this->ticket->getAssignedPerson();
+	$username = View::escape($person['username']);
+}
+else {
+	$username = View::escape($_SESSION['USER']->getUsername());
+}
 ?>
 <table>
-	<tr><td><label for="department_id">Department</label></td>
-		<td><select name="department_id" id="department_id">
-				<option></option>
-				<?php
-					$assignedPerson = $this->ticket->getAssignedPerson()
-						? $this->ticket->getAssignedPerson()
-						: $_SESSION['USER']->getPerson();
-
-					$currentDepartment = $assignedPerson->getDepartment()
-						? $assignedPerson->getDepartment()
-						: $_SESSION['USER']->getDepartment();
-
-					$list = new DepartmentList();
-					$list->find();
-					foreach ($list as $department) {
-						$name = View::escape($department->getName());
-						$selected = $department->getId()==$currentDepartment->getId()
-							? 'selected="selected"'
-							: '';
-						echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-	<tr><td><label for="assignedPerson_id">Person</label></td>
-		<td><select name="assignedPerson_id" id="assignedPerson_id">
-			<?php
-				$name = View::escape($assignedPerson->getFullname());
-				echo "<option value=\"{$assignedPerson->getId()}\">$name</option>";
-
-				foreach ($currentDepartment->getUsers() as $user) {
-					$name = View::escape($user->getPerson()->getFullname());
-					echo "<option value=\"{$user->getPerson_id()}\">$name</option>";
-				}
-			?>
-			</select>
-		</td>
+	<tr><td><label for="assignedPerson">Person</label></td>
+		<td><input name="assignedPerson" id="assignedPerson" value="<?php echo $username; ?>" /></td>
 	</tr>
 </table>
 <div><label for="notes">Note to the assignee</label></div>
