@@ -294,7 +294,7 @@ class Person extends MongoRecord
 	public function setDepartment($string)
 	{
 		$department = new Department($string);
-		
+
 		$this->data['department'] = array(
 			'_id'=>$department->getId(),
 			'name'=>$department->getName()
@@ -312,7 +312,7 @@ class Person extends MongoRecord
 			return $this->data['username'];
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -322,7 +322,7 @@ class Person extends MongoRecord
 			return $this->data['authenticationMethod'];
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -333,7 +333,7 @@ class Person extends MongoRecord
 		}
 		return array();
 	}
-	
+
 	/**
 	 * @return bool
 	 */
@@ -343,7 +343,7 @@ class Person extends MongoRecord
 			return in_array($role,$this->data['roles']);
 		}
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
@@ -351,7 +351,7 @@ class Person extends MongoRecord
 	{
 		$this->data['username'] = strtolower(trim($string));
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
@@ -359,7 +359,7 @@ class Person extends MongoRecord
 	{
 		$this->data['authenticationMethod'] = trim($string);
 	}
-	
+
 	/**
 	 * @param array $roles
 	 */
@@ -367,7 +367,7 @@ class Person extends MongoRecord
 	{
 		$this->data['roles'] = $roles;
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
@@ -444,7 +444,7 @@ class Person extends MongoRecord
 			return $this->getOrganization();
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -483,6 +483,6 @@ class Person extends MongoRecord
 	 */
 	public function mergeFrom(Person $person)
 	{
-	
+
 	}
 }

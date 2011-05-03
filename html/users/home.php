@@ -12,7 +12,7 @@ if (!userIsAllowed('Users')) {
 
 $search = array('username'=>array('$exists'=>true));
 if (isset($_GET['department_id'])) {
-	$seearch['department_id'] = (string)$_GET['department_id'];
+	$search['department_id'] = (string)$_GET['department_id'];
 }
 $people = new PersonList($search);
 

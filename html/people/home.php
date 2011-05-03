@@ -9,6 +9,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param GET personQuery
  * @param GET return_url
  */
 if (!userIsAllowed('People')) {
@@ -24,22 +25,10 @@ if (isset($_GET['return_url'])) {
 }
 $template->blocks[] = $searchForm;
 
-
-
-// Include the search form and results
-$search = array();
-$fields = array('firstname','lastname','organization','email','address','phone');
-foreach ($fields as $field) {
-	if (isset($_GET[$field])) {
-		$value = trim($_GET[$field]);
-		if ($value) {
-			$search[$field] = $value;
-		}
-	}
-}
-if (count($search)) {
+$personQuery = isset($_GET['personQuery']) ? trim($_GET['personQuery']) : '';
+if ($personQuery) {
 	$personList = new PersonList();
-	$personList->search($search);
+	$personList->search(array('query'=>$personQuery));
 
 	$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
 	if (isset($_GET['return_url'])) {

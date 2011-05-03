@@ -37,7 +37,7 @@ class PersonList extends MongoResultIterator
 		}
 		$this->runSearch($search,$order);
 	}
-	
+
 	/**
 	 * Populates the collection, using regular expressions for matching
 	 *
@@ -47,13 +47,23 @@ class PersonList extends MongoResultIterator
 	public function search($fields=null,$order=array('lastname'=>1,'firstname'=>1))
 	{
 		$search = array();
-		if (count($fields)) {
+		if (isset($fields['query'])) {
+			$regex = new MongoRegex("/$fields[query]/i");
+			$search = array('$or'=>array(
+				array('firstname'=>$regex),
+				array('lastname'=>$regex),
+				array('email'=>$regex),
+				array('username'=>$regex)
+			));
+		}
+		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					$search[$key] = new MongoRegex("/$value/i");
 				}
 			}
 		}
+
 		$this->runSearch($search,$order);
 	}
 
@@ -69,7 +79,7 @@ class PersonList extends MongoResultIterator
 			$this->cursor->sort($order);
 		}
 	}
-	
+
 	/**
 	 * Loads a single Person object for the row returned from ZendDbResultIterator
 	 *
