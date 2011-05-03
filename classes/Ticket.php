@@ -104,7 +104,7 @@ class Ticket extends MongoRecord
 			return $this->data['enteredDate'];
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -238,7 +238,7 @@ class Ticket extends MongoRecord
 		}
 		return $issues;
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -281,7 +281,21 @@ class Ticket extends MongoRecord
 	 */
 	public function setEnteredByPerson($person)
 	{
-		$this->setPersonData('enteredByPerson',$person);
+		if (is_string($person)) {
+			$person = new Person($person);
+		}
+		elseif (is_array($person)) {
+			$person = new Person($person['_id']);
+		}
+
+		if ($person instanceof Person) {
+			if ($person->getUsername()) {
+				$this->setPersonData('enteredByPerson',$person);
+			}
+			else {
+				throw new Exception('tickets/personRequiresUsername');
+			}
+		}
 	}
 
 	/**
@@ -293,7 +307,21 @@ class Ticket extends MongoRecord
 	 */
 	public function setAssignedPerson($person)
 	{
-		$this->setPersonData('assignedPerson',$person);
+		if (is_string($person)) {
+			$person = new Person($person);
+		}
+		elseif (is_array($person)) {
+			$person = new Person($person['_id']);
+		}
+
+		if ($person instanceof Person) {
+			if ($person->getUsername()) {
+				$this->setPersonData('assignedPerson',$person);
+			}
+			else {
+				throw new Exception('tickets/personRequiresUsername');
+			}
+		}
 	}
 
 	/**
@@ -420,7 +448,7 @@ class Ticket extends MongoRecord
 		}
 		return $categories;
 	}
-	
+
 	/**
 	 * @param Issue $issue
 	 * @param int $index
@@ -428,11 +456,11 @@ class Ticket extends MongoRecord
 	public function updateIssues(Issue $issue, $index=null)
 	{
 		$issue->validate();
-		
+
 		if (!isset($this->data['issues'])) {
 			$this->data['issues'] = array();
 		}
-		
+
 		if (isset($index) && isset($this->data['issues'][$index])) {
 			$this->data['issues'][$index] = $issue->getData();
 		}
@@ -448,11 +476,11 @@ class Ticket extends MongoRecord
 	public function updateHistory(History $history, $index=null)
 	{
 		$history->validate();
-		
+
 		if (!isset($this->data['history'])) {
 			$this->data['history'] = array();
 		}
-		
+
 		if (isset($index) && isset($this->data['history'][$index])) {
 			$this->data['history'][$index] = $history->getData();
 		}
@@ -484,7 +512,7 @@ class Ticket extends MongoRecord
 		$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
 		return $result['values'];
 	}
-	
+
 	/**
 	 * @param array $data
 	 */
@@ -500,7 +528,7 @@ class Ticket extends MongoRecord
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns data from person structures in the Mongo record
 	 *
