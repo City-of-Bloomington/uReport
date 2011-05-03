@@ -7,7 +7,7 @@
 abstract class MongoRecord
 {
 	protected $data = array();
-	
+
 	/**
 	 * Returns raw data from the Mongo record.
 	 *
@@ -32,7 +32,7 @@ abstract class MongoRecord
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * @param string|array|Person $person
 	 */
@@ -41,20 +41,30 @@ abstract class MongoRecord
 		if (is_string($person)) {
 			$person = new Person($person);
 		}
-		if ($person instanceof Person) {
-			$this->data[$fieldname] = array(
-				'_id'=>$person->getId(),
-				'fullname'=>$person->getFullname()
-			);
-		}
 		if (is_array($person)) {
-			if (isset($person['_id']) && ($person['_id'] instanceof MongoId)
-				&& isset($person['fullname'])) {
-				$this->data[$fieldname] = $person;
+			if (isset($person['_id'])) {
+				$person = new Person("$person[_id]");
 			}
-			else {
-				throw new Exception('invalidPerson');
+		}
+		if ($person instanceof Person) {
+			$data = array(
+				'_id'=>$person->getId(),
+			);
+			$fields = array(
+				'firstname','middlename','lastname','fullname',
+				'username','department','organization',
+				'email','phone','address','city','state','zip'
+			);
+			foreach ($fields as $field) {
+				$get = 'get'.ucfirst($field);
+				if ($person->$get()) {
+					$data[$field] = $person->$get();
+				}
 			}
+			$this->data[$fieldname] = $data;
+		}
+		else {
+			throw new Exception('invalidPerson');
 		}
 	}
 }
