@@ -82,14 +82,10 @@ define('ERROR_REPORTING','PHP_DEFAULT');
 
 /**
  * Database Setup
- * Refer to the PDO documentation for DSN sytnax for your database type
- * http://www.php.net/manual/en/pdo.drivers.php
  */
-define('DB_ADAPTER','Pdo_Mysql');
+define('DB_ADAPTER','mongodb');
 define('DB_HOST','localhost');
-define('DB_NAME',APPLICATION_NAME);
-define('DB_USER',APPLICATION_NAME);
-define('DB_PASS','password');
+define('DB_NAME','crm');
 
 /**
  * LDAP Configuration
