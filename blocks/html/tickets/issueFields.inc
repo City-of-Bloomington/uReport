@@ -7,105 +7,100 @@
  */
 ?>
 <table>
-	<tr><td><label for="issue[issueType_id]" class="required">Type</label></td>
-		<td><select name="issue[issueType_id]" id="issue-issueType_id">
+	<tr><td><label for="issue[type]" class="required">Type</label></td>
+		<td><select name="issue[type]" id="issue-type">
 				<?php
-					$list = new IssueTypeList();
-					$list->find();
-					foreach ($list as $type) {
-						$name = View::escape($type);
-						$selected = ($this->issue->getIssueType_id() && $this->issue->getIssueType_id()==$type->getId())
+					foreach (Issue::$types as $type) {
+						$selected = ($this->issue->getType()==$type)
 							? 'selected="selected"'
 							: '';
-						echo "<option value=\"{$type->getId()}\" $selected>$name</option>";
+						echo "<option $selected>$type</option>";
 					}
 				?>
 			</select>
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-reportedByPerson_id">Reported By</label></td>
-		<td><input type="hidden" name="issue[reportedByPerson_id]" id="issue-reportedByPerson_id" value="<?php echo $this->issue->getReportedByPerson_id(); ?>" />
-			<?php
-				echo $this->issue->getReportedByPerson_id()
-					? View::escape($this->issue->getReportedByPerson()->getFullname())
-					: '';
-
-				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-				$url = BASE_URL."/people?return_url=$return_url";
-				echo $this->template->formButton(
-					'Change Person','button','change',null,
-					"document.location.href='$url';"
-				);
+	<tr><td><label for="issue-reportedByPerson">Reported By</label></td>
+		<td><?php
+				$value = '';
+				$reportedByPerson = $this->issue->getReportedByPerson();
+				if (isset($reportedByPerson['username']) && $reportedByPerson['username']) {
+					$value = $reportedByPerson['username'];
+				}
+				elseif (isset($reportedByPerson['email']) && $reportedByPerson['email']) {
+					$value = $reportedByPerson['email'];
+				}
+				elseif (isset($reportedByPerson['_id'])) {
+					$value = $reportedByPerson['_id'];
+				}
 			?>
+			<input name="issue[reportedByPerson]" id="issue-reportedByPerson"
+				value="<?php echo View::escape($value); ?>" />
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-contactMethod_id">Contact Method</label></td>
-		<td><select name="issue[contactMethod_id]" id="issue-contactMethod_id">
+	<tr><td><label for="issue-contactMethod">Contact Method</label></td>
+		<td><select name="issue[contactMethod]" id="issue-contactMethod">
 				<option></option>
 				<?php
-					$list = new ContactMethodList();
-					$list->find();
-					foreach ($list as $method) {
-						$name = View::escape($method);
-						$selected = $this->issue->getContactMethod_id()==$method->getId()
+					foreach (Issue::$contactMethods as $method) {
+						$selected = $this->issue->getContactMethod()==$method
 							? 'selected="selected"'
 							: '';
-						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
+						echo "<option $selected>$method</option>";
 					}
 				?>
 			</select>
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-responseMethod_id">Response Method</label></td>
-		<td><select name="issue[responseMethod_id]" id="issue-responseMethod_id">
+	<tr><td><label for="issue-responseMethod">Response Method</label></td>
+		<td><select name="issue[responseMethod]" id="issue-responseMethod">
 				<option></option>
 				<?php
 					// Use the same drop down as the contact method
-					foreach ($list as $method) {
-						$name = View::escape($method);
-						$selected = $this->issue->getResponseMethod_id()==$method->getId()
+					foreach (Issue::$contactMethods as $method) {
+						$selected = $this->issue->getContactMethod()==$method
 							? 'selected="selected"'
 							: '';
-						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
+						echo "<option $selected>$method</option>";
 					}
 				?>
 			</select>
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-categories">Categories</label></td>
-		<td><select name="issue[categories][]" id="issue-categories" multiple="true" size="5">
-				<?php
-					foreach ($this->issue->getCategories() as $category) {
-						$name = View::escape($category);
-						$selected = $this->issue->hasCategory($category)
+	<tr><td><label for="issue-category">Category</label></td>
+		<td><select name="issue[category]" id="issue-category">
+			<?php
+				$issueCategory_id = null;
+				$cat = $this->issue->getCategory();
+				if ($cat) {
+					$issueCategory_id = "$cat[_id]";
+					$name = View::escape($cat['name']);
+					echo "<option value=\"$issueCategory_id\">$name</option>";
+				}
+				if ($_SESSION['USER']->getDepartment()) {
+					$dept = $_SESSION['USER']->getDepartment();
+					$department = new Department($dept['_id']);
+
+					foreach ($department->getCategories() as $departmentCategory) {
+						$selected = $issueCategory_id=="$departmentCategory[_id]"
 							? 'selected="selected"'
 							: '';
-						echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
+						$name = View::escape($departmentCategory['name']);
+						echo "<option value=\"$departmentCategory[_id]\">$name</option>";
 					}
+				}
 
-					if ($_SESSION['USER']->getDepartment()) {
-						foreach ($_SESSION['USER']->getDepartment()->getCategories() as $category) {
-							$name = View::escape($category);
-							echo "<option value=\"{$category->getId()}\">$name</option>";
-						}
-					}
-
-				?>
+			?>
 			</select>
 		</td>
 	</tr>
-
-	<tr><td><label for="issue-case_number">Case Number</label></td>
-		<td><input name="issue[case_number]" id="issue-case_number"
-				value="<?php echo View::escape($this->issue->getCase_number()); ?>" />
-		</td>
-	</tr>
-
-
 </table>
+
 <div><label for="issue-notes">Comment about the issue</label></div>
-<div><textarea name="issue[notes]" id="issue-notes" rows="3" cols="60"><?php echo View::escape($this->issue->getNotes()); ?></textarea></div>
+<div>
+	<textarea name="issue[notes]" id="issue-notes" rows="3" cols="60"><?php echo View::escape($this->issue->getNotes()); ?></textarea>
+</div>

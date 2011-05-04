@@ -24,64 +24,43 @@ if (!userIsAllowed('Issues')) {
 //-------------------------------------------------------------------
 // Load all the data that's passed in
 //-------------------------------------------------------------------
-if (isset($_REQUEST['issue_id']) && $_REQUEST['issue_id']) {
-	try {
-		$issue = new Issue($_REQUEST['issue_id']);
+try {
+	$ticket = new Ticket($_REQUEST['ticket_id']);
+	$issues = $ticket->getIssues();
+	if (isset($_REQUEST['index']) && array_key_exists($_REQUEST['index'],$issues)) {
+		$issue = $issues[$_REQUEST['index']];
+		$index = (int)$_REQUEST['index'];
 	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-	}
-}
-else {
-	$issue = new Issue();
-}
-
-if (isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id']) {
-	try {
-		$issue->setTicket_id($_REQUEST['ticket_id']);
-	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-		header('Location: '.BASE_URL);
-		exit();
+	else {
+		$issue = new Issue();
+		$index = null;
 	}
 }
-
-if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
-	try {
-		$issue->setReportedByPerson_id($_REQUEST['person_id']);
-	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-		// No need to send them away.
-		// They can just choose another person
-	}
-}
-else {
-	$issue->setReportedByPerson($_SESSION['USER']->getPerson());
+catch (Exception $e) {
+	$_SESSION['errorMessages'][] = $e;
+	header('Location: '.BASE_URL.'/tickets');
+	exit();
 }
 
 //-------------------------------------------------------------------
 // Handle any stuff the user posts
 //-------------------------------------------------------------------
 if (isset($_POST['issue'])) {
-	if (!$issue->getEnteredByPerson_id()) {
-		$issue->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
+	if (!$issue->getEnteredByPerson) {
+		$issue->setEnteredByPerson($_SESSION['USER']);
 	}
 	$fields = array(
-		'issueType_id','reportedByPerson_id',
-		'contactMethod_id','responseMethod_id',
-		'case_number','notes'
+		'type','reportedByPerson','contactMethod','responseMethod','category','notes'
 	);
 	foreach ($fields as $field) {
 		$set = 'set'.ucfirst($field);
 		$issue->$set($_POST['issue'][$field]);
 	}
+	$ticket->updateIssues($issue,$index);
 
 	try {
-		$issue->save();
-		$issue->saveCategories($_POST['issue']['categories']);
-		header('Location: '.$issue->getTicket()->getURL());
+		$ticket->save();
+		header('Location: '.$ticket->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -95,28 +74,28 @@ if (isset($_POST['issue'])) {
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/ticketInfo.inc',
-	array('ticket'=>$issue->getTicket())
+	array('ticket'=>$ticket,'disableButtons'=>true)
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$issue->getTicket()->getHistory())
+	array('history'=>$ticket->getHistory())
 );
 $template->blocks['issue-panel'][] = new Block(
 	'tickets/updateIssueForm.inc',
-	array('issue'=>$issue)
+	array('ticket'=>$ticket,'index'=>$index,'issue'=>$issue)
 );
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',
-	array('location'=>$issue->getTicket()->getLocation())
+	array('location'=>$ticket->getLocation())
 );
-if ($issue->getTicket()->getLocation()) {
+if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'tickets/ticketList.inc',
 		array(
-			'ticketList'=>new TicketList(array('location'=>$issue->getTicket()->getLocation())),
+			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
 			'title'=>'Other tickets for this location',
 			'disableButtons'=>true,
-			'filterTicket'=>$issue->getTicket()
+			'filterTicket'=>$ticket
 		)
 	);
 }

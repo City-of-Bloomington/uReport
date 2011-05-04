@@ -12,7 +12,7 @@ $addButton = '';
 if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
 	$addButton = $this->template->linkButton(
 		'Add Issue',
-		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}';",
+		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}",
 		'add',null, null,'button'
 	);
 }
@@ -28,7 +28,7 @@ echo "
 		if (!$this->disableButtons && userIsAllowed('Issues')) {
 			$editButton = $this->template->linkButton(
 				'Edit Issue',
-				BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index=$index';",
+				BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index=$index",
 				'edit',
 				null,
 				null,
@@ -38,7 +38,7 @@ echo "
 			if ($issue->getReportedByPerson()) {
 				$responseButton = $this->template->linkButton(
 					'Add Response',
-					BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$index';",
+					BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$index",
 					'add',
 					null,
 					null,
@@ -74,7 +74,7 @@ echo "
 		<table>
 			<thead>
 				<tr><th>Created by</th>
-					<th>Categories</th>
+					<th>Category</th>
 					<th>Reported By</th>
 					<th>Contacted Via</th>
 					<th>Respond Via</th>

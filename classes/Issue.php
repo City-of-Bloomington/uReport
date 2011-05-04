@@ -1,16 +1,26 @@
 <?php
 /**
+ * A class for working with Issues
+ *
+ * Issues are only stored inside Tickets.
+ * They do not have their own collection in Mongo
+ *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class Issue extends MongoRecord
 {
+	public static $types = array(
+		'Request','Complain','Violation'
+	);
+
+	public static $contactMethods = array(
+		'Phone','Email','Letter','Mayor Email','Constituent Meeting','Walk In','Web Form'
+	);
+
 	/**
 	 * Populates the object with data
-	 *
-	 * Passing in an associative array of data will populate this object without
-	 * hitting the database.
 	 *
 	 * @param array $data
 	 */
@@ -34,24 +44,20 @@ class Issue extends MongoRecord
 	/**
 	 * Throws an exception if anything's wrong
 	 *
-	 * Setting $preliminary will make the validation ignore the Ticket_id.
-	 * This is usefull for validing all the user-input data before assigning
-	 * the issue to a Ticket.
-	 *
 	 * @param bool $preliminary
 	 * @throws Exception $e
 	 */
 	public function validate($preliminary=false)
 	{
-		if (!$this->data['type']) {
+		if (!$this->getType()) {
 			throw new Exception('missingRequiredFields');
 		}
 
-		#if (!$this->data['enteredByPerson']) {
+		#if (!$this->getEnteredByPerson()) {
 		#	throw new Exception('missingRequiredFields');
 		#}
 
-		if (!$this->data['date']) {
+		if (!isset($this->data['date'])) {
 			$this->data['date'] = new MongoDate();
 		}
 	}
@@ -88,7 +94,7 @@ class Issue extends MongoRecord
 			return $this->data['type'];
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -118,7 +124,7 @@ class Issue extends MongoRecord
 			return $this->data['reportedByPerson'];
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -138,7 +144,7 @@ class Issue extends MongoRecord
 			return $this->data['contactMethod'];
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -178,7 +184,7 @@ class Issue extends MongoRecord
 		}
 		$this->data['date'] = $date;
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
@@ -186,7 +192,7 @@ class Issue extends MongoRecord
 	{
 		$this->data['type'] = trim($string);
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
@@ -218,7 +224,7 @@ class Issue extends MongoRecord
 	{
 		$this->setPersonData('reportedByPerson',$person);
 	}
-	
+
 	/**
 	 * @param string|Category $category
 	 */
@@ -244,7 +250,7 @@ class Issue extends MongoRecord
 	{
 		$this->data['contactMethod'] = trim($string);
 	}
-	
+
 	/**
 	 * @param string $string
 	 */
