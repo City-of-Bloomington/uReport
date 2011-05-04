@@ -42,6 +42,10 @@ catch (Exception $e) {
 	exit();
 }
 
+if (isset($_REQUEST['person_id'])) {
+	$issue->setReportedByPerson($_REQUEST['person_id']);
+}
+
 //-------------------------------------------------------------------
 // Handle any stuff the user posts
 //-------------------------------------------------------------------

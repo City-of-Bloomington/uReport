@@ -23,20 +23,25 @@
 
 	<tr><td><label for="issue-reportedByPerson">Reported By</label></td>
 		<td><?php
-				$value = '';
 				$reportedByPerson = $this->issue->getReportedByPerson();
-				if (isset($reportedByPerson['username']) && $reportedByPerson['username']) {
-					$value = $reportedByPerson['username'];
-				}
-				elseif (isset($reportedByPerson['email']) && $reportedByPerson['email']) {
-					$value = $reportedByPerson['email'];
-				}
-				elseif (isset($reportedByPerson['_id'])) {
-					$value = $reportedByPerson['_id'];
-				}
+				$reportedByPerson_id = isset($reportedByPerson['_id'])
+					? $reportedByPerson['_id']
+					: '';
+				$fullname = $reportedByPerson['fullname']
+					? $reportedByPerson['fullname']
+					: '';
 			?>
-			<input name="issue[reportedByPerson]" id="issue-reportedByPerson"
-				value="<?php echo View::escape($value); ?>" />
+			<input type="hidden" name="issue[reportedByPerson]" id="issue-reportedByPerson"
+				value="<?php echo "$reportedByPerson_id"; ?>" />
+			<?php
+				echo $fullname;
+				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+				$url = BASE_URL."/people?return_url=$return_url";
+				echo $this->template->formButton(
+					'Change Person','button','change',null,
+					"document.location.href='$url';"
+				);
+			?>
 		</td>
 	</tr>
 

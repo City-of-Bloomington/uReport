@@ -12,7 +12,7 @@
 class Issue extends MongoRecord
 {
 	public static $types = array(
-		'Request','Complain','Violation'
+		'Request','Complaint','Violation'
 	);
 
 	public static $contactMethods = array(

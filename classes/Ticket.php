@@ -39,8 +39,8 @@ class Ticket extends MongoRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->enteredDate = new MongoDate();
-			$this->status = 'open';
+			$this->data['enteredDate'] = new MongoDate();
+			$this->data['status'] = 'open';
 		}
 	}
 
@@ -51,12 +51,12 @@ class Ticket extends MongoRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->status) {
-			$this->status = 'open';
+		if (!$this->data['status']) {
+			$this->data['status'] = 'open';
 		}
 
-		if (!$this->enteredDate) {
-			$this->enteredDate = new MongoDate();
+		if (!$this->data['enteredDate']) {
+			$this->data['enteredDate'] = new MongoDate();
 		}
 
 		#if (!$this->enteredByPerson_id) {
@@ -97,11 +97,13 @@ class Ticket extends MongoRecord
 	 */
 	public function getEnteredDate($format=null)
 	{
-		if ($format) {
-			return date($format,$this->data['enteredDate']->sec);
-		}
-		else {
-			return $this->data['enteredDate'];
+		if (isset($this->data['enteredDate'])) {
+			if ($format) {
+				return date($format,$this->data['enteredDate']->sec);
+			}
+			else {
+				return $this->data['enteredDate'];
+			}
 		}
 	}
 
