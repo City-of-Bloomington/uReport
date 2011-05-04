@@ -27,7 +27,7 @@ class History extends MongoRecord
 	 */
 	public function validate()
 	{
-		if (!$this->data['action']) {
+		if (!$this->getAction()) {
 			throw new Exception('missingRequiredFields');
 		}
 
@@ -51,7 +51,7 @@ class History extends MongoRecord
 			return $this->data['action'];
 		}
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -150,7 +150,7 @@ class History extends MongoRecord
 	{
 		$this->data['action'] = trim($string);
 	}
-	
+
 	/**
 	 * Sets the date
 	 *
@@ -237,7 +237,7 @@ class History extends MongoRecord
 		}
 		return $output;
 	}
-	
+
 	/**
 	 * Returns data from person structures in the Mongo record
 	 *

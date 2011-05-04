@@ -23,18 +23,18 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['action_id'])) {
+if (isset($_POST['action'])) {
 	// add a record to ticket history
-	$history = new TicketHistory();
-	$history->setTicket($ticket);
-	$history->setAction_id($_POST['action_id']);
+	$history = new History();
+	$history->setAction($_POST['action']);
 	$history->setActionDate($_POST['actionDate']);
-	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
+	$history->setEnteredByPerson($_SESSION['USER']);
+	$history->setActionPerson($_SESSION['USER']);
 	$history->setNotes($_POST['notes']);
+	$ticket->updateHistory($history);
 
 	try {
-		$history->save();
+		$ticket->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
