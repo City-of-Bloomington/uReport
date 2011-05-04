@@ -56,7 +56,9 @@ echo "
 						}
 					}
 					if (false !== strpos($field,'Date')) {
-						$value = date(DATE_FORMAT,$value->sec);
+						if (isset($value->sec)) {
+							$value = date(DATE_FORMAT,$value->sec);
+						}
 					}
 					if ($field=='categories') {
 						$c = array();

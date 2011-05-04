@@ -6,6 +6,7 @@
  * @param GET ticket_id
  */
 $ticket = new Ticket($_GET['ticket_id']);
+print_r($ticket);
 
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));

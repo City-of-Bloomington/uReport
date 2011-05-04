@@ -18,7 +18,7 @@
 						All open tickets
 					</a>
 				</li>
-				<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson_id={$_SESSION['USER']->getId()}\">
+				<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
 						All tickets assigned to me
 					</a>
 				</li>
@@ -26,7 +26,7 @@
 			if ($_SESSION['USER']->getDepartment()) {
 				$dept = $_SESSION['USER']->getDepartment();
 				echo "
-				<li><a href=\"".BASE_URL."/tickets/home.php?department_id=$dept[_id]\">
+				<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
 						All tickets for my department
 					</a>
 				</li>

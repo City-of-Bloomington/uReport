@@ -16,7 +16,7 @@ $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 $fields = array(
 	'enteredByPerson'=>'enteredByPerson._id',
 	'assignedPerson'=>'assignedPerson._id',
-	'department'=>'department._id',
+	'department'=>'assignedPerson.department._id',
 	'city'=>'city',
 	'state'=>'state',
 	'zip'=>'zip',
@@ -37,13 +37,13 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 			}
 		}
 	}
-	
+
 	if (count($search)) {
 		$ticketList = new TicketList($search);
 
 		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 		$paginator = $ticketList->getPaginator(50,$page);
-		
+
 		$template->blocks['search-results'][] = new Block(
 			'tickets/searchResults.inc',
 			array(
