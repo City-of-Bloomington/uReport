@@ -12,18 +12,18 @@
 				<option></option>
 				<?php
 					$assignedPerson = $this->ticket->getAssignedPerson()
-						? $this->ticket->getAssignedPerson()
-						: $_SESSION['USER']->getPerson();
+						? new Person($this->ticket->getAssignedPerson())
+						: $_SESSION['USER'];
 
 					$currentDepartment = $assignedPerson->getDepartment()
-						? $assignedPerson->getDepartment()
-						: $_SESSION['USER']->getDepartment();
+						? new Department($assignedPerson->getDepartment())
+						: new Department($_SESSION['USER']->getDepartment());
 
 					$list = new DepartmentList();
 					$list->find();
 					foreach ($list as $department) {
 						$name = View::escape($department->getName());
-						$selected = $department->getId()==$currentDepartment->getId()
+						$selected = "{$department->getId()}"=="{$currentDepartment->getId()}"
 							? 'selected="selected"'
 							: '';
 						echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
@@ -32,15 +32,15 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td><label for="assignedPerson_id">Person</label></td>
-		<td><select name="assignedPerson_id" id="assignedPerson_id">
+	<tr><td><label for="assignedPerson">Person</label></td>
+		<td><select name="assignedPerson" id="assignedPerson">
 			<?php
 				$name = View::escape($assignedPerson->getFullname());
 				echo "<option value=\"{$assignedPerson->getId()}\">$name</option>";
 
-				foreach ($currentDepartment->getUsers() as $user) {
-					$name = View::escape($user->getPerson()->getFullname());
-					echo "<option value=\"{$user->getPerson_id()}\">$name</option>";
+				foreach ($currentDepartment->getPeople() as $person) {
+					$name = View::escape($person->getFullname());
+					echo "<option value=\"{$person->getId()}\">$name</option>";
 				}
 			?>
 			</select>

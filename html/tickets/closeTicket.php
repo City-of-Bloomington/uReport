@@ -21,21 +21,20 @@ catch (Exception $e) {
 	exit();
 }
 
-if (isset($_POST['resolution_id'])) {
-	$ticket->setResolution_id($_POST['resolution_id']);
-	$ticket->setStatus='closed';
+if (isset($_POST['resolution'])) {
+	$ticket->setResolution($_POST['resolution']);
+	$ticket->setStatus('closed');
 
 	// add a record to ticket history
-	$history = new TicketHistory();
-	$history->setTicket($ticket);
+	$history = new History();
 	$history->setAction('close');
-	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
+	$history->setEnteredByPerson($_SESSION['USER']);
+	$history->setActionPerson($_SESSION['USER']);
 	$history->setNotes($_POST['notes']);
+	$ticket->updateHistory($history);
 
 	try {
 		$ticket->save();
-		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
@@ -57,10 +56,10 @@ $template->blocks['ticket-panel'][] = new Block(
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
+	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
-	'issues/issueList.inc',
+	'tickets/issueList.inc',
 	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 );
 if ($ticket->getLocation()) {

@@ -13,7 +13,6 @@ $result = $pdo->query($sql);
 foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
 	$category = new Category();
 	$category->setName($name);
-	$category->save();
 
 	if (preg_match('/NOTICE/',$name)) {
 		list($type,$notice) = explode(' ',trim($name));
@@ -22,11 +21,10 @@ foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
 		$query = $pdo->prepare('select notice from sanitation_notices where type=?');
 		$query->execute(array($type));
 		foreach ($query->fetchAll(PDO::FETCH_COLUMN) as $notice) {
-			$note = new CategoryNote();
-			$note->setCategory($category);
-			$note->setNote($notice);
-			$note->save();
+			$category->updateProblems($notice);
 		}
 	}
+	$category->save();
 	echo $category->getName()."\n";
 }
+

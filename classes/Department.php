@@ -4,17 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Department
+class Department extends MongoRecord
 {
-	private $id;
-	private $name;
-	private $default_person_id;
-
-	private $actions = array();
-	private $categories = array();
-	private $customStatuses = array();
-	private $default_person;
-
 	/**
 	 * Populates the object with data
 	 *
@@ -34,17 +25,18 @@ class Department
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
-				$sql = 'select * from departments where id=?';
-				$result = $zend_db->fetchRow($sql,array($id));
+				$mongo = Database::getConnection();
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
+					$search = array('_id'=>new MongoId($id));
+				}
+				else {
+					$search = array('name'=>$id);
+				}
+				$result = $mongo->departments->findOne($search);
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('departments/unknownDepartment');
@@ -63,7 +55,7 @@ class Department
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name || !$this->default_person_id) {
+		if (!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -75,29 +67,8 @@ class Department
 	{
 		$this->validate();
 
-		$data = array();
-		$data['name'] = $this->name;
-		$data['default_person_id'] = $this->default_person_id;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('departments',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('departments',$data);
-		$this->id = $zend_db->lastInsertId('departments','id');
+		$mongo = Database::getConnection();
+		$mongo->departments->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -105,11 +76,13 @@ class Department
 	//----------------------------------------------------------------
 
 	/**
-	 * @return int
+	 * @return string Mongo's unique identifier
 	 */
 	public function getId()
 	{
-		return $this->id;
+		if (isset($this->data['_id'])) {
+			return $this->data['_id'];
+		}
 	}
 
 	/**
@@ -117,31 +90,52 @@ class Department
 	 */
 	public function getName()
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getDefault_person_id()
-	{
-		return $this->default_person_id;
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getDefault_person()
-	{
-		if ($this->default_person_id) {
-			if (!$this->default_person) {
-				$this->default_person = new Person($this->default_person_id);
-			}
-			return $this->default_person;
+		if (isset($this->data['name'])) {
+			return $this->data['name'];
 		}
-		return null;
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getDefaultPerson()
+	{
+		if (isset($this->data['defaultPerson'])) {
+			return $this->data['defaultPerson'];
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCategories()
+	{
+		if (isset($this->data['categories'])) {
+			return $this->data['categories'];
+		}
+		return array();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCustomStatuses()
+	{
+		if (isset($this->data['customStatuses'])) {
+			return $this->data['customStatuses'];
+		}
+		return array();
+	}
+	/**
+	 * @return array
+	 */
+	public function getActions()
+	{
+		if (isset($this->data['actions'])) {
+			return $this->data['actions'];
+		}
+		return array();
+	}
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -151,140 +145,119 @@ class Department
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->data['name'] = trim($string);
 	}
 
 	/**
-	 * @param int $int
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
-	public function setDefault_person_id($int)
+	public function setDefaultPerson($person)
 	{
-		$this->default_person = new Person($int);
-		$this->default_person_id = $int;
+		$this->setPersonData('defaultPerson',$person);
 	}
 
-	/**
-	 * @param Person $person
+	/*
+	 *@param array $array
 	 */
-	public function setDefault_person($person)
+	public function setCategories($categories)
 	{
-		$this->default_person_id = $person->getId();
-		$this->default_person = $person;
+		if ($categories && is_array($categories)) {
+			$this->data['categories'] = array();
+
+			foreach ($categories as $id) {
+				try {
+					$category = new Category($id);
+					$this->data['categories'][] = array(
+						'_id'=>$category->getId(),
+						'name'=>$category->getName()
+					);
+				}
+				catch (Eexception $ex) {
+					// Just ignore the bad ones
+				}
+			}
+		}
 	}
 
+	/*
+	 *@param string $string
+	 */
+	public function setCustomStatuses($string)
+	{
+		$this->data['customStatuses'] = array();
+		foreach (explode(',',$string) as $status) {
+			$status = trim($status);
+			if ($status) {
+				$this->data['customStatuses'][] = $status;
+			}
+		}
+	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * @return array
-	 */
-	public function getCategories()
+	public function __toString()
 	{
-		if (!count($this->categories)) {
-			$list = new CategoryList(array('department_id'=>$this->id));
-			foreach ($list as $category) {
-				$this->categories[$category->getId()] = $category;
-			}
-		}
-		return $this->categories;
+		return $this->getName();
 	}
 
 	/**
-	 * @param Category $category
+	 * @param string $string
 	 * @return bool
 	 */
-	public function hasCategory(Category $category)
+	public function hasCategory($string)
 	{
-		return array_key_exists($category->getId(),$this->getCategories());
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasCategories()
-	{
-		return count($this->getCategories()) ? true : false;
-	}
-
-	/**
-	 * Saves a set of categories to the database
-	 *
-	 * Replaces the database records for the department
-	 * with a new set of categories
-	 *
-	 * @param array|CategoryList $categories
-	 */
-	public function saveCategories($categories)
-	{
-		if ($this->id) {
-			$zend_db = Database::getConnection();
-			$zend_db->delete('department_categories','department_id='.$this->id);
-			foreach ($categories as $category) {
-				if (!$category instanceof Category) {
-					$category = new Category($category);
-				}
-
-				$zend_db->insert('department_categories',
-								array('department_id'=>$this->id,'category_id'=>$category->getId()));
+		foreach ($this->getCategories() as $category) {
+			if ($string == $category['name']) {
+				return true;
 			}
 		}
 	}
 
 	/**
-	 * @return array
+	 * @param array $action
+	 * @param int $index
 	 */
-	public function getActions()
+	public function updateActions($action,$index=null)
 	{
-		if (!count($this->actions)) {
-			$list = new ActionList(array('department_id'=>$this->id));
-			foreach ($list as $action) {
-				$this->actions[$action->getId()] = $action;
-			}
+		if (!isset($this->data['actions'])) {
+			$this->data['actions'] = array();
 		}
-		return $this->actions;
+		foreach ($action as $key=>$value) {
+			$action[$key] = (string)$value;
+		}
+		if (isset($index) && isset($this->data['actions'][$index])) {
+			$this->data['actions'][$index] = $action;
+		}
+		else {
+			$this->data['actions'][] = $action;
+		}
 	}
 
 	/**
-	 * @param Action $action
+	 * @param int $index
+	 */
+	public function removeAction($index)
+	{
+		if (isset($this->data['actions'][$index])) {
+			unset($this->data['actions'][$index]);
+		}
+	}
+
+	/**
+	 * @param string $string
 	 * @return bool
 	 */
-	public function hasAction(Action $action)
+	public function hasAction($string)
 	{
-		return array_key_exists($action->getId(),$this->getActions());
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasActions()
-	{
-		return count($this->getActions()) ? true : false;
-	}
-
-	/**
-	 * Saves a set of actions to the database
-	 *
-	 * Replaces the database records for the department
-	 * with a new set of actions
-	 *
-	 * @param array|ActionList $actions
-	 */
-	public function saveActions($actions)
-	{
-		if ($this->id) {
-			$zend_db = Database::getConnection();
-			$zend_db->delete('department_actions','department_id='.$this->id);
-			foreach ($actions as $action) {
-				if (!$action instanceof Action) {
-					$action = new Action($action);
-				}
-
-				$zend_db->insert(
-					'department_actions',
-					array('department_id'=>$this->id,'action_id'=>$action->getId())
-				);
+		foreach ($this->getActions() as $action) {
+			if ($string == $action['name']) {
+				return true;
 			}
 		}
 	}
@@ -292,59 +265,8 @@ class Department
 	/**
 	 * @return UserList
 	 */
-	public function getUsers()
+	public function getPeople()
 	{
-		return new UserList(array('department_id'=>$this->id));
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getCustomStatuses()
-	{
-		if (!count($this->customStatuses)) {
-			if ($this->id) {
-				$zend_db = Database::getConnection();
-				$query = $zend_db->query(
-					'select status from customStatuses where department_id=?',
-					array($this->id)
-				);
-				$this->customStatuses = $query->fetchAll(Zend_Db::FETCH_COLUMN);
-			}
-		}
-		return $this->customStatuses;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasCustomStatuses()
-	{
-		return count($this->getCustomStatuses()) ? true : false;
-	}
-
-	/**
-	 * Immediately saves an array of status strings to the database
-	 *
-	 * @param string|array $statuses
-	 */
-	public function saveCustomStatuses($statuses)
-	{
-		if ($this->id) {
-			$zend_db = Database::getConnection();
-			$zend_db->delete('customStatuses','department_id='.$this->id);
-
-			if (!is_array($statuses)) {
-				$statuses = explode(',',$statuses);
-			}
-			$this->customStatuses = $statuses;
-
-			foreach ($statuses as $status) {
-				$zend_db->insert(
-					'customStatuses',
-					array('department_id'=>$this->id,'status'=>$status)
-				);
-			}
-		}
+		return new PersonList(array('department._id'=>$this->data['_id']));
 	}
 }

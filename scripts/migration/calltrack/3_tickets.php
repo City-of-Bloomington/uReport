@@ -38,13 +38,12 @@ foreach($results as $row){
   // Import the Person
   if (isset($row['username']) && $row['username']) {
 	try {
-	  $user = new User(strtolower($row['username']));
-	  $ticket->setEnteredByPerson($user->getPerson());
+	  $ticket->setEnteredByPerson($row['username']);
 	  if(isset($row['referralId']) && $row['referralId']){
-		$ticket->setReferredPerson($user->getPerson());
+		$ticket->setReferredPerson($row['referredId']);
 	  }
 	  else {
-		$ticket->setAssignedPerson($user->getPerson());
+		$ticket->setAssignedPerson($row['username']);
 	  }
 	}
 	catch (Exception $e) {
@@ -58,19 +57,19 @@ foreach($results as $row){
 	break;
   default:
 	$ticket->setStatus('closed');
+	$ticket->setResolution('Resolved');
   }
   // if the request has resolution record ==> it is closed
   if(isset($row['resolutionId']) && $row['resolutionId']){
 	$ticket->setStatus('closed');
-	$ticket->setResolution(new Resolution('Resolved'));
+	$ticket->setResolution('Resolved');
   }
   // No address or location info
-  $ticket->save();
+ //  $ticket->save();
 
   // Create the issue on this ticket
   $issue = new Issue();
   $issue->setDate($ticket->getEnteredDate());
-  $issue->setTicket($ticket);
   if ($ticket->getEnteredByPerson()) {
 	$issue->setEnteredByPerson($ticket->getEnteredByPerson());
   }
@@ -94,13 +93,13 @@ foreach($results as $row){
 	}
   }
   if (preg_match('/COMPLAINT/',$row['notes'])) {
-	$issue->setIssueType('Complaint');
+	$issue->setType('Complaint');
   }
   if (preg_match('/VIOLATION/',$row['notes'])) {
-	$issue->setIssueType('Violation');
+	$issue->setType('Violation');
   }
   else {
-	$issue->setIssueType('Request');
+	$issue->setType('Request');
   }
   
   $personList = new
@@ -111,10 +110,10 @@ foreach($results as $row){
 					 'phone'=>$row['phone']
 					 ));
   if (count($personList)) {
-	$issue->setReportedByPerson($personList[0]);
+	$personList->next();
+	$issue->setReportedByPerson($personList->current());
   }
-  $issue->save();
-	
+  $ticket->updateIssues($issue);	
   /**
    * Create the Ticket History
    *
@@ -126,16 +125,14 @@ foreach($results as $row){
   if ($ticket->getEnteredByPerson()) {
 	$lastPerson = $ticket->getEnteredByPerson();
   }
-  $history = new TicketHistory();
-  $history->setAction(new Action('open'));
+  $history = new History();
+  $history->setAction('open');
   $history->setEnteredDate($ticket->getEnteredDate());
   $history->setActionDate($ticket->getEnteredDate());
-  $history->setTicket($ticket);
   if ($lastPerson) {
 	$history->setEnteredByPerson($lastPerson);
   }
-  $history->setNotes('Ticket opened');
-  $history->save();
+  $ticket->updateHistory($history);
   //
   // looking for resolutions,responses related to this request
   // these will be considered as actions
@@ -146,11 +143,10 @@ foreach($results as $row){
   //
   $result2 = $pdo->query($sql);
   while ($row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
-	$history = new TicketHistory();
-	$history->setAction(new Action('referral'));
+	$history = new History();
+	$history->setAction('referral');
 	$history->setEnteredDate($row2['date']);
 	$history->setActionDate($row2['date']);
-	$history->setTicket($ticket);
 	$history->setNotes($row2['notes']);
 	if ($lastPerson) {
 	  $history->setEnteredByPerson($lastPerson);
@@ -168,7 +164,8 @@ foreach($results as $row){
 	  }
 	}
 	if($personList && count($personList)){
-	  $history->setActionPerson($personList[0]);							   
+		$personList->next();
+	  $history->setActionPerson($personList->current());							   
 	}
 	else{
 	  // if no match found, we put all in first name
@@ -177,7 +174,7 @@ foreach($results as $row){
 	  $person->save();
 	  $history->setActionPerson($person);		
 	}
-	$history->save();
+	$ticket->updateHistory($history);
   }
   //
   // start with resolutions
@@ -188,16 +185,14 @@ foreach($results as $row){
 		where r.request_id=".$row['id'];
   $result2 = $pdo->query($sql);
   while ($row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
-	$history = new TicketHistory();
-	$history->setAction(new Action('close'));
+	$history = new History();
+	$history->setAction('close');
 	$history->setActionDate($row2['date']);
 	$history->setEnteredDate($row2['date']);
-	$history->setTicket($ticket);
-	$history->setNotes($row['notes']);
-	$user = new User(strtolower($row2['username']));
-	$history->setEnteredByPerson($user->getPerson());		
-	$history->setActionPerson($user->getPerson());
-	$history->save();
+	$history->setNotes($row2['notes']);
+	$history->setEnteredByPerson($row2['username']);		
+	$history->setActionPerson($row2['username']);
+	$ticket->updateHistory($history);
   }
   //
   // responses go in issueHistory
@@ -211,15 +206,14 @@ foreach($results as $row){
 		where rf.request_id=".$row['id'];
   $result2 = $pdo->query($sql);
   while ($result2 && $row2 = $result2->fetch(PDO::FETCH_ASSOC)) {
-	$history = new IssueHistory();
-	$history->setAction(new Action('response'));
+	$history = new History();
+	$history->setAction('response');
 	$history->setEnteredDate($row2['date']);
 	$history->setActionDate($row2['date']);
-	$history->setIssue($issue);
 	$history->setNotes($row2['notes']);	  
-	$user = new User(strtolower($row2['username']));
-	$history->setEnteredByPerson($user->getPerson());
-	$history->setActionPerson($issue->getReportedByPerson());
+	$history->setEnteredByPerson($row2['username']);
+	$history->setActionPerson($row2['username']);
+	/*
 	if($row2['contactMethod']){
 	  switch ($row2['contactMethod']) {
 	  case 'phone':
@@ -238,7 +232,16 @@ foreach($results as $row){
 		$history->setContactMethod('Other');
 	  }
 	}
-	$history->save();
+	*/
+  	$ticket->updateHistory($history);
 	// print_r($history);
+  }
+  try {
+  	$ticket->save();
+  }
+  catch (Exception $e) {
+  	echo $e->getMessage()."\n";
+	print_r($e);
+  	exit();
   }
 }

@@ -3,9 +3,10 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param ResolutionList $this->resolutionList
  */
 ?>
-<div class="resolutionList interfaceBox">
+<div class="resolutionList">
 	<h1><?php
 			if (userIsAllowed('Resolutions')) {
 				echo $this->template->linkButton(
@@ -20,12 +21,9 @@
 			foreach ($this->resolutionList as $resolution) {
 				$editButton = '';
 				if (userIsAllowed('Resolutions')) {
-					$url = new URL(BASE_URL.'/resolutions/updateResolution.php');
-					$url->id = $resolution->getId();
-
 					$editButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/resolutions/updateResolution.php?resolution_id='.$resolution->getId(),
+						BASE_URL."/resolutions/updateResolution.php?resolution_id={$resolution->getId()}",
 						'edit'
 					);
 				}

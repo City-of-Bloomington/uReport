@@ -55,7 +55,6 @@ tbody th { text-align:right; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
-#location-panel .locationResidents		{ }
 .findPeople { width:290px; float:left; }
 
 /* Blocks we want to show up in the right column of a Panel */
@@ -113,7 +112,7 @@ tbody th { text-align:right; }
 
 .mediaList {margin-left:.5em; }
 
-/* ICONS FOR MIME TYPES */ 
+/* ICONS FOR MIME TYPES */
 .jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
 .png  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
 .gif  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright 2007-2010 City of Bloomington, Indiana
+ * @copyright 2007-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param UserList $this->userList
+ * @param PersonList $this->userList
  */
 ?>
 <div class="interfaceBox">
@@ -48,12 +48,14 @@
 				$username = View::escape($user->getUsername());
 				$name = View::escape("{$user->getFirstname()} {$user->getLastname()}");
 				$email = View::escape($user->getEmail());
-				$department = View::escape($user->getDepartment()->getName());
+
+				$department = $user->getDepartment();
+				$departmentName = View::escape($department['name']);
 				echo "
 				<tr><td>$editButton</td>
 					<td>$username</td>
 					<td>$name</td>
-					<td>$department</td>
+					<td>$departmentName</td>
 					<td>{$user->getAuthenticationMethod()}</td>
 					<td>
 				";

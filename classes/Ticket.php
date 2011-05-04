@@ -4,35 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Ticket
+class Ticket extends MongoRecord
 {
-	private $id;
-	private $enteredDate;
-	private $enteredByPerson_id;
-	private $assignedPerson_id;
-	private $referredPerson_id;
-	private $status;           // open, closed,
-	private $resolution_id;
-	private $location;
-	private $latitude;
-	private $longitude;
-	private $address_id;
-	private $city;
-	private $state;
-	private $zip;
-
-	private $addressServiceCache = array();
-
-	private $enteredByPerson;
-	private $assignedPerson;
-	private $referredPerson;
-	private $resolution;
-
-	// Used to identify fields that can be updated from the AddressService
-	private	$addressServiceFields = array(
-		'location','address_id','city','state','zip','latitude','longitude'
-	);
-
 	/**
 	 * Populates the object with data
 	 *
@@ -52,32 +25,22 @@ class Ticket
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
-				$sql = 'select * from tickets where id=?';
-				$result = $zend_db->fetchRow($sql,array($id));
+				$mongo = Database::getConnection();
+				$result = $mongo->tickets->findOne(array('_id'=>new MongoId($id)));
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						if (preg_match('/Date/',$field)) {
-							$value = new Date($value);
-						}
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('tickets/unknownTicket');
 			}
-
-			$this->addressServiceCache = AddressService::getTicketData($this);
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->enteredDate = new Date();
-			$this->status = 'open';
+			$this->data['enteredDate'] = new MongoDate();
+			$this->data['status'] = 'open';
 		}
 	}
 
@@ -88,12 +51,12 @@ class Ticket
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->status) {
-			$this->status = 'open';
+		if (!$this->data['status']) {
+			$this->data['status'] = 'open';
 		}
 
-		if (!$this->enteredDate) {
-			$this->enteredDate = new Date();
+		if (!$this->data['enteredDate']) {
+			$this->data['enteredDate'] = new MongoDate();
 		}
 
 		#if (!$this->enteredByPerson_id) {
@@ -107,43 +70,8 @@ class Ticket
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['enteredDate'] = $this->enteredDate->format('Y-m-d');
-		$data['enteredByPerson_id'] = $this->enteredByPerson_id ? $this->enteredByPerson_id : null;
-		$data['assignedPerson_id'] = $this->assignedPerson_id ? $this->assignedPerson_id : null;
-		$data['referredPerson_id'] = $this->referredPerson_id ? $this->referredPerson_id : null;
-		$data['status'] = $this->status;
-		$data['resolution_id'] = $this->resolution_id ? $this->resolution_id : null;
-		$data['location'] = $this->location ? $this->location : null;
-		$data['latitude'] = $this->latitude ? $this->latitude : null;
-		$data['longitude'] = $this->longitude ? $this->longitude : null;
-		$data['address_id'] = $this->address_id ? $this->address_id : null;
-		$data['city'] = $this->city ? $this->city : null;
-		$data['state'] = $this->state ? $this->state : null;
-		$data['zip'] = $this->zip ? $this->zip : null;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-
-		AddressService::saveTicketData($this->addressServiceCache,$this);
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('tickets',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('tickets',$data);
-		$this->id = $zend_db->lastInsertId('tickets','id');
+		$mongo = Database::getConnection();
+		$mongo->tickets->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -154,7 +82,7 @@ class Ticket
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->data['_id'];
 	}
 
 	/**
@@ -162,85 +90,51 @@ class Ticket
 	 *
 	 * Format is specified using PHP's date() syntax
 	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
+	 * If no format is given, the MongoDate object is returned
 	 *
 	 * @param string $format
-	 * @return string|DateTime
+	 * @return string|MongoDate
 	 */
 	public function getEnteredDate($format=null)
 	{
-		if ($format && $this->enteredDate) {
-			return $this->enteredDate->format($format);
-		}
-		else {
-			return $this->enteredDate;
+		if (isset($this->data['enteredDate'])) {
+			if ($format) {
+				return date($format,$this->data['enteredDate']->sec);
+			}
+			else {
+				return $this->data['enteredDate'];
+			}
 		}
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getEnteredByPerson_id()
-	{
-		return $this->enteredByPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getEnteredByPerson()
 	{
-		if ($this->enteredByPerson_id) {
-			if (!$this->enteredByPerson) {
-				$this->enteredByPerson = new Person($this->enteredByPerson_id);
-			}
-			return $this->enteredByPerson;
+		if (isset($this->data['enteredByPerson'])) {
+			return $this->data['enteredByPerson'];
 		}
-		return null;
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getAssignedPerson_id()
-	{
-		return $this->assignedPerson_id;
-	}
-
-	/**
-	 * @return Person
+	 * @return array
 	 */
 	public function getAssignedPerson()
 	{
-		if ($this->assignedPerson_id) {
-			if (!$this->assignedPerson) {
-				$this->assignedPerson = new Person($this->assignedPerson_id);
-			}
-			return $this->assignedPerson;
+		if (isset($this->data['assignedPerson'])) {
+			return $this->data['assignedPerson'];
 		}
-		return null;
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getReferredPerson_id()
-	{
-		return $this->referredPerson_id;
-	}
-
-	/**
-	 * @return ReferredPerson
+	 * @return array
 	 */
 	public function getReferredPerson()
 	{
-		if ($this->referredPerson_id) {
-			if (!$this->referredPerson) {
-				$this->referredPerson = new Person($this->referredPerson_id);
-			}
-			return $this->referredPerson;
+		if (isset($this->data['referredPerson'])) {
+			return $this->data['referredPerson'];
 		}
-		return null;
 	}
 
 	/**
@@ -248,27 +142,18 @@ class Ticket
 	 */
 	public function getStatus()
 	{
-		return $this->status;
+		if (isset($this->data['status'])) {
+			return $this->data['status'];
+		}
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getResolution_id()
-	{
-		return $this->resolution_id;
-	}
-
-	/**
-	 * @return Resolution
+	 * @return string
 	 */
 	public function getResolution()
 	{
-		if ($this->resolution_id) {
-			if (!$this->resolution) {
-				$this->resolution = new Resolution($this->resolution_id);
-			}
-			return $this->resolution;
+		if (isset($this->data['resolution'])) {
+			return $this->data['resolution'];
 		}
 	}
 
@@ -277,7 +162,9 @@ class Ticket
 	 */
 	public function getLocation()
 	{
-		return $this->location;
+		if (isset($this->data['location'])) {
+			return $this->data['location'];
+		}
 	}
 
 	/**
@@ -285,7 +172,9 @@ class Ticket
 	 */
 	public function getLatitude()
 	{
-		return $this->latitude;
+		if (isset($this->data['latitude'])) {
+			return $this->data['latitude'];
+		}
 	}
 
 	/**
@@ -293,7 +182,9 @@ class Ticket
 	 */
 	public function getLongitude()
 	{
-		return $this->longitude;
+		if (isset($this->data['longitude'])) {
+			return $this->data['longitude'];
+		}
 	}
 
 	/**
@@ -301,7 +192,9 @@ class Ticket
 	 */
 	public function getAddress_id()
 	{
-		return $this->address_id;
+		if (isset($this->data['address_id'])) {
+			return $this->data['address_id'];
+		}
 	}
 
 	/**
@@ -309,7 +202,9 @@ class Ticket
 	 */
 	public function getCity()
 	{
-		return $this->city;
+		if (isset($this->data['city'])) {
+			return $this->data['city'];
+		}
 	}
 
 	/**
@@ -317,7 +212,9 @@ class Ticket
 	 */
 	public function getState()
 	{
-		return $this->state;
+		if (isset($this->data['state'])) {
+			return $this->data['state'];
+		}
 	}
 
 	/**
@@ -325,15 +222,37 @@ class Ticket
 	 */
 	public function getZip()
 	{
-		return $this->zip;
+		if (isset($this->data['zip'])) {
+			return $this->data['zip'];
+		}
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getAddressServiceCache()
+	public function getIssues()
 	{
-		return $this->addressServiceCache;
+		$issues = array();
+		if (isset($this->data['issues'])) {
+			foreach ($this->data['issues'] as $data) {
+				$issues[] = new Issue($data);
+			}
+		}
+		return $issues;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getHistory()
+	{
+		$history = array();
+		if (isset($this->data['history'])) {
+			foreach ($this->data['history'] as $data) {
+				$history[] = new History($data);
+			}
+		}
+		return $history;
 	}
 
 	//----------------------------------------------------------------
@@ -342,78 +261,81 @@ class Ticket
 	/**
 	 * Sets the date
 	 *
-	 * Date arrays should match arrays produced by getdate()
-	 *
-	 * Date string formats should be in something strtotime() understands
+	 * Dates should be in something strtotime() understands
 	 * http://www.php.net/manual/en/function.strtotime.php
 	 *
-	 * @param int|string|array $date
+	 * @param string $date
 	 */
 	public function setEnteredDate($date)
 	{
-		if ($date instanceof Date) {
-			$this->enteredDate = $date;
-		}
-		elseif ($date) {
-			$this->enteredDate = new Date($date);
-		}
-		else {
-			$this->enteredDate = null;
+		$date = trim($date);
+		if ($date) {
+			$this->data['enteredDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setEnteredByPerson_id($int)
-	{
-		$this->enteredByPerson = new Person($int);
-		$this->enteredByPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setEnteredByPerson($person)
 	{
-		$this->enteredByPerson_id = $person->getId();
-		$this->enteredByPerson = $person;
+		if (is_string($person)) {
+			$person = new Person($person);
+		}
+		elseif (is_array($person)) {
+			$person = new Person($person['_id']);
+		}
+
+		if ($person instanceof Person) {
+			if ($person->getUsername()) {
+				$this->setPersonData('enteredByPerson',$person);
+			}
+			else {
+				throw new Exception('tickets/personRequiresUsername');
+			}
+		}
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setAssignedPerson_id($int)
-	{
-		$this->assignedPerson = new Person($int);
-		$this->assignedPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setAssignedPerson($person)
 	{
-		$this->assignedPerson_id = $person->getId();
-		$this->assignedPerson = $person;
+		if (is_string($person)) {
+			$person = new Person($person);
+		}
+		elseif (is_array($person)) {
+			$person = new Person($person['_id']);
+		}
+
+		if ($person instanceof Person) {
+			if ($person->getUsername()) {
+				$this->setPersonData('assignedPerson',$person);
+			}
+			else {
+				throw new Exception('tickets/personRequiresUsername');
+			}
+		}
 	}
 
 	/**
-	 * @param int $int
-	 */
-	public function setReferredPerson_id($int)
-	{
-		$this->referredPerson = new Person($int);
-		$this->referredPerson_id = $int;
-	}
-
-	/**
-	 * @param Person $person
+	 * Sets person data
+	 *
+	 * See: MongoRecord->setPersonData
+	 *
+	 * @param string|array|Person $person
 	 */
 	public function setReferredPerson($person)
 	{
-		$this->referredPerson_id = $person->getId();
-		$this->referredPerson = $person;
+		$this->setPersonData('referredPerson',$person);
 	}
 
 	/**
@@ -425,36 +347,25 @@ class Ticket
 	 */
 	public function setStatus($string)
 	{
-		$this->status = trim($string);
-		if ($this->status != 'closed') {
-			$this->resolution = null;
-			$this->resolution_id = null;
+		$this->data['status'] = trim($string);
+		if ($this->data['status'] != 'closed') {
+			unset($this->data['resolution']);
 		}
 	}
 
 	/**
-	 * @param int $id
-	 */
-	public function setResolution_id($id)
-	{
-		$this->resolution = new Resolution($id);
-		$this->resolution_id = $this->resolution->getId();
-
-		$this->status = 'closed';
-	}
-
-	/**
-	 * @param Resolution|string $resolution
+	 * @param string $resolution
 	 */
 	public function setResolution($resolution)
 	{
-		if (!$resolution instanceof Resolution) {
-			$resolution = new Resolution($resolution);
+		$resolution = trim($resolution);
+		if ($resolution) {
+			$this->data['resolution'] = $resolution;
 		}
-		$this->resolution_id = $resolution->getId();
-		$this->resolution = $resolution;
-
-		$this->status = 'closed';
+		elseif (isset($this->data['resolution'])) {
+			unset($this->data['resolution']);
+		}
+		$this->data['status'] = 'closed';
 	}
 
 	/**
@@ -462,7 +373,7 @@ class Ticket
 	 */
 	public function setLocation($string)
 	{
-		$this->location = trim($string);
+		$this->data['location'] = trim($string);
 	}
 
 	/**
@@ -470,7 +381,7 @@ class Ticket
 	 */
 	public function setLatitude($float)
 	{
-		$this->latitude = (float)$float;
+		$this->data['latitude'] = (float)$float;
 	}
 
 	/**
@@ -478,7 +389,7 @@ class Ticket
 	 */
 	public function setLongitude($float)
 	{
-		$this->longitude = (float)$float;
+		$this->data['longitude'] = (float)$float;
 	}
 
 	/**
@@ -486,7 +397,7 @@ class Ticket
 	 */
 	public function setAddress_id($id)
 	{
-		$this->address_id = (int)$id;
+		$this->data['address_id'] = (int)$id;
 	}
 
 	/**
@@ -494,7 +405,7 @@ class Ticket
 	 */
 	public function setCity($string)
 	{
-		$this->city = trim($string);
+		$this->data['city'] = trim($string);
 	}
 
 	/**
@@ -502,7 +413,7 @@ class Ticket
 	 */
 	public function setState($string)
 	{
-		$this->state = trim($string);
+		$this->data['state'] = trim($string);
 	}
 
 	/**
@@ -510,28 +421,7 @@ class Ticket
 	 */
 	public function setZip($string)
 	{
-		$this->zip = trim($string);
-	}
-
-	/**
-	 * Populates ticket fields from the data passed in
-	 *
-	 * Data fields that have the same name as Ticket properties will
-	 * update the appropriate property.  These fields will be removed from the
-	 * cache, so we only store any piece of data in one, an only one place.
-	 *
-	 * @param array $data
-	 */
-	public function setAddressServiceCache($data)
-	{
-		foreach ($data as $key=>$value) {
-			if (in_array($key,$this->addressServiceFields)) {
-				$set = 'set'.ucfirst($key);
-				$this->$set($value);
-				unset($data[$key]);
-			}
-		}
-		$this->addressServiceCache = $data;
+		$this->data['zip'] = trim($string);
 	}
 
 	//----------------------------------------------------------------
@@ -543,33 +433,63 @@ class Ticket
 	 */
 	public function getURL()
 	{
-		return BASE_URL.'/tickets/viewTicket.php?ticket_id='.$this->id;
+		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
 	}
 
-	/**
-	 * @return IssueList
-	 */
-	public function getIssues()
-	{
-		return new IssueList(array('ticket_id'=>$this->id));
-	}
 
 	/**
-	 * @return CategoryList
+	 * @return array
 	 */
 	public function getCategories()
 	{
-		return new CategoryList(array('ticket_id'=>$this->id));
+		$categories = array();
+		foreach ($this->data['issues'] as $issue) {
+			if (isset($issue['category'])) {
+				$categories[] = $issue['category'];
+			}
+		}
+		return $categories;
 	}
 
 	/**
-	 * @return TicketHistoryList
+	 * @param Issue $issue
+	 * @param int $index
 	 */
-	public function getHistory()
+	public function updateIssues(Issue $issue, $index=null)
 	{
-		return new TicketHistoryList(array('ticket_id'=>$this->id));
+		$issue->validate();
+
+		if (!isset($this->data['issues'])) {
+			$this->data['issues'] = array();
+		}
+
+		if (isset($index) && isset($this->data['issues'][$index])) {
+			$this->data['issues'][$index] = $issue->getData();
+		}
+		else {
+			$this->data['issues'][] = $issue->getData();
+		}
 	}
 
+	/**
+	 * @param History $history
+	 * @param int $index
+	 */
+	public function updateHistory(History $history, $index=null)
+	{
+		$history->validate();
+
+		if (!isset($this->data['history'])) {
+			$this->data['history'] = array();
+		}
+
+		if (isset($index) && isset($this->data['history'][$index])) {
+			$this->data['history'][$index] = $history->getData();
+		}
+		else {
+			$this->data['history'][] = $history->getData();
+		}
+	}
 	/**
 	 * Transfers all data from a ticket, then deletes the ticket
 	 *
@@ -579,13 +499,7 @@ class Ticket
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
-		if ($this->id && $ticket->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->update('issues',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
-			$zend_db->update('ticketHistory',array('ticket_id'=>$this->id),'ticket_id='.$ticket->getId());
-			$zend_db->delete('addressServiceCache',array('ticket_id'=>$ticket->getId()));
-			$zend_db->delete('tickets','id='.$ticket->getId());
-		}
+
 	}
 
 	/**
@@ -596,20 +510,43 @@ class Ticket
 	 */
 	public static function getDistinct($fieldname)
 	{
-		if (property_exists('ticket',$fieldname)) {
-			$zend_db = Database::getConnection();
-			return $zend_db->fetchCol("select distinct $fieldname from tickets order by $fieldname");
+		$mongo = Database::getConnection();
+		$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+		return $result['values'];
+	}
+
+	/**
+	 * @param array $data
+	 */
+	public function setAddressServiceData($data)
+	{
+		foreach ($data as $key=>$value) {
+			$set = 'set'.ucfirst($key);
+			if (method_exists($this,$set)) {
+				$this->$set($value);
+			}
+			else {
+				$this->data[$key] = (string)$value;
+			}
 		}
 	}
 
 	/**
-	 * Empties out the fields that can be populated from the AddressService
+	 * Returns data from person structures in the Mongo record
+	 *
+	 * If the data doesn't exist an empty string will be returned
+	 * Examples:
+	 * 	getPersonData('enteredByPerson','id')
+	 *  getPersonData('referredPerson','fullname')
+	 *
+	 * @param string $personField
+	 * @param string $dataField
+	 * @return string
 	 */
-	public function clearAddressServiceCache()
+	public function getPersonData($personField,$dataField)
 	{
-		foreach ($this->addressServiceFields as $field) {
-			$set = 'set'.ucfirst($field);
-			$this->$set('');
-		}
+		return isset($this->data[$personField][$dataField])
+			? $this->data[$personField][$dataField]
+			: '';
 	}
 }

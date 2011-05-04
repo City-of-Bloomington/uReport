@@ -7,9 +7,9 @@
  * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
-$assigned = $this->ticket->getAssignedPerson() ? View::escape($this->ticket->getAssignedPerson()->getFullname()) : '';
-$enteredBy = $this->ticket->getEnteredByPerson() ? View::escape($this->ticket->getEnteredByPerson()->getFullname()) : '';
-$referred = $this->ticket->getReferredPerson() ? View::escape($this->ticket->getReferredPerson()->getFullname()) : '';
+$assigned = View::escape($this->ticket->getPersonData('assignedPerson','fullname'));
+$enteredBy = View::escape($this->ticket->getPersonData('enteredByPerson','fullname'));
+$referred = View::escape($this->ticket->getPersonData('referredPerson','fullname'));
 
 $status = $this->ticket->getStatus();
 if ($this->ticket->getResolution()) {
@@ -50,14 +50,13 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	);
 }
 
-
 echo "
 <div class=\"ticketInfo\">
 	<h1>Ticket #{$this->ticket->getId()}</h1>
 	<div>$location $changeLocationButton</div>
 	<table>
 		<tr><th>Date Opened</th>
-			<td>{$this->ticket->getEnteredDate()}</td>
+			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
 			<td></td>
 		</tr>
 		<tr><th>Status</th>

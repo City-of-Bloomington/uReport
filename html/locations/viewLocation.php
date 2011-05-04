@@ -12,14 +12,12 @@ $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',array('location'=>$_GET['location'])
 );
-if (count($ticketList)) {
-	$template->blocks['ticket-panel'][] = new Block(
-		'tickets/ticketList.inc',
-		array(
-			'ticketList'=>$ticketList,
-			'title'=>'Tickets Associated with this Location'
-		)
-	);
-}
+$template->blocks['ticket-panel'][] = new Block(
+	'tickets/ticketList.inc',
+	array(
+		'ticketList'=>$ticketList,
+		'title'=>'Tickets Associated with this Location'
+	)
+);
 
 echo $template->render();

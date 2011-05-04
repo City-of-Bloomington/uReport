@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST ticket_id
+ * @param REQUEST person_id
  */
 // Make sure they're supposed to be here
 if (!userIsAllowed('Tickets')) {
@@ -12,12 +13,10 @@ if (!userIsAllowed('Tickets')) {
 	exit();
 }
 
-// Load the ticket
+// Load the Ticket and Person
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
-	if (isset($_GET['person_id'])) {
-		$ticket->setReferredPerson_id($_GET['person_id']);
-	}
+	$person = new Person($_REQUEST['person_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -26,20 +25,19 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['referredPerson_id'])) {
-	$ticket->setReferredPerson_id($_POST['referredPerson_id']);
-
-	// add a record to ticket history
-	$history = new TicketHistory();
-	$history->setTicket($ticket);
-	$history->setAction('referral');
-	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($ticket->getReferredPerson_id());
-	$history->setNotes($_POST['notes']);
-
+if (isset($_POST['referredPerson'])) {
 	try {
+		$ticket->setReferredPerson($_POST['referredPerson']);
+
+		// add a record to ticket history
+		$history = new History();
+		$history->setAction('referral');
+		$history->setEnteredByPerson($_SESSION['USER']);
+		$history->setActionPerson($ticket->getReferredPerson());
+		$history->setNotes($_POST['notes']);
+		$ticket->updateHistory($history);
+
 		$ticket->save();
-		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
@@ -56,14 +54,14 @@ $template->blocks['ticket-panel'][] = new Block(
 );
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/referTicketForm.inc',
-	array('ticket'=>$ticket)
+	array('ticket'=>$ticket,'person'=>$person)
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
+	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
-	'issues/issueList.inc',
+	'tickets/issueList.inc',
 	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 );
 if ($ticket->getLocation()) {

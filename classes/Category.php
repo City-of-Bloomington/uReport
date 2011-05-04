@@ -4,11 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Category
+class Category extends MongoRecord
 {
-	private $id;
-	private $name;
-
 	/**
 	 * Populates the object with data
 	 *
@@ -28,22 +25,19 @@ class Category
 				$result = $id;
 			}
 			else {
-				if (is_numeric($id)) {
-					$sql = 'select * from categories where id=?';
+				$mongo = Database::getConnection();
+				
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
+					$search = array('_id'=>new MongoId($id));
 				}
 				else {
-					$sql = 'select * from categories where name=?';
+					$search = array('name'=>(string)$id);
 				}
-				$zend_db = Database::getConnection();
-				$result = $zend_db->fetchRow($sql,array($id));
+				$result = $mongo->categories->findOne($search);
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('categories/unknownCategory');
@@ -62,7 +56,7 @@ class Category
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->name) {
+		if(!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -73,41 +67,21 @@ class Category
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['name'] = $this->name;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
+		$mongo = Database::getConnection();
+		$mongo->categories->save($this->data,array('safe'=>true));
 	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('categories',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('categories',$data);
-		$this->id = $zend_db->lastInsertId('categories','id');
-	}
-
+	
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
 	/**
-	 * @return int
+	 * @return string
 	 */
 	public function getId()
 	{
-		return $this->id;
+		if (isset($this->data['_id'])) {
+			return $this->data['_id'];
+		}
 	}
 
 	/**
@@ -115,43 +89,78 @@ class Category
 	 */
 	public function getName()
 	{
-		return $this->name;
+		if (isset($this->data['name'])) {
+			return $this->data['name'];
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getProblems()
+	{
+		if (isset($this->data['problems'])) {
+			return $this->data['problems'];
+		}
+		return array();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCustomFields()
+	{
+		if (isset($this->data['customFields'])) {
+			return $this->data['customFields'];
+		}
+		return array();
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-
 	/**
 	 * @param string $string
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->data['name'] = trim($string);
 	}
-
+	
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return $this->name;
+		return $this->getName();
 	}
-
+	
 	/**
-	 * @return CategoryNoteList
+	 * @param string $problem
+	 * @param int $index
 	 */
-	public function getNotes()
+	public function updateProblems($problem, $index=null)
 	{
-		return new CategoryNoteList(array('category_id'=>$this->id));
+		if (!isset($this->data['problems'])) {
+			$this->data['problems'] = array();
+		}
+		
+		if (isset($index) && isset($this->data['problems'][$index])) {
+			$this->data['problems'][$index] = trim($problem);
+		}
+		else {
+			$this->data['problems'][] = trim($problem);
+		}
 	}
-
+	
 	/**
-	 * @return bool
+	 * @param int $index
 	 */
-	public function hasNotes()
+	public function removeProblem($index)
 	{
-		return count($this->getNotes()) ? true : false;
+		if (isset($this->data['problems'][$index])) {
+			unset($this->data['problems'][$index]);
+		}
 	}
 }

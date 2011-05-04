@@ -12,24 +12,51 @@ if (!userIsAllowed('Tickets')) {
 
 $template = new Template('search');
 $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
+// Map the form fields to the Ticket search fields
 $fields = array(
-	'enteredByPerson_id','assignedPerson_id','department_id','zip',
-	'issueType_id','category_id','contactMethod_id',
-	'status','action_id','actionType_id','actionPerson_id'
+	'enteredByPerson'=>'enteredByPerson._id',
+	'assignedPerson'=>'assignedPerson._id',
+	'department'=>'assignedPerson.department._id',
+	'city'=>'city',
+	'state'=>'state',
+	'zip'=>'zip',
+	'type'=>'issues.type',
+	'category'=>'issues.category._id',
+	'contactMethod'=>'issues.contactMethod',
+	'status'=>'status',
+	'action'=>'history.action',
+	'actionPerson'=>'history.actionPerson._id'
 );
-if (count(array_intersect($fields,array_keys($_GET)))) {
-	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-	$ticketList = new TicketList(null,50,$page);
-	$ticketList->search($_GET);
-	$template->blocks['search-results'][] = new Block(
-		'tickets/searchResults.inc',
-		array(
-			'ticketList'=>$ticketList,
-			'title'=>'Search Results',
-			'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
-		)
-	);
-	$template->blocks['search-results'][] = new Block('pageNavigation.inc',array('list'=>$ticketList));
+if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
+	$search = array();
+	foreach ($fields as $field=>$key) {
+		if (isset($_GET[$field])) {
+			$value = trim($_GET[$field]);
+			if ($value) {
+				$search[$key] = $value;
+			}
+		}
+	}
+
+	if (count($search)) {
+		$ticketList = new TicketList($search);
+
+		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
+		$paginator = $ticketList->getPaginator(50,$page);
+
+		$template->blocks['search-results'][] = new Block(
+			'tickets/searchResults.inc',
+			array(
+				'ticketList'=>$paginator,
+				'title'=>'Search Results',
+				'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
+			)
+		);
+		$template->blocks['search-results'][] = new Block(
+			'pageNavigation.inc',array('paginator'=>$paginator)
+		);
+
+	}
 }
 
 echo $template->render();

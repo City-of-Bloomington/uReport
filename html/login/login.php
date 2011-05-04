@@ -4,15 +4,14 @@
  *
  *	A logged in user will have a $_SESSION['USER']
  *
- * @copyright 2006-2009 City of Bloomington, Indiana
+ * @copyright 2006-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 try {
-	$user = new User($_POST['username']);
-
-	if ($user->authenticate($_POST['password'])) {
-		$user->startNewSession();
+	$person = new Person($_POST['username']);
+	if ($person->authenticate($_POST['password'])) {
+		$_SESSION['USER'] = $person;
 	}
 	else {
 		throw new Exception('wrongPassword');

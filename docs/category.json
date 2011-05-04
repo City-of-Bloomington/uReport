@@ -1,0 +1,11 @@
+{
+	_id:'',
+	name:'',
+	problems:[],
+	customFields:[
+		{
+			name:'',
+			values:[]
+		}
+	]
+}

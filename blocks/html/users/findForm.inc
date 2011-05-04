@@ -17,10 +17,11 @@
 								$list->find();
 								foreach ($list as $department) {
 									$name = View::escape($department->getName());
-									$selected = (isset($_GET['department_id']) && $department->getId()==$_GET['department_id'])
+									$selected = (isset($_GET['department_id'])
+												&& "{$department->getId()}"==$_GET['department_id'])
 										? 'selected="selected"'
 										: '';
-									echo "<option value=\"{$department->getId()}\">$name</option>";
+									echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
 								}
 							?>
 						</select>

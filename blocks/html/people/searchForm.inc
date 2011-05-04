@@ -5,25 +5,13 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->return_url
  */
+$personQuery = isset($_GET['personQuery']) ? View::escape($_GET['personQuery']) : '';
 ?>
 <div class="findPeople">
 	<h1>Find Someone</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
-			<table>
-			<?php
-				$fields = array('firstname','lastname','organization','email','address','phone');
-				foreach ($fields as $field) {
-					$label = ucfirst($field);
-					$value = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
-					echo "
-					<tr><td><label for=\"$field\">$label</label></td>
-						<td><input name=\"$field\" id=\"$field\" value=\"$value\" /></td>
-					</tr>
-					";
-				}
-			?>
-			</table>
+			<input name="personQuery" value="<?php echo $personQuery; ?>" />
 			<?php
 				echo $this->template->formButton(
 					'Search','submit','search'

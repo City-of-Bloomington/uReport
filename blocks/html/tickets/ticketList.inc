@@ -25,19 +25,18 @@
 		<tbody>
 		<?php
 			foreach ($this->ticketList as $ticket) {
-				if ($this->filterTicket && $this->filterTicket->getId()==$ticket->getId()) {
+				if ($this->filterTicket
+					&& "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
 					continue;
 				}
 				$status = View::escape($ticket->getStatus());
 				$location = View::escape($ticket->getLocation());
-				$enteredBy = $ticket->getEnteredByPerson_id()
-					? View::escape($ticket->getEnteredByPerson()->getFullname())
-					: '';
+				$enteredBy = View::escape($ticket->getData('enteredByPerson.fullname'));
 				echo "
 				<tr><td><a href=\"{$ticket->getURL()}\">{$ticket->getId()}</a></td>
 					<td>$status</td>
 					<td>$location</td>
-					<td>{$ticket->getEnteredDate()}</td>
+					<td>{$ticket->getEnteredDate(DATE_FORMAT)}</td>
 					<td>$enteredBy</td>
 					<td>
 				";
@@ -45,19 +44,19 @@
 					if (count($categories)) {
 						echo '<ul>';
 						foreach ($categories as $category) {
-							echo '<li>'.View::escape($category).'</li>';
+							echo '<li>'.View::escape($category['name']).'</li>';
 						}
 						echo '</ul>';
 
 					}
 					if (!$this->disableButtons && userIsAllowed('Issues')) {
 						echo '<td>';
-						$url = new URL(BASE_URL.'/issues/updateIssue.php');
-						$url->ticket_id = $ticket->getId();
+						$url = new URL(BASE_URL.'/tickets/updateIssue.php');
+						$url->ticket_id = "{$ticket->getId()}";
 						if (isset($_GET['person_id'])) {
 							try {
 								$person = new Person($_GET['person_id']);
-								$url->person_id = $person->getId();
+								$url->person_id = "{$person->getId()}";
 							}
 							catch (Exception $e) {
 								// Just ignore invalid people

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2009-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST user_id
@@ -13,16 +13,7 @@ if (!userIsAllowed('Users')) {
 
 // Load the user for editing
 try {
-	if (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) {
-		$user = new User($_REQUEST['user_id']);
-	}
-	else {
-		$user = new User();
-		if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
-			$person = new Person($_REQUEST['person_id']);
-			$user->setPerson($person);
-		}
-	}
+	$user = new Person($_REQUEST['user_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -32,7 +23,7 @@ catch (Exception $e) {
 
 // Handle POST data
 if (isset($_POST['username'])) {
-	$fields = array('username','password','authenticationMethod','roles','department_id');
+	$fields = array('username','password','authenticationMethod','roles','department');
 	foreach ($fields as $field) {
 		if (isset($_POST[$field])) {
 			$set = 'set'.ucfirst($field);
@@ -44,21 +35,15 @@ if (isset($_POST['username'])) {
 	if ($user->getAuthenticationMethod() == 'LDAP') {
 		try {
 			$ldap = new LDAPEntry($user->getUsername());
-			$person = $user->getPerson_id() ? $user->getPerson() : new Person();
 
-			if (!$person->getFirstname()) {
-				$person->setFirstname($ldap->getFirstname());
+			if (!$user->getFirstname()) {
+				$user->setFirstname($ldap->getFirstname());
 			}
-			if (!$person->getLastname()) {
-				$person->setLastname($ldap->getLastname());
+			if (!$user->getLastname()) {
+				$user->setLastname($ldap->getLastname());
 			}
-			if (!$person->getEmail()) {
-				$person->setEmail($ldap->getEmail());
-			}
-
-			$person->save();
-			if (!$user->getPerson_id()) {
-				$user->setPerson($person);
+			if (!$user->getEmail()) {
+				$user->setEmail($ldap->getEmail());
 			}
 		}
 		catch (Exception $e) {
@@ -78,8 +63,7 @@ if (isset($_POST['username'])) {
 
 // Display the form
 $template = new Template('two-column');
+$template->blocks[] = new Block('people/personInfo.inc',array('person'=>$user));
 $template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
-if ($user->getPerson_id()) {
-	$template->blocks[] = new BlocK('people/personInfo.inc',array('person'=>$user->getPerson()));
-}
 echo $template->render();
+

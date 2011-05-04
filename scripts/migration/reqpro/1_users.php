@@ -16,18 +16,16 @@ $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
 $result = $pdo->query('select distinct userid,full_name from complain_authorized');
 foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
-	$person = new Person();
-
 	try {
-		$user = new User($row['userid']);
+		$person = new Person($row['userid']);
 	}
 	catch (Exception $e) {
-		$user = new User();
-		$user->setUsername($row['userid']);
-		$user->setAuthenticationMethod('LDAP');
+		$person = new Person();
+		$person->setUsername($row['userid']);
+		$person->setAuthenticationMethod('LDAP');
 
 		try {
-			$ldap = new LDAPEntry($user->getUsername());
+			$ldap = new LDAPEntry($person->getUsername());
 			$person->setFirstname($ldap->getFirstname());
 			$person->setLastname($ldap->getLastname());
 			$person->setEmail($ldap->getEmail());
@@ -41,15 +39,12 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
 		try {
 			$person->save();
-			$user->setPerson($person);
-			$user->save();
 		}
 		catch (Exception $e) {
 			print_r($e);
 			print_r($person);
-			print_r($user);
 			exit();
 		}
 	}
-	echo $user->getUsername()."\n";
+	echo $person->getUsername()."\n";
 }

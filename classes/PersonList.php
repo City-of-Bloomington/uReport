@@ -6,14 +6,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class PersonList extends ZendDbResultIterator
+class PersonList extends MongoResultIterator
 {
-	private $columns = array(
-		'firstname','middlename','lastname','email','phone','organization',
-		'address','city','state','zip',
-		'street_address_id','subunit_id','township','neighborhoodAssociation'
-	);
-
 	/**
 	 * @param array $fields
 	 */
@@ -26,108 +20,78 @@ class PersonList extends ZendDbResultIterator
 	}
 
 	/**
-	 * Creates the base select query that this class uses.
-	 * Both find() and search() will use the same select query.
-	 */
-	public function createSelection()
-	{
-		$this->select->from(array('p'=>'people'));
-	}
-
-	/**
 	 * Populates the collection, using strict matching of the requested fields
 	 *
 	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
+	 * @param array $order
 	 */
-	public function find($fields=null,$order='p.lastname,p.firstname',$limit=null,$groupBy=null)
+	public function find($fields=null,$order=array('lastname'=>1,'firstname'=>1))
 	{
-		$this->createSelection();
-
+		$search = array();
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$value = trim($value);
 				if ($value) {
-					if (in_array($key,$this->columns)) {
-						$this->select->where("p.$key=?",$value);
-					}
+					$search[$key] = $value;
 				}
 			}
 		}
-
-		if (isset($fields['enteredTicket'])) {
-			$count = $fields['enteredTicket'] ? '> 1' : '= 0';
-			$this->select->join(array('t'=>'tickets'),
-								'p.id=t.enteredByPerson_id',
-								array('ticketCount'=>'count(*)'));
-			$this->select->group('p.id');
-			$this->select->having("ticketCount $count");
-
-		}
-
-
-		$this->runSelection($order,$limit,$groupBy);
+		$this->runSearch($search,$order);
 	}
 
 	/**
-	 * Populates the collection, using loose matching of the requested fields
+	 * Populates the collection, using regular expressions for matching
 	 *
 	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
+	 * @param array $order
 	 */
-	public function search($fields=null,$order='p.lastname,p.firstname',$limit=null,$groupBy=null)
+	public function search($fields=null,$order=array('lastname'=>1,'firstname'=>1))
 	{
-		$this->createSelection();
-
-		if (count($fields)) {
+		$search = array();
+		if (isset($fields['query'])) {
+			$regex = new MongoRegex("/$fields[query]/i");
+			$search = array('$or'=>array(
+				array('firstname'=>$regex),
+				array('lastname'=>$regex),
+				array('email'=>$regex),
+				array('username'=>$regex)
+			));
+		}
+		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				$value = trim($value);
 				if ($value) {
-					$value = addslashes($value);
-					if (in_array($key,$this->columns)) {
-						$this->select->where("p.$key like ?","%$value%");
-					}
-					if ($key=='name') {
-						$this->select->where("p.firstname like '%$value%' or p.lastname like '%$value%' or p.organization like '%$value%'");
-					}
+					$search[$key] = new MongoRegex("/$value/i");
 				}
 			}
 		}
 
-		$this->runSelection($order,$limit,$groupBy);
+		$this->runSearch($search,$order);
 	}
 
-	/**
-	 * Adds the order, limit, and groupBy to the select, then sends the select to the database
-	 *
-	 * @param string $order
-	 * @param string $limit
-	 * @param string $groupBy
-	 */
-	private function runSelection($order,$limit=null,$groupBy=null)
+	private function runSearch($search=null,$order=null)
 	{
-		$this->select->order($order);
-		if ($limit) {
-			$this->select->limit($limit);
+		if (count($search)) {
+			$this->cursor = $this->mongo->people->find($search);
 		}
-		if ($groupBy) {
-			$this->select->group($groupBy);
+		else {
+			$this->cursor = $this->mongo->people->find();
 		}
-		$this->populateList();
+		if ($order) {
+			$this->cursor->sort($order);
+		}
 	}
-
 
 	/**
 	 * Loads a single Person object for the row returned from ZendDbResultIterator
 	 *
 	 * @param array $key
 	 */
-	protected function loadResult($key)
+	public function loadResult($data)
 	{
-		return new Person($this->result[$key]);
+		if ($data) {
+			return new Person($data);
+		}
+		else {
+			throw new Exception('resultIteratorSentEmptyData');
+		}
 	}
 }

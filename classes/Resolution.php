@@ -4,12 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Resolution
+class Resolution extends MongoRecord
 {
-	private $id;
-	private $name;
-	private $description;
-
 	/**
 	 * Populates the object with data
 	 *
@@ -29,20 +25,18 @@ class Resolution
 				$result = $id;
 			}
 			else {
-				$sql = is_numeric($id)
-					? 'select * from resolutions where id=?'
-					: 'select * from resolutions where name=?';
-
-				$zend_db = Database::getConnection();
-				$result = $zend_db->fetchRow($sql,array($id));
+				if (preg_match('/[0-9a-f]{24}/',$id)) {
+					$search = array('_id'=>new MongoId($id));
+				}
+				else {
+					$search = array('name'=>(string)$id);
+				}
+				$mongo = Database::getConnection();
+				$result = $mongo->resolutions->findOne($search);
 			}
 
 			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						$this->$field = $value;
-					}
-				}
+				$this->data = $result;
 			}
 			else {
 				throw new Exception('resolutions/unknownResolution');
@@ -61,7 +55,7 @@ class Resolution
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->name) {
+		if (!$this->getName()) {
 			throw new Exception('missingRequiredFields');
 		}
 	}
@@ -72,30 +66,8 @@ class Resolution
 	public function save()
 	{
 		$this->validate();
-
-		$data = array();
-		$data['name'] = $this->name;
-		$data['description'] = $this->description ? $this->description : null;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('resolutions',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('resolutions',$data);
-		$this->id = $zend_db->lastInsertId('resolutions','id');
+		$mongo = Database::getConnection();
+		$mongo->resolutions->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -103,11 +75,13 @@ class Resolution
 	//----------------------------------------------------------------
 
 	/**
-	 * @return int
+	 * @return MongoId
 	 */
 	public function getId()
 	{
-		return $this->id;
+		if (isset($this->data['_id'])) {
+			return $this->data['_id'];
+		}
 	}
 
 	/**
@@ -115,7 +89,9 @@ class Resolution
 	 */
 	public function getName()
 	{
-		return $this->name;
+		if (isset($this->data['name'])) {
+			return $this->data['name'];
+		}
 	}
 
 	/**
@@ -123,7 +99,9 @@ class Resolution
 	 */
 	public function getDescription()
 	{
-		return $this->description;
+		if (isset($this->data['description'])) {
+			return $this->data['description'];
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -135,7 +113,7 @@ class Resolution
 	 */
 	public function setName($string)
 	{
-		$this->name = trim($string);
+		$this->data['name'] = trim($string);
 	}
 
 	/**
@@ -143,7 +121,7 @@ class Resolution
 	 */
 	public function setDescription($string)
 	{
-		$this->description = trim($string);
+		$this->data['description'] = trim($string);
 	}
 
 
@@ -153,6 +131,6 @@ class Resolution
 	//----------------------------------------------------------------
 	public function __toString()
 	{
-		return $this->name;
+		return $this->getName();
 	}
 }

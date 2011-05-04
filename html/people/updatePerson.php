@@ -11,7 +11,7 @@ $return_url = isset($_REQUEST['return_url'])
 	? new URL($_REQUEST['return_url'])
 	: new URL(BASE_URL.'/people/viewPerson.php');
 
-if (!userIsAllowed('Users')) {
+if (!userIsAllowed('People')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header("Location: $errorURL");
 	exit();
@@ -20,7 +20,7 @@ if (!userIsAllowed('Users')) {
 if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 	try {
 		$person = new Person($_REQUEST['person_id']);
-		$return_url->person_id = $person->getId();
+		$return_url->person_id = "{$person->getId()}";
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -46,7 +46,7 @@ if (isset($_POST['firstname'])) {
 
 	try {
 		$person->save();
-		$return_url->person_id = $person->getId();
+		$return_url->person_id = "{$person->getId()}";
 
 		header("Location: $return_url");
 		exit();

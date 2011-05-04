@@ -5,26 +5,31 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+$department = new Department($_SESSION['USER']->getData('department._id'));
+$actions = $department->getActions();
+if (count($actions)) {
 ?>
 <div class="actionForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/recordAction.php">
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="action_id">Action</label></td>
-					<td><select name="action_id" id="action_id">
+				<tr><td><label for="action">Action</label></td>
+					<td><select name="action" id="action">
 							<option></option>
 							<?php
-								foreach ($_SESSION['USER']->getDepartment()->getActions() as $action) {
-									$name = View::escape($action->getName());
-									echo "<option value=\"{$action->getId()}\">$name</option>";
+								foreach ($department->getActions() as $action) {
+									$name = View::escape($action['name']);
+									echo "<option>$name</option>";
 								}
 							?>
 						</select>
 					</td>
 				</tr>
 				<tr><td><label for="actionDate">Date</label></td>
-					<td><input name="actionDate" id="actionDate" value="<?php echo new Date(); ?>" /></td>
+					<td><input name="actionDate" id="actionDate"
+							value="<?php echo date(DATE_FORMAT); ?>" />
+					</td>
 				</tr>
 				<tr>
 					<td><label for="notes">Comment</label></td>
@@ -38,3 +43,5 @@
 		</fieldset>
 	</form>
 </div>
+<?php
+}

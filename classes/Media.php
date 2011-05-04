@@ -4,17 +4,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Media
+class Media extends MongoRecord
 {
-	private $id;
-	protected $filename;
-	protected $mime_type;
-	protected $media_type;
-	private $uploaded;
-	private $person_id;
-
-	private $person;
-
 	public static $extensions = array(
 		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),
 		'gif' =>array('mime_type'=>'image/gif','media_type'=>'image'),
@@ -46,53 +37,18 @@ class Media
 	 * Passing in an associative array of data will populate this object without
 	 * hitting the database.
 	 *
-	 * Passing in a scalar will load the data from the database.
-	 * This will load all fields in the table as properties of this class.
-	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
+	 * @param array $data
 	 */
-	public function __construct($id=null)
+	public function __construct($data)
 	{
-		if ($id) {
-			if (is_array($id)) {
-				$result = $id;
-			}
-			else {
-				$zend_db = Database::getConnection();
-				if (is_numeric($id)) {
-					$sql = 'select * from media where id=?';
-				}
-				else {
-					$sql = 'select * from media where filename=?';
-				}
-				$result = $zend_db->fetchRow($sql,array($id));
-			}
-
-			if ($result) {
-				foreach ($result as $field=>$value) {
-					if ($value) {
-						if ($field=='uploaded') {
-							if (false !== substr($value,'0000')) {
-								$value = new Date($value);
-							}
-							else {
-								$value = null;
-							}
-						}
-						$this->$field = $value;
-					}
-				}
-			}
-			else {
-				throw new Exception('media/404');
-			}
+		if (is_array($data)) {
+			$this->data = $data;
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->uploaded = new Date();
-			$this->setPerson($_SESSION['USER']->getPerson());
+			$this->uploaded = new MongoDate();
+			$this->setPerson($_SESSION['USER']);
 		}
 	}
 
@@ -103,44 +59,9 @@ class Media
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->filename || !$this->mime_type || !$this->media_type) {
+		if (!$this->data['filename'] || !$this->data['mime_type'] || !$this->data['media_type']) {
 			throw new Exception('missingRequiredFields');
 		}
-	}
-
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-
-		$data = array();
-		$data['filename'] = $this->filename;
-		$data['mime_type'] = $this->mime_type;
-		$data['media_type'] = $this->media_type;
-		$data['uploaded'] = $this->getUploaded('Y-m-d H:i:s');
-		$data['person_id'] = $this->person_id;
-
-		if ($this->id) {
-			$this->update($data);
-		}
-		else {
-			$this->insert($data);
-		}
-	}
-
-	private function update($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->update('media',$data,"id='{$this->id}'");
-	}
-
-	private function insert($data)
-	{
-		$zend_db = Database::getConnection();
-		$zend_db->insert('media',$data);
-		$this->id = $zend_db->lastInsertId('media','id');
 	}
 
 	public function delete()
@@ -158,21 +79,12 @@ class Media
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
 	/**
 	 * @return string
 	 */
 	public function getFilename()
 	{
-		return $this->filename;
+		return $this->data['filename'];
 	}
 
 	/**
@@ -180,7 +92,7 @@ class Media
 	 */
 	public function getMime_type()
 	{
-		return $this->mime_type;
+		return $this->data['mime_type'];
 	}
 
 	/**
@@ -188,7 +100,7 @@ class Media
 	 */
 	public function getMedia_type()
 	{
-		return $this->media_type;
+		return $this->data['media_type'];
 	}
 
 	/**
@@ -203,42 +115,38 @@ class Media
 	 */
 	public function getUploaded($format=null)
 	{
-		if ($format && $this->uploaded) {
-			return $this->uploaded->format($format);
+		if ($format) {
+			list($microseconds,$timestamp) = explode(' ',$this->data['uploaded']);
+			return date($format,$timestamp);
 		}
 		else {
-			return $this->uploaded;
+			return $this->data['uploaded'];
 		}
 	}
 
-	public function getPerson_id()
-	{
-		return $this->person_id;
-	}
-
+	/**
+	 * @return array
+	 */
 	public function getPerson()
 	{
-		if ($this->person_id) {
-			if (!$this->person) {
-				$this->person = new Person($this->person_id);
-			}
-		}
-		return $this->person;
+		return $this->data['person'];
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
-	public function setPerson_id($int)
+	/**
+	 * @param string|Person $person
+	 */
+	public function setPerson($person)
 	{
-		$this->person = new Person($int);
-		$this->person_id = $this->person->getId();
-	}
-
-	public function setPerson(Person $person)
-	{
-		$this->person_id = $person->getId();
-		$this->person = $person;
+		if (!$person instanceof Person) {
+			$person = new Person($person);
+		}
+		$this->data['person'] = array(
+			'_id'=>$person->getId(),
+			'fullname'=>$person->getFullname()
+		);
 	}
 
 	//----------------------------------------------------------------
@@ -282,13 +190,13 @@ class Media
 
 		// Clean all bad characters from the filename
 		$filename = $this->createValidFilename($filename);
-		$this->filename = $filename;
+		$this->data['filename'] = $filename;
 		$extension = $this->getExtension();
 
 		// Find out the mime type for this file
 		if (array_key_exists(strtolower($extension),Media::$extensions)) {
-			$this->mime_type = Media::$extensions[$extension]['mime_type'];
-			$this->media_type = Media::$extensions[$extension]['media_type'];
+			$this->data['mime_type'] = Media::$extensions[$extension]['mime_type'];
+			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
 		}
 		else {
 			throw new Exception('unknownFileType');

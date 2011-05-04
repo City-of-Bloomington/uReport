@@ -11,16 +11,19 @@ $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));
 
 if (userIsAllowed('Tickets') && $ticket->getStatus()!='closed') {
-	$template->blocks['ticket-panel'][] = new Block('tickets/actionForm.inc',array('ticket'=>$ticket));
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/actionForm.inc',
+		array('ticket'=>$ticket)
+	);
 }
 
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory())
+	array('history'=>$ticket->getHistory())
 );
 
 $template->blocks['issue-panel'][] = new Block(
-	'issues/issueList.inc',
+	'tickets/issueList.inc',
 	array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
 );
 

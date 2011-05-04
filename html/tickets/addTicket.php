@@ -16,10 +16,10 @@ $issue = new Issue();
 // If the user has chosen a location, they'll pass it in here
 if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setLocation($_GET['location']);
-	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
+	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 }
 if (isset($_REQUEST['person_id'])) {
-	$issue->setReportedByPerson_id($_REQUEST['person_id']);
+	$issue->setReportedByPerson($_REQUEST['person_id']);
 }
 
 if(isset($_POST['ticket'])){
@@ -33,63 +33,46 @@ if(isset($_POST['ticket'])){
 			$ticket->$set($_POST['ticket'][$field]);
 		}
 	}
-	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
+	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 
-	$ticket->setEnteredDate(new Date());
-	$ticket->setAssignedPerson_id($_POST['assignedPerson_id']);
-	$ticket->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
+	$ticket->setAssignedPerson($_POST['assignedPerson']);
+	$ticket->setEnteredByPerson($_SESSION['USER']);
 
 	// Create the issue
 	$fields = array(
-		'issueType_id','reportedByPerson_id',
-		'contactMethod_id','responseMethod_id',
-		'case_number','notes'
+		'type','reportedByPerson',
+		'contactMethod','responseMethod',
+		'category','notes'
 	);
 	foreach ($fields as $field) {
 		$set = 'set'.ucfirst($field);
 		$issue->$set($_POST['issue'][$field]);
 	}
-	$issue->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
+	$issue->setEnteredByPerson($_SESSION['USER']);
 
-	// Create the TicketHistory entries
-	$open = new TicketHistory();
+	// Create the History entries
+	$open = new History();
 	$open->setAction('open');
-	$open->setEnteredDate($ticket->getEnteredDate());
-	$open->setActionDate($ticket->getEnteredDate());
-	$open->setEnteredByPerson($_SESSION['USER']->getPerson());
-	$open->setActionPerson($_SESSION['USER']->getPerson());
+	$open->setEnteredByPerson($_SESSION['USER']);
+	$open->setActionPerson($_SESSION['USER']);
 
-	$assignment = new TicketHistory();
+	$assignment = new History();
 	$assignment->setAction('assignment');
-	$assignment->setEnteredDate($ticket->getEnteredDate());
-	$assignment->setActionDate($ticket->getEnteredDate());
-	$assignment->setEnteredByPerson($_SESSION['USER']->getPerson());
-	$assignment->setActionPerson_id($_POST['assignedPerson_id']);
+	$assignment->setEnteredByPerson($_SESSION['USER']);
+	$assignment->setActionPerson($_POST['assignedPerson']);
 
 	// Validate Everything and save
 	try {
-		$ticket->validate();
-		$issue->validate(true);
-		$open->validate(true);
-		$assignment->validate(true);
-
+		$ticket->updateIssues($issue);
+		$ticket->updateHistory($open);
+		$ticket->updateHistory($assignment);
 		$ticket->save();
-
-		$issue->setTicket($ticket);
-		$open->setTicket($ticket);
-		$assignment->setTicket($ticket);
-
-		$issue->save();
-		$open->save();
-		$assignment->save();
 
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
-		print_r($e);
-		exit();
 	}
 }
 
@@ -120,7 +103,7 @@ else {
 }
 
 $personPanel = $issue->getReportedByPerson()
-	? new Block('people/personInfo.inc',array('person'=>$issue->getReportedByPerson()))
+	? new Block('people/personInfo.inc',array('person'=>new Person($issue->getReportedByPerson())))
 	: new Block('people/searchForm.inc',array('return_url'=>$return_url));
 $template->blocks['person-panel'][] = $personPanel;
 
@@ -130,6 +113,4 @@ $addTicketForm = new Block(
 );
 $template->blocks['ticket-panel'][] = $addTicketForm;
 
-
-#$template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 echo $template->render();

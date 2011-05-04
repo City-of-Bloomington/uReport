@@ -25,31 +25,68 @@ class Location
 		$crm_query = '';
 
 		if (isset($query['address']) && $query['address']) {
-			$crm_query = addslashes($query['address']);
+			$crm_query = $query['address'];
 		}
-		#elseif (isset($query['street']) && $query['street']) {
-		#	$crm_query = addslashes($query['street']);
-		#}
+		// Don't do a mongo search if they're doing a street search
+		// Mongo will return too many locations to be useful
 		elseif (isset($query['text']) && $query['text']) {
-			$crm_query = addslashes($query['text']);
+			$crm_query = $query['text'];
 		}
-
+		
 		if ($crm_query) {
-			$zend_db = Database::getConnection();
-			$sql = 'select distinct location,address_id from tickets where location like ? order by location';
-			$r = $zend_db->query($sql,array("%$crm_query%"));
-			foreach ($r->fetchAll() as $row) {
-				$results[$row['location']] = $row['address_id'];
+			$mongo = Database::getConnection();
+
+			$map = new MongoCode("function() {
+				var address_id = '';
+				if (this.address_id) {
+					address_id = this.address_id;
+				}
+				emit(this.location,{count:1,address_id:address_id});
+			}");
+
+			$reduce = new MongoCode("function(key,values) {
+				var result = { count:1,address_id:'' };
+				
+				for (var i in values) {
+					result.count += values[i].count;
+				}
+				if (values[i].address_id) {
+					result.address_id = values[i].address_id;
+				}
+				return result;
+			}");
+
+			$q = $mongo->command(array(
+				'mapreduce'=>'tickets',
+				'map'=>$map,
+				'reduce'=>$reduce,
+				'query'=>array('location'=>new MongoRegex("/$crm_query/i")),
+				'out'=>array('inline'=>1)
+			));
+			
+			foreach ($q['results'] as $location) {
+				$results[$location['_id']] = array(
+					'ticketCount'=>$location['value']['count'],
+					'address_id'=>$location['value']['address_id'],
+					'source'=>'mongo'
+				);
+			}
+
+		}
+		
+		if (isset($query['address']) && $query['address']) {
+			foreach (AddressService::searchAddresses($query['address']) as $location=>$address_id) {
+				$results[$location]['address_id'] = $address_id;
+				$results[$location]['source'] = 'Master Address';
+			}
+		}
+		elseif (isset($query['street']) && $query['street']) {
+			foreach (AddressService::searchStreets($query['street']) as $location=>$street_id) {
+				$results[$location]['address_id'] = $street_id;
+				$results[$location]['source'] = 'Master Address';
 			}
 		}
 
-		if (isset($query['address']) && $query['address']) {
-			$results = array_merge($results,AddressService::searchAddresses($query['address']));
-		}
-
-		if (isset($query['street']) && $query['street']) {
-			$results = array_merge($results,AddressService::searchStreets($query['street']));
-		}
 		return $results;
 	}
 }

@@ -6,17 +6,24 @@
  */
 $department = $_SESSION['USER']->getDepartment();
 $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
+if(!isset($department)){
+	$_SESSION['errorMessages'][] = new Exception('departments/unknownDepartment');
+	header('Location: '.$return_url);
+	exit();
+}
 
-if (isset($_POST['default_person_id'])) {
-	$department->setName($_POST['name']);
-	$department->setDefault_person_id($_POST['default_person_id']);
+if (isset($_POST['defaultPerson'])) {
+	$fields = array('name','defaultPerson','customStatuses','categories');
 
 	try {
-		$department->save();
-		$department->saveCustomStatuses($_POST['customStatuses']);
-		$department->saveCategories(array_keys($_POST['categories']));
-		$department->saveActions(array_keys($_POST['actions']));
+		foreach ($fields as $field) {
+			if (isset($_POST[$field])) {
+				$set = 'set'.ucfirst($field);
+				$department->$set($_POST[$field]);
+			}
+		}
 
+		$department->save();
 		header('Location: '.$return_url);
 		exit();
 	}

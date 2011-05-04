@@ -11,7 +11,7 @@ $description = View::escape($this->resolution->getDescription());
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 	<fieldset><legend>Resolution Info</legend>
-		<input name="resolution_id" type="hidden" value="<?php echo $this->resolution->getId(); ?>" />
+		<input name="resolution_id" type="hidden" value="<?php echo "{$this->resolution->getId()}"; ?>" />
 		<table>
 
 			<tr><td><label for="name" class="required">Name</label></td>

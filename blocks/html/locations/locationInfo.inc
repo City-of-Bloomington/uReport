@@ -29,22 +29,14 @@ if ($this->location) {
 		}
 	}
 
-	$constituents = new PersonList(array('address'=>$this->location));
-	if (count($constituents)) {
-		echo "
-		<div class=\"locationResidents\">
-			<h2>Associated Residents</h2>
-			<ul>
-			";
-				foreach ($constituents as $person) {
-					$url = BASE_URL.'/people/viewPerson.php?person_id='.$person->getId();
-					$name = View::escape($person->getFullname());
-					echo "<li><a href=\"$url\">$name</a></li>";
-				}
-			echo "
-			</ul>
-		</div>
-		";
+	$people = new PersonList(array('address'=>$this->location));
+	if (count($people)) {
+		echo "<ul>";
+		foreach ($people as $person) {
+			$name = View::escape($person->getFullname());
+			echo "<li><a href=\"{$person->getURL()}\">$name</a></li>";
+		}
+		echo "</ul>";
 	}
 }
 

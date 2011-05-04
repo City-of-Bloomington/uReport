@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2008 City of Bloomington, Indiana
+ * @copyright 2006-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -10,13 +10,12 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-$userList = new UserList();
-if (isset($_GET['department_id'])) {
-	$userList->find(array('department_id'=>$_GET['department_id']));
+$search = array('username'=>array('$exists'=>true));
+if (isset($_GET['department_id']) && $_GET['department_id']) {
+	$search['department._id'] = new MongoId($_GET['department_id']);
 }
-else {
-	$userList->find();
-}
+$people = new PersonList($search);
+
 
 
 if (isset($_GET['format'])) {
@@ -28,6 +27,6 @@ else {
 	$template->blocks[] = new Block('users/findForm.inc');
 }
 
-$template->blocks[] = new Block('users/userList.inc',array('userList'=>$userList));
+$template->blocks[] = new Block('users/userList.inc',array('userList'=>$people));
 
 echo $template->render();

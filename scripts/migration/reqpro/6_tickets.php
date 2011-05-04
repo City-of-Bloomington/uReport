@@ -66,8 +66,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	// Import the Person
 	if (isset($row['received_by']) && $row['received_by']) {
 		try {
-			$user = new User(strtolower($row['received_by']));
-			$ticket->setEnteredByPerson($user->getPerson());
+			$ticket->setEnteredByPerson($row['received_by']);
 		}
 		catch (Exception $e) {
 		}
@@ -85,7 +84,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 		echo $query.' ==> ';
 		if (count($data)) {
-			$ticket->setAddressServiceCache($data);
+			$ticket->setAddressServiceData($data);
 		}
 		else {
 			if (is_numeric($row['street_num'])) {
@@ -103,30 +102,31 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$location = preg_replace('/\s+/',' ',$location);
 		$ticket->setLocation($location);
 	}
-
 	echo $ticket->getLocation()."\n";
-	$ticket->save();
-
 
 	// Create the issue on this ticket
 	$issue = new Issue();
 	$issue->setDate($ticket->getEnteredDate());
-	$issue->setTicket($ticket);
 	if ($ticket->getEnteredByPerson()) {
 		$issue->setEnteredByPerson($ticket->getEnteredByPerson());
 	}
-	$issue->setNotes($row['comments']);
-	$issue->setCase_number($row['case_number']);
-	$issue->setContactMethod($row['complaint_source']);
-
+	if ($row['comments']) {
+		$issue->setNotes($row['comments']);
+	}
+	if ($row['complaint_source']) {
+		$issue->setContactMethod($row['complaint_source']);
+	}
 	if (preg_match('/COMPLAINT/',$row['comp_desc'])) {
-		$issue->setIssueType('Complaint');
+		$issue->setType('Complaint');
 	}
 	if (preg_match('/VIOLATION/',$row['comp_desc'])) {
-		$issue->setIssueType('Violation');
+		$issue->setType('Violation');
 	}
 	else {
-		$issue->setIssueType('Request');
+		$issue->setType('Request');
+	}
+	if ($row['comp_desc']) {
+		$issue->setCategory($row['comp_desc']);
 	}
 
 	$personList = new PersonList(array(
@@ -136,14 +136,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		'email'=>$row['e_mail_address']
 	));
 	if (count($personList)) {
-		$issue->setReportedByPerson($personList[0]);
+		$personList->next();
+		$issue->setReportedByPerson($personList->current());
 	}
-
-	$issue->save();
-	$category = trim($row['comp_desc']);
-	if ($category) {
-		$issue->saveCategories(array($category));
-	}
+	$ticket->updateIssues($issue);
 
 	/**
 	 * Create the Ticket History
@@ -157,30 +153,29 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$lastPerson = $ticket->getEnteredByPerson();
 	}
 
-	$history = new TicketHistory();
+	$history = new History();
 	$history->setAction('open');
 	$history->setEnteredDate($ticket->getEnteredDate());
 	$history->setActionDate($ticket->getEnteredDate());
-	$history->setTicket($ticket);
 	if ($lastPerson) {
 		$history->setEnteredByPerson($lastPerson);
+		$history->setActionPerson($lastPerson);
 	}
-	$history->save();
+	$ticket->updateHistory($history);
 
 	if ($row['assigned_to']) {
-		$history = new TicketHistory();
+		$history = new History();
 		$history->setAction('assignment');
 		$history->setEnteredDate($row['assigned_date']);
 		$history->setActionDate($row['assigned_date']);
-		$history->setTicket($ticket);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		if ($lastPerson) {
 			$history->setEnteredByPerson($lastPerson);
 		}
 		try {
 			list($username,$fullname) = explode(':',$row['assigned_to']);
-			$user = new User($username);
-			$history->setActionPerson($user->getPerson());
+			$person = new Person($username);
+			$history->setActionPerson($person);
 		}
 		catch (Exception $e) {
 			if ($ticket->getEnteredByPerson()) {
@@ -192,7 +187,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		if ($history->getActionPerson()) {
 			$lastPerson = $history->getActionPerson();
 			try {
-				$history->save();
+				$ticket->updateHistory($history);
 			}
 			catch  (Exception $e) {
 				// Any problems with the action, and we won't save it
@@ -207,33 +202,29 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 
 	if ($row['insp_date']) {
-		$history = new TicketHistory();
+		$history = new History();
 		$history->setAction('inspection');
 		$history->setEnteredDate($row['insp_date']);
 		$history->setActionDate($row['insp_date']);
-		$history->setTicket($ticket);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
 		if ($row['username']) {
 			try {
-				$user = new User($row['username']);
-				$history->setEnteredByPerson($user->getPerson());
-				$history->setActionPerson($user->getPerson());
+				$person = new Person($row['username']);
+				$history->setEnteredByPerson($person);
+				$history->setActionPerson($person);
 			}
 			catch (Exception $e) {
-				$user = new User();
-				$user->setUsername($row['username']);
-				$user->setAuthenticationMethod('LDAP');
+				$person = new Person();
+				$person->setUsername($row['username']);
+				$person->setAuthenticationMethod('LDAP');
 
 				try {
-					$person = new Person();
-					$ldap = new LDAPEntry($user->getUsername());
+					$ldap = new LDAPEntry($person->getUsername());
 					$person->setFirstname($ldap->getFirstname());
 					$person->setLastname($ldap->getLastname());
 					$person->setEmail($ldap->getEmail());
 
 					$person->save();
-					$user->setPerson($person);
-					$user->save();
 				}
 				catch (Exception $e) {
 					$person = new Person();
@@ -249,8 +240,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			list($firstname,$lastname) = explode(' ',$name);
 			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
 			if (count($list)) {
-				$history->setEnteredByPerson($list[0]);
-				$history->setActionPerson($list[0]);
+				$list->next();
+				$history->setEnteredByPerson($list->current());
+				$history->setActionPerson($list->current());
 			}
 		}
 		else {
@@ -261,15 +253,16 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			$list = new PersonList($search);
 			if (count($list)) {
-				$history->setEnteredByPerson($list[0]);
-				$history->setActionPerson($list[0]);
+				$list->next();
+				$history->setEnteredByPerson($list->current());
+				$history->setActionPerson($list->current());
 			}
 		}
 		if ($history->getActionPerson()) {
 			$lastPerson = $history->getActionPerson();
 		}
 		try {
-			$history->save();
+			$ticket->updateHistory($history);
 		}
 		catch (Exception $e) {
 			// Any problems when creating the inspection, and we'll just not bother
@@ -281,18 +274,25 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 
 		if ($row['followup_date']) {
-			$history = new TicketHistory();
+			$history = new History();
 			$history->setAction('followup');
 			$history->setActionDate($row['followup_date']);
-			$history->setTicket($ticket);
 			$history->setEnteredDate($row['followup_date']);
 			$history->setNotes("$row[action_taken]\n$row[next_action]");
 			if ($lastPerson) {
-				$history->setEnteredByPerson($lastPerson);
-				$history->setActionPerson($lastPerson);
+				try {
+					$history->setEnteredByPerson($lastPerson);
+					$history->setActionPerson($lastPerson);
+				}
+				catch (Exception $e) {
+					echo "Could not set a person for the followup\n";
+					print_r($ticket);
+					print_r($lastPerson);
+					exit();
+				}
 			}
 			try {
-				$history->save();
+				$ticket->updateHistory($history);
 			}
 			catch (Exception $e) {
 				// Anything that doesn't save, we're just going to ignore
@@ -305,16 +305,24 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 
 		if ($row['completed_date']) {
-			$history = new TicketHistory();
+			$history = new History();
 			$history->setAction('close');
 			$history->setActionDate($row['completed_date']);
-			$history->setTicket($ticket);
 			$history->setEnteredDate($row['completed_date']);
 			if ($lastPerson) {
 				$history->setEnteredByPerson($lastPerson);
 				$history->setActionPerson($lastPerson);
 			}
-			$history->save();
+			$ticket->updateHistory($history);
 		}
+	}
+	
+	try {
+		$ticket->save();
+	}
+	catch (Exception $e) {
+		echo $e->getMessage()."\n";
+		print_r($e);
+		exit();
 	}
 }

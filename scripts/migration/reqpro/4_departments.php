@@ -26,16 +26,30 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 	$query->execute(array($row['dept_no']));
 	$r = $query->fetch(PDO::FETCH_ASSOC);
 	if ($r) {
-		$user = new User($r['userid']);
+		$person = new Person($r['userid']);
 	}
 	elseif (array_key_exists($row['dept_name'],$lookup)) {
-		$user = new User($lookup[$row['dept_name']]);
+		$person = new Person($lookup[$row['dept_name']]);
 	}
 
-	if (isset($user)) {
+	if (isset($person)) {
 		$department = new Department();
 		$department->setName($row['dept_name']);
-		$department->setDefault_person($user->getPerson());
+		$department->setDefaultPerson($person);
+
+		$query->closeCursor();
+
+		// Load the Department's commonly used categories
+		$sql = "select distinct c.comp_desc
+				from ce_eng_comp a,c_types c
+				where a.c_type=c.c_type1 and a.dept=?
+				and a.c_type is not null
+				and a.c_type!=0
+				order by c.comp_desc";
+		$query = $pdo->prepare($sql);
+		$query->execute(array($row['dept_no']));
+		$department->setCategories($query->fetchAll(PDO::FETCH_COLUMN));
+
 		try {
 			$department->save();
 			echo $department->getName()."\n";
@@ -43,23 +57,10 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 		catch (Exception $e) {
 			print_r($e);
 			print_r($department);
-			print_r($user);
+			print_r($person);
 			exit();
 		}
 	}
-
-	$query->closeCursor();
-
-	// Load the Department's commonly used categories
-	$sql = "select distinct c.comp_desc
-			from ce_eng_comp a,c_types c
-			where a.c_type=c.c_type1 and a.dept=?
-			and a.c_type is not null
-			and a.c_type!=0
-			order by c.comp_desc";
-	$query = $pdo->prepare($sql);
-	$query->execute(array($row['dept_no']));
-	$department->saveCategories($query->fetchAll(PDO::FETCH_COLUMN));
 }
 
 // Assign all the users to their departments
@@ -67,17 +68,22 @@ $sql = "select u.userid,d.dept_name
 		from complain_authorized u,departments d
 		where u.dept=d.dept_no and u.userid=?";
 $query = $pdo->prepare($sql);
-$users = new UserList();
-$users->find();
-foreach ($users as $user) {
-	$query->execute(array($user->getUsername()));
+
+$people = new PersonList(array('username'=>array('$exists'=>true)));
+foreach ($people as $person) {
+	$query->execute(array($person->getUsername()));
 	$row = $query->fetch(PDO::FETCH_ASSOC);
 	if ($row) {
-
-		$departments = new DepartmentList(array('name'=>$row['dept_name']));
-		$user->setDepartment($departments[0]);
-		$user->save();
+		try {
+			$person->setDepartment($row['dept_name']);
+			$person->save();
+		}
+		catch (Exception $e) {
+			// Just skip the bad ones
+		}
 	}
 	$query->closeCursor();
-	echo "{$user->getUsername()} {$user->getDepartment()->getName()}\n";
+
+	$department = $person->getDepartment();
+	echo "{$person->getUsername()} {$department['name']}\n";
 }

@@ -3,7 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketHistoryList $this->ticketHistory
+ * @param array $this->history
  * @param bool $this->disableComments
  */
 ?>
@@ -12,7 +12,9 @@
 	<table>
 		<thead>
 			<tr><th>Date</th>
+				<th>Entered By</th>
 				<th>Action</th>
+				<th>Person</th>
 				<?php
 					if (!$this->disableComments) {
 						echo '<th>Comments</th>';
@@ -22,11 +24,15 @@
 		</thead>
 		<tbody>
 		<?php
-			foreach ($this->ticketHistory as $event) {
-				$action = View::escape($event->getDescription());
+			foreach ($this->history as $event) {
+				$action = View::escape($event->getAction());
+				$enteredByPerson = $event->getPersonData('enteredByPerson','fullname');
+				$actionPerson = $event->getPersonData('actionPerson','fullname');
 				echo "
-				<tr><td>{$event->getActionDate()}</td>
+				<tr><td>{$event->getActionDate(DATE_FORMAT)}</td>
+					<td>$enteredByPerson</td>
 					<td>$action</td>
+					<td>$actionPerson</td>
 				";
 					if (!$this->disableComments) {
 						$notes = View::escape($event->getNotes());

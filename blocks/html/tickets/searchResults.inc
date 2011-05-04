@@ -20,8 +20,8 @@
 // Default fields to be used
 if (!$this->fields) {
 	$this->fields = array(
-		'ticket-id'=>1,'ticket-status'=>1,
-		'ticket-location'=>1,'ticket-enteredDate'=>1,'ticket-enteredByPerson'=>1
+		'id'=>1,'status'=>1,
+		'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
 	);
 }
 $title = $this->title ? View::escape($this->title) : 'Tickets';
@@ -47,20 +47,28 @@ echo "
 		";
 			foreach ($this->ticketList as $ticket) {
 				echo '<tr>';
-				foreach ($this->fields as $name=>$value) {
-					list($var,$field) = explode('-',$name);
+				foreach ($this->fields as $field=>$value) {
 					$get = 'get'.ucfirst($field);
 					$value = $ticket->$get();
-					if (preg_match('/Person/',$name) || $field=='constituent') {
+					if (preg_match('/Person/',$field) || $field=='constituent') {
 						if ($value) {
-							$value = $value->getFullname();
+							$value = $value['fullname'];
 						}
 					}
-					// Only put the href on the ticket_id
-					if ($field == 'id') {
-						$value = "<a href=\"{$ticket->getURL()}\">$value</a>";
+					if (false !== strpos($field,'Date')) {
+						if (isset($value->sec)) {
+							$value = date(DATE_FORMAT,$value->sec);
+						}
 					}
-					echo "<td>$value</td>";
+					if ($field=='categories') {
+						$c = array();
+						foreach ($value as $category) {
+							$c[] = $category['name'];
+						}
+						$value = implode(',',$c);
+					}
+					$value = View::escape($value);
+					echo "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
 				}
 				echo '</tr>';
 			}

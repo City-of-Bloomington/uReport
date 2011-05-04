@@ -15,50 +15,50 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>
-
 			<tr><td><label for="name" class="required">Name</label></td>
 				<td><input name="name" id="name"
 						value="<?php echo View::escape($this->department->getName()); ?>" />
 				</td>
 			</tr>
 
-			<tr><td><label for="default_person_id" class="required">default_person_id</label></td>
-				<td><input name="default_person_id" id="default_person_id"
-						value="<?php echo $this->department->getDefault_person_id(); ?>" />
+			<tr><td><label for="defaultPerson">Default Person</label></td>
+				<td><select name="defaultPerson" id="defaultPerson">
+					<?php
+						$defaultPerson = $this->department->getDefaultPerson();
+						$defaultPerson_id = '';
+						if ($defaultPerson) {
+							$defaultPerson_id = $defaultPerson['_id'];
+						}
+						foreach ($this->department->getPeople() as $person) {
+							$name = View::escape($person->getFullname());
+							if ($name) {
+								$selected = "{$person->getId()}"=="$defaultPerson_id";
+									? 'selected="selected"'
+									: '';
+								echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
+							}
+						}
+					?>
+					</select>
 				</td>
 			</tr>
-
-
 		</table>
 	</fieldset>
 	<fieldset><legend>Custom Statuses</legend>
 		<p>Enter the statuses you want for the department, each separated by commas</p>
 		<div>
-			<input name="customStatuses" id="customStatuses"
-				value="<?php echo View::escape(implode(',',$this->department->getCustomStatuses())); ?>" />
-		</div>
-	</fieldset>
-	<fieldset class="actions">
-		<legend>Actions</legend>
-		<ul>
 		<?php
-			$list = new ActionList();
-			$list->find(array('type'=>'user'));
-			foreach ($list as $action) {
-				$name = View::escape($action->getName());
-				$checked = $this->department->hasAction($action)
-					? 'checked="checked"'
-					: '';
-				echo "
-				<li><label>
-						<input name=\"actions[{$action->getId()}]\" type=\"checkbox\" $checked />
-						$name
-					</label>
-				</li>
-				";
+			$statuses = array();
+			foreach ($this->department->getCustomStatuses() as $status) {
+				$statuses[] = View::escape($status);
 			}
+			$statuses = implode(',',$statuses);
+			echo "
+			<input name=\"customStatuses\" id=\"customStatuses\"
+				value=\"$statuses\" />
+			";
 		?>
-		</ul>
+		</div>
 	</fieldset>
 	<fieldset class="categories">
 		<legend>Categories</legend>
@@ -67,13 +67,14 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 			$list = new CategoryList();
 			$list->find();
 			foreach ($list as $category) {
-				$name = View::escape($category);
-				$checked = $this->department->hasCategory($category)
+				$id = $category->getId();
+				$name = View::escape($category->getName());
+				$checked = $this->department->hasCategory($name)
 					? 'checked="checked"'
 					: '';
 				echo "
 				<li><label>
-						<input name=\"categories[{$category->getId()}]\" type=\"checkbox\" $checked />
+						<input name=\"categories[$id]\" type=\"checkbox\" $checked />
 						$name
 					</label>
 				</li>
