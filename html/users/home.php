@@ -11,8 +11,8 @@ if (!userIsAllowed('Users')) {
 }
 
 $search = array('username'=>array('$exists'=>true));
-if (isset($_GET['department_id'])) {
-	$search['department_id'] = (string)$_GET['department_id'];
+if (isset($_GET['department_id']) && $_GET['department_id']) {
+	$search['department._id'] = new MongoId($_GET['department_id']);
 }
 $people = new PersonList($search);
 
