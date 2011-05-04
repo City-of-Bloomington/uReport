@@ -9,7 +9,7 @@ td { padding:.5em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
 li { margin:.5em 0 }
-fieldset { padding:1em 0; }
+fieldset {padding:.5em 0; }
 legend { font-weight:bold; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
@@ -74,7 +74,7 @@ tbody th { text-align:right; }
 .mergeForm .button { position:absolute; left:40%; }
 
 .searchForm {}
-.searchForm .fields { margin:1em; }
+.searchForm .fields { width:300px; min-height:160px; margin:1em; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
 .searchResults {}
 
 .issueList .issue {

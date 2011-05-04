@@ -258,8 +258,8 @@
 			</table>
 		</fieldset>
 
-		<fieldset class="fields"><legend>Fields to display</legend>
-			<ul>
+		<fieldset><legend>Fields to display</legend>
+			<ul class="fields">
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
