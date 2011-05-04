@@ -52,10 +52,7 @@ class TicketList extends MongoResultIterator
 	/**
 	 * Hydrates all the Ticket objects from a database result set
 	 *
-	 * This is a callback function, called from ZendDbResultIterator.  It is
-	 * called once per row of the result.
-	 *
-	 * @param int $key The index of the result row to load
+	 * @param array $data A single data record returned from Mongo
 	 * @return Ticket
 	 */
 	public function loadResult($data)

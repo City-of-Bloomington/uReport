@@ -14,5 +14,8 @@ $resolutionList = new ResolutionList();
 $resolutionList->find();
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('resolutions/resolutionList.inc',array('resolutionList'=>$resolutionList));
+$template->blocks[] = new Block(
+	'resolutions/resolutionList.inc',
+	array('resolutionList'=>$resolutionList)
+);
 echo $template->render();

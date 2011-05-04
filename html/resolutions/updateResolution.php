@@ -5,7 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST resolution_id
  */
-
 if (!userIsAllowed('Resolutions')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL.'/resolutions');
@@ -43,5 +42,8 @@ if (isset($_POST['name'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('resolutions/updateResolutionForm.inc',array('resolution'=>$resolution));
+$template->blocks[] = new Block(
+	'resolutions/updateResolutionForm.inc',
+	array('resolution'=>$resolution)
+);
 echo $template->render();
