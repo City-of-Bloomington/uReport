@@ -27,22 +27,21 @@ catch (Exception $e) {
 
 if (isset($_POST['status'])) {
 	if ($_POST['status'] == 'closed') {
-		header('Location: '.BASE_URL.'/tickets/closeTicket.php?ticket_id='.$ticket->getId());
+		header('Location: '.BASE_URL."/tickets/closeTicket.php?ticket_id={$ticket->getId()}");
 		exit();
 	}
 	$ticket->setStatus($_POST['status']);
 
 	// add a record to ticket history
-	$history = new TicketHistory();
-	$history->setTicket($ticket);
-	$history->setAction('statusChange');
-	$history->setEnteredByPerson_id($_SESSION['USER']->getPerson_id());
-	$history->setActionPerson_id($_SESSION['USER']->getPerson_id());
+	$history = new History();
+	$history->setAction($_POST['status']);
+	$history->setEnteredByPerson($_SESSION['USER']);
+	$history->setActionPerson($_SESSION['USER']);
 	$history->setNotes($_POST['notes']);
+	$ticket->updateHistory($history);
 
 	try {
 		$ticket->save();
-		$history->save();
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
@@ -69,7 +68,7 @@ if ($ticket->getStatus() != 'closed') {
 }
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory(),'disableButtons'=>true)
+	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
 	'tickets/issueList.inc',

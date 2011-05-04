@@ -461,7 +461,7 @@ class Person extends MongoRecord
 	public function getURL()
 	{
 		if ($this->getId()) {
-			return BASE_URL.'/people/viewPerson.php?person_id='.$this->getId();
+			return BASE_URL."/people/viewPerson.php?person_id={$this->getId()}";
 		}
 	}
 

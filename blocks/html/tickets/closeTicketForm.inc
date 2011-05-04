@@ -7,18 +7,18 @@
  */
 ?>
 <div class="closeTicketForm">
-	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/closeTicket.php">
 		<fieldset><legend>Close This Ticket</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="resolution_id">Resolution</label></td>
-					<td><select name="resolution_id" id="resolution_id">
+				<tr><td><label for="resolution">Resolution</label></td>
+					<td><select name="resolution" id="resolution">
 						<?php
 							$list = new ResolutionList();
 							$list->find();
 							foreach ($list as $resolution) {
 								$name = View::escape($resolution->getName());
-								echo "<option value=\"{$resolution->getId()}\">$name</option>";
+								echo "<option>$name</option>";
 							}
 						?>
 						</select>

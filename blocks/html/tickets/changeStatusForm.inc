@@ -15,12 +15,17 @@
 					<td><select name="status" id="status">
 							<option>open</option>
 							<?php
-								foreach ($_SESSION['USER']->getDepartment()->getCustomStatuses() as $status) {
-									$selected = $this->ticket->getStatus()==$status
-										? 'selected="selected"'
-										: '';
-									$status = View::escape($status);
-									echo "<option $selected>$status</option>";
+								$dept = $_SESSION['USER']->getDepartment();
+								if ($dept) {
+									$department = new Department($dept['_id']);
+
+									foreach ($department->getCustomStatuses() as $status) {
+										$selected = $this->ticket->getStatus()==$status
+											? 'selected="selected"'
+											: '';
+										$status = View::escape($status);
+										echo "<option $selected>$status</option>";
+									}
 								}
 							?>
 						</select>
