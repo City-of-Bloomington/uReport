@@ -28,12 +28,9 @@
 			foreach ($this->categoryList as $category) {
 				$editButton = '';
 				if (userIsAllowed('Categories')) {
-					$url = new URL(BASE_URL.'/categories/updateCategory.php');
-					$url->id = $category->getId();
-
 					$editButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/categories/updateCategory.php?category_id='.$category->getId(),
+						BASE_URL."/categories/updateCategory.php?category_id={$category->getId()}",
 						'edit'
 					);
 				}

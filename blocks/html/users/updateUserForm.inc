@@ -19,7 +19,7 @@ echo "<h1>$title</h1>";
 						$list->find();
 						foreach ($list as $department) {
 							$name = View::escape($department->getName());
-							$selected = $this->user->getDepartment_id()==$department->getId()
+							$selected = "{$this->user->getDepartment_id()}"=="{$department->getId()}"
 										? 'selected="selected"'
 										: '';
 							echo "<option value=\"{$department->getId()}\" $selected>$name</option>";

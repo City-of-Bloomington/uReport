@@ -20,7 +20,7 @@
 		<tbody>
 		<?php
 			$url = new URL(BASE_URL.'/departments/updateAction.php');
-			$url->department_id = (string)$this->department->getId();
+			$url->department_id = "{$this->department->getId()}";
 
 			foreach ($this->department->getActions() as $index=>$action) {
 				$editButton = '';

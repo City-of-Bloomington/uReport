@@ -15,7 +15,7 @@
 				<tr><td><label for="referredPerson">Person</label></td>
 					<td><?php echo View::escape($this->person->getFullname()); ?>
 						<input name="referredPerson" id="referredPerson" type="hidden"
-							value="<?php echo "{$this->person->getId()}"; ?>" />
+							value="<?php echo $this->person->getId(); ?>" />
 					</td>
 				</tr>
 			</table>

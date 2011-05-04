@@ -20,7 +20,7 @@ if (!userIsAllowed('People')) {
 if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 	try {
 		$person = new Person($_REQUEST['person_id']);
-		$return_url->person_id = $person->getId();
+		$return_url->person_id = "{$person->getId()}";
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -46,7 +46,7 @@ if (isset($_POST['firstname'])) {
 
 	try {
 		$person->save();
-		$return_url->person_id = $person->getId();
+		$return_url->person_id = "{$person->getId()}";
 
 		header("Location: $return_url");
 		exit();

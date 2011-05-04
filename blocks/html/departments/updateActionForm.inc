@@ -26,7 +26,7 @@ $title = $this->index ? 'Edit Action' : 'Add Action';
 		<fieldset><legend>Action</legend>
 			<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 			<input name="index" type="hidden" value="<?php echo View::escape($this->index); ?>" />
-			
+
 			<table>
 
 				<tr><td><label for="action-name" class="required">Name</label></td>
@@ -50,8 +50,8 @@ $title = $this->index ? 'Edit Action' : 'Add Action';
 			</table>
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
-				
-				$url = BASE_URL.'/departments/actions.php?department_id='.$this->department->getId();
+
+				$url = BASE_URL."/departments/actions.php?department_id={$this->department->getId()}";
 				echo $this->template->formButton(
 					'Cancel','button','cancel',null,
 					"document.location.href='$url';"

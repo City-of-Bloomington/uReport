@@ -32,7 +32,7 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 						foreach ($this->department->getPeople() as $person) {
 							$name = View::escape($person->getFullname());
 							if ($name) {
-								$selected = $person->getId()==$defaultPerson_id
+								$selected = "{$person->getId()}"=="$defaultPerson_id";
 									? 'selected="selected"'
 									: '';
 								echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
