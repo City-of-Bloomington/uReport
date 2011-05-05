@@ -43,8 +43,8 @@
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 		<fieldset id="advanced-search">
 			<table>
-				<tr><td><label for="enteredByPerson">Entered By</label></td>
-					<td><select name="enteredByPerson" id="enteredByPerson">
+				<tr><td><label for="enteredByPerson">Entered By</label></td></tr>
+				<tr><td><select name="enteredByPerson" id="enteredByPerson">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
@@ -59,8 +59,8 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="assignedPerson">Assigned To</label></td>
-					<td><select name="assignedPerson" id="assignedPerson">
+				<tr><td><label for="assignedPerson">Assigned To</label></td></tr>
+				<tr><td><select name="assignedPerson" id="assignedPerson">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
@@ -75,8 +75,8 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="department">Department</label></td>
-					<td><select name="department" id="department">
+				<tr><td><label for="department">Department</label></td></tr>
+				<tr><td><select name="department" id="department">
 							<option></option>
 							<?php
 								$list = new DepartmentList();
@@ -92,61 +92,16 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="city">City</label></td>
-					<td><select name="city" id="city">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('city') as $city) {
-									$selected = (isset($_GET['city']) && $_GET['city']==$city)
-										? 'selected="selected"'
-										: '';
-									$city = View::escape($city);
-									echo "<option $selected>$city</option>";
-								}
-
-							?>
-						</select>
-					</td>
-				</tr>
-				<tr><td><label for="state">State</label></td>
-					<td><select name="state" id="state">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('state') as $state) {
-									$selected = (isset($_GET['state']) && $_GET['state']==$state)
-										? 'selected="selected"'
-										: '';
-									$state = View::escape($state);
-									echo "<option $selected>$state</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
-				<tr><td><label for="zip">Zip</label></td>
-					<td><select name="zip" id="zip">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('zip') as $zip) {
-									$selected = (isset($_GET['zip']) && $_GET['state']==$zip)
-										? 'selected="selected"'
-										: '';
-									$zip = View::escape($zip);
-									echo "<option $selected>$zip</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
+		
 				<?php
 					foreach (AddressService::$customFieldDescriptions as $key=>$config) {
 						echo "
-						<tr><td><label for=\"$key\">$config[description]</label></td>
-							<td>
+						<tr><td><label for=\"$key\">$config[description]</label></td></tr>
+						<tr><td>
 						";
 							switch ($config['formElement']) {
 								case 'select':
-									echo "<select name=\"$key\" id=\"$key\"><option></option>";
+									echo "<select multiple=\"$key\" id=\"$key\"><option></option>";
 									foreach (Ticket::getDistinct($key) as $value) {
 										$selected = (isset($_GET[$key]) && $_GET[$key]==$value)
 											? 'selected="selected"'
@@ -166,8 +121,8 @@
 						";
 					}
 				?>
-				<tr><td><label for="type">Type</label></td>
-					<td><select name="type" id="type">
+				<tr><td><label for="type">Type</label></td></tr>
+				<tr><td><select multiple="type" id="type">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('issues.type') as $type) {
@@ -181,8 +136,8 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="category">Category</label></td>
-					<td><select name="category" id="category">
+				<tr><td><label for="category">Category</label></td></tr>
+				<tr><td><select multiple="category" id="category">
 							<option></option>
 							<?php
 								$list = new CategoryList();
@@ -198,23 +153,8 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="contactMethod">Contact Method</label></td>
-					<td><select name="contactMethod" id="contactMethod">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('issues.contactMethod') as $contactMethod) {
-									$selected = (isset($_GET['contactMethod']) && $_GET['contactMethod']==$contactMethod)
-										? 'selected="selected"'
-										: '';
-									$contactMethod = View::escape($contactMethod);
-									echo "<option value=\"$contactMethod\" $selected>$contactMethod</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
-				<tr><td><label for="status">Status</label></td>
-					<td><select name="status" id="status">
+				<tr><td><label for="status">Status</label></td></tr>
+				<tr><td><select multiple="status" id="status">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('status') as $status) {
@@ -226,26 +166,6 @@
 								}
 							?>
 						</select>
-					</td>
-				</tr>
-				<tr><td><label for="action">Action</label></td>
-					<td><select name="action" id="action">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('history.action') as $action) {
-									$selected = (isset($_GET['action']) && $_GET['action']==$action)
-										? 'selected="selected"'
-										: '';
-									$action = View::escape($action);
-									echo "<option value=\"$action\" $selected>$action</option>";
-								}
-							?>
-						</select>
-					</td>
-				</tr>
-				<tr><td><label for="actionPerson">Person ID</label></td>
-					<td><input name="actionPerson" id="actionPerson"
-							value="<?php echo isset($_GET['actionPerson']) ? View::escape($_GET['actionPerson']) : ''; ?>" />
 					</td>
 				</tr>
 			</table>
