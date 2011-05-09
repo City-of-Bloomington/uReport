@@ -3,7 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Case $this->case
  */
 ?>
 <table>
@@ -11,8 +11,8 @@
 		<td><select name="department_id" id="department_id">
 				<option></option>
 				<?php
-					$assignedPerson = $this->ticket->getAssignedPerson()
-						? new Person($this->ticket->getAssignedPerson())
+					$assignedPerson = $this->case->getAssignedPerson()
+						? new Person($this->case->getAssignedPerson())
 						: $_SESSION['USER'];
 
 					$currentDepartment = $assignedPerson->getDepartment()

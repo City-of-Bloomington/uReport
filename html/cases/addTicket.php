@@ -4,39 +4,39 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Cases')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
-$ticket = new Ticket();
+$case = new Case();
 $issue = new Issue();
 
 // If the user has chosen a location, they'll pass it in here
 if (isset($_GET['location']) && $_GET['location']) {
-	$ticket->setLocation($_GET['location']);
-	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+	$case->setLocation($_GET['location']);
+	$case->setAddressServiceData(AddressService::getLocationData($case->getLocation()));
 }
 if (isset($_REQUEST['person_id'])) {
 	$issue->setReportedByPerson($_REQUEST['person_id']);
 }
 
-if(isset($_POST['ticket'])){
-	// Create the ticket
+if(isset($_POST['case'])){
+	// Create the case
 	$fields = array(
 		'location','latitude','longitude','address_id','city','state','zip'
 	);
 	foreach ($fields as $field) {
-		if (isset($_POST['ticket'][$field])) {
+		if (isset($_POST['case'][$field])) {
 			$set = 'set'.ucfirst($field);
-			$ticket->$set($_POST['ticket'][$field]);
+			$case->$set($_POST['case'][$field]);
 		}
 	}
-	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+	$case->setAddressServiceData(AddressService::getLocationData($case->getLocation()));
 
-	$ticket->setAssignedPerson($_POST['assignedPerson']);
-	$ticket->setEnteredByPerson($_SESSION['USER']);
+	$case->setAssignedPerson($_POST['assignedPerson']);
+	$case->setEnteredByPerson($_SESSION['USER']);
 
 	// Create the issue
 	$fields = array(
@@ -63,12 +63,12 @@ if(isset($_POST['ticket'])){
 
 	// Validate Everything and save
 	try {
-		$ticket->updateIssues($issue);
-		$ticket->updateHistory($open);
-		$ticket->updateHistory($assignment);
-		$ticket->save();
+		$case->updateIssues($issue);
+		$case->updateHistory($open);
+		$case->updateHistory($assignment);
+		$case->save();
 
-		header('Location: '.$ticket->getURL());
+		header('Location: '.$case->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -77,21 +77,21 @@ if(isset($_POST['ticket'])){
 }
 
 
-$template = new Template('ticketCreation');
+$template = new Template('caseCreation');
 
 $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-if ($ticket->getLocation()) {
+if ($case->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$case->getLocation())
 	);
 
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/ticketList.inc',
+		'cases/caseList.inc',
 		array(
-			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Tickets Associated with this Location'
+			'caseList'=>new CaseList(array('location'=>$case->getLocation())),
+			'title'=>'Cases Associated with this Location'
 		)
 	);
 }
@@ -107,10 +107,10 @@ $personPanel = $issue->getReportedByPerson()
 	: new Block('people/searchForm.inc',array('return_url'=>$return_url));
 $template->blocks['person-panel'][] = $personPanel;
 
-$addTicketForm = new Block(
-	'tickets/addTicketForm.inc',
-	array('ticket'=>$ticket,'issue'=>$issue)
+$addCaseForm = new Block(
+	'cases/addCaseForm.inc',
+	array('case'=>$case,'issue'=>$issue)
 );
-$template->blocks['ticket-panel'][] = $addTicketForm;
+$template->blocks['case-panel'][] = $addCaseForm;
 
 echo $template->render();

@@ -3,46 +3,46 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param GET ticket_id
+ * @param GET case_id
  */
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Cases')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
 try {
-	if (isset($_REQUEST['ticket_id'])) {
-		$ticket = new Ticket($_REQUEST['ticket_id']);
+	if (isset($_REQUEST['case_id'])) {
+		$case = new Case($_REQUEST['case_id']);
 	}
 	else {
-		throw new Exception('tickets/unknownTicket');
+		throw new Exception('cases/unknownCase');
 	}
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
-	header('Location: '.BASE_URL.'/tickets');
+	header('Location: '.BASE_URL.'/cases');
 	exit();
 }
 
 if (isset($_POST['status'])) {
 	if ($_POST['status'] == 'closed') {
-		header('Location: '.BASE_URL."/tickets/closeTicket.php?ticket_id={$ticket->getId()}");
+		header('Location: '.BASE_URL."/cases/closeCase.php?case_id={$case->getId()}");
 		exit();
 	}
-	$ticket->setStatus($_POST['status']);
+	$case->setStatus($_POST['status']);
 
-	// add a record to ticket history
+	// add a record to case history
 	$history = new History();
 	$history->setAction($_POST['status']);
 	$history->setEnteredByPerson($_SESSION['USER']);
 	$history->setActionPerson($_SESSION['USER']);
 	$history->setNotes($_POST['notes']);
-	$ticket->updateHistory($history);
+	$case->updateHistory($history);
 
 	try {
-		$ticket->save();
-		header('Location: '.$ticket->getURL());
+		$case->save();
+		header('Location: '.$case->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -51,41 +51,41 @@ if (isset($_POST['status'])) {
 }
 
 // Display the view
-$template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/ticketInfo.inc',
-	array('ticket'=>$ticket,'disableButtons'=>true)
+$template = new Template('cases');
+$template->blocks['case-panel'][] = new Block(
+	'cases/caseInfo.inc',
+	array('case'=>$case,'disableButtons'=>true)
 );
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/changeStatusForm.inc',
-	array('ticket'=>$ticket)
+$template->blocks['case-panel'][] = new Block(
+	'cases/changeStatusForm.inc',
+	array('case'=>$case)
 );
-if ($ticket->getStatus() != 'closed') {
-	$template->blocks['ticket-panel'][] = new Block(
-		'tickets/closeTicketForm.inc',
-		array('ticket'=>$ticket)
+if ($case->getStatus() != 'closed') {
+	$template->blocks['case-panel'][] = new Block(
+		'cases/closeCaseForm.inc',
+		array('case'=>$case)
 	);
 }
 $template->blocks['history-panel'][] = new Block(
-	'tickets/history.inc',
-	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
+	'cases/history.inc',
+	array('history'=>$case->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
-	'tickets/issueList.inc',
-	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
+	'cases/issueList.inc',
+	array('issueList'=>$case->getIssues(),'disableButtons'=>true)
 );
-if ($ticket->getLocation()) {
+if ($case->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$case->getLocation())
 	);
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/ticketList.inc',
+		'cases/caseList.inc',
 		array(
-			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location',
+			'caseList'=>new CaseList(array('location'=>$case->getLocation())),
+			'title'=>'Other cases for this location',
 			'disableButtons'=>true,
-			'filterTicket'=>$ticket
+			'filterCase'=>$case
 		)
 	);
 }

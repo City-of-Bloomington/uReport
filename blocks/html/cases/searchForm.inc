@@ -8,26 +8,26 @@
 <div class="searchForm">
 	<div>
 	<?php
-		if (userIsAllowed('Tickets')) {
+		if (userIsAllowed('Cases')) {
 			echo $this->linkButton(
-				'Add New Ticket',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
+				'Add New Case',BASE_URL.'/cases/addCase.php','add',null,null,'button'
 			);
 			echo "
 			<h1>Quick Search</h1>
-			<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
-						All open tickets
+			<ul><li><a href=\"".BASE_URL."/cases/home.php?status=open\">
+						All open cases
 					</a>
 				</li>
-				<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
-						All tickets assigned to me
+				<li><a href=\"".BASE_URL."/cases/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
+						All cases assigned to me
 					</a>
 				</li>
 			";
 			if ($_SESSION['USER']->getDepartment()) {
 				$dept = $_SESSION['USER']->getDepartment();
 				echo "
-				<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
-						All tickets for my department
+				<li><a href=\"".BASE_URL."/cases/home.php?department=$dept[_id]\">
+						All cases for my department
 					</a>
 				</li>
 				";
@@ -40,14 +40,14 @@
 	</div>
 
 	<h1>Advanced Search</h1>
-	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
+	<form method="get" action="<?php echo BASE_URL; ?>/cases/home.php">
 		<fieldset id="advanced-search">
 			<table>
 				<tr><td><label for="enteredByPerson">Entered By</label></td></tr>
 				<tr><td><select name="enteredByPerson" id="enteredByPerson">
 							<option></option>
 							<?php
-								foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
+								foreach (Case::getDistinct('enteredByPerson._id') as $id) {
 									$person = new Person($id);
 									$selected = (isset($_GET['enteredByPerson']) && $_GET['enteredByPerson']==$person->getId())
 										? 'selected="selected"'
@@ -63,7 +63,7 @@
 				<tr><td><select name="assignedPerson" id="assignedPerson">
 							<option></option>
 							<?php
-								foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
+								foreach (Case::getDistinct('assignedPerson._id') as $id) {
 									$person = new Person($id);
 									$selected = (isset($_GET['assignedPerson']) && $_GET['assignedPerson']==$person->getId())
 										? 'selected="selected"'
@@ -102,7 +102,7 @@
 							switch ($config['formElement']) {
 								case 'select':
 									echo "<select multiple=\"$key\" id=\"$key\"><option></option>";
-									foreach (Ticket::getDistinct($key) as $value) {
+									foreach (Case::getDistinct($key) as $value) {
 										$selected = (isset($_GET[$key]) && $_GET[$key]==$value)
 											? 'selected="selected"'
 											: '';
@@ -125,7 +125,7 @@
 				<tr><td><select multiple="type" id="type">
 							<option></option>
 							<?php
-								foreach (Ticket::getDistinct('issues.type') as $type) {
+								foreach (Case::getDistinct('issues.type') as $type) {
 									$selected = (isset($_GET['type']) && $_GET['type']==$type)
 										? 'selected="selected"'
 										: '';
@@ -157,7 +157,7 @@
 				<tr><td><select multiple="status" id="status">
 							<option></option>
 							<?php
-								foreach (Ticket::getDistinct('status') as $status) {
+								foreach (Case::getDistinct('status') as $status) {
 									$selected = (isset($_GET['status']) && $_GET['status']==$status)
 										? 'selected="selected"'
 										: '';
@@ -185,7 +185,7 @@
 					);
 				}
 
-				foreach (TicketList::getDisplayableFields() as $name=>$label) {
+				foreach (CaseList::getDisplayableFields() as $name=>$label) {
 					$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
 					echo "
 					<li><label>
@@ -211,5 +211,5 @@
 </div>
 <?php
 	#$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	#$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
+	#$this->template->addToAsset('scripts',BASE_URL.'/js/cases/search.js');
 ?>

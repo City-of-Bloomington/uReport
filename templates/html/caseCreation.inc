@@ -21,8 +21,8 @@
 			<div id="person-panel">
 				<?php echo $this->includeBlocks('person-panel'); ?>
 			</div>
-			<div id="ticket-panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
+			<div id="case-panel">
+				<?php echo $this->includeBlocks('case-panel'); ?>
 			</div>
 		</div>
 	</div>

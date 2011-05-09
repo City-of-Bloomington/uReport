@@ -4,15 +4,15 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
- * @param Ticket $this->ticket
+ * @param Case $this->case
  * @param bool $this->disableButtons
  * @param bool $this->disableComments
  */
 $addButton = '';
-if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
+if (!$this->disableButtons && $this->case && userIsAllowed('Issues')) {
 	$addButton = $this->template->linkButton(
 		'Add Issue',
-		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}",
+		BASE_URL."/cases/updateIssue.php?case_id={$this->case->getId()}",
 		'add',null, null,'button'
 	);
 }
@@ -28,7 +28,7 @@ echo "
 		if (!$this->disableButtons && userIsAllowed('Issues')) {
 			$editButton = $this->template->linkButton(
 				'Edit Issue',
-				BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index=$index",
+				BASE_URL."/cases/updateIssue.php?case_id={$this->case->getId()};index=$index",
 				'edit',
 				null,
 				null,
@@ -38,7 +38,7 @@ echo "
 			if ($issue->getReportedByPerson()) {
 				$responseButton = $this->template->linkButton(
 					'Add Response',
-					BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$index",
+					BASE_URL."/cases/addResponse.php?case_id={$this->case->getId()};index=$index",
 					'add',
 					null,
 					null,
@@ -103,7 +103,7 @@ echo "
 		";
 
 		$block = new Block('media/mediaList.inc',array(
-			'ticket'=>$this->ticket,
+			'case'=>$this->case,
 			'index'=>$index,
 			'mediaList'=>$issue->getMedia(),
 			'disableButtons'=>$this->disableButtons)
@@ -113,7 +113,7 @@ echo "
 		$history = $issue->getHistory();
 		if (count($history)) {
 			$block = new Block(
-				'tickets/history.inc',
+				'cases/history.inc',
 				array('history'=>$history,'disableComments'=>$this->disableComments)
 			);
 			echo $block->render('html',$this->template);

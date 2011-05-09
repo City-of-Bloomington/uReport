@@ -3,16 +3,16 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param REQUEST ticket_id
+ * @param REQUEST case_id
  */
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Cases')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
 try {
-	$ticket = new Ticket($_REQUEST['ticket_id']);
+	$case = new Case($_REQUEST['case_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -22,12 +22,12 @@ catch (Exception $e) {
 
 // Once the user has chosen a location, they'll pass it in here
 if (isset($_REQUEST['location']) && $_REQUEST['location']) {
-	$ticket->clearAddressServiceCache();
-	$ticket->setLocation($_REQUEST['location']);
-	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
+	$case->clearAddressServiceCache();
+	$case->setLocation($_REQUEST['location']);
+	$case->setAddressServiceCache(AddressService::getLocationData($case->getLocation()));
 	try {
-		$ticket->save();
-		header('Location: '.$ticket->getURL());
+		$case->save();
+		header('Location: '.$case->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -37,36 +37,36 @@ if (isset($_REQUEST['location']) && $_REQUEST['location']) {
 
 $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-$template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block(
+$template = new Template('cases');
+$template->blocks['case-panel'][] = new Block(
 	'locations/findLocationForm.inc',
 	array('return_url'=>$return_url,'includeExternalResults'=>true)
 );
 
 $template->blocks['history-panel'][] = new Block(
-	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory())
+	'cases/history.inc',
+	array('caseHistory'=>$case->getHistory())
 );
 
 $template->blocks['issue-panel'][] = new Block(
-	'tickets/issueList.inc',
-	array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
+	'cases/issueList.inc',
+	array('issueList'=>$case->getIssues(),'case'=>$case)
 );
 
-if ($ticket->getLocation()) {
+if ($case->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$case->getLocation())
 	);
 
-	$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
-	if (count($ticketList) > 1) {
+	$caseList = new CaseList(array('location'=>$case->getLocation()));
+	if (count($caseList) > 1) {
 		$template->blocks['location-panel'][] = new Block(
-			'tickets/ticketList.inc',
+			'cases/caseList.inc',
 			array(
-				'ticketList'=>$ticketList,
-				'title'=>'Other tickets for this location',
-				'filterTicket'=>$ticket
+				'caseList'=>$caseList,
+				'title'=>'Other cases for this location',
+				'filterCase'=>$case
 			)
 		);
 	}

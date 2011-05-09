@@ -3,13 +3,13 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Case $this->case
  */
 ?>
 <div class="changeStatusForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/cases/changeStatus.php">
 		<fieldset><legend>Change Status</legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+			<input name="case_id" type="hidden" value="<?php echo $this->case->getId(); ?>" />
 			<table>
 				<tr><td><label for="status">Status</label></td>
 					<td><select name="status" id="status">
@@ -20,7 +20,7 @@
 									$department = new Department($dept['_id']);
 
 									foreach ($department->getCustomStatuses() as $status) {
-										$selected = $this->ticket->getStatus()==$status
+										$selected = $this->case->getStatus()==$status
 											? 'selected="selected"'
 											: '';
 										$status = View::escape($status);
@@ -38,7 +38,7 @@
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->ticket->getURL()}';"
+					'Cancel','button','cancel',null,"document.location.href='{$this->case->getURL()}';"
 				);
 			?>
 		</fieldset>

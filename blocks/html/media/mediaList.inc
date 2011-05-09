@@ -3,7 +3,7 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Case $this->case
  * @param int $this->index
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons

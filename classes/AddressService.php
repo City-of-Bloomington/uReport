@@ -41,9 +41,9 @@ class AddressService
 	 * This can be used to see if the location string is a valid address
 	 * in your address system
 	 *
-	 * It's important to match $data fieldnames with Ticket fieldnames.
-	 * When this data is given to a Ticket, any fields that have the same name as Ticket
-	 * properties will update the appropriate Ticket property.
+	 * It's important to match $data fieldnames with Case fieldnames.
+	 * When this data is given to a Case, any fields that have the same name as Case
+	 * properties will update the appropriate Case property.
 	 *
 	 * @param string $location
 	 * @return array

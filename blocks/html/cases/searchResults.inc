@@ -1,21 +1,21 @@
 <?php
 /**
- * Displays a list of Tickets
+ * Displays a list of Cases
  *
- * This page only displays Ticket and Issue fields that are asked for
+ * This page only displays Case and Issue fields that are asked for
  * The fields desired need to be the indexes of an associative array
  * The values for each field just needs to be truthy
  *
- * $exampleFields = array('ticket-id'=>1,'ticket-status'=>1,'issue-issueType'=>1);
+ * $exampleFields = array('case-id'=>1,'case-status'=>1,'issue-issueType'=>1);
  *
  * For the full list of possible fields for use here,
- * See: TicketList::getDisplayableFields()
+ * See: CaseList::getDisplayableFields()
  *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketList $this->ticketList
- * @param array $this->fields The ticket fields to display.
+ * @param CaseList $this->caseList
+ * @param array $this->fields The case fields to display.
  */
 // Default fields to be used
 if (!$this->fields) {
@@ -24,18 +24,18 @@ if (!$this->fields) {
 		'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
 	);
 }
-$title = $this->title ? View::escape($this->title) : 'Tickets';
+$title = $this->title ? View::escape($this->title) : 'Cases';
 echo "
 <div class=\"searchResults\">
 	<h1>$title</h1>
 ";
-	if (count($this->ticketList)) {
+	if (count($this->caseList)) {
 		echo "
 		<table>
 			<thead>
 				<tr>
 		";
-				$fields = TicketList::getDisplayableFields();
+				$fields = CaseList::getDisplayableFields();
 				foreach ($this->fields as $name=>$value) {
 					echo "<th>$fields[$name]</th>";
 				}
@@ -45,11 +45,11 @@ echo "
 			</thead>
 			<tbody>
 		";
-			foreach ($this->ticketList as $ticket) {
+			foreach ($this->caseList as $case) {
 				echo '<tr>';
 				foreach ($this->fields as $field=>$value) {
 					$get = 'get'.ucfirst($field);
-					$value = $ticket->$get();
+					$value = $case->$get();
 					if (preg_match('/Person/',$field) || $field=='constituent') {
 						if ($value) {
 							$value = $value['fullname'];
@@ -68,7 +68,7 @@ echo "
 						$value = implode(',',$c);
 					}
 					$value = View::escape($value);
-					echo "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
+					echo "<td><a href=\"{$case->getURL()}\">$value</a></td>";
 				}
 				echo '</tr>';
 			}
@@ -78,7 +78,7 @@ echo "
 		";
 	}
 	else {
-		echo "<h2>No tickets found</h2>";
+		echo "<h2>No cases found</h2>";
 	}
 echo "
 </div>

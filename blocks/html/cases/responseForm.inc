@@ -36,7 +36,7 @@ $description = View::escape("$person resonded to $constituent");
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->issue->getTicket()->getURL()}';"
+					'Cancel','button','cancel',null,"document.location.href='{$this->issue->getCase()->getURL()}';"
 				);
 			?>
 		</fieldset>

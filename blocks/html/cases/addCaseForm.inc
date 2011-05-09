@@ -3,49 +3,49 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Case $this->case
  * @param Issue $this->issue
  */
 ?>
-<div class="addTicketForm">
-	<h1>New Ticket</h1>
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
-		<fieldset class="ticketFields">
-			<legend>Ticket Info</legend>
+<div class="addCaseForm">
+	<h1>New Case</h1>
+	<form method="post" action="<?php echo BASE_URL; ?>/cases/addCase.php">
+		<fieldset class="caseFields">
+			<legend>Case Info</legend>
 			<table>
-				<tr><td><label for="ticket-location">location</label></td>
-					<td><input name="ticket[location]" id="ticket-location"
-							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
+				<tr><td><label for="case-location">location</label></td>
+					<td><input name="case[location]" id="case-location"
+							value="<?php echo View::escape($this->case->getLocation()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-latitude">latitude</label></td>
-					<td><input name="ticket[latitude]" id="ticket-latitude"
-							value="<?php echo $this->ticket->getLatitude(); ?>" />
+				<tr><td><label for="case-latitude">latitude</label></td>
+					<td><input name="case[latitude]" id="case-latitude"
+							value="<?php echo $this->case->getLatitude(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-longitude">longitude</label></td>
-					<td><input name="ticket[longitude]" id="ticket-longitude"
-							value="<?php echo $this->ticket->getLongitude(); ?>" />
+				<tr><td><label for="case-longitude">longitude</label></td>
+					<td><input name="case[longitude]" id="case-longitude"
+							value="<?php echo $this->case->getLongitude(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-address_id">address_id</label></td>
-					<td><input name="ticket[address_id]" id="ticket-address_id"
-							value="<?php echo $this->ticket->getAddress_id(); ?>" />
+				<tr><td><label for="case-address_id">address_id</label></td>
+					<td><input name="case[address_id]" id="case-address_id"
+							value="<?php echo $this->case->getAddress_id(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-city">city</label></td>
-					<td><input name="ticket[city]" id="ticket-city"
-							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
+				<tr><td><label for="case-city">city</label></td>
+					<td><input name="case[city]" id="case-city"
+							value="<?php echo View::escape($this->case->getCity()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-state">state</label></td>
-					<td><input name="ticket[state]" id="ticket-state"
-							value="<?php echo View::escape($this->ticket->getState()); ?>" />
+				<tr><td><label for="case-state">state</label></td>
+					<td><input name="case[state]" id="case-state"
+							value="<?php echo View::escape($this->case->getState()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-zip">zip</label></td>
-					<td><input name="ticket[zip]" id="ticket-zip"
-							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
+				<tr><td><label for="case-zip">zip</label></td>
+					<td><input name="case[zip]" id="case-zip"
+							value="<?php echo View::escape($this->case->getZip()); ?>" />
 					</td>
 				</tr>
 			</table>
@@ -53,13 +53,13 @@
 		<fieldset class="issueFields">
 			<legend>Issue Information</legend>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+				include APPLICATION_HOME.'/blocks/html/cases/issueFields.inc';
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
 			<legend>Assignment Information</legend>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
+				include APPLICATION_HOME.'/blocks/html/cases/assignCaseFields.inc';
 			?>
 		</fieldset>
 
@@ -68,7 +68,7 @@
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/tickets';"
+					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/cases';"
 				);
 			?>
 		</fieldset>

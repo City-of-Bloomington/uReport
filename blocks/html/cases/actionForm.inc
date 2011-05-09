@@ -3,16 +3,16 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Case $this->case
  */
 $department = new Department($_SESSION['USER']->getData('department._id'));
 $actions = $department->getActions();
 if (count($actions)) {
 ?>
 <div class="actionForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/recordAction.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/cases/recordAction.php">
 		<fieldset>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+			<input name="case_id" type="hidden" value="<?php echo $this->case->getId(); ?>" />
 			<table>
 				<tr><td><label for="action">Action</label></td>
 					<td><select name="action" id="action">

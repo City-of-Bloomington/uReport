@@ -4,15 +4,15 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Cases')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
 $template = new Template('search');
-$template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
-// Map the form fields to the Ticket search fields
+$template->blocks['search-form'][] = new Block('cases/searchForm.inc');
+// Map the form fields to the Case search fields
 $fields = array(
 	'enteredByPerson'=>'enteredByPerson._id',
 	'assignedPerson'=>'assignedPerson._id',
@@ -39,15 +39,15 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	}
 
 	if (count($search)) {
-		$ticketList = new TicketList($search);
+		$caseList = new CaseList($search);
 
 		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-		$paginator = $ticketList->getPaginator(50,$page);
+		$paginator = $caseList->getPaginator(50,$page);
 
 		$template->blocks['search-results'][] = new Block(
-			'tickets/searchResults.inc',
+			'cases/searchResults.inc',
 			array(
-				'ticketList'=>$paginator,
+				'caseList'=>$paginator,
 				'title'=>'Search Results',
 				'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
 			)

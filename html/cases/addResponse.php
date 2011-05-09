@@ -38,7 +38,7 @@ if (isset($_POST['contactMethod_id'])) {
 
 	try {
 		$history->save();
-		header('Location: '.$issue->getTicket()->getURL());
+		header('Location: '.$issue->getCase()->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -47,30 +47,30 @@ if (isset($_POST['contactMethod_id'])) {
 }
 
 // Display the view
-$template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/ticketInfo.inc',
-	array('ticket'=>$issue->getTicket())
+$template = new Template('cases');
+$template->blocks['case-panel'][] = new Block(
+	'cases/caseInfo.inc',
+	array('case'=>$issue->getCase())
 );
 $template->blocks['history-panel'][] = new Block(
-	'tickets/history.inc',
-	array('ticketHistory'=>$issue->getTicket()->getHistory())
+	'cases/history.inc',
+	array('caseHistory'=>$issue->getCase()->getHistory())
 );
 $template->blocks['issue-panel'][] = new Block(
-	'tickets/responseForm.inc',
+	'cases/responseForm.inc',
 	array('issue'=>$issue)
 );
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',
-	array('location'=>$issue->getTicket()->getLocation())
+	array('location'=>$issue->getCase()->getLocation())
 );
 $template->blocks['location-panel'][] = new Block(
-	'tickets/ticketList.inc',
+	'cases/caseList.inc',
 	array(
-		'ticketList'=>new TicketList(array('location'=>$issue->getTicket()->getLocation())),
-		'title'=>'Other tickets for this location',
+		'caseList'=>new CaseList(array('location'=>$issue->getCase()->getLocation())),
+		'title'=>'Other cases for this location',
 		'disableButtons'=>true,
-		'filterTicket'=>$issue->getTicket()
+		'filterCase'=>$issue->getCase()
 	)
 );
 echo $template->render();

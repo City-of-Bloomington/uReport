@@ -3,22 +3,22 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticketA
- * @param Ticket $this->ticketB
+ * @param Case $this->caseA
+ * @param Case $this->caseB
  */
 ?>
 <div class="mergeForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/mergeTickets.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/cases/mergeCases.php">
 		<fieldset>
 			<div class="target_a">
-				<input name="targetTicket" id="targetTicket_a" type="radio" value="a" checked="checked" />
-				<input name="ticket_id_a" type="hidden" value="<?php echo $this->ticketA->getId(); ?>" />
-				<label for="targetTicket_a">Merge Into Ticket #<?php echo $this->ticketA->getId(); ?></label>
+				<input name="targetCase" id="targetCase_a" type="radio" value="a" checked="checked" />
+				<input name="case_id_a" type="hidden" value="<?php echo $this->caseA->getId(); ?>" />
+				<label for="targetCase_a">Merge Into Case #<?php echo $this->caseA->getId(); ?></label>
 			</div>
 			<div class="target_b">
-				<label for="targetTicket_b">Merge Into Ticket #<?php echo $this->ticketB->getId(); ?></label>
-				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
-				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
+				<label for="targetCase_b">Merge Into Case #<?php echo $this->caseB->getId(); ?></label>
+				<input name="targetCase" id="targetCase_b" type="radio" value="b" />
+				<input name="case_id_b" type="hidden" value="<?php echo $this->caseB->getId(); ?>" />
 			</div>
 			<?php echo $this->formButton('Merge','submit','submit'); ?>
 		</fieldset>

@@ -16,8 +16,8 @@
 		<div id="content-panel">
 			<?php include FRAMEWORK.'/errorMessages.php'; ?>
 
-			<div id="ticket-panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
+			<div id="case-panel">
+				<?php echo $this->includeBlocks('case-panel'); ?>
 			</div>
 			<div id="action-panel">
 				<?php echo $this->includeBlocks('history-panel'); ?>
