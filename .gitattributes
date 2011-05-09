@@ -1,13 +1,13 @@
 * text=auto !eol
-blocks/html/cases/addTicketForm.inc -text
-blocks/html/cases/assignTicketForm.inc -text
-blocks/html/cases/referTicketForm.inc -text
+blocks/html/cases/addCaseForm.inc -text
+blocks/html/cases/assignCaseForm.inc -text
+blocks/html/cases/referCaseForm.inc -text
 blocks/html/errorMessages/mergerNotAllowed.inc -text
 blocks/html/people/mergeForm.inc -text
 html/cases/addTicket.php -text
-html/cases/assignTicket.php -text
+html/cases/assignCase.php -text
 html/cases/recordAction.php -text
-html/cases/referTicket.php -text
+html/cases/referCase.php -text
 html/departments/updateMyDepartment.php -text
 html/media/media -text
 html/people/mergePeople.php -text

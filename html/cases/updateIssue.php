@@ -25,8 +25,8 @@ if (!userIsAllowed('Issues')) {
 // Load all the data that's passed in
 //-------------------------------------------------------------------
 try {
-	$ticket = new Ticket($_REQUEST['ticket_id']);
-	$issues = $ticket->getIssues();
+	$case = new Case($_REQUEST['case_id']);
+	$issues = $case->getIssues();
 	if (isset($_REQUEST['index']) && array_key_exists($_REQUEST['index'],$issues)) {
 		$issue = $issues[$_REQUEST['index']];
 		$index = (int)$_REQUEST['index'];
@@ -38,7 +38,7 @@ try {
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
-	header('Location: '.BASE_URL.'/tickets');
+	header('Location: '.BASE_URL.'/cases');
 	exit();
 }
 
@@ -60,11 +60,11 @@ if (isset($_POST['issue'])) {
 		$set = 'set'.ucfirst($field);
 		$issue->$set($_POST['issue'][$field]);
 	}
-	$ticket->updateIssues($issue,$index);
+	$case->updateIssues($issue,$index);
 
 	try {
-		$ticket->save();
-		header('Location: '.$ticket->getURL());
+		$case->save();
+		header('Location: '.$case->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -75,31 +75,31 @@ if (isset($_POST['issue'])) {
 //-------------------------------------------------------------------
 // Display the view
 //-------------------------------------------------------------------
-$template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/ticketInfo.inc',
-	array('ticket'=>$ticket,'disableButtons'=>true)
+$template = new Template('cases');
+$template->blocks['case-panel'][] = new Block(
+	'cases/caseInfo.inc',
+	array('case'=>$case,'disableButtons'=>true)
 );
 $template->blocks['history-panel'][] = new Block(
-	'tickets/history.inc',
-	array('history'=>$ticket->getHistory())
+	'cases/history.inc',
+	array('history'=>$case->getHistory())
 );
 $template->blocks['issue-panel'][] = new Block(
-	'tickets/updateIssueForm.inc',
-	array('ticket'=>$ticket,'index'=>$index,'issue'=>$issue)
+	'cases/updateIssueForm.inc',
+	array('case'=>$case,'index'=>$index,'issue'=>$issue)
 );
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',
-	array('location'=>$ticket->getLocation())
+	array('location'=>$case->getLocation())
 );
-if ($ticket->getLocation()) {
+if ($case->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/ticketList.inc',
+		'cases/caseList.inc',
 		array(
-			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location',
+			'caseList'=>new CaseList(array('location'=>$case->getLocation())),
+			'title'=>'Other cases for this location',
 			'disableButtons'=>true,
-			'filterTicket'=>$ticket
+			'filterCase'=>$case
 		)
 	);
 }

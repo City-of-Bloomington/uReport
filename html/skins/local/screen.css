@@ -46,7 +46,7 @@ tbody th { text-align:right; }
 #panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
+#case-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
 #location-panel { border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
@@ -55,7 +55,7 @@ tbody th { text-align:right; }
 
 
 /* Blocks we want to show up in the left column of a Panel */
-#ticket-panel .ticketInfo			{ width:290px; float:left; }
+#case-panel .caseInfo			{ width:290px; float:left; }
 #location-panel .locationInfo 		{ width:290px; float:left; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
@@ -64,13 +64,13 @@ tbody th { text-align:right; }
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
 #location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-#location-panel .ticketList, #ticket-panel .closeTicketForm, #ticket-panel .assignTicketForm,
-#ticket-panel .actionForm, #ticket-panel .referTicketForm,
-#ticket-panel .changeStatusForm, .findpeopleResults { padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
+#location-panel .caseList, #case-panel .closeCaseForm, #case-panel .assignCaseForm,
+#case-panel .actionForm, #case-panel .referCaseForm,
+#case-panel .changeStatusForm, .findpeopleResults { padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
 
-#ticket-panel .addTicketForm .ticketFields { display:none; }
-#ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
-#ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
+#case-panel .addCaseForm .caseFields { display:none; }
+#case-panel .addCaseForm .issueFields { float:left; width:480px; }
+#case-panel .addCaseForm .assignmentFields { margin-left:490px; }
 
 .mergeForm .target_a { float:left; width:48%; }
 .mergeForm .target_b { float:right; width:48%; }
@@ -147,7 +147,7 @@ tbody th { text-align:right; }
 tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
 .issue { margin-top:.25em; }
 .issueList h1 { display:inline; }
-.ticketList .add a { height:2em; }
+.caseList .add a { height:2em; }
 
 /* JavaScript will apply this style to stuff it wants to hide */
 .hidden { display:none; }

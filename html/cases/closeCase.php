@@ -5,15 +5,15 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 // Make sure they're supposed to be here
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Cases')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
 }
 
-// Load the ticket
+// Load the case
 try {
-	$ticket = new Ticket($_REQUEST['ticket_id']);
+	$case = new Case($_REQUEST['case_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -22,20 +22,20 @@ catch (Exception $e) {
 }
 
 if (isset($_POST['resolution'])) {
-	$ticket->setResolution($_POST['resolution']);
-	$ticket->setStatus('closed');
+	$case->setResolution($_POST['resolution']);
+	$case->setStatus('closed');
 
-	// add a record to ticket history
+	// add a record to case history
 	$history = new History();
 	$history->setAction('close');
 	$history->setEnteredByPerson($_SESSION['USER']);
 	$history->setActionPerson($_SESSION['USER']);
 	$history->setNotes($_POST['notes']);
-	$ticket->updateHistory($history);
+	$case->updateHistory($history);
 
 	try {
-		$ticket->save();
-		header('Location: '.$ticket->getURL());
+		$case->save();
+		header('Location: '.$case->getURL());
 		exit();
 	}
 	catch (Exception $e) {
@@ -45,35 +45,35 @@ if (isset($_POST['resolution'])) {
 
 
 // Display the view
-$template = new Template('tickets');
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/ticketInfo.inc',
-	array('ticket'=>$ticket,'disableButtons'=>true)
+$template = new Template('cases');
+$template->blocks['case-panel'][] = new Block(
+	'cases/caseInfo.inc',
+	array('case'=>$case,'disableButtons'=>true)
 );
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/closeTicketForm.inc',
-	array('ticket'=>$ticket)
+$template->blocks['case-panel'][] = new Block(
+	'cases/closeCaseForm.inc',
+	array('case'=>$case)
 );
 $template->blocks['history-panel'][] = new Block(
-	'tickets/history.inc',
-	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
+	'cases/history.inc',
+	array('history'=>$case->getHistory(),'disableButtons'=>true)
 );
 $template->blocks['issue-panel'][] = new Block(
-	'tickets/issueList.inc',
-	array('issueList'=>$ticket->getIssues(),'disableButtons'=>true)
+	'cases/issueList.inc',
+	array('issueList'=>$case->getIssues(),'disableButtons'=>true)
 );
-if ($ticket->getLocation()) {
+if ($case->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$case->getLocation())
 	);
 	$template->blocks['location-panel'][] = new Block(
-		'tickets/ticketList.inc',
+		'cases/caseList.inc',
 		array(
-			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Other tickets for this location',
+			'caseList'=>new CaseList(array('location'=>$case->getLocation())),
+			'title'=>'Other cases for this location',
 			'disableButtons'=>true,
-			'filterTicket'=>$ticket
+			'filterCase'=>$case
 		)
 	);
 }
