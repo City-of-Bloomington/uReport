@@ -36,9 +36,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	echo "$location ==> ";
 
 	// Import the Dates
-	$ticket = new Ticket();
+	$Case = new Case();
 	if ($row['received']) {
-		$ticket->setEnteredDate($row['received']);
+		$Case->setEnteredDate($row['received']);
 	}
 	else {
 		continue;
@@ -48,25 +48,25 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	switch ($row['status']) {
 		case 'NOT VALID':
 		case 'NOT PROCESSED':
-			$ticket->setStatus('closed');
-			$ticket->setResolution('Bogus');
+			$Case->setStatus('closed');
+			$Case->setResolution('Bogus');
 			break;
 		case 'COMPLETED':
-			$ticket->setStatus('closed');
-			$ticket->setResolution('Resolved');
+			$Case->setStatus('closed');
+			$Case->setResolution('Resolved');
 			break;
 		default:
-			$ticket->setStatus('open');
+			$Case->setStatus('open');
 	}
 	// ReqPro was not very good at keeping it's status and completed_date in sync
-	if ($row['completed_date'] && $ticket->getStatus()=='open') {
-		$ticket->setStatus('closed');
+	if ($row['completed_date'] && $Case->getStatus()=='open') {
+		$Case->setStatus('closed');
 	}
 
 	// Import the Person
 	if (isset($row['received_by']) && $row['received_by']) {
 		try {
-			$ticket->setEnteredByPerson($row['received_by']);
+			$Case->setEnteredByPerson($row['received_by']);
 		}
 		catch (Exception $e) {
 		}
@@ -84,31 +84,31 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 		echo $query.' ==> ';
 		if (count($data)) {
-			$ticket->setAddressServiceData($data);
+			$Case->setAddressServiceData($data);
 		}
 		else {
 			if (is_numeric($row['street_num'])) {
 				$location = "$row[street_num] $row[street_dir] $row[street_name] $row[street_type] $row[sud_type] $row[sud_num]";
 				$location = preg_replace('/\s+/',' ',$location);
-				$ticket->setLocation($location);
+				$Case->setLocation($location);
 			}
 			else {
-				$ticket->setLocation($row['street_num']);
+				$Case->setLocation($row['street_num']);
 			}
 		}
 	}
 	else {
 		$location = "$row[street_dir] $row[street_name] $row[street_type] $row[sud_type] $row[sud_num]";
 		$location = preg_replace('/\s+/',' ',$location);
-		$ticket->setLocation($location);
+		$Case->setLocation($location);
 	}
-	echo $ticket->getLocation()."\n";
+	echo $Case->getLocation()."\n";
 
-	// Create the issue on this ticket
+	// Create the issue on this Case
 	$issue = new Issue();
-	$issue->setDate($ticket->getEnteredDate());
-	if ($ticket->getEnteredByPerson()) {
-		$issue->setEnteredByPerson($ticket->getEnteredByPerson());
+	$issue->setDate($Case->getEnteredDate());
+	if ($Case->getEnteredByPerson()) {
+		$issue->setEnteredByPerson($Case->getEnteredByPerson());
 	}
 	if ($row['comments']) {
 		$issue->setNotes($row['comments']);
@@ -139,29 +139,29 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$personList->next();
 		$issue->setReportedByPerson($personList->current());
 	}
-	$ticket->updateIssues($issue);
+	$Case->updateIssues($issue);
 
 	/**
-	 * Create the Ticket History
+	 * Create the Case History
 	 *
-	 * We're going to run through the workflow of a ticket.
+	 * We're going to run through the workflow of a Case.
 	 * To help us out, we'll want to keep track of the last person who worked
-	 * on the ticket at each step of the workflow
+	 * on the Case at each step of the workflow
 	 */
 	$lastPerson = null;
-	if ($ticket->getEnteredByPerson()) {
-		$lastPerson = $ticket->getEnteredByPerson();
+	if ($Case->getEnteredByPerson()) {
+		$lastPerson = $Case->getEnteredByPerson();
 	}
 
 	$history = new History();
 	$history->setAction('open');
-	$history->setEnteredDate($ticket->getEnteredDate());
-	$history->setActionDate($ticket->getEnteredDate());
+	$history->setEnteredDate($Case->getEnteredDate());
+	$history->setActionDate($Case->getEnteredDate());
 	if ($lastPerson) {
 		$history->setEnteredByPerson($lastPerson);
 		$history->setActionPerson($lastPerson);
 	}
-	$ticket->updateHistory($history);
+	$Case->updateHistory($history);
 
 	if ($row['assigned_to']) {
 		$history = new History();
@@ -178,8 +178,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$history->setActionPerson($person);
 		}
 		catch (Exception $e) {
-			if ($ticket->getEnteredByPerson()) {
-				$history->setActionPerson($ticket->getEnteredByPerson());
+			if ($Case->getEnteredByPerson()) {
+				$history->setActionPerson($Case->getEnteredByPerson());
 			}
 		}
 		// Assignments really do need a person
@@ -187,7 +187,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		if ($history->getActionPerson()) {
 			$lastPerson = $history->getActionPerson();
 			try {
-				$ticket->updateHistory($history);
+				$Case->updateHistory($history);
 			}
 			catch  (Exception $e) {
 				// Any problems with the action, and we won't save it
@@ -262,7 +262,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$lastPerson = $history->getActionPerson();
 		}
 		try {
-			$ticket->updateHistory($history);
+			$Case->updateHistory($history);
 		}
 		catch (Exception $e) {
 			// Any problems when creating the inspection, and we'll just not bother
@@ -286,13 +286,13 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				}
 				catch (Exception $e) {
 					echo "Could not set a person for the followup\n";
-					print_r($ticket);
+					print_r($Case);
 					print_r($lastPerson);
 					exit();
 				}
 			}
 			try {
-				$ticket->updateHistory($history);
+				$Case->updateHistory($history);
 			}
 			catch (Exception $e) {
 				// Anything that doesn't save, we're just going to ignore
@@ -313,12 +313,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				$history->setEnteredByPerson($lastPerson);
 				$history->setActionPerson($lastPerson);
 			}
-			$ticket->updateHistory($history);
+			$Case->updateHistory($history);
 		}
 	}
 	
 	try {
-		$ticket->save();
+		$Case->save();
 	}
 	catch (Exception $e) {
 		echo $e->getMessage()."\n";

@@ -6,17 +6,17 @@
  * @param $_GET location
  */
 // Make sure we have the location in the system
-$ticketList = new TicketList(array('location'=>$_GET['location']));
+$caseList = new caseList(array('location'=>$_GET['location']));
 
 $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',array('location'=>$_GET['location'])
 );
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/ticketList.inc',
+$template->blocks['case-panel'][] = new Block(
+	'cases/caseList.inc',
 	array(
-		'ticketList'=>$ticketList,
-		'title'=>'Tickets Associated with this Location'
+		'caseList'=>$caseList,
+		'title'=>'cases Associated with this Location'
 	)
 );
 

@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Ticket extends MongoRecord
+class case extends MongoRecord
 {
 	/**
 	 * Populates the object with data
@@ -26,14 +26,14 @@ class Ticket extends MongoRecord
 			}
 			else {
 				$mongo = Database::getConnection();
-				$result = $mongo->tickets->findOne(array('_id'=>new MongoId($id)));
+				$result = $mongo->cases->findOne(array('_id'=>new MongoId($id)));
 			}
 
 			if ($result) {
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('tickets/unknownTicket');
+				throw new Exception('cases/unknowncase');
 			}
 		}
 		else {
@@ -60,7 +60,7 @@ class Ticket extends MongoRecord
 		}
 
 		#if (!$this->enteredByPerson_id) {
-		#	throw new Exception('tickets/missingEnteredByPerson');
+		#	throw new Exception('cases/missingEnteredByPerson');
 		#}
 	}
 
@@ -71,7 +71,7 @@ class Ticket extends MongoRecord
 	{
 		$this->validate();
 		$mongo = Database::getConnection();
-		$mongo->tickets->save($this->data,array('safe'=>true));
+		$mongo->cases->save($this->data,array('safe'=>true));
 	}
 
 	//----------------------------------------------------------------
@@ -295,7 +295,7 @@ class Ticket extends MongoRecord
 				$this->setPersonData('enteredByPerson',$person);
 			}
 			else {
-				throw new Exception('tickets/personRequiresUsername');
+				throw new Exception('cases/personRequiresUsername');
 			}
 		}
 	}
@@ -321,7 +321,7 @@ class Ticket extends MongoRecord
 				$this->setPersonData('assignedPerson',$person);
 			}
 			else {
-				throw new Exception('tickets/personRequiresUsername');
+				throw new Exception('cases/personRequiresUsername');
 			}
 		}
 	}
@@ -433,7 +433,7 @@ class Ticket extends MongoRecord
 	 */
 	public function getURL()
 	{
-		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
+		return BASE_URL."/cases/viewcase.php?case_id={$this->getId()}";
 	}
 
 
@@ -491,19 +491,19 @@ class Ticket extends MongoRecord
 		}
 	}
 	/**
-	 * Transfers all data from a ticket, then deletes the ticket
+	 * Transfers all data from a case, then deletes the case
 	 *
-	 * This ticket will end up containing all information from both tickets
+	 * This case will end up containing all information from both cases
 	 *
-	 * @param Ticket $ticket
+	 * @param case $case
 	 */
-	public function mergeFrom(Ticket $ticket)
+	public function mergeFrom(case $case)
 	{
 
 	}
 
 	/**
-	 * Returns the array of distinct values used for Tickets in the system
+	 * Returns the array of distinct values used for cases in the system
 	 *
 	 * @param string $fieldname
 	 * @return array
@@ -511,7 +511,7 @@ class Ticket extends MongoRecord
 	public static function getDistinct($fieldname)
 	{
 		$mongo = Database::getConnection();
-		$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+		$result = $mongo->command(array('distinct'=>'cases','key'=>$fieldname));
 		return $result['values'];
 	}
 

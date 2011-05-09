@@ -31,19 +31,19 @@ $results = $result->fetchAll(PDO::FETCH_ASSOC);
 foreach($results as $row){
   //
   // Import the Dates
-  $ticket = new Ticket();
+  $case = new case();
   if ($row['date']) {
-	$ticket->setEnteredDate($row['date']);
+	$case->setEnteredDate($row['date']);
   }
   // Import the Person
   if (isset($row['username']) && $row['username']) {
 	try {
-	  $ticket->setEnteredByPerson($row['username']);
+	  $case->setEnteredByPerson($row['username']);
 	  if(isset($row['referralId']) && $row['referralId']){
-		$ticket->setReferredPerson($row['referredId']);
+		$case->setReferredPerson($row['referredId']);
 	  }
 	  else {
-		$ticket->setAssignedPerson($row['username']);
+		$case->setAssignedPerson($row['username']);
 	  }
 	}
 	catch (Exception $e) {
@@ -53,25 +53,25 @@ foreach($results as $row){
   switch ($row['status']) {
   case 'Requested':
   case 'Referred':			  
-	$ticket->setStatus('open');
+	$case->setStatus('open');
 	break;
   default:
-	$ticket->setStatus('closed');
-	$ticket->setResolution('Resolved');
+	$case->setStatus('closed');
+	$case->setResolution('Resolved');
   }
   // if the request has resolution record ==> it is closed
   if(isset($row['resolutionId']) && $row['resolutionId']){
-	$ticket->setStatus('closed');
-	$ticket->setResolution('Resolved');
+	$case->setStatus('closed');
+	$case->setResolution('Resolved');
   }
   // No address or location info
- //  $ticket->save();
+ //  $case->save();
 
-  // Create the issue on this ticket
+  // Create the issue on this case
   $issue = new Issue();
-  $issue->setDate($ticket->getEnteredDate());
-  if ($ticket->getEnteredByPerson()) {
-	$issue->setEnteredByPerson($ticket->getEnteredByPerson());
+  $issue->setDate($case->getEnteredDate());
+  if ($case->getEnteredByPerson()) {
+	$issue->setEnteredByPerson($case->getEnteredByPerson());
   }
   $issue->setNotes($row['notes']);
   if($row['contactMethod']){
@@ -113,26 +113,26 @@ foreach($results as $row){
 	$personList->next();
 	$issue->setReportedByPerson($personList->current());
   }
-  $ticket->updateIssues($issue);	
+  $case->updateIssues($issue);	
   /**
-   * Create the Ticket History
+   * Create the case History
    *
-   * We're going to run through the workflow of a ticket.
+   * We're going to run through the workflow of a case.
    * To help us out, we'll want to keep track of the last person who worked
-   * on the ticket at each step of the workflow
+   * on the case at each step of the workflow
    */
   $lastPerson = null;
-  if ($ticket->getEnteredByPerson()) {
-	$lastPerson = $ticket->getEnteredByPerson();
+  if ($case->getEnteredByPerson()) {
+	$lastPerson = $case->getEnteredByPerson();
   }
   $history = new History();
   $history->setAction('open');
-  $history->setEnteredDate($ticket->getEnteredDate());
-  $history->setActionDate($ticket->getEnteredDate());
+  $history->setEnteredDate($case->getEnteredDate());
+  $history->setActionDate($case->getEnteredDate());
   if ($lastPerson) {
 	$history->setEnteredByPerson($lastPerson);
   }
-  $ticket->updateHistory($history);
+  $case->updateHistory($history);
   //
   // looking for resolutions,responses related to this request
   // these will be considered as actions
@@ -174,7 +174,7 @@ foreach($results as $row){
 	  $person->save();
 	  $history->setActionPerson($person);		
 	}
-	$ticket->updateHistory($history);
+	$case->updateHistory($history);
   }
   //
   // start with resolutions
@@ -192,7 +192,7 @@ foreach($results as $row){
 	$history->setNotes($row2['notes']);
 	$history->setEnteredByPerson($row2['username']);		
 	$history->setActionPerson($row2['username']);
-	$ticket->updateHistory($history);
+	$case->updateHistory($history);
   }
   //
   // responses go in issueHistory
@@ -233,11 +233,11 @@ foreach($results as $row){
 	  }
 	}
 	*/
-  	$ticket->updateHistory($history);
+  	$case->updateHistory($history);
 	// print_r($history);
   }
   try {
-  	$ticket->save();
+  	$case->save();
   }
   catch (Exception $e) {
   	echo $e->getMessage()."\n";

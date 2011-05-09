@@ -1,12 +1,12 @@
 <?php
 /**
- * A collection class for Ticket objects
+ * A collection class for case objects
  *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class TicketList extends MongoResultIterator
+class caseList extends MongoResultIterator
 {
 	/**
 	 * @param array $fields
@@ -39,10 +39,10 @@ class TicketList extends MongoResultIterator
 			}
 		}
 		if (count($search)) {
-			$this->cursor = $this->mongo->tickets->find($search);
+			$this->cursor = $this->mongo->cases->find($search);
 		}
 		else {
-			$this->cursor = $this->mongo->tickets->find();
+			$this->cursor = $this->mongo->cases->find();
 		}
 		if ($order) {
 			$this->cursor->sort($order);
@@ -50,21 +50,21 @@ class TicketList extends MongoResultIterator
 	}
 
 	/**
-	 * Hydrates all the Ticket objects from a database result set
+	 * Hydrates all the case objects from a database result set
 	 *
 	 * @param array $data A single data record returned from Mongo
-	 * @return Ticket
+	 * @return case
 	 */
 	public function loadResult($data)
 	{
-		return new Ticket($data);
+		return new case($data);
 	}
 
 	/**
 	 * Returns fields that can be displayed in a single line
 	 *
-	 * When displaying TicketLists, it is useful to try to display each ticket on a single line
-	 * These are the fields that are possible to be joined into a single line for any single ticket
+	 * When displaying caseLists, it is useful to try to display each case on a single line
+	 * These are the fields that are possible to be joined into a single line for any single case
 	 *
 	 * @return array(fieldname=>human_readable_label)
 	 */
@@ -72,9 +72,9 @@ class TicketList extends MongoResultIterator
 	{
 		// All possible columns to display
 		return array(
-			'id'=>'Ticket #',
-			'enteredDate'=>'Ticket Date',
-			'enteredByPerson'=>'Ticket Entered By',
+			'id'=>'case #',
+			'enteredDate'=>'case Date',
+			'enteredByPerson'=>'case Entered By',
 			'assignedPerson'=>'Assigned To',
 			'referredPerson'=>'Referred To',
 			'status'=>'Status',

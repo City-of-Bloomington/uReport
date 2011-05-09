@@ -57,7 +57,7 @@ class Location
 			}");
 
 			$q = $mongo->command(array(
-				'mapreduce'=>'tickets',
+				'mapreduce'=>'cases',
 				'map'=>$map,
 				'reduce'=>$reduce,
 				'query'=>array('location'=>new MongoRegex("/$crm_query/i")),
@@ -66,7 +66,7 @@ class Location
 			
 			foreach ($q['results'] as $location) {
 				$results[$location['_id']] = array(
-					'ticketCount'=>$location['value']['count'],
+					'caseCount'=>$location['value']['count'],
 					'address_id'=>$location['value']['address_id'],
 					'source'=>'mongo'
 				);

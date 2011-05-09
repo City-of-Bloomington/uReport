@@ -466,11 +466,11 @@ class Person extends MongoRecord
 	}
 
 	/**
-	 * @return TicketList
+	 * @return CaseList
 	 */
-	public function getReportedTickets() {
+	public function getReportedCases() {
 		if ($this->getId()) {
-			#return new TicketList(array('reportedByPerson_id'=>$this->getId()));
+			#return new CaseList(array('reportedByPerson_id'=>$this->getId()));
 		}
 	}
 
