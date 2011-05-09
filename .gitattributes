@@ -4,6 +4,10 @@ blocks/html/cases/assignTicketForm.inc -text
 blocks/html/cases/referTicketForm.inc -text
 blocks/html/errorMessages/mergerNotAllowed.inc -text
 blocks/html/people/mergeForm.inc -text
+html/cases/addTicket.php -text
+html/cases/assignTicket.php -text
+html/cases/recordAction.php -text
+html/cases/referTicket.php -text
 html/departments/updateMyDepartment.php -text
 html/media/media -text
 html/people/mergePeople.php -text
@@ -29,10 +33,6 @@ html/skins/local/images/icons/mime/video.png -text
 html/skins/local/images/icons/mime/windowsMedia.png -text
 html/skins/local/images/icons/mime/xls.png -text
 html/skins/local/images/icons/mime/zip.png -text
-html/tickets/addTicket.php -text
-html/tickets/assignTicket.php -text
-html/tickets/recordAction.php -text
-html/tickets/referTicket.php -text
 scripts/migration/calltrack/1_users.php -text
 scripts/migration/calltrack/2_constituents.php -text
 scripts/migration/calltrack/3_cases.php -text
