@@ -4,7 +4,7 @@ blocks/html/cases/assignCaseForm.inc -text
 blocks/html/cases/referCaseForm.inc -text
 blocks/html/errorMessages/mergerNotAllowed.inc -text
 blocks/html/people/mergeForm.inc -text
-html/cases/addTicket.php -text
+html/cases/addCase.php -text
 html/cases/assignCase.php -text
 html/cases/recordAction.php -text
 html/cases/referCase.php -text
