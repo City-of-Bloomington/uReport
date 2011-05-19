@@ -22,4 +22,4 @@ else {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 }
 
-header('Location: '.$issue->getCase()->getURL());
+header('Location: '.$issue->getTicket()->getURL());

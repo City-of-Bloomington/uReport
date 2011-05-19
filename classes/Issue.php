@@ -2,7 +2,7 @@
 /**
  * A class for working with Issues
  *
- * Issues are only stored inside cases.
+ * Issues are only stored inside Tickets.
  * They do not have their own collection in Mongo
  *
  * @copyright 2011 City of Bloomington, Indiana

@@ -18,8 +18,8 @@
 			<div id="location-panel">
 				<?php echo $this->includeBlocks('location-panel'); ?>
 			</div>
-			<div id="case-panel">
-				<?php echo $this->includeBlocks('case-panel'); ?>
+			<div id="ticket-panel">
+				<?php echo $this->includeBlocks('ticket-panel'); ?>
 			</div>
 		</div>
 	</div>

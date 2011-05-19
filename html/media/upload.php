@@ -33,5 +33,5 @@ else {
 }
 
 
-$return_url = isset($_POST['return_url']) ? $_POST['return_url'] : $issue->getCase()->getURL();
+$return_url = isset($_POST['return_url']) ? $_POST['return_url'] : $issue->getTicket()->getURL();
 header('Location: '.$return_url);

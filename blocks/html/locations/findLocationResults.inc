@@ -11,7 +11,7 @@ echo "
 <table>
 	<thead>
 		<tr><th>Location</th>
-			<th>Cases</th>
+			<th>Tickets</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -25,7 +25,7 @@ echo "
 
 		$location = View::escape($location);
 		$class = $data['address_id'] ? 'class="verified"' : '';
-		$count = isset($data['caseCount']) ? $data['caseCount'] : '';
+		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
 		echo "
 		<tr $class>
 			<td><a href=\"$url\">$location</a></td>

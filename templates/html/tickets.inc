@@ -16,15 +16,23 @@
 		<div id="content-panel">
 			<?php include FRAMEWORK.'/errorMessages.php'; ?>
 
-			<div id="person-panel">
-				<?php echo $this->includeBlocks('person-panel'); ?>
-			</div>
 			<div id="ticket-panel">
 				<?php echo $this->includeBlocks('ticket-panel'); ?>
 			</div>
+			<div id="action-panel">
+				<?php echo $this->includeBlocks('history-panel'); ?>
+			</div>
+			<div id="issue-panel">
+				<?php echo $this->includeBlocks('issue-panel'); ?>
+			</div>
+			<div id="location-panel">
+				<?php echo $this->includeBlocks('location-panel'); ?>
+			</div>
 		</div>
 	</div>
-	<?php include $dir.'/partials/footer.inc'; ?>
+	<?php
+		include $dir.'/partials/footer.inc';
+	?>
 </body>
 </html>
 <?php

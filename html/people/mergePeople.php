@@ -21,7 +21,7 @@ catch (Exception $e) {
 	header('Location: '.BASE_URL);
 	exit();
 }
-// When the user chooses a target, merge the other case into the target
+// When the user chooses a target, merge the other ticket into the target
 if (isset($_POST['targetPerson'])) {
 	try {
 		if ($_POST['targetPerson']=='a') {
@@ -52,13 +52,13 @@ $template->blocks['merge-panel-one'][] = new Block(
 	array('person'=>$personA,'disableButtons'=>true)
 );
 
-$reportedCases = $personA->getReportedCases();
-if (count($reportedCases)) {
+$reportedTickets = $personA->getReportedTickets();
+if (count($reportedTickets)) {
 	$template->blocks['merge-panel-one'][] = new Block(
-		'cases/searchResults.inc',
+		'tickets/searchResults.inc',
 		array(
-			'caseList'=>$personA->getReportedCases(),
-			'title'=>'Cases With Issues Reported By '.$personA->getFullname(),
+			'ticketList'=>$personA->getReportedTickets(),
+			'title'=>'Tickets With Issues Reported By '.$personA->getFullname(),
 			'disableButtons'=>true,
 			'disableComments'=>true
 		)
@@ -70,13 +70,13 @@ $template->blocks['merge-panel-two'][] = new Block(
 	'people/personInfo.inc',
 	array('person'=>$personB,'disableButtons'=>true)
 );
-$reportedCases = $personB->getReportedCases();
-if (count($reportedCases)) {
+$reportedTickets = $personB->getReportedTickets();
+if (count($reportedTickets)) {
 	$template->blocks['merge-panel-two'][] = new Block(
-		'cases/searchResults.inc',
+		'tickets/searchResults.inc',
 		array(
-			'caseList'=>$personB->getReportedCases(),
-			'title'=>'Cases With Issues Reported By '.$personB->getFullname(),
+			'ticketList'=>$personB->getReportedTickets(),
+			'title'=>'Tickets With Issues Reported By '.$personB->getFullname(),
 			'disableButtons'=>true,
 			'disableComments'=>true
 		)

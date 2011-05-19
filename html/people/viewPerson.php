@@ -22,13 +22,13 @@ $template = new Template('people');
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
 
-$reportedCases = $person->getReportedCases();
-if (count($reportedCases)) {
-	$template->blocks['case-panel'][] = new Block(
-		'cases/caseList.inc',
+$reportedTickets = $person->getReportedTickets();
+if (count($reportedTickets)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
 		array(
-			'caseList'=>$person->getReportedCases(),
-			'title'=>'Cases With Issues Reported By '.$person->getFullname()
+			'ticketList'=>$person->getReportedTickets(),
+			'title'=>'Tickets With Issues Reported By '.$person->getFullname()
 		)
 	);
 }
