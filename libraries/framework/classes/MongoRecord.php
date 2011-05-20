@@ -51,9 +51,10 @@ abstract class MongoRecord
 				'_id'=>$person->getId(),
 			);
 			$fields = array(
-				'firstname','middlename','lastname','fullname',
-				'username','department','organization',
-				'email','phone','address','city','state','zip'
+				'fullname'
+				#'firstname','middlename','lastname',
+				#'username','department','organization',
+				#'email','phone','address','city','state','zip'
 			);
 			foreach ($fields as $field) {
 				$get = 'get'.ucfirst($field);
