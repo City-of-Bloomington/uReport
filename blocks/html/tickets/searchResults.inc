@@ -20,8 +20,7 @@
 // Default fields to be used
 if (!$this->fields) {
 	$this->fields = array(
-		'id'=>1,'status'=>1,
-		'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
+		'status'=>1,'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
 	);
 }
 $title = $this->title ? View::escape($this->title) : 'Cases';

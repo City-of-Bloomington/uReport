@@ -13,7 +13,7 @@
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h1>
 	<table>
 		<thead>
-			<tr><th>ID</th>
+			<tr>
 				<th>Status</th>
 				<th>Location</th>
 				<th>Entered Date</th>
@@ -33,11 +33,11 @@
 				$location = View::escape($ticket->getLocation());
 				$enteredBy = View::escape($ticket->getData('enteredByPerson.fullname'));
 				echo "
-				<tr><td><a href=\"{$ticket->getURL()}\">{$ticket->getId()}</a></td>
-					<td>$status</td>
-					<td>$location</td>
-					<td>{$ticket->getEnteredDate(DATE_FORMAT)}</td>
-					<td>$enteredBy</td>
+				<tr>
+					<td><a href=\"{$ticket->getURL()}\">$status</a></td>
+					<td><a href=\"{$ticket->getURL()}\">$location</a></td>
+					<td><a href=\"{$ticket->getURL()}\">{$ticket->getEnteredDate(DATE_FORMAT)}</a></td>
+					<td><a href=\"{$ticket->getURL()}\">$enteredBy</a></td>
 					<td>
 				";
 					$categories = $ticket->getCategories();

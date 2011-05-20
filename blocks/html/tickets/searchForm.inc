@@ -92,7 +92,7 @@
 						</select>
 					</td>
 				</tr>
-		
+
 				<?php
 					foreach (AddressService::$customFieldDescriptions as $key=>$config) {
 						echo "
@@ -101,7 +101,7 @@
 						";
 							switch ($config['formElement']) {
 								case 'select':
-									echo "<select multiple=\"$key\" id=\"$key\"><option></option>";
+									echo "<select name=\"$key\" id=\"$key\"><option></option>";
 									foreach (Ticket::getDistinct($key) as $value) {
 										$selected = (isset($_GET[$key]) && $_GET[$key]==$value)
 											? 'selected="selected"'
@@ -122,7 +122,7 @@
 					}
 				?>
 				<tr><td><label for="type">Type</label></td></tr>
-				<tr><td><select multiple="type" id="type">
+				<tr><td><select name="type" id="type">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('issues.type') as $type) {
@@ -137,7 +137,7 @@
 					</td>
 				</tr>
 				<tr><td><label for="category">Category</label></td></tr>
-				<tr><td><select multiple="category" id="category">
+				<tr><td><select name="category" id="category">
 							<option></option>
 							<?php
 								$list = new CategoryList();
@@ -154,7 +154,7 @@
 					</td>
 				</tr>
 				<tr><td><label for="status">Status</label></td></tr>
-				<tr><td><select multiple="status" id="status">
+				<tr><td><select name="status" id="status">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('status') as $status) {
