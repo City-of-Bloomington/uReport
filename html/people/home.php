@@ -18,6 +18,23 @@ if (!userIsAllowed('People')) {
 	exit();
 }
 
+// Look for anything that the user searched for
+$search = array();
+$fields = array('firstname','lastname','email');
+foreach ($fields as $field) {
+	if (isset($_GET[$field]) && $_GET[$field]) {
+		$value = trim($_GET[$field]);
+		if ($value) {
+			$search[$field] = $value;
+		}
+	}
+}
+$personQuery = isset($_GET['personQuery']) ? trim($_GET['personQuery']) : '';
+if ($personQuery) {
+	$search = array('query'=>$personQuery);
+}
+
+// Display the search form and any results
 $template = new Template();
 $searchForm = new Block('people/searchForm.inc');
 if (isset($_GET['return_url'])) {
@@ -25,16 +42,13 @@ if (isset($_GET['return_url'])) {
 }
 $template->blocks[] = $searchForm;
 
-$personQuery = isset($_GET['personQuery']) ? trim($_GET['personQuery']) : '';
-if ($personQuery) {
+if (count($search)) {
 	$personList = new PersonList();
-	$personList->search(array('query'=>$personQuery));
-
+	$personList->search($search);
 	$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
 	if (isset($_GET['return_url'])) {
 		$searchResults->return_url = $_GET['return_url'];
 	}
 	$template->blocks[] = $searchResults;
 }
-
 echo $template->render();

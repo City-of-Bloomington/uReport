@@ -11,7 +11,20 @@ $personQuery = isset($_GET['personQuery']) ? View::escape($_GET['personQuery']) 
 	<h1>Find Someone</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
-			<input name="personQuery" value="<?php echo $personQuery; ?>" />
+			<table>
+			<?php
+				$fields = array('firstname','lastname','email');
+				foreach ($fields as $field) {
+					$label = ucfirst($field);
+					$value = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
+					echo "
+					<tr><td><label for=\"$field\">$label</label></td>
+						<td><input name=\"$field\" id=\"$field\" value=\"$value\" /></td>
+					</tr>
+					";
+				}
+			?>
+			</table>
 			<?php
 				echo $this->template->formButton(
 					'Search','submit','search'

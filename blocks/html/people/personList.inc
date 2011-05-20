@@ -13,7 +13,7 @@
 	</h1>
 	<table>
 		<thead>
-			<tr><th>ID</th>
+			<tr>
 				<th>Username</th>
 				<th>Name</th>
 				<th>Email</th>
@@ -37,11 +37,11 @@
 				$name = View::escape($person->getFullname());
 				$organization = View::escape($person->getOrganization());
 				echo "
-				<tr><td>{$person->getId()}</td>
-					<td>{$person->getUsername()}</td>
+				<tr>
+					<td><a href=\"$url\">{$person->getUsername()}</a></td>
 					<td><a href=\"$url\">$name</a></td>
-					<td>{$person->getEmail()}</td>
-					<td>$organization</td>
+					<td><a href=\"$url\">{$person->getEmail()}</a></td>
+					<td><a href=\"$url\">$organization</a></td>
 				</tr>
 				";
 			}
