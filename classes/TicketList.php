@@ -25,7 +25,7 @@ class TicketList extends MongoResultIterator
 	 * @param array $fields
 	 * @param array $order
 	 */
-	public function find($fields=null,$order=null)
+	public function find($fields=null,$order=array('enteredDate'=>-1))
 	{
 		$search = array();
 		if (count($fields)) {
