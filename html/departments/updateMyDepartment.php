@@ -4,9 +4,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>, W Sibo <sibow@bloomington.in.gov>
  */
-$department = $_SESSION['USER']->getDepartment();
 $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
-if(!isset($department)){
+
+if (!isset($_SESSION['USER'])) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.$return_url);
+	exit();
+}
+
+$department = $_SESSION['USER']->getDepartment();
+if ($department) {
+	$department = new Department($department['_id']);
+}
+else {
 	$_SESSION['errorMessages'][] = new Exception('departments/unknownDepartment');
 	header('Location: '.$return_url);
 	exit();
