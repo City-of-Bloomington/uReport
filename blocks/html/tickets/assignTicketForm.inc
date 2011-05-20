@@ -8,7 +8,7 @@
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Assign Ticket</legend>
+		<fieldset><legend>Assign Case</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';

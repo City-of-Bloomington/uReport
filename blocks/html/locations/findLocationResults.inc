@@ -11,7 +11,7 @@ echo "
 <table>
 	<thead>
 		<tr><th>Location</th>
-			<th>Tickets</th>
+			<th>Cases</th>
 		</tr>
 	</thead>
 	<tbody>

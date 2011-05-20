@@ -8,7 +8,7 @@
 ?>
 <div class="closeTicketForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/closeTicket.php">
-		<fieldset><legend>Close This Ticket</legend>
+		<fieldset><legend>Close This Case/legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
 				<tr><td><label for="resolution">Resolution</label></td>

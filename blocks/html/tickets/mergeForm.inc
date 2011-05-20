@@ -13,10 +13,10 @@
 			<div class="target_a">
 				<input name="targetTicket" id="targetTicket_a" type="radio" value="a" checked="checked" />
 				<input name="ticket_id_a" type="hidden" value="<?php echo $this->ticketA->getId(); ?>" />
-				<label for="targetTicket_a">Merge Into Ticket #<?php echo $this->ticketA->getId(); ?></label>
+				<label for="targetTicket_a">Merge Into Case #<?php echo $this->ticketA->getId(); ?></label>
 			</div>
 			<div class="target_b">
-				<label for="targetTicket_b">Merge Into Ticket #<?php echo $this->ticketB->getId(); ?></label>
+				<label for="targetTicket_b">Merge Into Case #<?php echo $this->ticketB->getId(); ?></label>
 				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
 				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
 			</div>

@@ -8,10 +8,10 @@
  */
 ?>
 <div class="addTicketForm">
-	<h1>New Ticket</h1>
+	<h1>New Case</h1>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
 		<fieldset class="ticketFields">
-			<legend>Ticket Info</legend>
+			<legend>Case Info</legend>
 			<table>
 				<tr><td><label for="ticket-location">location</label></td>
 					<td><input name="ticket[location]" id="ticket-location"

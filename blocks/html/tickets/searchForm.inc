@@ -15,11 +15,11 @@
 			echo "
 			<h1>Quick Search</h1>
 			<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
-						All open tickets
+						All open cases
 					</a>
 				</li>
 				<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
-						All tickets assigned to me
+						All cases assigned to me
 					</a>
 				</li>
 			";
@@ -27,7 +27,7 @@
 				$dept = $_SESSION['USER']->getDepartment();
 				echo "
 				<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
-						All tickets for my department
+						All cases for my department
 					</a>
 				</li>
 				";

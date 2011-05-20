@@ -24,7 +24,7 @@ if (!$this->fields) {
 		'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
 	);
 }
-$title = $this->title ? View::escape($this->title) : 'Tickets';
+$title = $this->title ? View::escape($this->title) : 'Cases';
 echo "
 <div class=\"searchResults\">
 	<h1>$title</h1>
@@ -78,7 +78,7 @@ echo "
 		";
 	}
 	else {
-		echo "<h2>No tickets found</h2>";
+		echo "<h2>No cases found</h2>";
 	}
 echo "
 </div>

@@ -10,7 +10,7 @@
  */
 ?>
 <div class="ticketList">
-	<h1><?php echo $this->title ? View::escape($this->title) : 'Tickets'; ?></h1>
+	<h1><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h1>
 	<table>
 		<thead>
 			<tr><th>ID</th>
@@ -63,7 +63,7 @@
 							}
 						}
 						echo $this->template->linkButton(
-							'Add Issue to ticket',$url,'add',null,null,'button'
+							'Add Issue to case',$url,'add',null,null,'button'
 						);
 						echo '</td>';
 					}
@@ -79,8 +79,8 @@
 		if (!$this->disableButtons && count($this->ticketList)>1) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
-				<fieldset><legend>Merge Two Tickets</legend>
-					<p>Add two ticket IDs to compare tickets and move data between them.</p>
+				<fieldset><legend>Merge Two Cases/legend>
+					<p>Add two ticket IDs to compare cases and move data between them.</p>
 					<div>
 						<input name=\"ticket_id_a\" id=\"ticket_id_a\" />
 						<input name=\"ticket_id_b\" id=\"ticket_id_b\" />
