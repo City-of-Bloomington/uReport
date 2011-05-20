@@ -27,6 +27,9 @@ $fields = array(
 	'action'=>'history.action',
 	'actionPerson'=>'history.actionPerson._id'
 );
+foreach (AddressService::$customFieldDescriptions as $key=>$description) {
+	$fields[$key] = $key;
+}
 if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	$search = array();
 	foreach ($fields as $field=>$key) {
