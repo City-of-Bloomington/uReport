@@ -35,7 +35,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 			'edit'
 		);
 
-		$return_url = new URL(BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId());
+		$return_url = $this->ticket->getURL();
 		$referralButton = $this->template->linkButton(
 			'Refer',
 			BASE_URL."/people?return_url=$return_url",
