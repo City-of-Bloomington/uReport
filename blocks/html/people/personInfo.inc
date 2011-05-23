@@ -48,3 +48,11 @@ echo "
 	<div>$city $state $zip</div>
 </div>
 ";
+
+if (userIsAllowed('Tickets')) {
+	echo "<div>";
+	echo $this->linkButton(
+			'Add New Case',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),'add',null,null,'button'
+	);
+	echo "</div>";
+}

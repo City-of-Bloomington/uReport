@@ -19,7 +19,7 @@ if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 }
 if (isset($_REQUEST['person_id'])) {
-	$issue->setReportedByPerson($_REQUEST['person_id']);
+	$issue->setReportedByPerson(new Person($_REQUEST['person_id']));
 }
 
 if(isset($_POST['ticket'])){
