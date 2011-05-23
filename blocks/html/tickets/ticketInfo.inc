@@ -55,11 +55,7 @@ echo "
 	<h1>Ticket</h1>
 	<div>$location $changeLocationButton</div>
 	<table>
-		<tr><th>Date Opened</th>
-			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
-			<td></td>
-		</tr>
-		<tr><th>Status</th>
+		<tr><th>Status:</th>
 			<td>$status</td>
 			<td>$editStatusButton</td>
 		</tr>
@@ -71,8 +67,12 @@ echo "
 			<td>$referred</td>
 			<td>$referralButton</td>
 		</tr>
-		<tr><th>Received By</th>
+		<tr><th>Created By:</th>
 			<td>$enteredBy</td>
+		</tr>
+		<tr><th>Date Opened:</th>
+			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
+			<td></td>
 		</tr>
 	</table>
 </div>
