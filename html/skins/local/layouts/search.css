@@ -1,6 +1,6 @@
 /*Search panel with two vertical columns*/
 #search-form {width:39%; float:left; padding:0 1em; }
-#search-results {width:59%; margin-left:40%; padding:0 1em; }
+#search-results { margin-left:40%; padding:0 1em; }
 #search-form .search-checkboxes {-webkit-column-count:2; -webkit-column-gap:.5em;
 								-moz-column-count:2; -moz-column-gap:.5em;
 								}
