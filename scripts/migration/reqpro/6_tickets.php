@@ -129,15 +129,17 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$issue->setCategory($row['comp_desc']);
 	}
 
-	$personList = new PersonList(array(
-		'firstname'=>$row['first_name'],
-		'middlename'=>$row['middle_initial'],
-		'lastname'=>$row['last_name'],
-		'email'=>$row['e_mail_address']
-	));
-	if (count($personList)) {
-		$personList->next();
-		$issue->setReportedByPerson($personList->current());
+	if ($row['first_name'] || $row['middle_initial'] || $row['last_name'] || $row['e_mail_address']) {
+		$personList = new PersonList(array(
+			'firstname'=>$row['first_name'],
+			'middlename'=>$row['middle_initial'],
+			'lastname'=>$row['last_name'],
+			'email'=>$row['e_mail_address']
+		));
+		if (count($personList)) {
+			$personList->next();
+			$issue->setReportedByPerson($personList->current());
+		}
 	}
 	$ticket->updateIssues($issue);
 
@@ -316,7 +318,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			$ticket->updateHistory($history);
 		}
 	}
-	
+
 	try {
 		$ticket->save();
 	}
