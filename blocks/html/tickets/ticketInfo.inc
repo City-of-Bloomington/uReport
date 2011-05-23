@@ -7,9 +7,27 @@
  * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
+$location = $location ? "<a href=\"".BASE_URL."/locations?location=$location\">$location</a>" : '';
+
+$url = new URL(BASE_URL.'/people/viewPerson.php');
+
 $assigned = View::escape($this->ticket->getPersonData('assignedPerson','fullname'));
+if ($assigned) {
+	$url->person_id = "{$this->ticket->getPersonData('assignedPerson','_id')}";
+	$assigned = "<a href=\"$url\">$assigned</a>";
+}
+
 $enteredBy = View::escape($this->ticket->getPersonData('enteredByPerson','fullname'));
+if ($enteredBy) {
+	$url->person_id = (string)$this->ticket->getPersonData('assignedPerson','_id');
+	$enteredBy = "<a href=\"$url\">$enteredBy</a>";
+}
+
 $referred = View::escape($this->ticket->getPersonData('referredPerson','fullname'));
+if ($referred) {
+	$url->person_id = (string)$this->ticket->getPersonData('referredPerson','_id');
+	$referred = "<a href=\"$url\">$referred</a>";
+}
 
 $status = $this->ticket->getStatus();
 if ($this->ticket->getResolution()) {
