@@ -60,17 +60,27 @@ tbody th { text-align:right; }
 .locationInfo > div { margin:.5em 0; }
 #location-panel .findLocationForm	{ width:290px; float:left; }
 .findPeople { width:290px; float:left; }
+#person-panel .personInfo			{ width:290px; float:left; }
 
 /* Blocks we want to show up in the right column of a Panel */
-#location-panel .locationList			{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-#location-panel .findLocationResults	{ margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc; }
-#location-panel .ticketList, #ticket-panel .closeTicketForm, #ticket-panel .assignTicketForm,
-#ticket-panel .actionForm, #ticket-panel .referTicketForm,
-#ticket-panel .changeStatusForm, .findpeopleResults { padding-left:10px; overflow:auto; border-left:1px solid #cccccc;}
+#location-panel .locationList,
+#location-panel .findLocationResults,
+#location-panel .ticketList,
+#ticket-panel .closeTicketForm,
+#ticket-panel .assignTicketForm,
+#ticket-panel .actionForm,
+#ticket-panel .referTicketForm,
+#ticket-panel .changeStatusForm,
+#person-panel .ticketList,
+.findpeopleResults {
+	margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;
+}
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
 #ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
+
+
 
 .mergeForm .target_a { float:left; width:48%; }
 .mergeForm .target_b { float:right; width:48%; }

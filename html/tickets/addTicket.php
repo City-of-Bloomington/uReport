@@ -20,7 +20,8 @@ if (isset($_GET['location']) && $_GET['location']) {
 }
 
 if (isset($_REQUEST['person_id'])) {
-	$issue->setReportedByPerson(new Person($_REQUEST['person_id']));
+	$person = new Person($_REQUEST['person_id']);
+	$issue->setReportedByPerson($person);
 }
 
 if (isset($_REQUEST['category_id'])) {
@@ -83,9 +84,11 @@ if(isset($_POST['ticket'])){
 
 
 $template = new Template('ticketCreation');
-
 $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
+//-------------------------------------------------------------------
+// Location Panel
+//-------------------------------------------------------------------
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
@@ -107,24 +110,44 @@ else {
 	);
 }
 
-if ($issue->getReportedByPerson()) {
-	$personPanel = new Block(
+//-------------------------------------------------------------------
+// Person Panel
+//-------------------------------------------------------------------
+if (isset($person)) {
+	$template->blocks['person-panel'][] = new Block(
 		'people/personInfo.inc',
 		array(
-			'person'=>$issue->getPersonObject('reportedByPerson'),
+			'person'=>$person,
 			'disableButtons'=>true
 		)
 	);
+	$reportedTickets = $person->getTickets('issues.reportedBy');
+	if (count($reportedTickets)) {
+		$template->blocks['person-panel'][] = new Block(
+			'tickets/ticketList.inc',
+			array(
+				'ticketList'=>$reportedTickets,
+				'title'=>'Reported Tickets',
+				'disableButtons'=>true,
+				'limit'=>10,
+				'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
+			)
+		);
+	}
 }
 else {
-	$personPanel = new Block('people/searchForm.inc',array('return_url'=>$return_url));
+	$template->blocks['person-panel'][] = new Block(
+		'people/searchForm.inc',
+		array('return_url'=>$return_url)
+	);
 }
-$template->blocks['person-panel'][] = $personPanel;
 
-$addTicketForm = new Block(
+//-------------------------------------------------------------------
+// Ticket Panel
+//-------------------------------------------------------------------
+$template->blocks['ticket-panel'][] = new Block(
 	'tickets/addTicketForm.inc',
 	array('ticket'=>$ticket,'issue'=>$issue)
 );
-$template->blocks['ticket-panel'][] = $addTicketForm;
 
 echo $template->render();
