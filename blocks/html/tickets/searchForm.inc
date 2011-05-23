@@ -177,7 +177,6 @@
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
 					$_GET['fields'] = array(
-						'id'=>'on',
 						'status'=>'on',
 						'location'=>'on',
 						'enteredDate'=>'on',
