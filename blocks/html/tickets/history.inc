@@ -26,8 +26,18 @@
 		<?php
 			foreach ($this->history as $event) {
 				$action = View::escape($event->getAction());
-				$enteredByPerson = $event->getPersonData('enteredByPerson','fullname');
-				$actionPerson = $event->getPersonData('actionPerson','fullname');
+
+				$url = new URL(BASE_URL.'/people/viewPerson.php');
+				$enteredByPerson = View::escape($event->getPersonData('enteredByPerson','fullname'));
+				if ($enteredByPerson) {
+					$url->person_id = (string)$event->getPersonData('enteredByPerson','_id');
+					$enteredByPerson = "<a href=\"$url\">$enteredByPerson</a>";
+				}
+				$actionPerson = View::escape($event->getPersonData('actionPerson','fullname'));
+				if ($actionPerson) {
+					$url->person_id = (string)$event->getPersonData('actionPerson','_id');
+					$actionPerson = "<a href=\"$url\">$actionPerson</a>";
+				}
 				echo "
 				<tr><td>{$event->getActionDate(DATE_FORMAT)}</td>
 					<td>$enteredByPerson</td>
