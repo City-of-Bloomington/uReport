@@ -9,7 +9,7 @@ abstract class MongoResultIterator implements Iterator,Countable
 {
 	protected $mongo;
 	protected $cursor;
-	
+
 	abstract public function find($fields=null,$order=null);
 	abstract public function loadResult($key);
 
@@ -22,13 +22,39 @@ abstract class MongoResultIterator implements Iterator,Countable
 	}
 
 	/**
+	 * Applies an ordering to the results
+	 *
+	 * If you want to apply an order, you can call this function after
+	 * calling find(), but before you start iterating
+	 * 
+	 * @param array $order
+	 */
+	public function order($order)
+	{
+		$this->cursor->order($order);
+	}
+
+	/**
+	 * Applies a limit to the results
+	 *
+	 * If you want to apply a limit, you can call this function after
+	 * calling find(), but before you start iterating.
+	 *
+	 * @param int $limit
+	 */
+	public function limit($limit)
+	{
+		$this->cursor->limit($limit);
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getExplain()
 	{
 		return $this->cursor->explain();
 	}
-	
+
 	/**
 	 * @param int $itemsPerPage
 	 * @param int $currentPage
@@ -41,7 +67,7 @@ abstract class MongoResultIterator implements Iterator,Countable
 		$paginator->setCurrentPageNumber($currentPage);
 		return $paginator;
 	}
-	
+
 	// SPLIterator Section
 	/**
 	 * Reset the pionter to the first element

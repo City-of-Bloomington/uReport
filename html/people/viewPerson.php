@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009 City of Bloomington, Indiana
+ * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET person_id
@@ -22,13 +22,55 @@ $template = new Template('people');
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
 
-$reportedTickets = $person->getReportedTickets();
-if (count($reportedTickets)) {
+$tickets = $person->getTickets('issues.reportedBy');
+if (count($tickets)) {
 	$template->blocks['ticket-panel'][] = new Block(
 		'tickets/ticketList.inc',
 		array(
-			'ticketList'=>$person->getReportedTickets(),
-			'title'=>'Tickets With Issues Reported By '.$person->getFullname()
+			'ticketList'=>$tickets,
+			'title'=>'Reported Tickets',
+			'disableButtons'=>true,
+			'limit'=>10,
+			'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
+		)
+	);
+}
+$tickets = $person->getTickets('assigned');
+if (count($tickets)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$tickets,
+			'title'=>'Assigned Tickets',
+			'disableButtons'=>true,
+			'limit'=>10,
+			'moreLink'=>BASE_URL."/tickets?assignedPerson={$person->getId()}"
+		)
+	);
+}
+$tickets = $person->getTickets('referred');
+if (count($tickets)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$tickets,
+			'title'=>'Referred Tickets',
+			'disableButtons'=>true,
+			'limit'=>10,
+			'moreLink'=>BASE_URL."/tickets?referredPerson={$person->getId()}"
+		)
+	);
+}
+$tickets = $person->getTickets('history.action');
+if (count($tickets)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$tickets,
+			'title'=>'Worked On Tickets',
+			'disableButtons'=>true,
+			'limit'=>10,
+			'moreLink'=>BASE_URL."/tickets?actionPerson={$person->getId()}"
 		)
 	);
 }

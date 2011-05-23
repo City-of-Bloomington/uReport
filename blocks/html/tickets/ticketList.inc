@@ -4,10 +4,16 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
+ *
  * @param string $this->title
  * @param bool $this->disableButtons
  * @param Ticket $this->filterTicket A ticket to leave out of the display
+ * @param int $this->limit
+ * @param string $this->moreLink
  */
+if ($this->limit) {
+	$this->ticketList->limit($this->limit);
+}
 ?>
 <div class="ticketList">
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h1>
@@ -76,6 +82,9 @@
 		</tbody>
 	</table>
 	<?php
+		if ($this->limit && count($this->ticketList)>$this->limit && $this->moreLink) {
+			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
+		}
 		if (!$this->disableButtons && count($this->ticketList)>1) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
