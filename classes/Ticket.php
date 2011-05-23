@@ -530,23 +530,4 @@ class Ticket extends MongoRecord
 			}
 		}
 	}
-
-	/**
-	 * Returns data from person structures in the Mongo record
-	 *
-	 * If the data doesn't exist an empty string will be returned
-	 * Examples:
-	 * 	getPersonData('enteredByPerson','id')
-	 *  getPersonData('referredPerson','fullname')
-	 *
-	 * @param string $personField
-	 * @param string $dataField
-	 * @return string
-	 */
-	public function getPersonData($personField,$dataField)
-	{
-		return isset($this->data[$personField][$dataField])
-			? $this->data[$personField][$dataField]
-			: '';
-	}
 }

@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
+ * @param bool $this->disableButtons
  */
 if (userIsAllowed('People')) {
 	$username = $this->person->getUsername();
@@ -21,7 +22,7 @@ else {
 }
 
 $editButton = '';
-if (userIsAllowed('People')) {
+if (userIsAllowed('People') && !$this->disableButtons) {
 	$editButton = $this->template->linkButton(
 		'Edit',
 		BASE_URL.'/people/updatePerson.php?person_id='.$this->person->getId(),
@@ -49,10 +50,9 @@ echo "
 </div>
 ";
 
-if (userIsAllowed('Tickets')) {
-	echo "<div>";
+if (userIsAllowed('Tickets') && !$this->disableButtons) {
 	echo $this->linkButton(
-			'Add New Case',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),'add',null,null,'button'
+		'Add New Case',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),
+		'add',null,null,'button'
 	);
-	echo "</div>";
 }

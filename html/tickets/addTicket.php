@@ -18,8 +18,13 @@ if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setLocation($_GET['location']);
 	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 }
+
 if (isset($_REQUEST['person_id'])) {
 	$issue->setReportedByPerson(new Person($_REQUEST['person_id']));
+}
+
+if (isset($_REQUEST['category_id'])) {
+	$issue->setCategory($_REQUEST['category_id']);
 }
 
 if(isset($_POST['ticket'])){
@@ -102,9 +107,18 @@ else {
 	);
 }
 
-$personPanel = $issue->getReportedByPerson()
-	? new Block('people/personInfo.inc',array('person'=>new Person($issue->getReportedByPerson())))
-	: new Block('people/searchForm.inc',array('return_url'=>$return_url));
+if ($issue->getReportedByPerson()) {
+	$personPanel = new Block(
+		'people/personInfo.inc',
+		array(
+			'person'=>$issue->getPersonObject('reportedByPerson'),
+			'disableButtons'=>true
+		)
+	);
+}
+else {
+	$personPanel = new Block('people/searchForm.inc',array('return_url'=>$return_url));
+}
 $template->blocks['person-panel'][] = $personPanel;
 
 $addTicketForm = new Block(

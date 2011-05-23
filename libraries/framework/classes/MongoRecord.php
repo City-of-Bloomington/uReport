@@ -34,6 +34,38 @@ abstract class MongoRecord
 	}
 
 	/**
+	 * Returns data from person structures in the Mongo record
+	 *
+	 * If the data doesn't exist an empty string will be returned
+	 * Examples:
+	 * 	getPersonData('enteredByPerson','id')
+	 *  getPersonData('referredPerson','fullname')
+	 *
+	 * @param string $personField
+	 * @param string $dataField
+	 * @return string
+	 */
+	public function getPersonData($personField,$dataField)
+	{
+		return isset($this->data[$personField][$dataField])
+			? $this->data[$personField][$dataField]
+			: '';
+	}
+
+	/**
+	 * Loads the Person from Mongo and returns the Person object
+	 *
+	 * @param string $personField
+	 * @return Person
+	 */
+	public function getPersonObject($personField)
+	{
+		if (isset($this->data[$personField]['_id'])) {
+			return new Person((string)$this->data[$personField]['_id']);
+		}
+	}
+
+	/**
 	 * @param string|array|Person $person
 	 */
 	public function setPersonData($fieldname,$person)
