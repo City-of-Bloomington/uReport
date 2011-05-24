@@ -6,10 +6,33 @@
  * @param string $this->return_url
  */
 $personQuery = isset($_GET['personQuery']) ? View::escape($_GET['personQuery']) : '';
+if (!$_GET['setOfPeople']) {
+	$_GET['setOfPeople'] = 'all';
+}
 ?>
 <div class="findPeople">
 	<h1>Find Someone</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
+		<fieldset>
+			<div><label>
+					<input type="radio" name="setOfPeople" value="all"
+						<?php if ($_GET['setOfPeople']=='all') echo 'checked="checked"'; ?> />
+					All
+				</label>
+			</div>
+			<div><label>
+					<input type="radio" name="setOfPeople" value="staff"
+						<?php if ($_GET['setOfPeople']=='staff') echo 'checked="checked"'; ?> />
+					Staff Only
+				</label>
+			</div>
+			<div><label>
+					<input type="radio" name="setOfPeople" value="public"
+						<?php if ($_GET['setOfPeople']=='public') echo 'checked="checked"'; ?> />
+					Public Only
+				</label>
+			</div>
+		</fieldset>
 		<fieldset>
 			<table>
 			<?php

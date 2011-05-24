@@ -58,8 +58,11 @@ class PersonList extends MongoResultIterator
 		}
 		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if ($value) {
+				if (is_string($value)) {
 					$search[$key] = new MongoRegex("/$value/i");
+				}
+				elseif (is_array($value)) {
+					$search[$key] = $value;
 				}
 			}
 		}

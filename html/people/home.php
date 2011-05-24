@@ -43,6 +43,16 @@ if (isset($_GET['return_url'])) {
 $template->blocks[] = $searchForm;
 
 if (count($search)) {
+	if (isset($_GET['setOfPeople'])) {
+		switch ($_GET['setOfPeople']) {
+			case 'staff':
+				$search['username'] = array('$exists'=>true);
+				break;
+			case 'public':
+				$search['username'] = array('$exists'=>false);
+				break;
+		}
+	}
 	$personList = new PersonList();
 	$personList->search($search);
 	$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
