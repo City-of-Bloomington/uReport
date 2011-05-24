@@ -24,7 +24,7 @@ $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('p
 
 $tickets = $person->getTickets('issues.reportedBy');
 if (count($tickets)) {
-	$template->blocks['ticket-panel'][] = new Block(
+	$template->blocks['person-panel'][] = new Block(
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
@@ -37,7 +37,7 @@ if (count($tickets)) {
 }
 $tickets = $person->getTickets('assigned');
 if (count($tickets)) {
-	$template->blocks['ticket-panel'][] = new Block(
+	$template->blocks['person-panel'][] = new Block(
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
@@ -50,7 +50,7 @@ if (count($tickets)) {
 }
 $tickets = $person->getTickets('referred');
 if (count($tickets)) {
-	$template->blocks['ticket-panel'][] = new Block(
+	$template->blocks['person-panel'][] = new Block(
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
@@ -58,19 +58,6 @@ if (count($tickets)) {
 			'disableButtons'=>true,
 			'limit'=>10,
 			'moreLink'=>BASE_URL."/tickets?referredPerson={$person->getId()}"
-		)
-	);
-}
-$tickets = $person->getTickets('history.action');
-if (count($tickets)) {
-	$template->blocks['ticket-panel'][] = new Block(
-		'tickets/ticketList.inc',
-		array(
-			'ticketList'=>$tickets,
-			'title'=>'Worked On Tickets',
-			'disableButtons'=>true,
-			'limit'=>10,
-			'moreLink'=>BASE_URL."/tickets?actionPerson={$person->getId()}"
 		)
 	);
 }
