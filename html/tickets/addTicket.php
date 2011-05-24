@@ -99,7 +99,8 @@ if ($ticket->getLocation()) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Tickets Associated with this Location'
+			'title'=>'Tickets Associated with this Location',
+			'disableButtons'=>true
 		)
 	);
 }
