@@ -46,21 +46,23 @@ tbody th { text-align:right; }
 #panel-one div ul { margin:.25em; padding:0; }
 #panel-one a { font-weight:bold; color:black; }
 
-#ticket-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#issue-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#history-panel 	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#location-panel { border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-#person-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 10px 10px; overflow:auto; }
-#action-panel	{ border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; }
-
+/* Panels need to be full-width and be seperated by a line */
+#ticket-panel,
+#issue-panel,
+#history-panel,
+#location-panel,
+#person-panel,
+#action-panel {
+	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
+}
 
 /* Blocks we want to show up in the left column of a Panel */
-#ticket-panel .ticketInfo			{ width:290px; float:left; }
-#location-panel .locationInfo 		{ width:290px; float:left; }
-.locationInfo > div { margin:.5em 0; }
-#location-panel .findLocationForm	{ width:290px; float:left; }
-.findPeople { width:290px; float:left; }
-#person-panel .personInfo			{ width:290px; float:left; }
+#ticket-panel .ticketInfo,
+#location-panel .locationInfo,
+#location-panel .findLocationForm,
+#person-panel .personInfo {
+	width:290px; float:left;
+}
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList,
@@ -75,6 +77,9 @@ tbody th { text-align:right; }
 .findpeopleResults {
 	margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;
 }
+
+.locationInfo > div { margin:.5em 0; }
+.findPeople { width:290px; float:left; }
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
@@ -123,7 +128,7 @@ tbody th { text-align:right; }
 	background:url('images/add.gif') no-repeat;
 }
 
-.mediaList {margin-left:.5em; }
+.mediaList { margin-left:.5em; }
 
 /* ICONS FOR MIME TYPES */
 .jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
