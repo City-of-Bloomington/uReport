@@ -92,7 +92,7 @@ $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 	);
 
 	$template->blocks['location-panel'][] = new Block(
