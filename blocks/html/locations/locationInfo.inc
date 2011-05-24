@@ -28,6 +28,13 @@ if ($this->location) {
 			echo '</table>';
 		}
 	}
+	
+	if (userIsAllowed('Tickets') && !$this->disableButtons) {
+		echo $this->linkButton(
+			'Report New Case',BASE_URL.'/tickets/addTicket.php?location='.urlencode($location),
+			'add',null,null,'button'
+		);
+	}
 
 	$people = new PersonList(array('address'=>$this->location));
 	if (count($people)) {

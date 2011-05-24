@@ -10,7 +10,7 @@ $ticketList = new TicketList(array('location'=>$_GET['location']));
 
 $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
-	'locations/locationInfo.inc',array('location'=>$_GET['location'])
+	'locations/locationInfo.inc',array('location'=>$_GET['location'],'disableButtons'=>false)
 );
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/ticketList.inc',

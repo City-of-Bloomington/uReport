@@ -52,7 +52,7 @@ echo "
 
 if (userIsAllowed('Tickets') && !$this->disableButtons) {
 	echo $this->linkButton(
-		'Add New Case',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),
+		'Report New Case by This Person',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),
 		'add',null,null,'button'
 	);
 }
