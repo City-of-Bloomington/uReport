@@ -6,7 +6,7 @@
  * @param string $this->return_url
  */
 $personQuery = isset($_GET['personQuery']) ? View::escape($_GET['personQuery']) : '';
-if (!$_GET['setOfPeople']) {
+if (!isset($_GET['setOfPeople'])) {
 	$_GET['setOfPeople'] = 'all';
 }
 ?>
