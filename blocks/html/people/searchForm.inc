@@ -13,7 +13,7 @@ $personQuery = isset($_GET['personQuery']) ? View::escape($_GET['personQuery']) 
 		<fieldset>
 			<table>
 			<?php
-				$fields = array('firstname','lastname','email');
+				$fields = array('firstname','lastname','email','organization');
 				foreach ($fields as $field) {
 					$label = ucfirst($field);
 					$value = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
