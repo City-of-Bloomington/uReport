@@ -7,7 +7,7 @@
  * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
-$location = $location ? "<a href=\"".BASE_URL."/locations?location=$location\">$location</a>" : '';
+$location = $location ? "<a href=\"".BASE_URL."/locations/viewLocation.php?location=$location\">$location</a>" : '';
 
 $url = new URL(BASE_URL.'/people/viewPerson.php');
 
@@ -70,7 +70,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 
 echo "
 <div class=\"ticketInfo\">
-	<h1>Case/h1>
+	<h1>Case</h1>
 	<div>$location $changeLocationButton</div>
 	<table>
 		<tr><th>Status:</th>

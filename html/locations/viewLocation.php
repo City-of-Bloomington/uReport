@@ -6,11 +6,16 @@
  * @param $_GET location
  */
 // Make sure we have the location in the system
-$ticketList = new TicketList(array('location'=>$_GET['location']));
+$location = trim($_GET['location']);
+if (!$location) {
+	header('Location: '.BASE_URL.'/locations');
+	exit();
+}
+$ticketList = new TicketList(array('location'=>$location));
 
 $template = new Template('locations');
 $template->blocks['location-panel'][] = new Block(
-	'locations/locationInfo.inc',array('location'=>$_GET['location'],'disableButtons'=>false)
+	'locations/locationInfo.inc',array('location'=>$location,'disableButtons'=>false)
 );
 $template->blocks['location-panel'][] = new Block(
 	'tickets/ticketList.inc',

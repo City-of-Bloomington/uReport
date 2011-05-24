@@ -88,7 +88,7 @@ if ($this->limit) {
 		if (!$this->disableButtons && count($this->ticketList)>1) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
-				<fieldset><legend>Merge Two Cases/legend>
+				<fieldset><legend>Merge Two Cases</legend>
 					<p>Add two ticket IDs to compare cases and move data between them.</p>
 					<div>
 						<input name=\"ticket_id_a\" id=\"ticket_id_a\" />

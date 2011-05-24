@@ -56,7 +56,7 @@ $template->blocks['merge-panel-one'][] = new Block(
 );
 $template->blocks['merge-panel-one'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticketA->getHistory(),'disableComments'=>true)
+	array('history'=>$ticketA->getHistory(),'disableComments'=>true)
 );
 $template->blocks['merge-panel-one'][] = new Block(
 	'tickets/issueList.inc',
@@ -74,7 +74,7 @@ $template->blocks['merge-panel-two'][] = new Block(
 );
 $template->blocks['merge-panel-two'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticketB->getHistory(),'disableComments'=>true)
+	array('history'=>$ticketB->getHistory(),'disableComments'=>true)
 );
 $template->blocks['merge-panel-two'][] = new Block(
 	'tickets/issueList.inc',

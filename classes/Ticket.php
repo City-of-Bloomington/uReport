@@ -74,6 +74,17 @@ class Ticket extends MongoRecord
 		$mongo->tickets->save($this->data,array('safe'=>true));
 	}
 
+	/**
+	 * Deletes this ticket from the database
+	 */
+	public function delete()
+	{
+		if ($this->getId()) {
+			$mongo = Database::getConnection();
+			$mongo->tickets->remove(array('_id'=>$this->getId()));
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -491,15 +502,24 @@ class Ticket extends MongoRecord
 		}
 	}
 	/**
-	 * Transfers all data from a ticket, then deletes the ticket
+	 * Transfers issues and history from another ticket into this one
 	 *
-	 * This ticket will end up containing all information from both tickets
+	 * We're only migrating the issue and history
+	 * Once we're done we delete the other ticket
 	 *
 	 * @param Ticket $ticket
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
+		foreach ($ticket->getIssues() as $issue) {
+			$this->updateIssues($issue);
+		}
+		foreach ($ticket->getHistory() as $history) {
+			$this->updateHistory($history);
+		}
 
+		$this->save();
+		$ticket->delete();
 	}
 
 	/**
