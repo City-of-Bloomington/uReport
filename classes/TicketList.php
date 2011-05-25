@@ -73,8 +73,8 @@ class TicketList extends MongoResultIterator
 		// All possible columns to display
 		return array(
 			'id'=>'Ticket #',
-			'enteredDate'=>'Ticket Date',
-			'enteredByPerson'=>'Ticket Entered By',
+			'enteredDate'=>'Case Date',
+			'enteredByPerson'=>'Case Entered By',
 			'assignedPerson'=>'Assigned To',
 			'referredPerson'=>'Referred To',
 			'status'=>'Status',

@@ -21,7 +21,7 @@ $template->blocks['location-panel'][] = new Block(
 	'tickets/ticketList.inc',
 	array(
 		'ticketList'=>$ticketList,
-		'title'=>'Tickets Associated with this Location'
+		'title'=>'Cases Associated with this Location'
 	)
 );
 
