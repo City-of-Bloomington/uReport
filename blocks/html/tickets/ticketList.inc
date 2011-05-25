@@ -89,7 +89,7 @@ if ($this->limit) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
 				<fieldset><legend>Merge Two Cases</legend>
-					<p>Add two ticket IDs to compare cases and move data between them.</p>
+					<p>Add two cases IDs to compare cases and move data between them.</p>
 					<div>
 						<input name=\"ticket_id_a\" id=\"ticket_id_a\" />
 						<input name=\"ticket_id_b\" id=\"ticket_id_b\" />
