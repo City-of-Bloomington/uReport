@@ -39,7 +39,7 @@ if ($ticket->getLocation()) {
 			'tickets/ticketList.inc',
 			array(
 				'ticketList'=>$ticketList,
-				'title'=>'Other tickets for this location',
+				'title'=>'Other cases for this location',
 				'filterTicket'=>$ticket
 			)
 		);

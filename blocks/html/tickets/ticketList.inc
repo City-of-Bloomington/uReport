@@ -69,7 +69,7 @@ if ($this->limit) {
 							}
 						}
 						echo $this->template->linkButton(
-							'Add Issue to case',$url,'add',null,null,'button'
+							'Add Issue',$url,'add',null,null,'button'
 						);
 						echo '</td>';
 					}

@@ -6,13 +6,15 @@
  */
 ?>
 <div class="searchForm">
-	<div>
 	<?php
 		if (userIsAllowed('Tickets')) {
+			echo"<div class=\"addNew\">";
 			echo $this->linkButton(
 				'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
 			);
 			echo "
+			</div>
+			<div class=\"searches\">
 			<h1>Quick Search</h1>
 			<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
 						All open cases
@@ -37,7 +39,6 @@
 			";
 		}
 	?>
-	</div>
 
 	<h1>Advanced Search</h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
@@ -207,6 +208,7 @@
 			?>
 		</fieldset>
 	</form>
+</div>
 </div>
 <?php
 	#$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
