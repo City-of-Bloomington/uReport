@@ -6,9 +6,51 @@
  * @param Ticket $this->ticket
  * @param Issue $this->issue
  */
+if (isset($_GET['department_id'])) {
+	try {
+		$this->currentDepartment = new Department($_GET['department_id']);
+	}
+	catch (Exception $e) {
+	}
+}
+if (!isset($this->currentDepartment)) {
+	$this->currentDepartment = new Department($_SESSION['USER']->getDepartment());
+}
 ?>
 <div class="addTicketForm">
 	<h1>New Case</h1>
+	<form method="get" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
+		<fieldset><legend>Department</legend>
+			<table>
+				<tr><td><label for="department_id">Department</label></td>
+					<td><select name="department_id" id="department_id">
+							<option></option>
+							<?php
+								$list = new DepartmentList();
+								$list->find();
+								foreach ($list as $department) {
+									$name = View::escape($department->getName());
+									$selected = "{$department->getId()}"=="{$this->currentDepartment->getId()}"
+										? 'selected="selected"'
+										: '';
+									echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
+								}
+							?>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<?php
+				foreach ($_GET as $key=>$value) {
+					if ($key !== 'department_id') {
+						$value = View::escape($value);
+						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />";
+					}
+				}
+				echo $this->template->formButton('Switch Department','submit','submit');
+			?>
+		</fieldset>
+	</form>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
 		<fieldset class="ticketFields">
 			<legend>Case Info</legend>
