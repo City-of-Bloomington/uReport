@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
- * @param Department $this->currentDepartment
  */
 ?>
 <table>
@@ -87,13 +86,19 @@
 					$name = View::escape($cat['name']);
 					echo "<option value=\"$issueCategory_id\">$name</option>";
 				}
-				foreach ($this->currentDepartment->getCategories() as $departmentCategory) {
-					$selected = $issueCategory_id=="$departmentCategory[_id]"
-						? 'selected="selected"'
-						: '';
-					$name = View::escape($departmentCategory['name']);
-					echo "<option value=\"$departmentCategory[_id]\">$name</option>";
+				if ($_SESSION['USER']->getDepartment()) {
+					$dept = $_SESSION['USER']->getDepartment();
+					$department = new Department($dept['_id']);
+
+					foreach ($department->getCategories() as $departmentCategory) {
+						$selected = $issueCategory_id=="$departmentCategory[_id]"
+							? 'selected="selected"'
+							: '';
+						$name = View::escape($departmentCategory['name']);
+						echo "<option value=\"$departmentCategory[_id]\">$name</option>";
+					}
 				}
+
 			?>
 			</select>
 		</td>

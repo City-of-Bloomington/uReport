@@ -4,10 +4,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
+ * @param Department $this->currentDepartment
  */
 $assignedPerson = $this->ticket->getAssignedPerson()
-	? new Person($this->ticket->getAssignedPerson())
-	: $_SESSION['USER'];
+	? $this->ticket->getPersonObject('assignedPerson')
+	: $this->currentDepartment->getPersonObject('defaultPerson');
 ?>
 <table>
 	<tr><td><label for="assignedPerson">Person</label></td>

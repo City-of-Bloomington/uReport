@@ -14,7 +14,8 @@ if (isset($_GET['department_id'])) {
 	}
 }
 if (!isset($this->currentDepartment)) {
-	$this->currentDepartment = new Department($_SESSION['USER']->getDepartment());
+	$dept = $_SESSION['USER']->getDepartment();
+	$this->currentDepartment = new Department((string)$dept['_id']);
 }
 ?>
 <div class="addTicketForm">
