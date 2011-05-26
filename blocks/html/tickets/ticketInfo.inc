@@ -71,8 +71,11 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 echo "
 <div class=\"ticketInfo\">
 	<h1>Case</h1>
-	<div>$location $changeLocationButton</div>
 	<table>
+		<tr><th>Location:</th>
+			<td>$location</td>
+			<td>$changeLocationButton</td>
+		</tr>
 		<tr><th>Status:</th>
 			<td>$status</td>
 			<td>$editStatusButton</td>
