@@ -8,6 +8,7 @@
  */
 echo "
 <div class=\"categoryChoices\">
+	<h1>Choose a category</h1>
 	<ul>
 ";
 	$return_url = $this->return_url;
