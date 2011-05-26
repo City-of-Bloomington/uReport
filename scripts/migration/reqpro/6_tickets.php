@@ -71,6 +71,15 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		catch (Exception $e) {
 		}
 	}
+	if (isset($row['assigned_to']) && $row['assigned_to']) {
+		try {
+			list($username,$fullname) = explode(':',$row['assigned_to']);
+			$person = new Person($username);
+			$ticket->setAssignedPerson($person);
+		}
+		catch (Exception $e) {
+		}
+	}
 
 	// Check the location against Master Address
 	// Master Address data should overwrite information from ReqPro
@@ -171,19 +180,20 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$history->setEnteredDate($row['assigned_date']);
 		$history->setActionDate($row['assigned_date']);
 		$history->setNotes("$row[action_taken]\n$row[next_action]");
+		// The ticket must have been assigned by the last person who worked on the ticket
 		if ($lastPerson) {
 			$history->setEnteredByPerson($lastPerson);
 		}
-		try {
-			list($username,$fullname) = explode(':',$row['assigned_to']);
-			$person = new Person($username);
-			$history->setActionPerson($person);
+
+		// If we know who assigned it use them.
+		// Otherwise, assign it to the person who created the ticket
+		if ($ticket->getAssignedPerson()) {
+			$history->setActionPerson($ticket->getAssignedPerson());
 		}
-		catch (Exception $e) {
-			if ($ticket->getEnteredByPerson()) {
-				$history->setActionPerson($ticket->getEnteredByPerson());
-			}
+		elseif ($ticket->getEnteredByPerson()) {
+			$history->setActionPerson($ticket->getEnteredByPerson());
 		}
+
 		// Assignments really do need a person
 		// Saying something is assigned without knowing who is useless.
 		if ($history->getActionPerson()) {
