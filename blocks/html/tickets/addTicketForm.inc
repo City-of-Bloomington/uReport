@@ -39,6 +39,9 @@ if (!isset($this->currentDepartment)) {
 							?>
 						</select>
 					</td>
+					<td>
+					<?php echo $this->template->formButton('Switch Department','submit','submit');	?>					
+					</td>
 				</tr>
 			</table>
 			<?php
@@ -48,7 +51,7 @@ if (!isset($this->currentDepartment)) {
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />";
 					}
 				}
-				echo $this->template->formButton('Switch Department','submit','submit');
+
 			?>
 		</fieldset>
 	</form>

@@ -28,6 +28,7 @@ $result = $pdo->query($sql);
 // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 //
 $results = $result->fetchAll(PDO::FETCH_ASSOC);
+$cnt = 1;
 foreach ($results as $row) {
 
     // Import the Dates
@@ -228,7 +229,8 @@ foreach ($results as $row) {
 	}
 	try {
     	$ticket->save();
-		echo $ticket->getId();
+		echo $ticket->getId()." $cnt\n";
+		$cnt++;
 	}
 	catch (Exception $e) {
     	echo $e->getMessage()."\n";
