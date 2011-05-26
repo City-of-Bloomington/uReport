@@ -59,13 +59,13 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 			BASE_URL."/people?return_url=$return_url",
 			'edit'
 		);
+		$changeLocationButton = $this->template->linkButton(
+			'Change Location',
+			BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
+			'edit'
+		);
 	}
 
-	$changeLocationButton = $this->template->linkButton(
-		'Change Location',
-		BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
-		'edit'
-	);
 }
 
 echo "

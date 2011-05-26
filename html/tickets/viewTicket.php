@@ -24,7 +24,11 @@ $template->blocks['history-panel'][] = new Block(
 
 $template->blocks['issue-panel'][] = new Block(
 	'tickets/issueList.inc',
-	array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
+	array(
+		'issueList'=>$ticket->getIssues(),
+		'ticket'=>$ticket,
+		'disableButtons'=>$ticket->getStatus()=='closed'
+	)
 );
 
 if ($ticket->getLocation()) {
