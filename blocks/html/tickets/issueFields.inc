@@ -45,7 +45,7 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-contactMethod">Contact Method</label></td>
+	<tr><td><label for="issue-contactMethod">Received via</label></td>
 		<td><select name="issue[contactMethod]" id="issue-contactMethod">
 				<option></option>
 				<?php
