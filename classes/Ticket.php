@@ -183,8 +183,8 @@ class Ticket extends MongoRecord
 	 */
 	public function getLatitude()
 	{
-		if (isset($this->data['latitude'])) {
-			return $this->data['latitude'];
+		if (isset($this->data['coordinates']['latitude'])) {
+			return $this->data['coordinates']['latitude'];
 		}
 	}
 
@@ -193,8 +193,8 @@ class Ticket extends MongoRecord
 	 */
 	public function getLongitude()
 	{
-		if (isset($this->data['longitude'])) {
-			return $this->data['longitude'];
+		if (isset($this->data['coordinates']['longitude'])) {
+			return $this->data['coordinates']['longitude'];
 		}
 	}
 
@@ -392,7 +392,7 @@ class Ticket extends MongoRecord
 	 */
 	public function setLatitude($float)
 	{
-		$this->data['latitude'] = (float)$float;
+		$this->data['coordinates']['latitude'] = (float)$float;
 	}
 
 	/**
@@ -400,7 +400,7 @@ class Ticket extends MongoRecord
 	 */
 	public function setLongitude($float)
 	{
-		$this->data['longitude'] = (float)$float;
+		$this->data['coordinates']['longitude'] = (float)$float;
 	}
 
 	/**
