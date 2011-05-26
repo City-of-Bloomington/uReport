@@ -148,7 +148,7 @@ else {
 //-------------------------------------------------------------------
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/addTicketForm.inc',
-	array('ticket'=>$ticket,'issue'=>$issue)
+	array('ticket'=>$ticket,'issue'=>$issue,'return_url'=>$return_url)
 );
 
 echo $template->render();

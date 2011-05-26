@@ -26,7 +26,7 @@ class Category extends MongoRecord
 			}
 			else {
 				$mongo = Database::getConnection();
-				
+
 				if (preg_match('/[0-9a-f]{24}/',$id)) {
 					$search = array('_id'=>new MongoId($id));
 				}
@@ -70,7 +70,7 @@ class Category extends MongoRecord
 		$mongo = Database::getConnection();
 		$mongo->categories->save($this->data,array('safe'=>true));
 	}
-	
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -93,7 +93,17 @@ class Category extends MongoRecord
 			return $this->data['name'];
 		}
 	}
-	
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		if (isset($this->data['description'])) {
+			return $this->data['description'];
+		}
+	}
+
 	/**
 	 * @return array
 	 */
@@ -104,7 +114,7 @@ class Category extends MongoRecord
 		}
 		return array();
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -126,7 +136,15 @@ class Category extends MongoRecord
 	{
 		$this->data['name'] = trim($string);
 	}
-	
+
+	/**
+	 * @param string $string
+	 */
+	public function setDescription($string)
+	{
+		$this->data['description'] = trim($string);
+	}
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
@@ -135,7 +153,7 @@ class Category extends MongoRecord
 	{
 		return $this->getName();
 	}
-	
+
 	/**
 	 * @param string $problem
 	 * @param int $index
@@ -145,7 +163,7 @@ class Category extends MongoRecord
 		if (!isset($this->data['problems'])) {
 			$this->data['problems'] = array();
 		}
-		
+
 		if (isset($index) && isset($this->data['problems'][$index])) {
 			$this->data['problems'][$index] = trim($problem);
 		}
@@ -153,7 +171,7 @@ class Category extends MongoRecord
 			$this->data['problems'][] = trim($problem);
 		}
 	}
-	
+
 	/**
 	 * @param int $index
 	 */

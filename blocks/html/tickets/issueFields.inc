@@ -101,6 +101,13 @@
 
 			?>
 			</select>
+			<div>
+				<?php
+					$url = new URL(BASE_URL.'/categories/chooseCategory.php');
+					$url->return_url = "{$this->return_url}";
+					echo "<a href=\"$url\">Choose from all categories</a>";
+				?>
+			</div>
 		</td>
 	</tr>
 </table>
