@@ -239,6 +239,8 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * Returns an array of Issues
+	 *
 	 * @return array
 	 */
 	public function getIssues()
@@ -250,6 +252,19 @@ class Ticket extends MongoRecord
 			}
 		}
 		return $issues;
+	}
+
+	/**
+	 * Returns a single issue
+	 *
+	 * @param int $index
+	 * @param Issue
+	 */
+	public function getIssue($index)
+	{
+		if (isset($this->data['issues'][$index])) {
+			return new Issue($this->data['issues'][$index]);
+		}
 	}
 
 	/**
@@ -479,6 +494,45 @@ class Ticket extends MongoRecord
 		}
 		else {
 			$this->data['issues'][] = $issue->getData();
+		}
+	}
+
+	/**
+	 * @param array|string $file Either a $_FILES array or a path to a file
+	 */
+	public function attachMedia($file,$index)
+	{
+		if (!array_key_exists($index,$this->data['issues'])) {
+			throw new Exception('tickets/unknownIssueIndex');
+		}
+
+		$year = $this->getEnteredDate('Y');
+		$month = $this->getEnteredDate('m');
+		$day = $this->getEnteredDate('d');
+		$directory = "$year/$month/$day/{$this->data['_id']}";
+
+		$media = new Media();
+		$media->setFile($file,$directory);
+
+		$this->data['issues'][$index]['media'][] = $media->getData();
+	}
+
+	/**
+	 * @param int $issueIndex
+	 * @param int $mediaIndex
+	 */
+	public function deleteMedia($issueIndex,$mediaIndex)
+	{
+		if (isset($this->data['issues'][$issueIndex]['media'][$mediaIndex])) {
+			$media = new Media($this->data['issues'][$issueIndex]['media'][$mediaIndex]);
+
+			// remove the file from the hard drive
+			$media->delete();
+
+			// remove the data from the ticket
+			unset($this->data['issues'][$issueIndex]['media'][$mediaIndex]);
+
+			$this->save();
 		}
 	}
 

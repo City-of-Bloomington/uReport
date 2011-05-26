@@ -281,28 +281,16 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @param Media $media
-	 */
-	public function attachMedia(Media $media)
-	{
-		$this->data['media'][] = array(
-			'filename'=>$media->getFilename(),
-			'mime_type'=>$media->getMime_type(),
-			'media_type'=>$media->getMedia_type(),
-			'date'=>$media->getUploaded(),
-			'person'=>array(
-				'_id'=>$media->getPerson()->getId(),
-				'fullname'=>$media->getPerson()->getFullname()
-			)
-		);
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getMedia()
 	{
 		$media = array();
+		if (isset($this->data['media'])) {
+			foreach ($this->data['media'] as $data) {
+				$media[] = new Media($data);
+			}
+		}
 		return $media;
 	}
 }

@@ -3,11 +3,12 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param GET media_id
+ * @param GET ticket_id
+ * @param GET issueIndex
+ * @param GET mediaIndex
  */
 try {
-	$media = new Media($_GET['media_id']);
-	$issue = $media->getIssue();
+	$ticket = new Ticket($_GET['ticket_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -15,11 +16,11 @@ catch (Exception $e) {
 	exit();
 }
 
-if (userIsAllowed('Issues')) {
-	$media->delete();
+if (userIsAllowed('Tickets')) {
+	$ticket->deleteMedia($_GET['issueIndex'],$_GET['mediaIndex']);
 }
 else {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 }
 
-header('Location: '.$issue->getTicket()->getURL());
+header('Location: '.$ticket->getURL());

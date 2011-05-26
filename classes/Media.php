@@ -39,7 +39,7 @@ class Media extends MongoRecord
 	 *
 	 * @param array $data
 	 */
-	public function __construct($data)
+	public function __construct($data=null)
 	{
 		if (is_array($data)) {
 			$this->data = $data;
@@ -47,7 +47,7 @@ class Media extends MongoRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->uploaded = new MongoDate();
+			$this->data['uploaded'] = new MongoDate();
 			$this->setPerson($_SESSION['USER']);
 		}
 	}
@@ -67,14 +67,7 @@ class Media extends MongoRecord
 	public function delete()
 	{
 		// Delete the file from the hard drive
-		unlink($this->getDirectory().'/'.$this->getInternalFilename());
-
-		if ($this->id) {
-			// Clear out the database
-			$zend_db = Database::getConnection();
-			$zend_db->delete('issue_media','media_id='.$this->id);
-			$zend_db->delete('media','id='.$this->id);
-		}
+		unlink(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
 	}
 	//----------------------------------------------------------------
 	// Generic Getters
@@ -84,15 +77,34 @@ class Media extends MongoRecord
 	 */
 	public function getFilename()
 	{
-		return $this->data['filename'];
+		if (isset($this->data['filename'])) {
+			return $this->data['filename'];
+		}
 	}
 
+	/**
+	 * Returns the path of the file, relative to /data/media
+	 *
+	 * Media is stored in the data directory, outside of the web directory
+	 * This variable only contains the partial path.
+	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
+	 *
+	 * @return string
+	 */
+	public function getDirectory()
+	{
+		if (isset($this->data['directory'])) {
+			return $this->data['directory'];
+		}
+	}
 	/**
 	 * @return string
 	 */
 	public function getMime_type()
 	{
-		return $this->data['mime_type'];
+		if (isset($this->data['mime_type'])) {
+			return $this->data['mime_type'];
+		}
 	}
 
 	/**
@@ -100,7 +112,9 @@ class Media extends MongoRecord
 	 */
 	public function getMedia_type()
 	{
-		return $this->data['media_type'];
+		if (isset($this->data['media_type'])) {
+			return $this->data['media_type'];
+		}
 	}
 
 	/**
@@ -108,19 +122,20 @@ class Media extends MongoRecord
 	 *
 	 * Format is specified using PHP's date() syntax
 	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
+	 * If no format is given, the MongoDate object is returned
 	 *
 	 * @param string $format
-	 * @return string|DateTime
+	 * @return string|MongoDate
 	 */
 	public function getUploaded($format=null)
 	{
-		if ($format) {
-			list($microseconds,$timestamp) = explode(' ',$this->data['uploaded']);
-			return date($format,$timestamp);
-		}
-		else {
-			return $this->data['uploaded'];
+		if (isset($this->data['uploaded'])) {
+			if ($format) {
+				return date($format,$this->data['uploaded']->sec);
+			}
+			else {
+				return $this->data['uploaded'];
+			}
 		}
 	}
 
@@ -129,24 +144,20 @@ class Media extends MongoRecord
 	 */
 	public function getPerson()
 	{
-		return $this->data['person'];
+		if (isset($this->data['person'])) {
+			return $this->data['person'];
+		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
 	/**
-	 * @param string|Person $person
+	 * @param Person $person
 	 */
 	public function setPerson($person)
 	{
-		if (!$person instanceof Person) {
-			$person = new Person($person);
-		}
-		$this->data['person'] = array(
-			'_id'=>$person->getId(),
-			'fullname'=>$person->getFullname()
-		);
+		$this->setPersonData('person',$person);
 	}
 
 	//----------------------------------------------------------------
@@ -179,7 +190,7 @@ class Media extends MongoRecord
 	 *
 	 * @param array|string Either a $_FILES array or a path to a file
 	 */
-	public function setFile($file)
+	public function setFile($file,$directory)
 	{
 		# Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
@@ -194,48 +205,35 @@ class Media extends MongoRecord
 		$extension = $this->getExtension();
 
 		// Find out the mime type for this file
-		if (array_key_exists(strtolower($extension),Media::$extensions)) {
+		if (!array_key_exists(strtolower($extension),Media::$extensions)) {
+			throw new Exception('unknownFileType');
+		}
+
+		// Move the file where it's supposed to go
+		if (!is_dir(APPLICATION_HOME."/data/media/$directory")) {
+			mkdir(APPLICATION_HOME."/data/media/$directory",0777,true);
+		}
+		$newFile = APPLICATION_HOME."/data/media/$directory/$filename";
+		rename($tempFile,$newFile);
+		chmod($newFile,0666);
+
+		if (is_file($newFile)) {
+			$this->data['directory'] = $directory;
 			$this->data['mime_type'] = Media::$extensions[$extension]['mime_type'];
 			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
 		}
 		else {
-			throw new Exception('unknownFileType');
-		}
-
-		// Clean out any previous version of the file
-		if ($this->id) {
-			foreach(glob("{$this->getDirectory()}/{$this->id}.*") as $file) {
-				unlink($file);
-			}
-		}
-
-		// Move the file where it's supposed to go
-		if (!is_dir($this->getDirectory())) {
-			mkdir($this->getDirectory(),0777,true);
-		}
-		$newFile = $this->getDirectory().'/'.$this->getInternalFilename();
-		rename($tempFile,$newFile);
-		chmod($newFile,0666);
-
-		if (!is_file($this->getDirectory().'/'.$this->getInternalFilename())) {
 			throw new Exception('media/uploadFailed');
-			exit();
 		}
 	}
 
 	/**
-	 * Returns the path to where the file should be stored
-	 *
-	 * Media is stored in the data directory, outside of the web directory
-	 *
 	 * @return string
 	 */
-	public function getDirectory()
+	public function getExtension()
 	{
-		$year = $this->uploaded->format('Y');
-		$month = $this->uploaded->format('m');
-		$day = $this->uploaded->format('d');
-		return APPLICATION_HOME."/data/media/$year/$month/$day";
+		preg_match("/[^.]+$/",$this->data['filename'],$matches);
+		return strtolower($matches[0]);
 	}
 
 	/**
@@ -245,47 +243,7 @@ class Media extends MongoRecord
 	 */
 	public function getURL()
 	{
-		$year = $this->uploaded->format('Y');
-		$month = $this->uploaded->format('m');
-		$day = $this->uploaded->format('d');
-		$url = BASE_URL."/media/media/$year/$month/$day";
-
-		$filename = $this->getInternalFilename();
-
-		$url.="/$filename";
-
-		return $url;
-	}
-
-	/**
-	 * Returns the system-generated filename
-	 *
-	 * We don't use the user-provided filenames when saving the file to the server's hard drive
-	 * Instead, we use the ID of this media object as the filename
-	 *
-	 * @return string
-	 */
-	public function getInternalFilename()
-	{
-		// We've got a chicken-or-egg problem here.  We want to use the id
-		// as the filename, but the id doesn't exist until the info's been saved
-		// to the database.
-		//
-		// If we don't have an id yet, try and save to the database first.
-		// If that fails, we most likely don't have enough required info yet
-		if (!$this->id) {
-			$this->save();
-		}
-		return "{$this->id}.{$this->getExtension()}";
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getExtension()
-	{
-		preg_match("/[^.]+$/",$this->filename,$matches);
-		return strtolower($matches[0]);
+		return BASE_URL."/media/media/{$this->data['directory']}/{$this->data['filename']}";
 	}
 
 	/**
@@ -293,9 +251,8 @@ class Media extends MongoRecord
 	 */
 	public function getFilesize()
 	{
-		return filesize($this->getDirectory().'/'.$this->getInternalFilename());
+		return filesize(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
 	}
-
 
 	/**
 	 * Cleans a filename of any characters that might cause problems on filesystems
@@ -316,21 +273,5 @@ class Media extends MongoRecord
 		}
 
 		return $string;
-	}
-
-	/**
-	 * @return Issue
-	 */
-	public function getIssue()
-	{
-		if ($this->id) {
-			$zend_db = Database::getConnection();
-
-			$issue_id = $zend_db->fetchOne(
-				'select issue_id from issue_media where media_id=?',
-				array($this->id)
-			);
-			return new Issue($issue_id);
-		}
 	}
 }

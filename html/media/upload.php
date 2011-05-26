@@ -3,12 +3,13 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param POST issue_id
- * @param POST return_url
+ * @param POST ticket_id
+ * @param POST index
  * @param POST attachment
+ * @param POST return_url
  */
 try {
-	$issue = new Issue($_POST['issue_id']);
+	$ticket = new Ticket($_POST['ticket_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
@@ -16,13 +17,10 @@ catch (Exception $e) {
 	exit();
 }
 
-if (userIsAllowed('Issues')) {
+if (userIsAllowed('Tickets')) {
 	try {
-		$media = new Media();
-		$media->setFile($_FILES['attachment']);
-		$media->save();
-
-		$issue->attachMedia($media);
+		$ticket->attachMedia($_FILES['attachment'],$_POST['index']);
+		$ticket->save();
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -33,5 +31,5 @@ else {
 }
 
 
-$return_url = isset($_POST['return_url']) ? $_POST['return_url'] : $issue->getTicket()->getURL();
+$return_url = isset($_POST['return_url']) ? $_POST['return_url'] : $ticket->getURL();
 header('Location: '.$return_url);

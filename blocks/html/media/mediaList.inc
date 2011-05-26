@@ -15,13 +15,15 @@
 			echo "
 			<table>
 			";
-			foreach ($this->mediaList as $media) {
+			foreach ($this->mediaList as $mediaIndex=>$media) {
 				$deleteButton = '';
 				if (!$this->disableButtons) {
+					$url = new URL(BASE_URL.'/media/delete.php');
+					$url->ticket_id = (string)$this->ticket->getId();
+					$url->issueIndex = $this->index;
+					$url->mediaIndex = $mediaIndex;
 					$deleteButton = $this->template->linkButton(
-						'Delete Attachment',
-						BASE_URL.'/media/delete.php?media_id='.$media->getId(),
-						'delete'
+						'Delete Attachment',$url,'delete'
 					);
 				}
 				echo "
@@ -30,7 +32,7 @@
 						</a>
 						$deleteButton
 					</td>
-					<td>{$media->getUploaded()}</td>
+					<td>{$media->getUploaded(DATE_FORMAT)}</td>
 				</tr>
 				";
 			}
@@ -39,7 +41,7 @@
 			";
 		}
 
-		if (!$this->disableButtons && userIsAllowed('Issues')) {
+		if (!$this->disableButtons && userIsAllowed('Tickets')) {
 			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
 		}
 	?>
