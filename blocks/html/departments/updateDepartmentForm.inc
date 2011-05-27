@@ -23,22 +23,20 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 
 			<tr><td><label for="defaultPerson">Default Person</label></td>
 				<td><select name="defaultPerson" id="defaultPerson">
-					<?php
-						$defaultPerson = $this->department->getDefaultPerson();
-						$defaultPerson_id = '';
-						if ($defaultPerson) {
-							$defaultPerson_id = $defaultPerson['_id'];
-						}
-						foreach ($this->department->getPeople() as $person) {
-							$name = View::escape($person->getFullname());
-							if ($name) {
-								$selected = "{$person->getId()}"=="$defaultPerson_id"
-									? 'selected="selected"'
-									: '';
-								echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
+						<option value=""></option>
+						<?php
+							$defaultPerson = $this->department->getDefaultPerson();
+							if ($defaultPerson) {
+								$name = View::escape($defaultPerson['fullname']);
+								echo "<option value=\"$defaultPerson[_id]\" selected=\"selected\">$name</option>";
 							}
-						}
-					?>
+							foreach ($this->department->getPeople() as $person) {
+								$name = View::escape($person->getFullname());
+								if ($name) {
+									echo "<option value=\"{$person->getId()}\">$name</option>";
+								}
+							}
+						?>
 					</select>
 				</td>
 			</tr>

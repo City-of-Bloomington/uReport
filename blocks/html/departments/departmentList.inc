@@ -31,17 +31,26 @@
 			foreach ($this->departmentList as $department) {
 				$editButton = '';
 				$editActionsButton = '';
+				$deleteButton = '';
 				if (userIsAllowed('Departments')) {
 					$editButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/departments/updateDepartment.php?department_id='.(string)$department->getId(),
+						BASE_URL."/departments/updateDepartment.php?department_id={$department->getId()}",
 						'edit'
 					);
 					$editActionsButton = $this->template->linkButton(
 						'Edit',
-						BASE_URL.'/departments/actions.php?department_id='.(string)$department->getId(),
+						BASE_URL."/departments/actions.php?department_id={$department->getId()}",
 						'edit'
 					);
+					// Departments should only be deleted when there's no people in them
+					if (!count($department->getPeople())) {
+						$deleteButton = $this->template->linkButton(
+							'Delete',
+							BASE_URL."/departments/deleteDepartment.php?department_id={$department->getId()}",
+							'delete'
+						);
+					}
 				}
 				$name = View::escape($department->getName());
 
@@ -54,7 +63,9 @@
 				}
 
 				echo "
-				<tr><td>$editButton</td>
+				<tr><td>$editButton
+						$deleteButton
+					</td>
 					<td>$name</td>
 					<td>$fullname</td>
 					<td><ul>

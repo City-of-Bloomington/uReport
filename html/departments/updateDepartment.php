@@ -32,9 +32,11 @@ if (isset($_POST['name'])) {
 	$department->setName($_POST['name']);
 	$department->setCustomStatuses($_POST['customStatuses']);
 	try {
-		$department->setDefaultPerson($_POST['defaultPerson']);
+		if ($_POST['defaultPerson']) {
+			$department->setDefaultPerson($_POST['defaultPerson']);
+		}
 		$department->setCategories(array_keys($_POST['categories']));
-		
+
 		$department->save();
 		header('Location: '.$return_url);
 		exit();

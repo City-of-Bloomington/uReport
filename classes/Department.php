@@ -71,6 +71,19 @@ class Department extends MongoRecord
 		$mongo->departments->save($this->data,array('safe'=>true));
 	}
 
+	public function delete()
+	{
+		if ($this->getId()) {
+			if (count($this->getPeople())) {
+				throw new Exception('departments/stillHasPeople');
+			}
+			else {
+				$mongo = Database::getConnection();
+				$mongo->departments->remove(array('_id'=>$this->getId()));
+			}
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
