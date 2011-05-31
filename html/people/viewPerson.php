@@ -21,6 +21,7 @@ catch (Exception $e) {
 $template = new Template('people');
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
+$template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
 
 $tickets = $person->getTickets('issues.reportedBy');
 if (count($tickets)) {

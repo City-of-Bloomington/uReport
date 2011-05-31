@@ -479,13 +479,21 @@ class Person extends MongoRecord
 
 	/**
 	 * @param string $personField The field in Ticket that has this person embedded
+	 * @param array $fields Additional fields to filter the ticketList
 	 * @return TicketList
 	 */
-	public function getTickets($personFieldname)
+	public function getTickets($personFieldname,$fields=null)
 	{
 		if ($this->getId()) {
 			$field = $personFieldname.'Person._id';
-			return new TicketList(array($field=>"{$this->getId()}"));
+			if (is_array($fields)) {
+				$search = $fields;
+				$search[$field] = (string)$this->getId();
+			}
+			else {
+				$search = array($field=>(string)$this->getId());
+			}
+			return new TicketList($search);
 		}
 	}
 
