@@ -44,7 +44,32 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	}
 
 	if (count($search)) {
-		$ticketList = new TicketList($search);
+		if (isset($_GET['sort'])) {
+			$key = array_keys($_GET['sort']);
+			$key = $key[0];
+			$value = $_GET['sort'][$key];
+
+			// Try and use anthing set up in $fields first.
+			// That's where we've defined the embedded fields in Mongo
+			if (array_key_exists($key,$fields)) {
+				$sort = array($fields[$key]=>(int)$value);
+			}
+			// Anything else that we're displaying will not be an embedded field
+			// So we can just use the name of the field
+			else {
+				$f = TicketList::getDisplayableFields();
+				if (array_key_exists($key,$f)) {
+					$sort = array($key=>(int)$value);
+				}
+			}
+		}
+		if (isset($sort)) {
+			$ticketList = new TicketList();
+			$ticketList->find($search,$sort);
+		}
+		else {
+			$ticketList = new TicketList($search);
+		}
 
 		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 		$paginator = $ticketList->getPaginator(50,$page);
