@@ -23,13 +23,17 @@ catch (Exception $e) {
 
 // Handle POST data
 if (isset($_POST['username'])) {
-	$fields = array('username','password','authenticationMethod','roles','department');
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			$set = 'set'.ucfirst($field);
-			$user->$set($_POST[$field]);
-		}
+	$user->setUsername($_POST['username']);
+	$user->setAuthenticationMethod($_POST['authenticationMethod']);
+	$user->setDepartment($_POST['department']);
+
+	$roles = isset($_POST['roles']) ? $_POST['roles'] : array();
+	$user->setRoles($roles);
+
+	if (isset($_POST['password']) && $_POST['password']) {
+		$user->setPassword($_POST['password']);
 	}
+
 	// Load any missing information from LDAP
 	// Delete this statement if you're not using LDAP
 	if ($user->getAuthenticationMethod() == 'LDAP') {
