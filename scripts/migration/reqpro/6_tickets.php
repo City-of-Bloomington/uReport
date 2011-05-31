@@ -80,6 +80,16 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		catch (Exception $e) {
 		}
 	}
+	// If they didn't assign it to anyone in particular,
+	// try and assign it to the default person for the department
+	elseif (isset($row['dept'])) {
+		try {
+			$department = new Department($row['dept']);
+			$ticket->setAssignedPerson($department->getDefaultPerson());
+		}
+		catch (Exception $e) {
+		}
+	}
 
 	// Check the location against Master Address
 	// Master Address data should overwrite information from ReqPro
