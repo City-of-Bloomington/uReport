@@ -19,7 +19,7 @@ if ($assigned) {
 
 $enteredBy = View::escape($this->ticket->getPersonData('enteredByPerson','fullname'));
 if ($enteredBy) {
-	$url->person_id = (string)$this->ticket->getPersonData('assignedPerson','_id');
+	$url->person_id = (string)$this->ticket->getPersonData('enteredByPerson','_id');
 	$enteredBy = "<a href=\"$url\">$enteredBy</a>";
 }
 
