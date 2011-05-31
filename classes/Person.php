@@ -82,6 +82,18 @@ class Person extends MongoRecord
 		$mongo->people->save($this->data,array('safe'=>true));
 	}
 
+	public function delete()
+	{
+		if ($this->getId()) {
+			if ($this->hasTickets()) {
+				throw new Exception('people/personStillHasTickets');
+			}
+
+			$mongo = Database::getConnection();
+			$mongo->people->remove(array('_id'=>$this->getId()));
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -478,14 +490,29 @@ class Person extends MongoRecord
 	}
 
 	/**
-	 * Transfers all data from a person, then deletes that person
+	 * Returns true if this person's ID is associated with any fields in the ticket records
 	 *
-	 * This person will end up containing all information from both people
-	 *
-	 * @param Person $person
+	 * @return boolean
 	 */
-	public function mergeFrom(Person $person)
+	public function hasTickets()
 	{
-
+		if ($this->getId()) {
+			$mongo = Database::getConnection();
+			$tickets = $mongo->tickets->findOne(array(
+				'$or'=>array(
+					array('enteredByPerson._id'=>new MongoId($this->data['_id'])),
+					array('assignedPerson._id'=>new MongoId($this->data['_id'])),
+					array('referredPerson._id'=>new MongoId($this->data['_id'])),
+					array('issues.enteredByPerson._id'=>new MongoId($this->data['_id'])),
+					array('issues.reportedByPerson._id'=>new MongoId($this->data['_id'])),
+					array('issues.media.person._id'=>new MongoId($this->data['_id'])),
+					array('history.enteredByPerson._id'=>new MongoId($this->data['_id'])),
+					array('history.actionPerson._id'=>new MongoId($this->data['_id']))
+				)
+			));
+			if ($tickets) {
+				return true;
+			}
+		}
 	}
 }

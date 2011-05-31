@@ -22,13 +22,22 @@ else {
 }
 
 $editButton = '';
+$deleteButton = '';
 if (userIsAllowed('People') && !$this->disableButtons) {
 	$editButton = $this->template->linkButton(
 		'Edit',
 		BASE_URL.'/people/updatePerson.php?person_id='.$this->person->getId(),
 		'edit'
 	);
+	if (!$this->person->hasTickets()) {
+		$deleteButton = $this->template->linkButton(
+			'Delete Person',
+			BASE_URL.'/people/deletePerson.php?person_id='.$this->person->getId(),
+			'delete'
+		);
+	}
 }
+
 
 $name = View::escape($this->person->getFullname());
 $phone = View::escape($this->person->getPhone());
@@ -47,6 +56,7 @@ echo "
 	<div>$email</div>
 	<div>$address</div>
 	<div>$city $state $zip</div>
+	<div>$deleteButton</div>
 </div>
 ";
 

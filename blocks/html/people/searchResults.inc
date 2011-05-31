@@ -16,24 +16,5 @@
 		else {
 			echo '<p>No results found</p>';
 		}
-
-		if (!$this->disableButtons && count($this->personList)>1) {
-			echo "
-			<form method=\"get\" action=\"".BASE_URL."/people/mergePeople.php\">
-				<fieldset><legend>Merge Two People</legend>
-					<p>Add two people IDs to compare and move data between them.</p>
-					<div>
-						<input name=\"person_id_a\" id=\"person_id_a\" />
-						<input name=\"person_id_b\" id=\"person_id_b\" />
-			";
-							echo $this->template->formButton(
-								'Submit','submit','submit'
-							);
-			echo "
-					</div>
-				</fieldset>
-			</form>
-			";
-		}
 	?>
 </div>
