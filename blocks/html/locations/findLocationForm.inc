@@ -15,7 +15,7 @@ $subunit_identifier = isset($_GET['location']['subunit_identifier'])
 	: '';
 ?>
 <div class="findLocationForm">
-	<h1>Find a Location</h1>
+	<h1><?php echo $this->title ? View::escape($this->title) : 'Find a Location'; ?></h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/locations">
 		<fieldset><legend>Find a specific address</legend>
 			<input name="location[address]" id="location-address" value="<?php echo $address; ?>" />

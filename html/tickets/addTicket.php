@@ -107,7 +107,7 @@ if ($ticket->getLocation()) {
 else {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/findLocationForm.inc',
-		array('return_url'=>$return_url,'includeExternalResults'=>true)
+		array('return_url'=>$return_url,'includeExternalResults'=>true, 'title'=>'Associate a Location', 'description'=>'Search for a location to associate it with the case.')
 	);
 }
 
@@ -139,7 +139,7 @@ if (isset($person)) {
 else {
 	$template->blocks['person-panel'][] = new Block(
 		'people/searchForm.inc',
-		array('return_url'=>$return_url)
+		array('return_url'=>$return_url,'title'=>'Person Reporting the Issue')
 	);
 }
 

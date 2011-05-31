@@ -7,11 +7,12 @@ th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
 td { padding:.25em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
-li { margin:.5em 0 }
+li { margin:.5em 0; }
 fieldset {padding:.5em 0; }
 legend { font-weight:bold; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
+.ticketList td, .searchResults td {border-bottom:1px solid #dddddd; }
 
 #banner {
 	width:100%; height:60px;

@@ -11,7 +11,7 @@ if (!isset($_GET['setOfPeople'])) {
 }
 ?>
 <div class="findPeople">
-	<h1>Find Someone</h1>
+	<h1><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
 			<div><label>

@@ -14,6 +14,6 @@ td select {max-width:200px; overflow:hidden; }
 h1 {margin:2em 0; }
 
 #search-form label {display:block; font-weight: bold; }
-.searchForm .fields { width:300px; min-height:160px; margin:1em; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
+.searchForm .fields { min-height:160px; margin:1em; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
 .addNew {margin:1em 0; }
 #search-form .button .add a {font-size:12pt; height:16px; }
