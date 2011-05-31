@@ -45,12 +45,13 @@
 		<fieldset id="advanced-search">
 			<table>
 				<tr><td><label for="enteredByPerson">Entered By</label></td></tr>
-				<tr><td><select name="enteredByPerson" id="enteredByPerson">
+				<tr><td><select name="enteredByPerson[]" id="enteredByPerson" multiple="true" size="5">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
 									$person = new Person($id);
-									$selected = (isset($_GET['enteredByPerson']) && $_GET['enteredByPerson']==$person->getId())
+									$selected = (isset($_GET['enteredByPerson'])
+												&& in_array("{$person->getId()}",$_GET['enteredByPerson']))
 										? 'selected="selected"'
 										: '';
 									$name = View::escape($person->getFullname());
@@ -61,12 +62,13 @@
 					</td>
 				</tr>
 				<tr><td><label for="assignedPerson">Assigned To</label></td></tr>
-				<tr><td><select name="assignedPerson" id="assignedPerson">
+				<tr><td><select name="assignedPerson[]" id="assignedPerson" multiple="true" size="5">
 							<option></option>
 							<?php
 								foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
 									$person = new Person($id);
-									$selected = (isset($_GET['assignedPerson']) && $_GET['assignedPerson']==$person->getId())
+									$selected = (isset($_GET['assignedPerson'])
+												&& in_array("{$person->getId()}",$_GET['assignedPerson']))
 										? 'selected="selected"'
 										: '';
 									$name = View::escape($person->getFullname());
@@ -77,13 +79,14 @@
 					</td>
 				</tr>
 				<tr><td><label for="department">Department</label></td></tr>
-				<tr><td><select name="department" id="department">
+				<tr><td><select name="department[]" id="department" multiple="true" size="5">
 							<option></option>
 							<?php
 								$list = new DepartmentList();
 								$list->find();
 								foreach ($list as $department) {
-									$selected = (isset($_GET['department']) && $_GET['department']=="{$department->getId()}")
+									$selected = (isset($_GET['department'])
+												&& in_array("{$department->getId()}",$_GET['department']))
 										? 'selected="selected"'
 										: '';
 									$name = View::escape($department->getName());
@@ -102,9 +105,12 @@
 						";
 							switch ($config['formElement']) {
 								case 'select':
-									echo "<select name=\"$key\" id=\"$key\"><option></option>";
+									echo "
+									<select name=\"{$key}[]\" id=\"$key\" multiple=\"true\" size=\"5\">
+										<option></option>
+									";
 									foreach (Ticket::getDistinct($key) as $value) {
-										$selected = (isset($_GET[$key]) && $_GET[$key]==$value)
+										$selected = (isset($_GET[$key]) && in_array($value,$_GET[$key]))
 											? 'selected="selected"'
 											: '';
 										echo "<option $selected>$value</option>";
@@ -138,13 +144,14 @@
 					</td>
 				</tr>
 				<tr><td><label for="category">Category</label></td></tr>
-				<tr><td><select name="category" id="category">
+				<tr><td><select name="category[]" id="category" multiple="true" size="5">
 							<option></option>
 							<?php
 								$list = new CategoryList();
 								$list->find();
 								foreach ($list as $category) {
-									$selected = (isset($_GET['category']) && $_GET['category']=="{$category->getId()}")
+									$selected = (isset($_GET['category'])
+												&& in_array("{$category->getId()}",$_GET['category']))
 										? 'selected="selected"'
 										: '';
 									$name = View::escape($category);

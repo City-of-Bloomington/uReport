@@ -31,10 +31,20 @@ class TicketList extends MongoResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					if (false !== strpos($key,'_id')) {
-						$value = new MongoId($value);
+					if (is_array($value)) {
+						if (false !== strpos($key,'_id')) {
+							foreach ($value as $k=>$v) {
+								$value[$k] = new MongoId($v);
+							}
+						}
+						$search[$key] = array('$in'=>$value);
 					}
-					$search[$key] = $value;
+					else {
+						if (false !== strpos($key,'_id')) {
+							$value = new MongoId($value);
+						}
+						$search[$key] = $value;
+					}
 				}
 			}
 		}

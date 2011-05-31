@@ -36,7 +36,7 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	$search = array();
 	foreach ($fields as $field=>$key) {
 		if (isset($_GET[$field])) {
-			$value = trim($_GET[$field]);
+			$value = is_string($_GET[$field]) ? trim($_GET[$field]) : $_GET[$field];
 			if ($value) {
 				$search[$key] = $value;
 			}
