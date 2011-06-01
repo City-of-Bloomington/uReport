@@ -44,7 +44,8 @@ if ($ticket->getLocation()) {
 			array(
 				'ticketList'=>$ticketList,
 				'title'=>'Other cases for this location',
-				'filterTicket'=>$ticket
+				'filterTicket'=>$ticket,
+				'disableButtons'=>true
 			)
 		);
 	}
