@@ -40,7 +40,7 @@ if (!isset($this->currentDepartment)) {
 						</select>
 					</td>
 					<td>
-					<?php echo $this->template->formButton('Switch Department','submit','submit');	?>					
+					<?php echo $this->template->formButton('Switch Department','submit','submit');	?>
 					</td>
 				</tr>
 			</table>

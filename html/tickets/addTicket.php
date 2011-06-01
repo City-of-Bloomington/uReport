@@ -90,6 +90,7 @@ $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 // Location Panel
 //-------------------------------------------------------------------
 if ($ticket->getLocation()) {
+	$template->blocks['location-panel'][] = new Block('tickets/changeLocationButton.inc');
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
 		array('location'=>$ticket->getLocation(),'disableButtons'=>true)
@@ -120,6 +121,7 @@ else {
 // Person Panel
 //-------------------------------------------------------------------
 if (isset($person)) {
+	$template->blocks['person-panel'][] = new Block('tickets/changePersonButton.inc');
 	$template->blocks['person-panel'][] = new Block(
 		'people/personInfo.inc',
 		array(

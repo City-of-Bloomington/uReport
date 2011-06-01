@@ -28,7 +28,7 @@ if ($this->location) {
 			echo '</table>';
 		}
 	}
-	
+
 	if (userIsAllowed('Tickets') && !$this->disableButtons) {
 		echo $this->linkButton(
 			'Report New Case',BASE_URL.'/tickets/addTicket.php?location='.urlencode($location),
@@ -45,8 +45,8 @@ if ($this->location) {
 		}
 		echo "</ul>";
 	}
-}
 
-echo "
+	echo "
 	</div>
 	";
+}
