@@ -7,6 +7,8 @@
 include '../../../configuration.inc';
 include './migrationConfig.inc';
 
+$UNFOUND_PEOPLE = fopen('./unfoundPeople.log','w');
+
 $townships = array(
 	1=>'Bean Blossom',
 	2=>'Benton',
@@ -150,14 +152,17 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 	if ($row['first_name'] || $row['middle_initial'] || $row['last_name'] || $row['e_mail_address']) {
 		$personList = new PersonList(array(
-			'firstname'=>$row['first_name'],
-			'middlename'=>$row['middle_initial'],
-			'lastname'=>$row['last_name'],
-			'email'=>$row['e_mail_address']
+			'firstname'=>ucwords(strtolower($row['first_name'])),
+			'middlename'=>ucwords(strtolower($row['middle_initial'])),
+			'lastname'=>ucwords(strtolower($row['last_name'])),
+			'email'=>ucwords(strtolower($row['e_mail_address']))
 		));
 		if (count($personList)) {
 			$personList->next();
 			$issue->setReportedByPerson($personList->current());
+		}
+		else {
+			fwrite($UNFOUND_PEOPLE,"$row[first_name]|$row[middle_initial]|$row[last_name]|$row[e_mail_address]\n");
 		}
 	}
 	$ticket->updateIssues($issue);
@@ -250,7 +255,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				}
 				catch (Exception $e) {
 					$person = new Person();
-					$person->setFirstname($row['username']);
+					$person->setFirstname(strtolower($row['username']));
 					$person->save();
 				}
 				$history->setEnteredByPerson($person);
@@ -260,7 +265,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		elseif ($row['needed'] || $row['existing']) {
 			$name = $row['needed'] ? $row['needed'] : $row['existing'];
 			list($firstname,$lastname) = explode(' ',$name);
-			$list = new PersonList(array('firstname'=>$firstname,'lastname'=>$lastname));
+			$list = new PersonList(array(
+				'firstname'=>ucwords(strtolower($firstname)),
+				'lastname'=>ucwords(strtolower($lastname))
+			));
 			if (count($list)) {
 				$list->next();
 				$history->setEnteredByPerson($list->current());
@@ -269,9 +277,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 		else {
 			$name = explode(' ',$row['inspector']);
-			$search = array('firstname'=>$name[0]);
+			$search = array('firstname'=>ucwords(strtolower($name[0])));
 			if (isset($name[1])) {
-				$search['lastname'] = $name[1];
+				$search['lastname'] = ucwords(strtolower($name[1]));
 			}
 			$list = new PersonList($search);
 			if (count($list)) {
