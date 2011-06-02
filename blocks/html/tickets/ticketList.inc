@@ -55,8 +55,13 @@ if ($this->limit) {
 						echo '</ul>';
 
 					}
-					if (!$this->disableButtons && userIsAllowed('Issues')) {
-						echo '<td>';
+				echo "
+					</td>
+					<td>
+				";
+					if (!$this->disableButtons
+							&& userIsAllowed('Tickets')
+							&& $ticket->getStatus()!=='closed') {
 						$url = new URL(BASE_URL.'/tickets/updateIssue.php');
 						$url->ticket_id = "{$ticket->getId()}";
 						if (isset($_GET['person_id'])) {
@@ -71,7 +76,6 @@ if ($this->limit) {
 						echo $this->template->linkButton(
 							'Add Issue',$url,'add',null,null,'button'
 						);
-						echo '</td>';
 					}
 				echo "
 					</td>
