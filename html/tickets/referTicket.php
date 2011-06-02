@@ -16,12 +16,19 @@ if (!userIsAllowed('Tickets')) {
 // Load the Ticket and Person
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
-	$person = new Person($_REQUEST['person_id']);
 }
 catch (Exception $e) {
 	$_SESSION['errorMessages'][] = $e;
 	header('Location: '.BASE_URL);
 	exit();
+}
+
+if (isset($_REQUEST['person_id'])) {
+	try {
+		$person = new Person($_REQUEST['person_id']);
+	}
+	catch (Exception $e) {
+	}
 }
 
 // Handle any stuff the user posts
@@ -52,10 +59,18 @@ $template->blocks['ticket-panel'][] = new Block(
 	'tickets/ticketInfo.inc',
 	array('ticket'=>$ticket,'disableButtons'=>true)
 );
-$template->blocks['ticket-panel'][] = new Block(
-	'tickets/referTicketForm.inc',
-	array('ticket'=>$ticket,'person'=>$person)
-);
+if (isset($person)) {
+	$template->blocks['ticket-panel'][] = new Block(
+		'tickets/referTicketForm.inc',
+		array('ticket'=>$ticket,'person'=>$person)
+	);
+}
+else {
+	$template->blocks['ticket-panel'][] = new Block(
+		'people/searchForm.inc',
+		array('return_url'=>BASE_URL.'/tickets/referTicket.php?ticket_id='.$ticket->getId())
+	);
+}
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
 	array('history'=>$ticket->getHistory(),'disableButtons'=>true)
