@@ -13,21 +13,37 @@ if (!userIsAllowed('Tickets')) {
 $ticket = new Ticket();
 $issue = new Issue();
 
-// If the user has chosen a location, they'll pass it in here
+// Handle any Location choice passed in
 if (isset($_GET['location']) && $_GET['location']) {
 	$ticket->setLocation($_GET['location']);
 	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 }
 
+// Handle any Person choice passed in
 if (isset($_REQUEST['person_id'])) {
 	$person = new Person($_REQUEST['person_id']);
 	$issue->setReportedByPerson($person);
 }
 
+// Handle any Category choice passed in
 if (isset($_REQUEST['category_id'])) {
 	$issue->setCategory($_REQUEST['category_id']);
 }
 
+// Handle any Department choice passed in
+if (isset($_GET['department_id'])) {
+	try {
+		$currentDepartment = new Department($_GET['department_id']);
+	}
+	catch (Exception $e) {
+	}
+}
+if (!isset($currentDepartment)) {
+	$dept = $_SESSION['USER']->getDepartment();
+	$currentDepartment = new Department((string)$dept['_id']);
+}
+
+// Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
 	// Create the ticket
 	$fields = array(
@@ -155,7 +171,12 @@ else {
 //-------------------------------------------------------------------
 $template->blocks['ticket-panel'][] = new Block(
 	'tickets/addTicketForm.inc',
-	array('ticket'=>$ticket,'issue'=>$issue,'return_url'=>$return_url)
+	array(
+		'ticket'=>$ticket,
+		'issue'=>$issue,
+		'return_url'=>$return_url,
+		'currentDepartment'=>$currentDepartment
+	)
 );
 
 echo $template->render();

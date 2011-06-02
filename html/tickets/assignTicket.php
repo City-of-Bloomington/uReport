@@ -12,6 +12,19 @@ if (!userIsAllowed('Tickets')) {
 	exit();
 }
 
+// Handle any Department choice passed in
+if (isset($_GET['department_id'])) {
+	try {
+		$currentDepartment = new Department($_GET['department_id']);
+	}
+	catch (Exception $e) {
+	}
+}
+if (!isset($currentDepartment)) {
+	$dept = $_SESSION['USER']->getDepartment();
+	$currentDepartment = new Department((string)$dept['_id']);
+}
+
 // Load the ticket
 try {
 	$ticket = new Ticket($_REQUEST['ticket_id']);
@@ -44,6 +57,8 @@ if (isset($_POST['assignedPerson'])) {
 	}
 }
 
+
+
 // Display the view
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block(
@@ -51,8 +66,12 @@ $template->blocks['ticket-panel'][] = new Block(
 	array('ticket'=>$ticket,'disableButtons'=>true)
 );
 $template->blocks['ticket-panel'][] = new Block(
+	'departments/chooseDepartmentForm.inc',
+	array('currentDepartment'=>$currentDepartment)
+);
+$template->blocks['ticket-panel'][] = new Block(
 	'tickets/assignTicketForm.inc',
-	array('ticket'=>$ticket)
+	array('ticket'=>$ticket,'currentDepartment'=>$currentDepartment)
 );
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
