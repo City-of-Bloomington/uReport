@@ -258,6 +258,7 @@ class Issue extends MongoRecord
 	{
 		$this->data['responseMethod'] = trim($string);
 	}
+
 	/**
 	 * @param text $text
 	 */
@@ -292,5 +293,19 @@ class Issue extends MongoRecord
 			}
 		}
 		return $media;
+	}
+
+	/**
+	 * @return array An array of Response objects
+	 */
+	public function getResponses()
+	{
+		$responses = array();
+		if (isset($this->data['responses'])) {
+			foreach ($this->data['responses'] as $data) {
+				$responses[] = new Response($data);
+			}
+		}
+		return $responses;
 	}
 }

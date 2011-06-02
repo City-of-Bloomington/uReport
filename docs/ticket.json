@@ -53,6 +53,15 @@
 					}
 				}
 			],
+			responses:[
+				date:'',
+				contactMethod:'',
+				notes:'',
+				person:{
+					_id:'',
+					fullname:''
+				}
+			],
 			notes:''
 		}
 	],

@@ -3,28 +3,23 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Issue $this->issue
+ * @param Ticket $this->ticket
+ * @param int $this->index
  */
-$person = View::escape($_SESSION['USER']->getPerson()->getFullname());
-$constituent = View::escape($this->issue->getReportedByPerson()->getFullname());
-$date = new Date();
-$description = View::escape("$person resonded to $constituent");
 ?>
 <div class="responseForm">
-	<h1>Respond</h1>
-	<p><?php echo $description; ?></p>
+	<h1>Record a response</h1>
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend></legend>
-			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
+		<fieldset><legend>How did you respond to the person?</legend>
+			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+			<input name="index" type="hidden" value="<?php echo $this->index; ?>" />
 			<table>
-				<tr><td><label for="contactMethod_id">Contact Method</label></td>
-					<td><select name="contactMethod_id" id="contactMethod_id">
+				<tr><td><label for="contactMethod">Contact Method</label></td>
+					<td><select name="contactMethod" id="contactMethod">
 							<?php
-								$list = new ContactMethodList();
-								$list->find();
-								foreach ($list as $method) {
-									$name = View::escape($method);
-									echo "<option value=\"{$method->getId()}\">$name</option>";
+								foreach (Issue::$contactMethods as $method) {
+									$method = View::escape($method);
+									echo "<option>$method</option>";
 								}
 							?>
 						</select>
@@ -36,7 +31,7 @@ $description = View::escape("$person resonded to $constituent");
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->issue->getTicket()->getURL()}';"
+					'Cancel','button','cancel',null,"document.location.href='{$this->ticket->getURL()}';"
 				);
 			?>
 		</fieldset>

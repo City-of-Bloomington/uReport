@@ -102,6 +102,11 @@ echo "
 		</table>
 		";
 
+		$this->responses = $issue->getResponses();
+		if ($this->responses) {
+			include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
+		}
+
 		$block = new Block('media/mediaList.inc',array(
 			'ticket'=>$this->ticket,
 			'index'=>$index,

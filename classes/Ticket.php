@@ -498,6 +498,19 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * Records that someone responded to an issue
+	 *
+	 * @param int $index The issue index
+	 * @param Response $response
+	 */
+	public function addResponse($index, Response $response)
+	{
+		$response->validate();
+
+		$this->data['issues'][$index]['responses'][] = $response->getData();
+	}
+
+	/**
 	 * @param array|string $file Either a $_FILES array or a path to a file
 	 */
 	public function attachMedia($file,$index)
