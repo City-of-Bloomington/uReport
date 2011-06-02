@@ -6,6 +6,11 @@
  */
 class Ticket extends MongoRecord
 {
+	// Used to identify fields that can be updated from the AddressService
+	private	$addressServiceFields = array(
+		'location','address_id','city','state','zip','latitude','longitude'
+	);
+
 	/**
 	 * Populates the object with data
 	 *
@@ -608,13 +613,30 @@ class Ticket extends MongoRecord
 	public function setAddressServiceData($data)
 	{
 		foreach ($data as $key=>$value) {
-			$set = 'set'.ucfirst($key);
-			if (method_exists($this,$set)) {
-				$this->$set($value);
+			if (in_array($key,$this->addressServiceFields)) {
+				$set = 'set'.ucfirst($key);
+				if (method_exists($this,$set)) {
+					$this->$set($value);
+				}
+				else {
+					$this->data[$key] = (string)$value;
+				}
 			}
-			else {
-				$this->data[$key] = (string)$value;
-			}
+		}
+	}
+
+	/**
+	 * Empties out the fields that can be populated from the AddressService
+	 *
+	 * New AddressService data may not include all the possible fields
+	 * that were set from a previous attempt.  This function will clear
+	 * out all possible fields.
+	 */
+	public function clearAddressServiceData()
+	{
+		foreach ($this->addressServiceFields as $field) {
+			$set = 'set'.ucfirst($field);
+			$this->$set('');
 		}
 	}
 }

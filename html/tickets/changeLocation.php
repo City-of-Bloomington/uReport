@@ -22,9 +22,9 @@ catch (Exception $e) {
 
 // Once the user has chosen a location, they'll pass it in here
 if (isset($_REQUEST['location']) && $_REQUEST['location']) {
-	$ticket->clearAddressServiceCache();
+	$ticket->clearAddressServiceData();
 	$ticket->setLocation($_REQUEST['location']);
-	$ticket->setAddressServiceCache(AddressService::getLocationData($ticket->getLocation()));
+	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 	try {
 		$ticket->save();
 		header('Location: '.$ticket->getURL());
@@ -45,7 +45,7 @@ $template->blocks['ticket-panel'][] = new Block(
 
 $template->blocks['history-panel'][] = new Block(
 	'tickets/history.inc',
-	array('ticketHistory'=>$ticket->getHistory())
+	array('history'=>$ticket->getHistory())
 );
 
 $template->blocks['issue-panel'][] = new Block(
