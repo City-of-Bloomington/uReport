@@ -34,7 +34,7 @@ $template->blocks['issue-panel'][] = new Block(
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
-		array('location'=>$ticket->getLocation())
+		array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 	);
 
 	$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
