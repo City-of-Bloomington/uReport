@@ -263,7 +263,7 @@ class Issue extends MongoRecord
 	 */
 	public function setNotes($text)
 	{
-		$this->notes = trim($text);
+		$this->data['notes'] = trim($text);
 	}
 
 	//----------------------------------------------------------------
