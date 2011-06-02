@@ -163,6 +163,8 @@ background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 .dxf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
 .kml  { height:16px; padding: 0px 0px 10px 22px; background: url('images/mime/kml_feed_small.png') no-repeat; }
 .swf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/flash.gif') no-repeat; }
+.ascending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sort.png') top right no-repeat; }
+.descending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sortdescending.png') top right no-repeat; }
 
 
 .pageNavigation { margin:.5em; }
