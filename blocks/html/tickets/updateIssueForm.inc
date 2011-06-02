@@ -7,7 +7,7 @@
  * @param Issue $this->issue
  * @param int $this->index
  */
-$title = isset($this->index) ? 'Edit Issue' : 'Add Issue';
+$title = is_null($this->index) ? 'Add Issue' : 'Edit Issue';
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
