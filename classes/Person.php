@@ -513,6 +513,7 @@ class Person extends MongoRecord
 					array('referredPerson._id'=>new MongoId($this->data['_id'])),
 					array('issues.enteredByPerson._id'=>new MongoId($this->data['_id'])),
 					array('issues.reportedByPerson._id'=>new MongoId($this->data['_id'])),
+					array('issues.responses.person._id'=>new MongoId($this->data['_id'])),
 					array('issues.media.person._id'=>new MongoId($this->data['_id'])),
 					array('history.enteredByPerson._id'=>new MongoId($this->data['_id'])),
 					array('history.actionPerson._id'=>new MongoId($this->data['_id']))
@@ -522,5 +523,18 @@ class Person extends MongoRecord
 				return true;
 			}
 		}
+	}
+
+	/**
+	 * Returns the array of distinct values used for Tickets in the system
+	 *
+	 * @param string $fieldname
+	 * @return array
+	 */
+	public static function getDistinct($fieldname)
+	{
+		$mongo = Database::getConnection();
+		$result = $mongo->command(array('distinct'=>'people','key'=>$fieldname));
+		return $result['values'];
 	}
 }
