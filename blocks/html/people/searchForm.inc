@@ -10,7 +10,7 @@ if (!isset($_GET['setOfPeople'])) {
 	$_GET['setOfPeople'] = 'all';
 }
 ?>
-<div class="findPeople">
+<div class="findPeople yui3-skin-sam">
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h1>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
@@ -65,3 +65,7 @@ if (!isset($_GET['setOfPeople'])) {
 		</fieldset>
 	</form>
 </div>
+<?php
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/people/search.js');
+?>

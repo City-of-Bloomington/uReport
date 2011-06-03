@@ -529,12 +529,21 @@ class Person extends MongoRecord
 	 * Returns the array of distinct values used for Tickets in the system
 	 *
 	 * @param string $fieldname
+	 * @param string $query Text to match in the $fieldname
 	 * @return array
 	 */
-	public static function getDistinct($fieldname)
+	public static function getDistinct($fieldname,$query=null)
 	{
+		$fieldname = trim($fieldname);
+
 		$mongo = Database::getConnection();
-		$result = $mongo->command(array('distinct'=>'people','key'=>$fieldname));
+		$command = array('distinct'=>'people','key'=>$fieldname);
+		if ($query) {
+			$query = trim($query);
+			$regex = new MongoRegex("/$query/i");
+			$command['query'] = array($fieldname=>$regex);
+		}
+		$result = $mongo->command($command);
 		return $result['values'];
 	}
 }

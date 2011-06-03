@@ -183,3 +183,9 @@ tr.verified > td:first-of-type { background:url('images/check.png') center left 
 
 /* JavaScript will apply this style to stuff it wants to hide */
 .hidden { display:none; }
+
+/* YUI Styles */
+/* Autocomplete styles */
+.yui3-aclist-content { border:1px solid black; background-color:white; }
+.yui3-aclist-item { font-family:sans-serif; }
+.yui3-aclist-item-active { background-color:blue; }
