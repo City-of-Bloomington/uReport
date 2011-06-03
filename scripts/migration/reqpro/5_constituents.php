@@ -35,7 +35,7 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 	$person->setFirstname(ucwords(strtolower($row['first_name'])));
 	$person->setMiddlename(ucwords(strtolower($row['middle_initial'])));
 	$person->setLastname(ucwords(strtolower($row['last_name'])));
-	$person->setEmail($row['e_mail_address']);
+	$person->setEmail(strtolower($row['e_mail_address']));
 	$person->setPhone($row['home_phone'] ? $row['home_phone'] : $row['bus_phone']);
 
 	if ($row['address']) {

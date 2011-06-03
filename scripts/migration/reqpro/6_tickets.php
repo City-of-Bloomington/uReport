@@ -155,7 +155,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			'firstname'=>ucwords(strtolower($row['first_name'])),
 			'middlename'=>ucwords(strtolower($row['middle_initial'])),
 			'lastname'=>ucwords(strtolower($row['last_name'])),
-			'email'=>ucwords(strtolower($row['e_mail_address']))
+			'email'=>strtolower($row['e_mail_address'])
 		));
 		if (count($personList)) {
 			$personList->next();
