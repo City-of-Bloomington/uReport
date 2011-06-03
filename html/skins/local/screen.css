@@ -75,12 +75,12 @@ tbody th { text-align:right; }
 #ticket-panel .changeStatusForm,
 #person-panel .ticketList,
 .findpeopleResults {
-	margin-left:295px; padding-left:10px; overflow:auto; border-left:1px solid #cccccc;
+	margin-left:295px; padding-left:10px; border-left:1px solid #cccccc;
 }
 
 #location-panel,
-#person-panel {
-	max-height:250px; overflow:auto;
+#ticketCreation #person-panel {
+	max-height:300px; overflow:auto;
 }
 
 .locationInfo > div { margin:.5em 0; }
