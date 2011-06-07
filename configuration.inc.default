@@ -25,6 +25,12 @@ define('APPLICATION_HOME','/var/www/sites/application_name');
 define('BASE_URL','http://localhost');
 
 /**
+ * Some default values for Tickets in the system
+ */
+define('DEFAULT_CITY','Bloomington');
+define('DEFAULT_STATE','IN');
+
+/**
  * Where on the filesystem the framework is installed.
  */
 define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');

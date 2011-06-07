@@ -42,6 +42,8 @@ class Ticket extends MongoRecord
 			// Set any default values for properties that need it here
 			$this->data['enteredDate'] = new MongoDate();
 			$this->data['status'] = 'open';
+			$this->data['city'] = DEFAULT_CITY;
+			$this->data['state'] = DEFAULT_STATE;
 		}
 	}
 

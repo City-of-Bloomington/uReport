@@ -13,41 +13,36 @@
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
 		<fieldset class="ticketFields">
-			<legend>Case Info</legend>
+			<legend>Location Info</legend>
 			<table>
-				<tr><td><label for="ticket-location">location</label></td>
+				<tr><td><label for="ticket-location">Location</label></td>
 					<td><input name="ticket[location]" id="ticket-location"
 							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-latitude">latitude</label></td>
-					<td><input name="ticket[latitude]" id="ticket-latitude"
-							value="<?php echo $this->ticket->getLatitude(); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="ticket-longitude">longitude</label></td>
-					<td><input name="ticket[longitude]" id="ticket-longitude"
-							value="<?php echo $this->ticket->getLongitude(); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="ticket-address_id">address_id</label></td>
-					<td><input name="ticket[address_id]" id="ticket-address_id"
-							value="<?php echo $this->ticket->getAddress_id(); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="ticket-city">city</label></td>
+				<tr><td><label for="ticket-city">City</label></td>
 					<td><input name="ticket[city]" id="ticket-city"
 							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-state">state</label></td>
+				<tr><td><label for="ticket-state">State</label></td>
 					<td><input name="ticket[state]" id="ticket-state"
 							value="<?php echo View::escape($this->ticket->getState()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-zip">zip</label></td>
+				<tr><td><label for="ticket-zip">Zip</label></td>
 					<td><input name="ticket[zip]" id="ticket-zip"
 							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
+					</td>
+				</tr>
+				<tr><td><label for="ticket-latitude">Latitude</label></td>
+					<td><input name="ticket[latitude]" id="ticket-latitude"
+							value="<?php echo $this->ticket->getLatitude(); ?>" />
+					</td>
+				</tr>
+				<tr><td><label for="ticket-longitude">Longitude</label></td>
+					<td><input name="ticket[longitude]" id="ticket-longitude"
+							value="<?php echo $this->ticket->getLongitude(); ?>" />
 					</td>
 				</tr>
 			</table>
@@ -76,3 +71,7 @@
 		</fieldset>
 	</form>
 </div>
+<?php
+#	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+#	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/add.js');
+?>

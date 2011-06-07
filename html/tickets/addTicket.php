@@ -45,9 +45,12 @@ if (!isset($currentDepartment)) {
 
 // Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
-	// Create the ticket
+	$ticket->setAssignedPerson($_POST['assignedPerson']);
+	$ticket->setEnteredByPerson($_SESSION['USER']);
+
+	// Set all the location information using any fields the user posted
 	$fields = array(
-		'location','latitude','longitude','address_id','city','state','zip'
+		'location','latitude','longitude','city','state','zip'
 	);
 	foreach ($fields as $field) {
 		if (isset($_POST['ticket'][$field])) {
@@ -55,10 +58,14 @@ if(isset($_POST['ticket'])){
 			$ticket->$set($_POST['ticket'][$field]);
 		}
 	}
-	$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 
-	$ticket->setAssignedPerson($_POST['assignedPerson']);
-	$ticket->setEnteredByPerson($_SESSION['USER']);
+	// If the location the user posted is a valid address, overwrite what
+	// the user posted with data from the AddressService
+	$data = AddressService::getLocationData($ticket->getLocation());
+	if ($data) {
+		$ticket->setAddressServiceData($data);
+	}
+
 
 	// Create the issue
 	$fields = array(

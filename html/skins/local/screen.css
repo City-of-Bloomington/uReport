@@ -86,7 +86,7 @@ tbody th { text-align:right; }
 .locationInfo > div { margin:.5em 0; }
 .findPeople { width:290px; float:left; }
 
-#ticket-panel .addTicketForm .ticketFields { display:none; }
+#ticket-panel .addTicketForm .ticketFields {  }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
 #ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
