@@ -23,6 +23,7 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 		$person = new Person();
 		$person->setUsername($row['userid']);
 		$person->setAuthenticationMethod('LDAP');
+		$person->addRole('Staff');
 
 		try {
 			$ldap = new LDAPEntry($person->getUsername());

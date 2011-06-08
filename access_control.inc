@@ -8,7 +8,7 @@ $ZEND_ACL = new Zend_Acl();
 /**
  * Load the roles from the database
  */
-$roles = array('Administrator');
+$roles = array('Administrator','Staff');
 foreach ($roles as $role) {
 	$ZEND_ACL = $ZEND_ACL->addRole(new Zend_Acl_Role($role));
 }
@@ -34,3 +34,5 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
  */
 // Administrator is allowed access to everything
 $ZEND_ACL->allow('Administrator');
+$ZEND_ACL->allow('Staff','Tickets');
+$ZEND_ACL->allow('Staff','People');

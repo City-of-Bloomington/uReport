@@ -357,6 +357,25 @@ class Person extends MongoRecord
 	}
 
 	/**
+	 * @param array $roles
+	 */
+	public function setRoles($roles)
+	{
+		$this->data['roles'] = $roles;
+	}
+
+	/**
+	 * @param string $role
+	 */
+	public function addRole($role)
+	{
+		if (!isset($this->data['roles'])) {
+			$this->data['roles'] = array();
+		}
+		$this->data['roles'][] = trim($role);
+	}
+
+	/**
 	 * @param string $string
 	 */
 	public function setUsername($string)
@@ -370,14 +389,6 @@ class Person extends MongoRecord
 	public function setAuthenticationMethod($string)
 	{
 		$this->data['authenticationMethod'] = trim($string);
-	}
-
-	/**
-	 * @param array $roles
-	 */
-	public function setRoles($roles)
-	{
-		$this->data['roles'] = $roles;
 	}
 
 	/**

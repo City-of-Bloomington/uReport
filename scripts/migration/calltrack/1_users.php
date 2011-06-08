@@ -24,6 +24,8 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 		$person = new Person();
 		$person->setUsername($row['username']);
 		$person->setAuthenticationMethod($row['authenticationMethod']);
+		$person->addRole('Staff');
+
 		if($row['authenticationMethod'] == 'LDAP'){
 			try {
 				$ldap = new LDAPEntry($person->getUsername());
