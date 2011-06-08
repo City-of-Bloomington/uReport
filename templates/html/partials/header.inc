@@ -12,5 +12,5 @@
 		var BASE_URL = '<?php echo BASE_URL; ?>';
 	</script>
 
-	<title>Civic CRM</title>
+	<title>uReport</title>
 </head>
