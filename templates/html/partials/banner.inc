@@ -1,8 +1,7 @@
 <div id="banner">
-
 	<div id="utilityBar">
-	<?php
-	if (userIsAllowed('Users')) {
+		<?php
+			if (userIsAllowed('Users')) {
 				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
 			}
 			if (isset($_SESSION['USER'])) {
@@ -24,9 +23,11 @@
 				</li>
 				";
 			}
-			?>
+		?>
 	</div>
-		<div id="application_name"><a href="<?php echo BASE_URL; ?>/">uReport</a></div>
+		<div id="application_name">
+			<a href="<?php echo BASE_URL; ?>/"><?php echo APPLICATION_NAME; ?></a>
+		</div>
 	<div id="location_name">
 		City of Bloomington, Mark Kruzan, Mayor
 	</div>

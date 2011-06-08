@@ -12,5 +12,5 @@
 		var BASE_URL = '<?php echo BASE_URL; ?>';
 	</script>
 
-	<title>uReport</title>
+	<title><?php echo APPLICATION_NAME; ?></title>
 </head>
