@@ -67,6 +67,14 @@ class Block extends View
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getFile()
+	{
+		return $this->file;
+	}
+
+	/**
 	 * Passes helper function calls off to the Template
 	 */
 	public function __call($functionName,$arguments)
