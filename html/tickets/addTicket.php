@@ -113,7 +113,6 @@ $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 // Location Panel
 //-------------------------------------------------------------------
 if ($ticket->getLocation()) {
-	$template->blocks['location-panel'][] = new Block('tickets/changeLocationButton.inc');
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
 		array('location'=>$ticket->getLocation(),'disableButtons'=>true)
@@ -128,23 +127,11 @@ if ($ticket->getLocation()) {
 		)
 	);
 }
-else {
-	$template->blocks['location-panel'][] = new Block(
-		'locations/findLocationForm.inc',
-		array(
-			'return_url'=>$return_url,
-			'includeExternalResults'=>true,
-			'title'=>'Associate a Location',
-			'description'=>'Search for a location to associate it with the case.'
-		)
-	);
-}
 
 //-------------------------------------------------------------------
 // Person Panel
 //-------------------------------------------------------------------
 if (isset($person)) {
-	$template->blocks['person-panel'][] = new Block('tickets/changePersonButton.inc');
 	$template->blocks['person-panel'][] = new Block(
 		'people/personInfo.inc',
 		array(
@@ -165,12 +152,6 @@ if (isset($person)) {
 			)
 		);
 	}
-}
-else {
-	$template->blocks['person-panel'][] = new Block(
-		'people/searchForm.inc',
-		array('return_url'=>$return_url,'title'=>'Person Reporting the Issue')
-	);
 }
 
 //-------------------------------------------------------------------
