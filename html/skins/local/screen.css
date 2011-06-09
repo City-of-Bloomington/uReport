@@ -127,7 +127,8 @@ tbody th { text-align:right; }
 	background: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(215,215,215,1)), color-stop(.5, rgba(255,255,255,.5)), color-stop(1, rgba(215,215,215,1)));
 background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 }
-.add a { font-size:10pt;
+.add a {
+	font-size:10pt;
 	padding:1px 1px 1px 12px;
 	height:14px;
 	background:#eeeeee url('images/add.gif') 0px 2px no-repeat;

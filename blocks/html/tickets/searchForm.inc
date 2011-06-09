@@ -8,14 +8,17 @@
 <div class="searchForm">
 	<?php
 		if (userIsAllowed('Tickets')) {
-			echo"<div class=\"addNew\">";
+			echo"<div class=\"addNew\">
+			<h1>New Cases</h1>
+			";
 			echo $this->linkButton(
 				'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
 			);
 			echo "
 			</div>
 			<div class=\"searches\">
-			<h1>Quick Search</h1>
+			<h1>Existing Cases</h1>
+			<h2>Quick Search</h2>
 			<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
 						All open cases
 					</a>
@@ -40,7 +43,7 @@
 		}
 	?>
 
-	<h1>Advanced Search</h1>
+	<h2>Advanced Search</h2>
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 		<fieldset id="advanced-search">
 			<table>
