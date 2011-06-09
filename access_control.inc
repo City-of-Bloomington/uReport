@@ -34,6 +34,8 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
  */
 // Administrator is allowed access to everything
 $ZEND_ACL->allow('Administrator');
+
+// Staff Permissions
 $ZEND_ACL->allow('Staff','Tickets');
 $ZEND_ACL->allow('Staff','People');
 $ZEND_ACL->allow('Staff','Issues');

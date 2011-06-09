@@ -64,7 +64,7 @@ if (count($reportedTickets)) {
 		)
 	);
 }
- 
+
 
 $template->blocks['merge-panel-two'][] = new Block(
 	'people/personInfo.inc',
@@ -82,5 +82,5 @@ if (count($reportedTickets)) {
 		)
 	);
 }
- 
+
 echo $template->render();
