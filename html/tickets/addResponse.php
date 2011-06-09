@@ -7,7 +7,7 @@
  * @param REQUEST index
  */
 // Make sure they're supposed to be here
-if (!userIsAllowed('Tickets')) {
+if (!userIsAllowed('Issues')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
 	exit();
