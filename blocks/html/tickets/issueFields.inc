@@ -27,7 +27,7 @@
 				$reportedByPerson_id = isset($reportedByPerson['_id'])
 					? $reportedByPerson['_id']
 					: '';
-				$fullname = $reportedByPerson['fullname']
+				$fullname = isset($reportedByPerson['fullname'])
 					? $reportedByPerson['fullname']
 					: '';
 			?>
