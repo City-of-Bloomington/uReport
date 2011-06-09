@@ -12,9 +12,17 @@ if (!isset($_SESSION['USER'])) {
 	exit();
 }
 
+// Load the User's department
 $department = $_SESSION['USER']->getDepartment();
 if ($department) {
-	$department = new Department($department['_id']);
+	try {
+		$department = new Department($department['_id']);
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+		header('Location: '.$return_url);
+		exit();
+	}
 }
 else {
 	$_SESSION['errorMessages'][] = new Exception('departments/unknownDepartment');
@@ -22,16 +30,15 @@ else {
 	exit();
 }
 
-if (isset($_POST['defaultPerson'])) {
-	$fields = array('name','defaultPerson','customStatuses','categories');
-
+// Handle any data they post
+if (isset($_POST['name'])) {
+	$department->setName($_POST['name']);
+	$department->setCustomStatuses($_POST['customStatuses']);
 	try {
-		foreach ($fields as $field) {
-			if (isset($_POST[$field])) {
-				$set = 'set'.ucfirst($field);
-				$department->$set($_POST[$field]);
-			}
+		if ($_POST['defaultPerson']) {
+			$department->setDefaultPerson($_POST['defaultPerson']);
 		}
+		$department->setCategories(array_keys($_POST['categories']));
 
 		$department->save();
 		header('Location: '.$return_url);
@@ -42,6 +49,7 @@ if (isset($_POST['defaultPerson'])) {
 	}
 }
 
+// Display the form
 $template = new Template('two-column');
 $template->blocks[] = new Block(
 	'departments/updateDepartmentForm.inc',
