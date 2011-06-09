@@ -100,7 +100,7 @@ tbody th { text-align:right; }
 .searchResults {}
 
 .issueList .issue {
-	padding:0; margin:.25em;
+	border-top:1px solid #cccccc; padding:0; margin:.25em;
 }
 
 /* Buttons */

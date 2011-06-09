@@ -20,7 +20,6 @@ echo "
 <div class=\"issueList\">
 	<h1>Associated Issues</h1>
 	$addButton
-	<div class=\"issue\">
 ";
 	foreach ($this->issueList as $index=>$issue) {
 		$editButton = '';
@@ -66,6 +65,7 @@ echo "
 		$contactMethod = View::escape($issue->getContactMethod());
 		$responseMethod = View::escape($issue->getResponseMethod());
 		echo "
+		<div class=\"issue\">
 		<h2><span class=\"date\">{$issue->getDate(DATE_FORMAT)}</span>
 			<span class=\"issueType\">$type</span>
 			$editButton
@@ -100,6 +100,7 @@ echo "
 				</tr>
 			</tbody>
 		</table>
+		</div>		
 		";
 
 		$this->responses = $issue->getResponses();
@@ -125,6 +126,5 @@ echo "
 		}
 	}
 echo "
-	</div>
 </div>
 ";
