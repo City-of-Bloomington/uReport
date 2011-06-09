@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2010 City of Bloomington, Indiana
+ * @copyright 2009-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
@@ -8,13 +8,10 @@
  */
 ?>
 <div class="interfaceBox">
-	<h1>
-		People
-	</h1>
+	<h1>People</h1>
 	<table>
 		<thead>
-			<tr>
-				<th>Username</th>
+			<tr><th>Username</th>
 				<th>Name</th>
 				<th>Email</th>
 				<th>Organization</th>
@@ -37,8 +34,7 @@
 				$name = View::escape($person->getFullname());
 				$organization = View::escape($person->getOrganization());
 				echo "
-				<tr>
-					<td><a href=\"$url\">{$person->getUsername()}</a></td>
+				<tr><td><a href=\"$url\">{$person->getUsername()}</a></td>
 					<td><a href=\"$url\">$name</a></td>
 					<td><a href=\"$url\">{$person->getEmail()}</a></td>
 					<td><a href=\"$url\">$organization</a></td>
