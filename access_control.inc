@@ -36,3 +36,4 @@ $ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
 $ZEND_ACL->allow('Administrator');
 $ZEND_ACL->allow('Staff','Tickets');
 $ZEND_ACL->allow('Staff','People');
+$ZEND_ACL->allow('Staff','Issues');
