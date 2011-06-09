@@ -8,37 +8,39 @@
 <div class="searchForm">
 	<?php
 		if (userIsAllowed('Tickets')) {
-			echo"<div class=\"addNew\">
-			<h1>New Cases</h1>
+			echo "
+			<div class=\"addNew\">
+				<h1>New Cases</h1>
 			";
-			echo $this->linkButton(
-				'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
-			);
+				echo $this->linkButton(
+					'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
+				);
 			echo "
 			</div>
 			<div class=\"searches\">
-			<h1>Existing Cases</h1>
-			<h2>Quick Search</h2>
-			<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
-						All open cases
-					</a>
-				</li>
-				<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
-						All cases assigned to me
-					</a>
-				</li>
-			";
-			if ($_SESSION['USER']->getDepartment()) {
-				$dept = $_SESSION['USER']->getDepartment();
-				echo "
-				<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
-						All cases for my department
-					</a>
-				</li>
+				<h1>Existing Cases</h1>
+				<h2>Quick Search</h2>
+				<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
+							All open cases
+						</a>
+					</li>
+					<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
+							All cases assigned to me
+						</a>
+					</li>
 				";
-			}
+				if ($_SESSION['USER']->getDepartment()) {
+					$dept = $_SESSION['USER']->getDepartment();
+					echo "
+					<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
+							All cases for my department
+						</a>
+					</li>
+					";
+				}
 			echo "
-			</ul>
+				</ul>
+			</div>
 			";
 		}
 	?>
