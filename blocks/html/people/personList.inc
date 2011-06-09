@@ -44,11 +44,4 @@
 		?>
 		</tbody>
 	</table>
-<?php
-	if (userIsAllowed('People')) {
-		echo $this->linkButton(
-			'Add a Person',BASE_URL.'/people/updatePerson.php','add',null,null,'button'
-		);
-	}
-?>
 </div>
