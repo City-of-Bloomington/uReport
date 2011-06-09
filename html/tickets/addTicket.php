@@ -112,6 +112,7 @@ $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 //-------------------------------------------------------------------
 // Location Panel
 //-------------------------------------------------------------------
+$template->blocks['location-panel'][] = new Block('tickets/changeLocationButton.inc');
 if ($ticket->getLocation()) {
 	$template->blocks['location-panel'][] = new Block(
 		'locations/locationInfo.inc',
@@ -122,8 +123,7 @@ if ($ticket->getLocation()) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Cases Associated with this Location',
-			'disableButtons'=>true
+			'title'=>'Cases Associated with this Location'
 		)
 	);
 }
