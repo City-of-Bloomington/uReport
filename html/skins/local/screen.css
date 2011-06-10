@@ -47,13 +47,15 @@ tbody th { text-align:right; }
 #panel-one a { font-weight:bold; color:black; }
 
 /* Panels need to be full-width and be seperated by a line */
-#ticket-panel,
 #issue-panel,
 #history-panel,
 #location-panel,
 #person-panel,
 #action-panel {
 	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
+}
+#ticket-panel{
+	clear:both; padding:10px 0 0 10px; overflow:auto;
 }
 
 /* Blocks we want to show up in the left column of a Panel */
