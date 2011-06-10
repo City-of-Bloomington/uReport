@@ -21,7 +21,8 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-reportedByPerson">Reported By</label></td>
+	<tr class="reportedByPerson">
+		<td><label for="issue-reportedByPerson">Reported By</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$reportedByPerson_id = isset($reportedByPerson['_id'])
@@ -37,9 +38,8 @@
 				echo $fullname;
 				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 				$url = BASE_URL."/people?return_url=$return_url";
-				echo $this->template->formButton(
-					'Lookup Person','button','change',null,
-					"document.location.href='$url';"
+				echo $this->template->linkButton(
+					'Change Person',$url,'change',null,null,'button'
 				);
 			?>
 		</td>

@@ -131,6 +131,7 @@ if ($ticket->getLocation()) {
 //-------------------------------------------------------------------
 // Person Panel
 //-------------------------------------------------------------------
+$template->blocks['person-panel'][] = new Block('tickets/changePersonButton.inc');
 if (isset($person)) {
 	$template->blocks['person-panel'][] = new Block(
 		'people/personInfo.inc',

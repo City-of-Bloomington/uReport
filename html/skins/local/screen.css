@@ -89,6 +89,7 @@ tbody th { text-align:right; }
 .findPeople { width:290px; float:left; }
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
+#ticket-panel .addTicketForm .reportedByPerson { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
 #ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
