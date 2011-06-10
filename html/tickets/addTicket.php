@@ -123,7 +123,8 @@ if ($ticket->getLocation()) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-			'title'=>'Cases Associated with this Location'
+			'title'=>'Cases Associated with this Location',
+			'disableLinks'=>true
 		)
 	);
 }
@@ -148,6 +149,7 @@ if (isset($person)) {
 				'ticketList'=>$reportedTickets,
 				'title'=>'Reported Cases',
 				'disableButtons'=>true,
+				'disableLinks'=>true,
 				'limit'=>10,
 				'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
 			)

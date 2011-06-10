@@ -19,8 +19,7 @@ if ($this->limit) {
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h1>
 	<table>
 		<thead>
-			<tr>
-				<th>Status</th>
+			<tr><th>Status</th>
 				<th>Location</th>
 				<th>Entered Date</th>
 				<th>Entered By</th>
@@ -37,13 +36,19 @@ if ($this->limit) {
 				}
 				$status = View::escape($ticket->getStatus());
 				$location = View::escape($ticket->getLocation());
+				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
 				$enteredBy = View::escape($ticket->getData('enteredByPerson.fullname'));
+				if (!$this->disableLinks) {
+					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
+					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";
+					$enteredDate = "<a href=\"{$ticket->getURL()}\">$enteredDate</a>";
+					$enteredBy = "<a href=\"{$ticket->getURL()}\">$enteredBy</a>";
+				}
 				echo "
-				<tr>
-					<td><a href=\"{$ticket->getURL()}\">$status</a></td>
-					<td><a href=\"{$ticket->getURL()}\">$location</a></td>
-					<td><a href=\"{$ticket->getURL()}\">{$ticket->getEnteredDate(DATE_FORMAT)}</a></td>
-					<td><a href=\"{$ticket->getURL()}\">$enteredBy</a></td>
+				<tr><td>$status</td>
+					<td>$location</td>
+					<td>$enteredDate</td>
+					<td>$enteredBy</td>
 					<td>
 				";
 					$categories = $ticket->getCategories();
