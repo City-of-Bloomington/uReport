@@ -88,7 +88,7 @@ tbody th { text-align:right; }
 .locationInfo > div { margin:.5em 0; }
 .findPeople { width:290px; float:left; }
 
-#ticket-panel .addTicketForm .ticketFields {  }
+#ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
 #ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
@@ -192,3 +192,6 @@ tr.verified > td:first-of-type { background:url('images/check.png') center left 
 .yui3-aclist-content { border:1px solid black; background-color:white; }
 .yui3-aclist-item { font-family:sans-serif; }
 .yui3-aclist-item-active { background-color:blue; }
+
+/* Overlay styles */
+.yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }

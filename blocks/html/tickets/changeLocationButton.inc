@@ -4,14 +4,18 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
+$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
 foreach ($_GET as $key=>$value) {
 	if ($key!=='location') {
-		$url->$key = $value;
+		$return_url->$key = $value;
 	}
 }
+$url = BASE_URL."/locations?return_url=$return_url";
 echo "<div class=\"changeLocationButton\">";
 echo $this->template->linkButton(
-	'Change Location',$url,'change',null,null,'button'
+	'Find an Address',$url,'change','findAddressButton',null,'button'
 );
-echo "</div>";
+echo "
+</div>
+<div id=\"find_location_overlay\"></div>
+";

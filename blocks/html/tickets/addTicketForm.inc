@@ -18,16 +18,6 @@
 				<tr><td><label for="ticket-location">Location</label></td>
 					<td><input name="ticket[location]" id="ticket-location"
 							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
-						<?php
-							$return_url = new URL(BASE_URL."/tickets/addTicket.php?$_SERVER[QUERY_STRING]");
-							if (isset($return_url->parameters['location'])) {
-								unset($return_url->parameters['location']);
-							}
-							$url = BASE_URL."/locations?return_url=$return_url";
-							echo $this->template->linkButton(
-								'Find an Address',$url,'change','findAddressButton',null,'button'
-							);
-						?>
 					</td>
 				</tr>
 				<tr><td><label for="ticket-city">City</label></td>
@@ -80,10 +70,8 @@
 			?>
 		</fieldset>
 	</form>
-	<div id="find_location_overlay"></div>
 </div>
 <?php
-	#$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	#$this->template->addToAsset('scripts',BASE_URL.'/js/CRM.js');
-	#$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/add.js');
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
 ?>
