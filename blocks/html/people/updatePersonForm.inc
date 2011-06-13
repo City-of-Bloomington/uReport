@@ -15,6 +15,7 @@ foreach ($fields as $field) {
 	$$field = View::escape($this->person->$get());
 }
 $title = $this->person->getId() ? View::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
+$title = $this->title ? View::escape($this->title) : $title;
 echo "<h1>$title</h1>";
 ?>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
