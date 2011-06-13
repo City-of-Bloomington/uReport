@@ -4,12 +4,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!userIsAllowed('Tickets')) {
-	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
-	exit();
-}
-
 $template = new Template('search');
 $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 // Map the form fields to the Ticket search fields

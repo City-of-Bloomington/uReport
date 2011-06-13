@@ -28,5 +28,5 @@ if ($_POST['return_url']) {
 	header('Location: '.$_POST['return_url']);
 }
 else {
-	header('Location: '.BASE_URL);
+	header('Location: '.BASE_URL.'/tickets');
 }
