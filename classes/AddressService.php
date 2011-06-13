@@ -52,9 +52,9 @@ class AddressService
 	{
 		$data = array();
 		$location = trim($location);
-		$parsed = self::parseAddress($location);
+		$parsedAddress = self::parseAddress($location);
 
-		if (defined('ADDRESS_SERVICE') && $location && isset($parsed->street_number)) {
+		if (defined('ADDRESS_SERVICE') && $location && isset($parsedAddress->street_number)) {
 			$url = new URL(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
@@ -62,32 +62,9 @@ class AddressService
 
 			$xml = new SimpleXMLElement($url,null,true);
 			if (count($xml)==1) {
-				$data['location'] = "{$xml->address->streetAddress}";
-				$data['address_id'] = "{$xml->address->id}";
-				$data['city'] = "{$xml->address->city}";
-				$data['state'] = "{$xml->address->state}";
-				$data['zip'] = "{$xml->address->zip}";
-				$data['latitude'] = "{$xml->address->latitude}";
-				$data['longitude'] = "{$xml->address->longitude}";
-				$data['township'] = "{$xml->address->township}";
-
-				// See if there's a neighborhood association
-				$neighborhood = $xml->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
-				if ($neighborhood) {
-					$data['neighborhoodAssociation'] = "{$neighborhood[0]}";
-				}
-
-				// See if this is a subunit
-				if ($parsed->subunitIdentifier) {
-					$subunit = $xml->xpath("//subunit[identifier='{$parsed->subunitIdentifier}']");
-					if ($subunit) {
-						$data['subunit_id'] = "{$subunit[0]['id']}";
-						$data['location'] = "$data[location] {$subunit[0]->type} {$subunit[0]->identifier}";
-					}
-				}
+				$data = self::extractAddressData($xml->address,$parsedAddress);
 			}
 		}
-
 		return $data;
 	}
 
@@ -104,20 +81,10 @@ class AddressService
 			$url->format = 'xml';
 			$url->query = $query;
 
-			$parsed = self::parseAddress($query);
-
 			$xml = new SimpleXMLElement($url,null,true);
 			foreach ($xml as $address) {
-				$results["{$address->streetAddress}"] = "{$address->id}";
-
-				if ($parsed->subunitIdentifier) {
-					$upper = strtoupper($parsed->subunitIdentifier);
-					$lower = strtolower($parsed->subunitIdentifier);
-					$subunit = $address->xpath("//subunit[identifier='$upper' or identifier='$lower']");
-					if (count($subunit)) {
-						$results["{$address->streetAddress} {$subunit[0]->type} {$subunit[0]->identifier}"] = "{$subunit[0]['id']}";
-					}
-				}
+				$data = self::extractAddressData($address,self::parseAddress($query));
+				$results[$data['location']] = $data;
 			}
 		}
 		return $results;
@@ -156,5 +123,39 @@ class AddressService
 			$url->address = $address;
 			return new SimpleXMLElement($url,null,true);
 		}
+	}
+
+	/**
+	 * @param SimpleXMLElement $address The address node
+	 * @param array $parsedAddress
+	 * @return array
+	 */
+	private static function extractAddressData($address,$parsedAddress)
+	{
+		$data = array();
+		$data['location'] = "{$address->streetAddress}";
+		$data['address_id'] = "{$address->id}";
+		$data['city'] = "{$address->city}";
+		$data['state'] = "{$address->state}";
+		$data['zip'] = "{$address->zip}";
+		$data['latitude'] = "{$address->latitude}";
+		$data['longitude'] = "{$address->longitude}";
+		$data['township'] = "{$address->township}";
+
+		// See if there's a neighborhood association
+		$neighborhood = $address->xpath("//purpose[@type='NEIGHBORHOOD ASSOCIATION']");
+		if ($neighborhood) {
+			$data['neighborhoodAssociation'] = "{$neighborhood[0]}";
+		}
+
+		// See if this is a subunit
+		if ($parsedAddress->subunitIdentifier) {
+			$subunit = $address->xpath("//subunit[identifier='{$parsedAddress->subunitIdentifier}']");
+			if ($subunit) {
+				$data['subunit_id'] = "{$subunit[0]['id']}";
+				$data['location'] = "$data[location] {$subunit[0]->type} {$subunit[0]->identifier}";
+			}
+		}
+		return $data;
 	}
 }

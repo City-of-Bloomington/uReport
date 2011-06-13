@@ -24,11 +24,12 @@ echo "
 		$url->location = $location;
 
 		$location = View::escape($location);
+		$city = isset($data['city']) ? ", $data[city]" : '';
 		$class = $data['address_id'] ? 'class="verified"' : '';
 		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
 		echo "
 		<tr $class>
-			<td><a href=\"$url\">$location</a></td>
+			<td><a href=\"$url\">$location$city</a></td>
 			<td>$count</td>
 		</tr>
 		";

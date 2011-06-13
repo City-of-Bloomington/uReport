@@ -80,7 +80,7 @@ tbody th { text-align:right; }
 	margin-left:295px; padding-left:10px; border-left:1px solid #cccccc;
 }
 
-#location-panel,
+#ticketCreation #location-panel,
 #ticketCreation #person-panel {
 	max-height:300px; overflow:auto;
 }

@@ -32,26 +32,32 @@ class Location
 		elseif (isset($query['text']) && $query['text']) {
 			$crm_query = $query['text'];
 		}
-		
+
 		if ($crm_query) {
 			$mongo = Database::getConnection();
 
 			$map = new MongoCode("function() {
-				var address_id = '';
+				var address_id='',city='';
 				if (this.address_id) {
 					address_id = this.address_id;
 				}
-				emit(this.location,{count:1,address_id:address_id});
+				if (this.city) {
+					city = this.city;
+				}
+				emit(this.location,{count:1,address_id:address_id,city:city});
 			}");
 
 			$reduce = new MongoCode("function(key,values) {
-				var result = { count:1,address_id:'' };
-				
+				var result = { count:1,address_id:'',city:'' };
+
 				for (var i in values) {
 					result.count += values[i].count;
 				}
 				if (values[i].address_id) {
 					result.address_id = values[i].address_id;
+				}
+				if (values[i].city) {
+					result.city = values[i].city;
 				}
 				return result;
 			}");
@@ -63,20 +69,21 @@ class Location
 				'query'=>array('location'=>new MongoRegex("/$crm_query/i")),
 				'out'=>array('inline'=>1)
 			));
-			
+
 			foreach ($q['results'] as $location) {
 				$results[$location['_id']] = array(
 					'ticketCount'=>$location['value']['count'],
 					'address_id'=>$location['value']['address_id'],
+					'city'=>$location['value']['city'],
 					'source'=>'mongo'
 				);
 			}
 
 		}
-		
+
 		if (isset($query['address']) && $query['address']) {
-			foreach (AddressService::searchAddresses($query['address']) as $location=>$address_id) {
-				$results[$location]['address_id'] = $address_id;
+			foreach (AddressService::searchAddresses($query['address']) as $location=>$data) {
+				$results[$location] = array_merge($results[$location],$data);
 				$results[$location]['source'] = 'Master Address';
 			}
 		}
