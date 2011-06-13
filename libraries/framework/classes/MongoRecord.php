@@ -9,6 +9,16 @@ abstract class MongoRecord
 	protected $data = array();
 
 	/**
+	 * Returns any field stored in $data
+	 */
+	public function get($fieldname)
+	{
+		if (isset($this->data[$fieldname])) {
+			return $this->data[$fieldname];
+		}
+	}
+
+	/**
 	 * Returns raw data from the Mongo record.
 	 *
 	 * You can specify a particular element to return, using the dot syntax
