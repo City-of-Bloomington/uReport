@@ -36,19 +36,23 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['assignedPerson'])) {
+if (isset($_REQUEST['assignedPerson'])) {
 	try {
-		$ticket->setAssignedPerson($_POST['assignedPerson']);
+		$ticket->setAssignedPerson($_REQUEST['assignedPerson']);
 
 		// add a record to ticket history
 		$history = new History();
 		$history->setAction('assignment');
 		$history->setEnteredByPerson($_SESSION['USER']);
 		$history->setActionPerson($ticket->getAssignedPerson());
-		$history->setNotes($_POST['notes']);
+		$history->setNotes($_REQUEST['notes']);
+		$history->setDescription('{enteredByPerson} assigned this ticket to {actionPerson}');
 		$ticket->updateHistory($history);
 
 		$ticket->save();
+
+		$history->sendNotification();
+
 		header('Location: '.$ticket->getURL());
 		exit();
 	}

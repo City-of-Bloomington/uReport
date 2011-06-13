@@ -62,8 +62,17 @@ class Ticket extends MongoRecord
 			$this->data['enteredDate'] = new MongoDate();
 		}
 
-		#if (!$this->enteredByPerson_id) {
+		# This code is commented out to allow the migration to run smoothly
+		# There's a lot of missing data in the previous systems, but we need to
+		# import whatever we can.
+		#
+		# Please remember to uncomment this after the migration and before going live
+		#
+		#if (!$this->getPersonData('enteredByPerson','_id')) {
 		#	throw new Exception('tickets/missingEnteredByPerson');
+		#}
+		#if (!$this->getPersonData('assignedPerson','_id')) {
+		#	throw new Exception('tickets/missingAssignment');
 		#}
 	}
 

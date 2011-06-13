@@ -53,21 +53,20 @@ class History extends MongoRecord
 	}
 
 	/**
+	 * Returns the parsed description
+	 *
+	 * This is where the placeholders are defined
+	 * Add any placeholders and their values to the array being
+	 * passed to $this->parseDescription()
+	 *
 	 * @return string
 	 */
 	public function getDescription()
 	{
-		if (isset($this->data['description'])) {
-			$enteredByPerson = isset($this->data['enteredByPerson']['fullname'])
-				? $this->data['enteredByPerson']['fullname']
-				: '';
-			$actionPerson = isset($this->data['actionPerson']['fullname'])
-				? $this->data['actionPerson']['fullname']
-				: '';
-			return $this->parseDescription(
-				array('enteredByPerson'=>$enteredByPerson,'actionPerson'=>$actionPerson)
-			);
-		}
+		return $this->parseDescription(array(
+			'enteredByPerson'=>$this->getPersonData('enteredByPerson','fullname'),
+			'actionPerson'=>$this->getPersonData('actionPerson','fullname')
+		));
 	}
 
 	/**
@@ -152,6 +151,23 @@ class History extends MongoRecord
 	}
 
 	/**
+	 * Sets the raw description string
+	 *
+	 * Include any substitution placeholders in curly braces.
+	 * The supported placeholders must be defined in getDescription()
+	 * See also:
+	 *		$this->getDescription()
+	 *		$this->parseDescription()
+	 *
+	 * @param string $string
+	 */
+	public function setDescription($string)
+	{
+		$this->data['description'] = trim($string);
+	}
+
+
+	/**
 	 * Sets the date
 	 *
 	 * Dates should be in something strtotime() understands
@@ -230,7 +246,7 @@ class History extends MongoRecord
 	 */
 	public function parseDescription($placeholders)
 	{
-		$output = $this->description;
+		$output = isset($this->data['description']) ? $this->data['description'] : '';
 
 		foreach ($placeholders as $key=>$value) {
 			$output = preg_replace("/\{$key\}/",$value,$output);
@@ -244,7 +260,7 @@ class History extends MongoRecord
 	 * If the data doesn't exist an empty string will be returned
 	 * Examples:
 	 * 	getPersonData('enteredByPerson','id')
-	 *  getPersonData('referredPerson','fullname')
+	 *  getPersonData('actionPerson','fullname')
 	 *
 	 * @param string $personField
 	 * @param string $dataField
@@ -255,5 +271,31 @@ class History extends MongoRecord
 		return isset($this->data[$personField][$dataField])
 			? $this->data[$personField][$dataField]
 			: '';
+	}
+
+	/**
+	 * Send a notification of this action to the actionPerson
+	 *
+	 * Does not send if the enteredByPerson and actionPerson are the same person
+	 */
+	public function sendNotification()
+	{
+		$enteredByPerson = $this->getPersonObject('enteredByPerson');
+		$actionPerson = $this->getPersonObject('actionPerson');
+
+		if ($enteredByPerson && $actionPerson
+			&& "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}") {
+
+			$message = $this->parseDescription(array(
+				'enteredByPerson'=>$enteredByPerson->getFullname(),
+				'actionPerson'=>'you'
+			));
+			$message.= "\n\n{$this->getNotes()}";
+			$actionPerson->sendNotification(
+				$message,
+				APPLICATION_NAME.' '.$this->getAction(),
+				$enteredByPerson
+			);
+		}
 	}
 }

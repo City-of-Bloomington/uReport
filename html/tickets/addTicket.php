@@ -31,6 +31,8 @@ if (isset($_REQUEST['category_id'])) {
 }
 
 // Handle any Department choice passed in
+// Choosing a department here will cause the assignment form
+// to pre-select that department's defaultPerson
 if (isset($_GET['department_id'])) {
 	try {
 		$currentDepartment = new Department($_GET['department_id']);
@@ -38,15 +40,19 @@ if (isset($_GET['department_id'])) {
 	catch (Exception $e) {
 	}
 }
+// If they haven't chosen a department, start by assigning
+// the ticket to the current User, and use the current user's department
 if (!isset($currentDepartment)) {
+	$ticket->setAssignedPerson($_SESSION['USER']);
+
 	$dept = $_SESSION['USER']->getDepartment();
 	$currentDepartment = new Department((string)$dept['_id']);
 }
 
 // Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
-	$ticket->setAssignedPerson($_POST['assignedPerson']);
 	$ticket->setEnteredByPerson($_SESSION['USER']);
+	$ticket->setAssignedPerson($_POST['assignedPerson']);
 
 	// Set all the location information using any fields the user posted
 	$fields = array(
@@ -85,19 +91,22 @@ if(isset($_POST['ticket'])){
 	$open->setEnteredByPerson($_SESSION['USER']);
 	$open->setActionPerson($_SESSION['USER']);
 
-	$assignment = new History();
-	$assignment->setAction('assignment');
-	$assignment->setEnteredByPerson($_SESSION['USER']);
-	$assignment->setActionPerson($_POST['assignedPerson']);
-
 	// Validate Everything and save
 	try {
 		$ticket->updateIssues($issue);
 		$ticket->updateHistory($open);
-		$ticket->updateHistory($assignment);
 		$ticket->save();
 
-		header('Location: '.$ticket->getURL());
+		// Send them on to the URL that handles assignments
+		// All tickets must be assigned to somebody
+		// We should have all the data we need for the assignment,
+		// but assignments are complex enough that we want only one
+		// script where all the magic happens
+		$url = new URL(BASE_URL.'/tickets/assignTicket.php');
+		$url->ticket_id = "{$ticket->getId()}";
+		$url->assignedPerson = $_POST['assignedPerson'];
+		$url->notes = $_POST['notes'];
+		header('Location: '.$url);
 		exit();
 	}
 	catch (Exception $e) {
