@@ -46,7 +46,7 @@ echo "
 
 <table>
 	<tr class=\"verified\">
-		<td>The location has been verified.</td>
+		<td>indicates verified locations</td>
 	</tr>
 </table>
 </div>

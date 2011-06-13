@@ -180,7 +180,7 @@ background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 .pageNavigation li { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified > td:first-of-type { background:url('images/check.png') center left no-repeat; padding-left:16px; }
+tr.verified > td:first-of-type { background:url('images/required_asterik.gif') center left no-repeat; padding-left:16px; }
 .issue { margin-top:.25em; }
 .issueList h1 { display:inline; }
 .ticketList .add a { height:2em; font-size:.9em; }
