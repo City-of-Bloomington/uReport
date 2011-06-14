@@ -14,7 +14,7 @@
 
 	<div id="panel-container">
 		<div id="content-panel">
-			<div id="ticketCreation">
+			<div id="ticketCreation" class="yui3-skin-sam">
 				<?php include FRAMEWORK.'/errorMessages.php'; ?>
 				<div id="location-panel">
 					<?php echo $this->includeBlocks('location-panel'); ?>

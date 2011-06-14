@@ -7,7 +7,7 @@
  * return here, passing in the person_id they have chosen
  *
  * @copyright 2011 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST issue_id
  * @param REQUEST person_id The new person to apply to the issue

@@ -3,7 +3,7 @@
  * Displays page navigation for any list that has pagination turned on
  *
  * @copyright 2007-2011 City of Bloomington, Indiana
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Zend_Paginator $this->paginator
  */
