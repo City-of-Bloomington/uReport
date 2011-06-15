@@ -62,7 +62,7 @@
 
 	<tr><td><label for="issue-responseMethod">Response Method</label></td>
 		<td><select name="issue[responseMethod]" id="issue-responseMethod">
-				<option></option>
+				<option value="">Do not contact</option>
 				<?php
 					// Use the same drop down as the contact method
 					foreach (Issue::$contactMethods as $method) {

@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+// These are no longer being stored in the database.
+// They are now hard-coded in the issue class.
+//
+/*
 include '../../../configuration.inc';
 include './migrationConfig.inc';
 
@@ -16,3 +20,4 @@ foreach ($query->fetchAll(PDO::FETCH_COLUMN) as $method) {
 	$contactMethod->save();
 	echo $contactMethod->getName()."\n";
 }
+*/
