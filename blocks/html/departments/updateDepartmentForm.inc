@@ -58,6 +58,29 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 		?>
 		</div>
 	</fieldset>
+	<fieldset class="actions">
+		<legend>Actions</legend>
+		<ul>
+		<?php
+			foreach (ActionList::getActions() as $action) {
+				if ($action->getType()=='department') {
+					$id = $action->getId();
+					$name = View::escape($action->getName());
+					$checked = $this->department->hasAction($name)
+						? 'checked="checked"'
+						: '';
+					echo "
+					<li><label>
+							<input name=\"actions[$id]\" type=\"checkbox\" $checked />
+							$name
+						</label>
+					</li>
+					";
+				}
+			}
+		?>
+		</ul>
+	</fieldset>
 	<fieldset class="categories">
 		<legend>Categories</legend>
 		<ul>

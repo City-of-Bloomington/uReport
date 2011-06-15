@@ -558,6 +558,48 @@ class Person extends MongoRecord
 		return $result['values'];
 	}
 
+	/**
+	 * Returns the array of action names the person is subscribed to
+	 *
+	 * @return array
+	 */
+	public function getNotifications()
+	{
+		if (isset($this->data['notifications'])) {
+			return $this->data['notifications'];
+		}
+		return array();
+	}
+
+	/**
+	 * @param array $actions The array of action names to subscribe to
+	 */
+	public function setNotifications($actions)
+	{
+		$this->data['notifications'] = array();
+		foreach ($actions as $action) {
+			$this->data['notifications'][] = trim($action);
+		}
+	}
+
+	/**
+	 * @param string $action
+	 * @return boolean
+	 */
+	public function wantsNotification($action)
+	{
+		foreach ($this->getNotifications() as $subscribedAction) {
+			if ($subscribedAction == $action) {
+				return true;
+			}
+		}
+	}
+
+	/**
+	 * @param string $message
+	 * @param string $subject
+	 * @param Person $personFrom
+	 */
 	public function sendNotification($message,$subject=null,Person $personFrom=null)
 	{
 		if (!$personFrom) {

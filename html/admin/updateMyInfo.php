@@ -6,7 +6,7 @@
  */
 if (!isset($_SESSION['USER'])) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL.'/admin');
+	header('Location: '.BASE_URL);
 	exit();
 }
 

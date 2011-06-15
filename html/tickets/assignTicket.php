@@ -46,7 +46,6 @@ if (isset($_REQUEST['assignedPerson'])) {
 		$history->setEnteredByPerson($_SESSION['USER']);
 		$history->setActionPerson($ticket->getAssignedPerson());
 		$history->setNotes($_REQUEST['notes']);
-		$history->setDescription('{enteredByPerson} assigned this ticket to {actionPerson}');
 		$ticket->updateHistory($history);
 
 		$ticket->save();

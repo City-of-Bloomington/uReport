@@ -2,13 +2,14 @@
 /**
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>, W Sibo <sibow@bloomington.in.gov>
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @author W Sibo <sibow@bloomington.in.gov>
  */
-$return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
+$return_url = BASE_URL.'/admin';
 
 if (!isset($_SESSION['USER'])) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.$return_url);
+	header('Location: '.BASE_URL);
 	exit();
 }
 
@@ -38,7 +39,11 @@ if (isset($_POST['name'])) {
 		if ($_POST['defaultPerson']) {
 			$department->setDefaultPerson($_POST['defaultPerson']);
 		}
-		$department->setCategories(array_keys($_POST['categories']));
+		$categories = isset($_POST['categories']) ? array_keys($_POST['categories']) : array();
+		$actions = isset($_POST['actions']) ? array_keys($_POST['actions']) : array();
+
+		$department->setCategories($categories);
+		$department->setActions($actions);
 
 		$department->save();
 		header('Location: '.$return_url);

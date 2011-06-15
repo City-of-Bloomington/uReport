@@ -12,9 +12,7 @@
 	<table>
 		<thead>
 			<tr><th>Date</th>
-				<th>Entered By</th>
 				<th>Action</th>
-				<th>Person</th>
 				<?php
 					if (!$this->disableComments) {
 						echo '<th>Comments</th>';
@@ -28,21 +26,11 @@
 				$action = View::escape($event->getAction());
 
 				$url = new URL(BASE_URL.'/people/viewPerson.php');
-				$enteredByPerson = View::escape($event->getPersonData('enteredByPerson','fullname'));
-				if ($enteredByPerson) {
-					$url->person_id = (string)$event->getPersonData('enteredByPerson','_id');
-					$enteredByPerson = "<a href=\"$url\">$enteredByPerson</a>";
-				}
-				$actionPerson = View::escape($event->getPersonData('actionPerson','fullname'));
-				if ($actionPerson) {
-					$url->person_id = (string)$event->getPersonData('actionPerson','_id');
-					$actionPerson = "<a href=\"$url\">$actionPerson</a>";
-				}
+				$description = View::escape($event->getDescription());
+				$description = $description ? $description : $action;
 				echo "
 				<tr><td>{$event->getActionDate(DATE_FORMAT)}</td>
-					<td>$enteredByPerson</td>
-					<td>$action</td>
-					<td>$actionPerson</td>
+					<td>$description</td>
 				";
 					if (!$this->disableComments) {
 						$notes = View::escape($event->getNotes());

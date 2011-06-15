@@ -36,6 +36,7 @@ if (isset($_POST['name'])) {
 			$department->setDefaultPerson($_POST['defaultPerson']);
 		}
 		$department->setCategories(array_keys($_POST['categories']));
+		$department->setActions(array_keys($_POST['actions']));
 
 		$department->save();
 		header('Location: '.$return_url);

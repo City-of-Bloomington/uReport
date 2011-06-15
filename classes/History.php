@@ -53,23 +53,6 @@ class History extends MongoRecord
 	}
 
 	/**
-	 * Returns the parsed description
-	 *
-	 * This is where the placeholders are defined
-	 * Add any placeholders and their values to the array being
-	 * passed to $this->parseDescription()
-	 *
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return $this->parseDescription(array(
-			'enteredByPerson'=>$this->getPersonData('enteredByPerson','fullname'),
-			'actionPerson'=>$this->getPersonData('actionPerson','fullname')
-		));
-	}
-
-	/**
 	 * Returns the date/time in the desired format
 	 *
 	 * Format is specified using PHP's date() syntax
@@ -151,23 +134,6 @@ class History extends MongoRecord
 	}
 
 	/**
-	 * Sets the raw description string
-	 *
-	 * Include any substitution placeholders in curly braces.
-	 * The supported placeholders must be defined in getDescription()
-	 * See also:
-	 *		$this->getDescription()
-	 *		$this->parseDescription()
-	 *
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
-	}
-
-
-	/**
 	 * Sets the date
 	 *
 	 * Dates should be in something strtotime() understands
@@ -235,23 +201,67 @@ class History extends MongoRecord
 	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
 	/**
+	 * Returns the parsed description
+	 *
+	 * This is where the placeholders are defined
+	 * Add any placeholders and their values to the array being
+	 * passed to $this->parseDescription()
+	 *
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		foreach (ActionList::getActions() as $action) {
+			if ($action->getName()==$this->getAction()) {
+				return $this->parseDescription(
+					$action->getDescription(),
+					array(
+						'enteredByPerson'=>$this->getPersonData('enteredByPerson','fullname'),
+						'actionPerson'=>$this->getPersonData('actionPerson','fullname')
+					)
+				);
+			}
+		}
+	}
+
+	/**
 	 * Substitutes actual data for the placeholders in the description
 	 *
 	 * Specify the placeholders as an associative array
 	 * $placeholders = array('enteredByPerson'=>'Joe Smith',
 	 *						'actionPerson'=>'Mary Sue')
 	 *
+	 * @param string $description
 	 * @param array $placeholders
 	 * @return string
 	 */
-	public function parseDescription($placeholders)
+	public function parseDescription($description,$placeholders)
 	{
-		$output = isset($this->data['description']) ? $this->data['description'] : '';
-
 		foreach ($placeholders as $key=>$value) {
-			$output = preg_replace("/\{$key\}/",$value,$output);
+			$description = preg_replace("/\{$key\}/",$value,$description);
 		}
-		return $output;
+		return $description;
+	}
+
+	/**
+	 * Send a notification of this action to the actionPerson
+	 *
+	 * Does not send if the enteredByPerson and actionPerson are the same person
+	 */
+	public function sendNotification()
+	{
+		$enteredByPerson = $this->getPersonObject('enteredByPerson');
+		$actionPerson = $this->getPersonObject('actionPerson');
+
+		if ($enteredByPerson && $actionPerson
+			&& "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}") {
+
+			$actionPerson->sendNotification(
+				"{$this->getDescription()}\n\n{$this->getNotes()}",
+				APPLICATION_NAME.' '.$this->getAction(),
+				$enteredByPerson
+			);
+		}
 	}
 
 	/**
@@ -271,31 +281,5 @@ class History extends MongoRecord
 		return isset($this->data[$personField][$dataField])
 			? $this->data[$personField][$dataField]
 			: '';
-	}
-
-	/**
-	 * Send a notification of this action to the actionPerson
-	 *
-	 * Does not send if the enteredByPerson and actionPerson are the same person
-	 */
-	public function sendNotification()
-	{
-		$enteredByPerson = $this->getPersonObject('enteredByPerson');
-		$actionPerson = $this->getPersonObject('actionPerson');
-
-		if ($enteredByPerson && $actionPerson
-			&& "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}") {
-
-			$message = $this->parseDescription(array(
-				'enteredByPerson'=>$enteredByPerson->getFullname(),
-				'actionPerson'=>'you'
-			));
-			$message.= "\n\n{$this->getNotes()}";
-			$actionPerson->sendNotification(
-				$message,
-				APPLICATION_NAME.' '.$this->getAction(),
-				$enteredByPerson
-			);
-		}
 	}
 }

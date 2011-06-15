@@ -121,17 +121,6 @@ class Department extends MongoRecord
 	/**
 	 * @return array
 	 */
-	public function getCategories()
-	{
-		if (isset($this->data['categories'])) {
-			return $this->data['categories'];
-		}
-		return array();
-	}
-
-	/**
-	 * @return array
-	 */
 	public function getCustomStatuses()
 	{
 		if (isset($this->data['customStatuses'])) {
@@ -139,16 +128,7 @@ class Department extends MongoRecord
 		}
 		return array();
 	}
-	/**
-	 * @return array
-	 */
-	public function getActions()
-	{
-		if (isset($this->data['actions'])) {
-			return $this->data['actions'];
-		}
-		return array();
-	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -171,29 +151,6 @@ class Department extends MongoRecord
 	public function setDefaultPerson($person)
 	{
 		$this->setPersonData('defaultPerson',$person);
-	}
-
-	/*
-	 *@param array $array
-	 */
-	public function setCategories($categories)
-	{
-		if ($categories && is_array($categories)) {
-			$this->data['categories'] = array();
-
-			foreach ($categories as $id) {
-				try {
-					$category = new Category($id);
-					$this->data['categories'][] = array(
-						'_id'=>$category->getId(),
-						'name'=>$category->getName()
-					);
-				}
-				catch (Eexception $ex) {
-					// Just ignore the bad ones
-				}
-			}
-		}
 	}
 
 	/*
@@ -220,56 +177,94 @@ class Department extends MongoRecord
 	}
 
 	/**
-	 * @param string $string
+	 * Returns an array of category data
+	 *
+	 * @return array
+	 */
+	public function getCategories()
+	{
+		if (isset($this->data['categories'])) {
+			return $this->data['categories'];
+		}
+		return array();
+	}
+
+	/**
+	 * @param array $categories
+	 */
+	public function setCategories($categories)
+	{
+		$this->data['categories'] = array();
+
+		foreach ($categories as $id) {
+			try {
+				$category = new Category($id);
+				$this->data['categories'][] = array(
+					'_id'=>$category->getId(),
+					'name'=>$category->getName()
+				);
+			}
+			catch (Exception $e) {
+				// Just ignore the bad ones
+			}
+		}
+	}
+
+	/**
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasCategory($string)
+	public function hasCategory($name)
 	{
 		foreach ($this->getCategories() as $category) {
-			if ($string == $category['name']) {
+			if ($name == $category['name']) {
 				return true;
 			}
 		}
 	}
 
 	/**
-	 * @param array $action
-	 * @param int $index
+	 * Returns an array of action data
+	 *
+	 * @return array
 	 */
-	public function updateActions($action,$index=null)
+	public function getActions()
 	{
-		if (!isset($this->data['actions'])) {
-			$this->data['actions'] = array();
+		if (isset($this->data['actions'])) {
+			return $this->data['actions'];
 		}
-		foreach ($action as $key=>$value) {
-			$action[$key] = (string)$value;
-		}
-		if (isset($index) && isset($this->data['actions'][$index])) {
-			$this->data['actions'][$index] = $action;
-		}
-		else {
-			$this->data['actions'][] = $action;
+		return array();
+	}
+
+	/**
+	 * @param array $actions
+	 */
+	public function setActions($actions)
+	{
+		$this->data['actions'] = array();
+
+		foreach ($actions as $id) {
+			try {
+				$action = new Action($id);
+				$this->data['actions'][] = array(
+					'_id'=>$action->getId(),
+					'name'=>$action->getName()
+				);
+			}
+			catch (Exception $e) {
+				// Just ignore the bad ones
+			}
 		}
 	}
 
 	/**
-	 * @param int $index
-	 */
-	public function removeAction($index)
-	{
-		if (isset($this->data['actions'][$index])) {
-			unset($this->data['actions'][$index]);
-		}
-	}
-
-	/**
-	 * @param string $string
+	 * @param string $name
 	 * @return bool
 	 */
-	public function hasAction($string)
+	public function hasAction($name)
 	{
 		foreach ($this->getActions() as $action) {
-			if ($string == $action['name']) {
+			if ($name == $action['name']) {
 				return true;
 			}
 		}

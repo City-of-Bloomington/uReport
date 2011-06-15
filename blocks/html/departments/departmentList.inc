@@ -30,17 +30,11 @@
 		<?php
 			foreach ($this->departmentList as $department) {
 				$editButton = '';
-				$editActionsButton = '';
 				$deleteButton = '';
 				if (userIsAllowed('Departments')) {
 					$editButton = $this->template->linkButton(
 						'Edit',
 						BASE_URL."/departments/updateDepartment.php?department_id={$department->getId()}",
-						'edit'
-					);
-					$editActionsButton = $this->template->linkButton(
-						'Edit',
-						BASE_URL."/departments/actions.php?department_id={$department->getId()}",
 						'edit'
 					);
 					// Departments should only be deleted when there's no people in them
@@ -83,7 +77,6 @@
 						}
 				echo "
 						</ul>
-						$editActionsButton
 					</td>
 					<td><ul>
 				";
