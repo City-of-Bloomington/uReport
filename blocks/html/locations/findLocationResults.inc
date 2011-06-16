@@ -6,6 +6,7 @@
  * @param Array $this->results
  * @param string $this->return_url (optional)
  */
+if (count($this->results)) {
 echo "
 <div class=\"findLocationResults\">
 <table>
@@ -51,3 +52,7 @@ echo "
 </table>
 </div>
 ";
+}
+else {
+	echo '<p>No locations found matching your search.</p>';
+}
