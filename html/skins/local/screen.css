@@ -120,6 +120,7 @@ tbody th { text-align:right; }
 	border:1px solid #555555;
 	background: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(220,220,220,1)), color-stop(.5, rgba(255,255,255,.5)), color-stop(1, rgba(220,220,220,1)));
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
+	display:inline-block;
 }
 
 .button button {border:none; background-color:transparent; }
