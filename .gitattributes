@@ -5,6 +5,7 @@ html/departments/updateMyDepartment.php -text
 html/media/media -text
 html/people/mergePeople.php -text
 html/skins/local/images/add.gif -text
+html/skins/local/images/add.png -text
 html/skins/local/images/buttonBackground.png -text
 html/skins/local/images/check.png -text
 html/skins/local/images/delete.gif -text

@@ -23,6 +23,7 @@ tbody th { text-align:right; }
 	position:relative;
 	color:white;
 }
+
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; width:60%; }
 #location_name {width:75%; }
@@ -108,17 +109,20 @@ tbody th { text-align:right; }
 
 /* Buttons */
 .button {
-}
-.button a {
 	overflow:hidden;
 	background-repeat:no-repeat;
 	margin:0 2px;
 	font-size:10pt;
 	font-weight:normal;
-	vertical-align:bottom;
 	padding:1px;
-	border:1px solid #aaaaaa;
+	color:black;
+	line-height:1em;
+	border:1px solid #555555;
+	background: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(220,220,220,1)), color-stop(.5, rgba(255,255,255,.5)), color-stop(1, rgba(220,220,220,1)));
+	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 }
+
+.button button {border:none; background-color:transparent; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
 .icon a { height:0px; }
 .icon .edit { display:block; width:14px; overflow:hidden; }
@@ -126,19 +130,14 @@ tbody th { text-align:right; }
 .icon .add a { padding: 12px 0 0 18px; height:0px; }
 .icon .delete a { padding:12px 0 0 18px; height:0px; }
 
-.button .add, .button .edit, .button .delete {
-	background: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(215,215,215,1)), color-stop(.5, rgba(255,255,255,.5)), color-stop(1, rgba(215,215,215,1)));
-background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
+.add { padding-left:14px; background: url('images/add.png') center left no-repeat; }
+
+.submit, .search {
+padding-left:12px;
+	background:url('images/check.png') center left no-repeat;
 }
-.add a {
-	font-size:10pt;
-	padding:1px 1px 1px 12px;
-	height:14px;
-	background:#eeeeee url('images/add.gif') 0px 2px no-repeat;
-	-webkit-border-radius:3px;
-}
-.edit a { padding:1px 1px 1px 18px; height:17px; background:#eeeeee url('images/edit.png') no-repeat; }
-.delete a { padding:1px 1px 1px 12px; height:16px; background:#eeeeee url('images/delete.gif') no-repeat; }
+.edit { padding-left:18px; background:url('images/edit.png') center left no-repeat; }
+.delete, .cancel {padding-left:13px;  background:url('images/delete.gif') center left no-repeat; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
