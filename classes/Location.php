@@ -83,7 +83,12 @@ class Location
 
 		if (isset($query['address']) && $query['address']) {
 			foreach (AddressService::searchAddresses($query['address']) as $location=>$data) {
-				$results[$location] = array_merge($results[$location],$data);
+				if (!isset($results[$location])) {
+					$results[$location] = $data;
+				}
+				else {
+					$results[$location] = array_merge($results[$location],$data);
+				}
 				$results[$location]['source'] = 'Master Address';
 			}
 		}
