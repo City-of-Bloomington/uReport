@@ -54,5 +54,5 @@ echo "
 ";
 }
 else {
-	echo '<p>No locations found matching your search.</p>';
+	echo '<p>No locations found. Please try your search again or contact an administrator if you believe a location is missing from our database.</p>';
 }
