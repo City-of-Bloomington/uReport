@@ -89,7 +89,9 @@ tbody th { text-align:right; }
 .ticketList table { border:1px solid #aaaaaa; }
 .ticketList tr:nth-child(even) { background: #cccccc }
 .ticketList tbody td { border-bottom:1px solid #aaaaaa; }
+
 .locationInfo > div { margin:.5em 0; }
+
 .findPeople { width:290px; float:left; }
 
 #ticket-panel .addTicketForm .ticketFields { display:none; }
@@ -125,6 +127,7 @@ tbody th { text-align:right; }
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 	display:inline-block;
 }
+.button a {padding:14px; }
 
 .button button {border:none; background-color:transparent; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
@@ -134,14 +137,13 @@ tbody th { text-align:right; }
 .icon .add a { padding: 12px 0 0 18px; height:0px; }
 .icon .delete a { padding:12px 0 0 18px; height:0px; }
 
-.add { padding-left:14px; background: url('images/add.png') center left no-repeat; }
+.add { background: url('images/add.gif') center left no-repeat; }
 
 .submit, .search {
-padding-left:12px;
 	background:url('images/check.png') center left no-repeat;
 }
-.edit { padding-left:18px; background:url('images/edit.png') center left no-repeat; }
-.delete, .cancel {padding-left:13px;  background:url('images/delete.gif') center left no-repeat; }
+.edit { background:url('images/edit.png') center left no-repeat; }
+.delete, .cancel { background:url('images/delete.gif') center left no-repeat; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
@@ -203,5 +205,5 @@ tr.verified > td:first-of-type { background:url('images/required_asterik.gif') c
 /* Drag and Drop */
 .yui3-dd-draggable { cursor:move; }
 .yui3-dd-drop input {background-color:lightGreen; }
-.yui3-dd-drop-over { background-color: green; }
+input.yui3-dd-drop-over { background-color:green; }
 .yui3-dd-drop-active-valid { border: 2px solid green; }

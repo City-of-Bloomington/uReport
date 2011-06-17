@@ -7,8 +7,6 @@
 td select { max-width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 
-#search-form .add a { margin:1.25em 0; }
-
 #search-form li { margin:.25em; }
 
 h1 { margin:2em 0; }
@@ -16,5 +14,5 @@ h1 { margin:2em 0; }
 #search-form label { font-size:1em; display:block; font-weight: bold; }
 .searchForm .fields { min-height:160px; margin:1em; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
 .addNew { margin:1em 0; border-bottom:1px solid #cccccc; }
-#search-form .button .add { font-size:12pt; height:16px; width:200px; padding:4px 4px 4px 14px; }
+#search-form .button .add { font-size:14pt; height:16px; width:200px; padding:4px 4px 4px 14px; }
 .searches {border-bottom:1px solid #cccccc; }
