@@ -45,7 +45,7 @@ if ($this->limit) {
 					$enteredBy = "<a href=\"{$ticket->getURL()}\">$enteredBy</a>";
 				}
 				echo "
-				<tr><td>$status</td>
+				<tr class=\"ticketResult\"><td>$status</td>
 					<td>$location</td>
 					<td>$enteredDate</td>
 					<td>$enteredBy</td>
@@ -100,10 +100,10 @@ if ($this->limit) {
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
 				<fieldset><legend>Merge Two Cases</legend>
-					<p>Add two cases IDs to compare cases and move data between them.</p>
+					<p>Add two cases by dragging one of the rows or typing in the IDs to compare cases and move data between them.</p>
 					<div>
-						<input name=\"ticket_id_a\" id=\"ticket_id_a\" />
-						<input name=\"ticket_id_b\" id=\"ticket_id_b\" />
+						<span class=\"yui3-dd-drop\"><input name=\"ticket_id_a\" id=\"ticket_id_a\" /></span>
+						<span class=\"yui3-dd-drop\"><input name=\"ticket_id_b\" id=\"ticket_id_b\" /><span class=\"yui3-dd-drop\">
 			";
 							echo $this->template->formButton(
 								'Submit','submit','submit'

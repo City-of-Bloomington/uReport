@@ -86,6 +86,16 @@ tbody th { text-align:right; }
 	max-height:300px; overflow:auto;
 }
 
+.ticketList table {border:1px solid #aaaaaa;}
+tr:nth-child(even).ticketResult {background: #CCC}
+.ticketResult td {border-bottom:1px solid #aaaaaa; cursor:move; }
+.yui3-dd-drop-active-valid {
+    border: 2px solid green;
+}
+.yui3-dd-drop input {background-color:lightGreen; }
+.yui3-dd-drop-over {
+    background-color: green;
+}
 .locationInfo > div { margin:.5em 0; }
 .findPeople { width:290px; float:left; }
 
