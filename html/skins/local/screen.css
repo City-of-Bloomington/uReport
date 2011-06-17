@@ -86,16 +86,9 @@ tbody th { text-align:right; }
 	max-height:300px; overflow:auto;
 }
 
-.ticketList table {border:1px solid #aaaaaa;}
-tr:nth-child(even).ticketResult {background: #CCC}
-.ticketResult td {border-bottom:1px solid #aaaaaa; cursor:move; }
-.yui3-dd-drop-active-valid {
-    border: 2px solid green;
-}
-.yui3-dd-drop input {background-color:lightGreen; }
-.yui3-dd-drop-over {
-    background-color: green;
-}
+.ticketList table { border:1px solid #aaaaaa; }
+.ticketList tr:nth-child(even) { background: #cccccc }
+.ticketList tbody td { border-bottom:1px solid #aaaaaa; }
 .locationInfo > div { margin:.5em 0; }
 .findPeople { width:290px; float:left; }
 
@@ -206,3 +199,9 @@ tr.verified > td:first-of-type { background:url('images/required_asterik.gif') c
 
 /* Overlay styles */
 .yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
+
+/* Drag and Drop */
+.yui3-dd-draggable { cursor:move; }
+.yui3-dd-drop input {background-color:lightGreen; }
+.yui3-dd-drop-over { background-color: green; }
+.yui3-dd-drop-active-valid { border: 2px solid green; }

@@ -45,7 +45,7 @@ if ($this->limit) {
 					$enteredBy = "<a href=\"{$ticket->getURL()}\">$enteredBy</a>";
 				}
 				echo "
-				<tr class=\"ticketResult\"><td>$status</td>
+				<tr><td>$status</td>
 					<td>$location</td>
 					<td>$enteredDate</td>
 					<td>$enteredBy</td>
