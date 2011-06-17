@@ -12,7 +12,7 @@ YUI().use('dd-delegate','dd-drop-plugin', function(Y) {
 	});
 
 	Y.DD.DDM.on('drop:hit',function(e) {
-		var matches = e.drag.get('node').one('.button a').get('href').match(/ticket_id=(.+)$/);
+		var matches = e.drag.get('node').one('td:first-child a').get('href').match(/ticket_id=(.+)$/);
 		e.drop.get('node').set('value',matches[1]);
 	});
 });

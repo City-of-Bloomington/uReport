@@ -94,7 +94,9 @@ if ($this->limit) {
 		if ($this->limit && count($this->ticketList)>$this->limit && $this->moreLink) {
 			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
 		}
-		if (!$this->disableButtons && count($this->ticketList)>1) {
+		if (userIsAllowed('Tickets') && !$this->disableButtons && count($this->ticketList)>1) {
+			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+			$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 			echo "
 			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
 				<fieldset><legend>Merge Two Cases</legend>
@@ -114,7 +116,3 @@ if ($this->limit) {
 		}
 	?>
 </div>
-<?php
-	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
-?>
