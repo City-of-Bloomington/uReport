@@ -100,7 +100,6 @@ echo "
 				</tr>
 			</tbody>
 		</table>
-		</div>		
 		";
 
 		$this->responses = $issue->getResponses();
@@ -124,6 +123,9 @@ echo "
 			);
 			echo $block->render('html',$this->template);
 		}
+		echo "
+		</div>
+		";
 	}
 echo "
 </div>
