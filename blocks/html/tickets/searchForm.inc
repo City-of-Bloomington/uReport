@@ -17,7 +17,7 @@
 				);
 			echo "
 			</div>
-			<div class=\"searches\">
+			<div class=\"quickSearches\">
 				<h1>Existing Cases</h1>
 				<h2>Quick Search</h2>
 				<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
@@ -44,7 +44,7 @@
 			";
 		}
 	?>
-
+	<div class="advancedSearch">
 	<h2>Advanced Search</h2>
 	<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 		<fieldset id="advanced-search">
@@ -220,6 +220,7 @@
 			?>
 		</fieldset>
 	</form>
+	</div>
 </div>
 </div>
 <?php

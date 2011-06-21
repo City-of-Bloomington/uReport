@@ -107,9 +107,9 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
-
+.issueList {background-color:#eeeeee; }
 .issueList .issue {
-	border-top:1px solid #cccccc; padding:0; margin:.25em;
+	border:1px solid #cccccc; padding:0; margin:.25em; background-color:white;
 }
 
 /* Buttons */
@@ -119,7 +119,7 @@ tbody th { text-align:right; }
 	margin:0 2px;
 	font-size:10pt;
 	font-weight:normal;
-	padding:1px;
+	padding:3px;
 	color:black;
 	line-height:1em;
 	border:1px solid #555555;
@@ -127,9 +127,9 @@ tbody th { text-align:right; }
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 	display:inline-block;
 }
-.button a {padding:14px; }
+.button a {padding-left:15px; }
 
-.button button {border:none; background-color:transparent; }
+.button button {border:none; background-color:transparent; padding-left:14px; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
 .icon a { height:0px; }
 .icon .edit { display:block; width:14px; overflow:hidden; }
