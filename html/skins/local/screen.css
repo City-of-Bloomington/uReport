@@ -26,9 +26,9 @@ tbody th { text-align:right; }
 
 #banner a { color:white; }
 #application_name { font-size:21pt; font-weight:bold; width:60%; }
-#location_name {width:75%; }
-#utilityBar {float:right; width:40%;}
-#utilityBar li {display:inline; margin-right:1em; color:white; }
+#location_name { width:75%; }
+#utilityBar { float:right; width:40%;}
+#utilityBar li { display:inline; margin-right:1em; color:white; }
 
 #menuBar { margin-bottom:.5em; border-bottom:1px solid #cccccc; }
 #menuBar ul { margin:.5em; padding:0; }
@@ -107,7 +107,7 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
-.issueList {background-color:#eeeeee; }
+.issueList { background-color:#eeeeee; }
 .issueList .issue {
 	border:1px solid #cccccc; padding:0; margin:.25em; background-color:white;
 }
@@ -127,7 +127,7 @@ tbody th { text-align:right; }
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 	display:inline-block;
 }
-.button a {padding-left:15px; }
+.button a { padding-left:15px; }
 
 .button button {border:none; background-color:transparent; padding-left:14px; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
