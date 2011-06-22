@@ -201,6 +201,7 @@ tr.verified > td:first-of-type { background:url('images/required_asterik.gif') c
 
 /* Overlay styles */
 .yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
+.yui3-widget-ft { clear:both; }
 
 /* Drag and Drop */
 .yui3-dd-draggable { cursor:move; }

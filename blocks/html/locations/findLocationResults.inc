@@ -1,3 +1,4 @@
+<div class="findLocationResults">
 <?php
 /**
  * @copyright 2011 City of Bloomington, Indiana
@@ -7,16 +8,15 @@
  * @param string $this->return_url (optional)
  */
 if (count($this->results)) {
-echo "
-<div class=\"findLocationResults\">
-<table>
-	<thead>
-		<tr><th>Location</th>
-			<th>Cases</th>
-		</tr>
-	</thead>
-	<tbody>
-";
+	echo "
+	<table>
+		<thead>
+			<tr><th>Location</th>
+				<th>Cases</th>
+			</tr>
+		</thead>
+		<tbody>
+	";
 	$url = isset($this->return_url)
 		? new URL($this->return_url)
 		: new URL(BASE_URL.'/locations/viewLocation.php');
@@ -41,18 +41,19 @@ echo "
 		$location = View::escape($_GET['location']['text']);
 		echo "<tr><td><a href=\"$url\">$location</a></td><td></td></tr>";
 	}
-echo "
-	</tbody>
-</table>
+	echo "
+		</tbody>
+	</table>
 
-<table>
-	<tr class=\"verified\">
-		<td>indicates verified locations</td>
-	</tr>
-</table>
-</div>
-";
+	<table>
+		<tr class=\"verified\">
+			<td>indicates verified locations</td>
+		</tr>
+	</table>
+	";
 }
 else {
 	echo '<p>No locations found. Please try your search again or contact an administrator if you believe a location is missing from our database.</p>';
 }
+?>
+</div>

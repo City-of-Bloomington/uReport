@@ -21,14 +21,16 @@ else {
 }
 
 $template->blocks['location-panel'][] = new Block(
-	'locations/locationInfo.inc',array('location'=>$location)
+	'locations/locationInfo.inc',
+	array('location'=>$location,'disableButtons'=>isset($_GET['disableButtons']))
 );
 $template->blocks['location-panel'][] = new Block(
 	'tickets/ticketList.inc',
 	array(
 		'ticketList'=>$ticketList,
 		'title'=>'Cases Associated with this Location',
-		'disableLinks'=>isset($_GET['disableLinks'])
+		'disableLinks'=>isset($_GET['disableLinks']),
+		'disableButtons'=>isset($_GET['disableButtons'])
 	)
 );
 
