@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
+ * @param bool $this->disableButtons
  */
 if ($this->location) {
 	$url = new URL(BASE_URL.'/locations/viewLocation.php?location='.$this->location);

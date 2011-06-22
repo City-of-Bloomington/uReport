@@ -13,15 +13,22 @@ if (!$location) {
 }
 $ticketList = new TicketList(array('location'=>$location));
 
-$template = new Template('locations');
+if (isset($_GET['partial'])) {
+	$template = new Template('partial');
+}
+else {
+	$template = new Template('locations');
+}
+
 $template->blocks['location-panel'][] = new Block(
-	'locations/locationInfo.inc',array('location'=>$location,'disableButtons'=>false)
+	'locations/locationInfo.inc',array('location'=>$location)
 );
 $template->blocks['location-panel'][] = new Block(
 	'tickets/ticketList.inc',
 	array(
 		'ticketList'=>$ticketList,
-		'title'=>'Cases Associated with this Location'
+		'title'=>'Cases Associated with this Location',
+		'disableLinks'=>isset($_GET['disableLinks'])
 	)
 );
 
