@@ -36,6 +36,10 @@ if ($ticket->getLocation()) {
 		'locations/locationInfo.inc',
 		array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 	);
+	$template->blocks['location-panel'][] = new Block(
+		'tickets/ticketLocationInfo.inc',
+		array('ticket'=>$ticket)
+	);
 
 	$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
 	if (count($ticketList) > 1) {

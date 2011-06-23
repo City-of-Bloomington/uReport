@@ -95,22 +95,6 @@ echo "
 			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
 			<td></td>
 		</tr>
-";
-		$additionalFields = array('city','state','zip','latitude','longitude');
-		foreach ($additionalFields as $field) {
-			$get = 'get'.ucfirst($field);
-			$value = View::escape($this->ticket->$get());
-			if ($value) {
-				echo "<tr><th>$field</th><td>$value</td></tr>";
-			}
-		}
-		foreach (array_keys(AddressService::$customFieldDescriptions) as $field) {
-			$value = View::escape($this->ticket->get($field));
-			if ($value) {
-				echo "<tr><th>$field</th><td>$value</td></tr>";
-			}
-		}
-echo "
 	</table>
 </div>
 ";

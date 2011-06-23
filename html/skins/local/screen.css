@@ -63,8 +63,9 @@ tbody th { text-align:right; }
 #ticket-panel .ticketInfo,
 #location-panel .locationInfo,
 #location-panel .findLocationForm,
+#location-panel .ticketLocationInfo,
 #person-panel .personInfo {
-	width:290px; float:left;
+	width:290px; float:left; clear:left;
 }
 
 /* Blocks we want to show up in the right column of a Panel */
