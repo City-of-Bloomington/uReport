@@ -15,20 +15,24 @@ $result = $pdo->query($sql);
 foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
 	$name = trim($name);
 	$newName = isset($CATEGORIES[$name]) ? $CATEGORIES[$name] : $name;
-
-	$category = new Category();
-	$category->setName($newName);
-
-	if (preg_match('/NOTICE/',$name)) {
-		list($type,$notice) = explode(' ',$name);
-		$type = $type=='RECYCLING' ? 'RECYCLE' : $type;
-
-		$query = $pdo->prepare('select notice from sanitation_notices where type=?');
-		$query->execute(array($type));
-		foreach ($query->fetchAll(PDO::FETCH_COLUMN) as $notice) {
-			$category->updateProblems($notice);
-		}
+	try {
+		$category = new Category($newName);
 	}
-	$category->save();
-	echo $category->getName()."\n";
+	catch (Exception $e) {
+		$category = new Category();
+		$category->setName($newName);
+
+		if (preg_match('/NOTICE/',$name)) {
+			list($type,$notice) = explode(' ',$name);
+			$type = $type=='RECYCLING' ? 'RECYCLE' : $type;
+
+			$query = $pdo->prepare('select notice from sanitation_notices where type=?');
+			$query->execute(array($type));
+			foreach ($query->fetchAll(PDO::FETCH_COLUMN) as $notice) {
+				$category->updateProblems($notice);
+			}
+		}
+		$category->save();
+		echo $category->getName()."\n";
+	}
 }
