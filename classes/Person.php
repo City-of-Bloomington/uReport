@@ -94,6 +94,28 @@ class Person extends MongoRecord
 		}
 	}
 
+	/**
+	 * Removes all the user account related fields from this Person
+	 */
+	public function deleteUserAccount()
+	{
+		if (isset($this->data['username'])) {
+			unset($this->data['username']);
+		}
+		if (isset($this->data['password'])) {
+			unset($this->data['password']);
+		}
+		if (isset($this->data['authenticationMethod'])) {
+			unset($this->data['authenticationMethod']);
+		}
+		if (isset($this->data['roles'])) {
+			unset($this->data['roles']);
+		}
+		if (isset($this->data['department'])) {
+			unset($this->data['department']);
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------

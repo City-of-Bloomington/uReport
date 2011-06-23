@@ -24,6 +24,7 @@
 				<th>Department</th>
 				<th>Authentication</th>
 				<th>Roles</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,6 +65,7 @@
 						}
 				echo "
 					</td>
+					<td>$deleteButton</td>
 				</tr>
 				";
 			}
