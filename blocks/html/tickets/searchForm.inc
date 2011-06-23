@@ -24,16 +24,16 @@
 							All open cases
 						</a>
 					</li>
-					<li><a href=\"".BASE_URL."/tickets/home.php?assignedPerson={$_SESSION['USER']->getId()}\">
-							All cases assigned to me
+					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;assignedPerson={$_SESSION['USER']->getId()}\">
+							All open cases assigned to me
 						</a>
 					</li>
 				";
 				if ($_SESSION['USER']->getDepartment()) {
 					$dept = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets/home.php?department=$dept[_id]\">
-							All cases for my department
+					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;department=$dept[_id]\">
+							All open cases for my department
 						</a>
 					</li>
 					";

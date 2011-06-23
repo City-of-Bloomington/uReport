@@ -26,6 +26,15 @@ $fields = array(
 foreach (AddressService::$customFieldDescriptions as $key=>$description) {
 	$fields[$key] = $key;
 }
+
+// Logged in users should have a default search
+// Search for open tickets assigned to them
+if (!count(array_intersect(array_keys($fields),array_keys($_GET)))
+	&& isset($_SESSION['USER'])) {
+	$_GET['status'] = 'open';
+	$_GET['assignedPerson'] = "{$_SESSION['USER']->getId()}";
+}
+
 if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	$search = array();
 	foreach ($fields as $field=>$key) {
