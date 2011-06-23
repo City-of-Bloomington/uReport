@@ -1,0 +1,72 @@
+<?php
+/**
+ * This is the translation table from old names to new names
+ *
+ * The key of the array is the old name, with the new name as the value
+ *
+ * @copyright 2011 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+$CATEGORIES = array(
+	'ADA COMPLAINT'=>'ADA',
+	'ANIMAL CONTROL'=>'Animal Control',
+	'BILLING PROBLEM - UTILITIES'=>'Billing Problem – Utilities',
+	'BUILDING'=>'Trash',
+	'CABLE TV'=>'Other',
+	'CBU POLICY'=>'CBU Policy',
+	'DAMAGE DUE TO CONSTRUCTION'=>'Public Works Projects',
+	'DRAINAGE HURT BY STREET WORK'=>'Sewer Problems',
+	'ENCROACHMENT INTO THE RIGHT-OF-WAY'=>'Right-of-Way',
+	'EROSION CONTROL VIOLATION'=>'Violation of Environmental Standards',
+	'FIRE'=>'Fire hazards',
+	'FLOODING AT TWIN LAKES'=>'Water Problems',
+	'GENERAL NUISANCE'=>'General Nuisance',
+	'GRADING'=>'Failure to Comply with Development Standards',
+	'HAZARDOUS DRIVING'=>'Traffic',
+	'INFORMATION REQUEST'=>'Other',
+	'LEAF COLLECTION'=>'Leaf Collection',
+	'NOISE'=>'Noise',
+	'OTHER - (SEE COMMENTS)'=>'Other',
+	'OVER-OCCUPANCY'=>'Over-Occupancy',
+	'PARKING VIOLATION'=>'Parking on unimproved surface',
+	'PARKS & REC'=>'Parks & Rec Parks',
+	'PCB PROBLEMS'=>'Other',
+	'PERMIT VIOLATION'=>'Misc Zoning Violation',
+	'PERSONNEL COMPLAINTS'=>'City Performance',
+	'PUBLIC WORKS PROJECT  - ROAD RECONSTRUCTION'=>'Public Works Projects',
+	'PUBLIC WORKS PROJECT - CURB/SIDEWALK'=>'Public Works Projects',
+	'RECYCLING NOTICE'=>'Recycling',
+	'REFERRAL'=>'Other',
+	'RENTAL COMPLAINT'=>'Rental Complaint',
+	'RIGHT-OF-WAY'=>'Right-of-Way',
+	'SAND REMOVAL'=>'Sand Removal',
+	'SANITATION'=>'Trash',
+	'SANITATION MEMO'=>'Trash',
+	'SEWER PROBLEMS'=>'Sewer Problems',
+	'SIDEWALK/CURB COMPLAINT'=>'Sidewalk and Curbs',
+	'SIGN COMPLAINT'=>'Temporary Signage w/o permit',
+	'SNOW REMOVAL'=>'Snow Removal',
+	'SNOW REMOVAL-PRIVATE PROPERTY'=>'Snow Removal',
+	'STORM WATER DRAINAGE'=>'Sidewalk Snow Removal',
+	'STREET CUT'=>'Public Works Projects',
+	'STREET LIGHTS'=>'Street Lights',
+	'STREET REPAIR'=>'Street Repair',
+	'TITLE VI - RECYCLE'=>'Recycling',
+	'TITLE VI - TRASH'=>'Trash',
+	'TITLE VI - WEEDS'=>'Weeds',
+	'TITLE VI - YARD WASTE'=>'Yard Waste',
+	'TRAFFIC - LINE OF SIGHT  PROBLEM'=>'Line of Sight',
+	'TRAFFIC - PARKING REQUEST'=>'Traffic',
+	'TRAFFIC - STOP SIGN REQUEST'=>'Traffic Equipment',
+	'TRAFFIC - UNSAFE CONDITION'=>'Traffic',
+	'TRAFFIC DURING PROJECTS'=>'Public Works Projects',
+	'TRASH NOTICE'=>'Trash',
+	'UNREGISTERED RENTAL'=>'Unregistered Rental',
+	'UNSAFE STRUCTURE'=>'Unsafe Structure',
+	'WATER PROBLEM'=>'Water Problems',
+	'WATER QUALITY'=>'Water Quality',
+	'WEEDS/SHRUBS (CITY PROPERTY)'=>'Weeds',
+	'YARD WASTE NOTICE'=>'Yard Waste',
+	'ZONING'=>'Misc Zoning Violation'
+);

@@ -6,16 +6,21 @@
  */
 include '../../../configuration.inc';
 include './migrationConfig.inc';
+include './categoryTranslation.inc';
+
 $pdo = new PDO(MIGRATION_DSN,MIGRATION_USER,MIGRATION_PASS);
 
 $sql = "select comp_desc from c_types where c_type1!=0";
 $result = $pdo->query($sql);
 foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
+	$name = trim($name);
+	$newName = isset($CATEGORIES[$name]) ? $CATEGORIES[$name] : $name;
+
 	$category = new Category();
-	$category->setName($name);
+	$category->setName($newName);
 
 	if (preg_match('/NOTICE/',$name)) {
-		list($type,$notice) = explode(' ',trim($name));
+		list($type,$notice) = explode(' ',$name);
 		$type = $type=='RECYCLING' ? 'RECYCLE' : $type;
 
 		$query = $pdo->prepare('select notice from sanitation_notices where type=?');
@@ -27,4 +32,3 @@ foreach ($result->fetchAll(PDO::FETCH_COLUMN) as $name) {
 	$category->save();
 	echo $category->getName()."\n";
 }
-

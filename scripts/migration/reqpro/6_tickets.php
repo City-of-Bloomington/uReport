@@ -6,6 +6,7 @@
  */
 include '../../../configuration.inc';
 include './migrationConfig.inc';
+include './categoryTranslation.inc';
 
 $UNFOUND_PEOPLE = fopen('./unfoundPeople.log','w');
 
@@ -147,7 +148,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$issue->setType('Request');
 	}
 	if ($row['comp_desc']) {
-		$issue->setCategory($row['comp_desc']);
+		$row['comp_desc'] = trim($row['comp_desc']);
+		$category = isset($CATEGORIES[$row['comp_desc']]) ? $CATEGORIES[$row['comp_desc']] : $row['comp_desc'];
+		$issue->setCategory($category);
 	}
 
 	if ($row['first_name'] || $row['middle_initial'] || $row['last_name'] || $row['e_mail_address']) {
