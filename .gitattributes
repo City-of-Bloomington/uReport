@@ -30,6 +30,8 @@ html/skins/local/images/icons/mime/zip.png -text
 html/skins/local/images/required_asterik.gif -text
 html/skins/local/images/sort.png -text
 html/skins/local/images/sortdescending.png -text
+scripts/migration/calltrack/1_constituents.php -text
 scripts/migration/calltrack/1_users.php -text
 scripts/migration/calltrack/2_constituents.php -text
+scripts/migration/calltrack/2_users.php -text
 templates/html/default.inc -text
