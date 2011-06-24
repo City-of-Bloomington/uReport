@@ -20,7 +20,7 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 		$person = new Person($row['username']);
 	}
 	catch (Exception $e) {
-		print_r($e);
+	    // print_r($e);
 		$person = new Person();
 		$person->setUsername($row['username']);
 		$person->setAuthenticationMethod($row['authenticationMethod']);
@@ -35,7 +35,7 @@ foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				// $person->setDepartment($ldap->getDepartment());
 			}
 			catch (Exception $e) {
-				print_r($e);
+			  // print_r($e);
 				$person->setEmail($row['username'].'@bloomington.in.gov');
 			}
 		}
