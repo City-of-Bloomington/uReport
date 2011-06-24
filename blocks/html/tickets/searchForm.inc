@@ -51,53 +51,60 @@
 				<table>
 					<tr><td><label for="enteredByPerson">Entered By</label></td></tr>
 					<tr><td><select name="enteredByPerson[]" id="enteredByPerson" multiple="true" size="5">
-								<option></option>
-								<?php
-									foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
-										$person = new Person($id);
-										$selected = (isset($_GET['enteredByPerson'])
-													&& in_array("{$person->getId()}",$_GET['enteredByPerson']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($person->getFullname());
-										echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
-									}
-								?>
+							<?php
+								$options = array();
+								foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
+									$person = new Person($id);
+									$options["{$person->getLastname()} {$person->getFirstname()}"] = $person;
+								}
+								ksort($options);
+								foreach ($options as $person) {
+									$selected = (isset($_GET['enteredByPerson'])
+												&& in_array("{$person->getId()}",$_GET['enteredByPerson']))
+										? 'selected="selected"'
+										: '';
+									$name = View::escape($person->getFullname());
+									echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
+								}
+							?>
 							</select>
 						</td>
 					</tr>
 					<tr><td><label for="assignedPerson">Assigned To</label></td></tr>
 					<tr><td><select name="assignedPerson[]" id="assignedPerson" multiple="true" size="5">
-								<option></option>
-								<?php
-									foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
-										$person = new Person($id);
-										$selected = (isset($_GET['assignedPerson'])
-													&& in_array("{$person->getId()}",$_GET['assignedPerson']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($person->getFullname());
-										echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
-									}
-								?>
+							<?php
+								$options = array();
+								foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
+									$person = new Person($id);
+									$options["{$person->getLastname()} {$person->getFirstname()}"] = $person;
+								}
+								ksort($options);
+								foreach ($options as $person) {
+									$selected = (isset($_GET['assignedPerson'])
+												&& in_array("{$person->getId()}",$_GET['assignedPerson']))
+										? 'selected="selected"'
+										: '';
+									$name = View::escape($person->getFullname());
+									echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
+								}
+							?>
 							</select>
 						</td>
 					</tr>
 					<tr><td><label for="department">Department</label></td></tr>
 					<tr><td><select name="department[]" id="department" multiple="true" size="5">
-								<option></option>
-								<?php
-									$list = new DepartmentList();
-									$list->find();
-									foreach ($list as $department) {
-										$selected = (isset($_GET['department'])
-													&& in_array("{$department->getId()}",$_GET['department']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($department->getName());
-										echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
-									}
-								?>
+							<?php
+								$list = new DepartmentList();
+								$list->find();
+								foreach ($list as $department) {
+									$selected = (isset($_GET['department'])
+												&& in_array("{$department->getId()}",$_GET['department']))
+										? 'selected="selected"'
+										: '';
+									$name = View::escape($department->getName());
+									echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
+								}
+							?>
 							</select>
 						</td>
 					</tr>
@@ -110,11 +117,15 @@
 							";
 								switch ($config['formElement']) {
 									case 'select':
-										echo "
-										<select name=\"{$key}[]\" id=\"$key\" multiple=\"true\" size=\"5\">
-											<option></option>
-										";
+										echo "<select name=\"{$key}[]\" id=\"$key\" multiple=\"true\" size=\"5\">";
+										$options = array();
 										foreach (Ticket::getDistinct($key) as $value) {
+											if (trim($value)) {
+												$options[] = $value;
+											}
+										}
+										sort($options);
+										foreach ($options as $value) {
 											$selected = (isset($_GET[$key]) && in_array($value,$_GET[$key]))
 												? 'selected="selected"'
 												: '';
@@ -150,19 +161,18 @@
 					</tr>
 					<tr><td><label for="category">Category</label></td></tr>
 					<tr><td><select name="category[]" id="category" multiple="true" size="5">
-								<option></option>
-								<?php
-									$list = new CategoryList();
-									$list->find();
-									foreach ($list as $category) {
-										$selected = (isset($_GET['category'])
-													&& in_array("{$category->getId()}",$_GET['category']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($category);
-										echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
-									}
-								?>
+							<?php
+								$list = new CategoryList();
+								$list->find();
+								foreach ($list as $category) {
+									$selected = (isset($_GET['category'])
+												&& in_array("{$category->getId()}",$_GET['category']))
+										? 'selected="selected"'
+										: '';
+									$name = View::escape($category);
+									echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
+								}
+							?>
 							</select>
 						</td>
 					</tr>
