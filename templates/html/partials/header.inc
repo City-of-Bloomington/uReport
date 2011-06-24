@@ -8,6 +8,7 @@
 		@import url('<?php echo BASE_URL; ?>/skins/local/layouts/<?php echo $this->layout; ?>.css');
 		@import url('<?php echo BASE_URL; ?>/skins/local/screen.css');
 	</style>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css">
 	<script type="text/javascript">
 		var BASE_URL = '<?php echo BASE_URL; ?>';
 	</script>

@@ -1,9 +1,9 @@
-h1 { font-size:1.5em; margin:.5em 0; color:red; }
-h2 { font-size:1.25em; font-weight:bold;  margin:.5em 0 .25em 0; }
+h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:red; }
+h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
 a { text-decoration:none; color:blue; }
 p { margin:.5em; }
 table { margin-bottom:.5em; }
-th { color:#333333; font-weight:bold; font-size:.9em; padding:0em .75em .5em; }
+th { color:#333333; font-weight:bold; font-size:90%; padding:0em .75em .5em; }
 td { padding:.25em .75em; }
 .date, .issueType { font-weight:bold; }
 ul { list-style-type:none; margin:0; padding:0; }
@@ -25,15 +25,16 @@ tbody th { text-align:right; }
 }
 
 #banner a { color:white; }
-#application_name { font-size:21pt; font-weight:bold; width:60%; }
-#location_name { width:75%; }
-#utilityBar { float:right; width:40%;}
-#utilityBar li { display:inline; margin-right:1em; color:white; }
+#application_name { width:60%; margin-left:5px; }
+#application_name a {font-weight:bold; font-size:174%; }
+#location_name {width:75%; margin-left:5px;  }
+#utilityBar {float:right; width:40%;}
+#utilityBar li {display:inline; margin-right:1em; color:white; }
 
 #menuBar { margin-bottom:.5em; border-bottom:1px solid #cccccc; }
 #menuBar ul { margin:.5em; padding:0; }
 #menuBar li { display:inline; margin-right:1em;}
-#menuBar a { font-size:1.25em; }
+#menuBar a { font-size:123.1%; }
 #menuBar a:visited { color:blue; }
 
 #footer { padding:.5em; }
@@ -53,8 +54,9 @@ tbody th { text-align:right; }
 #location-panel,
 #person-panel,
 #action-panel {
-	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
+	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; 
 }
+
 #ticket-panel{
 	clear:both; padding:10px 0 0 10px; overflow:auto;
 }
@@ -63,9 +65,9 @@ tbody th { text-align:right; }
 #ticket-panel .ticketInfo,
 #location-panel .locationInfo,
 #location-panel .findLocationForm,
-#location-panel .ticketLocationInfo,
-#person-panel .personInfo {
-	width:290px; float:left; clear:left;
+#person-panel .personInfo
+#location-panel .locationInfo {
+	 width:290px; float:left; padding:3px;
 }
 
 /* Blocks we want to show up in the right column of a Panel */
@@ -79,7 +81,7 @@ tbody th { text-align:right; }
 #ticket-panel .changeStatusForm,
 #person-panel .ticketList,
 .findpeopleResults {
-	margin-left:295px; padding-left:10px; border-left:1px solid #cccccc;
+	margin-left:305px; padding-left:10px; border-left:1px solid #cccccc;
 }
 
 #ticketCreation #location-panel,
@@ -108,7 +110,7 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
-.issueList { background-color:#eeeeee; }
+.issueList {background-color:#eeeeee; }
 .issueList .issue {
 	border:1px solid #cccccc; padding:0; margin:.25em; background-color:white;
 }
@@ -118,7 +120,7 @@ tbody th { text-align:right; }
 	overflow:hidden;
 	background-repeat:no-repeat;
 	margin:0 2px;
-	font-size:10pt;
+	font-size:95%;
 	font-weight:normal;
 	padding:3px;
 	color:black;
@@ -128,7 +130,7 @@ tbody th { text-align:right; }
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 	display:inline-block;
 }
-.button a { padding-left:15px; }
+.button a {padding-left:15px; }
 
 .button button {border:none; background-color:transparent; padding-left:14px; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
@@ -148,10 +150,13 @@ tbody th { text-align:right; }
 
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
-	color:black; font-size:12pt; font-weight:bold;
+	color:black; font-size:116%; font-weight:bold;
 	padding-left:11px;
 	background:url('images/add.gif') no-repeat;
 }
+
+input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button
+{ padding:1px 2px; }
 
 .mediaList { margin-left:.5em; }
 
@@ -189,7 +194,7 @@ tbody th { text-align:right; }
 tr.verified > td:first-of-type { background:url('images/required_asterik.gif') center left no-repeat; padding-left:16px; }
 .issue { margin-top:.25em; }
 .issueList h1 { display:inline; }
-.ticketList .add a { height:2em; font-size:.9em; }
+.ticketList .add a { height:2em; font-size:93%; }
 
 /* JavaScript will apply this style to stuff it wants to hide */
 .hidden { display:none; }
