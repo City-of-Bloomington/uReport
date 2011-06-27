@@ -9,7 +9,7 @@ YUI().use('node','overlay','io-form',function(Y) {
 			points:[Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]
 		}
 	});
-	Y.io(BASE_URL+'/locations/partial.php?partial=locations/findLocationForm.inc;return_url='+BASE_URL+'/locations/viewLocation.php;disableButtons',{
+	Y.io(BASE_URL+'/locations/partial.php?partial=locations/findLocationForm.inc;return_url='+BASE_URL+'/locations/viewLocation.php',{
 		on:{
 			complete:function(id,o,args) {
 				overlay.set('bodyContent',o.responseText);
@@ -42,7 +42,7 @@ YUI().use('node','overlay','io-form',function(Y) {
 					);
 					Y.all('#find_location_overlay .findLocationResults a').on('click',function(e) {
 						e.preventDefault();
-						var uri = e.target.get('href')+';partial=location-panel;disableLinks;disableButtons';
+						var uri = e.target.get('href')+';partial=location-panel;disableLinks';
 						Y.io(uri,{
 							on: {
 								complete: function(id,o,args) {
