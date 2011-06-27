@@ -90,7 +90,6 @@ if(isset($_POST['ticket'])){
 	$open->setAction('open');
 	$open->setEnteredByPerson($_SESSION['USER']);
 	$open->setActionPerson($_SESSION['USER']);
-	$open->setDescription('Opened by {actionPerson}');
 
 	// Validate Everything and save
 	try {
