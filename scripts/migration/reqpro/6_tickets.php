@@ -10,6 +10,12 @@ include './categoryTranslation.inc';
 
 $UNFOUND_PEOPLE = fopen('./unfoundPeople.log','w');
 
+$unknownPerson = new Person();
+$unknownPerson->setFirstname('unknown');
+$unknownPerson->setLastname('person');
+$unknownPerson->setUsername('unknown');
+$unknownPerson->save();
+
 $townships = array(
 	1=>'Bean Blossom',
 	2=>'Benton',
@@ -73,6 +79,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		}
 		catch (Exception $e) {
 		}
+	}
+	if (!$ticket->getEnteredByPerson()) {
+		$ticket->setEnteredByPerson('unknown');
 	}
 	if (isset($row['assigned_to']) && $row['assigned_to']) {
 		try {
@@ -351,6 +360,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 
 	try {
+		if (!$ticket->getEnteredByPerson()) {
+			$ticket->setEnteredByPerson('unknown');
+		}
+		if (!$ticket->getAssignedPerson()) {
+			$ticket->setAssignedPerson('unknown');
+		}
 		$ticket->save();
 	}
 	catch (Exception $e) {

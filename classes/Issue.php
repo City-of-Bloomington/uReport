@@ -53,9 +53,9 @@ class Issue extends MongoRecord
 			throw new Exception('missingRequiredFields');
 		}
 
-		#if (!$this->getEnteredByPerson()) {
-		#	throw new Exception('missingRequiredFields');
-		#}
+		if (!$this->getEnteredByPerson()) {
+			throw new Exception('missingRequiredFields');
+		}
 
 		if (!isset($this->data['date'])) {
 			$this->data['date'] = new MongoDate();

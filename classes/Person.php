@@ -70,6 +70,10 @@ class Person extends MongoRecord
 			&& !$this->data['organization']) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		if (isset($this->data['username']) && !isset($this->data['authenticationMethod'])) {
+			$this->data['authenticationMethod'] = 'local';
+		}
 	}
 
 	/**
