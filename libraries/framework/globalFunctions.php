@@ -71,7 +71,7 @@ function customErrorHandler ($errno, $errstr, $errfile, $errline)
 			curl_setopt($skidder,
 						CURLOPT_POSTFIELDS,
 						array('application_id'=>SKIDDER_APPLICATION_ID,
-							  'script'=>$_SERVER['REQUEST_URI'],
+							  'script'=>$_SERVER['SCRIPT_NAME'],
 							  'type'=>$errstr,
 							  'message'=>$message));
 			curl_exec($skidder);
