@@ -32,7 +32,7 @@ foreach (AddressService::$customFieldDescriptions as $key=>$description) {
 if (!count(array_intersect(array_keys($fields),array_keys($_GET)))
 	&& isset($_SESSION['USER'])) {
 	$_GET['status'] = 'open';
-	$_GET['assignedPerson'] = "{$_SESSION['USER']->getId()}";
+	$_GET['assignedPerson'] = array("{$_SESSION['USER']->getId()}");
 }
 
 if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
