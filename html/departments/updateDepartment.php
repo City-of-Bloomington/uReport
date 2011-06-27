@@ -35,8 +35,18 @@ if (isset($_POST['name'])) {
 		if ($_POST['defaultPerson']) {
 			$department->setDefaultPerson($_POST['defaultPerson']);
 		}
-		$department->setCategories(array_keys($_POST['categories']));
-		$department->setActions(array_keys($_POST['actions']));
+		if (isset($_POST['categories'])) {
+			$department->setCategories(array_keys($_POST['categories']));
+		}
+		else {
+			$department->setCategories(array());
+		}
+		if (isset($_POST['actions'])) {
+			$department->setActions(array_keys($_POST['actions']));
+		}
+		else {
+			$department->setActions(array());
+		}
 
 		$department->save();
 		header('Location: '.$return_url);
