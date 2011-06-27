@@ -29,7 +29,7 @@ if (count($tickets)) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
-			'title'=>'Reported Tickets',
+			'title'=>'Reported Cases',
 			'limit'=>10,
 			'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
 		)
@@ -41,7 +41,7 @@ if (count($tickets)) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
-			'title'=>'Assigned Tickets',
+			'title'=>'Assigned Cases',
 			'limit'=>10,
 			'moreLink'=>BASE_URL."/tickets?assignedPerson={$person->getId()}"
 		)
@@ -53,7 +53,7 @@ if (count($tickets)) {
 		'tickets/ticketList.inc',
 		array(
 			'ticketList'=>$tickets,
-			'title'=>'Referred Tickets',
+			'title'=>'Referred Cases',
 			'limit'=>10,
 			'moreLink'=>BASE_URL."/tickets?referredPerson={$person->getId()}"
 		)
