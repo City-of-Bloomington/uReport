@@ -26,10 +26,10 @@ tbody th { text-align:right; }
 
 #banner a { color:white; }
 #application_name { width:60%; margin-left:5px; }
-#application_name a {font-weight:bold; font-size:174%; }
-#location_name {width:75%; margin-left:5px;  }
-#utilityBar {float:right; width:40%;}
-#utilityBar li {display:inline; margin-right:1em; color:white; }
+#application_name a { font-weight:bold; font-size:174%; }
+#location_name { width:75%; margin-left:5px;  }
+#utilityBar { float:right; width:40%;}
+#utilityBar li { display:inline; margin-right:1em; color:white; }
 
 #menuBar { margin-bottom:.5em; border-bottom:1px solid #cccccc; }
 #menuBar ul { margin:.5em; padding:0; }
@@ -54,7 +54,8 @@ tbody th { text-align:right; }
 #location-panel,
 #person-panel,
 #action-panel {
-	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto; 
+	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
+	width:100%;
 }
 
 #ticket-panel{
@@ -110,7 +111,7 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
-.issueList {background-color:#eeeeee; }
+.issueList { background-color:#eeeeee; }
 .issueList .issue {
 	border:1px solid #cccccc; padding:0; margin:.25em; background-color:white;
 }
@@ -130,9 +131,9 @@ tbody th { text-align:right; }
 	background: -moz-linear-gradient(top, #dddddd 0%, white 50%, #dddddd 75%);
 	display:inline-block;
 }
-.button a {padding-left:15px; }
+.button a { padding-left:15px; }
 
-.button button {border:none; background-color:transparent; padding-left:14px; }
+.button button { border:none; background-color:transparent; padding-left:14px; }
 .icon { display:inline-block; height:16px; overflow:hidden; }
 .icon a { height:0px; }
 .icon .edit { display:block; width:14px; overflow:hidden; }
@@ -206,11 +207,18 @@ tr.verified > td:first-of-type { background:url('images/required_asterik.gif') c
 .yui3-aclist-item-active { background-color:blue; }
 
 /* Overlay styles */
+.yui3-overlay { width:90%; }
 .yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
 .yui3-widget-ft { clear:both; }
+#find_location_overlay { width:100%; }
 
 /* Drag and Drop */
 .yui3-dd-draggable { cursor:move; }
 .yui3-dd-drop input {background-color:lightGreen; }
 input.yui3-dd-drop-over { background-color:green; }
 .yui3-dd-drop-active-valid { border: 2px solid green; }
+
+#location_map {
+	width:100%; height:480px;
+	border:2px solid black;
+}
