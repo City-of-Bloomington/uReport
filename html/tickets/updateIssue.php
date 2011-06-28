@@ -50,7 +50,7 @@ if (isset($_REQUEST['person_id'])) {
 // Handle any stuff the user posts
 //-------------------------------------------------------------------
 if (isset($_POST['issue'])) {
-	if (!$issue->getEnteredByPerson) {
+	if (!$issue->getEnteredByPerson()) {
 		$issue->setEnteredByPerson($_SESSION['USER']);
 	}
 	$fields = array(
