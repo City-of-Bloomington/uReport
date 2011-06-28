@@ -275,6 +275,9 @@ class Department extends MongoRecord
 	 */
 	public function getPeople()
 	{
-		return new PersonList(array('department._id'=>$this->data['_id']));
+		if (isset($this->data['_id'])) {
+			return new PersonList(array('department._id'=>$this->data['_id']));
+		}
+		return array();
 	}
 }
