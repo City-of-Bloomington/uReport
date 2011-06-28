@@ -23,7 +23,7 @@ catch (Exception $e) {
 }
 
 // Handle any stuff the user posts
-if (isset($_POST['action'])) {
+if (isset($_POST['action']) && $_POST['action']) {
 	// add a record to ticket history
 	$history = new History();
 	$history->setAction($_POST['action']);
