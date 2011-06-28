@@ -61,7 +61,8 @@ function customErrorHandler ($errno, $errstr, $errfile, $errline)
 				 "From: apache@$_SERVER[SERVER_NAME]");
 		}
 		if (in_array('SKIDDER',$ERROR_REPORTING)) {
-			$message = "Error on line $errline of file $errfile:\n$errstr\n";
+			$script = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
+			$message = "$script\nError on line $errline of file $errfile:\n$errstr\n";
 			$message.= print_r(debug_backtrace(),true);
 
 			$skidder = curl_init(SKIDDER_URL);
