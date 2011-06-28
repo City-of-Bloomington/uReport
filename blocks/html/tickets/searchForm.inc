@@ -32,7 +32,7 @@
 				if ($_SESSION['USER']->getDepartment()) {
 					$dept = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;department=$dept[_id]\">
+					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;department[]=$dept[_id]\">
 							All open cases for my department
 						</a>
 					</li>
