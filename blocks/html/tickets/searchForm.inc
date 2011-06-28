@@ -24,7 +24,7 @@
 							All open cases
 						</a>
 					</li>
-					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;assignedPerson={$_SESSION['USER']->getId()}\">
+					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;assignedPerson[]={$_SESSION['USER']->getId()}\">
 							All open cases assigned to me
 						</a>
 					</li>
