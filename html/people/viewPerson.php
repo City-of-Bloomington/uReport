@@ -43,7 +43,7 @@ if (count($tickets)) {
 			'ticketList'=>$tickets,
 			'title'=>'Assigned Cases',
 			'limit'=>10,
-			'moreLink'=>BASE_URL."/tickets?assignedPerson={$person->getId()}"
+			'moreLink'=>BASE_URL."/tickets?assignedPerson[]={$person->getId()}"
 		)
 	);
 }
