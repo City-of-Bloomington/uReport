@@ -50,7 +50,7 @@ if (isset($_REQUEST['assignedPerson'])) {
 
 		$ticket->save();
 
-		$history->sendNotification();
+		$history->sendNotification($ticket);
 
 		header('Location: '.$ticket->getURL());
 		exit();

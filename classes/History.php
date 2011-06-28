@@ -247,17 +247,19 @@ class History extends MongoRecord
 	 * Send a notification of this action to the actionPerson
 	 *
 	 * Does not send if the enteredByPerson and actionPerson are the same person
+	 * @param Ticket $ticket
 	 */
-	public function sendNotification()
+	public function sendNotification($ticket=null)
 	{
 		$enteredByPerson = $this->getPersonObject('enteredByPerson');
 		$actionPerson = $this->getPersonObject('actionPerson');
+		$url = $ticket ? $ticket->getURL() : '';
 
 		if ($enteredByPerson && $actionPerson
 			&& "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}") {
 
 			$actionPerson->sendNotification(
-				"{$this->getDescription()}\n\n{$this->getNotes()}",
+				"$url\n\n{$this->getDescription()}\n\n{$this->getNotes()}",
 				APPLICATION_NAME.' '.$this->getAction(),
 				$enteredByPerson
 			);
