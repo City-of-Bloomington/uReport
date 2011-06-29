@@ -19,9 +19,7 @@
  */
 // Default fields to be used
 if (!$this->fields) {
-	$this->fields = array(
-		'status'=>1,'location'=>1,'enteredDate'=>1,'enteredByPerson'=>1
-	);
+	$this->fields = TicketList::getDefaultFieldsToDisplay();
 }
 $title = $this->title ? View::escape($this->title) : 'Cases';
 if (isset($_GET['sort'])) {

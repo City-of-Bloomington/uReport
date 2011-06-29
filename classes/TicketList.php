@@ -99,4 +99,14 @@ class TicketList extends MongoResultIterator
 			'notes'=>'Notes'
 		);
 	}
+
+	/**
+	 * Returns the set of fields we want to display in search results by default
+	 *
+	 * @return array
+	 */
+	public static function getDefaultFieldsToDisplay()
+	{
+		return array('enteredDate'=>'on','location'=>'on','notes'=>'on');
+	}
 }

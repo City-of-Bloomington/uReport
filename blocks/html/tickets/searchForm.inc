@@ -199,12 +199,7 @@
 				<?php
 					// Default columns to display
 					if (!isset($_GET['fields'])) {
-						$_GET['fields'] = array(
-							'status'=>'on',
-							'location'=>'on',
-							'enteredDate'=>'on',
-							'enteredByPerson'=>'on'
-						);
+						$_GET['fields'] = TicketList::getDefaultFieldsToDisplay();
 					}
 
 					foreach (TicketList::getDisplayableFields() as $name=>$label) {
