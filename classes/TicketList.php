@@ -95,7 +95,8 @@ class TicketList extends MongoResultIterator
 			'city'=>'City',
 			'state'=>'State',
 			'zip'=>'Zip',
-			'categories'=>'Categories'
+			'categories'=>'Categories',
+			'notes'=>'Notes'
 		);
 	}
 }

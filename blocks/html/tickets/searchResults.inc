@@ -83,6 +83,9 @@ echo "
 						}
 						$value = implode(',',$c);
 					}
+					if ($field=='notes') {
+						$value = isset($value[0]) ? $value[0] : '';
+					}
 					$value = View::escape($value);
 					echo "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
 				}

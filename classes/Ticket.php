@@ -470,6 +470,8 @@ class Ticket extends MongoRecord
 
 
 	/**
+	 * Returns the category of each Issue in the ticket
+	 *
 	 * @return array
 	 */
 	public function getCategories()
@@ -481,6 +483,22 @@ class Ticket extends MongoRecord
 			}
 		}
 		return $categories;
+	}
+
+	/**
+	 * Returns the note field of each Issue in the ticket
+	 *
+	 * @return array
+	 */
+	public function getNotes()
+	{
+		$notes = array();
+		foreach ($this->data['issues'] as $issue) {
+			if (isset($issue['notes'])) {
+				$notes[] = $issue['notes'];
+			}
+		}
+		return $notes;
 	}
 
 	/**
