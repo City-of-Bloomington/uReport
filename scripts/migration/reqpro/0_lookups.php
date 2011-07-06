@@ -19,23 +19,19 @@ foreach ($resolutions as $name=>$description) {
 	echo "$resolution\n";
 }
 
-#$issueTypes = array('Request','Complaint','Violation');
-#foreach ($issueTypes as $name) {
-#	$type = new IssueType();
-#	$type->setName($name);
-#	$type->save();
-#	echo "$type\n";
-#}
-
-#$actions = array(
-#	array('name'=>'inspection','description'=>'{actionPerson} inspected this Location','formLabel'=>'inspected by'),
-#	array('name'=>'followup','description'=>'{actionPerson} followed up on this ticket','formLabel'=>'followed up')
-#);
-#foreach ($actions as $a) {
-#	$action = new Action();
-#	$action->setName($a['name']);
-#	$action->setDescription($a['description']);
-#	$action->setFormLabel($a['formLabel']);
-#	$action->save();
-#	echo "{$action->getName()}\n";
-#}
+$actions = array(
+	array('name'=>'open','description'=>'Opened by {actionPerson}','type'=>'system'),
+	array('name'=>'assignment','description'=>'{enteredByPerson} assigned this case to {actionPerson}','type'=>'system'),
+	array('name'=>'close','description'=>'Closed by {actionPerson}','type'=>'system'),
+	array('name'=>'referral','description'=>'{enteredByPerson} referred this case to {actionPerson}','type'=>'system'),
+	array('name'=>'Inspection','description'=>'{actionPerson} inspected this Location','type'=>'department'),
+	array('name'=>'Follow up','description'=>'{actionPerson} followed up on this ticket','type'=>'department')
+);
+foreach ($actions as $a) {
+	$action = new Action();
+	$action->setName($a['name']);
+	$action->setDescription($a['description']);
+	$action->setType($a['type']);
+	$action->save();
+	echo "{$action->getName()}\n";
+}
