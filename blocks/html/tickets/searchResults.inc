@@ -44,14 +44,19 @@ echo "
 				$fields = TicketList::getDisplayableFields();
 				$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 				foreach ($this->fields as $name=>$value) {
-					if (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1) {
-						$url->sort = array($name=>-1);
+					switch ($name) {
+						case 'notes':
+						case 'categories':
+							echo "<th>$fields[$name]</th>";
+							break;
+
+						default:
+							$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
+								? $url->sort = array($name=>-1)
+								: $url->sort = array($name=>1);
+							$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
+							echo "<th><a href=\"$url\" $class>$fields[$name]</a></th>";
 					}
-					else {
-						$url->sort = array($name=>1);
-					}
-					$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
-					echo "<th><a href=\"$url\" $class>$fields[$name]</a></th>";
 				}
 		echo "
 					<th></th>
