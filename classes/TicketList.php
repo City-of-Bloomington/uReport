@@ -32,12 +32,25 @@ class TicketList extends MongoResultIterator
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					if (is_array($value)) {
+						// Convert any MongoIds
 						if (false !== strpos($key,'_id')) {
 							foreach ($value as $k=>$v) {
 								$value[$k] = new MongoId($v);
 							}
 						}
-						$search[$key] = array('$in'=>$value);
+
+						// We want to be able to pass raw Mongo queries for status
+						// This should work, since we don't ever want to do queries
+						// for a set of statuses.  We will only every be passing in
+						// one status
+						if ($key=='status') {
+							$search[$key] = $value;
+						}
+						// Normally, we want to allow for passing in multiple possible values
+						// We should do queries for tickets matching a field to a set of values
+						else {
+							$search[$key] = array('$in'=>$value);
+						}
 					}
 					else {
 						if (false !== strpos($key,'_id')) {
