@@ -152,11 +152,9 @@ tbody th { text-align:right; }
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
 .largeButton .add a {
 	color:black; font-size:116%; font-weight:bold;
-	padding-left:11px;
-	background:url('images/add.gif') no-repeat;
 }
 
-input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button
+input[type="button"], input[type="submit"], input[type="reset"], input[type="file"],-webkit-file-upload-button, button
 { padding:1px 2px; }
 
 .mediaList { margin-left:.5em; }
@@ -193,6 +191,7 @@ input[type="button"], input[type="submit"], input[type="reset"], input[type="fil
 .pageNavigation .current { border:2px solid green; }
 
 tr.verified > td:first-of-type { background:url('images/required_asterik.gif') center left no-repeat; padding-left:16px; }
+tr.verified {background:url('images/required_asterik.gif') center left no-repeat\9; padding-left:16px\9; }
 .issue { margin-top:.25em; }
 .issueList h1 { display:inline; }
 .ticketList .add a { height:2em; font-size:93%; }

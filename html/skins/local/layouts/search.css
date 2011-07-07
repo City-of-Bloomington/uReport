@@ -8,7 +8,7 @@
 #search-form .search-checkboxes { -webkit-column-count:2; -webkit-column-gap:.5em;
 								-moz-column-count:2; -moz-column-gap:.5em;
 								}
-td select { max-width:200px; overflow:hidden; }
+td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 
 #search-form li { margin:.15em; padding:0; }
