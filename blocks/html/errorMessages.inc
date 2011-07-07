@@ -7,7 +7,7 @@
  */
 ?>
 <div id="errorMessages">
-	<h1>No That's wrong</h1>
+	<h1>Sorry</h1>
 	<?php
 		foreach ($this->errorMessages as $e)
 		{
