@@ -6,20 +6,26 @@
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
-$assignedPerson = $this->ticket->getAssignedPerson()
-	? $this->ticket->getPersonObject('assignedPerson')
-	: $this->currentDepartment->getPersonObject('defaultPerson');
+// If the assigned person is in the currently chosen department, use the assigned person
+// Otherwise, use the default person from the currently chosen department
+$assignedPerson = $this->ticket->getPersonObject('assignedPerson');
+if (!$assignedPerson) {
+	$assignedPerson = $_SESSION['USER'];
+}
+$selected_id = "{$assignedPerson->getData('department._id')}" == "{$this->currentDepartment->getId()}"
+	? "{$assignedPerson->getId()}"
+	: "{$this->currentDepartment->getData('defaultPerson._id')}";
 ?>
 <table>
 	<tr><td><label for="assignedPerson">Person</label></td>
 		<td><select name="assignedPerson" id="assignedPerson">
 			<?php
-				$name = View::escape($assignedPerson->getFullname());
-				echo "<option value=\"{$assignedPerson->getId()}\">$name</option>";
-
 				foreach ($this->currentDepartment->getPeople() as $person) {
 					$name = View::escape($person->getFullname());
-					echo "<option value=\"{$person->getId()}\">$name</option>";
+					$selected = "{$person->getId()}"==$selected_id
+						? 'selected="selected"'
+						: '';
+					echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
 				}
 			?>
 			</select>
