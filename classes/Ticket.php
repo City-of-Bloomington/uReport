@@ -478,7 +478,7 @@ class Ticket extends MongoRecord
 	{
 		$categories = array();
 		foreach ($this->data['issues'] as $issue) {
-			if (isset($issue['category'])) {
+			if (isset($issue['category']) && !in_array($issue['category'],$categories)) {
 				$categories[] = $issue['category'];
 			}
 		}
