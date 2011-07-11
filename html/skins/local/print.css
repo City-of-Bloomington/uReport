@@ -4,3 +4,5 @@ html { font-size:10pt; }
 #menuBar { display:none; }
 #search-form { display:none; }
 #search-results { width:100%; margin:0; padding:0 1em; }
+.button { display:none; }
+.uploadForm { display:none; }
