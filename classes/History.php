@@ -161,7 +161,7 @@ class History extends MongoRecord
 	{
 		$date = trim($date);
 		if ($date) {
-			$this->data['enteredDate'] = new MongoDate(strtotime($date));
+			$this->data['actionDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
