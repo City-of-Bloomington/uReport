@@ -15,7 +15,7 @@ tbody th { text-align:right; }
 .ticketList td, .searchResults td {border-bottom:1px solid #dddddd; }
 
 #banner {
-	width:100%; height:60px;
+	height:60px;
 	background-color:#003366;
 	background-image: -moz-linear-gradient( rgba(6,42,78,1), rgba(15,98,180,.5), rgba(6,42,78,1));
 	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(6,42,78,1)), color-stop(.5, rgba(15,98,180,.5)), color-stop(1, rgba(6,42,78,1)));
@@ -55,7 +55,6 @@ tbody th { text-align:right; }
 #person-panel,
 #action-panel {
 	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
-	width:100%;
 }
 
 #ticket-panel{
@@ -111,10 +110,13 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
+
 .issueList { background-color:#eeeeee; }
-.issueList .issue {
-	border:1px solid #cccccc; padding:0; margin:.25em; background-color:white;
+.issueList h1 { margin:.25em; }
+.issueList .issueInfo {
+	border:1px solid #cccccc; padding:.25em; background-color:white;
 }
+.issueInfo .notes { margin-bottom:.25em; }
 
 /* Buttons */
 .button {
@@ -191,9 +193,7 @@ input[type="button"], input[type="submit"], input[type="reset"], input[type="fil
 .pageNavigation .current { border:2px solid green; }
 
 tr.verified > td:first-of-type { background:url('images/required_asterik.gif') center left no-repeat; padding-left:16px; }
-tr.verified {background:url('images/required_asterik.gif') center left no-repeat\9; padding-left:16px\9; }
-.issue { margin-top:.25em; }
-.issueList h1 { display:inline; }
+tr.verified { background:url('images/required_asterik.gif') center left no-repeat\9; padding-left:16px\9; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 /* JavaScript will apply this style to stuff it wants to hide */
@@ -213,7 +213,7 @@ tr.verified {background:url('images/required_asterik.gif') center left no-repeat
 
 /* Drag and Drop */
 .yui3-dd-draggable { cursor:move; }
-.yui3-dd-drop input {background-color:lightGreen; }
+.yui3-dd-drop input { background-color:lightGreen; }
 input.yui3-dd-drop-over { background-color:green; }
 .yui3-dd-drop-active-valid { border: 2px solid green; }
 

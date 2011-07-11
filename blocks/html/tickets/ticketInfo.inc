@@ -70,7 +70,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 
 echo "
 <div class=\"ticketInfo\">
-	<h1>Case</h1>
+	<h1>Case #{$this->ticket->getId()}</h1>
 	<table>
 		<tr><th>Location:</th>
 			<td>$location</td>

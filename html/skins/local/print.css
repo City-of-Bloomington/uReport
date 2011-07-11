@@ -1,6 +1,6 @@
 /*Search panel with two vertical columns*/
-html {font-size:10pt; }
-#banner {display:none; }
-#menuBar {display:none; }
-#search-form {display:none; }
+html { font-size:10pt; }
+#banner { display:none; }
+#menuBar { display:none; }
+#search-form { display:none; }
 #search-results { width:100%; margin:0; padding:0 1em; }
