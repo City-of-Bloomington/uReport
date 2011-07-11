@@ -47,7 +47,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 		'edit'
 	);
 	$deleteButton = $this->template->linkButton(
-		'Delete',
+		'Delete Case',
 		BASE_URL.'/tickets/deleteTicket.php?ticket_id='.$this->ticket->getId(),
 		'delete'
 	);

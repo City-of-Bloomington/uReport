@@ -20,7 +20,7 @@ if (!$this->disableButtons && userIsAllowed('Issues')) {
 	$deleteButton = $this->template->linkButton(
 		'Delete Issue',
 		BASE_URL."/tickets/deleteIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}",
-		'edit',null,null,'button'
+		'delete',null,null,'button'
 	);
 
 	if ($this->issue->getReportedByPerson()) {
