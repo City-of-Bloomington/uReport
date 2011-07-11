@@ -9,11 +9,17 @@
  * @param bool $this->disableButtons
  */
 $editButton = '';
+$deleteButton = '';
 $responseButton = '';
 if (!$this->disableButtons && userIsAllowed('Issues')) {
 	$editButton = $this->template->linkButton(
 		'Edit Issue',
-		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index=$this->index",
+		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}",
+		'edit',null,null,'button'
+	);
+	$deleteButton = $this->template->linkButton(
+		'Delete Issue',
+		BASE_URL."/tickets/deleteIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}",
 		'edit',null,null,'button'
 	);
 
@@ -33,6 +39,7 @@ echo "
 		<span class=\"issueType\"><a href=\"$url\">$type</a></span>
 		$editButton
 		$responseButton
+		$deleteButton
 	</h2>
 ";
 	if (!$this->disableComments) {

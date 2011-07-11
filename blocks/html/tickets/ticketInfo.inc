@@ -37,6 +37,7 @@ if ($this->ticket->getResolution()) {
 $assignButton = '';
 $referralButton = '';
 $editStatusButton = '';
+$deleteButton = '';
 $changeLocationButton = '';
 
 if (!$this->disableButtons && userIsAllowed('Tickets')) {
@@ -44,6 +45,11 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 		'Edit Status',
 		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
 		'edit'
+	);
+	$deleteButton = $this->template->linkButton(
+		'Delete',
+		BASE_URL.'/tickets/deleteTicket.php?ticket_id='.$this->ticket->getId(),
+		'delete'
 	);
 
 	if ($this->ticket->getStatus()!='closed') {
@@ -70,7 +76,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 
 echo "
 <div class=\"ticketInfo\">
-	<h1>Case #{$this->ticket->getId()}</h1>
+	<h1>Case #{$this->ticket->getId()} $deleteButton</h1>
 	<table>
 		<tr><th>Location:</th>
 			<td>$location</td>

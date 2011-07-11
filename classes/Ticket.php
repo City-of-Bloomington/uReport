@@ -522,6 +522,16 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @param int $index
+	 */
+	public function removeIssue($index)
+	{
+		if (isset($this->data['issues'][$index])) {
+			unset($this->data['issues'][$index]);
+		}
+	}
+
+	/**
 	 * Records that someone responded to an issue
 	 *
 	 * @param int $index The issue index
