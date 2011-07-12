@@ -14,33 +14,41 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketList $this->ticketList
+ * @param array $this->search The search to be passed to the TicketList
  * @param array $this->fields The ticket fields to display.
+ * @param array $this->sort (optional) A mongo array that defines the sort
  */
-// Default fields to be used
-if (!$this->fields) {
-	$this->fields = TicketList::getDefaultFieldsToDisplay();
-}
-$title = $this->title ? View::escape($this->title) : 'Cases';
-if (isset($_GET['sort'])) {
-	$keys = array_keys($_GET['sort']);
-	$currentSortField = $keys[0];
-	$currentSortDirection = $_GET['sort'][$currentSortField]==1 ? 'ascending' : 'descending';
+if ($this->sort) {
+	$ticketList = new TicketList();
+	$ticketList->find($this->search,$this->sort);
 }
 else {
-	$currentSortField = 'enteredDate';
-	$currentSortDirection = 'descending';
+	$ticketList = new TicketList($this->search);
 }
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
+$paginator = $ticketList->getPaginator(50,$page);
+
+
+
 echo "
 <div class=\"searchResults\">
-	<h1>$title</h1>
+	<h1>Search Results</h1>
 ";
-	if (count($this->ticketList)) {
+	if (count($paginator)) {
 		echo "
 		<table>
 			<thead>
 				<tr>
 		";
+				if (isset($_GET['sort'])) {
+					$keys = array_keys($_GET['sort']);
+					$currentSortField = $keys[0];
+					$currentSortDirection = $_GET['sort'][$currentSortField]==1 ? 'ascending' : 'descending';
+				}
+				else {
+					$currentSortField = 'enteredDate';
+					$currentSortDirection = 'descending';
+				}
 				$fields = TicketList::getDisplayableFields();
 				$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 				foreach ($this->fields as $name=>$value) {
@@ -64,7 +72,7 @@ echo "
 			</thead>
 			<tbody>
 		";
-			foreach ($this->ticketList as $ticket) {
+			foreach ($paginator as $ticket) {
 				echo '<tr>';
 				foreach ($this->fields as $field=>$value) {
 					$get = 'get'.ucfirst($field);
@@ -100,8 +108,11 @@ echo "
 		";
 	}
 	else {
-		echo "<h2>No cases found</h2>";
+		echo "<p>No cases found<p>";
 	}
 echo "
 </div>
 ";
+
+$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
+echo $block->render('html',$this->template);

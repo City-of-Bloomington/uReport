@@ -52,7 +52,7 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 			$key = $key[0];
 			$value = $_GET['sort'][$key];
 
-			// Try and use anthing set up in $fields first.
+			// Try and use anything set up in $fields first.
 			// That's where we've defined the embedded fields in Mongo
 			if (array_key_exists($key,$fields)) {
 				$sort = array($fields[$key]=>(int)$value);
@@ -66,29 +66,18 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 				}
 			}
 		}
+
+		$report = (isset($_GET['report']) && $_GET['report']
+					&& is_file(APPLICATION_HOME."/blocks/html/tickets/reports/$_GET[report].inc"))
+			? new Block("tickets/reports/$_GET[report].inc")
+			: new Block('tickets/searchResults.inc');
+		$report->search = $search;
+		$report->fields = isset($_GET['fields']) ? $_GET['fields'] : TicketList::getDefaultFieldsToDisplay();
 		if (isset($sort)) {
-			$ticketList = new TicketList();
-			$ticketList->find($search,$sort);
+			$report->sort = $sort;
 		}
-		else {
-			$ticketList = new TicketList($search);
-		}
-
-		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-		$paginator = $ticketList->getPaginator(50,$page);
-
-		$template->blocks['search-results'][] = new Block(
-			'tickets/searchResults.inc',
-			array(
-				'ticketList'=>$paginator,
-				'title'=>'Search Results',
-				'fields'=>isset($_GET['fields']) ? $_GET['fields'] : null
-			)
-		);
-		$template->blocks['search-results'][] = new Block(
-			'pageNavigation.inc',array('paginator'=>$paginator)
-		);
-
+		$template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
+		$template->blocks['search-results'][] = $report;
 	}
 }
 

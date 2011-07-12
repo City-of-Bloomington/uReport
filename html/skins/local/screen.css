@@ -110,6 +110,7 @@ tbody th { text-align:right; }
 
 .searchForm {}
 .searchResults {}
+.searchResults .tableOfContents li { display:inline; margin-right:2em; }
 
 .issueList { background-color:#eeeeee; }
 .issueList h1 { margin:.25em; }
@@ -186,6 +187,7 @@ input[type="button"], input[type="submit"], input[type="reset"], input[type="fil
 .swf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/flash.gif') no-repeat; }
 .ascending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sort.png') top right no-repeat; }
 .descending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sortdescending.png') top right no-repeat; }
+.top { height:16px; padding: 0px 20px 0px 0px; background:url('images/sortdescending.png') top right no-repeat; }
 
 
 .pageNavigation { margin:.5em; }

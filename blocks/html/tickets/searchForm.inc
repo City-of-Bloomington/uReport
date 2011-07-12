@@ -219,6 +219,10 @@
 
 			<fieldset><legend>Submit</legend>
 				<?php
+					if (isset($_GET['report'])) {
+						$report = View::escape($_GET['report']);
+						echo "<input name=\"report\" type=\"hidden\" value=\"$report\" />";
+					}
 					echo $this->template->formButton(
 						'Search','submit','search'
 					);
