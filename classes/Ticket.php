@@ -6,7 +6,6 @@
  */
 class Ticket extends MongoRecord
 {
-
 	/**
 	 * Populates the object with data
 	 *
@@ -631,9 +630,34 @@ class Ticket extends MongoRecord
 	 */
 	public static function getDistinct($fieldname)
 	{
-		$mongo = Database::getConnection();
-		$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
-		return $result['values'];
+		if (defined('DISTINCT_QUERY_CACHE')) {
+			$cache = Zend_Cache::factory(
+				'Core','File',
+				array('lifetime'=>DISTINCT_QUERY_CACHE_LIFETIME),
+				array(
+					'cache_dir'=>APPLICATION_HOME.'/data/cache',
+					'read_control_type'=>'strlen'
+				)
+			);
+
+			$id = preg_replace('/[^a-zA-Z]/','',$fieldname);
+			if (($data = $cache->load($id))===false) {
+				$mongo = Database::getConnection();
+				$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+				$data = $result['values'];
+				$cache->save(serialize($data));
+				return $data;
+			}
+			else {
+				return unserialize($data);
+			}
+		}
+		else {
+			// Return non-cached results
+			$mongo = Database::getConnection();
+			$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
+			return $result['values'];
+		}
 	}
 
 	/**
