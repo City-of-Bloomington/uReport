@@ -3,11 +3,21 @@
  * Displays a list of Tickets
  *
  * This page only displays Ticket and Issue fields that are asked for
- * The fields desired need to be the indexes of an associative array
- * The values for each field just needs to be truthy
  *
- * $exampleFields = array('ticket-id'=>1,'ticket-status'=>1,'issue-issueType'=>1);
- *
+ * The fields desired need to be in the form of TicketList::getDisplayableFields()
+ * Example:
+ * $this->fieldsToDisplay = array (
+ *		'enteredByPerson'=>array(
+ *			'displayName'=>'Case Entered By',
+ *			'searchOn'=>'enteredByPerson._id',
+ *			'sortOn'=>'enteredByPerson.fullname'
+ *		),
+ *		'categories'=>array(
+ *			'displayName'=>'Categories',
+ *			'searchOn'=>'issues.category._id',
+ *			'sortOn'=>'issues.category.name'
+ *		)
+ *	)
  * For the full list of possible fields for use here,
  * See: TicketList::getDisplayableFields()
  *
@@ -15,97 +25,40 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->search The search to be passed to the TicketList
- * @param array $this->fields The ticket fields to display.
+ * @param array $this->fieldsToDisplay The ticket fields to display
  * @param array $this->sort (optional) A mongo array that defines the sort
  */
-if ($this->sort) {
-	$ticketList = new TicketList();
-	$ticketList->find($this->search,$this->sort);
+$returnFields = array();
+foreach ($this->fieldsToDisplay as $field=>$definition) {
+	$returnFields[] = $definition['sortOn'];
 }
-else {
-	$ticketList = new TicketList($this->search);
-}
+
+$ticketList = new TicketList();
+$ticketList->findRawData($this->search,$this->sort,$returnFields);
+
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-$paginator = $ticketList->getPaginator(50,$page);
-
-
+$ticketList = $ticketList->getPaginator(50,$page);
 
 echo "
 <div class=\"searchResults\">
 	<h1>Search Results</h1>
 ";
-	if (count($paginator)) {
-		echo "
-		<table>
-			<thead>
-				<tr>
-		";
-				if (isset($_GET['sort'])) {
-					$keys = array_keys($_GET['sort']);
-					$currentSortField = $keys[0];
-					$currentSortDirection = $_GET['sort'][$currentSortField]==1 ? 'ascending' : 'descending';
-				}
-				else {
-					$currentSortField = 'enteredDate';
-					$currentSortDirection = 'descending';
-				}
-				$fields = TicketList::getDisplayableFields();
-				$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-				foreach ($this->fields as $name=>$value) {
-					switch ($name) {
-						case 'notes':
-						case 'categories':
-							echo "<th>$fields[$name]</th>";
-							break;
+	if (count($ticketList)) {
+		echo "<table>";
 
-						default:
-							$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
-								? $url->sort = array($name=>-1)
-								: $url->sort = array($name=>1);
-							$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
-							echo "<th><a href=\"$url\" $class>$fields[$name]</a></th>";
-					}
-				}
-		echo "
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-		";
-			foreach ($paginator as $ticket) {
-				echo '<tr>';
-				foreach ($this->fields as $field=>$value) {
-					$get = 'get'.ucfirst($field);
-					$value = $ticket->$get();
-					if (preg_match('/Person/',$field) || $field=='constituent') {
-						if ($value) {
-							$value = $value['fullname'];
-						}
-					}
-					if (false !== strpos($field,'Date')) {
-						if (isset($value->sec)) {
-							$value = date(DATE_FORMAT,$value->sec);
-						}
-					}
-					if ($field=='categories') {
-						$c = array();
-						foreach ($value as $category) {
-							$c[] = $category['name'];
-						}
-						$value = implode(',',$c);
-					}
-					if ($field=='notes') {
-						$value = isset($value[0]) ? $value[0] : '';
-					}
-					$value = View::escape($value);
-					echo "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
-				}
-				echo '</tr>';
-			}
-		echo "
-			</tbody>
-		</table>
-		";
+		$header = new Block(
+			'tickets/partials/searchResultsColumnHeaders.inc',
+			array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+		);
+		echo $header->render('html',$this->template);
+
+		$body = new Block(
+			'tickets/partials/searchResultsRows.inc',
+			array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+		);
+		echo $body->render('html',$this->template);
+
+		echo "</table>";
 	}
 	else {
 		echo "<p>No cases found<p>";
@@ -114,5 +67,5 @@ echo "
 </div>
 ";
 
-$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
+$block = new Block('pageNavigation.inc',array('paginator'=>$ticketList));
 echo $block->render('html',$this->template);

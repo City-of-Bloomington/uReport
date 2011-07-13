@@ -6,25 +6,11 @@
  */
 $template = new Template('search');
 $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
-// Map the form fields to the Ticket search fields
-$fields = array(
-	'enteredByPerson'=>'enteredByPerson._id',
-	'assignedPerson'=>'assignedPerson._id',
-	'referredPerson'=>'referredPerson._id',
-	'reportedByPerson'=>'issues.reportedByPerson._id',
-	'department'=>'assignedPerson.department._id',
-	'city'=>'city',
-	'state'=>'state',
-	'zip'=>'zip',
-	'type'=>'issues.type',
-	'category'=>'issues.category._id',
-	'contactMethod'=>'issues.contactMethod',
-	'status'=>'status',
-	'action'=>'history.action',
-	'actionPerson'=>'history.actionPerson._id'
-);
-foreach (AddressService::$customFieldDescriptions as $key=>$description) {
-	$fields[$key] = $key;
+
+// Map any extra AddressService fields to the Ticket search fields
+$fields = TicketList::getDisplayableFields();
+foreach (AddressService::$customFieldDescriptions as $key=>$value) {
+	$fields[$key] = array('displayName'=>$value['description'],'searchOn'=>$key,'sortOn'=>$key);
 }
 
 // Logged in users should have a default search
@@ -35,47 +21,50 @@ if (!count(array_intersect(array_keys($fields),array_keys($_GET)))
 	$_GET['assignedPerson'] = array("{$_SESSION['USER']->getId()}");
 }
 
+// Build the search query
 if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 	$search = array();
-	foreach ($fields as $field=>$key) {
+	foreach ($fields as $field=>$definition) {
 		if (isset($_GET[$field])) {
 			$value = is_string($_GET[$field]) ? trim($_GET[$field]) : $_GET[$field];
 			if ($value) {
-				$search[$key] = $value;
+				$search[$definition['searchOn']] = $value;
 			}
 		}
 	}
 
 	if (count($search)) {
-		if (isset($_GET['sort'])) {
-			$key = array_keys($_GET['sort']);
-			$key = $key[0];
-			$value = $_GET['sort'][$key];
-
-			// Try and use anything set up in $fields first.
-			// That's where we've defined the embedded fields in Mongo
-			if (array_key_exists($key,$fields)) {
-				$sort = array($fields[$key]=>(int)$value);
-			}
-			// Anything else that we're displaying will not be an embedded field
-			// So we can just use the name of the field
-			else {
-				$f = TicketList::getDisplayableFields();
-				if (array_key_exists($key,$f)) {
-					$sort = array($key=>(int)$value);
-				}
-			}
-		}
-
+		// Create the report
 		$report = (isset($_GET['report']) && $_GET['report']
 					&& is_file(APPLICATION_HOME."/blocks/html/tickets/reports/$_GET[report].inc"))
 			? new Block("tickets/reports/$_GET[report].inc")
 			: new Block('tickets/searchResults.inc');
 		$report->search = $search;
-		$report->fields = isset($_GET['fields']) ? $_GET['fields'] : TicketList::getDefaultFieldsToDisplay();
-		if (isset($sort)) {
-			$report->sort = $sort;
+
+		// If the user asked for a sorting, see if we can accomodate them
+		// What we can sort by is defined in $fields
+		// See TicketList::getDisplayableFields()
+		if (isset($_GET['sort'])) {
+			$keys = array_keys($_GET['sort']);
+			$fieldToSortBy = $keys[0];
+			$value = $_GET['sort'][$fieldToSortBy];
+
+			if (array_key_exists($fieldToSortBy,$fields)) {
+				$report->sort = array($fields[$fieldToSortBy]['sortOn']=>(int)$value);
+			}
 		}
+
+		// Tell the report what fields we want displayed
+		$fieldsToDisplay = array();
+		$f = isset($_GET['fields']) ? $_GET['fields'] : TicketList::getDefaultFieldsToDisplay();
+		foreach (array_keys($f) as $field) {
+			if (isset($fields[$field])) {
+				$fieldsToDisplay[$field] = $fields[$field];
+			}
+		}
+		$report->fieldsToDisplay = $fieldsToDisplay;
+
+
 		$template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
 		$template->blocks['search-results'][] = $report;
 	}

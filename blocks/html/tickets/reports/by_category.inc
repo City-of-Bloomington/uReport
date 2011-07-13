@@ -5,12 +5,20 @@
  * If categories are chosen in the search, we only display those categories.
  * If categories are not chosen, we will go through all the categories in the system
  *
- * This page only displays Ticket and Issue fields that are asked for
- * The fields desired need to be the indexes of an associative array
- * The values for each field just needs to be truthy
- *
- * $exampleFields = array('ticket-id'=>1,'ticket-status'=>1,'issue-issueType'=>1);
- *
+ * The fields desired need to be in the form of TicketList::getDisplayableFields()
+ * Example:
+ * $this->fieldsToDisplay = array (
+ *		'enteredByPerson'=>array(
+ *			'displayName'=>'Case Entered By',
+ *			'searchOn'=>'enteredByPerson._id',
+ *			'sortOn'=>'enteredByPerson.fullname'
+ *		),
+ *		'categories'=>array(
+ *			'displayName'=>'Categories',
+ *			'searchOn'=>'issues.category._id',
+ *			'sortOn'=>'issues.category.name'
+ *		)
+ *	)
  * For the full list of possible fields for use here,
  * See: TicketList::getDisplayableFields()
  *
@@ -30,6 +38,12 @@ else {
 	$categories = new CategoryList();
 	$categories->find();
 }
+
+$returnFields = array();
+foreach ($this->fieldsToDisplay as $field=>$definition) {
+	$returnFields[] = $definition['sortOn'];
+}
+
 echo "
 <div class=\"searchResults\">
 	<h1>Category Report</h1>
@@ -50,14 +64,10 @@ echo "
 
 		$this->vars['search']['issues.category._id'] = array("{$category->getId()}");
 
-		if ($this->sort) {
-			$ticketList = new TicketList();
-			$ticketList->find($this->search,$this->sort);
-		}
-		else {
-			$ticketList = new TicketList($this->search);
-		}
+		$ticketList = new TicketList();
+		$ticketList->findRawData($this->search,$this->sort,$returnFields);
 		$count = count($ticketList);
+
 		if ($count) {
 			// Render the tableOfContents link
 			echo "<li><a href=\"$_SERVER[REQUEST_URI]#$id\">$categoryName ($count)</a></li>";
@@ -66,73 +76,20 @@ echo "
 			$ticketData.= "
 			<h2 id=\"$id\">$categoryName</h2>
 			<table>
-				<thead>
-					<tr>
 			";
-					if (isset($_GET['sort'])) {
-						$keys = array_keys($_GET['sort']);
-						$currentSortField = $keys[0];
-						$currentSortDirection = $_GET['sort'][$currentSortField]==1 ? 'ascending' : 'descending';
-					}
-					else {
-						$currentSortField = 'enteredDate';
-						$currentSortDirection = 'descending';
-					}
-					$fields = TicketList::getDisplayableFields();
-					$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-					foreach ($this->fields as $name=>$value) {
-						switch ($name) {
-							case 'notes':
-							case 'categories':
-								$ticketData.= "<th>$fields[$name]</th>";
-								break;
+			$header = new Block(
+				'tickets/partials/searchResultsColumnHeaders.inc',
+				array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+			);
+			$ticketData.= $header->render('html',$this->template);
 
-							default:
-								$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
-									? $url->sort = array($name=>-1)
-									: $url->sort = array($name=>1);
-								$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
-								$ticketData.= "<th><a href=\"$url\" $class>$fields[$name]</a></th>";
-						}
-					}
+			$body = new Block(
+				'tickets/partials/searchResultsRows.inc',
+				array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+			);
+			$ticketData.= $body->render('html',$this->template);
+
 			$ticketData.= "
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-			";
-				foreach ($ticketList as $ticket) {
-					$ticketData.= '<tr>';
-					foreach ($this->fields as $field=>$value) {
-						$get = 'get'.ucfirst($field);
-						$value = $ticket->$get();
-						if (preg_match('/Person/',$field) || $field=='constituent') {
-							if ($value) {
-								$value = $value['fullname'];
-							}
-						}
-						if (false !== strpos($field,'Date')) {
-							if (isset($value->sec)) {
-								$value = date(DATE_FORMAT,$value->sec);
-							}
-						}
-						if ($field=='categories') {
-							$c = array();
-							foreach ($value as $category) {
-								$c[] = $category['name'];
-							}
-							$value = implode(',',$c);
-						}
-						if ($field=='notes') {
-							$value = isset($value[0]) ? $value[0] : '';
-						}
-						$value = View::escape($value);
-						$ticketData.= "<td><a href=\"{$ticket->getURL()}\">$value</a></td>";
-					}
-					$ticketData.= '</tr>';
-				}
-			$ticketData.= "
-				</tbody>
 			</table>
 			<a href=\"$_SERVER[REQUEST_URI]#banner\" class=\"top\">Back to Top</a>
 			";

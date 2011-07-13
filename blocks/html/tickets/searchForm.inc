@@ -202,12 +202,12 @@
 						$_GET['fields'] = TicketList::getDefaultFieldsToDisplay();
 					}
 
-					foreach (TicketList::getDisplayableFields() as $name=>$label) {
+					foreach (TicketList::getDisplayableFields() as $name=>$definition) {
 						$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
 						echo "
 						<li><label>
 								<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
-								$label
+								$definition[displayName]
 							</label>
 						</li>
 						";

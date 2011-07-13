@@ -9,6 +9,17 @@
 class TicketList extends MongoResultIterator
 {
 	/**
+	 * Mongo has  a 4Mb limit on the data that can be sorted
+	 * However, there doesn't seem to be a query where we can ask a cursor
+	 * for how much data is about to be returned.
+	 * So, instead we're using rowcount as a guide to decide
+	 * whether we can apply sorting or not.
+	 */
+	public static $MAX_SORTABLE_ROWS = 2000;
+
+	private $RETURN_TICKET_OBJECTS = true;
+
+	/**
 	 * @param array $fields
 	 */
 	public function __construct($fields=null)
@@ -26,6 +37,54 @@ class TicketList extends MongoResultIterator
 	 * @param array $order
 	 */
 	public function find($fields=null,$order=array('enteredDate'=>-1))
+	{
+		$this->RETURN_TICKET_OBJECTS = true;
+
+		$search = self::prepareSearch($fields);
+		if (count($search)) {
+			$this->cursor = $this->mongo->tickets->find($search);
+		}
+		else {
+			$this->cursor = $this->mongo->tickets->find();
+		}
+		if ($order) {
+			if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+				$this->cursor->sort($order);
+			}
+		}
+	}
+
+	/**
+	 * Populates the results with only the fields requested
+	 *
+	 * Hydrating whole Ticket objects for large searches can be slow
+	 * This lets you get just the fields you need, saving memory
+	 *
+	 * @param array $fields
+	 * @param array $order
+	 * @param array $returnFields
+	 */
+	public function findRawData($fields=null,$order=null,$returnFields=null)
+	{
+		// Make sure there's always a TicketID in the results
+		if (!is_array($returnFields)) {
+			$returnFields = array();
+		}
+		if (!in_array('_id',$returnFields)) {
+			$returnFields[] = '_id';
+		}
+
+		$search = self::prepareSearch($fields);
+		$this->cursor = $this->mongo->tickets->find($search,$returnFields);
+		if ($order) {
+			if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+				$this->cursor->sort($order);
+			}
+		}
+		$this->RETURN_TICKET_OBJECTS = false;
+	}
+
+	private static function prepareSearch($fields)
 	{
 		$search = array();
 		if (count($fields)) {
@@ -61,15 +120,7 @@ class TicketList extends MongoResultIterator
 				}
 			}
 		}
-		if (count($search)) {
-			$this->cursor = $this->mongo->tickets->find($search);
-		}
-		else {
-			$this->cursor = $this->mongo->tickets->find();
-		}
-		if ($order) {
-			$this->cursor->sort($order);
-		}
+		return $search;
 	}
 
 	/**
@@ -80,36 +131,69 @@ class TicketList extends MongoResultIterator
 	 */
 	public function loadResult($data)
 	{
-		return new Ticket($data);
+		return $this->RETURN_TICKET_OBJECTS ? new Ticket($data) : $data;
 	}
 
 	/**
-	 * Returns fields that can be displayed in a single line
+	 * Returns fields that can be displayed for search results
 	 *
-	 * When displaying TicketLists, it is useful to try to display each ticket on a single line
-	 * These are the fields that are possible to be joined into a single line for any single ticket
+	 * We also provide the fully spelled-out mongo key for
+	 * both searching and sorting
 	 *
-	 * @return array(fieldname=>human_readable_label)
+	 * The key of the returned array is the name used on search form inputs
+	 * displayName is what should be displayed
+	 * searchOn is the key to use for filtering on that field
+	 * sortOn is the key to use for sorting by that field
+	 *
+	 * @return array(
+	 *	fieldname=>array(
+	 *			displayName=>human_readable_label,
+	 *			searchOn=>mongoKey,
+	 *			sortOn=>mongoKey
+	 *		)
+	 * )
 	 */
 	public static function getDisplayableFields()
 	{
 		// All possible columns to display
 		return array(
-			'id'=>'Case #',
-			'enteredDate'=>'Case Date',
-			'enteredByPerson'=>'Case Entered By',
-			'assignedPerson'=>'Assigned To',
-			'referredPerson'=>'Referred To',
-			'status'=>'Status',
-			'resolution'=>'Resolution',
-			'location'=>'Location',
-			'latitude'=>'Latitude',
-			'longitude'=>'Longitude',
-			'city'=>'City',
-			'state'=>'State',
-			'zip'=>'Zip',
-			'categories'=>'Categories',
-			'notes'=>'Notes'
+			'id'=>array(
+				'displayName'=>'Case #','searchOn'=>'_id','sortOn'=>'_id'
+			),
+			'enteredDate'=>array(
+				'displayName'=>'Case Date',
+				'searchOn'=>'enteredDate',
+				'sortOn'=>'enteredDate'
+			),
+			'enteredByPerson'=>array(
+				'displayName'=>'Case Entered By',
+				'searchOn'=>'enteredByPerson._id',
+				'sortOn'=>'enteredByPerson.fullname'
+			),
+			'assignedPerson'=>array(
+				'displayName'=>'Assigned To',
+				'searchOn'=>'assignedPerson._id',
+				'sortOn'=>'assignedPerson.fullname'
+			),
+			'referredPerson'=>array(
+				'displayName'=>'Referred To',
+				'searchOn'=>'referredPerson._id',
+				'sortOn'=>'referredPerson.fullname'
+			),
+			'categories'=>array(
+				'displayName'=>'Categories',
+				'searchOn'=>'issues.category._id',
+				'sortOn'=>'issues.category.name'
+			),
+			'status'=>array('displayName'=>'Status','searchOn'=>'status','sortOn'=>'status'),
+			'resolution'=>array('displayName'=>'Resolution','searchOn'=>'resolution','sortOn'=>'resolution'),
+			'location'=>array('displayName'=>'Location','searchOn'=>'location','sortOn'=>'location'),
+			'latitude'=>array('displayName'=>'Latitude','searchOn'=>'latitude','sortOn'=>'latitude'),
+			'longitude'=>array('displayName'=>'Longitude','searchOn'=>'longitude','sortOn'=>'longitude'),
+			'city'=>array('displayName'=>'City','searchOn'=>'city','sortOn'=>'city'),
+			'state'=>array('displayName'=>'State','searchOn'=>'state','sortOn'=>'state'),
+			'zip'=>array('displayName'=>'Zip','searchOn'=>'zip','sortOn'=>'zip'),
+			'notes'=>array('displayName'=>'Notes','searchOn'=>'issues.notes','sortOn'=>'issues.notes')
 		);
 	}
 
