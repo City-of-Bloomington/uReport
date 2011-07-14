@@ -18,6 +18,7 @@ class TicketList extends MongoResultIterator
 	public static $MAX_SORTABLE_ROWS = 2000;
 
 	private $RETURN_TICKET_OBJECTS = true;
+	private $DEFAULT_SORT = array('enteredDate'=>-1);
 
 	/**
 	 * @param array $fields
@@ -36,7 +37,7 @@ class TicketList extends MongoResultIterator
 	 * @param array $fields
 	 * @param array $order
 	 */
-	public function find($fields=null,$order=array('enteredDate'=>-1))
+	public function find($fields=null,$order=null)
 	{
 		$this->RETURN_TICKET_OBJECTS = true;
 
@@ -47,10 +48,9 @@ class TicketList extends MongoResultIterator
 		else {
 			$this->cursor = $this->mongo->tickets->find();
 		}
-		if ($order) {
-			if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
-				$this->cursor->sort($order);
-			}
+		$order = $order ? $order : $this->DEFAULT_SORT;
+		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+			$this->cursor->sort($order);
 		}
 	}
 
@@ -64,7 +64,7 @@ class TicketList extends MongoResultIterator
 	 * @param array $order
 	 * @param array $returnFields
 	 */
-	public function findRawData($fields=null,$order=array('enteredDate'=>-1),$returnFields=null)
+	public function findRawData($fields=null,$order=null,$returnFields=null)
 	{
 		// Make sure there's always a TicketID in the results
 		if (!is_array($returnFields)) {
@@ -76,10 +76,10 @@ class TicketList extends MongoResultIterator
 
 		$search = self::prepareSearch($fields);
 		$this->cursor = $this->mongo->tickets->find($search,$returnFields);
-		if ($order) {
-			if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
-				$this->cursor->sort($order);
-			}
+
+		$order = $order ? $order : $this->DEFAULT_SORT;
+		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+			$this->cursor->sort($order);
 		}
 		$this->RETURN_TICKET_OBJECTS = false;
 	}
