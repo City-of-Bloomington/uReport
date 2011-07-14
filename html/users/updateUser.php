@@ -11,14 +11,19 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-// Load the user for editing
-try {
-	$user = new Person($_REQUEST['user_id']);
+if (isset($_REQUEST['user_id'])) {
+	// Load the user for editing
+	try {
+		$user = new Person($_REQUEST['user_id']);
+	}
+	catch (Exception $e) {
+		$_SESSION['errorMessages'][] = $e;
+		header('Location: '.BASE_URL.'/users');
+		exit();
+	}
 }
-catch (Exception $e) {
-	$_SESSION['errorMessages'][] = $e;
-	header('Location: '.BASE_URL.'/users');
-	exit();
+else {
+	$user = new Person();
 }
 
 // Handle POST data
