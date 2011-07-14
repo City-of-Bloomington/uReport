@@ -64,7 +64,7 @@ class TicketList extends MongoResultIterator
 	 * @param array $order
 	 * @param array $returnFields
 	 */
-	public function findRawData($fields=null,$order=null,$returnFields=null)
+	public function findRawData($fields=null,$order=array('enteredDate'=>-1),$returnFields=null)
 	{
 		// Make sure there's always a TicketID in the results
 		if (!is_array($returnFields)) {
