@@ -36,15 +36,15 @@ foreach ($this->fieldsToDisplay as $field=>$definition) {
 $ticketList = new TicketList();
 $ticketList->findRawData($this->search,$this->sort,$returnFields);
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-$ticketList = $ticketList->getPaginator(50,$page);
-
 echo "
 <div class=\"searchResults\">
 	<h1>Search Results</h1>
 ";
 	if (count($ticketList)) {
 		echo "<table>";
+
+		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
+		$ticketList = $ticketList->getPaginator(50,$page);
 
 		$header = new Block(
 			'tickets/partials/searchResultsColumnHeaders.inc',
@@ -67,5 +67,7 @@ echo "
 </div>
 ";
 
-$block = new Block('pageNavigation.inc',array('paginator'=>$ticketList));
-echo $block->render('html',$this->template);
+if ($ticketList instanceof Zend_Paginator) {
+	$block = new Block('pageNavigation.inc',array('paginator'=>$ticketList));
+	echo $block->render('html',$this->template);
+}
