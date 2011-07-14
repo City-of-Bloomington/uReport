@@ -15,11 +15,22 @@
 				echo $this->linkButton(
 					'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
 				);
+				$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
 			echo "
 			</div>
 			<div class=\"quickSearches\">
 				<h1>Existing Cases</h1>
 				<h2>Quick Search</h2>
+				<form method=\"get\" action=\"".BASE_URL."/tickets/home.php\">
+					<fieldset>
+						<label>Case # <input name=\"number\" value=\"$number\"/></label>
+			";
+						echo $this->template->formButton(
+							'Search','submit','search'
+						);
+			echo "
+					</fieldset>
+				</form>
 				<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
 							All open cases
 						</a>

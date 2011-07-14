@@ -74,9 +74,10 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 
 }
 
+$id = $this->ticket->getNumber() ? $this->ticket->getNumber() : $this->ticket->getId();
 echo "
 <div class=\"ticketInfo\">
-	<h1>Case #{$this->ticket->getId()} $deleteButton</h1>
+	<h1>Case #$id $deleteButton</h1>
 	<table>
 		<tr><th>Location:</th>
 			<td>$location</td>

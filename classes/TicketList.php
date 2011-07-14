@@ -97,7 +97,6 @@ class TicketList extends MongoResultIterator
 								$value[$k] = new MongoId($v);
 							}
 						}
-
 						// We want to be able to pass raw Mongo queries for status
 						// This should work, since we don't ever want to do queries
 						// for a set of statuses.  We will only every be passing in
@@ -115,7 +114,14 @@ class TicketList extends MongoResultIterator
 						if (false !== strpos($key,'_id')) {
 							$value = new MongoId($value);
 						}
-						$search[$key] = $value;
+						// Make sure ticket numbers are converted to Integer
+						// They won't be found if you pass a string
+						elseif ($key=='number') {
+							$search[$key] = (int)$value;
+						}
+						else {
+							$search[$key] = $value;
+						}
 					}
 				}
 			}
@@ -158,7 +164,10 @@ class TicketList extends MongoResultIterator
 		// All possible columns to display
 		return array(
 			'id'=>array(
-				'displayName'=>'Case #','searchOn'=>'_id','sortOn'=>'_id'
+				'displayName'=>'Case ID','searchOn'=>'_id','sortOn'=>'_id'
+			),
+			'number'=>array(
+				'displayName'=>'Case #','searchOn'=>'number','sortOn'=>'number'
 			),
 			'enteredDate'=>array(
 				'displayName'=>'Case Date',

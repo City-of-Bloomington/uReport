@@ -62,10 +62,10 @@ class Ticket extends MongoRecord
 		}
 
 		if (!$this->getPersonData('enteredByPerson','_id')) {
-			throw new Exception('tickets/missingEnteredByPerson');
+			$this->setEnteredByPerson($_SESSION['USER']);
 		}
 		if (!$this->getPersonData('assignedPerson','_id')) {
-			throw new Exception('tickets/missingAssignment');
+			$this->setAssignedPerson($_SESSION['USER']);
 		}
 	}
 
@@ -76,6 +76,17 @@ class Ticket extends MongoRecord
 	{
 		$this->validate();
 		$mongo = Database::getConnection();
+
+		if (!$this->getNumber()) {
+			$counter = $mongo->command(array(
+				'findAndModify'=>'counters',
+				'query'=>array('_id'=>'tickets'),
+				'update'=>array('$inc'=>array('next'=>1)),
+				'new'=>true,
+				'upsert'=>true
+			));
+			$this->data['number'] = $counter['value']['next'];
+		}
 		$mongo->tickets->save($this->data,array('safe'=>true));
 	}
 
@@ -94,11 +105,21 @@ class Ticket extends MongoRecord
 	// Generic Getters
 	//----------------------------------------------------------------
 	/**
-	 * @return int
+	 * @return MongoId
 	 */
 	public function getId()
 	{
 		return $this->data['_id'];
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getNumber()
+	{
+		if (isset($this->data['number'])) {
+			return $this->data['number'];
+		}
 	}
 
 	/**
