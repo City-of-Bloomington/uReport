@@ -38,7 +38,7 @@ foreach ($this->ticketList as $row) {
 				break;
 
 			default:
-				$value = isset($row[$field]) ? $row[$field] : '';
+				$value = isset($row[$definition['sortOn']]) ? $row[$definition['sortOn']] : '';
 		}
 		$value = View::escape($value);
 		echo "
