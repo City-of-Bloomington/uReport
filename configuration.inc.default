@@ -156,7 +156,7 @@ define('ADDRESS_SERVICE','http://localhost/master_address');
  * Rental addresses have additional information we can look up
  * Owner information is being provided from this service
  */
-define('RENTAL_SERVICE','http://apps.bloomington.in.gov/rentpro');
+define('RENTAL_SERVICE','http://localhost/rentpro/RentService');
 
 /**
  * Date format
