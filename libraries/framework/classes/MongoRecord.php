@@ -89,24 +89,7 @@ abstract class MongoRecord
 			}
 		}
 		if ($person instanceof Person) {
-			$data = array(
-				'_id'=>$person->getId(),
-			);
-			$fields = array(
-				'fullname',
-				'department'
-				// Available fields are:
-				//'fullname','firstname','middlename','lastname',
-				//'username','department','organization',
-				//'email','phone','address','city','state','zip'
-			);
-			foreach ($fields as $field) {
-				$get = 'get'.ucfirst($field);
-				if ($person->$get()) {
-					$data[$field] = $person->$get();
-				}
-			}
-			$this->data[$fieldname] = $data;
+			$this->data[$fieldname] = $person->getData();
 		}
 		else {
 			throw new Exception('invalidPerson');

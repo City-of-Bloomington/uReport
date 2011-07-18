@@ -48,17 +48,17 @@ echo "
 	}
 
 
-	$enteredBy = '';
-	if ($this->issue->getEnteredByPerson()) {
-		$href = BASE_URL."/people/viewPerson.php?person_id={$this->issue->getData('enteredByPerson._id')}";
-		$enteredBy = View::escape($this->issue->getData('enteredByPerson.fullname'));
+	$enteredBy = $this->issue->getEnteredByPerson();
+	if ($enteredBy) {
+		$href = BASE_URL."/people/viewPerson.php?person_id={$enteredBy->getId()}";
+		$enteredBy = View::escape($enteredBy->getFullname());
 		$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 	}
 
-	$reportedBy = '';
-	if ($this->issue->getReportedByPerson()) {
-		$href = BASE_URL."/people/viewPerson.php?person_id={$this->issue->getData('reportedByPerson._id')}";
-		$reportedBy = View::escape($this->issue->getData('reportedByPerson.fullname'));
+	$reportedBy = $this->issue->getReportedByPerson();
+	if ($reportedBy) {
+		$href = BASE_URL."/people/viewPerson.php?person_id={$reportedBy->getId()}";
+		$reportedBy = View::escape($reportedBy->getFullname());
 		$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 	}
 

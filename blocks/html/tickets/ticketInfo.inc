@@ -11,22 +11,16 @@ $location = $location ? "<a href=\"".BASE_URL."/locations/viewLocation.php?locat
 
 $url = new URL(BASE_URL.'/people/viewPerson.php');
 
-$assigned = View::escape($this->ticket->getPersonData('assignedPerson','fullname'));
-if ($assigned) {
-	$url->person_id = "{$this->ticket->getPersonData('assignedPerson','_id')}";
-	$assigned = "<a href=\"$url\">$assigned</a>";
-}
+$personFields = array('enteredBy','assigned','referred');
+foreach ($personFields as $field) {
+	$$field = '';
+	$get = 'get'.ucfirst($field).'Person';
+	$person = $this->ticket->$get();
+	if ($person) {
+		$url->person_id = "{$person->getId()}";
+		$$field = "<a href=\"$url\">".View::escape($person->getFullname())."</a>";
+	}
 
-$enteredBy = View::escape($this->ticket->getPersonData('enteredByPerson','fullname'));
-if ($enteredBy) {
-	$url->person_id = (string)$this->ticket->getPersonData('enteredByPerson','_id');
-	$enteredBy = "<a href=\"$url\">$enteredBy</a>";
-}
-
-$referred = View::escape($this->ticket->getPersonData('referredPerson','fullname'));
-if ($referred) {
-	$url->person_id = (string)$this->ticket->getPersonData('referredPerson','_id');
-	$referred = "<a href=\"$url\">$referred</a>";
 }
 
 $status = $this->ticket->getStatus();

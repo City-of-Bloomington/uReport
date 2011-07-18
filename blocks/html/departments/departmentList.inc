@@ -48,12 +48,9 @@
 				}
 				$name = View::escape($department->getName());
 
-				$fullname = '';
-				$person = $department->getDefaultPerson();
-				if ($person) {
-					if (isset($person['fullname'])) {
-						$fullname = View::escape($person['fullname']);
-					}
+				$defaultPerson = $department->getDefaultPerson();
+				if ($defaultPerson) {
+					$defaultPerson = View::escape($defaultPerson->getFullname());
 				}
 
 				echo "
@@ -61,7 +58,7 @@
 						$deleteButton
 					</td>
 					<td>$name</td>
-					<td>$fullname</td>
+					<td>$defaultPerson</td>
 					<td><ul>
 				";
 						foreach ($department->getCategories() as $category) {

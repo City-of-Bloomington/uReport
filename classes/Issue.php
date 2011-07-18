@@ -107,22 +107,22 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getEnteredByPerson()
 	{
 		if (isset($this->data['enteredByPerson'])) {
-			return $this->data['enteredByPerson'];
+			return new Person($this->data['enteredByPerson']);
 		}
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getReportedByPerson()
 	{
 		if (isset($this->data['reportedByPerson'])) {
-			return $this->data['reportedByPerson'];
+			return new Person($this->data['reportedByPerson']);
 		}
 	}
 
@@ -165,6 +165,7 @@ class Issue extends MongoRecord
 			return $this->data['notes'];
 		}
 	}
+
 
 	//----------------------------------------------------------------
 	// Generic Setters
@@ -238,6 +239,13 @@ class Issue extends MongoRecord
 			}
 			$category = new Category($category);
 		}
+		// When the category changes, clear out any custom fields
+		// and load the custom_fields from the category
+		if (!isset($this->data['category'])
+			|| "{$this->data['category']['_id']}"!="{$category->getId()}") {
+			$this->data['custom_fields'] = $category->getCustomFields();
+		}
+
 		$this->data['category'] = array(
 			'_id'=>$category->getId(),
 			'name'=>$category->getName()
@@ -308,5 +316,15 @@ class Issue extends MongoRecord
 			}
 		}
 		return $responses;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCustomFields()
+	{
+		if (isset($this->data['custom_fields'])) {
+			return $this->data['custom_fields'];
+		}
 	}
 }

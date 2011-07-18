@@ -84,6 +84,9 @@ class Person extends MongoRecord
 		$this->validate();
 		$mongo = Database::getConnection();
 		$mongo->people->save($this->data,array('safe'=>true));
+
+		$this->updatePersonInTicketData();
+		$this->updatePersonInDepartmentData();
 	}
 
 	public function delete()
@@ -117,6 +120,90 @@ class Person extends MongoRecord
 		}
 		if (isset($this->data['department'])) {
 			unset($this->data['department']);
+		}
+	}
+
+	/**
+	 * Updates this person's information on all Ticket data that has this person embedded
+	 * Data is saved to the database immediately
+	 */
+	public function updatePersonInTicketData()
+	{
+		if (isset($this->data['_id'])) {
+			$mongo = Database::getConnection();
+
+			// Root level fields can just be updated with a multi-update command
+			$personFields = array('enteredByPerson','assignedPerson','referredPerson');
+			foreach ($personFields as $personField) {
+				$mongo->tickets->update(
+					array("$personField._id"=>$this->data['_id']),
+					array('$set'=>array($personField=>$this->data)),
+					array('upsert'=>false,'multiple'=>true,'safe'=>false)
+				);
+			}
+
+			// Deeper nested fields need to be manually modified and the ticket saved
+			//
+			// This is because the $ positional operator in mongo only returns the first
+			// nested field that matches the find query
+			// http://www.mongodb.org/display/DOCS/Updating#Updating-The%24positionaloperator
+			//
+			// So, instead, we have to do a find for the tickets that have that person
+			// Then, look over each of the possible ticketFields and update the person
+			// data if we see the person we're looking for.
+			$nestedFields = array(
+				'history'=>array('enteredByPerson','actionPerson'),
+				'issues'=>array('enteredByPerson','reportedByPerson')
+			);
+			foreach ($nestedFields as $ticketField=>$fields) {
+				foreach ($fields as $personField) {
+					$results = $mongo->tickets->find(array("$ticketField.$personField._id"=>$this->data['_id']));
+					foreach ($results as $data) {
+						if (isset($data[$ticketField])) {
+							foreach ($data[$ticketField] as $index=>$p) {
+								if (isset($p[$personField])
+									&& "{$p[$personField]['_id']}" == "{$this->data['_id']}") {
+									// ticket.history.0.enteredByPerson = PersonData
+									$data[$ticketField][$index][$personField] = $this->data;
+								}
+							}
+							$mongo->tickets->save($data,array('safe'=>false));
+						}
+					}
+				}
+			}
+
+			// Issue responses are really deep, but we don't want to forget about them
+			$results = $mongo->tickets->find(array('issues.responses.person._id',$this->data['_id']));
+			foreach ($results as $data) {
+				foreach ($data['issues'] as $issueIndex=>$issue) {
+					if (isset($issues['resonses'])) {
+						foreach ($issues['responses'] as $responseIndex=>$response) {
+							if (isset($response['person'])
+								&& "{$response['person']['_id']}"=="{$this->data['_id']}") {
+								// ticket.issues.0.responses.0.person = PersonData
+								$data['issues'][$issueIndex]['responses'][$responseIndex]['person'] = $this->data;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Updates this person's information on all Ticket data that has this person embedded
+	 * Data is saved to the database immediately
+	 */
+	public function updatePersonInDepartmentData()
+	{
+		if (isset($this->data['_id'])) {
+			$mongo = Database::getConnection();
+			$mongo->departments->update(
+				array('defaultPerson._id'=>$this->data['_id']),
+				array('$set'=>array('defaultPerson'=>$this->data)),
+				array('upsert'=>false,'multiple'=>true,'safe'=>false)
+			);
 		}
 	}
 

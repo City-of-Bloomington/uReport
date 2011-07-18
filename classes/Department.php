@@ -109,12 +109,12 @@ class Department extends MongoRecord
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getDefaultPerson()
 	{
 		if (isset($this->data['defaultPerson'])) {
-			return $this->data['defaultPerson'];
+			return new Person($this->data['defaultPerson']);
 		}
 	}
 

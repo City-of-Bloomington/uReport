@@ -27,8 +27,8 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 						<?php
 							$defaultPerson = $this->department->getDefaultPerson();
 							if ($defaultPerson) {
-								$name = View::escape($defaultPerson['fullname']);
-								echo "<option value=\"$defaultPerson[_id]\" selected=\"selected\">$name</option>";
+								$name = View::escape($defaultPerson->getFullname());
+								echo "<option value=\"{$defaultPerson->getId()}\" selected=\"selected\">$name</option>";
 							}
 							foreach ($this->department->getPeople() as $person) {
 								$name = View::escape($person->getFullname());

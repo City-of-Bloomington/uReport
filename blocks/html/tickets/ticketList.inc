@@ -37,7 +37,8 @@ if ($this->limit) {
 				$status = View::escape($ticket->getStatus());
 				$location = View::escape($ticket->getLocation());
 				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
-				$enteredBy = View::escape($ticket->getData('enteredByPerson.fullname'));
+				$enteredByPerson = $ticket->getEnteredByPerson();
+				$enteredBy = $enteredByPerson ? View::escape($enteredByPerson->getFullname()) : '';
 				if (!$this->disableLinks) {
 					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
 					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";

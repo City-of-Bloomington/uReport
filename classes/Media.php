@@ -140,12 +140,12 @@ class Media extends MongoRecord
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getPerson()
 	{
 		if (isset($this->data['person'])) {
-			return $this->data['person'];
+			return new Person($this->data['person']);
 		}
 	}
 

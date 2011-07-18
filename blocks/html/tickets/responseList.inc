@@ -19,16 +19,14 @@
 		<tbody>
 		<?php
 			foreach ($this->responses as $response) {
-				$person_id = $response->getPersonData('person','_id');
-				$fullname = View::escape($response->getPersonData('person','fullname'));
+				$person = $response->getPerson();
+				$id = $person->getId();
+				$name = View::escape($person->getFullname());
 				$contactMethod = View::escape($response->getContactMethod());
 				$notes = View::escape($response->getNotes());
 				echo "
 				<tr><td>{$response->getDate(DATE_FORMAT)}</td>
-					<td><a href=\"".BASE_URL."/people/viewPerson.php?person_id=$person_id\">
-							$fullname
-						</a>
-					</th>
+					<td><a href=\"".BASE_URL."/people/viewPerson.php?person_id=$id\">$name</a></td>
 					<td>$contactMethod</td>
 					<td>$notes</td>
 				</tr>

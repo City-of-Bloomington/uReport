@@ -145,32 +145,32 @@ class Ticket extends MongoRecord
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getEnteredByPerson()
 	{
 		if (isset($this->data['enteredByPerson'])) {
-			return $this->data['enteredByPerson'];
+			return new Person($this->data['enteredByPerson']);
 		}
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getAssignedPerson()
 	{
 		if (isset($this->data['assignedPerson'])) {
-			return $this->data['assignedPerson'];
+			return new Person($this->data['assignedPerson']);
 		}
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getReferredPerson()
 	{
 		if (isset($this->data['referredPerson'])) {
-			return $this->data['referredPerson'];
+			return new Person($this->data['referredPerson']);
 		}
 	}
 

@@ -8,7 +8,7 @@
  */
 // If the assigned person is in the currently chosen department, use the assigned person
 // Otherwise, use the default person from the currently chosen department
-$assignedPerson = $this->ticket->getPersonObject('assignedPerson');
+$assignedPerson = $this->ticket->getAssignedPerson();
 if (!$assignedPerson) {
 	$assignedPerson = $_SESSION['USER'];
 }

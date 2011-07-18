@@ -9,7 +9,8 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param REQUEST issue_id
+ * @param REQUEST ticket_id
+ * @param REQUEST index The index number of the issue
  * @param REQUEST person_id The new person to apply to the issue
  */
 //-------------------------------------------------------------------

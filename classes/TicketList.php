@@ -112,7 +112,7 @@ class TicketList extends MongoResultIterator
 					}
 					else {
 						if (false !== strpos($key,'_id')) {
-							$value = new MongoId($value);
+							$search[$key] = new MongoId($value);
 						}
 						// Make sure ticket numbers are converted to Integer
 						// They won't be found if you pass a string
@@ -193,6 +193,11 @@ class TicketList extends MongoResultIterator
 				'displayName'=>'Categories',
 				'searchOn'=>'issues.category._id',
 				'sortOn'=>'issues.category.name'
+			),
+			'department'=>array(
+				'displayName'=>'Department',
+				'searchOn'=>'assignedPerson.department._id',
+				'sortOn'=>'assignedPerson.department.name'
 			),
 			'status'=>array('displayName'=>'Status','searchOn'=>'status','sortOn'=>'status'),
 			'resolution'=>array('displayName'=>'Resolution','searchOn'=>'resolution','sortOn'=>'resolution'),

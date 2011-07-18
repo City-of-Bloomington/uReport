@@ -25,17 +25,17 @@
 		<td><label for="issue-reportedByPerson">Reported By</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
-				$reportedByPerson_id = isset($reportedByPerson['_id'])
-					? $reportedByPerson['_id']
-					: '';
-				$fullname = isset($reportedByPerson['fullname'])
-					? $reportedByPerson['fullname']
-					: '';
+				$id = '';
+				$name = '';
+				if ($reportedByPerson) {
+					$id = $reportedByPerson->getId();
+					$name = View::escape($reportedByPerson->getFullname());
+				}
 			?>
 			<input type="hidden" name="issue[reportedByPerson]" id="issue-reportedByPerson"
-				value="<?php echo "$reportedByPerson_id"; ?>" />
+				value="<?php echo "$id"; ?>" />
 			<?php
-				echo $fullname;
+				echo $name;
 				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 				$url = BASE_URL."/people?return_url=$return_url";
 				echo $this->template->linkButton(

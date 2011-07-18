@@ -93,22 +93,22 @@ class History extends MongoRecord
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getEnteredByPerson()
 	{
 		if (isset($this->data['enteredByPerson'])) {
-			return $this->data['enteredByPerson'];
+			return new Person($this->data['enteredByPerson']);
 		}
 	}
 
 	/**
-	 * @return array
+	 * @return Person
 	 */
 	public function getActionPerson()
 	{
 		if (isset($this->data['actionPerson'])) {
-			return $this->data['actionPerson'];
+			return new Person($this->data['actionPerson']);
 		}
 	}
 
@@ -213,11 +213,17 @@ class History extends MongoRecord
 	{
 		foreach (ActionList::getActions() as $action) {
 			if ($action->getName()==$this->getAction()) {
+				$enteredByPerson = $this->getEnteredByPerson();
+				$enteredByPerson = $enteredByPerson ? $enteredByPerson->getFullname() : '';
+
+				$actionPerson = $this->getActionPerson();
+				$actionPerson = $actionPerson ? $actionPerson->getFullname() : '';
+
 				return $this->parseDescription(
 					$action->getDescription(),
 					array(
-						'enteredByPerson'=>$this->getPersonData('enteredByPerson','fullname'),
-						'actionPerson'=>$this->getPersonData('actionPerson','fullname')
+						'enteredByPerson'=>$enteredByPerson,
+						'actionPerson'=>$actionPerson
 					)
 				);
 			}
@@ -264,24 +270,5 @@ class History extends MongoRecord
 				$enteredByPerson
 			);
 		}
-	}
-
-	/**
-	 * Returns data from person structures in the Mongo record
-	 *
-	 * If the data doesn't exist an empty string will be returned
-	 * Examples:
-	 * 	getPersonData('enteredByPerson','id')
-	 *  getPersonData('actionPerson','fullname')
-	 *
-	 * @param string $personField
-	 * @param string $dataField
-	 * @return string
-	 */
-	public function getPersonData($personField,$dataField)
-	{
-		return isset($this->data[$personField][$dataField])
-			? $this->data[$personField][$dataField]
-			: '';
 	}
 }

@@ -16,7 +16,8 @@ foreach ($this->ticketList as $row) {
 			case 'enteredByPerson':
 			case 'assignedPerson':
 			case 'referredPerson':
-				$value = isset($row[$field]['fullname']) ? $row[$field]['fullname'] : '';
+				$person = new Person($row[$field]);
+				$value = $person->getFullname();
 				break;
 
 			case 'enteredDate':
