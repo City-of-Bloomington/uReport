@@ -50,10 +50,10 @@ if ($this->location) {
 	if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
 		$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
 		$xml = new SimpleXMLElement($url,null,true);
-		$owners = $xml->xpath("//owner");
+		$owners = $xml->xpath("//Owner");
 		if (count($owners)) {
 			echo '<h1>Owners</h1><ul>';
-			foreach ($xml->xpath("//owner") as $owner) {
+			foreach ($owners as $owner) {
 				echo "<li>{$owner->Name}</li>";
 			}
 			echo '</ul>';
