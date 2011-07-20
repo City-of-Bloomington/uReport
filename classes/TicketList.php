@@ -74,6 +74,18 @@ class TicketList extends MongoResultIterator
 			$returnFields[] = '_id';
 		}
 
+		// Don't let them ask for just a small piece of person data
+		// If they ask for any Person fields to be returned,
+		// we should return the whole person record.
+		// We'll expect the display to load that as a Person object
+		// and call getter functions on it to display the information
+		// See: /blocks/html/tickets/partials/searchResultRows.inc
+		foreach ($returnFields as $i=>$field) {
+			if (preg_match('/.*Person/',$field,$matches)) {
+				$returnFields[$i] = $matches[0];
+			}
+		}
+
 		$search = self::prepareSearch($fields);
 		$this->cursor = $this->mongo->tickets->find($search,$returnFields);
 
@@ -177,17 +189,17 @@ class TicketList extends MongoResultIterator
 			'enteredByPerson'=>array(
 				'displayName'=>'Case Entered By',
 				'searchOn'=>'enteredByPerson._id',
-				'sortOn'=>'enteredByPerson.fullname'
+				'sortOn'=>'enteredByPerson.lastname'
 			),
 			'assignedPerson'=>array(
 				'displayName'=>'Assigned To',
 				'searchOn'=>'assignedPerson._id',
-				'sortOn'=>'assignedPerson.fullname'
+				'sortOn'=>'assignedPerson.lastname'
 			),
 			'referredPerson'=>array(
 				'displayName'=>'Referred To',
 				'searchOn'=>'referredPerson._id',
-				'sortOn'=>'referredPerson.fullname'
+				'sortOn'=>'referredPerson.lastname'
 			),
 			'categories'=>array(
 				'displayName'=>'Categories',
