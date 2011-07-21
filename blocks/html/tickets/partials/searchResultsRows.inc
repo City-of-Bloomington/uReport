@@ -43,6 +43,12 @@ foreach ($this->ticketList as $row) {
 				$value = isset($row['issues'][0]['notes']) ? $row['issues'][0]['notes'] : '';
 				break;
 
+			case 'department':
+				$value = isset($row['assignedPerson']['department']['name'])
+					? View::escape($row['assignedPerson']['department']['name'])
+					: '';
+				break;
+
 			default:
 				$value = isset($row[$definition['sortOn']]) ? $row[$definition['sortOn']] : '';
 		}
