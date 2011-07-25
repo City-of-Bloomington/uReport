@@ -1,2 +1,2 @@
-scripts/migration/calltrack/3_tickets.php
-scripts/migration/calltrack/migrationConfig.inc
+scripts/migration/0.0-1.0/calltrack/3_tickets.php
+scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
