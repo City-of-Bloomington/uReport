@@ -175,9 +175,6 @@ class TicketList extends MongoResultIterator
 	{
 		// All possible columns to display
 		return array(
-			'id'=>array(
-				'displayName'=>'Case ID','searchOn'=>'_id','sortOn'=>'_id'
-			),
 			'number'=>array(
 				'displayName'=>'Case #','searchOn'=>'number','sortOn'=>'number'
 			),
