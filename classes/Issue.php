@@ -127,16 +127,6 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getCategory()
-	{
-		if (isset($this->data['category'])) {
-			return $this->data['category'];
-		}
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getContactMethod()
@@ -228,31 +218,6 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @param string|Category $category
-	 */
-	public function setCategory($category)
-	{
-		if (!$category instanceof Category) {
-			$category = trim($category);
-			if (!$category) {
-				return false;
-			}
-			$category = new Category($category);
-		}
-		// When the category changes, clear out any custom fields
-		// and load the custom_fields from the category
-		if (!isset($this->data['category'])
-			|| "{$this->data['category']['_id']}"!="{$category->getId()}") {
-			$this->data['custom_fields'] = $category->getCustomFields();
-		}
-
-		$this->data['category'] = array(
-			'_id'=>$category->getId(),
-			'name'=>$category->getName()
-		);
-	}
-
-	/**
 	 * @param string $string
 	 */
 	public function setContactMethod($string)
@@ -323,8 +288,34 @@ class Issue extends MongoRecord
 	 */
 	public function getCustomFields()
 	{
-		if (isset($this->data['custom_fields'])) {
-			return $this->data['custom_fields'];
+		if (isset($this->data['customFields'])) {
+			return $this->data['customFields'];
+		}
+	}
+
+	/**
+	 * Populates available fields from the given array
+	 *
+	 * @param array $post
+	 */
+	public function set($post)
+	{
+		$fields = array(
+			'type','reportedByPerson','contactMethod','responseMethod','category','notes'
+		);
+		foreach ($fields as $field) {
+			$set = 'set'.ucfirst($field);
+			if (isset($post[$field])) {
+				$this->$set($post[$field]);
+			}
+		}
+
+		// Check for custom fields
+		if (isset($this->data['category']['customFields'])
+			&& count($this->data['category']['customFields'])) {
+			foreach ($this->data['category']['customFields'] as $i=>$definition) {
+				$this->data['customFields'][$definition['name']] = isset($post[$definition['name']]) ? $post[$definition['name']] : '';
+			}
 		}
 	}
 }

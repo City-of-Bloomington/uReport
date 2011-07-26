@@ -13,10 +13,10 @@
  *			'searchOn'=>'enteredByPerson._id',
  *			'sortOn'=>'enteredByPerson.fullname'
  *		),
- *		'categories'=>array(
+ *		'category'=>array(
  *			'displayName'=>'Categories',
- *			'searchOn'=>'issues.category._id',
- *			'sortOn'=>'issues.category.name'
+ *			'searchOn'=>'category._id',
+ *			'sortOn'=>'category.name'
  *		)
  *	)
  * For the full list of possible fields for use here,
@@ -29,10 +29,10 @@
  * @param array $this->fields The ticket fields to display.
  * @param array $this->sort (optional) A mongo array that defines the sort
  */
-if (isset($this->search['issues.category._id'])) {
+if (isset($this->search['category._id'])) {
 	// Remove the whole set of categories.  Later, we'll replace each category
 	// into the search and run the ticketList
-	$categories = $this->search['issues.category._id'];
+	$categories = $this->search['category._id'];
 }
 else {
 	$categories = new CategoryList();
@@ -62,7 +62,7 @@ echo "
 		$id = preg_replace('/[^a-zA-Z]/','',$category->getName());
 		$categoryName = View::escape($category->getName());
 
-		$this->vars['search']['issues.category._id'] = array("{$category->getId()}");
+		$this->vars['search']['category._id'] = array("{$category->getId()}");
 
 		$ticketList = new TicketList();
 		$ticketList->findRawData($this->search,$this->sort,$returnFields);

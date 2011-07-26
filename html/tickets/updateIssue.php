@@ -54,13 +54,7 @@ if (isset($_POST['issue'])) {
 	if (!$issue->getEnteredByPerson()) {
 		$issue->setEnteredByPerson($_SESSION['USER']);
 	}
-	$fields = array(
-		'type','reportedByPerson','contactMethod','responseMethod','category','notes'
-	);
-	foreach ($fields as $field) {
-		$set = 'set'.ucfirst($field);
-		$issue->$set($_POST['issue'][$field]);
-	}
+	$issue->set($_POST['issue']);
 	$ticket->updateIssues($issue,$index);
 
 	try {

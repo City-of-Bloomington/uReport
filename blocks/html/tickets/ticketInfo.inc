@@ -69,10 +69,15 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 }
 
 $id = $this->ticket->getNumber() ? $this->ticket->getNumber() : $this->ticket->getId();
+$category = $this->ticket->getData('category.name') ? View::escape($this->ticket->getData('category.name')) : '';
 echo "
 <div class=\"ticketInfo\">
 	<h1>Case #$id $deleteButton</h1>
 	<table>
+		<tr><th>Category:</th>
+			<td>$category</td>
+			<td></td>
+		</tr>
 		<tr><th>Location:</th>
 			<td>$location</td>
 			<td>$changeLocationButton</td>

@@ -75,41 +75,6 @@
 			</select>
 		</td>
 	</tr>
-
-	<tr><td><label for="issue-category">Category</label></td>
-		<td><select name="issue[category]" id="issue-category">
-			<?php
-				$issueCategory_id = null;
-				$cat = $this->issue->getCategory();
-				if ($cat) {
-					$issueCategory_id = "$cat[_id]";
-					$name = View::escape($cat['name']);
-					echo "<option value=\"$issueCategory_id\">$name</option>";
-				}
-				if ($_SESSION['USER']->getDepartment()) {
-					$dept = $_SESSION['USER']->getDepartment();
-					$department = new Department($dept['_id']);
-
-					foreach ($department->getCategories() as $departmentCategory) {
-						$selected = $issueCategory_id=="$departmentCategory[_id]"
-							? 'selected="selected"'
-							: '';
-						$name = View::escape($departmentCategory['name']);
-						echo "<option value=\"$departmentCategory[_id]\">$name</option>";
-					}
-				}
-
-			?>
-			</select>
-			<div>
-				<?php
-					$url = new URL(BASE_URL.'/categories/chooseCategory.php');
-					$url->return_url = "{$this->return_url}";
-					echo "<a href=\"$url\">Choose from all categories</a>";
-				?>
-			</div>
-		</td>
-	</tr>
 </table>
 
 <div><label for="issue-notes">Comment about the issue</label></div>

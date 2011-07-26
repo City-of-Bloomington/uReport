@@ -201,10 +201,10 @@ class TicketList extends MongoResultIterator
 				'searchOn'=>'referredPerson._id',
 				'sortOn'=>'referredPerson.lastname'
 			),
-			'categories'=>array(
-				'displayName'=>'Categories',
-				'searchOn'=>'issues.category._id',
-				'sortOn'=>'issues.category.name'
+			'category'=>array(
+				'displayName'=>'Category',
+				'searchOn'=>'category._id',
+				'sortOn'=>'category.name'
 			),
 			'department'=>array(
 				'displayName'=>'Department',

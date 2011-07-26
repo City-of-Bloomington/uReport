@@ -2,17 +2,19 @@ h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:red; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
 a { text-decoration:none; color:blue; }
 p { margin:.5em; }
+
 table { margin-bottom:.5em; }
 th { color:#333333; font-weight:bold; font-size:90%; padding:0em .75em .5em; }
 td { padding:.25em .75em; }
-.date, .issueType { font-weight:bold; }
-ul { list-style-type:none; margin:0; padding:0; }
-li { margin:.5em 0; }
-fieldset {padding:.25em 0; }
-legend { font-weight:bold; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
-.ticketList td, .searchResults td {border-bottom:1px solid #dddddd; }
+
+ul { list-style-type:none; margin:0; padding:0; }
+li { margin:.5em 0; }
+
+fieldset { padding:.25em 0; }
+legend { font-weight:bold; }
+label { font-weight:bold; }
 
 #banner {
 	height:60px;
@@ -63,11 +65,12 @@ tbody th { text-align:right; }
 
 /* Blocks we want to show up in the left column of a Panel */
 #ticket-panel .ticketInfo,
+#person-panel .personInfo,
+#person-panel .addNewForm,
 #location-panel .locationInfo,
 #location-panel .findLocationForm,
-#person-panel .personInfo
-#location-panel .locationInfo {
-	 width:290px; float:left; padding:3px;
+#location-panel .addNewForm {
+	 width:290px; float:left; padding:3px; clear:left
 }
 
 /* Blocks we want to show up in the right column of a Panel */
@@ -91,7 +94,7 @@ tbody th { text-align:right; }
 
 .ticketList table { border:1px solid #aaaaaa; }
 .ticketList tr:nth-child(even) { background: #cccccc }
-.ticketList tbody td { border-bottom:1px solid #aaaaaa; }
+.ticketList td { border-bottom:1px solid #aaaaaa; }
 
 .locationInfo > div { margin:.5em 0; }
 
@@ -108,9 +111,25 @@ tbody th { text-align:right; }
 .mergeForm .target_b { float:right; width:48%; }
 .mergeForm .button { position:absolute; left:40%; }
 
-.searchForm {}
-.searchResults {}
-.searchResults .tableOfContents li { display:inline; margin-right:2em; }
+
+#search-form { border-right:1px solid #cccccc; background-color:#eeeeee; }
+#search-form td select { width:200px; overflow:hidden; }
+#search-form td { padding:.25em .25em; }
+#search-form li { margin:.15em; padding:0; }
+#search-form .fields {
+	min-height:160px; margin:.5em;
+	-webkit-column-count:2; -moz-column-count:2; column-count:2;
+}
+#search-form .addNewForm,
+#search-form .quickSearches,
+#search-form .advancedSearch {
+	background-color:white; border:1px solid #cccccc; margin:5px 0; padding-left:5px;
+}
+#search-results { margin-left:33%; padding:0 1em; }
+#search-results td { border-bottom:1px solid #dddddd; }
+#search-results .tableOfContents li { display:inline; margin-right:2em; }
+
+
 
 .issueList { background-color:#eeeeee; }
 .issueList h1 { margin:.25em; }
@@ -135,8 +154,13 @@ tbody th { text-align:right; }
 	display:inline-block;
 }
 .button a { padding-left:15px; }
-
 .button button { border:none; background-color:transparent; padding-left:14px; }
+
+.add { background: url('images/add.gif') center left no-repeat; }
+.edit { background:url('images/edit.png') center left no-repeat; }
+.submit, .search { background:url('images/check.png') center left no-repeat; }
+.delete, .cancel { background:url('images/delete.gif') center left no-repeat; }
+
 .icon { display:inline-block; height:16px; overflow:hidden; }
 .icon a { height:0px; }
 .icon .edit { display:block; width:14px; overflow:hidden; }
@@ -144,21 +168,17 @@ tbody th { text-align:right; }
 .icon .add a { padding: 12px 0 0 18px; height:0px; }
 .icon .delete a { padding:12px 0 0 18px; height:0px; }
 
-.add { background: url('images/add.gif') center left no-repeat; }
-
-.submit, .search {
-	background:url('images/check.png') center left no-repeat;
-}
-.edit { background:url('images/edit.png') center left no-repeat; }
-.delete, .cancel { background:url('images/delete.gif') center left no-repeat; }
-
 .largeButton { display:inline-block; padding:2px; border:2px solid black; background-color:#DDDDDD; }
-.largeButton .add a {
-	color:black; font-size:116%; font-weight:bold;
-}
+.largeButton .add a { color:black; font-size:116%; font-weight:bold; }
 
-input[type="button"], input[type="submit"], input[type="reset"], input[type="file"],-webkit-file-upload-button, button
-{ padding:1px 2px; }
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="file"],
+-webkit-file-upload-button,
+button {
+	padding:1px 2px;
+}
 
 .mediaList { margin-left:.5em; }
 

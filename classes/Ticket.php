@@ -488,21 +488,27 @@ class Ticket extends MongoRecord
 		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
 	}
 
+	/**
+	 * @return Category
+	 */
+	public function getCategory()
+	{
+		if (isset($this->data['category'])) {
+			return new Category($this->data['category']);
+		}
+	}
 
 	/**
-	 * Returns the category of each Issue in the ticket
-	 *
-	 * @return array
+	 * @param MongoId|string|Category $category
 	 */
-	public function getCategories()
+	public function setCategory($category)
 	{
-		$categories = array();
-		foreach ($this->data['issues'] as $issue) {
-			if (isset($issue['category']) && !in_array($issue['category'],$categories)) {
-				$categories[] = $issue['category'];
-			}
+		if (!$category instanceof Category) {
+			$category = new Category($category);
 		}
-		return $categories;
+		if ($category instanceof Category) {
+			$this->data['category'] = $category->getData();
+		}
 	}
 
 	/**
@@ -718,6 +724,32 @@ class Ticket extends MongoRecord
 			if (isset($this->data[$key])) {
 				unset($this->data[$key]);
 			}
+		}
+	}
+
+	/**
+	 * Populates available fields from the given array
+	 *
+	 * @param array $post
+	 */
+	public function set($post)
+	{
+		// Set all the location information using any fields the user posted
+		$fields = array(
+			'assignedPerson','location','latitude','longitude','city','state','zip'
+		);
+		foreach ($fields as $field) {
+			if (isset($post['ticket'][$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post['ticket'][$field]);
+			}
+		}
+
+		// If the location the user posted is a valid address, overwrite what
+		// the user posted with data from the AddressService
+		$data = AddressService::getLocationData($this->getLocation());
+		if ($data) {
+			$this->setAddressServiceData($data);
 		}
 	}
 }

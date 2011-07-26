@@ -24,7 +24,6 @@ echo "
 		foreach ($this->fieldsToDisplay as $name=>$definition) {
 			switch ($name) {
 				case 'notes':
-				case 'categories':
 					echo "<th>$definition[displayName]</th>";
 					break;
 

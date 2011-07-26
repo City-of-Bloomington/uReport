@@ -6,6 +6,7 @@
  * @param Person $this->person
  * @param bool $this->disableButtons
  */
+$username = '';
 if (userIsAllowed('People')) {
 	$username = $this->person->getUsername();
 	if (!$username && userIsAllowed('Users') && !$this->disableButtons) {
@@ -16,9 +17,6 @@ if (userIsAllowed('People')) {
 		);
 	}
 
-}
-else {
-	$username = '';
 }
 
 $editButton = '';
@@ -59,10 +57,3 @@ echo "
 	<div>$deleteButton</div>
 </div>
 ";
-
-if (userIsAllowed('Tickets') && !$this->disableButtons) {
-	echo $this->linkButton(
-		'Report New Case by This Person',BASE_URL.'/tickets/addTicket.php?person_id='.$this->person->getId(),
-		'add',null,null,'button'
-	);
-}

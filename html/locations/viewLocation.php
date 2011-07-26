@@ -13,17 +13,19 @@ if (!$location) {
 }
 $ticketList = new TicketList(array('location'=>$location));
 
-if (isset($_GET['partial'])) {
-	$template = new Template('partial');
-}
-else {
-	$template = new Template('locations');
-}
+
+$template = isset($_GET['partial']) ? new Template('partial') : new Template('locations');
 
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',
 	array('location'=>$location,'disableButtons'=>isset($_GET['disableButtons']))
 );
+if (userIsAllowed('Tickets')) {
+	$template->blocks['location-panel'][] = new Block(
+		'tickets/addNewForm.inc',
+		array('return_url'=>new URL(BASE_URL.'/tickets/addTicket.php'),'title'=>'Report New Case')
+	);
+}
 $template->blocks['location-panel'][] = new Block(
 	'tickets/ticketList.inc',
 	array(

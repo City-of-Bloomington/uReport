@@ -21,6 +21,12 @@ catch (Exception $e) {
 $template = new Template('people');
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
+if (userIsAllowed('Tickets')) {
+	$template->blocks['person-panel'][] = new Block(
+		'tickets/addNewForm.inc',
+		array('return_url'=>new URL(BASE_URL.'/tickets/addTicket.php'),'title'=>'Report New Case')
+	);
+}
 $template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
 
 $tickets = $person->getTickets('issues.reportedBy');

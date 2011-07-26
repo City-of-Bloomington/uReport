@@ -23,7 +23,7 @@ if ($this->limit) {
 				<th>Location</th>
 				<th>Entered Date</th>
 				<th>Entered By</th>
-				<th>Categories</th>
+				<th>Category</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -39,30 +39,20 @@ if ($this->limit) {
 				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
 				$enteredByPerson = $ticket->getEnteredByPerson();
 				$enteredBy = $enteredByPerson ? View::escape($enteredByPerson->getFullname()) : '';
+				$category = View::escape($ticket->getData('category.name'));
 				if (!$this->disableLinks) {
 					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
 					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";
 					$enteredDate = "<a href=\"{$ticket->getURL()}\">$enteredDate</a>";
 					$enteredBy = "<a href=\"{$ticket->getURL()}\">$enteredBy</a>";
+					$category = "<a href=\"{$ticket->getURL()}\">$category</a>";
 				}
 				echo "
 				<tr><td>$status</td>
 					<td>$location</td>
 					<td>$enteredDate</td>
 					<td>$enteredBy</td>
-					<td>
-				";
-					$categories = $ticket->getCategories();
-					if (count($categories)) {
-						echo '<ul>';
-						foreach ($categories as $category) {
-							echo '<li>'.View::escape($category['name']).'</li>';
-						}
-						echo '</ul>';
-
-					}
-				echo "
-					</td>
+					<td>$category</td>
 					<td>
 				";
 					if (!$this->disableButtons

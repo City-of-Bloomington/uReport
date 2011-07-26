@@ -7,9 +7,10 @@
  * @param Issue $this->issue
  * @param Department $this->currentDepartment
  */
+$category = $this->ticket->getCategory();
 ?>
 <div class="addTicketForm">
-	<h1>New Case</h1>
+	<h1>New <?php echo View::escape($category->getName()); ?> Case</h1>
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
 		<fieldset class="ticketFields">
@@ -62,6 +63,7 @@
 
 
 		<fieldset>
+			<input name="category_id" type="hidden" value="<?php echo $category->getId(); ?>" />
 			<?php
 				echo $this->template->formButton('Submit','submit','submit');
 				echo $this->template->formButton(

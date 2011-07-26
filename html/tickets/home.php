@@ -5,6 +5,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $template = new Template('search');
+if (userIsAllowed('Tickets')) {
+	$template->blocks['search-form'][] = new Block(
+		'tickets/addNewForm.inc',
+		array('return_url'=>new URL(BASE_URL.'/tickets/addTicket.php'))
+	);
+}
 $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 
 // Map any extra AddressService fields to the Ticket search fields

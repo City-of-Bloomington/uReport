@@ -12,10 +12,10 @@
  *			'searchOn'=>'enteredByPerson._id',
  *			'sortOn'=>'enteredByPerson.fullname'
  *		),
- *		'categories'=>array(
- *			'displayName'=>'Categories',
- *			'searchOn'=>'issues.category._id',
- *			'sortOn'=>'issues.category.name'
+ *		'category'=>array(
+ *			'displayName'=>'Category',
+ *			'searchOn'=>'category._id',
+ *			'sortOn'=>'category.name'
  *		)
  *	)
  * For the full list of possible fields for use here,

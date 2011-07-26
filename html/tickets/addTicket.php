@@ -27,7 +27,7 @@ if (isset($_REQUEST['person_id'])) {
 
 // Handle any Category choice passed in
 if (isset($_REQUEST['category_id'])) {
-	$issue->setCategory($_REQUEST['category_id']);
+	$ticket->setCategory($_REQUEST['category_id']);
 }
 
 // Handle any Department choice passed in
@@ -52,38 +52,11 @@ if (!isset($currentDepartment)) {
 // Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
 	$ticket->setEnteredByPerson($_SESSION['USER']);
-	$ticket->setAssignedPerson($_POST['assignedPerson']);
-
-	// Set all the location information using any fields the user posted
-	$fields = array(
-		'location','latitude','longitude','city','state','zip'
-	);
-	foreach ($fields as $field) {
-		if (isset($_POST['ticket'][$field])) {
-			$set = 'set'.ucfirst($field);
-			$ticket->$set($_POST['ticket'][$field]);
-		}
-	}
-
-	// If the location the user posted is a valid address, overwrite what
-	// the user posted with data from the AddressService
-	$data = AddressService::getLocationData($ticket->getLocation());
-	if ($data) {
-		$ticket->setAddressServiceData($data);
-	}
-
+	$ticket->set($_POST);
 
 	// Create the issue
-	$fields = array(
-		'type','reportedByPerson',
-		'contactMethod','responseMethod',
-		'category','notes'
-	);
-	foreach ($fields as $field) {
-		$set = 'set'.ucfirst($field);
-		$issue->$set($_POST['issue'][$field]);
-	}
 	$issue->setEnteredByPerson($_SESSION['USER']);
+	$issue->set($_POST['issue']);
 
 	// Create the History entries
 	$open = new History();
@@ -91,22 +64,22 @@ if(isset($_POST['ticket'])){
 	$open->setEnteredByPerson($_SESSION['USER']);
 	$open->setActionPerson($_SESSION['USER']);
 
+	// Record the assignment
+	$assignment = new History();
+	$assignment->setAction('assignment');
+	$assignment->setEnteredByPerson($_SESSION['USER']);
+	$assignment->setActionPerson($ticket->getAssignedPerson());
+	$assignment->setNotes($_REQUEST['notes']);
+
 	// Validate Everything and save
 	try {
 		$ticket->updateIssues($issue);
 		$ticket->updateHistory($open);
+		$ticket->updateHistory($assignment);
 		$ticket->save();
+		$assignment->sendNotification($ticket);
 
-		// Send them on to the URL that handles assignments
-		// All tickets must be assigned to somebody
-		// We should have all the data we need for the assignment,
-		// but assignments are complex enough that we want only one
-		// script where all the magic happens
-		$url = new URL(BASE_URL.'/tickets/assignTicket.php');
-		$url->ticket_id = "{$ticket->getId()}";
-		$url->assignedPerson = $_POST['assignedPerson'];
-		$url->notes = $_POST['notes'];
-		header('Location: '.$url);
+		header('Location: '.$ticket->getURL());
 		exit();
 	}
 	catch (Exception $e) {

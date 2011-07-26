@@ -8,16 +8,8 @@
 <div class="searchForm">
 	<?php
 		if (userIsAllowed('Tickets')) {
+			$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
 			echo "
-			<div class=\"addNew\">
-				<h1>New Cases</h1>
-			";
-				echo $this->linkButton(
-					'Add New Case',BASE_URL.'/tickets/addTicket.php','add',null,null,'button'
-				);
-				$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
-			echo "
-			</div>
 			<div class=\"quickSearches\">
 				<h1>Existing Cases</h1>
 				<h2>Quick Search</h2>

@@ -68,7 +68,6 @@ echo "
 	<table>
 		<thead>
 			<tr><th>Created by</th>
-				<th>Category</th>
 				<th>Reported By</th>
 				<th>Contacted Via</th>
 				<th>Respond Via</th>
@@ -76,7 +75,6 @@ echo "
 		</thead>
 		<tbody>
 			<tr><td>$enteredBy</td>
-				<td>{$this->issue->getData('category.name')}</td>
 				<td>$reportedBy</td>
 				<td>$contactMethod</td>
 				<td>$responseMethod</td>

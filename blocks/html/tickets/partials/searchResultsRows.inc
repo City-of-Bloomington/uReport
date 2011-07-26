@@ -31,16 +31,11 @@ foreach ($this->ticketList as $row) {
 				}
 				break;
 
-			case 'categories':
-				$c = array();
-				foreach ($row['issues'] as $issue) {
-					$c[] = isset($issue['category']['name']) ? $issue['category']['name'] : '';
-				}
-				$value = implode(',',$c);
-				break;
-
 			case 'notes':
 				$value = isset($row['issues'][0]['notes']) ? $row['issues'][0]['notes'] : '';
+				break;
+			case 'category':
+				$value = isset($row['category']['name']) ? $row['category']['name'] : '';
 				break;
 
 			case 'department':
