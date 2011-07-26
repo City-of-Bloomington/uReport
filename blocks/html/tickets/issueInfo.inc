@@ -82,6 +82,18 @@ echo "
 		</tbody>
 	</table>
 	";
+	$customFields = $this->ticket->getData('category.customFields');
+	if ($customFields) {
+		$customFieldData = $this->issue->getCustomFields();
+		echo "<table>";
+		foreach ($customFields as $definition) {
+			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
+			$value = isset($customFieldData[$definition['name']]) ? $customFieldData[$definition['name']] : '';
+			$value = is_array($value) ? implode(', ',$value) : View::escape($value);
+			echo "<tr><th>$label</th><td>$value</td></tr>";
+		}
+		echo "</table>";
+	}
 
 	$this->responses = $this->issue->getResponses();
 	if ($this->responses) {

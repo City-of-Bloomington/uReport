@@ -294,6 +294,14 @@ class Issue extends MongoRecord
 	}
 
 	/**
+	 * @param array $post
+	 */
+	public function setCustomFields($post)
+	{
+		$this->data['customFields'] = $post;
+	}
+
+	/**
 	 * Populates available fields from the given array
 	 *
 	 * @param array $post
@@ -301,20 +309,13 @@ class Issue extends MongoRecord
 	public function set($post)
 	{
 		$fields = array(
-			'type','reportedByPerson','contactMethod','responseMethod','category','notes'
+			'type','reportedByPerson','contactMethod','responseMethod','category','notes',
+			'customFields'
 		);
 		foreach ($fields as $field) {
 			$set = 'set'.ucfirst($field);
 			if (isset($post[$field])) {
 				$this->$set($post[$field]);
-			}
-		}
-
-		// Check for custom fields
-		if (isset($this->data['category']['customFields'])
-			&& count($this->data['category']['customFields'])) {
-			foreach ($this->data['category']['customFields'] as $i=>$definition) {
-				$this->data['customFields'][$definition['name']] = isset($post[$definition['name']]) ? $post[$definition['name']] : '';
 			}
 		}
 	}

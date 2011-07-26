@@ -52,6 +52,7 @@ $category = $this->ticket->getCategory();
 			<legend>Issue Information</legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">

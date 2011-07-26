@@ -16,6 +16,7 @@ $title = is_null($this->index) ? 'Add Issue' : 'Edit Issue';
 		<input name="index" type="hidden" value="<?php echo $this->index; ?>" />
 		<?php
 			include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+			include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 
 			echo $this->template->formButton('Submit','submit','submit');
 			echo $this->template->formButton(
