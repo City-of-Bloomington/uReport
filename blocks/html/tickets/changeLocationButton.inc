@@ -10,7 +10,7 @@ foreach ($_GET as $key=>$value) {
 		$return_url->$key = $value;
 	}
 }
-$url = BASE_URL."/locations?return_url=$return_url";
+$url = BASE_URL.'/locations?return_url='.urlencode($return_url);
 echo "<div class=\"changeLocationButton\">";
 echo $this->template->linkButton(
 	'Lookup Location',$url,'edit','findAddressButton',null,'button'
