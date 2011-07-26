@@ -20,7 +20,7 @@
 		<thead>
 			<tr><th></th>
 				<th>Name</th>
-				<th>Problems</th>
+				<th>Description</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,14 +35,11 @@
 					);
 				}
 				$name = View::escape($category->getName());
-				$problems = count($category->getProblems());
+				$description = View::escape($category->getDescription());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
-					<td><a href=\"".BASE_URL."/categories/problems.php?category_id={$category->getId()}\">
-							$problems
-						</a>
-					</td>
+					<td>$description</td>
 				</tr>
 				";
 			}

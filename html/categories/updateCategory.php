@@ -28,8 +28,10 @@ else {
 
 if (isset($_POST['name'])) {
 	$category->setName($_POST['name']);
+	$category->setDescription($_POST['description']);
 
 	try {
+		$category->setCustomFields($_POST['custom_fields']);
 		$category->save();
 		header('Location: '.BASE_URL.'/categories');
 		exit();

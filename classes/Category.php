@@ -105,17 +105,17 @@ class Category extends MongoRecord
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getProblems()
-	{
-		if (isset($this->data['problems'])) {
-			return $this->data['problems'];
-		}
-		return array();
-	}
-
-	/**
+	 * Returns a PHP array representing the description of custom fields
+	 *
+	 * The category holds the description of the custom fields desired
+	 * $customFields = array(
+	 *		array('name'=>'','type'=>'','label'=>'','values'=>array())
+	 * )
+	 * Name and Label are required.
+	 * Anything without a type will be rendered as type='text'
+	 * If type is select, radio, or checkbox, you must provide values
+	 *		for the user to choose from
+	 *
 	 * @return array
 	 */
 	public function getCustomFields()
@@ -145,6 +145,38 @@ class Category extends MongoRecord
 		$this->data['description'] = trim($string);
 	}
 
+	/**
+	 * Loads a valid JSON string describing the custom fields
+	 *
+	 * The category holds the description of the custom fields desired
+	 * $json = [
+	 *		{'name':'','type':'','label':'','values':['',''])
+	 * ]
+	 * Name and Label are required.
+	 * Anything without a type will be rendered as type='text'
+	 * If type is select, radio, or checkbox, you must provide values
+	 *		for the user to choose from
+	 *
+	 * @param string $json
+	 */
+	public function setCustomFields($json=null)
+	{
+		$json = trim($json);
+		$customFields = '';
+		if ($json) {
+			$customFields = json_decode($json);
+			if (is_array($customFields)) {
+				$this->data['customFields'] = $customFields;
+			}
+			else {
+				throw new JSONException(json_last_error());
+			}
+		}
+		else {
+			unset($this->data['customFields']);
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	// We recommend adding all your custom code down here at the bottom
@@ -153,32 +185,34 @@ class Category extends MongoRecord
 	{
 		return $this->getName();
 	}
+}
 
-	/**
-	 * @param string $problem
-	 * @param int $index
-	 */
-	public function updateProblems($problem, $index=null)
+class JSONException extends Exception
+{
+	public function __construct($message, $code=0, Exception $previous=null)
 	{
-		if (!isset($this->data['problems'])) {
-			$this->data['problems'] = array();
-		}
-
-		if (isset($index) && isset($this->data['problems'][$index])) {
-			$this->data['problems'][$index] = trim($problem);
-		}
-		else {
-			$this->data['problems'][] = trim($problem);
-		}
-	}
-
-	/**
-	 * @param int $index
-	 */
-	public function removeProblem($index)
-	{
-		if (isset($this->data['problems'][$index])) {
-			unset($this->data['problems'][$index]);
+		switch ($message) {
+			case JSON_ERROR_NONE:
+				$this->message = 'No errors';
+			break;
+			case JSON_ERROR_DEPTH:
+				$this->message = 'Maximum stack depth exceeded';
+			break;
+			case JSON_ERROR_STATE_MISMATCH:
+				$this->message = 'Underflow or the modes mismatch';
+			break;
+			case JSON_ERROR_CTRL_CHAR:
+				$this->message = 'Unexpected control character found';
+			break;
+			case JSON_ERROR_SYNTAX:
+				$this->message = 'Syntax error, malformed JSON';
+			break;
+			case JSON_ERROR_UTF8:
+				$this->message = 'Malformed UTF-8 characters, possibly incorrectly encoded';
+			break;
+			default:
+				$this->message = 'Unknown JSON error';
+			break;
 		}
 	}
 }

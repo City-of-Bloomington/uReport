@@ -1,0 +1,38 @@
+[
+	{
+		"name":"owner",
+		"label":"Are you a property owner/manager?",
+		"type":"radio",
+		"values":["yes","no"]
+	},
+	{
+		"name":"when",
+		"label":"When did you first observe the graffiti?"
+	},
+	{
+		"name":"graffiti_on",
+		"label":"Graffiti is on: (check all that apply)",
+		"type":"checkbox",
+		"values":["Public Property","Private Property","Residence","Business"]
+	},
+	{
+		"name":"property_type",
+		"label":"Property Type",
+		"type":"checkbox",
+		"values":[
+			"Building","Brick Wall","Bridge","Concrete Block Wall","Curbs","Driveway",
+			"Fence","Garage Door","Granite Pole","House","Metal Pole","Parking Lot",
+			"Pedestrian Tunnel","Overpass","Sidewalk","Stop Sign","Street","Telephone Poles",
+			"Traffic Control Box","Traffic Signs","Tree","Underpass","Other"
+		]
+	},
+	{ "name":"other", "label":"If other, please define" },
+	{
+		"name":"description","label":"Describe the graffiti","type":"textbox"
+	},
+	{
+		"name":"background_info",
+		"label":"Is this area consistently plagued by graffiti? If so, is it always the same kind of graffiti (political, ideological, offensive, tags, etc)? Please explain.",
+		"type":"textbox"
+	}
+]
