@@ -175,3 +175,6 @@ define('DATE_FORMAT','Y-m-d');
  */
 define('DISTINCT_QUERY_CACHE',true);
 define('DISTINCT_QUERY_CACHE_LIFETIME',3600); // Lifetime in seconds
+
+
+define('OPEN311_JURISDICTION','localhost');

@@ -2,7 +2,7 @@
 	{
 		"name":"owner",
 		"label":"Are you a property owner/manager?",
-		"type":"radio",
+		"type":"singlevaluelist",
 		"values":["yes","no"]
 	},
 	{
@@ -11,14 +11,14 @@
 	},
 	{
 		"name":"graffiti_on",
-		"label":"Graffiti is on: (check all that apply)",
-		"type":"checkbox",
+		"label":"Graffiti is on: (choose all that apply)",
+		"type":"multiplevaluelist",
 		"values":["Public Property","Private Property","Residence","Business"]
 	},
 	{
 		"name":"property_type",
 		"label":"Property Type",
-		"type":"checkbox",
+		"type":"multivaluelist",
 		"values":[
 			"Building","Brick Wall","Bridge","Concrete Block Wall","Curbs","Driveway",
 			"Fence","Garage Door","Granite Pole","House","Metal Pole","Parking Lot",
@@ -28,11 +28,11 @@
 	},
 	{ "name":"other", "label":"If other, please define" },
 	{
-		"name":"description","label":"Describe the graffiti","type":"textbox"
+		"name":"description","label":"Describe the graffiti","type":"text"
 	},
 	{
 		"name":"background_info",
 		"label":"Is this area consistently plagued by graffiti? If so, is it always the same kind of graffiti (political, ideological, offensive, tags, etc)? Please explain.",
-		"type":"textbox"
+		"type":"text"
 	}
 ]

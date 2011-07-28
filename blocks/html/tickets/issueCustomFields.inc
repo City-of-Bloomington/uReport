@@ -13,58 +13,14 @@ if ($category) {
 	if (count($customFields)) {
 		echo "<table>";
 		foreach ($customFields as $name=>$definition) {
-			$type = isset($definition['type']) ? $definition['type'] : 'text';
+			$type = isset($definition['type']) ? $definition['type'] : 'string';
 			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
 			$value = $this->issue->getData("customFields.$definition[name]");
 
 			$field_name = "issue[customFields][$definition[name]]";
 			$field_id = "issue-customFields-$definition[name]";
 			switch ($type) {
-				case 'radio':
-					$value = View::escape($value);
-					echo "
-					<tr><td>$label</td>
-						<td>
-					";
-						foreach ($definition['values'] as $v) {
-							$v = View::escape($v);
-							$checked = $v==$value ? 'checked="checked"' : '';
-							echo "
-							<label>
-								<input type=\"radio\" name=\"$field_name\" value=\"$v\" $checked />
-								$v
-							</label>
-							";
-						}
-					echo "
-						</td>
-					</tr>
-					";
-					break;
-				case 'checkbox':
-					if (!is_array($value)) {
-						$value = array();
-					}
-					echo "
-					<tr><td>$label</td>
-						<td>
-					";
-						foreach ($definition['values'] as $v) {
-							$checked = in_array($v,$value) ? 'checked="checked"' : '';
-							$v = View::escape($v);
-							echo "
-							<label>
-								<input type=\"checkbox\" name=\"{$field_name}[$v]\" value=\"$v\" $checked />
-								$v
-							</label>
-							";
-						}
-					echo "
-						</td>
-					</tr>
-					";
-					break;
-				case 'select':
+				case 'singlevaluelist':
 					$value = View::escape($value);
 					echo "
 					<tr><td><label for=\"$field_id\">$label</td>
@@ -82,7 +38,26 @@ if ($category) {
 					</tr>
 					";
 					break;
-				case 'textarea':
+				case 'multivaluelist':
+					if (!is_array($value)) {
+						$value = array();
+					}
+					echo "
+					<tr><td><label for=\"$field_id\">$label</label></td>
+						<td><select name=\"$field_name\" id=\"$field_id\" multiple=\"true\" size=\"5\">
+					";
+							foreach ($definition['values'] as $v) {
+								$selected = in_array($v,$value) ? 'selected="selected"' : '';
+								$v = View::escape($v);
+								echo "<option value=\"$v\" $selected>$v</option>";
+							}
+					echo "
+							</select>
+						</td>
+					</tr>
+					";
+					break;
+				case 'text':
 					$value = View::escape($value);
 					echo "
 					<tr><td colspan=\"2\">
