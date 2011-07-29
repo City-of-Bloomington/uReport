@@ -7,7 +7,7 @@
  * @copyright 2006-2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param GET user_id
+ * @param GET person_id
  */
 if (!userIsAllowed('Users')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -15,7 +15,7 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-$person = new Person($_GET['user_id']);
+$person = new Person($_GET['person_id']);
 $person->deleteUserAccount();
 try {
 	$person->save();

@@ -35,13 +35,13 @@
 				if (userIsAllowed('Users')) {
 					$editButton = $this->linkButton(
 						'Edit User Account',
-						BASE_URL.'/users/updateUser.php?user_id='.$user->getId(),
+						BASE_URL.'/users/updateUser.php?person_id='.$user->getId(),
 						'edit'
 					);
 
 					$deleteButton = $this->linkButton(
 						'Delete User Account',
-						BASE_URL.'/users/deleteUser.php?user_id='.$user->getId(),
+						BASE_URL.'/users/deleteUser.php?person_id='.$user->getId(),
 						'delete'
 					);
 				}

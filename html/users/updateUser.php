@@ -11,10 +11,10 @@ if (!userIsAllowed('Users')) {
 	exit();
 }
 
-if (isset($_REQUEST['user_id'])) {
+if (isset($_REQUEST['person_id'])) {
 	// Load the user for editing
 	try {
-		$user = new Person($_REQUEST['user_id']);
+		$user = new Person($_REQUEST['person_id']);
 	}
 	catch (Exception $e) {
 		$_SESSION['errorMessages'][] = $e;
@@ -73,6 +73,6 @@ if (isset($_POST['username'])) {
 // Display the form
 $template = new Template('two-column');
 $template->blocks[] = new Block('people/personInfo.inc',array('person'=>$user));
-$template->blocks[] = new Block('users/updateUserForm.inc',array('user'=>$user));
+$template->blocks[] = new Block('users/updateUserForm.inc',array('person'=>$user));
 echo $template->render();
 
