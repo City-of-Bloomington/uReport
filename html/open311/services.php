@@ -14,8 +14,13 @@ $template = new Template('open311',$format);
 // See if they're asking for a particular service
 preg_match('|/open311/v2/services/?([0-9a-f]{24})?.*|',$_SERVER['REQUEST_URI'],$matches);
 if (isset($matches[1]) && $matches[1]) {
-	$category = new Category($matches[1]);
-	$template->blocks[] = new Block('open311/serviceInfo.inc',array('category'=>$category));
+	try {
+		$category = new Category($matches[1]);
+		$template->blocks[] = new Block('open311/serviceInfo.inc',array('category'=>$category));
+	}
+	catch (Exception $e) {
+		# Unknown service
+	}
 }
 // Just display  the full service list
 else {
