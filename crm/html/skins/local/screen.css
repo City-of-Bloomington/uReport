@@ -161,7 +161,7 @@ label { font-weight:bold; }
 .submit, .search { background:url('images/check.png') center left no-repeat; }
 .delete, .cancel { background:url('images/delete.gif') center left no-repeat; }
 
-.icon { display:inline-block; height:16px; overflow:hidden; }
+.icon { display:inline-block; overflow:hidden; }
 .icon a { height:0px; }
 .icon .edit { display:block; width:14px; overflow:hidden; }
 .icon .edit a { display:block; padding: 13px 0 0 0; height:0px; width:14px; overflow:hidden; }
