@@ -78,21 +78,21 @@ echo "
 			<td>$category</td>
 			<td></td>
 		</tr>
-		<tr><th>Location:</th>
+		<tr><td>$changeLocationButton</td>
+			<th>Location:</th>
 			<td>$location</td>
-			<td>$changeLocationButton</td>
 		</tr>
-		<tr><th>Status:</th>
+		<tr><td>$editStatusButton</td>
+			<th>Status:</th>
 			<td>$status</td>
-			<td>$editStatusButton</td>
 		</tr>
-		<tr><th>Assigned To:</th>
+		<tr><td>$assignButton</td>
+			<th>Assigned To:</th>
 			<td>$assigned</td>
-			<td>$assignButton</td>
 		</tr>
-		<tr><th>Referred To:</th>
+		<tr><td>$referralButton</td>
+			<th>Referred To:</th>
 			<td>$referred</td>
-			<td>$referralButton</td>
 		</tr>
 		<tr><th>Created By:</th>
 			<td>$enteredBy</td>
