@@ -15,31 +15,35 @@ if (!defined('CAS')) {
 
 $_SESSION['return_url'] = $return_url;
 
-require_once CAS.'/SimpleCAS/Autoload.php';
-$options = array('hostname'=>CAS_SERVER,'uri'=>CAS_URI);
-$protocol = new SimpleCAS_Protocol_Version2($options);
-$client = SimpleCAS::client($protocol);
-$client->forceAuthentication();
+require_once CAS.'/CAS.php';
+phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
+phpCAS::setNoCasServerValidation();
+phpCAS::forceAuthentication();
+// at this step, the user has been authenticated by the CAS server
+// and the user's login name can be read with phpCAS::getUser().
 
-if ($client->isAuthenticated()) {
-	try {
-		$_SESSION['USER'] = new Person($client->getUsername());
+// They may be authenticated according to CAS,
+// but that doesn't mean they have person record
+// and even if they have a person record, they may not
+// have a user account for that person record.
+try {
+	$_SESSION['USER'] = new Person(phpCAS::getUser());
 
-		if (isset($_SESSION['return_url'])) {
-			$return_url = $_SESSION['return_url'];
-			unset($_SESSION['return_url']);
 
-			header('Location: '.$return_url);
-			exit();
-		}
-		else {
-			header('Location: '.BASE_URL);
-			exit();
-		}
+	if (isset($_SESSION['return_url'])) {
+		$return_url = $_SESSION['return_url'];
+		unset($_SESSION['return_url']);
+
+		header('Location: '.$return_url);
+		exit();
 	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
+	else {
+		header('Location: '.BASE_URL);
+		exit();
 	}
 }
-unset($_SESSION['return_url']);
-header('Location: '.BASE_URL);
+catch (Exception $e) {
+	// They authentcated against CAS,
+	// but do not have a Person record
+	$_SESSION['errorMessages'][] = $e;
+}

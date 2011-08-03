@@ -112,13 +112,12 @@ define('LDAP_PASSWORD_ATTRIBUTE','userpassword');
  *
  * This is requried only if you want to do CAS authentication
  *
- * http://code.google.com/p/simplecas/
+ * https://wiki.jasig.org/display/CASC/phpCAS
  *
- * SimpleCAS is a PHP library for handling the calls to the CAS service
- * The version we're running right now has been modified to remove
- * the depency on HTTP_Request2.  Instead, it uses curl
+ * phpCAS is a PHP library for handling the calls to the CAS service
+ * It is the official library, part of the Jasig CAS project
  */
-define('CAS','/var/www/libraries/SimpleCAS');
+define('CAS','/var/www/libraries/phpCAS');
 define('CAS_SERVER','cas.somewhere.org');
 define('CAS_URI','cas');
 
