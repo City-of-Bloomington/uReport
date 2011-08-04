@@ -14,6 +14,7 @@ echo "<h1>$title</h1>";
 		<table>
 			<tr><td><label for="department">Department</label></td>
 				<td><select name="department" id="department">
+						<option></option>
 					<?php
 						$list = new DepartmentList();
 						$list->find();
@@ -30,12 +31,19 @@ echo "<h1>$title</h1>";
 			</tr>
 			<tr><td><label for="authenticationMethod">Authentication</label></td>
 				<td><select name="authenticationMethod" id="authenticationMethod">
-						<option <?php if ($this->person->getAuthenticationMethod()=='LDAP') echo "selected=\"selected\""; ?>>
-							LDAP
-						</option>
 						<option <?php if ($this->person->getAuthenticationMethod()=='local') echo "selected=\"selected\""; ?>>
 							local
 						</option>
+						<?php
+							if (isset($GLOBALS['LDAP_CONFIG'])) {
+								foreach (array_keys($GLOBALS['LDAP_CONFIG']) as $key) {
+									$selected = $key==$this->person->getAuthenticationMethod()
+										? 'selected="selected"'
+										: '';
+									echo "<option $selected>$key</option>";
+								}
+							}
+						?>
 					</select>
 				</td>
 			</tr>

@@ -96,16 +96,24 @@ define('DB_NAME','crm');
 /**
  * LDAP Configuration
  *
- * This is required only if you want to use the LDAP authentication
- * If you do not want to use LDAP authentication, you can comment this out
+ * This supports doing user authentication on multiple LDAP servers
+ * Required since city staff are in a seperate LDAP from public user accounts
+ * Person::authenticationMethod should be set to match one of these configs
  */
-define('LDAP_DOMAIN','ldap.domain.somewhere');
-define('LDAP_DN','ou=people,o='.LDAP_DOMAIN);
-define('LDAP_USERNAME_ATTRIBUTE','uid');
-define('LDAP_ADMIN_USER','username');
-define('LDAP_ADMIN_PASS','password');
-define('LDAP_SERVER','ldaps://ldap.somewhere.com:636'); // Example for SSL
-define('LDAP_PASSWORD_ATTRIBUTE','userpassword');
+$LDAP_CONFIG = array(
+	'LDAP'=>array(
+		'LDAP_SERVER','ldaps://ldap.somewhere.com:636', // Example for SSL
+		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
+		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
+		'LDAP_ADMIN_PASS'=>'password'
+	),
+	'PublicLDAP'=>array(
+		'LDAP_SERVER','ldaps://ldap.somewhere.com:636', // Example for SSL
+		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
+		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
+		'LDAP_ADMIN_PASS'=>'password'
+	)
+);
 
 /**
  * CAS authentication http://www.jasig.org/cas

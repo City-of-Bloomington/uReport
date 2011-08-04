@@ -40,23 +40,19 @@ if (isset($_POST['username'])) {
 	}
 
 	// Load any missing information from LDAP
-	// Delete this statement if you're not using LDAP
-	if ($user->getAuthenticationMethod() == 'LDAP') {
+	// You can delete this statement if you're not using LDAP
+	if (array_key_exists($user->getAuthenticationMethod(),$LDAP_CONFIG)) {
 		try {
-			$ldap = new LDAPEntry($user->getUsername());
-
-			if (!$user->getFirstname()) {
-				$user->setFirstname($ldap->getFirstname());
-			}
-			if (!$user->getLastname()) {
-				$user->setLastname($ldap->getLastname());
-			}
-			if (!$user->getEmail()) {
-				$user->setEmail($ldap->getEmail());
-			}
+			$ldap = new LDAP(
+				$LDAP_CONFIG[$user->getAuthenticationMethod()],
+				$user->getUsername()
+			);
+			$user->populateFromLDAP($ldap);
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
+			print_r($e);
+			exit();
 		}
 	}
 

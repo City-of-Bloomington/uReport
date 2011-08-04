@@ -529,16 +529,15 @@ class Person extends MongoRecord
 	{
 		if ($this->getUsername())
 		{
-			switch ($this->getAuthenticationMethod()) {
-				case 'local':
-					return $this->getPassword()==sha1($password);
-					break;
-				default:
-					return call_user_func(
-						array($this->getAuthenticationMethod(),'authenticate'),
-						$this->getUsername(),
-						$password
-					);
+			if ($this->getAuthenticationMethod() == 'local') {
+				return $this->getPassword()==sha1($password);
+			}
+			elseif (array_key_exists($this->getAuthenticationMethod(),$LDAP_CONFIG)) {
+				return LDAP::authenticate(
+					$LDAP_CONFIG[$this->getAuthenticationMethod()],
+					$this->getUsername(),
+					$password
+				);
 			}
 		}
 	}
@@ -728,5 +727,37 @@ class Person extends MongoRecord
 		$mail->setSubject($subject);
 		$mail->setBodyText($message);
 		$mail->send();
+	}
+
+	/**
+	 * @param LDAP $ldap An ldap entry to ready from
+	 */
+	public function populateFromLDAP(LDAP $ldap)
+	{
+		if (!$this->getFirstname() && $ldap->get('cn')) {
+			$this->setFirstname($ldap->get('cn'));
+		}
+		if (!$this->getLastname() && $ldap->get('sn')) {
+			$this->setLastname($ldap->get('sn'));
+		}
+		if (!$this->getEmail() && $ldap->get('mail')) {
+			$this->setEmail($ldap->get('mail'));
+		}
+		if (!$this->getPhone() && $ldap->get('telephonenumber')) {
+			$this->setPhone($ldap->get('telephonenumber'));
+		}
+		if (!$this->getAddress() && $ldap->get('postaladdress')) {
+			$this->setAddress($ldap->get('postaladdress'));
+		}
+		if (!$this->getCity() && $ldap->get('l')) {
+			$this->setCity($ldap->get('l'));
+		}
+		if (!$this->getState() && $ldap->get('st')) {
+			$this->setState($ldap->get('st'));
+		}
+		if (!$this->getZip() && $ldap->get('postalcode')) {
+			$this->setZip($ldap->get('postalcode'));
+		}
+
 	}
 }
