@@ -5,6 +5,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET person_id
  */
+if (!userIsAllowed('People')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
+
 if (!isset($_GET['person_id'])) {
 	header('Location: '.BASE_URL.'/people');
 	exit();

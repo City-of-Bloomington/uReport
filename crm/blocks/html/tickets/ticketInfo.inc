@@ -9,18 +9,19 @@
 $location = View::escape($this->ticket->getLocation());
 $location = $location ? "<a href=\"".BASE_URL."/locations/viewLocation.php?location=$location\">$location</a>" : '';
 
-$url = new URL(BASE_URL.'/people/viewPerson.php');
+if (userIsAllowed('People')) {
+	$url = new URL(BASE_URL.'/people/viewPerson.php');
+	$personFields = array('enteredBy','assigned','referred');
+	foreach ($personFields as $field) {
+		$$field = '';
+		$get = 'get'.ucfirst($field).'Person';
+		$person = $this->ticket->$get();
+		if ($person) {
+			$url->person_id = "{$person->getId()}";
+			$$field = "<a href=\"$url\">".View::escape($person->getFullname())."</a>";
+		}
 
-$personFields = array('enteredBy','assigned','referred');
-foreach ($personFields as $field) {
-	$$field = '';
-	$get = 'get'.ucfirst($field).'Person';
-	$person = $this->ticket->$get();
-	if ($person) {
-		$url->person_id = "{$person->getId()}";
-		$$field = "<a href=\"$url\">".View::escape($person->getFullname())."</a>";
 	}
-
 }
 
 $status = $this->ticket->getStatus();
@@ -47,23 +48,25 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	);
 
 	if ($this->ticket->getStatus()!='closed') {
-		$assignButton = $this->template->linkButton(
-			'Assign',
-			BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
-			'edit'
-		);
-
-		$return_url = $this->ticket->getURL();
-		$referralButton = $this->template->linkButton(
-			'Refer',
-			BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId(),
-			'edit'
-		);
 		$changeLocationButton = $this->template->linkButton(
 			'Change Location',
 			BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
 			'edit'
 		);
+		if (userIsAllowed('People')) {
+			$assignButton = $this->template->linkButton(
+				'Assign',
+				BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
+				'edit'
+			);
+
+			$return_url = $this->ticket->getURL();
+			$referralButton = $this->template->linkButton(
+				'Refer',
+				BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId(),
+				'edit'
+			);
+		}
 	}
 
 }
@@ -86,6 +89,9 @@ echo "
 			<th>Status:</th>
 			<td>$status</td>
 		</tr>
+";
+if (userIsAllowed('People')) {
+	echo "
 		<tr><td>$assignButton</td>
 			<th>Assigned To:</th>
 			<td>$assigned</td>
@@ -97,6 +103,9 @@ echo "
 		<tr><th>Created By:</th>
 			<td>$enteredBy</td>
 		</tr>
+	";
+}
+echo "
 		<tr><th>Date Opened:</th>
 			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
 			<td></td>

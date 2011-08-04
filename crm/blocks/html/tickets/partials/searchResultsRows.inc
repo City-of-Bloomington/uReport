@@ -47,13 +47,15 @@ foreach ($this->ticketList as $row) {
 			default:
 				$value = isset($row[$definition['sortOn']]) ? $row[$definition['sortOn']] : '';
 		}
-		$value = View::escape($value);
-		echo "
-		<td><a href=\"".BASE_URL."/tickets/viewTicket.php?ticket_id=$row[_id]\">
-				$value
-			</a>
-		</td>
-		";
+		if (false === strpos($field,'Person') || userIsAllowed('People')) {
+			$value = View::escape($value);
+			echo "
+			<td><a href=\"".BASE_URL."/tickets/viewTicket.php?ticket_id=$row[_id]\">
+					$value
+				</a>
+			</td>
+			";
+		}
 	}
 	echo '</tr>';
 }

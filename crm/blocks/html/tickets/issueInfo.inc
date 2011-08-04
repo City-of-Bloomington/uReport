@@ -47,41 +47,43 @@ echo "
 		echo "<div class=\"notes\">$notes</div>";
 	}
 
+	// Don't display any personal information from the issue unless the user is authenticated
+	if (userIsAllowed('People')) {
+		$enteredBy = $this->issue->getEnteredByPerson();
+		if ($enteredBy) {
+			$href = BASE_URL."/people/viewPerson.php?person_id={$enteredBy->getId()}";
+			$enteredBy = View::escape($enteredBy->getFullname());
+			$enteredBy = "<a href=\"$href\">$enteredBy</a>";
+		}
 
-	$enteredBy = $this->issue->getEnteredByPerson();
-	if ($enteredBy) {
-		$href = BASE_URL."/people/viewPerson.php?person_id={$enteredBy->getId()}";
-		$enteredBy = View::escape($enteredBy->getFullname());
-		$enteredBy = "<a href=\"$href\">$enteredBy</a>";
+		$reportedBy = $this->issue->getReportedByPerson();
+		if ($reportedBy) {
+			$href = BASE_URL."/people/viewPerson.php?person_id={$reportedBy->getId()}";
+			$reportedBy = View::escape($reportedBy->getFullname());
+			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
+		}
+
+		$contactMethod = View::escape($this->issue->getContactMethod());
+		$responseMethod = View::escape($this->issue->getResponseMethod());
+		echo "
+		<table>
+			<thead>
+				<tr><th>Created by</th>
+					<th>Reported By</th>
+					<th>Contacted Via</th>
+					<th>Respond Via</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td>$enteredBy</td>
+					<td>$reportedBy</td>
+					<td>$contactMethod</td>
+					<td>$responseMethod</td>
+				</tr>
+			</tbody>
+		</table>
+		";
 	}
-
-	$reportedBy = $this->issue->getReportedByPerson();
-	if ($reportedBy) {
-		$href = BASE_URL."/people/viewPerson.php?person_id={$reportedBy->getId()}";
-		$reportedBy = View::escape($reportedBy->getFullname());
-		$reportedBy = "<a href=\"$href\">$reportedBy</a>";
-	}
-
-	$contactMethod = View::escape($this->issue->getContactMethod());
-	$responseMethod = View::escape($this->issue->getResponseMethod());
-	echo "
-	<table>
-		<thead>
-			<tr><th>Created by</th>
-				<th>Reported By</th>
-				<th>Contacted Via</th>
-				<th>Respond Via</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr><td>$enteredBy</td>
-				<td>$reportedBy</td>
-				<td>$contactMethod</td>
-				<td>$responseMethod</td>
-			</tr>
-		</tbody>
-	</table>
-	";
 	$customFields = $this->ticket->getData('category.customFields');
 	if ($customFields) {
 		$customFieldData = $this->issue->getCustomFields();
@@ -95,9 +97,12 @@ echo "
 		echo "</table>";
 	}
 
-	$this->responses = $this->issue->getResponses();
-	if ($this->responses) {
-		include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
+	// Don't display any personal information from the issue unless the user is authenticated
+	if (userIsAllowed('People')) {
+		$this->responses = $this->issue->getResponses();
+		if ($this->responses) {
+			include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
+		}
 	}
 
 	$this->mediaList = $this->issue->getMedia();

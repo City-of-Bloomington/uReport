@@ -12,6 +12,11 @@
  * @param GET personQuery
  * @param GET return_url
  */
+if (!userIsAllowed('People')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
 // Look for anything that the user searched for
 $search = array();
 $fields = array('firstname','lastname','email','organization');

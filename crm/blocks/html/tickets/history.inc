@@ -23,11 +23,16 @@
 		<tbody>
 		<?php
 			foreach ($this->history as $event) {
-				$action = View::escape($event->getAction());
-
 				$url = new URL(BASE_URL.'/people/viewPerson.php');
-				$description = View::escape($event->getDescription());
-				$description = $description ? $description : $action;
+
+				$action = View::escape($event->getAction());
+				if (userIsAllowed('People')) {
+					$description = View::escape($event->getDescription());
+					$description = $description ? $description : $action;
+				}
+				else {
+					$description = $action;
+				}
 				echo "
 				<tr><td>{$event->getActionDate(DATE_FORMAT)}</td>
 					<td>$description</td>

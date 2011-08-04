@@ -6,6 +6,11 @@
  * @param GET field
  * @param GET query
  */
+if (!userIsAllowed('People')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL);
+	exit();
+}
 $results = Person::getDistinct($_GET['field'],$_GET['query']);
 
 $template = (isset($_GET['format'])) ? new Template('default',$_GET['format']) : new Template();

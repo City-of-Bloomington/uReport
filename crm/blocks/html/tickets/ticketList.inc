@@ -22,7 +22,7 @@ if ($this->limit) {
 			<tr><th>Status</th>
 				<th>Location</th>
 				<th>Entered Date</th>
-				<th>Entered By</th>
+				<?php if (userIsAllowed('People')) { echo "<th>Entered By</th>"; } ?>
 				<th>Category</th>
 				<th></th>
 			</tr>
@@ -40,6 +40,8 @@ if ($this->limit) {
 				$enteredByPerson = $ticket->getEnteredByPerson();
 				$enteredBy = $enteredByPerson ? View::escape($enteredByPerson->getFullname()) : '';
 				$category = View::escape($ticket->getData('category.name'));
+				if (userIsAllowed('People')) {
+				}
 				if (!$this->disableLinks) {
 					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
 					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";
@@ -51,7 +53,9 @@ if ($this->limit) {
 				<tr><td>$status</td>
 					<td>$location</td>
 					<td>$enteredDate</td>
-					<td>$enteredBy</td>
+				";
+					if (userIsAllowed('People')) { echo "<td>$enteredBy</td>"; }
+				echo "
 					<td>$category</td>
 					<td>
 				";

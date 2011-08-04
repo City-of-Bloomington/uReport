@@ -30,26 +30,28 @@ if ($this->location) {
 		}
 	}
 
-	$people = new PersonList(array('address'=>$this->location));
-	if (count($people)) {
-		echo "<h1>People</h1><ul>";
-		foreach ($people as $person) {
-			$name = View::escape($person->getFullname());
-			echo "<li><a href=\"{$person->getURL()}\">$name</a></li>";
-		}
-		echo "</ul>";
-	}
-
-	if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
-		$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-		$xml = new SimpleXMLElement($url,null,true);
-		$owners = $xml->xpath("//Owner");
-		if (count($owners)) {
-			echo '<h1>Owners</h1><ul>';
-			foreach ($owners as $owner) {
-				echo "<li>{$owner->Name}</li>";
+	if (userIsAllowed('People')) {
+		$people = new PersonList(array('address'=>$this->location));
+		if (count($people)) {
+			echo "<h1>People</h1><ul>";
+			foreach ($people as $person) {
+				$name = View::escape($person->getFullname());
+				echo "<li><a href=\"{$person->getURL()}\">$name</a></li>";
 			}
-			echo '</ul>';
+			echo "</ul>";
+		}
+
+		if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
+			$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
+			$xml = new SimpleXMLElement($url,null,true);
+			$owners = $xml->xpath("//Owner");
+			if (count($owners)) {
+				echo '<h1>Owners</h1><ul>';
+				foreach ($owners as $owner) {
+					echo "<li>{$owner->Name}</li>";
+				}
+				echo '</ul>';
+			}
 		}
 	}
 

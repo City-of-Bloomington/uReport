@@ -28,13 +28,15 @@ echo "
 					break;
 
 				default:
-					$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
-						? $url->sort = array($name=>-1)
-						: $url->sort = array($name=>1);
-					$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
-					echo "
-					<th><a href=\"$url\" $class>$definition[displayName]</a></th>
-					";
+					if (false === strpos($name,'Person') || userIsAllowed('People')) {
+						$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
+							? $url->sort = array($name=>-1)
+							: $url->sort = array($name=>1);
+						$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
+						echo "
+						<th><a href=\"$url\" $class>$definition[displayName]</a></th>
+						";
+					}
 			}
 		}
 	}
