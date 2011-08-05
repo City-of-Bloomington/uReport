@@ -30,8 +30,45 @@ class CategoryList extends MongoResultIterator
 		$search = array();
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if ($value) {
-					$search[$key] = $value;
+				switch ($key) {
+					case 'postableBy':
+						// If they're authenticated, but they are not staff
+						if ($value instanceof Person) {
+							if (!$value->hasRole('Staff') && !$value->hasRole('Administrator')) {
+								// Limit them to public and anonymous categories
+								$search['$or'] = array(
+									array('postingPermissionLevel'=>'public'),
+									array('postingPermissionLevel'=>'anonymous')
+								);
+							}
+						}
+						// They are not logged in. Limit them to anonymous categories
+						else {
+							$search['postingPermissionLevel'] = 'anonymous';
+						}
+						break;
+
+					case 'displayableTo':
+						// If they're authenticated, but they are not staff
+						if ($value instanceof Person) {
+							if (!$value->hasRole('Staff') && !$value->hasRole('Administrator')) {
+								// Limit them to public and anonymous categories
+								$search['$or'] = array(
+									array('displayPermissionLevel'=>'public'),
+									array('displayPermissionLevel'=>'anonymous')
+								);
+							}
+						}
+						// They are not logged in. Limit them to anonymous categories
+						else {
+							$search['displayPermissionLevel'] = 'anonymous';
+						}
+						break;
+
+					default:
+						if ($value) {
+							$search[$key] = $value;
+						}
 				}
 			}
 		}

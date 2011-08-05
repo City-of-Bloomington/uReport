@@ -69,6 +69,18 @@ class Category extends MongoRecord
 		$this->validate();
 		$mongo = Database::getConnection();
 		$mongo->categories->save($this->data,array('safe'=>true));
+
+		$this->updateCategoryInTicketData();
+	}
+
+	public function updateCategoryInTicketData()
+	{
+		$mongo = Database::getConnection();
+		$mongo->tickets->update(
+			array('category._id'=>$this->data['_id']),
+			array('$set'=>array('category'=>$this->data)),
+			array('upsert'=>false,'multiple'=>true,'safe'=>false)
+		);
 	}
 
 	//----------------------------------------------------------------
@@ -175,6 +187,42 @@ class Category extends MongoRecord
 		else {
 			unset($this->data['customFields']);
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPostingPermissionLevel()
+	{
+		return isset($this->data['postingPermissionLevel'])
+			? $this->data['postingPermissionLevel']
+			: '';
+	}
+
+	/**
+	 * @param string $level
+	 */
+	public function setPostingPermissionLevel($level)
+	{
+		$this->data['postingPermissionLevel'] = $level;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDisplayPermissionLevel()
+	{
+		return isset($this->data['displayPermissionLevel'])
+			? $this->data['displayPermissionLevel']
+			: '';
+	}
+
+	/**
+	 * @param string $level
+	 */
+	public function setDisplayPermissionLevel($level)
+	{
+		$this->data['displayPermissionLevel'] = $level;
 	}
 
 	//----------------------------------------------------------------

@@ -138,6 +138,14 @@ class TicketList extends MongoResultIterator
 				}
 			}
 		}
+		// Only get tickets for categories this user is allowed to see
+		if (!isset($_SESSION['USER'])) {
+			$search['category.displayPermissionLevel'] = 'anonymous';
+		}
+		elseif (!$_SESSION['USER']->hasRole('Staff') && !$_SESSION['USER']->hasRole('Administrator')) {
+			$search['category.displayPermissionLevel'] = array('$in'=>array('public','anonymous'));
+		}
+
 		return $search;
 	}
 

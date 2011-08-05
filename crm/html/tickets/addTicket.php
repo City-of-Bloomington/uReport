@@ -27,7 +27,15 @@ if (isset($_REQUEST['person_id'])) {
 
 // Handle any Category choice passed in
 if (isset($_REQUEST['category_id'])) {
-	$ticket->setCategory($_REQUEST['category_id']);
+	$category = new Category($_REQUEST['category_id']);
+	if ($category->allowsPosting($_SESSION['USER'])) {
+		$ticket->setCategory($_REQUEST['category_id']);
+	}
+	else {
+		$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+		header('Location: '.BASE_URL);
+		exit();
+	}
 }
 
 // Handle any Department choice passed in

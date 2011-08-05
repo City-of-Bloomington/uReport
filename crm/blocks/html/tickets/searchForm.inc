@@ -164,23 +164,29 @@
 							</select>
 						</td>
 					</tr>
-					<tr><td><label for="category">Category</label></td></tr>
-					<tr><td><select name="category[]" id="category" multiple="true" size="5">
-							<?php
-								$list = new CategoryList();
-								$list->find();
-								foreach ($list as $category) {
-									$selected = (isset($_GET['category'])
-												&& in_array("{$category->getId()}",$_GET['category']))
-										? 'selected="selected"'
-										: '';
-									$name = View::escape($category);
-									echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
-								}
-							?>
-							</select>
-						</td>
-					</tr>
+					<?php
+						$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
+						$list = new CategoryList(array('displayableTo'=>$person));
+						if (count($list)) {
+						echo "
+						<tr><td><label for=\"category\">Category</label></td></tr>
+						<tr><td><select name=\"category[]\" id=\"category\" multiple=\"true\" size=\"5\">
+						";
+							foreach ($list as $category) {
+								$selected = (isset($_GET['category'])
+											&& in_array("{$category->getId()}",$_GET['category']))
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($category);
+								echo "<option value=\"{$category->getId()}\" $selected>$name</option>";
+							}
+						echo "
+								</select>
+							</td>
+						</tr>
+						";
+						}
+					?>
 					<tr><td><label for="status">Status</label></td></tr>
 					<tr><td><select name="status" id="status">
 								<option></option>

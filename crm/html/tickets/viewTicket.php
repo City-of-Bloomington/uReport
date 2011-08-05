@@ -6,6 +6,11 @@
  * @param GET ticket_id
  */
 $ticket = new Ticket($_GET['ticket_id']);
+if (!$ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+	header('Location: '.BASE_URL.'/tickets');
+	exit();
+}
 
 $template = new Template('tickets');
 $template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc',array('ticket'=>$ticket));

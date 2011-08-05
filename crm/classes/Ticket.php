@@ -752,4 +752,24 @@ class Ticket extends MongoRecord
 			$this->setAddressServiceData($data);
 		}
 	}
+
+	/**
+	 * Checks whether the user is supposed to be allowed to see this ticket
+	 *
+	 * @return bool
+	 */
+	public function allowsDisplay($person)
+	{
+		$category = isset($this->data['category']) ? $this->getCategory() : new Category();
+		if (!$person instanceof Person) {
+			return $category->getDisplayPermissionLevel()=='anonymous';
+		}
+		elseif (!$person->hasRole('Staff') && !$person->hasRole('Administrator')) {
+			return in_array(
+				$category->getDisplayPermissionLevel(),
+				array('public','anonymous')
+			);
+		}
+		return true;
+	}
 }

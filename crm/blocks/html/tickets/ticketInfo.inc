@@ -77,9 +77,9 @@ echo "
 <div class=\"ticketInfo\">
 	<h1>Case #$id $deleteButton</h1>
 	<table>
-		<tr><th>Category:</th>
+		<tr><td></td>
+			<th>Category:</th>
 			<td>$category</td>
-			<td></td>
 		</tr>
 		<tr><td>$changeLocationButton</td>
 			<th>Location:</th>
@@ -100,15 +100,16 @@ if (userIsAllowed('People')) {
 			<th>Referred To:</th>
 			<td>$referred</td>
 		</tr>
-		<tr><th>Created By:</th>
+		<tr><td></td>
+			<th>Created By:</th>
 			<td>$enteredBy</td>
 		</tr>
 	";
 }
 echo "
-		<tr><th>Date Opened:</th>
+		<tr><td></td>
+			<th>Date Opened:</th>
 			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
-			<td></td>
 		</tr>
 	</table>
 </div>

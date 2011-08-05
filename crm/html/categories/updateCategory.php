@@ -29,6 +29,8 @@ else {
 if (isset($_POST['name'])) {
 	$category->setName($_POST['name']);
 	$category->setDescription($_POST['description']);
+	$category->setPostingPermissionLevel($_POST['postingPermissionLevel']);
+	$category->setDisplayPermissionLevel($_POST['displayPermissionLevel']);
 
 	try {
 		$category->setCustomFields($_POST['custom_fields']);

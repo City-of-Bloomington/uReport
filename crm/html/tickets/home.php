@@ -39,6 +39,7 @@ if (count(array_intersect(array_keys($fields),array_keys($_GET)))) {
 		}
 	}
 
+	// Do the search
 	if (count($search)) {
 		// Create the report
 		$report = (isset($_GET['report']) && $_GET['report']

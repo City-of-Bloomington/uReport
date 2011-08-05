@@ -6,9 +6,21 @@
  * @param Category $this->category
  */
 $title = $this->category->getId() ? 'Edit Category' : 'Add Category';
-$name = isset($_POST['name']) ? View::escape($_POST['name']) : View::escape($this->category->getName());
-$description = isset($_POST['description']) ? View::escape($_POST['description']) : View::escape($this->category->getDescription());
-$custom_fields = isset($_POST['custom_fields']) ? View::escape($_POST['custom_fields']) : json_encode($this->category->getCustomFields());
+$name = isset($_POST['name'])
+	? View::escape($_POST['name'])
+	: View::escape($this->category->getName());
+$description = isset($_POST['description'])
+	? View::escape($_POST['description'])
+	: View::escape($this->category->getDescription());
+$custom_fields = isset($_POST['custom_fields'])
+	? View::escape($_POST['custom_fields'])
+	: json_encode($this->category->getCustomFields());
+$postingPermissionLevel = isset($_POST['postingPermissionLevel'])
+	? $_POST['postingPermissionLevel']
+	: $this->category->getPostingPermissionLevel();
+$displayPermissionLevel = isset($_POST['displayPermissionLevel'])
+	? $_POST['displayPermissionLevel']
+	: $this->category->getDisplayPermissionLevel();
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
@@ -22,6 +34,34 @@ $custom_fields = isset($_POST['custom_fields']) ? View::escape($_POST['custom_fi
 		<div>
 			<div><label for="description">Description</label></div>
 			<textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
+		</div>
+		<div>
+			<div><label for="postingPermissionLevel">Permission Level for Posting Cases</label></div>
+			<select name="postingPermissionLevel" id="postingPermissionLevel">
+				<option value="staff" <?php if ($postingPermissionLevel=='staff') echo 'selected="selected"'; ?> >
+					Authenticated Staff
+				</option>
+				<option value="public" <?php if ($postingPermissionLevel=='public') echo 'selected="selected"'; ?> >
+					Authenticated Public
+				</option>
+				<option value="anonymous" <?php if ($postingPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
+					Anonymous
+				</option>
+			</select>
+		</div>
+		<div>
+			<div><label for="displayPermissionLevel">Permission Level for Displaying Cases</label></div>
+			<select name="displayPermissionLevel" id="displayPermissionLevel">
+				<option value="staff" <?php if ($displayPermissionLevel=='staff') echo 'selected="selected"'; ?> >
+					Authenticated Staff
+				</option>
+				<option value="public" <?php if ($displayPermissionLevel=='public') echo 'selected="selected"'; ?> >
+					Authenticated Public
+				</option>
+				<option value="anonymous" <?php if ($displayPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
+					Anonymous
+				</option>
+			</select>
 		</div>
 		<div>
 			<div><label for="custom_fields">Custom Fields</label></div>

@@ -26,7 +26,7 @@ abstract class MongoResultIterator implements Iterator,Countable
 	 *
 	 * If you want to apply an order, you can call this function after
 	 * calling find(), but before you start iterating
-	 * 
+	 *
 	 * @param array $order
 	 */
 	public function order($order)
