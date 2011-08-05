@@ -72,6 +72,20 @@ class CategoryList extends MongoResultIterator
 				}
 			}
 		}
+		// Only get categories this user is allowed to see or post to
+		if (!isset($_SESSION['USER'])) {
+			$search['$or'] = array(
+				array('postingPermissionLevel'=>'anonymous'),
+				array('displayPermissionLevel'=>'anonymous')
+			);
+		}
+		elseif (!$_SESSION['USER']->hasRole('Staff') && !$_SESSION['USER']->hasRole('Administrator')) {
+			$search['$or'] = array(
+				array('postingPermissionLevel'=>array('$in'=>array('public','anonymous'))),
+				array('displayPermissionLevel'=>array('$in'=>array('public','anonymous')))
+			);
+		}
+
 		if (count($search)) {
 			$this->cursor = $this->mongo->categories->find($search);
 		}
