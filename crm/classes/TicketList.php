@@ -224,7 +224,7 @@ class TicketList extends MongoResultIterator
 			'city'=>array('displayName'=>'City','searchOn'=>'city','sortOn'=>'city'),
 			'state'=>array('displayName'=>'State','searchOn'=>'state','sortOn'=>'state'),
 			'zip'=>array('displayName'=>'Zip','searchOn'=>'zip','sortOn'=>'zip'),
-			'notes'=>array('displayName'=>'Notes','searchOn'=>'issues.notes','sortOn'=>'issues.notes')
+			'description'=>array('displayName'=>'Description','searchOn'=>'issues.description','sortOn'=>'issues.description')
 		);
 	}
 
@@ -235,6 +235,6 @@ class TicketList extends MongoResultIterator
 	 */
 	public static function getDefaultFieldsToDisplay()
 	{
-		return array('enteredDate'=>'on','location'=>'on','notes'=>'on');
+		return array('enteredDate'=>'on','location'=>'on','description'=>'on');
 	}
 }

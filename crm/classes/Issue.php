@@ -158,10 +158,10 @@ class Issue extends MongoRecord
 	/**
 	 * @return text
 	 */
-	public function getNotes()
+	public function getDescription()
 	{
-		if (isset($this->data['notes'])) {
-			return $this->data['notes'];
+		if (isset($this->data['description'])) {
+			return $this->data['description'];
 		}
 	}
 
@@ -245,9 +245,9 @@ class Issue extends MongoRecord
 	/**
 	 * @param text $text
 	 */
-	public function setNotes($text)
+	public function setDescription($text)
 	{
-		$this->data['notes'] = trim($text);
+		$this->data['description'] = trim($text);
 	}
 
 	//----------------------------------------------------------------
@@ -318,7 +318,7 @@ class Issue extends MongoRecord
 	public function set($post)
 	{
 		$fields = array(
-			'type','reportedByPerson','contactMethod','responseMethod','category','notes',
+			'type','reportedByPerson','contactMethod','responseMethod','description',
 			'customFields'
 		);
 		foreach ($fields as $field) {

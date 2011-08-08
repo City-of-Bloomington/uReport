@@ -31,8 +31,8 @@ foreach ($this->ticketList as $row) {
 				}
 				break;
 
-			case 'notes':
-				$value = isset($row['issues'][0]['notes']) ? $row['issues'][0]['notes'] : '';
+			case 'description':
+				$value = isset($row['issues'][0]['description']) ? $row['issues'][0]['description'] : '';
 				break;
 			case 'category':
 				$value = isset($row['category']['name']) ? $row['category']['name'] : '';

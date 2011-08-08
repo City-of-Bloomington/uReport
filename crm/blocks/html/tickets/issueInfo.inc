@@ -43,8 +43,8 @@ echo "
 	</h2>
 ";
 	if (!$this->disableComments) {
-		$notes = View::escape($this->issue->getNotes());
-		echo "<div class=\"notes\">$notes</div>";
+		$description = View::escape($this->issue->getDescription());
+		echo "<div class=\"notes\">$description</div>";
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated

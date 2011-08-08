@@ -77,7 +77,7 @@
 	</tr>
 </table>
 
-<div><label for="issue-notes">Comment about the issue</label></div>
+<div><label for="issue-description">Describe the issue</label></div>
 <div>
-	<textarea name="issue[notes]" id="issue-notes" rows="3" cols="60"><?php echo View::escape($this->issue->getNotes()); ?></textarea>
+	<textarea name="issue[description]" id="issue-description" rows="3" cols="60"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>
