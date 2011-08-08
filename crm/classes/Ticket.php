@@ -6,6 +6,9 @@
  */
 class Ticket extends MongoRecord
 {
+	private $assignmentNotes;	// A temp variable for preserving posted assignment notes
+								// until we call Ticket::save()
+
 	/**
 	 * Populates the object with data
 	 *
@@ -43,6 +46,9 @@ class Ticket extends MongoRecord
 			$this->data['status'] = 'open';
 			$this->data['city'] = DEFAULT_CITY;
 			$this->data['state'] = DEFAULT_STATE;
+			if (isset($_SESSION['USER'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+			}
 		}
 	}
 
@@ -62,10 +68,19 @@ class Ticket extends MongoRecord
 		}
 
 		if (!$this->getPersonData('enteredByPerson','_id')) {
-			$this->setEnteredByPerson($_SESSION['USER']);
+			if (isset($_SESSION['USER'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+			}
 		}
+
 		if (!$this->getPersonData('assignedPerson','_id')) {
-			$this->setAssignedPerson($_SESSION['USER']);
+			if (isset($this->data['category']['department'])) {
+				$department = new Department($this->data['category']['department']);
+				$this->setAssignedPerson($department->getDefaultPerson());
+			}
+			else {
+				$this->setAssignedPerson($_SESSION['USER']);
+			}
 		}
 	}
 
@@ -75,8 +90,24 @@ class Ticket extends MongoRecord
 	public function save()
 	{
 		$this->validate();
-		$mongo = Database::getConnection();
 
+		// The initial Ticket creation needs to generate
+		// log entries to record the open action and assignment action
+		if (!isset($this->data['_id'])) {
+			// Create the History entries
+			$open = new History();
+			$open->setAction('open');
+			$this->updateHistory($open);
+
+			$assignment = new History();
+			$assignment->setAction('assignment');
+			$assignment->setActionPerson($this->getAssignedPerson());
+			$assignment->setNotes($this->assignmentNotes);
+			$this->updateHistory($assignment);
+		}
+
+		// Write the ticket out to the database
+		$mongo = Database::getConnection();
 		if (!$this->getNumber()) {
 			$counter = $mongo->command(array(
 				'findAndModify'=>'counters',
@@ -88,6 +119,12 @@ class Ticket extends MongoRecord
 			$this->data['number'] = $counter['value']['next'];
 		}
 		$mongo->tickets->save($this->data,array('safe'=>true));
+
+		// If this is a brand new ticket, and we've just assigned it to someone
+		// We need to send them the notification
+		if (isset($assignment)) {
+			$assignment->sendNotification($this);
+		}
 	}
 
 	/**
@@ -751,25 +788,24 @@ class Ticket extends MongoRecord
 		if ($data) {
 			$this->setAddressServiceData($data);
 		}
+
+		// If the user posted any Notes for the person they're assigning
+		// this ticket to, we need to temporarily save those.
+		// Initial assignment creation doesn't happen until Ticket::save()
+		if (isset($post['notes'])) {
+			$this->assignmentNotes = $post['notes'];
+		}
 	}
 
 	/**
 	 * Checks whether the user is supposed to be allowed to see this ticket
 	 *
+	 * @param Person $person
 	 * @return bool
 	 */
 	public function allowsDisplay($person)
 	{
 		$category = isset($this->data['category']) ? $this->getCategory() : new Category();
-		if (!$person instanceof Person) {
-			return $category->getDisplayPermissionLevel()=='anonymous';
-		}
-		elseif (!$person->hasRole('Staff') && !$person->hasRole('Administrator')) {
-			return in_array(
-				$category->getDisplayPermissionLevel(),
-				array('public','anonymous')
-			);
-		}
-		return true;
+		return $category->allowsDisplay($person);
 	}
 }

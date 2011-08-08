@@ -138,6 +138,16 @@ class Category extends MongoRecord
 		return array();
 	}
 
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if (isset($this->data['department'])) {
+			return new Department($this->data['department']);
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Setters
 	//----------------------------------------------------------------
@@ -190,6 +200,17 @@ class Category extends MongoRecord
 	}
 
 	/**
+	 * @param string|Department $department
+	 */
+	public function setDepartment($department)
+	{
+		if (!$department instanceof Department) {
+			$department = new Department($department);
+		}
+		$this->data['department'] = $department->getData();
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getPostingPermissionLevel()
@@ -232,6 +253,54 @@ class Category extends MongoRecord
 	public function __toString()
 	{
 		return $this->getName();
+	}
+
+	/**
+	 * @param array $post
+	 */
+	public function set($post)
+	{
+		$this->setName($post['name']);
+		$this->setDescription($post['description']);
+		$this->setDepartment($post['department']);
+		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
+		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
+		$this->setCustomFields($post['custom_fields']);
+	}
+
+	/**
+	 * @param Person $person
+	 * @return bool
+	 */
+	public function allowsDisplay($person)
+	{
+		if (!$person instanceof Person) {
+			return $this->getDisplayPermissionLevel()=='anonymous';
+		}
+		elseif (!$person->hasRole('Staff') && !$person->hasRole('Administrator')) {
+			return in_array(
+				$this->getDisplayPermissionLevel(),
+				array('public','anonymous')
+			);
+		}
+		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function allowsPosting($person)
+	{
+		if (!$person instanceof Person) {
+			return $this->getPostingPermissionLevel()=='anonymous';
+		}
+		elseif (!$person->hasRole('Staff') && !$person->hasRole('Administrator')) {
+			return in_array(
+				$this->getPostingPermissionLevel(),
+				array('public','anonymous')
+			);
+		}
+		return true;
 	}
 }
 
