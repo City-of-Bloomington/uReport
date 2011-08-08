@@ -6,6 +6,7 @@
  * @param Category $this->category
  */
 $title = $this->category->getId() ? 'Edit Category' : 'Add Category';
+$department_id = $this->category->getData('department._id');
 $name = isset($_POST['name'])
 	? View::escape($_POST['name'])
 	: View::escape($this->category->getName());
@@ -34,6 +35,22 @@ $displayPermissionLevel = isset($_POST['displayPermissionLevel'])
 		<div>
 			<div><label for="description">Description</label></div>
 			<textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
+		</div>
+		<div>
+			<div><label for="department">Default Department Assignment</label></div>
+			<select name="department" id="department">
+			<?php
+				$list = new DepartmentList();
+				$list->find();
+				foreach ($list as $department) {
+					$selected = "{$department->getId()}"=="$department_id"
+						? 'selected="selected"'
+						: '';
+					$name = View::escape($department->getName());
+					echo "<option value=\"{$department->getId()}\" $selected >$name</option>";
+				}
+			?>
+			</select>
 		</div>
 		<div>
 			<div><label for="postingPermissionLevel">Permission Level for Posting Cases</label></div>

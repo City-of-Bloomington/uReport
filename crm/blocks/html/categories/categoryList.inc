@@ -20,9 +20,9 @@
 		<thead>
 			<tr><th></th>
 				<th>Name</th>
+				<th>Department</th>
 				<th>Post Permission</th>
 				<th>Display Permission</th>
-				<th>Description</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,16 +37,18 @@
 					);
 				}
 				$name = View::escape($category->getName());
+				$department = View::escape($category->getData('department.name'));
 				$postPermission = View::escape($category->getPostingPermissionLevel());
 				$displayPermission = View::escape($category->getDisplayPermissionLevel());
 				$description = View::escape($category->getDescription());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
+					<td>$department</td>
 					<td>$postPermission</td>
 					<td>$displayPermission</td>
-					<td>$description</td>
 				</tr>
+				<tr><td colspan=\"5\">$description</td></tr>
 				";
 			}
 		?>
