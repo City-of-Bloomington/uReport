@@ -17,6 +17,10 @@ class History extends MongoRecord
 		else {
 			$this->data['enteredDate'] = new MongoDate();
 			$this->data['actionDate'] = new MongoDate();
+			if (isset($_SESSION['USER'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+				$this->setActionPerson($_SESSION['USER']);
+			}
 		}
 	}
 
@@ -37,6 +41,15 @@ class History extends MongoRecord
 
 		if (!$this->data['actionDate']) {
 			$this->data['actionDate'] = new MongoDate();
+		}
+
+		if (isset($_SESSION['USER'])) {
+			if (!isset($this->data['enteredByPerson'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+			}
+			if (!isset($this->data['actionPerson'])) {
+				$this->setActionPerson($_SESSION['USER']);
+			}
 		}
 	}
 	//----------------------------------------------------------------

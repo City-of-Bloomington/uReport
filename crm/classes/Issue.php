@@ -39,6 +39,10 @@ class Issue extends MongoRecord
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->data['date'] = new MongoDate();
+
+			if (isset($_SESSION['USER'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+			}
 		}
 	}
 
@@ -54,8 +58,13 @@ class Issue extends MongoRecord
 			throw new Exception('missingRequiredFields');
 		}
 
-		if (!$this->getEnteredByPerson()) {
-			throw new Exception('missingRequiredFields');
+		if (isset($_SESSION['USER'])) {
+			if (!isset($this->data['enteredByPerson'])) {
+				$this->setEnteredByPerson($_SESSION['USER']);
+			}
+			if (!isset($this->data['reportedByPerson'])) {
+				$this->setReportedByPerson($_SESSION['USER']);
+			}
 		}
 
 		if (!isset($this->data['date'])) {
