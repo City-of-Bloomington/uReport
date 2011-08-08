@@ -59,33 +59,12 @@ if (!isset($currentDepartment)) {
 
 // Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
-	$ticket->setEnteredByPerson($_SESSION['USER']);
-	$ticket->set($_POST);
-
-	// Create the issue
-	$issue->setEnteredByPerson($_SESSION['USER']);
-	$issue->set($_POST['issue']);
-
-	// Create the History entries
-	$open = new History();
-	$open->setAction('open');
-	$open->setEnteredByPerson($_SESSION['USER']);
-	$open->setActionPerson($_SESSION['USER']);
-
-	// Record the assignment
-	$assignment = new History();
-	$assignment->setAction('assignment');
-	$assignment->setEnteredByPerson($_SESSION['USER']);
-	$assignment->setActionPerson($ticket->getAssignedPerson());
-	$assignment->setNotes($_REQUEST['notes']);
-
 	// Validate Everything and save
 	try {
+		$ticket->set($_POST);
+		$issue->set($_POST['issue']);
 		$ticket->updateIssues($issue);
-		$ticket->updateHistory($open);
-		$ticket->updateHistory($assignment);
 		$ticket->save();
-		$assignment->sendNotification($ticket);
 
 		header('Location: '.$ticket->getURL());
 		exit();
