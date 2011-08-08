@@ -27,13 +27,8 @@ else {
 
 
 if (isset($_POST['name'])) {
-	$category->setName($_POST['name']);
-	$category->setDescription($_POST['description']);
-	$category->setPostingPermissionLevel($_POST['postingPermissionLevel']);
-	$category->setDisplayPermissionLevel($_POST['displayPermissionLevel']);
-
 	try {
-		$category->setCustomFields($_POST['custom_fields']);
+		$category->set($_POST);
 		$category->save();
 		header('Location: '.BASE_URL.'/categories');
 		exit();
