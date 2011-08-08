@@ -51,9 +51,6 @@ if (isset($_REQUEST['person_id'])) {
 // Handle any stuff the user posts
 //-------------------------------------------------------------------
 if (isset($_POST['issue'])) {
-	if (!$issue->getEnteredByPerson()) {
-		$issue->setEnteredByPerson($_SESSION['USER']);
-	}
 	$issue->set($_POST['issue']);
 	$ticket->updateIssues($issue,$index);
 
