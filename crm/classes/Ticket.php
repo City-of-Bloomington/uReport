@@ -182,172 +182,6 @@ class Ticket extends MongoRecord
 	}
 
 	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if (isset($this->data['enteredByPerson'])) {
-			return new Person($this->data['enteredByPerson']);
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getAssignedPerson()
-	{
-		if (isset($this->data['assignedPerson'])) {
-			return new Person($this->data['assignedPerson']);
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getReferredPerson()
-	{
-		if (isset($this->data['referredPerson'])) {
-			return new Person($this->data['referredPerson']);
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getStatus()
-	{
-		if (isset($this->data['status'])) {
-			return $this->data['status'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getResolution()
-	{
-		if (isset($this->data['resolution'])) {
-			return $this->data['resolution'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getLocation()
-	{
-		if (isset($this->data['location'])) {
-			return $this->data['location'];
-		}
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getLatitude()
-	{
-		if (isset($this->data['coordinates']['latitude'])) {
-			return $this->data['coordinates']['latitude'];
-		}
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getLongitude()
-	{
-		if (isset($this->data['coordinates']['longitude'])) {
-			return $this->data['coordinates']['longitude'];
-		}
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getAddress_id()
-	{
-		if (isset($this->data['address_id'])) {
-			return $this->data['address_id'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCity()
-	{
-		if (isset($this->data['city'])) {
-			return $this->data['city'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getState()
-	{
-		if (isset($this->data['state'])) {
-			return $this->data['state'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getZip()
-	{
-		if (isset($this->data['zip'])) {
-			return $this->data['zip'];
-		}
-	}
-
-	/**
-	 * Returns an array of Issues
-	 *
-	 * @return array
-	 */
-	public function getIssues()
-	{
-		$issues = array();
-		if (isset($this->data['issues'])) {
-			foreach ($this->data['issues'] as $data) {
-				$issues[] = new Issue($data);
-			}
-		}
-		return $issues;
-	}
-
-	/**
-	 * Returns a single issue
-	 *
-	 * @param int $index
-	 * @param Issue
-	 */
-	public function getIssue($index)
-	{
-		if (isset($this->data['issues'][$index])) {
-			return new Issue($this->data['issues'][$index]);
-		}
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getHistory()
-	{
-		$history = array();
-		if (isset($this->data['history'])) {
-			foreach ($this->data['history'] as $data) {
-				$history[] = new History($data);
-			}
-		}
-		return $history;
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
 	 * Sets the date
 	 *
 	 * Dates should be in something strtotime() understands
@@ -360,6 +194,16 @@ class Ticket extends MongoRecord
 		$date = trim($date);
 		if ($date) {
 			$this->data['enteredDate'] = new MongoDate(strtotime($date));
+		}
+	}
+
+	/**
+	 * @return Person
+	 */
+	public function getEnteredByPerson()
+	{
+		if (isset($this->data['enteredByPerson'])) {
+			return new Person($this->data['enteredByPerson']);
 		}
 	}
 
@@ -390,6 +234,16 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return Person
+	 */
+	public function getAssignedPerson()
+	{
+		if (isset($this->data['assignedPerson'])) {
+			return new Person($this->data['assignedPerson']);
+		}
+	}
+
+	/**
 	 * Sets person data
 	 *
 	 * See: MongoRecord->setPersonData
@@ -416,6 +270,16 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return Person
+	 */
+	public function getReferredPerson()
+	{
+		if (isset($this->data['referredPerson'])) {
+			return new Person($this->data['referredPerson']);
+		}
+	}
+
+	/**
 	 * Sets person data
 	 *
 	 * See: MongoRecord->setPersonData
@@ -425,6 +289,16 @@ class Ticket extends MongoRecord
 	public function setReferredPerson($person)
 	{
 		$this->setPersonData('referredPerson',$person);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStatus()
+	{
+		if (isset($this->data['status'])) {
+			return $this->data['status'];
+		}
 	}
 
 	/**
@@ -439,6 +313,16 @@ class Ticket extends MongoRecord
 		$this->data['status'] = trim($string);
 		if ($this->data['status'] != 'closed') {
 			unset($this->data['resolution']);
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getResolution()
+	{
+		if (isset($this->data['resolution'])) {
+			return $this->data['resolution'];
 		}
 	}
 
@@ -458,11 +342,31 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getLocation()
+	{
+		if (isset($this->data['location'])) {
+			return $this->data['location'];
+		}
+	}
+
+	/**
 	 * @param string $string
 	 */
 	public function setLocation($string)
 	{
 		$this->data['location'] = trim($string);
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getLatitude()
+	{
+		if (isset($this->data['coordinates']['latitude'])) {
+			return $this->data['coordinates']['latitude'];
+		}
 	}
 
 	/**
@@ -474,11 +378,31 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return float
+	 */
+	public function getLongitude()
+	{
+		if (isset($this->data['coordinates']['longitude'])) {
+			return $this->data['coordinates']['longitude'];
+		}
+	}
+
+	/**
 	 * @param float $float
 	 */
 	public function setLongitude($float)
 	{
 		$this->data['coordinates']['longitude'] = (float)$float;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getAddress_id()
+	{
+		if (isset($this->data['address_id'])) {
+			return $this->data['address_id'];
+		}
 	}
 
 	/**
@@ -490,11 +414,31 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCity()
+	{
+		if (isset($this->data['city'])) {
+			return $this->data['city'];
+		}
+	}
+
+	/**
 	 * @param string $string
 	 */
 	public function setCity($string)
 	{
 		$this->data['city'] = trim($string);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getState()
+	{
+		if (isset($this->data['state'])) {
+			return $this->data['state'];
+		}
 	}
 
 	/**
@@ -506,6 +450,16 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getZip()
+	{
+		if (isset($this->data['zip'])) {
+			return $this->data['zip'];
+		}
+	}
+
+	/**
 	 * @param string $string
 	 */
 	public function setZip($string)
@@ -513,55 +467,33 @@ class Ticket extends MongoRecord
 		$this->data['zip'] = trim($string);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
 	/**
-	 * @return string
-	 */
-	public function getURL()
-	{
-		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
-	}
-
-	/**
-	 * @return Category
-	 */
-	public function getCategory()
-	{
-		if (isset($this->data['category'])) {
-			return new Category($this->data['category']);
-		}
-	}
-
-	/**
-	 * @param MongoId|string|Category $category
-	 */
-	public function setCategory($category)
-	{
-		if (!$category instanceof Category) {
-			$category = new Category($category);
-		}
-		if ($category instanceof Category) {
-			$this->data['category'] = $category->getData();
-		}
-	}
-
-	/**
-	 * Returns the note field of each Issue in the ticket
+	 * Returns an array of Issues
 	 *
 	 * @return array
 	 */
-	public function getNotes()
+	public function getIssues()
 	{
-		$notes = array();
-		foreach ($this->data['issues'] as $issue) {
-			if (isset($issue['notes'])) {
-				$notes[] = $issue['notes'];
+		$issues = array();
+		if (isset($this->data['issues'])) {
+			foreach ($this->data['issues'] as $data) {
+				$issues[] = new Issue($data);
 			}
 		}
-		return $notes;
+		return $issues;
+	}
+
+	/**
+	 * Returns a single issue
+	 *
+	 * @param int $index
+	 * @param Issue
+	 */
+	public function getIssue($index)
+	{
+		if (isset($this->data['issues'][$index])) {
+			return new Issue($this->data['issues'][$index]);
+		}
 	}
 
 	/**
@@ -647,6 +579,20 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getHistory()
+	{
+		$history = array();
+		if (isset($this->data['history'])) {
+			foreach ($this->data['history'] as $data) {
+				$history[] = new History($data);
+			}
+		}
+		return $history;
+	}
+
+	/**
 	 * @param History $history
 	 * @param int $index
 	 */
@@ -665,6 +611,54 @@ class Ticket extends MongoRecord
 			$this->data['history'][] = $history->getData();
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getURL()
+	{
+		return BASE_URL."/tickets/viewTicket.php?ticket_id={$this->getId()}";
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategory()
+	{
+		if (isset($this->data['category'])) {
+			return new Category($this->data['category']);
+		}
+	}
+
+	/**
+	 * @param MongoId|string|Category $category
+	 */
+	public function setCategory($category)
+	{
+		if (!$category instanceof Category) {
+			$category = new Category($category);
+		}
+		if ($category instanceof Category) {
+			$this->data['category'] = $category->getData();
+		}
+	}
+
+	/**
+	 * Returns the note field of each Issue in the ticket
+	 *
+	 * @return array
+	 */
+	public function getNotes()
+	{
+		$notes = array();
+		foreach ($this->data['issues'] as $issue) {
+			if (isset($issue['notes'])) {
+				$notes[] = $issue['notes'];
+			}
+		}
+		return $notes;
+	}
+
 	/**
 	 * Transfers issues and history from another ticket into this one
 	 *

@@ -72,9 +72,6 @@ class Issue extends MongoRecord
 		}
 	}
 
-	//----------------------------------------------------------------
-	// Generic Getters
-	//----------------------------------------------------------------
 	/**
 	 * Returns the date/time in the desired format
 	 *
@@ -96,6 +93,23 @@ class Issue extends MongoRecord
 	}
 
 	/**
+	 * Sets the date
+	 *
+	 * Date string formats should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param string|MongoDate $date
+	 */
+	public function setDate($date)
+	{
+		if (!$date instanceof MongoDate) {
+			$date = trim($date);
+			$date = new MongoDate(strtotime($date));
+		}
+		$this->data['date'] = $date;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getType()
@@ -103,6 +117,14 @@ class Issue extends MongoRecord
 		if (isset($this->data['type'])) {
 			return $this->data['type'];
 		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setType($string)
+	{
+		$this->data['type'] = trim($string);
 	}
 
 	/**
@@ -126,83 +148,6 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @return Person
-	 */
-	public function getReportedByPerson()
-	{
-		if (isset($this->data['reportedByPerson'])) {
-			return new Person($this->data['reportedByPerson']);
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getContactMethod()
-	{
-		if (isset($this->data['contactMethod'])) {
-			return $this->data['contactMethod'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getResponseMethod()
-	{
-		if (isset($this->data['responseMethod'])) {
-			return $this->data['responseMethod'];
-		}
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getDescription()
-	{
-		if (isset($this->data['description'])) {
-			return $this->data['description'];
-		}
-	}
-
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * Sets the date
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string|MongoDate $date
-	 */
-	public function setDate($date)
-	{
-		if (!$date instanceof MongoDate) {
-			$date = trim($date);
-			$date = new MongoDate(strtotime($date));
-		}
-		$this->data['date'] = $date;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setType($string)
-	{
-		$this->data['type'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setProblem($string)
-	{
-		$this->data['problem'] = trim($string);
-	}
-
-	/**
 	 * Sets person data
 	 *
 	 * See: MongoRecord->setPersonData
@@ -212,6 +157,16 @@ class Issue extends MongoRecord
 	public function setEnteredByPerson($person)
 	{
 		$this->setPersonData('enteredByPerson',$person);
+	}
+
+	/**
+	 * @return Person
+	 */
+	public function getReportedByPerson()
+	{
+		if (isset($this->data['reportedByPerson'])) {
+			return new Person($this->data['reportedByPerson']);
+		}
 	}
 
 	/**
@@ -227,11 +182,31 @@ class Issue extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getContactMethod()
+	{
+		if (isset($this->data['contactMethod'])) {
+			return $this->data['contactMethod'];
+		}
+	}
+
+	/**
 	 * @param string $string
 	 */
 	public function setContactMethod($string)
 	{
 		$this->data['contactMethod'] = trim($string);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getResponseMethod()
+	{
+		if (isset($this->data['responseMethod'])) {
+			return $this->data['responseMethod'];
+		}
 	}
 
 	/**
@@ -243,6 +218,16 @@ class Issue extends MongoRecord
 	}
 
 	/**
+	 * @return text
+	 */
+	public function getDescription()
+	{
+		if (isset($this->data['description'])) {
+			return $this->data['description'];
+		}
+	}
+
+	/**
 	 * @param text $text
 	 */
 	public function setDescription($text)
@@ -250,10 +235,6 @@ class Issue extends MongoRecord
 		$this->data['description'] = trim($text);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
 	/**
 	 * @return array
 	 */
