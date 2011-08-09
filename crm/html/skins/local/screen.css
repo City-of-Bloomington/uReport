@@ -1,5 +1,6 @@
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:red; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
+h3 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:blue; }
 p { margin:.5em; }
 
@@ -9,8 +10,8 @@ td { padding:.25em .75em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
-ul { list-style-type:none; margin:0; padding:0; }
-li { margin:.5em 0; }
+ul { list-style-type:bullet; margin-left:1em; padding:0; }
+li { margin:0; }
 
 fieldset { padding:.25em 0; }
 legend { font-weight:bold; }
