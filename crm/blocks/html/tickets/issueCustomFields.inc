@@ -44,7 +44,7 @@ if ($category) {
 					}
 					echo "
 					<tr><td><label for=\"$field_id\">$label</label></td>
-						<td><select name=\"$field_name\" id=\"$field_id\" multiple=\"true\" size=\"5\">
+						<td><select name=\"{$field_name}[]\" id=\"$field_id\" multiple=\"true\" size=\"5\">
 					";
 							foreach ($definition['values'] as $v) {
 								$selected = in_array($v,$value) ? 'selected="selected"' : '';
