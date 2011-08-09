@@ -52,9 +52,7 @@ class History extends MongoRecord
 			}
 		}
 	}
-	//----------------------------------------------------------------
-	// Generic Getters
-	//----------------------------------------------------------------
+
 	/**
 	 * @return string
 	 */
@@ -63,6 +61,14 @@ class History extends MongoRecord
 		if (isset($this->data['action'])) {
 			return $this->data['action'];
 		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setAction($string)
+	{
+		$this->data['action'] = trim($string);
 	}
 
 	/**
@@ -82,6 +88,22 @@ class History extends MongoRecord
 		}
 		else {
 			return $this->date['enteredDate'];
+		}
+	}
+
+	/**
+	 * Sets the date
+	 *
+	 * Dates should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param string $date
+	 */
+	public function setEnteredDate($date)
+	{
+		$date = trim($date);
+		if ($date) {
+			$this->data['enteredDate'] = new MongoDate(strtotime($date));
 		}
 	}
 
@@ -106,63 +128,6 @@ class History extends MongoRecord
 	}
 
 	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if (isset($this->data['enteredByPerson'])) {
-			return new Person($this->data['enteredByPerson']);
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getActionPerson()
-	{
-		if (isset($this->data['actionPerson'])) {
-			return new Person($this->data['actionPerson']);
-		}
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		if (isset($this->data['notes'])) {
-			return $this->data['notes'];
-		}
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * @param string $string
-	 */
-	public function setAction($string)
-	{
-		$this->data['action'] = trim($string);
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Dates should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string $date
-	 */
-	public function setEnteredDate($date)
-	{
-		$date = trim($date);
-		if ($date) {
-			$this->data['enteredDate'] = new MongoDate(strtotime($date));
-		}
-	}
-
-	/**
 	 * Sets the date
 	 *
 	 * Date string formats should be in something strtotime() understands
@@ -179,6 +144,16 @@ class History extends MongoRecord
 	}
 
 	/**
+	 * @return Person
+	 */
+	public function getEnteredByPerson()
+	{
+		if (isset($this->data['enteredByPerson'])) {
+			return new Person($this->data['enteredByPerson']);
+		}
+	}
+
+	/**
 	 * Sets person data
 	 *
 	 * See: MongoRecord->setPersonData
@@ -188,6 +163,16 @@ class History extends MongoRecord
 	public function setEnteredByPerson($person)
 	{
 		$this->setPersonData('enteredByPerson',$person);
+	}
+
+	/**
+	 * @return Person
+	 */
+	public function getActionPerson()
+	{
+		if (isset($this->data['actionPerson'])) {
+			return new Person($this->data['actionPerson']);
+		}
 	}
 
 	/**
@@ -203,16 +188,23 @@ class History extends MongoRecord
 	}
 
 	/**
+	 * @return text
+	 */
+	public function getNotes()
+	{
+		if (isset($this->data['notes'])) {
+			return $this->data['notes'];
+		}
+	}
+
+	/**
 	 * @param text $text
 	 */
 	public function setNotes($text)
 	{
 		$this->data['notes'] = trim($text);
 	}
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
+
 	/**
 	 * Returns the parsed description
 	 *
