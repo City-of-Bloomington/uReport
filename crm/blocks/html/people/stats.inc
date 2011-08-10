@@ -13,13 +13,13 @@ $referred = count($this->person->getTickets('referred',$notClosed));
 echo "
 <div class=\"stats\">
 	<table>
-		<tr><th>Currently assigned tickets</th>
+		<tr><th>Currently assigned cases</th>
 			<td>$assigned</td>
 		</tr>
-		<tr><th>Outstanding reported tickets</th>
+		<tr><th>Outstanding reported cases/th>
 			<td>$reported</td>
 		</tr>
-		<tr><th>Current referred tickets</th>
+		<tr><th>Current referred cases</th>
 			<td>$referred</td>
 		</tr>
 	</table>
