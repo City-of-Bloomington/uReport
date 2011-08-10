@@ -240,9 +240,13 @@ class Issue extends MongoRecord
 	 */
 	public function getHistory()
 	{
+		$history = array();
 		if (isset($this->data['history'])) {
-			return $this->data['history'];
+			foreach ($this->data['history'] as $data) {
+				$history[] = new History($data);
+			}
 		}
+		return $history;
 	}
 
 	/**

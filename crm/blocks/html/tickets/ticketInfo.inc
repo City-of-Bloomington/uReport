@@ -33,6 +33,7 @@ $assignButton = '';
 $referralButton = '';
 $editStatusButton = '';
 $deleteButton = '';
+$changeCategoryButton = '';
 $changeLocationButton = '';
 
 if (!$this->disableButtons && userIsAllowed('Tickets')) {
@@ -48,6 +49,11 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	);
 
 	if ($this->ticket->getStatus()!='closed') {
+		$changeCategoryButton = $this->template->linkButton(
+			'Change Category',
+			BASE_URL.'/tickets/changeCategory.php?ticket_id='.$this->ticket->getId(),
+			'edit'
+		);
 		$changeLocationButton = $this->template->linkButton(
 			'Change Location',
 			BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
@@ -77,7 +83,7 @@ echo "
 <div class=\"ticketInfo\">
 	<h1>Case #$id $deleteButton</h1>
 	<table>
-		<tr><td></td>
+		<tr><td>$changeCategoryButton</td>
 			<th>Category:</th>
 			<td>$category</td>
 		</tr>

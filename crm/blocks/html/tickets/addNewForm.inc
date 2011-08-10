@@ -21,23 +21,8 @@ $title = $this->title ? View::escape($this->title) : 'New Cases';
 	<h1><?php echo $title; ?></h1>
 	<form method="get" action="<?php echo $this->return_url; ?>">
 		<fieldset><legend>Choose a category</legend>
-			<label>
-				Category
-				<select name="category_id">
-				<?php
-					if ($_SESSION['USER']->getDepartment()) {
-						$dept = $_SESSION['USER']->getDepartment();
-						$department = new Department($dept['_id']);
-
-						foreach ($department->getCategories() as $departmentCategory) {
-							$name = View::escape($departmentCategory['name']);
-							echo "<option value=\"$departmentCategory[_id]\">$name</option>";
-						}
-					}
-				?>
-				</select>
-			</label>
 			<?php
+				include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
 				// Check for and preserve any fields already in the request
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key != 'category') {
@@ -50,12 +35,6 @@ $title = $this->title ? View::escape($this->title) : 'New Cases';
 				echo $this->template->formButton(
 					'Add New Case','submit','add'
 				);
-				echo "
-				<div><a href=\"".BASE_URL."/categories/chooseCategory.php?return_url={$this->return_url}\">
-						Choose from all categories
-					</a>
-				</div>
-				";
 			?>
 		</fieldset>
 	</form>

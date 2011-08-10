@@ -594,7 +594,7 @@ class Ticket extends MongoRecord
 
 	/**
 	 * @param History $history
-	 * @param int $index
+	 * @param int $index		The index of the history item to update
 	 */
 	public function updateHistory(History $history, $index=null)
 	{
@@ -609,6 +609,28 @@ class Ticket extends MongoRecord
 		}
 		else {
 			$this->data['history'][] = $history->getData();
+		}
+	}
+
+	/**
+	 * @param int $issueIndex	The index of the issue whose history you want to update
+	 * @param History $history
+	 * @param int $index		The index of the history item to update
+	 */
+	public function updateIssueHistory($issueIndex, History $history, $index=null)
+	{
+		$history->validate();
+		if (isset($this->data['issues'][$issueIndex])) {
+			if (!isset($this->data['issues'][$issueIndex]['history'])) {
+				$this->data['issues'][$issueIndex]['history'] = array();
+			}
+
+			if (isset($index) && isset($this->data['issues'][$issueIndex]['history'][$index])) {
+				$this->data['issues'][$issueIndex]['history'][$index] = $history->getData();
+			}
+			else {
+				$this->data['issues'][$issueIndex]['history'][] = $history->getData();
+			}
 		}
 	}
 
@@ -631,15 +653,47 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * Changes a new category on this ticket
+	 *
+	 * Changing categories involves a definition change of custom fields.
+	 * Issues on the ticket will already have user-submitted data matching
+	 * the previous category's custom field definition.
+	 * We need to write out the current issue custom field data to
+	 * a comment in the history, so it's not lost.
+	 * Subsequent submissions for the new custom field data will
+	 * use and override the existing custom field data.
+	 * Fields that have the same name will be preserved during future edits
+	 * to the issue.
+	 *
 	 * @param MongoId|string|Category $category
 	 */
 	public function setCategory($category)
 	{
+		$oldId = isset($this->data['category']['_id'])
+			? (string)$this->data['category']['_id']
+			: '';
 		if (!$category instanceof Category) {
 			$category = new Category($category);
 		}
 		if ($category instanceof Category) {
 			$this->data['category'] = $category->getData();
+		}
+
+		if ($oldId != (string)$this->data['category']['_id']) {
+			foreach ($this->getIssues() as $index=>$issue) {
+				// Serialize any existing custom field data into a history entry
+				$notes = '';
+				foreach ($issue->getCustomFields() as $name=>$value) {
+					$value = is_array($value) ? implode(', ',$value) : $value;
+					$notes.= "$name: $value; ";
+				}
+				if ($notes) {
+					$history = new History();
+					$history->setAction('categoryChange');
+					$history->setNotes($notes);
+					$this->updateIssueHistory($index,$history);
+				}
+			}
 		}
 	}
 
