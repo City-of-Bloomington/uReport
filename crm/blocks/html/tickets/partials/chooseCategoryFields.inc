@@ -11,6 +11,18 @@
 	<select name="category_id">
 	<?php
 		if ($_SESSION['USER']->getDepartment()) {
+			if (isset($_REQUEST['category_id'])) {
+				try {
+					$category = new Category($_REQUEST['category_id']);
+					$name = View::escape($category->getName());
+					echo "
+					<option value=\"{$category->getId()}\" selected=\"selected\">$name</option>
+					";
+				}
+				catch (Exception $e) {
+				}
+			}
+
 			$dept = $_SESSION['USER']->getDepartment();
 			$department = new Department($dept['_id']);
 
