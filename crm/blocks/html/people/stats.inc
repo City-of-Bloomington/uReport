@@ -16,7 +16,7 @@ echo "
 		<tr><th>Currently assigned cases</th>
 			<td>$assigned</td>
 		</tr>
-		<tr><th>Outstanding reported cases/th>
+		<tr><th>Outstanding reported cases</th>
 			<td>$reported</td>
 		</tr>
 		<tr><th>Current referred cases</th>
