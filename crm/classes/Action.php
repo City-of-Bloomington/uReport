@@ -6,6 +6,8 @@
  */
 class Action extends MongoRecord
 {
+	public static $types = array('system','department');
+
 	/**
 	 * Populates the object with data
 	 *
@@ -46,6 +48,7 @@ class Action extends MongoRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setType('department');
 		}
 	}
 
@@ -57,6 +60,10 @@ class Action extends MongoRecord
 	{
 		if (!$this->getName() || !$this->getDescription()) {
 			throw new Exception('missingRequiredFields');
+		}
+
+		if (!$this->getType()) {
+			$this->setType('department');
 		}
 	}
 
@@ -94,6 +101,14 @@ class Action extends MongoRecord
 	}
 
 	/**
+	 * @param string $string
+	 */
+	public function setName($string)
+	{
+		$this->data['name'] = trim($string);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getDescription()
@@ -101,6 +116,14 @@ class Action extends MongoRecord
 		if (isset($this->data['description'])) {
 			return $this->data['description'];
 		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setDescription($string)
+	{
+		$this->data['description'] = trim($string);
 	}
 
 	/**
@@ -113,35 +136,14 @@ class Action extends MongoRecord
 		}
 	}
 
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
-	}
-
 	/**
 	 * @param string $string
 	 */
 	public function setType($string)
 	{
-		$this->data['type'] = trim($string);
+		$string = trim($string);
+		if (in_array($string,self::$types)) {
+			$this->data['type'] = $string;
+		}
 	}
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
 }

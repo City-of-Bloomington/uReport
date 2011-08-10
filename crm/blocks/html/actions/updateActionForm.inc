@@ -36,8 +36,14 @@ $description = View::escape($this->action->getDescription());
 
 				<tr><td><label for="type" class="required">Type</label></td>
 					<td><select name="type" id="type">
-							<option>system</option>
-							<option>department</option>
+						<?php
+							foreach (Action::$types as $type) {
+								$selected = $this->action->getType()==$type
+									? 'selected="selected"'
+									: '';
+								echo "<option $selected>$type</option>";
+							}
+						?>
 						</select>
 					</td>
 				</tr>
