@@ -38,7 +38,12 @@
 					<td>$description</td>
 				";
 					if (!$this->disableComments) {
-						$notes = View::escape($event->getNotes());
+						if ($event->getAction()=='categoryChange') {
+							$notes = $this->template->customFieldJSON($event->getNotes());
+						}
+						else {
+							$notes = View::escape($event->getNotes());
+						}
 						echo "<td>$notes</td>";
 					}
 				echo "

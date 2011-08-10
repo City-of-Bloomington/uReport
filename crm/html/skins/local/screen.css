@@ -116,7 +116,7 @@ label { font-weight:bold; }
 #search-form { border-right:1px solid #cccccc; background-color:#eeeeee; }
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
-#search-form li { margin:.15em; padding:0; }
+#search-form li { list-style-type:none; margin:.15em; padding:0; }
 #search-form .fields {
 	min-height:160px; margin:.5em;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
@@ -128,7 +128,7 @@ label { font-weight:bold; }
 }
 #search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #dddddd; }
-#search-results .tableOfContents li { display:inline; margin-right:2em; }
+#search-results .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
 
 

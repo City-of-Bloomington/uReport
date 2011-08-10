@@ -669,9 +669,8 @@ class Ticket extends MongoRecord
 	 */
 	public function setCategory($category)
 	{
-		$oldId = isset($this->data['category']['_id'])
-			? (string)$this->data['category']['_id']
-			: '';
+		$oldCategory = $this->getCategory();
+
 		if (!$category instanceof Category) {
 			$category = new Category($category);
 		}
@@ -679,18 +678,21 @@ class Ticket extends MongoRecord
 			$this->data['category'] = $category->getData();
 		}
 
-		if ($oldId != (string)$this->data['category']['_id']) {
+		if ($oldCategory && "{$oldCategory->getId()}"!="{$category->getId()}") {
+			$oldCustomFields = $oldCategory->getCustomFields();
+
 			foreach ($this->getIssues() as $index=>$issue) {
 				// Serialize any existing custom field data into a history entry
-				$notes = '';
-				foreach ($issue->getCustomFields() as $name=>$value) {
-					$value = is_array($value) ? implode(', ',$value) : $value;
-					$notes.= "$name: $value; ";
+				$notes = array();
+				$customData = $issue->getCustomFields();
+				foreach ($oldCustomFields as $definition) {
+					$definition['value'] = $customData[$definition['name']];
+					$notes[] = $definition;
 				}
 				if ($notes) {
 					$history = new History();
 					$history->setAction('categoryChange');
-					$history->setNotes($notes);
+					$history->setNotes(json_encode($notes));
 					$this->updateIssueHistory($index,$history);
 				}
 			}
