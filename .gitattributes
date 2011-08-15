@@ -1,6 +1,15 @@
 * text=auto !eol
 crm/blocks/html/errorMessages/mergerNotAllowed.inc -text
 crm/blocks/html/people/mergeForm.inc -text
+crm/docs/images/addcase.jpg -text
+crm/docs/images/answers.jpg -text
+crm/docs/images/customfieldsnotpopulated.jpg -text
+crm/docs/images/editissue.jpg -text
+crm/docs/images/editissue.psd -text
+crm/docs/images/editissuebutton.jpg -text
+crm/docs/images/history_change.jpg -text
+crm/docs/images/newcase.jpg -text
+crm/docs/images/same_field.jpg -text
 crm/html/departments/updateMyDepartment.php -text
 crm/html/media/media -text
 crm/html/people/mergePeople.php -text
