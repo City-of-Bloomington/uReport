@@ -47,6 +47,10 @@ foreach ($this->ticketList as $row) {
 						? View::escape($row['assignedPerson']['department']['name'])
 						: '';
 					break;
+				case 'latitude':
+				case 'longitude':
+					$value = isset($row['coordinates'][$field]) ? $row['coordinates'][$field] : '';
+					break;
 
 				default:
 					$value = isset($row[$displayableFields[$field]['index']])
