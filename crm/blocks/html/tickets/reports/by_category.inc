@@ -5,43 +5,21 @@
  * If categories are chosen in the search, we only display those categories.
  * If categories are not chosen, we will go through all the categories in the system
  *
- * The fields desired need to be in the form of TicketList::getDisplayableFields()
- * Example:
- * $this->fieldsToDisplay = array (
- *		'enteredByPerson'=>array(
- *			'displayName'=>'Case Entered By',
- *			'searchOn'=>'enteredByPerson._id',
- *			'sortOn'=>'enteredByPerson.fullname'
- *		),
- *		'category'=>array(
- *			'displayName'=>'Categories',
- *			'searchOn'=>'category._id',
- *			'sortOn'=>'category.name'
- *		)
- *	)
- * For the full list of possible fields for use here,
- * See: TicketList::getDisplayableFields()
- *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->search The search to be passed to the TicketList
  * @param array $this->fields The ticket fields to display.
  * @param array $this->sort (optional) A mongo array that defines the sort
  */
-if (isset($this->search['category._id'])) {
-	// Remove the whole set of categories.  Later, we'll replace each category
-	// into the search and run the ticketList
-	$categories = $this->search['category._id'];
+if (isset($_GET['category'])) {
+	// Remove all the requested categories from the search
+	// Later, we'll do a search using each one, one at a time
+	$categories = $_GET['category'];
+	unset($_GET['category']);
 }
 else {
 	$categories = new CategoryList();
 	$categories->find();
-}
-
-$returnFields = array();
-foreach ($this->fieldsToDisplay as $field=>$definition) {
-	$returnFields[] = $definition['sortOn'];
 }
 
 echo "
@@ -62,10 +40,10 @@ echo "
 		$id = preg_replace('/[^a-zA-Z]/','',$category->getName());
 		$categoryName = View::escape($category->getName());
 
-		$this->vars['search']['category._id'] = array("{$category->getId()}");
+		$_GET['category'] = "{$category->getId()}";
 
 		$ticketList = new TicketList();
-		$ticketList->findRawData($this->search,$this->sort,$returnFields);
+		$ticketList->findRawData($_GET);
 		$count = count($ticketList);
 
 		if ($count) {

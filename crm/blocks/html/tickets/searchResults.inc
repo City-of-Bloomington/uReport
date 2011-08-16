@@ -2,39 +2,12 @@
 /**
  * Displays a list of Tickets
  *
- * This page only displays Ticket and Issue fields that are asked for
- *
- * The fields desired need to be in the form of TicketList::getDisplayableFields()
- * Example:
- * $this->fieldsToDisplay = array (
- *		'enteredByPerson'=>array(
- *			'displayName'=>'Case Entered By',
- *			'searchOn'=>'enteredByPerson._id',
- *			'sortOn'=>'enteredByPerson.fullname'
- *		),
- *		'category'=>array(
- *			'displayName'=>'Category',
- *			'searchOn'=>'category._id',
- *			'sortOn'=>'category.name'
- *		)
- *	)
- * For the full list of possible fields for use here,
- * See: TicketList::getDisplayableFields()
- *
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->search The search to be passed to the TicketList
- * @param array $this->fieldsToDisplay The ticket fields to display
- * @param array $this->sort (optional) A mongo array that defines the sort
  */
-$returnFields = array();
-foreach ($this->fieldsToDisplay as $field=>$definition) {
-	$returnFields[] = $definition['sortOn'];
-}
-
 $ticketList = new TicketList();
-$ticketList->findRawData($this->search,$this->sort,$returnFields);
+$ticketList->findRawData($_GET);
 
 echo "
 <div class=\"searchResults\">

@@ -210,7 +210,7 @@
 				<?php
 					// Default columns to display
 					if (!isset($_GET['fields'])) {
-						$_GET['fields'] = TicketList::getDefaultFieldsToDisplay();
+						$_GET['fields'] = TicketList::$defaultFieldsToDisplay;
 					}
 
 					foreach (TicketList::getDisplayableFields() as $name=>$definition) {

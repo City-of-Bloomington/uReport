@@ -608,7 +608,7 @@ class Person extends MongoRecord
 	public function getTickets($personFieldname,$fields=null)
 	{
 		if ($this->getId()) {
-			$field = $personFieldname.'Person._id';
+			$field = $personFieldname.'Person';
 			if (is_array($fields)) {
 				$search = $fields;
 				$search[$field] = (string)$this->getId();

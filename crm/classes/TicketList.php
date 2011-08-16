@@ -16,9 +16,16 @@ class TicketList extends MongoResultIterator
 	 * whether we can apply sorting or not.
 	 */
 	public static $MAX_SORTABLE_ROWS = 2000;
+	private static $DEFAULT_SORT = array('enteredDate'=>-1);
 
 	private $RETURN_TICKET_OBJECTS = true;
-	private $DEFAULT_SORT = array('enteredDate'=>-1);
+
+	/**
+	 * The set of fields we want to display in search results by default
+	 */
+	public static $defaultFieldsToDisplay = array(
+		'enteredDate'=>'on','location'=>'on','description'=>'on'
+	);
 
 	/**
 	 * @param array $fields
@@ -32,25 +39,30 @@ class TicketList extends MongoResultIterator
 	}
 
 	/**
-	 * Populates the collection, using strict matching of the requested fields
+	 * Populates the results with the full record data of each Ticket
 	 *
-	 * @param array $fields
-	 * @param array $order
+	 * All the parameters are passed as a single query array
+	 * This is usually the raw $_REQUEST
+	 * $query['sort'] Declares what sorting to use
+	 * All other keys in $query are treated as Ticket fields to search on
+	 *
+	 * The emptyParameter is only a placeholder so that we can remain
+	 * compatible with extending MongoResultIterator
+	 *
+	 * @param array $query
+	 * @param null $emptyParameter Unused
 	 */
-	public function find($fields=null,$order=null)
+	public function find($query=null,$emptyParameter=null)
 	{
 		$this->RETURN_TICKET_OBJECTS = true;
 
-		$search = self::prepareSearch($fields);
-		if (count($search)) {
-			$this->cursor = $this->mongo->tickets->find($search);
-		}
-		else {
-			$this->cursor = $this->mongo->tickets->find();
-		}
-		$order = $order ? $order : $this->DEFAULT_SORT;
+		$search = self::prepareSearch($query);
+		$this->cursor = count($search)
+			? $this->mongo->tickets->find($search)
+			: $this->mongo->tickets->find();
+
 		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
-			$this->cursor->sort($order);
+			$this->cursor->sort(self::prepareSort($query));
 		}
 	}
 
@@ -60,84 +72,84 @@ class TicketList extends MongoResultIterator
 	 * Hydrating whole Ticket objects for large searches can be slow
 	 * This lets you get just the fields you need, saving memory
 	 *
-	 * @param array $fields
-	 * @param array $order
-	 * @param array $returnFields
+	 * All the parameters are now passed as a single query array
+	 * This is usually the raw $_REQUEST
+	 * $query['sort'] Declares what sorting to use
+	 * $query['fields'] Declares what fields to return
+	 * All other keys in $query are treated as Ticket fields to search on
+	 *
+	 * @param array $query
 	 */
-	public function findRawData($fields=null,$order=null,$returnFields=null)
+	public function findRawData($query=null)
 	{
-		// Make sure there's always a TicketID in the results
-		if (!is_array($returnFields)) {
-			$returnFields = array();
-		}
-		if (!in_array('_id',$returnFields)) {
-			$returnFields[] = '_id';
-		}
+		$search = self::prepareSearch($query);
+		$this->cursor = $this->mongo->tickets->find($search,self::prepareReturnFields($query));
 
-		// Don't let them ask for just a small piece of person data
-		// If they ask for any Person fields to be returned,
-		// we should return the whole person record.
-		// We'll expect the display to load that as a Person object
-		// and call getter functions on it to display the information
-		// See: /blocks/html/tickets/partials/searchResultRows.inc
-		foreach ($returnFields as $i=>$field) {
-			if (preg_match('/.*Person/',$field,$matches)) {
-				$returnFields[$i] = $matches[0];
-			}
-		}
-
-		$search = self::prepareSearch($fields);
-		$this->cursor = $this->mongo->tickets->find($search,$returnFields);
-
-		$order = $order ? $order : $this->DEFAULT_SORT;
 		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
-			$this->cursor->sort($order);
+			$this->cursor->sort(self::prepareSort($query));
 		}
 		$this->RETURN_TICKET_OBJECTS = false;
 	}
 
-	private static function prepareSearch($fields)
+	/**
+	 * Takes the request and creates a Mongo search array
+	 *
+	 * Each of the fields passed in can be an array or a string
+	 *
+	 * @param array $request Usually the raw $_REQUEST
+	 */
+	private static function prepareSearch($request)
 	{
 		$search = array();
-		if (count($fields)) {
-			foreach ($fields as $key=>$value) {
-				if ($value) {
-					if (is_array($value)) {
-						// Convert any MongoIds
-						if (false !== strpos($key,'_id')) {
-							foreach ($value as $k=>$v) {
-								$value[$k] = new MongoId($v);
+		if (count($request)) {
+			foreach (self::getSearchableFields() as $name=>$index) {
+				if (isset($request[$name]) && $request[$name]) {
+					// First, check for and convert any MongoIds
+					if (false !== strpos($index,'_id')) {
+						if (is_array($request[$name])) {
+							foreach ($request[$name] as $k=>$v) {
+								$request[$name][$k] = new MongoId($v);
 							}
 						}
-						// We want to be able to pass raw Mongo queries for status
-						// This should work, since we don't ever want to do queries
-						// for a set of statuses.  We will only every be passing in
-						// one status
-						if ($key=='status') {
-							$search[$key] = $value;
-						}
-						// Normally, we want to allow for passing in multiple possible values
-						// We should do queries for tickets matching a field to a set of values
 						else {
-							$search[$key] = array('$in'=>$value);
+							$request[$name] = new MongoId($request[$name]);
 						}
 					}
-					else {
-						if (false !== strpos($key,'_id')) {
-							$search[$key] = new MongoId($value);
-						}
-						// Make sure ticket numbers are converted to Integer
-						// They won't be found if you pass a string
-						elseif ($key=='number') {
-							$search[$key] = (int)$value;
-						}
-						else {
-							$search[$key] = $value;
-						}
+
+					// Now go through all the fields and create the Mongo search array
+					switch ($name) {
+						case 'status':
+							// We'll not be passing in multiple statuses during search
+							// However, we will be passing in raw Mongo queries for status
+							// These are arrays also, just not to be confused with wanting
+							// to search for multiple statuses.
+							$search[$index] = $request[$name];
+							break;
+
+						case 'number':
+							$search[$index] = (int)$request[$name];
+							break;
+
+						case 'start_date':
+							$search[$index]['$gt'] = new MongoDate(strtotime($request[$name]));
+							break;
+
+						case 'end_date':
+							$search[$index]['$lt'] = new MongoDate(strtotime($request[$name]));
+							break;
+
+						default:
+							// For all the other fields,
+							// we might be passing in an array of values
+							// or just a single value to look for.
+							$search[$index] = is_array($request[$name])
+								? array('$in'=>$request[$name])
+								: $request[$name];
 					}
 				}
 			}
 		}
+
 		// Only get tickets for categories this user is allowed to see
 		if (!isset($_SESSION['USER'])) {
 			$search['category.displayPermissionLevel'] = 'anonymous';
@@ -147,6 +159,57 @@ class TicketList extends MongoResultIterator
 		}
 
 		return $search;
+	}
+
+	/**
+	 * Takes the request and returns a valid Mongo sorting
+	 *
+	 * @param array $request Usually the raw $_REQUEST
+	 * @return array
+	 */
+	public static function prepareSort($request)
+	{
+		$fields = self::getSortableFields();
+		$sort = self::$DEFAULT_SORT;
+
+		if (!empty($request['sort'])) {
+			$keys = array_keys($request['sort']);
+			$fieldToSortBy = $keys[0];
+			$value = $request['sort'][$fieldToSortBy];
+
+			if (array_key_exists($fieldToSortBy,$fields)) {
+				$sort = array($fields[$fieldToSortBy]=>(int)$value);
+			}
+		}
+
+		return $sort;
+	}
+
+	/**
+	 * Reads what the request wants displayed and prepares the Mongo query
+	 *
+	 * The return fields are declared as the keys to an array:
+	 * $request['fields'] = array(
+	 *	'enteredByPerson'=>'On','enteredDate'=>'On'
+	 *);
+	 *
+	 * All the possible fieldnames are declared in self::getDisplayableFields()
+	 *
+	 * @param array $request Usually the raw $_REQUEST
+	 * @return array
+	 */
+	public static function prepareReturnFields($request)
+	{
+		// Make sure there's always a Ticket_id
+		$returnFields = array('_id'=>1);
+
+		foreach (self::getDisplayableFields() as $name=>$definition) {
+			if (isset($request['fields'][$name])) {
+				$returnFields[$definition['index']] = 1;
+			}
+		}
+
+		return $returnFields;
 	}
 
 	/**
@@ -161,80 +224,116 @@ class TicketList extends MongoResultIterator
 	}
 
 	/**
-	 * Returns fields that can be displayed for search results
+	 * Returns fields that can be displayed in ticketList and searchResults
 	 *
-	 * We also provide the fully spelled-out mongo key for
-	 * both searching and sorting
-	 *
-	 * The key of the returned array is the name used on search form inputs
-	 * displayName is what should be displayed
-	 * searchOn is the key to use for filtering on that field
-	 * sortOn is the key to use for sorting by that field
-	 *
-	 * @return array(
-	 *	fieldname=>array(
-	 *			displayName=>human_readable_label,
-	 *			searchOn=>mongoKey,
-	 *			sortOn=>mongoKey
-	 *		)
-	 * )
-	 */
-	public static function getDisplayableFields()
-	{
-		// All possible columns to display
-		return array(
-			'number'=>array(
-				'displayName'=>'Case #','searchOn'=>'number','sortOn'=>'number'
-			),
-			'enteredDate'=>array(
-				'displayName'=>'Case Date',
-				'searchOn'=>'enteredDate',
-				'sortOn'=>'enteredDate'
-			),
-			'enteredByPerson'=>array(
-				'displayName'=>'Case Entered By',
-				'searchOn'=>'enteredByPerson._id',
-				'sortOn'=>'enteredByPerson.lastname'
-			),
-			'assignedPerson'=>array(
-				'displayName'=>'Assigned To',
-				'searchOn'=>'assignedPerson._id',
-				'sortOn'=>'assignedPerson.lastname'
-			),
-			'referredPerson'=>array(
-				'displayName'=>'Referred To',
-				'searchOn'=>'referredPerson._id',
-				'sortOn'=>'referredPerson.lastname'
-			),
-			'category'=>array(
-				'displayName'=>'Category',
-				'searchOn'=>'category._id',
-				'sortOn'=>'category.name'
-			),
-			'department'=>array(
-				'displayName'=>'Department',
-				'searchOn'=>'assignedPerson.department._id',
-				'sortOn'=>'assignedPerson.department.name'
-			),
-			'status'=>array('displayName'=>'Status','searchOn'=>'status','sortOn'=>'status'),
-			'resolution'=>array('displayName'=>'Resolution','searchOn'=>'resolution','sortOn'=>'resolution'),
-			'location'=>array('displayName'=>'Location','searchOn'=>'location','sortOn'=>'location'),
-			'latitude'=>array('displayName'=>'Latitude','searchOn'=>'latitude','sortOn'=>'latitude'),
-			'longitude'=>array('displayName'=>'Longitude','searchOn'=>'longitude','sortOn'=>'longitude'),
-			'city'=>array('displayName'=>'City','searchOn'=>'city','sortOn'=>'city'),
-			'state'=>array('displayName'=>'State','searchOn'=>'state','sortOn'=>'state'),
-			'zip'=>array('displayName'=>'Zip','searchOn'=>'zip','sortOn'=>'zip'),
-			'description'=>array('displayName'=>'Description','searchOn'=>'issues.description','sortOn'=>'issues.description')
-		);
-	}
-
-	/**
-	 * Returns the set of fields we want to display in search results by default
+	 * The displayName will be a nice, readable label for the field
+	 * The index points to the desired data in the Mongo record
 	 *
 	 * @return array
 	 */
-	public static function getDefaultFieldsToDisplay()
+	public static function getDisplayableFields()
 	{
-		return array('enteredDate'=>'on','location'=>'on','description'=>'on');
+		$fields = array(
+			'number'=>array('displayName'=>'Case #','index'=>'number'),
+			'enteredDate'=>array('displayName'=>'Case Date','index'=>'enteredDate'),
+			'enteredByPerson'=>array('displayName'=>'Case Entered By','index'=>'enteredByPerson'),
+			'assignedPerson'=>array('displayName'=>'Assigned To','index'=>'assignedPerson'),
+			'referredPerson'=>array('displayName'=>'Referred To','index'=>'referredPerson'),
+			'category'=>array('displayName'=>'Category','index'=>'category.name'),
+			'department'=>array('displayName'=>'Department','index'=>'assignedPerson.department.name'),
+			'status'=>array('displayName'=>'Status','index'=>'status'),
+			'resolution'=>array('displayName'=>'Resolution','index'=>'resolution'),
+			'location'=>array('displayName'=>'Location','index'=>'location'),
+			'latitude'=>array('displayName'=>'Latitude','index'=>'latitude'),
+			'longitude'=>array('displayName'=>'Longitude','index'=>'longitude'),
+			'city'=>array('displayName'=>'City','index'=>'city'),
+			'state'=>array('displayName'=>'State','index'=>'state'),
+			'zip'=>array('displayName'=>'Zip','index'=>'zip'),
+			'description'=>array('displayName'=>'Description','index'=>'issues.description')
+		);
+		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
+			$fields[$key] = array('displayName'=>$value['description'],'index'=>$key);
+		}
+		return $fields;
 	}
+
+	/**
+	 * Returns fields this class knows how to search for
+	 *
+	 * @return array
+	 */
+	public static function getSearchableFields()
+	{
+		$fields = array(
+			'number'=>'number',
+			'enteredDate'=>'enteredDate',
+			'enteredByPerson'=>'enteredByPerson._id',
+			'assignedPerson'=>'assignedPerson._id',
+			'referredPerson'=>'referredPerson._id',
+			'reportedByPerson'=>'issues.reportedByPerson._id',
+			'category'=>'category._id',
+			'department'=>'assignedPerson.department._id',
+			'status'=>'status',
+			'resolution'=>'resolution',
+			'location'=>'location',
+			'latitude'=>'latitude',
+			'longitude'=>'longitude',
+			'city'=>'city',
+			'state'=>'state',
+			'zip'=>'zip',
+			'description'=>'issues.description',
+			'start_date'=>'enteredDate',
+			'end_date'=>'enteredDate'
+		);
+		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
+			$fields[$key] = $key;
+		}
+		return $fields;
+	}
+
+	/**
+	 * Returns fields this class can use for sorting ticket list results
+	 *
+	 * @return array
+	 */
+	public static function getSortableFields()
+	{
+		$fields = array(
+			'number'=>'number',
+			'enteredDate'=>'enteredDate',
+			'enteredByPerson'=>'enteredByPerson.lastname',
+			'assignedPerson'=>'assignedPerson.lastname',
+			'referredPerson'=>'referredPerson.lastname',
+			'category'=>'category.name',
+			'department'=>'assignedPerson.department.name',
+			'status'=>'status',
+			'resolution'=>'resolution',
+			'location'=>'location',
+			'latitude'=>'latitude',
+			'longitude'=>'longitude',
+			'city'=>'city',
+			'state'=>'state',
+			'zip'=>'zip',
+			'description'=>'issues.description'
+		);
+		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
+			$fields[$key] = $key;
+		}
+		return $fields;
+	}
+
+	/**
+	 * Tells whether the given request has fields that are searchable
+	 *
+	 * @param array $request Usually the raw $_REQUEST
+	 * @return bool
+	 */
+	public static function isValidSearch($request)
+	{
+		return count(array_intersect(
+			array_keys(self::getSearchableFields()),
+			array_keys($request)
+		)) ? true : false;
+	}
+
 }

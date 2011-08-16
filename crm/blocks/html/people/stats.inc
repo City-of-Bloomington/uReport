@@ -8,7 +8,7 @@
 $notClosed = array('status'=>array('$ne'=>'closed'));
 
 $assigned = count($this->person->getTickets('assigned',$notClosed));
-$reported = count($this->person->getTickets('issues.reportedBy',$notClosed));
+$reported = count($this->person->getTickets('reportedBy',$notClosed));
 $referred = count($this->person->getTickets('referred',$notClosed));
 echo "
 <div class=\"stats\">

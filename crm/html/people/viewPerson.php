@@ -35,7 +35,7 @@ if (userIsAllowed('Tickets')) {
 }
 $template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
 
-$tickets = $person->getTickets('issues.reportedBy');
+$tickets = $person->getTickets('reportedBy');
 if (count($tickets)) {
 	$template->blocks['person-panel'][] = new Block(
 		'tickets/ticketList.inc',

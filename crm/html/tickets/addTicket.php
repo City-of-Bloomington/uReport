@@ -110,7 +110,7 @@ if (isset($person)) {
 			'disableButtons'=>true
 		)
 	);
-	$reportedTickets = $person->getTickets('issues.reportedBy');
+	$reportedTickets = $person->getTickets('reportedBy');
 	if (count($reportedTickets)) {
 		$template->blocks['person-panel'][] = new Block(
 			'tickets/ticketList.inc',
