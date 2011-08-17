@@ -823,7 +823,7 @@ class Ticket extends MongoRecord
 	{
 		// Set all the location information using any fields the user posted
 		$fields = array(
-			'assignedPerson','location','latitude','longitude','city','state','zip'
+			'location','latitude','longitude','city','state','zip'
 		);
 		foreach ($fields as $field) {
 			if (isset($post['ticket'][$field])) {
@@ -842,6 +842,9 @@ class Ticket extends MongoRecord
 		// If the user posted any Notes for the person they're assigning
 		// this ticket to, we need to temporarily save those.
 		// Initial assignment creation doesn't happen until Ticket::save()
+		if (isset($post['assignedPerson'])) {
+			$this->setAssignedPerson($post['assignedPerson']);
+		}
 		if (isset($post['notes'])) {
 			$this->assignmentNotes = $post['notes'];
 		}
