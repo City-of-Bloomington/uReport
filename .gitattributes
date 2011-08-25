@@ -51,6 +51,8 @@ iphone/open311/FirstViewController.h -text
 iphone/open311/FirstViewController.m -text
 iphone/open311/SecondViewController.h -text
 iphone/open311/SecondViewController.m -text
+iphone/open311/Settings.bundle/Root.plist -text
+iphone/open311/Settings.bundle/en.lproj/Root.strings -text
 iphone/open311/WebRoot/css/mobile.css -text
 iphone/open311/WebRoot/index.html -text
 iphone/open311/WebRoot/js/mobile.js -text

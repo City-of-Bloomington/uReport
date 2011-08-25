@@ -21,6 +21,7 @@
 		69C56ACF1405670C003BDB66 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ACE1405670C003BDB66 /* index.html */; };
 		69C56ADC140569F6003BDB66 /* mobile.css in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ADB140569F6003BDB66 /* mobile.css */; };
 		69C56ADF14056BBE003BDB66 /* mobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ADD14056B81003BDB66 /* mobile.js */; };
+		69EB5FFB14068FCD00E9F849 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 69EB5FFA14068FCD00E9F849 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		69C56ACE1405670C003BDB66 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		69C56ADB140569F6003BDB66 /* mobile.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = mobile.css; sourceTree = "<group>"; };
 		69C56ADD14056B81003BDB66 /* mobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mobile.js; sourceTree = "<group>"; };
+		69EB5FFA14068FCD00E9F849 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				698E54EC14054A1C00830976 /* FirstView.xib */,
 				698E54EF14054A1C00830976 /* SecondView.xib */,
 				698E54D814054A1C00830976 /* Supporting Files */,
+				69EB5FFA14068FCD00E9F849 /* Settings.bundle */,
 			);
 			path = open311;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				698E54F114054A1C00830976 /* SecondView.xib in Resources */,
 				69C56ACF1405670C003BDB66 /* index.html in Resources */,
 				69C56ADC140569F6003BDB66 /* mobile.css in Resources */,
+				69EB5FFB14068FCD00E9F849 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
