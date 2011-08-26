@@ -2,24 +2,42 @@
 //  open311AppDelegate.m
 //  open311
 //
-//  Created by Cliff Ingham on 8/24/11.
+//  Created by Cliff Ingham on 8/26/11.
 //  Copyright 2011 City of Bloomington. All rights reserved.
 //
 
 #import "open311AppDelegate.h"
+#import "SettingsViewController.h"
+#import "ChooseServiceViewController.h"
 
 @implementation open311AppDelegate
 
 
 @synthesize window=_window;
-
 @synthesize tabBarController=_tabBarController;
+
+- (void)dealloc
+{
+    [_tabBarController release];
+    [_window release];
+    [super dealloc];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    // Add the tab bar controller's current view as a subview of the window
-    self.window.rootViewController = self.tabBarController;
+    UIViewController *settingsViewController = [[SettingsViewController alloc] init];
+    UIViewController *chooseServiceViewController = [[ChooseServiceViewController alloc] init];
+    NSArray *viewControllers = [NSArray arrayWithObjects:chooseServiceViewController, settingsViewController, nil];
+
+    self.tabBarController = [[UITabBarController alloc] init];
+    [self.tabBarController setViewControllers:viewControllers];
+
+    [settingsViewController release];
+    [chooseServiceViewController release];
+    
+    [self.window addSubview:[self.tabBarController view]];
+
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -62,26 +80,5 @@
      See also applicationDidEnterBackground:.
      */
 }
-
-- (void)dealloc
-{
-    [_window release];
-    [_tabBarController release];
-    [super dealloc];
-}
-
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-}
-*/
-
-/*
-// Optional UITabBarControllerDelegate method.
-- (void)tabBarController:(UITabBarController *)tabBarController didEndCustomizingViewControllers:(NSArray *)viewControllers changed:(BOOL)changed
-{
-}
-*/
 
 @end

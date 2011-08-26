@@ -13,7 +13,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "698E54CC14054A1C00830976"
+               BlueprintIdentifier = "69D87EFA1407D50F00CCFD87"
                BuildableName = "open311.app"
                BlueprintName = "open311"
                ReferencedContainer = "container:open311.xcodeproj">
@@ -40,7 +40,7 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "698E54CC14054A1C00830976"
+            BlueprintIdentifier = "69D87EFA1407D50F00CCFD87"
             BuildableName = "open311.app"
             BlueprintName = "open311"
             ReferencedContainer = "container:open311.xcodeproj">
@@ -59,7 +59,7 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "698E54CC14054A1C00830976"
+            BlueprintIdentifier = "69D87EFA1407D50F00CCFD87"
             BuildableName = "open311.app"
             BlueprintName = "open311"
             ReferencedContainer = "container:open311.xcodeproj">

@@ -7,155 +7,252 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		698E54D214054A1C00830976 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698E54D114054A1C00830976 /* UIKit.framework */; };
-		698E54D414054A1C00830976 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698E54D314054A1C00830976 /* Foundation.framework */; };
-		698E54D614054A1C00830976 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698E54D514054A1C00830976 /* CoreGraphics.framework */; };
-		698E54DC14054A1C00830976 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 698E54DA14054A1C00830976 /* InfoPlist.strings */; };
-		698E54DF14054A1C00830976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 698E54DE14054A1C00830976 /* main.m */; };
-		698E54E214054A1C00830976 /* open311AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 698E54E114054A1C00830976 /* open311AppDelegate.m */; };
-		698E54E514054A1C00830976 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698E54E314054A1C00830976 /* MainWindow.xib */; };
-		698E54E814054A1C00830976 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 698E54E714054A1C00830976 /* FirstViewController.m */; };
-		698E54EB14054A1C00830976 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 698E54EA14054A1C00830976 /* SecondViewController.m */; };
-		698E54EE14054A1C00830976 /* FirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698E54EC14054A1C00830976 /* FirstView.xib */; };
-		698E54F114054A1C00830976 /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698E54EF14054A1C00830976 /* SecondView.xib */; };
-		69C56ACF1405670C003BDB66 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ACE1405670C003BDB66 /* index.html */; };
-		69C56ADC140569F6003BDB66 /* mobile.css in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ADB140569F6003BDB66 /* mobile.css */; };
-		69C56ADF14056BBE003BDB66 /* mobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 69C56ADD14056B81003BDB66 /* mobile.js */; };
-		69EB5FFB14068FCD00E9F849 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 69EB5FFA14068FCD00E9F849 /* Settings.bundle */; };
+		696F90C0140805E200B782CE /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90AD140805E200B782CE /* ASIAuthenticationDialog.m */; };
+		696F90C1140805E200B782CE /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90B0140805E200B782CE /* ASIDataCompressor.m */; };
+		696F90C2140805E200B782CE /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90B2140805E200B782CE /* ASIDataDecompressor.m */; };
+		696F90C3140805E200B782CE /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90B4140805E200B782CE /* ASIDownloadCache.m */; };
+		696F90C4140805E200B782CE /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90B6140805E200B782CE /* ASIFormDataRequest.m */; };
+		696F90C5140805E200B782CE /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90B8140805E200B782CE /* ASIHTTPRequest.m */; };
+		696F90C6140805E200B782CE /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90BC140805E200B782CE /* ASIInputStream.m */; };
+		696F90C7140805E200B782CE /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90BE140805E200B782CE /* ASINetworkQueue.m */; };
+		696F90CD1408064300B782CE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F90CC1408064300B782CE /* Reachability.m */; };
+		696F90CF1408073700B782CE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 696F90CE1408073700B782CE /* CFNetwork.framework */; };
+		696F90D11408074800B782CE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 696F90D01408074800B782CE /* SystemConfiguration.framework */; };
+		696F90D31408075300B782CE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 696F90D21408075300B782CE /* MobileCoreServices.framework */; };
+		696F90D51408077B00B782CE /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 696F90D41408077B00B782CE /* libz.1.2.3.dylib */; };
+		69D87F001407D50F00CCFD87 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D87EFF1407D50F00CCFD87 /* UIKit.framework */; };
+		69D87F021407D50F00CCFD87 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D87F011407D50F00CCFD87 /* Foundation.framework */; };
+		69D87F041407D50F00CCFD87 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D87F031407D50F00CCFD87 /* CoreGraphics.framework */; };
+		69D87F0A1407D50F00CCFD87 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F081407D50F00CCFD87 /* InfoPlist.strings */; };
+		69D87F0D1407D50F00CCFD87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69D87F0C1407D50F00CCFD87 /* main.m */; };
+		69D87F101407D50F00CCFD87 /* open311AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69D87F0F1407D50F00CCFD87 /* open311AppDelegate.m */; };
+		69D87F131407D50F00CCFD87 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F111407D50F00CCFD87 /* MainWindow.xib */; };
+		69D87F1B1407D6DE00CCFD87 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F1A1407D6DE00CCFD87 /* Settings.bundle */; };
+		69D87F231407D82000CCFD87 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69D87F211407D82000CCFD87 /* SettingsViewController.m */; };
+		69D87F241407D82000CCFD87 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F221407D82000CCFD87 /* SettingsViewController.xib */; };
+		69D87F501407EAC000CCFD87 /* ChooseServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69D87F4E1407EAC000CCFD87 /* ChooseServiceViewController.m */; };
+		69D87F511407EAC000CCFD87 /* ChooseServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F4F1407EAC000CCFD87 /* ChooseServiceViewController.xib */; };
+		69D87F5D1407F43C00CCFD87 /* iconNewReport.png in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F5B1407F43C00CCFD87 /* iconNewReport.png */; };
+		69D87F5E1407F43C00CCFD87 /* iconSettings.png in Resources */ = {isa = PBXBuildFile; fileRef = 69D87F5C1407F43C00CCFD87 /* iconSettings.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		698E54CD14054A1C00830976 /* open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		698E54D114054A1C00830976 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		698E54D314054A1C00830976 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		698E54D514054A1C00830976 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		698E54D914054A1C00830976 /* open311-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "open311-Info.plist"; sourceTree = "<group>"; };
-		698E54DB14054A1C00830976 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		698E54DD14054A1C00830976 /* open311-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "open311-Prefix.pch"; sourceTree = "<group>"; };
-		698E54DE14054A1C00830976 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		698E54E014054A1C00830976 /* open311AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = open311AppDelegate.h; sourceTree = "<group>"; };
-		698E54E114054A1C00830976 /* open311AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = open311AppDelegate.m; sourceTree = "<group>"; };
-		698E54E414054A1C00830976 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		698E54E614054A1C00830976 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		698E54E714054A1C00830976 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
-		698E54E914054A1C00830976 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
-		698E54EA14054A1C00830976 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
-		698E54ED14054A1C00830976 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstView.xib; sourceTree = "<group>"; };
-		698E54F014054A1C00830976 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondView.xib; sourceTree = "<group>"; };
-		69C56ACE1405670C003BDB66 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		69C56ADB140569F6003BDB66 /* mobile.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = mobile.css; sourceTree = "<group>"; };
-		69C56ADD14056B81003BDB66 /* mobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = mobile.js; sourceTree = "<group>"; };
-		69EB5FFA14068FCD00E9F849 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		696F90AC140805E200B782CE /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
+		696F90AD140805E200B782CE /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
+		696F90AE140805E200B782CE /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
+		696F90AF140805E200B782CE /* ASIDataCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataCompressor.h; sourceTree = "<group>"; };
+		696F90B0140805E200B782CE /* ASIDataCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataCompressor.m; sourceTree = "<group>"; };
+		696F90B1140805E200B782CE /* ASIDataDecompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataDecompressor.h; sourceTree = "<group>"; };
+		696F90B2140805E200B782CE /* ASIDataDecompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataDecompressor.m; sourceTree = "<group>"; };
+		696F90B3140805E200B782CE /* ASIDownloadCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDownloadCache.h; sourceTree = "<group>"; };
+		696F90B4140805E200B782CE /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDownloadCache.m; sourceTree = "<group>"; };
+		696F90B5140805E200B782CE /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
+		696F90B6140805E200B782CE /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
+		696F90B7140805E200B782CE /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
+		696F90B8140805E200B782CE /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIHTTPRequest.m; sourceTree = "<group>"; };
+		696F90B9140805E200B782CE /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		696F90BA140805E200B782CE /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
+		696F90BB140805E200B782CE /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
+		696F90BC140805E200B782CE /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
+		696F90BD140805E200B782CE /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINetworkQueue.h; sourceTree = "<group>"; };
+		696F90BE140805E200B782CE /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
+		696F90BF140805E200B782CE /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
+		696F90CB1408064300B782CE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		696F90CC1408064300B782CE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		696F90CE1408073700B782CE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		696F90D01408074800B782CE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		696F90D21408075300B782CE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		696F90D41408077B00B782CE /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
+		69D87EFB1407D50F00CCFD87 /* open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69D87EFF1407D50F00CCFD87 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		69D87F011407D50F00CCFD87 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		69D87F031407D50F00CCFD87 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		69D87F071407D50F00CCFD87 /* open311-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "open311-Info.plist"; sourceTree = "<group>"; };
+		69D87F091407D50F00CCFD87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		69D87F0B1407D50F00CCFD87 /* open311-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "open311-Prefix.pch"; sourceTree = "<group>"; };
+		69D87F0C1407D50F00CCFD87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		69D87F0E1407D50F00CCFD87 /* open311AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = open311AppDelegate.h; sourceTree = "<group>"; };
+		69D87F0F1407D50F00CCFD87 /* open311AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = open311AppDelegate.m; sourceTree = "<group>"; };
+		69D87F121407D50F00CCFD87 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		69D87F1A1407D6DE00CCFD87 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		69D87F201407D82000CCFD87 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		69D87F211407D82000CCFD87 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		69D87F221407D82000CCFD87 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../Controllers/SettingsViewController.xib; sourceTree = "<group>"; };
+		69D87F4D1407EAC000CCFD87 /* ChooseServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseServiceViewController.h; sourceTree = "<group>"; };
+		69D87F4E1407EAC000CCFD87 /* ChooseServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseServiceViewController.m; sourceTree = "<group>"; };
+		69D87F4F1407EAC000CCFD87 /* ChooseServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChooseServiceViewController.xib; path = ../Controllers/ChooseServiceViewController.xib; sourceTree = "<group>"; };
+		69D87F5B1407F43C00CCFD87 /* iconNewReport.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconNewReport.png; sourceTree = "<group>"; };
+		69D87F5C1407F43C00CCFD87 /* iconSettings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconSettings.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		698E54CA14054A1C00830976 /* Frameworks */ = {
+		69D87EF81407D50F00CCFD87 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				698E54D214054A1C00830976 /* UIKit.framework in Frameworks */,
-				698E54D414054A1C00830976 /* Foundation.framework in Frameworks */,
-				698E54D614054A1C00830976 /* CoreGraphics.framework in Frameworks */,
+				69D87F001407D50F00CCFD87 /* UIKit.framework in Frameworks */,
+				69D87F021407D50F00CCFD87 /* Foundation.framework in Frameworks */,
+				69D87F041407D50F00CCFD87 /* CoreGraphics.framework in Frameworks */,
+				696F90CF1408073700B782CE /* CFNetwork.framework in Frameworks */,
+				696F90D31408075300B782CE /* MobileCoreServices.framework in Frameworks */,
+				696F90D11408074800B782CE /* SystemConfiguration.framework in Frameworks */,
+				696F90D51408077B00B782CE /* libz.1.2.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		698E54C214054A1C00830976 = {
+		696F90C9140805F100B782CE /* ASIHTTPRequest */ = {
 			isa = PBXGroup;
 			children = (
-				69C56ACD14056681003BDB66 /* WebRoot */,
-				698E54D714054A1C00830976 /* open311 */,
-				698E54D014054A1C00830976 /* Frameworks */,
-				698E54CE14054A1C00830976 /* Products */,
+				696F90AC140805E200B782CE /* ASIAuthenticationDialog.h */,
+				696F90AD140805E200B782CE /* ASIAuthenticationDialog.m */,
+				696F90AE140805E200B782CE /* ASICacheDelegate.h */,
+				696F90AF140805E200B782CE /* ASIDataCompressor.h */,
+				696F90B0140805E200B782CE /* ASIDataCompressor.m */,
+				696F90B1140805E200B782CE /* ASIDataDecompressor.h */,
+				696F90B2140805E200B782CE /* ASIDataDecompressor.m */,
+				696F90B3140805E200B782CE /* ASIDownloadCache.h */,
+				696F90B4140805E200B782CE /* ASIDownloadCache.m */,
+				696F90B5140805E200B782CE /* ASIFormDataRequest.h */,
+				696F90B6140805E200B782CE /* ASIFormDataRequest.m */,
+				696F90B7140805E200B782CE /* ASIHTTPRequest.h */,
+				696F90B8140805E200B782CE /* ASIHTTPRequest.m */,
+				696F90B9140805E200B782CE /* ASIHTTPRequestConfig.h */,
+				696F90BA140805E200B782CE /* ASIHTTPRequestDelegate.h */,
+				696F90BB140805E200B782CE /* ASIInputStream.h */,
+				696F90BC140805E200B782CE /* ASIInputStream.m */,
+				696F90BD140805E200B782CE /* ASINetworkQueue.h */,
+				696F90BE140805E200B782CE /* ASINetworkQueue.m */,
+				696F90BF140805E200B782CE /* ASIProgressDelegate.h */,
+			);
+			path = ASIHTTPRequest;
+			sourceTree = "<group>";
+		};
+		696F90CA1408064300B782CE /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				696F90CB1408064300B782CE /* Reachability.h */,
+				696F90CC1408064300B782CE /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		69D87EF01407D50F00CCFD87 = {
+			isa = PBXGroup;
+			children = (
+				69D87F051407D50F00CCFD87 /* open311 */,
+				69D87EFE1407D50F00CCFD87 /* Frameworks */,
+				69D87EFC1407D50F00CCFD87 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		698E54CE14054A1C00830976 /* Products */ = {
+		69D87EFC1407D50F00CCFD87 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				698E54CD14054A1C00830976 /* open311.app */,
+				69D87EFB1407D50F00CCFD87 /* open311.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		698E54D014054A1C00830976 /* Frameworks */ = {
+		69D87EFE1407D50F00CCFD87 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				698E54D114054A1C00830976 /* UIKit.framework */,
-				698E54D314054A1C00830976 /* Foundation.framework */,
-				698E54D514054A1C00830976 /* CoreGraphics.framework */,
+				696F90D41408077B00B782CE /* libz.1.2.3.dylib */,
+				696F90D21408075300B782CE /* MobileCoreServices.framework */,
+				696F90D01408074800B782CE /* SystemConfiguration.framework */,
+				696F90CE1408073700B782CE /* CFNetwork.framework */,
+				69D87EFF1407D50F00CCFD87 /* UIKit.framework */,
+				69D87F011407D50F00CCFD87 /* Foundation.framework */,
+				69D87F031407D50F00CCFD87 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		698E54D714054A1C00830976 /* open311 */ = {
+		69D87F051407D50F00CCFD87 /* open311 */ = {
 			isa = PBXGroup;
 			children = (
-				698E54E014054A1C00830976 /* open311AppDelegate.h */,
-				698E54E114054A1C00830976 /* open311AppDelegate.m */,
-				698E54E314054A1C00830976 /* MainWindow.xib */,
-				698E54E614054A1C00830976 /* FirstViewController.h */,
-				698E54E714054A1C00830976 /* FirstViewController.m */,
-				698E54E914054A1C00830976 /* SecondViewController.h */,
-				698E54EA14054A1C00830976 /* SecondViewController.m */,
-				698E54EC14054A1C00830976 /* FirstView.xib */,
-				698E54EF14054A1C00830976 /* SecondView.xib */,
-				698E54D814054A1C00830976 /* Supporting Files */,
-				69EB5FFA14068FCD00E9F849 /* Settings.bundle */,
+				69D87F73140801F800CCFD87 /* Libraries */,
+				69D87F6F1407F64E00CCFD87 /* Models */,
+				69D87F5A1407F3A400CCFD87 /* Images */,
+				69D87F1F1407D77600CCFD87 /* NIBs */,
+				69D87F191407D5FA00CCFD87 /* Controllers */,
+				69D87F0E1407D50F00CCFD87 /* open311AppDelegate.h */,
+				69D87F0F1407D50F00CCFD87 /* open311AppDelegate.m */,
+				69D87F111407D50F00CCFD87 /* MainWindow.xib */,
+				69D87F061407D50F00CCFD87 /* Supporting Files */,
+				69D87F1A1407D6DE00CCFD87 /* Settings.bundle */,
 			);
 			path = open311;
 			sourceTree = "<group>";
 		};
-		698E54D814054A1C00830976 /* Supporting Files */ = {
+		69D87F061407D50F00CCFD87 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				698E54D914054A1C00830976 /* open311-Info.plist */,
-				698E54DA14054A1C00830976 /* InfoPlist.strings */,
-				698E54DD14054A1C00830976 /* open311-Prefix.pch */,
-				698E54DE14054A1C00830976 /* main.m */,
+				69D87F071407D50F00CCFD87 /* open311-Info.plist */,
+				69D87F081407D50F00CCFD87 /* InfoPlist.strings */,
+				69D87F0B1407D50F00CCFD87 /* open311-Prefix.pch */,
+				69D87F0C1407D50F00CCFD87 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		69C56ACD14056681003BDB66 /* WebRoot */ = {
+		69D87F191407D5FA00CCFD87 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				69C56ADA140569D7003BDB66 /* js */,
-				69C56AD8140569CB003BDB66 /* css */,
-				69C56ACE1405670C003BDB66 /* index.html */,
+				69D87F201407D82000CCFD87 /* SettingsViewController.h */,
+				69D87F211407D82000CCFD87 /* SettingsViewController.m */,
+				69D87F4D1407EAC000CCFD87 /* ChooseServiceViewController.h */,
+				69D87F4E1407EAC000CCFD87 /* ChooseServiceViewController.m */,
 			);
-			name = WebRoot;
-			path = open311/WebRoot;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
-		69C56AD8140569CB003BDB66 /* css */ = {
+		69D87F1F1407D77600CCFD87 /* NIBs */ = {
 			isa = PBXGroup;
 			children = (
-				69C56ADB140569F6003BDB66 /* mobile.css */,
+				69D87F4F1407EAC000CCFD87 /* ChooseServiceViewController.xib */,
+				69D87F221407D82000CCFD87 /* SettingsViewController.xib */,
 			);
-			path = css;
+			path = NIBs;
 			sourceTree = "<group>";
 		};
-		69C56ADA140569D7003BDB66 /* js */ = {
+		69D87F5A1407F3A400CCFD87 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				69C56ADD14056B81003BDB66 /* mobile.js */,
+				69D87F5B1407F43C00CCFD87 /* iconNewReport.png */,
+				69D87F5C1407F43C00CCFD87 /* iconSettings.png */,
 			);
-			path = js;
+			path = Images;
+			sourceTree = "<group>";
+		};
+		69D87F6F1407F64E00CCFD87 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		69D87F73140801F800CCFD87 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				696F90CA1408064300B782CE /* Reachability */,
+				696F90C9140805F100B782CE /* ASIHTTPRequest */,
+			);
+			path = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		698E54CC14054A1C00830976 /* open311 */ = {
+		69D87EFA1407D50F00CCFD87 /* open311 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 698E54F414054A1C00830976 /* Build configuration list for PBXNativeTarget "open311" */;
+			buildConfigurationList = 69D87F161407D50F00CCFD87 /* Build configuration list for PBXNativeTarget "open311" */;
 			buildPhases = (
-				698E54C914054A1C00830976 /* Sources */,
-				698E54CA14054A1C00830976 /* Frameworks */,
-				698E54CB14054A1C00830976 /* Resources */,
+				69D87EF71407D50F00CCFD87 /* Sources */,
+				69D87EF81407D50F00CCFD87 /* Frameworks */,
+				69D87EF91407D50F00CCFD87 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -163,103 +260,95 @@
 			);
 			name = open311;
 			productName = open311;
-			productReference = 698E54CD14054A1C00830976 /* open311.app */;
+			productReference = 69D87EFB1407D50F00CCFD87 /* open311.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		698E54C414054A1C00830976 /* Project object */ = {
+		69D87EF21407D50F00CCFD87 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = "City of Bloomington";
 			};
-			buildConfigurationList = 698E54C714054A1C00830976 /* Build configuration list for PBXProject "open311" */;
+			buildConfigurationList = 69D87EF51407D50F00CCFD87 /* Build configuration list for PBXProject "open311" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 698E54C214054A1C00830976;
-			productRefGroup = 698E54CE14054A1C00830976 /* Products */;
+			mainGroup = 69D87EF01407D50F00CCFD87;
+			productRefGroup = 69D87EFC1407D50F00CCFD87 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				698E54CC14054A1C00830976 /* open311 */,
+				69D87EFA1407D50F00CCFD87 /* open311 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		698E54CB14054A1C00830976 /* Resources */ = {
+		69D87EF91407D50F00CCFD87 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69C56ADF14056BBE003BDB66 /* mobile.js in Resources */,
-				698E54DC14054A1C00830976 /* InfoPlist.strings in Resources */,
-				698E54E514054A1C00830976 /* MainWindow.xib in Resources */,
-				698E54EE14054A1C00830976 /* FirstView.xib in Resources */,
-				698E54F114054A1C00830976 /* SecondView.xib in Resources */,
-				69C56ACF1405670C003BDB66 /* index.html in Resources */,
-				69C56ADC140569F6003BDB66 /* mobile.css in Resources */,
-				69EB5FFB14068FCD00E9F849 /* Settings.bundle in Resources */,
+				69D87F0A1407D50F00CCFD87 /* InfoPlist.strings in Resources */,
+				69D87F131407D50F00CCFD87 /* MainWindow.xib in Resources */,
+				69D87F1B1407D6DE00CCFD87 /* Settings.bundle in Resources */,
+				69D87F241407D82000CCFD87 /* SettingsViewController.xib in Resources */,
+				69D87F511407EAC000CCFD87 /* ChooseServiceViewController.xib in Resources */,
+				69D87F5D1407F43C00CCFD87 /* iconNewReport.png in Resources */,
+				69D87F5E1407F43C00CCFD87 /* iconSettings.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		698E54C914054A1C00830976 /* Sources */ = {
+		69D87EF71407D50F00CCFD87 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				698E54DF14054A1C00830976 /* main.m in Sources */,
-				698E54E214054A1C00830976 /* open311AppDelegate.m in Sources */,
-				698E54E814054A1C00830976 /* FirstViewController.m in Sources */,
-				698E54EB14054A1C00830976 /* SecondViewController.m in Sources */,
+				69D87F0D1407D50F00CCFD87 /* main.m in Sources */,
+				69D87F101407D50F00CCFD87 /* open311AppDelegate.m in Sources */,
+				69D87F231407D82000CCFD87 /* SettingsViewController.m in Sources */,
+				69D87F501407EAC000CCFD87 /* ChooseServiceViewController.m in Sources */,
+				696F90C0140805E200B782CE /* ASIAuthenticationDialog.m in Sources */,
+				696F90C1140805E200B782CE /* ASIDataCompressor.m in Sources */,
+				696F90C2140805E200B782CE /* ASIDataDecompressor.m in Sources */,
+				696F90C3140805E200B782CE /* ASIDownloadCache.m in Sources */,
+				696F90C4140805E200B782CE /* ASIFormDataRequest.m in Sources */,
+				696F90C5140805E200B782CE /* ASIHTTPRequest.m in Sources */,
+				696F90C6140805E200B782CE /* ASIInputStream.m in Sources */,
+				696F90C7140805E200B782CE /* ASINetworkQueue.m in Sources */,
+				696F90CD1408064300B782CE /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		698E54DA14054A1C00830976 /* InfoPlist.strings */ = {
+		69D87F081407D50F00CCFD87 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				698E54DB14054A1C00830976 /* en */,
+				69D87F091407D50F00CCFD87 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		698E54E314054A1C00830976 /* MainWindow.xib */ = {
+		69D87F111407D50F00CCFD87 /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				698E54E414054A1C00830976 /* en */,
+				69D87F121407D50F00CCFD87 /* en */,
 			);
 			name = MainWindow.xib;
-			sourceTree = "<group>";
-		};
-		698E54EC14054A1C00830976 /* FirstView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				698E54ED14054A1C00830976 /* en */,
-			);
-			name = FirstView.xib;
-			sourceTree = "<group>";
-		};
-		698E54EF14054A1C00830976 /* SecondView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				698E54F014054A1C00830976 /* en */,
-			);
-			name = SecondView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		698E54F214054A1C00830976 /* Debug */ = {
+		69D87F141407D50F00CCFD87 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -276,7 +365,7 @@
 			};
 			name = Debug;
 		};
-		698E54F314054A1C00830976 /* Release */ = {
+		69D87F151407D50F00CCFD87 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -291,7 +380,7 @@
 			};
 			name = Release;
 		};
-		698E54F514054A1C00830976 /* Debug */ = {
+		69D87F171407D50F00CCFD87 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -305,7 +394,7 @@
 			};
 			name = Debug;
 		};
-		698E54F614054A1C00830976 /* Release */ = {
+		69D87F181407D50F00CCFD87 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -322,25 +411,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		698E54C714054A1C00830976 /* Build configuration list for PBXProject "open311" */ = {
+		69D87EF51407D50F00CCFD87 /* Build configuration list for PBXProject "open311" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				698E54F214054A1C00830976 /* Debug */,
-				698E54F314054A1C00830976 /* Release */,
+				69D87F141407D50F00CCFD87 /* Debug */,
+				69D87F151407D50F00CCFD87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		698E54F414054A1C00830976 /* Build configuration list for PBXNativeTarget "open311" */ = {
+		69D87F161407D50F00CCFD87 /* Build configuration list for PBXNativeTarget "open311" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				698E54F514054A1C00830976 /* Debug */,
-				698E54F614054A1C00830976 /* Release */,
+				69D87F171407D50F00CCFD87 /* Debug */,
+				69D87F181407D50F00CCFD87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 698E54C414054A1C00830976 /* Project object */;
+	rootObject = 69D87EF21407D50F00CCFD87 /* Project object */;
 }
