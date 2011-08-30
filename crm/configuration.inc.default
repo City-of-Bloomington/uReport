@@ -102,13 +102,13 @@ define('DB_NAME','crm');
  */
 $LDAP_CONFIG = array(
 	'LDAP'=>array(
-		'LDAP_SERVER','ldaps://ldap.somewhere.com:636', // Example for SSL
+		'LDAP_SERVER'=>'ldaps://ldap.somewhere.com:636', // Example for SSL
 		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
 		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
 		'LDAP_ADMIN_PASS'=>'password'
 	),
 	'PublicLDAP'=>array(
-		'LDAP_SERVER','ldaps://ldap.somewhere.com:636', // Example for SSL
+		'LDAP_SERVER'=>'ldaps://ldap.somewhere.com:636', // Example for SSL
 		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
 		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
 		'LDAP_ADMIN_PASS'=>'password'
