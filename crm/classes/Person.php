@@ -734,8 +734,8 @@ class Person extends MongoRecord
 	 */
 	public function populateFromLDAP(LDAP $ldap)
 	{
-		if (!$this->getFirstname() && $ldap->get('cn')) {
-			$this->setFirstname($ldap->get('cn'));
+		if (!$this->getFirstname() && $ldap->get('givenname')) {
+			$this->setFirstname($ldap->get('givenname'));
 		}
 		if (!$this->getLastname() && $ldap->get('sn')) {
 			$this->setLastname($ldap->get('sn'));
