@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		697C4763140FB6260057F87C /* AvailableServers.m in Sources */ = {isa = PBXBuildFile; fileRef = 697C4761140FB6260057F87C /* AvailableServers.m */; };
+		697C4764140FB6260057F87C /* AvailableServers.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697C4762140FB6260057F87C /* AvailableServers.xib */; };
+		697C477F141005EE0057F87C /* AvailableServers.plist in Resources */ = {isa = PBXBuildFile; fileRef = 697C477E141005EE0057F87C /* AvailableServers.plist */; };
+		698344F0140EB5FF00F06387 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698344EF140EB5FF00F06387 /* UIKit.framework */; };
+		698344F2140EB5FF00F06387 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698344F1140EB5FF00F06387 /* Foundation.framework */; };
+		698344F4140EB5FF00F06387 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 698344F3140EB5FF00F06387 /* CoreGraphics.framework */; };
+		698344FA140EB5FF00F06387 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 698344F8140EB5FF00F06387 /* InfoPlist.strings */; };
+		698344FD140EB5FF00F06387 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 698344FC140EB5FF00F06387 /* main.m */; };
+		69834500140EB5FF00F06387 /* open311AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 698344FF140EB5FF00F06387 /* open311AppDelegate.m */; };
+		69834503140EB5FF00F06387 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69834501140EB5FF00F06387 /* MainWindow.xib */; };
+		6983450F140EB6D800F06387 /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 6983450D140EB6D800F06387 /* list.png */; };
+		69834510140EB6D800F06387 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = 6983450E140EB6D800F06387 /* map.png */; };
+		69834519140EB84700F06387 /* MyServersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69834517140EB84700F06387 /* MyServersViewController.m */; };
+		6983451A140EB84700F06387 /* MyServersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69834518140EB84700F06387 /* MyServersViewController.xib */; };
+		6983451D140EC88A00F06387 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983451C140EC88A00F06387 /* Settings.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		697C4760140FB6260057F87C /* AvailableServers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailableServers.h; sourceTree = "<group>"; };
+		697C4761140FB6260057F87C /* AvailableServers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailableServers.m; sourceTree = "<group>"; };
+		697C4762140FB6260057F87C /* AvailableServers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AvailableServers.xib; path = ../Controllers/AvailableServers.xib; sourceTree = "<group>"; };
+		697C477E141005EE0057F87C /* AvailableServers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AvailableServers.plist; sourceTree = "<group>"; };
+		698344EB140EB5FF00F06387 /* open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		698344EF140EB5FF00F06387 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		698344F1140EB5FF00F06387 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		698344F3140EB5FF00F06387 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		698344F7140EB5FF00F06387 /* open311-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "open311-Info.plist"; sourceTree = "<group>"; };
+		698344F9140EB5FF00F06387 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		698344FB140EB5FF00F06387 /* open311-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "open311-Prefix.pch"; sourceTree = "<group>"; };
+		698344FC140EB5FF00F06387 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		698344FE140EB5FF00F06387 /* open311AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = open311AppDelegate.h; sourceTree = "<group>"; };
+		698344FF140EB5FF00F06387 /* open311AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = open311AppDelegate.m; sourceTree = "<group>"; };
+		69834502140EB5FF00F06387 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		6983450D140EB6D800F06387 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		6983450E140EB6D800F06387 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
+		69834516140EB84700F06387 /* MyServersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyServersViewController.h; sourceTree = "<group>"; };
+		69834517140EB84700F06387 /* MyServersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyServersViewController.m; sourceTree = "<group>"; };
+		69834518140EB84700F06387 /* MyServersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyServersViewController.xib; path = ../Controllers/MyServersViewController.xib; sourceTree = "<group>"; };
+		6983451B140EC88A00F06387 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		6983451C140EC88A00F06387 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		6983451E140EC89900F06387 /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthesizeSingleton.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		698344E8140EB5FF00F06387 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				698344F0140EB5FF00F06387 /* UIKit.framework in Frameworks */,
+				698344F2140EB5FF00F06387 /* Foundation.framework in Frameworks */,
+				698344F4140EB5FF00F06387 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		698344E0140EB5FF00F06387 = {
+			isa = PBXGroup;
+			children = (
+				698344F5140EB5FF00F06387 /* open311 */,
+				698344EE140EB5FF00F06387 /* Frameworks */,
+				698344EC140EB5FF00F06387 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		698344EC140EB5FF00F06387 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				698344EB140EB5FF00F06387 /* open311.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		698344EE140EB5FF00F06387 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				698344EF140EB5FF00F06387 /* UIKit.framework */,
+				698344F1140EB5FF00F06387 /* Foundation.framework */,
+				698344F3140EB5FF00F06387 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		698344F5140EB5FF00F06387 /* open311 */ = {
+			isa = PBXGroup;
+			children = (
+				6983450C140EB6C200F06387 /* Images */,
+				6983450B140EB6B400F06387 /* NIBs */,
+				6983450A140EB6A000F06387 /* Models */,
+				69834509140EB68E00F06387 /* Controllers */,
+				698344FE140EB5FF00F06387 /* open311AppDelegate.h */,
+				698344FF140EB5FF00F06387 /* open311AppDelegate.m */,
+				69834501140EB5FF00F06387 /* MainWindow.xib */,
+				698344F6140EB5FF00F06387 /* Supporting Files */,
+			);
+			path = open311;
+			sourceTree = "<group>";
+		};
+		698344F6140EB5FF00F06387 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				698344F7140EB5FF00F06387 /* open311-Info.plist */,
+				698344F8140EB5FF00F06387 /* InfoPlist.strings */,
+				698344FB140EB5FF00F06387 /* open311-Prefix.pch */,
+				698344FC140EB5FF00F06387 /* main.m */,
+				697C477E141005EE0057F87C /* AvailableServers.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		69834509140EB68E00F06387 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				69834516140EB84700F06387 /* MyServersViewController.h */,
+				69834517140EB84700F06387 /* MyServersViewController.m */,
+				697C4760140FB6260057F87C /* AvailableServers.h */,
+				697C4761140FB6260057F87C /* AvailableServers.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		6983450A140EB6A000F06387 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6983451E140EC89900F06387 /* SynthesizeSingleton.h */,
+				6983451B140EC88A00F06387 /* Settings.h */,
+				6983451C140EC88A00F06387 /* Settings.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6983450B140EB6B400F06387 /* NIBs */ = {
+			isa = PBXGroup;
+			children = (
+				697C4762140FB6260057F87C /* AvailableServers.xib */,
+				69834518140EB84700F06387 /* MyServersViewController.xib */,
+			);
+			path = NIBs;
+			sourceTree = "<group>";
+		};
+		6983450C140EB6C200F06387 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				6983450D140EB6D800F06387 /* list.png */,
+				6983450E140EB6D800F06387 /* map.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		698344EA140EB5FF00F06387 /* open311 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69834506140EB5FF00F06387 /* Build configuration list for PBXNativeTarget "open311" */;
+			buildPhases = (
+				698344E7140EB5FF00F06387 /* Sources */,
+				698344E8140EB5FF00F06387 /* Frameworks */,
+				698344E9140EB5FF00F06387 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = open311;
+			productName = open311;
+			productReference = 698344EB140EB5FF00F06387 /* open311.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		698344E2140EB5FF00F06387 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "City of Bloomington";
+			};
+			buildConfigurationList = 698344E5140EB5FF00F06387 /* Build configuration list for PBXProject "open311" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 698344E0140EB5FF00F06387;
+			productRefGroup = 698344EC140EB5FF00F06387 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				698344EA140EB5FF00F06387 /* open311 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		698344E9140EB5FF00F06387 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				698344FA140EB5FF00F06387 /* InfoPlist.strings in Resources */,
+				69834503140EB5FF00F06387 /* MainWindow.xib in Resources */,
+				6983450F140EB6D800F06387 /* list.png in Resources */,
+				69834510140EB6D800F06387 /* map.png in Resources */,
+				6983451A140EB84700F06387 /* MyServersViewController.xib in Resources */,
+				697C4764140FB6260057F87C /* AvailableServers.xib in Resources */,
+				697C477F141005EE0057F87C /* AvailableServers.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		698344E7140EB5FF00F06387 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				698344FD140EB5FF00F06387 /* main.m in Sources */,
+				69834500140EB5FF00F06387 /* open311AppDelegate.m in Sources */,
+				69834519140EB84700F06387 /* MyServersViewController.m in Sources */,
+				6983451D140EC88A00F06387 /* Settings.m in Sources */,
+				697C4763140FB6260057F87C /* AvailableServers.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		698344F8140EB5FF00F06387 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				698344F9140EB5FF00F06387 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		69834501140EB5FF00F06387 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				69834502140EB5FF00F06387 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		69834504140EB5FF00F06387 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		69834505140EB5FF00F06387 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		69834507140EB5FF00F06387 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "open311/open311-Prefix.pch";
+				INFOPLIST_FILE = "open311/open311-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		69834508140EB5FF00F06387 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "open311/open311-Prefix.pch";
+				INFOPLIST_FILE = "open311/open311-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		698344E5140EB5FF00F06387 /* Build configuration list for PBXProject "open311" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69834504140EB5FF00F06387 /* Debug */,
+				69834505140EB5FF00F06387 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69834506140EB5FF00F06387 /* Build configuration list for PBXNativeTarget "open311" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69834507140EB5FF00F06387 /* Debug */,
+				69834508140EB5FF00F06387 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 698344E2140EB5FF00F06387 /* Project object */;
+}
