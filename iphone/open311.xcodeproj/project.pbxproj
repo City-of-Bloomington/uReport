@@ -27,7 +27,7 @@
 /* Begin PBXFileReference section */
 		697C4760140FB6260057F87C /* AvailableServers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailableServers.h; sourceTree = "<group>"; };
 		697C4761140FB6260057F87C /* AvailableServers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailableServers.m; sourceTree = "<group>"; };
-		697C4762140FB6260057F87C /* AvailableServers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AvailableServers.xib; path = ../Controllers/AvailableServers.xib; sourceTree = "<group>"; };
+		697C4762140FB6260057F87C /* AvailableServers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AvailableServers.xib; sourceTree = "<group>"; };
 		697C477E141005EE0057F87C /* AvailableServers.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AvailableServers.plist; sourceTree = "<group>"; };
 		698344EB140EB5FF00F06387 /* open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		698344EF140EB5FF00F06387 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -44,7 +44,7 @@
 		6983450E140EB6D800F06387 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		69834516140EB84700F06387 /* MyServersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyServersViewController.h; sourceTree = "<group>"; };
 		69834517140EB84700F06387 /* MyServersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyServersViewController.m; sourceTree = "<group>"; };
-		69834518140EB84700F06387 /* MyServersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyServersViewController.xib; path = ../Controllers/MyServersViewController.xib; sourceTree = "<group>"; };
+		69834518140EB84700F06387 /* MyServersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyServersViewController.xib; sourceTree = "<group>"; };
 		6983451B140EC88A00F06387 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		6983451C140EC88A00F06387 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		6983451E140EC89900F06387 /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthesizeSingleton.h; sourceTree = "<group>"; };
