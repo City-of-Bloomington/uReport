@@ -21,13 +21,13 @@ echo "
 
 		$header = new Block(
 			'tickets/partials/searchResultsColumnHeaders.inc',
-			array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+			array('ticketList'=>$ticketList)
 		);
 		echo $header->render('html',$this->template);
 
 		$body = new Block(
 			'tickets/partials/searchResultsRows.inc',
-			array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+			array('ticketList'=>$ticketList)
 		);
 		echo $body->render('html',$this->template);
 

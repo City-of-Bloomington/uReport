@@ -240,7 +240,7 @@ class TicketList extends MongoResultIterator
 			'assignedPerson'=>array('displayName'=>'Assigned To','index'=>'assignedPerson'),
 			'referredPerson'=>array('displayName'=>'Referred To','index'=>'referredPerson'),
 			'category'=>array('displayName'=>'Category','index'=>'category.name'),
-			'department'=>array('displayName'=>'Department','index'=>'assignedPerson.department.name'),
+			'department'=>array('displayName'=>'Department','index'=>'assignedPerson'),
 			'status'=>array('displayName'=>'Status','index'=>'status'),
 			'resolution'=>array('displayName'=>'Resolution','index'=>'resolution'),
 			'location'=>array('displayName'=>'Location','index'=>'location'),
