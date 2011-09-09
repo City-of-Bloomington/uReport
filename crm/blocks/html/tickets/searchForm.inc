@@ -214,7 +214,8 @@
 					}
 
 					foreach (TicketList::getDisplayableFields() as $name=>$definition) {
-						if (false === strpos($name,'Person') || userIsAllowed('People')) {
+						if ((false === strpos($name,'Person') || userIsAllowed('People'))
+							&& $name!='id') {
 							$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
 							echo "
 							<li><label>

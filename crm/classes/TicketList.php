@@ -234,6 +234,7 @@ class TicketList extends MongoResultIterator
 	public static function getDisplayableFields()
 	{
 		$fields = array(
+			'id'=>array('displayName'=>'Ticket ID','index'=>'_id'),
 			'number'=>array('displayName'=>'Case #','index'=>'number'),
 			'enteredDate'=>array('displayName'=>'Case Date','index'=>'enteredDate'),
 			'enteredByPerson'=>array('displayName'=>'Case Entered By','index'=>'enteredByPerson'),
