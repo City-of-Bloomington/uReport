@@ -5,8 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 // Grab the format from the file extension used in the url
-$format = preg_match("/[^.]+$/",$_SERVER['REQUEST_URI'],$matches)
-	? strtolower($matches[0])
+$format = preg_match("/\.([^.?]+)/",$_SERVER['REQUEST_URI'],$matches)
+	? strtolower($matches[1])
 	: 'html';
 
 $template = new Template('open311',$format);
