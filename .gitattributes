@@ -43,5 +43,3 @@ crm/scripts/migration/0.0-1.0/calltrack/1_constituents.php -text
 crm/scripts/migration/0.0-1.0/calltrack/2_users.php -text
 crm/templates/html/default.inc -text
 iphone/mockups/iphonemockups.png -text
-iphone/open311/Images/list.png -text
-iphone/open311/Images/map.png -text
