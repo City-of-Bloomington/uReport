@@ -18,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Report To" image:[UIImage imageNamed:@"settings.png"] tag:0];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Report To" image:[UIImage imageNamed:@"megaphone.png"] tag:0];
     }
     return self;
 }
@@ -111,6 +111,9 @@
     self.tabBarController.selectedIndex = 0;
 }
 
+/**
+ * Navigates to the Servers tab
+ */
 - (void) goToAvailableServers
 {
     [self.navigationController pushViewController:[[AvailableServers alloc] init] animated:TRUE];

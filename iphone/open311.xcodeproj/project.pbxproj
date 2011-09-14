@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		697CE52C142111A4005C275A /* home_w.png in Resources */ = {isa = PBXBuildFile; fileRef = 697CE52A142111A4005C275A /* home_w.png */; };
+		697CE52D142111A4005C275A /* megaphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 697CE52B142111A4005C275A /* megaphone.png */; };
 		698166BD1417A83800E0B9E7 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A01417A83800E0B9E7 /* ASIAuthenticationDialog.m */; };
 		698166BE1417A83800E0B9E7 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A31417A83800E0B9E7 /* ASIDataCompressor.m */; };
 		698166BF1417A83800E0B9E7 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A51417A83800E0B9E7 /* ASIDataDecompressor.m */; };
@@ -61,11 +63,14 @@
 		69B07FD11416B30E008DD4E0 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = 69B07FCD1416B30E008DD4E0 /* map.png */; };
 		69B07FD21416B30E008DD4E0 /* report.png in Resources */ = {isa = PBXBuildFile; fileRef = 69B07FCE1416B30E008DD4E0 /* report.png */; };
 		69B07FD31416B30E008DD4E0 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 69B07FCF1416B30E008DD4E0 /* settings.png */; };
+		69BAA102141FB86C00D03396 /* Report.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69BAA101141FB86C00D03396 /* Report.plist */; };
 		69E58237141E87550038C910 /* ChooseServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E58235141E87550038C910 /* ChooseServiceViewController.m */; };
 		69E58238141E87550038C910 /* ChooseServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69E58236141E87550038C910 /* ChooseServiceViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		697CE52A142111A4005C275A /* home_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_w.png; sourceTree = "<group>"; };
+		697CE52B142111A4005C275A /* megaphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = megaphone.png; sourceTree = "<group>"; };
 		6981669F1417A83800E0B9E7 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		698166A01417A83800E0B9E7 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
 		698166A11417A83800E0B9E7 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
@@ -159,6 +164,7 @@
 		69B07FCD1416B30E008DD4E0 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		69B07FCE1416B30E008DD4E0 /* report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = report.png; sourceTree = "<group>"; };
 		69B07FCF1416B30E008DD4E0 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		69BAA101141FB86C00D03396 /* Report.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Report.plist; sourceTree = "<group>"; };
 		69E58234141E87550038C910 /* ChooseServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseServiceViewController.h; sourceTree = "<group>"; };
 		69E58235141E87550038C910 /* ChooseServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseServiceViewController.m; sourceTree = "<group>"; };
 		69E58236141E87550038C910 /* ChooseServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseServiceViewController.xib; sourceTree = "<group>"; };
@@ -343,6 +349,7 @@
 				69B07FAC1416AFEC008DD4E0 /* MainWindow.xib */,
 				6981669A1417A83800E0B9E7 /* Libraries */,
 				69B07FA11416AFEC008DD4E0 /* Supporting Files */,
+				69BAA101141FB86C00D03396 /* Report.plist */,
 			);
 			path = open311;
 			sourceTree = "<group>";
@@ -384,6 +391,8 @@
 		69B07FB61416B050008DD4E0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				697CE52A142111A4005C275A /* home_w.png */,
+				697CE52B142111A4005C275A /* megaphone.png */,
 				69B07FCC1416B30E008DD4E0 /* list.png */,
 				69B07FCD1416B30E008DD4E0 /* map.png */,
 				69B07FCE1416B30E008DD4E0 /* report.png */,
@@ -471,6 +480,9 @@
 				698166D81417A9F400E0B9E7 /* AvailableServers.plist in Resources */,
 				698166ED1417B3D000E0B9E7 /* AvailableServers.xib in Resources */,
 				69E58238141E87550038C910 /* ChooseServiceViewController.xib in Resources */,
+				69BAA102141FB86C00D03396 /* Report.plist in Resources */,
+				697CE52C142111A4005C275A /* home_w.png in Resources */,
+				697CE52D142111A4005C275A /* megaphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

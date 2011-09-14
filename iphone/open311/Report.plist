@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>data</key>
+	<dict>
+		<key>address_string</key>
+		<string></string>
+		<key>description</key>
+		<string></string>
+		<key>device_id</key>
+		<string></string>
+		<key>jurisdiction_id</key>
+		<string></string>
+		<key>lat</key>
+		<integer>0</integer>
+		<key>long</key>
+		<integer>0</integer>
+		<key>service_code</key>
+		<string></string>
+	</dict>
+	<key>fields</key>
+	<array>
+		<string>media</string>
+		<string>address_string</string>
+		<string>description</string>
+	</array>
+	<key>labels</key>
+	<dict>
+		<key>address_string</key>
+		<string>Choose a Location</string>
+		<key>description</key>
+		<string>Description</string>
+		<key>media</key>
+		<string>Choose a Photo</string>
+	</dict>
+	<key>types</key>
+	<dict>
+		<key>address_string</key>
+		<string>location</string>
+		<key>description</key>
+		<string>text</string>
+		<key>media</key>
+		<string>media</string>
+	</dict>
+</dict>
+</plist>
