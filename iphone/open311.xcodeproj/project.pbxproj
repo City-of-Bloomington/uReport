@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		697CE52C142111A4005C275A /* home_w.png in Resources */ = {isa = PBXBuildFile; fileRef = 697CE52A142111A4005C275A /* home_w.png */; };
 		697CE52D142111A4005C275A /* megaphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 697CE52B142111A4005C275A /* megaphone.png */; };
+		697DF9BD14225255005C8EB5 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 697DF9BB14225255005C8EB5 /* LocationChooserViewController.m */; };
+		697DF9BE14225255005C8EB5 /* LocationChooserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 697DF9BC14225255005C8EB5 /* LocationChooserViewController.xib */; };
+		697DF9E11422617E005C8EB5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697DF9E01422617E005C8EB5 /* CoreLocation.framework */; };
+		697DF9F414226952005C8EB5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 697DF9F314226952005C8EB5 /* MapKit.framework */; };
+		697DF9FA14226E97005C8EB5 /* Locator.m in Sources */ = {isa = PBXBuildFile; fileRef = 697DF9F914226E97005C8EB5 /* Locator.m */; };
 		698166BD1417A83800E0B9E7 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A01417A83800E0B9E7 /* ASIAuthenticationDialog.m */; };
 		698166BE1417A83800E0B9E7 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A31417A83800E0B9E7 /* ASIDataCompressor.m */; };
 		698166BF1417A83800E0B9E7 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166A51417A83800E0B9E7 /* ASIDataDecompressor.m */; };
@@ -31,6 +36,9 @@
 		698166EC1417B3D000E0B9E7 /* AvailableServers.m in Sources */ = {isa = PBXBuildFile; fileRef = 698166EA1417B3D000E0B9E7 /* AvailableServers.m */; };
 		698166ED1417B3D000E0B9E7 /* AvailableServers.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698166EB1417B3D000E0B9E7 /* AvailableServers.xib */; };
 		698167101417FF0100E0B9E7 /* Open311.m in Sources */ = {isa = PBXBuildFile; fileRef = 6981670F1417FF0100E0B9E7 /* Open311.m */; };
+		698290D914224AF700ABE661 /* TextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 698290D714224AF700ABE661 /* TextFieldViewController.m */; };
+		698290DA14224AF700ABE661 /* TextFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 698290D814224AF700ABE661 /* TextFieldViewController.xib */; };
+		698290E41422504100ABE661 /* textarea.png in Resources */ = {isa = PBXBuildFile; fileRef = 698290E31422504100ABE661 /* textarea.png */; };
 		6983974D141E7A13006B4F79 /* ActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983974C141E7A13006B4F79 /* ActionSheetPicker.m */; };
 		6984953F1418FFAD00CDEBF7 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 698495221418FFAD00CDEBF7 /* NSObject+SBJson.m */; };
 		698495401418FFAD00CDEBF7 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 698495251418FFAD00CDEBF7 /* SBJsonParser.m */; };
@@ -71,6 +79,13 @@
 /* Begin PBXFileReference section */
 		697CE52A142111A4005C275A /* home_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_w.png; sourceTree = "<group>"; };
 		697CE52B142111A4005C275A /* megaphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = megaphone.png; sourceTree = "<group>"; };
+		697DF9BA14225255005C8EB5 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
+		697DF9BB14225255005C8EB5 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
+		697DF9BC14225255005C8EB5 /* LocationChooserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationChooserViewController.xib; sourceTree = "<group>"; };
+		697DF9E01422617E005C8EB5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		697DF9F314226952005C8EB5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		697DF9F814226E97005C8EB5 /* Locator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Locator.h; sourceTree = "<group>"; };
+		697DF9F914226E97005C8EB5 /* Locator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Locator.m; sourceTree = "<group>"; };
 		6981669F1417A83800E0B9E7 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		698166A01417A83800E0B9E7 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
 		698166A11417A83800E0B9E7 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
@@ -110,6 +125,10 @@
 		698166EB1417B3D000E0B9E7 /* AvailableServers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AvailableServers.xib; sourceTree = "<group>"; };
 		6981670E1417FF0100E0B9E7 /* Open311.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Open311.h; sourceTree = "<group>"; };
 		6981670F1417FF0100E0B9E7 /* Open311.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Open311.m; sourceTree = "<group>"; };
+		698290D614224AF700ABE661 /* TextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextFieldViewController.h; sourceTree = "<group>"; };
+		698290D714224AF700ABE661 /* TextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextFieldViewController.m; sourceTree = "<group>"; };
+		698290D814224AF700ABE661 /* TextFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldViewController.xib; sourceTree = "<group>"; };
+		698290E31422504100ABE661 /* textarea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textarea.png; sourceTree = "<group>"; };
 		6983974B141E7A13006B4F79 /* ActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetPicker.h; sourceTree = "<group>"; };
 		6983974C141E7A13006B4F79 /* ActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetPicker.m; sourceTree = "<group>"; };
 		698495211418FFAD00CDEBF7 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
@@ -175,6 +194,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				697DF9F414226952005C8EB5 /* MapKit.framework in Frameworks */,
+				697DF9E11422617E005C8EB5 /* CoreLocation.framework in Frameworks */,
 				698166D21417A8EC00E0B9E7 /* libz.1.2.3.dylib in Frameworks */,
 				698166D01417A8D700E0B9E7 /* MobileCoreServices.framework in Frameworks */,
 				698166CE1417A8CB00E0B9E7 /* SystemConfiguration.framework in Frameworks */,
@@ -254,6 +275,19 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
+		698290D414224AA800ABE661 /* ReportFields */ = {
+			isa = PBXGroup;
+			children = (
+				698290D614224AF700ABE661 /* TextFieldViewController.h */,
+				698290D714224AF700ABE661 /* TextFieldViewController.m */,
+				698290D814224AF700ABE661 /* TextFieldViewController.xib */,
+				697DF9BA14225255005C8EB5 /* LocationChooserViewController.h */,
+				697DF9BB14225255005C8EB5 /* LocationChooserViewController.m */,
+				697DF9BC14225255005C8EB5 /* LocationChooserViewController.xib */,
+			);
+			path = ReportFields;
+			sourceTree = "<group>";
+		};
 		69839720141E43A4006B4F79 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,7 +360,9 @@
 		69B07F991416AFEC008DD4E0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				697DF9F314226952005C8EB5 /* MapKit.framework */,
 				698166D11417A8EC00E0B9E7 /* libz.1.2.3.dylib */,
+				697DF9E01422617E005C8EB5 /* CoreLocation.framework */,
 				698166CF1417A8D700E0B9E7 /* MobileCoreServices.framework */,
 				698166CD1417A8CB00E0B9E7 /* SystemConfiguration.framework */,
 				698166CB1417A8BB00E0B9E7 /* CFNetwork.framework */,
@@ -368,6 +404,7 @@
 		69B07FB51416B050008DD4E0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				698290D414224AA800ABE661 /* ReportFields */,
 				69839720141E43A4006B4F79 /* Modal */,
 				69B07FB81416B065008DD4E0 /* HomeViewController.h */,
 				69B07FB91416B065008DD4E0 /* HomeViewController.m */,
@@ -391,6 +428,7 @@
 		69B07FB61416B050008DD4E0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				698290E31422504100ABE661 /* textarea.png */,
 				697CE52A142111A4005C275A /* home_w.png */,
 				697CE52B142111A4005C275A /* megaphone.png */,
 				69B07FCC1416B30E008DD4E0 /* list.png */,
@@ -409,6 +447,8 @@
 				698166D51417A9AF00E0B9E7 /* SynthesizeSingleton.h */,
 				6981670E1417FF0100E0B9E7 /* Open311.h */,
 				6981670F1417FF0100E0B9E7 /* Open311.m */,
+				697DF9F814226E97005C8EB5 /* Locator.h */,
+				697DF9F914226E97005C8EB5 /* Locator.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -483,6 +523,9 @@
 				69BAA102141FB86C00D03396 /* Report.plist in Resources */,
 				697CE52C142111A4005C275A /* home_w.png in Resources */,
 				697CE52D142111A4005C275A /* megaphone.png in Resources */,
+				698290DA14224AF700ABE661 /* TextFieldViewController.xib in Resources */,
+				698290E41422504100ABE661 /* textarea.png in Resources */,
+				697DF9BE14225255005C8EB5 /* LocationChooserViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,6 +568,9 @@
 				6984954A1418FFAD00CDEBF7 /* SBJsonWriter.m in Sources */,
 				6983974D141E7A13006B4F79 /* ActionSheetPicker.m in Sources */,
 				69E58237141E87550038C910 /* ChooseServiceViewController.m in Sources */,
+				698290D914224AF700ABE661 /* TextFieldViewController.m in Sources */,
+				697DF9BD14225255005C8EB5 /* LocationChooserViewController.m in Sources */,
+				697DF9FA14226E97005C8EB5 /* Locator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

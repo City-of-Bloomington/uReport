@@ -10,6 +10,8 @@
 #import "Settings.h"
 #import "Open311.h"
 #import "ActionSheetPicker.h"
+#import "TextFieldViewController.h"
+#import "LocationChooserViewController.h"
 
 @implementation ReportViewController
 
@@ -148,16 +150,23 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"] autorelease];
     }
     
-    NSString *currentField = [[self.reportForm objectForKey:@"fields"] objectAtIndex:indexPath.row];
+    NSString *fieldname = [[self.reportForm objectForKey:@"fields"] objectAtIndex:indexPath.row];
 
-    cell.textLabel.text = [[self.reportForm objectForKey:@"labels"] objectForKey:currentField];
+    cell.textLabel.text = [[self.reportForm objectForKey:@"labels"] objectForKey:fieldname];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    if ([currentField isEqualToString:@"media"]) {
-        UIImage *image = [self.reportForm objectForKey:@"media"];
-        if (image) {
-            
-        }
+    
+    // Populate the user-provided data
+    if ([fieldname isEqualToString:@"media"]) {
+        
     }
+    else if ([fieldname isEqualToString:@"address_string"]) {
+        
+    }
+    else {
+        cell.detailTextLabel.text = [[self.reportForm objectForKey:@"data"] objectForKey:fieldname];
+    }
+    
+    
     
     return cell;
 }
@@ -167,26 +176,32 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     // Find out what data type the row is and display the appropriate view
-    NSString *type = [[self.reportForm objectForKey:@"types"] objectForKey:[[self.reportForm objectForKey:@"fields"] objectAtIndex:indexPath.row]];
+    NSString *fieldname = [[self.reportForm objectForKey:@"fields"] objectAtIndex:indexPath.row];
+    NSString *type = [[self.reportForm objectForKey:@"types"] objectForKey:fieldname];
     
     if ([type isEqualToString:@"media"]) {
-        
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentModalViewController:picker animated:YES];
+            [picker release];
+        }
     }
-    
-    [type release];
+    if ([type isEqualToString:@"location"]) {
+        LocationChooserViewController *chooseLocation = [[LocationChooserViewController alloc] init];
+        [self.navigationController pushViewController:chooseLocation animated:YES];
+        [chooseLocation release];
+    }
+    if ([type isEqualToString:@"text"]) {
+        TextFieldViewController *editTextController = [[TextFieldViewController alloc] initWithFieldname:fieldname report:self.reportForm];
+        [self.navigationController pushViewController:editTextController animated:YES];
+        [editTextController release];
+    }
 }
 
 #pragma mark - Image Choosing Functions
-
-- (void)showImagePicker
-{
-	UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-	picker.delegate = self;
-	picker.allowsEditing = NO;
-	picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-	[self presentModalViewController:picker animated:YES];
-	[picker release];
-}
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {

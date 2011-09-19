@@ -1,22 +1,22 @@
 //
-//  MapViewController.m
+//  LocationChooserViewController.m
 //  open311
 //
-//  Created by Cliff Ingham on 9/6/11.
+//  Created by Cliff Ingham on 9/15/11.
 //  Copyright 2011 City of Bloomington. All rights reserved.
 //
 
-#import "MapViewController.h"
-#import "Locator.h"
+#import "LocationChooserViewController.h"
 
-@implementation MapViewController
+
+@implementation LocationChooserViewController
 @synthesize map;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Issues" image:[UIImage imageNamed:@"map.png"] tag:0];
+        // Custom initialization
     }
     return self;
 }
@@ -41,25 +41,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [[Locator sharedLocator] start];
 }
 
 - (void)viewDidUnload
 {
-    [self setMap:nil];
+    [map release];
+    map = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    MKCoordinateRegion theRegion = self.map.region;
-    theRegion.center = [[[Locator sharedLocator] currentLocation] coordinate];
-    //theRegion.span.latitudeDelta = 0.025;
-    //theRegion.span.longitudeDelta = 0.025;
-    [self.map setRegion:theRegion animated:YES];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

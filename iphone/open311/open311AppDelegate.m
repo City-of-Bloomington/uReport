@@ -12,6 +12,7 @@
 #import "MapViewController.h"
 #import "MyServersViewController.h"
 #import "Settings.h"
+#import "Locator.h"
 
 @implementation open311AppDelegate
 
@@ -59,6 +60,9 @@
     [serverNav release];
     [self.tabBarController release];
     
+    // Start up the location services.
+    // Do it here, so we should have a position by the time we need it.
+    [[Locator sharedLocator] start];
     
     return YES;
 }

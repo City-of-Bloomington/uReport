@@ -1,29 +1,42 @@
 //
-//  MapViewController.m
+//  TextFieldViewController.m
 //  open311
 //
-//  Created by Cliff Ingham on 9/6/11.
+//  Created by Cliff Ingham on 9/15/11.
 //  Copyright 2011 City of Bloomington. All rights reserved.
 //
 
-#import "MapViewController.h"
-#import "Locator.h"
+#import "TextFieldViewController.h"
 
-@implementation MapViewController
-@synthesize map;
+
+@implementation TextFieldViewController
+@synthesize fieldname;
+@synthesize reportForm;
+
+- (id)initWithFieldname:(NSString *)field report:(NSMutableDictionary *)report
+{
+    self = [super init];
+    if (self) {
+        self.reportForm = report;
+        self.fieldname = field;
+    }
+    return self;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Issues" image:[UIImage imageNamed:@"map.png"] tag:0];
+        // Custom initialization
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [map release];
+    [fieldname release];
+    [label release];
+    [textarea release];
     [super dealloc];
 }
 
@@ -41,12 +54,14 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [[Locator sharedLocator] start];
 }
 
 - (void)viewDidUnload
 {
-    [self setMap:nil];
+    [label release];
+    label = nil;
+    [textarea release];
+    textarea = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -54,12 +69,15 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    label.text = [[self.reportForm objectForKey:@"labels"] objectForKey:self.fieldname];
+    textarea.text = [[self.reportForm objectForKey:@"data"] objectForKey:self.fieldname];
     [super viewWillAppear:animated];
-    MKCoordinateRegion theRegion = self.map.region;
-    theRegion.center = [[[Locator sharedLocator] currentLocation] coordinate];
-    //theRegion.span.latitudeDelta = 0.025;
-    //theRegion.span.longitudeDelta = 0.025;
-    [self.map setRegion:theRegion animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[self.reportForm objectForKey:@"data"] setObject:textarea.text forKey:self.fieldname];
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

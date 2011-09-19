@@ -23,6 +23,5 @@
 - (void)chooseService;
 - (void)initReportForm;
 - (void)didSelectService:(NSNumber *)selectedIndex:(id)element;
-- (void)showImagePicker;
 
 @end
