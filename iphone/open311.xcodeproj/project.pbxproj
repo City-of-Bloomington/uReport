@@ -456,9 +456,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		69B07F951416AFEC008DD4E0 /* open311 */ = {
+		69B07F951416AFEC008DD4E0 /* Open311 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 69B07FB11416AFEC008DD4E0 /* Build configuration list for PBXNativeTarget "open311" */;
+			buildConfigurationList = 69B07FB11416AFEC008DD4E0 /* Build configuration list for PBXNativeTarget "Open311" */;
 			buildPhases = (
 				69B07F921416AFEC008DD4E0 /* Sources */,
 				69B07F931416AFEC008DD4E0 /* Frameworks */,
@@ -468,7 +468,7 @@
 			);
 			dependencies = (
 			);
-			name = open311;
+			name = Open311;
 			productName = open311;
 			productReference = 69B07F961416AFEC008DD4E0 /* open311.app */;
 			productType = "com.apple.product-type.application";
@@ -493,7 +493,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				69B07F951416AFEC008DD4E0 /* open311 */,
+				69B07F951416AFEC008DD4E0 /* Open311 */,
 			);
 		};
 /* End PBXProject section */
@@ -632,12 +632,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "open311/open311-Prefix.pch";
 				INFOPLIST_FILE = "open311/open311-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -646,11 +648,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "open311/open311-Prefix.pch";
 				INFOPLIST_FILE = "open311/open311-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -668,7 +672,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		69B07FB11416AFEC008DD4E0 /* Build configuration list for PBXNativeTarget "open311" */ = {
+		69B07FB11416AFEC008DD4E0 /* Build configuration list for PBXNativeTarget "Open311" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				69B07FB21416AFEC008DD4E0 /* Debug */,
