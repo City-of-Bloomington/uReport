@@ -15,5 +15,6 @@
 }
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationBar;
 - (IBAction)goToNewReport:(id)sender;
+- (IBAction)goToIssues:(id)sender;
 
 @end

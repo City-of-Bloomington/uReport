@@ -72,18 +72,28 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    Settings *settings = [Settings sharedSettings];
+    Open311 *open311 = [Open311 sharedOpen311];
+    
     // If the user has changed servers, we need to load the new server's discovery information
     // All the data from the server will be stored in the Open311 singleton
-    if (![self.previousServerURL isEqualToString:[[[Settings sharedSettings] currentServer] objectForKey:@"URL"]]) {
+    if (![self.previousServerURL isEqualToString:[[settings currentServer] objectForKey:@"URL"]]) {
         self.currentService = nil;
-        self.previousServerURL = [[[Settings sharedSettings] currentServer] objectForKey:@"URL"];
-        [[Open311 sharedOpen311] reload:[NSURL URLWithString:self.previousServerURL]];
-    }
-    if (!currentService) {
-        [self chooseService];
+        self.previousServerURL = [[settings currentServer] objectForKey:@"URL"];
     }
     
-    [reportTableView reloadData];
+    if (open311.services) {
+        if (!self.currentService) {
+            [self chooseService];
+        }
+        [reportTableView reloadData];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No services" message:@"No services to report to.  Please choose a different server" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+    
     [super viewWillAppear:animated];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "MapViewController.h"
+#import "Settings.h"
 #import "Locator.h"
 
 @implementation MapViewController
@@ -42,6 +43,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [[Locator sharedLocator] start];
+
+    // If the user hasn't chosen a server yet, send them to the MyServers tab
+    if (![[Settings sharedSettings] currentServer]) {
+        self.tabBarController.selectedIndex = 3;
+    }
 }
 
 - (void)viewDidUnload
@@ -55,11 +61,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    MKCoordinateRegion theRegion = self.map.region;
-    theRegion.center = [[[Locator sharedLocator] currentLocation] coordinate];
-    //theRegion.span.latitudeDelta = 0.025;
-    //theRegion.span.longitudeDelta = 0.025;
-    [self.map setRegion:theRegion animated:YES];
+    [self zoomToGpsLocation:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -68,4 +70,19 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+
+- (void)zoomToGpsLocation:(BOOL)animated
+{
+    Locator *locator = [Locator sharedLocator];
+    if (locator.locationAvailable) {
+        MKCoordinateRegion region;
+        region.center.latitude = locator.currentLocation.coordinate.latitude;
+        region.center.longitude = locator.currentLocation.coordinate.longitude;
+        MKCoordinateSpan span;
+        span.latitudeDelta = 0.0025; // arbitrary value seems to look OK
+        span.longitudeDelta = 0.0025; // arbitrary value seems to look OK
+        region.span = span;
+        [self.map setRegion:region animated:animated];
+    }
+}
 @end

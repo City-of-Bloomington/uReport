@@ -45,7 +45,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
     self.services = nil;
 
     // Load the discovery data
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[url URLByAppendingPathComponent:@"discovery.json"]];
+    NSURL *discoveryURL = [url URLByAppendingPathComponent:@"discovery.json"];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:discoveryURL];
     [request startSynchronous];
     if (![request error]) {
         NSDictionary *discovery = [[request responseString] JSONValue];
@@ -56,13 +57,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
             }
         }
     }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not load discovery" message:[discoveryURL absoluteString] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
     
     // Load all the service definitions
     if (self.baseURL) {
-        request = [ASIHTTPRequest requestWithURL:[self.baseURL URLByAppendingPathComponent:@"services.json"]];
+        NSURL *servicesURL = [self.baseURL URLByAppendingPathComponent:@"services.json"];
+        request = [ASIHTTPRequest requestWithURL:servicesURL];
         [request startSynchronous];
         if (![request error]) {
             self.services = [[request responseString] JSONValue];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not load services" message:[servicesURL absoluteString] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            [alert release];
         }
     }
 }

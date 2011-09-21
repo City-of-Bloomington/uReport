@@ -8,7 +8,7 @@
 			<key>Name</key>
 			<string>Bloomington</string>
 			<key>URL</key>
-			<string>http://bandit.bloomington.in.gov/crm/open311</string>
+			<string>https://bloomington.in.gov/development/open311</string>
 		</dict>
 	</array>
 </dict>

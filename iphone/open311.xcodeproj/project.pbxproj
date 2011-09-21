@@ -156,7 +156,7 @@
 		698495371418FFAD00CDEBF7 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		698495381418FFAD00CDEBF7 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		698495391418FFAD00CDEBF7 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		69B07F961416AFEC008DD4E0 /* open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69B07F961416AFEC008DD4E0 /* Open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B07F9A1416AFEC008DD4E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69B07F9C1416AFEC008DD4E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		69B07F9E1416AFEC008DD4E0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -352,7 +352,7 @@
 		69B07F971416AFEC008DD4E0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				69B07F961416AFEC008DD4E0 /* open311.app */,
+				69B07F961416AFEC008DD4E0 /* Open311.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -470,7 +470,7 @@
 			);
 			name = Open311;
 			productName = open311;
-			productReference = 69B07F961416AFEC008DD4E0 /* open311.app */;
+			productReference = 69B07F961416AFEC008DD4E0 /* Open311.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

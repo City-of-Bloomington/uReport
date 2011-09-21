@@ -70,4 +70,8 @@
     self.tabBarController.selectedIndex = 1;
 }
 
+- (IBAction)goToIssues:(id)sender {
+    self.tabBarController.selectedIndex = 2;
+}
+
 @end

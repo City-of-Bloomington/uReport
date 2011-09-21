@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "69B07F951416AFEC008DD4E0"
-               BuildableName = "open311.app"
+               BuildableName = "Open311.app"
                BlueprintName = "Open311"
                ReferencedContainer = "container:open311.xcodeproj">
             </BuildableReference>
@@ -41,7 +41,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69B07F951416AFEC008DD4E0"
-            BuildableName = "open311.app"
+            BuildableName = "Open311.app"
             BlueprintName = "Open311"
             ReferencedContainer = "container:open311.xcodeproj">
          </BuildableReference>
@@ -60,7 +60,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69B07F951416AFEC008DD4E0"
-            BuildableName = "open311.app"
+            BuildableName = "Open311.app"
             BlueprintName = "Open311"
             ReferencedContainer = "container:open311.xcodeproj">
          </BuildableReference>

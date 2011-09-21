@@ -17,4 +17,6 @@
 }
 @property (nonatomic, retain) IBOutlet MKMapView *map;
 
+- (void)zoomToGpsLocation:(BOOL)animated;
+
 @end

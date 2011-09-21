@@ -45,7 +45,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Locator);
 
 - (void)stop
 {
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
