@@ -10,8 +10,7 @@
 
 
 @implementation TextFieldViewController
-@synthesize fieldname;
-@synthesize reportForm;
+@synthesize fieldname,previousText,reportForm;
 
 - (id)initWithFieldname:(NSString *)field report:(NSMutableDictionary *)report
 {
@@ -54,7 +53,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    // Remember the starting text, so we can restore it if they cancel
+    self.previousText = [[self.reportForm objectForKey:@"data"] objectForKey:self.fieldname];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
 }
 
 - (void)viewDidUnload
@@ -77,7 +80,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [[self.reportForm objectForKey:@"data"] setObject:textarea.text forKey:self.fieldname];
     [super viewWillDisappear:animated];
 }
 
@@ -85,6 +87,24 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+# pragma mark - Button Handling Functions
+/**
+ * Sends them back to the report without saving changes to the text
+ */
+- (void)cancel
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+/**
+ * Saves changes to the text and send them back to the report
+ */
+- (void)done
+{
+    [[self.reportForm objectForKey:@"data"] setObject:textarea.text forKey:self.fieldname];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

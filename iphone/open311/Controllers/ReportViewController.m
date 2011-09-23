@@ -146,6 +146,8 @@
     self.currentService = [[[Open311 sharedOpen311] services] objectAtIndex:[selectedIndex integerValue]];
     [self.navigationItem setTitle:[self.currentService objectForKey:@"service_name"]];
     
+    
+    
     [self initReportForm];
 }
 
