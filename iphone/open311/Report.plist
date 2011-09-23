@@ -13,9 +13,9 @@
 		<key>jurisdiction_id</key>
 		<string></string>
 		<key>lat</key>
-		<integer>0</integer>
+		<string></string>
 		<key>long</key>
-		<integer>0</integer>
+		<string></string>
 		<key>service_code</key>
 		<string></string>
 	</dict>
@@ -32,7 +32,7 @@
 		<key>description</key>
 		<string>Description</string>
 		<key>media</key>
-		<string>Choose a Photo</string>
+		<string>Take a Photo</string>
 	</dict>
 	<key>types</key>
 	<dict>

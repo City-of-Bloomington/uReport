@@ -21,7 +21,8 @@
 
 + (Settings *) sharedSettings;
 
-- (void) load;
-- (void) save;
+- (void)load;
+- (void)save;
+- (void)switchToServer:(NSDictionary *)server;
 
 @end

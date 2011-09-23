@@ -8,7 +8,7 @@
 
 #import "Settings.h"
 #import "SynthesizeSingleton.h"
-
+#import "Open311.h"
 
 @implementation Settings
 SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
@@ -70,5 +70,22 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
     [[NSUserDefaults standardUserDefaults] setObject:self.currentServer forKey:@"currentServer"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-   
+
+/**
+ * Resets Open311 to point to a different server
+ *
+ * Open311 needs to load the discovery and services for the new server
+ * The list of servers is stored in AvailableServers.plist
+ * The user will choose one, and we'll take it's dictionary and put it
+ * into self.currentServer
+ *
+ * @param NSDictionary server Server should have keys for name and url
+ */
+- (void)switchToServer:(NSDictionary *)server
+{
+    Open311 *open311 = [Open311 sharedOpen311];
+    NSLog(@"Switching to server: %@",[server objectForKey:@"URL"]);
+    [open311 reload:[NSURL URLWithString:[server objectForKey:@"URL"]]];
+    self.currentServer = server;
+}
 @end

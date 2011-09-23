@@ -10,13 +10,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import <MapKit/MKAnnotation.h>
+#import "BaseMapViewController.h"
 
-@interface MapViewController : UIViewController {
-    
-    MKMapView *map;
-}
-@property (nonatomic, retain) IBOutlet MKMapView *map;
+@interface MapViewController : BaseMapViewController
 
-- (void)zoomToGpsLocation:(BOOL)animated;
 
 @end

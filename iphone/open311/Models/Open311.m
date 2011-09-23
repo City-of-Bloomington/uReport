@@ -45,10 +45,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
     self.services = nil;
 
     // Load the discovery data
+    NSLog(@"Open311:reload:%@",[url absoluteString]);
     NSURL *discoveryURL = [url URLByAppendingPathComponent:@"discovery.json"];
+    NSLog(@"Loading URL: %@",discoveryURL);
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:discoveryURL];
     [request startSynchronous];
-    if (![request error]) {
+    if (![request error] && [request responseStatusCode]==200) {
         NSDictionary *discovery = [[request responseString] JSONValue];
         for (NSDictionary *ep in [discovery objectForKey:@"endpoints"]) {
             if ([[ep objectForKey:@"specification"] isEqualToString:@"http://wiki.open311.org/GeoReport_v2"]) {
@@ -66,6 +68,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
     // Load all the service definitions
     if (self.baseURL) {
         NSURL *servicesURL = [self.baseURL URLByAppendingPathComponent:@"services.json"];
+        NSLog(@"Loading URL: %@", servicesURL);
         request = [ASIHTTPRequest requestWithURL:servicesURL];
         [request startSynchronous];
         if (![request error]) {
@@ -76,6 +79,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
             [alert show];
             [alert release];
         }
+        NSLog(@"Loaded %u services",[self.services count]);
     }
 }
 

@@ -74,6 +74,9 @@
 		69BAA102141FB86C00D03396 /* Report.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69BAA101141FB86C00D03396 /* Report.plist */; };
 		69E58237141E87550038C910 /* ChooseServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E58235141E87550038C910 /* ChooseServiceViewController.m */; };
 		69E58238141E87550038C910 /* ChooseServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69E58236141E87550038C910 /* ChooseServiceViewController.xib */; };
+		69F08B7B142A6E910019C816 /* cross-hairs-small-black-cropped.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F08B79142A6E910019C816 /* cross-hairs-small-black-cropped.png */; };
+		69F08B7C142A6E910019C816 /* iconLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F08B7A142A6E910019C816 /* iconLocation.png */; };
+		69F08B88142A71BB0019C816 /* BaseMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F08B87142A71BB0019C816 /* BaseMapViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +190,10 @@
 		69E58234141E87550038C910 /* ChooseServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseServiceViewController.h; sourceTree = "<group>"; };
 		69E58235141E87550038C910 /* ChooseServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseServiceViewController.m; sourceTree = "<group>"; };
 		69E58236141E87550038C910 /* ChooseServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChooseServiceViewController.xib; sourceTree = "<group>"; };
+		69F08B79142A6E910019C816 /* cross-hairs-small-black-cropped.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cross-hairs-small-black-cropped.png"; sourceTree = "<group>"; };
+		69F08B7A142A6E910019C816 /* iconLocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconLocation.png; sourceTree = "<group>"; };
+		69F08B86142A71BB0019C816 /* BaseMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseMapViewController.h; sourceTree = "<group>"; };
+		69F08B87142A71BB0019C816 /* BaseMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseMapViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +411,7 @@
 		69B07FB51416B050008DD4E0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				69F08B85142A719A0019C816 /* Base */,
 				698290D414224AA800ABE661 /* ReportFields */,
 				69839720141E43A4006B4F79 /* Modal */,
 				69B07FB81416B065008DD4E0 /* HomeViewController.h */,
@@ -428,6 +436,8 @@
 		69B07FB61416B050008DD4E0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				69F08B79142A6E910019C816 /* cross-hairs-small-black-cropped.png */,
+				69F08B7A142A6E910019C816 /* iconLocation.png */,
 				698290E31422504100ABE661 /* textarea.png */,
 				697CE52A142111A4005C275A /* home_w.png */,
 				697CE52B142111A4005C275A /* megaphone.png */,
@@ -451,6 +461,15 @@
 				697DF9F914226E97005C8EB5 /* Locator.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		69F08B85142A719A0019C816 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				69F08B86142A71BB0019C816 /* BaseMapViewController.h */,
+				69F08B87142A71BB0019C816 /* BaseMapViewController.m */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -526,6 +545,8 @@
 				698290DA14224AF700ABE661 /* TextFieldViewController.xib in Resources */,
 				698290E41422504100ABE661 /* textarea.png in Resources */,
 				697DF9BE14225255005C8EB5 /* LocationChooserViewController.xib in Resources */,
+				69F08B7B142A6E910019C816 /* cross-hairs-small-black-cropped.png in Resources */,
+				69F08B7C142A6E910019C816 /* iconLocation.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +592,7 @@
 				698290D914224AF700ABE661 /* TextFieldViewController.m in Sources */,
 				697DF9BD14225255005C8EB5 /* LocationChooserViewController.m in Sources */,
 				697DF9FA14226E97005C8EB5 /* Locator.m in Sources */,
+				69F08B88142A71BB0019C816 /* BaseMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

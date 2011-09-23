@@ -67,6 +67,8 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - Table Vew Handlers
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==0) {
@@ -83,8 +85,9 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"] autorelease];
     }
-    cell.textLabel.text = [[[[Settings sharedSettings] myServers] objectAtIndex:indexPath.row] objectForKey:@"Name"];
-    cell.detailTextLabel.text = [[[[Settings sharedSettings] myServers] objectAtIndex:indexPath.row] objectForKey:@"URL"];
+    NSMutableArray *myServers = [[Settings sharedSettings] myServers];
+    cell.textLabel.text = [[myServers objectAtIndex:indexPath.row] objectForKey:@"Name"];
+    cell.detailTextLabel.text = [[myServers objectAtIndex:indexPath.row] objectForKey:@"URL"];
     return cell;
 }
 
@@ -106,8 +109,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    [[Settings sharedSettings] setCurrentServer:[[[Settings sharedSettings] myServers] objectAtIndex:indexPath.row]];
-    [[Open311 sharedOpen311] reload:[NSURL URLWithString:[[[Settings sharedSettings] currentServer] objectForKey:@"URL"]]];
+    
+    Settings *settings = [Settings sharedSettings];
+    [settings switchToServer:[[settings myServers] objectAtIndex:indexPath.row]];
+    
     self.tabBarController.selectedIndex = 0;
 }
 

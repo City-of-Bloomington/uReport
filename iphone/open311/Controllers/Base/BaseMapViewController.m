@@ -1,27 +1,16 @@
 //
-//  TextFieldViewController.m
+//  BaseMapViewController.m
 //  open311
 //
-//  Created by Cliff Ingham on 9/15/11.
+//  Created by Cliff Ingham on 9/21/11.
 //  Copyright 2011 City of Bloomington. All rights reserved.
 //
 
-#import "TextFieldViewController.h"
+#import "BaseMapViewController.h"
+#import "Locator.h"
 
-
-@implementation TextFieldViewController
-@synthesize fieldname;
-@synthesize reportForm;
-
-- (id)initWithFieldname:(NSString *)field report:(NSMutableDictionary *)report
-{
-    self = [super init];
-    if (self) {
-        self.reportForm = report;
-        self.fieldname = field;
-    }
-    return self;
-}
+@implementation BaseMapViewController
+@synthesize map;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,10 +23,7 @@
 
 - (void)dealloc
 {
-    [fieldname release];
-    [reportForm release];
-    [label release];
-    [textarea release];
+    [map release];
     [super dealloc];
 }
 
@@ -51,18 +37,16 @@
 
 #pragma mark - View lifecycle
 
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [[Locator sharedLocator] start];
 }
 
 - (void)viewDidUnload
 {
-    [label release];
-    label = nil;
-    [textarea release];
-    textarea = nil;
+    [map release];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -70,15 +54,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    label.text = [[self.reportForm objectForKey:@"labels"] objectForKey:self.fieldname];
-    textarea.text = [[self.reportForm objectForKey:@"data"] objectForKey:self.fieldname];
     [super viewWillAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [[self.reportForm objectForKey:@"data"] setObject:textarea.text forKey:self.fieldname];
-    [super viewWillDisappear:animated];
+    [self zoomToGpsLocation:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -86,5 +63,23 @@
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+#pragma mark - Location Functions
+
+- (void)zoomToGpsLocation:(BOOL)animated
+{
+    Locator *locator = [Locator sharedLocator];
+    if (locator.locationAvailable) {
+        MKCoordinateRegion region;
+        region.center.latitude = locator.currentLocation.coordinate.latitude;
+        region.center.longitude = locator.currentLocation.coordinate.longitude;
+        MKCoordinateSpan span;
+        span.latitudeDelta = 0.0025; // arbitrary value seems to look OK
+        span.longitudeDelta = 0.0025; // arbitrary value seems to look OK
+        region.span = span;
+        [self.map setRegion:region animated:animated];
+    }
+}
+
 
 @end

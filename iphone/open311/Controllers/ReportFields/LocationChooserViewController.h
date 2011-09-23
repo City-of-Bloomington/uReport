@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "BaseMapViewController.h"
 
-@interface LocationChooserViewController : UIViewController {
+@interface LocationChooserViewController : BaseMapViewController {
     
-    IBOutlet MKMapView *map;
 }
-@property (nonatomic, retain) IBOutlet MKMapView *map;
+
+@property (nonatomic, retain) NSMutableDictionary *reportForm;
+
+- (id)initWithReport:(NSMutableDictionary *)report;
+- (IBAction)handleZoomButton:(id)sender;
+- (void)didChooseLocation;
 
 @end
