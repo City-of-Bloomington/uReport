@@ -9,6 +9,15 @@
 // an open311 server.  We need to know what service the user wants to
 // report to on that server.  We'll get the list of attributes for that
 // service and let the user enter data for each one of the attributes.
+//
+// We start by creating an empty report from Report.plist
+// Then, we query the service_definition and add all the attributes
+// defined in the service_defition.
+// Each of the types declared in reportForm has a custom view
+// that opens when the user edits that field.  User responses
+// get saved as strings in reportForm[data].
+// When we're ready to POST, we just have to read through 
+// reportForm[data] for the data to submit.
 
 #import <AddressBook/AddressBook.h>
 #import "ReportViewController.h"
@@ -17,6 +26,8 @@
 #import "ActionSheetPicker.h"
 #import "TextFieldViewController.h"
 #import "LocationChooserViewController.h"
+#import "ASIHTTPRequest.h"
+#import "SBJson.h"
 
 @implementation ReportViewController
 
@@ -145,10 +156,31 @@
 {
     self.currentService = [[[Open311 sharedOpen311] services] objectAtIndex:[selectedIndex integerValue]];
     [self.navigationItem setTitle:[self.currentService objectForKey:@"service_name"]];
-    
-    
-    
     [self initReportForm];
+    [self loadServiceDefition:[self.currentService objectForKey:@"service_code"]];
+}
+
+/**
+ * Queries the service defintion and populates reportForm with all the attributes
+ */
+- (void)loadServiceDefition:(NSString *)service_code
+{
+    NSURL *url = [[[[Open311 sharedOpen311] baseURL] URLByAppendingPathComponent:@"services"] URLByAppendingPathComponent:[service_code stringByAppendingString:@".json"]];
+    NSLog(@"Loading URL: %@",[url absoluteString]);
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request startSynchronous];
+    if (![request error] && [request responseStatusCode]==200) {
+        NSDictionary *service_definition = [[request responseString] JSONValue];
+        for (NSDictionary *attribute in [service_definition objectForKey:@"attributes"]) {
+            NSString *code = [attribute objectForKey:@"code"];
+            NSLog(@"Attribute found: %@",code);
+            [[self.reportForm objectForKey:@"fields"] addObject:code];
+            [[self.reportForm objectForKey:@"labels"] setObject:[attribute objectForKey:@"description"] forKey:code];
+            [[self.reportForm objectForKey:@"types"] setObject:[attribute objectForKey:@"datatype"] forKey:code];
+        }
+        // The fields the user needs to report on have changed
+        [reportTableView reloadData];
+    }
 }
 
 
