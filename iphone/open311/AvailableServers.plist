@@ -6,6 +6,12 @@
 	<array>
 		<dict>
 			<key>Name</key>
+			<string>Baltimore</string>
+			<key>URL</key>
+			<string>http://311test.baltimorecity.gov/open311</string>
+		</dict>
+		<dict>
+			<key>Name</key>
 			<string>Bloomington</string>
 			<key>URL</key>
 			<string>https://bloomington.in.gov/development/open311</string>
