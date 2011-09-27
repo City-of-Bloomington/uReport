@@ -6,6 +6,7 @@
  * @param $_GET location
  */
 // Make sure we have the location in the system
+
 $location = trim($_GET['location']);
 if (!$location) {
 	header('Location: '.BASE_URL.'/locations');
@@ -13,8 +14,9 @@ if (!$location) {
 }
 $ticketList = new TicketList(array('location'=>$location));
 
-
-$template = isset($_GET['partial']) ? new Template('partial') : new Template('locations');
+$format = isset($_GET['format'])? $_GET['format']:'html';
+$filename = isset($_GET['partial'])? 'partial':'locations';
+$template = new Template($filename, $format);
 
 $template->blocks['location-panel'][] = new Block(
 	'locations/locationInfo.inc',

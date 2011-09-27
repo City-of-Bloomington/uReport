@@ -82,17 +82,33 @@ class Template extends View
 	 * @param string $panel
 	 * @return string
 	 */
-	private function includeBlocks($panel=null)
+	private function includeBlocks($target=null)
 	{
 		ob_start();
-		if ($panel) {
+		if ($target) { // panel 
 			// Render any blocks for the given panel
-			if (isset($this->blocks[$panel]) && is_array($this->blocks[$panel])) {
-				foreach ($this->blocks[$panel] as $block) {
+			if (isset($this->blocks[$target]) && is_array($this->blocks[$target])) {
+				foreach ($this->blocks[$target] as $block) {
 					echo $block->render($this->outputFormat,$this);
 				}
 			}
-
+			else{
+				foreach($this->blocks as $key=>$value){ // array
+					if($value instanceof Block){
+						if($value->getFile() == $target){
+							echo $block->render($this->outputFormat,$this);								continue;
+						}
+					}
+					else{   // panel
+						foreach ($value as $block) {
+							if($block->getFile() == $target){
+								echo $block->render($this->outputFormat,$this);
+								continue;
+							}
+						}
+					}
+				}
+			}
 		}
 		else {
 			// Render only the blocks for the main content area

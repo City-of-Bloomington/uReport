@@ -1,6 +1,8 @@
 * text=auto !eol
 crm/blocks/html/errorMessages/mergerNotAllowed.inc -text
 crm/blocks/html/people/mergeForm.inc -text
+crm/blocks/xml/locations/locationInfo.inc -text
+crm/blocks/xml/tickets/ticketList.inc -text
 crm/docs/images/addcase.jpg -text
 crm/docs/images/answers.jpg -text
 crm/docs/images/customfieldsnotpopulated.jpg -text
@@ -42,6 +44,7 @@ crm/html/skins/local/images/sortdescending.png -text
 crm/scripts/migration/0.0-1.0/calltrack/1_constituents.php -text
 crm/scripts/migration/0.0-1.0/calltrack/2_users.php -text
 crm/templates/html/default.inc -text
+crm/templates/xml/partial.inc -text
 iphone/mockups/iphonemockups.png -text
 iphone/open311/Controllers/Base/BaseFieldViewController.h -text
 iphone/open311/Controllers/Base/BaseFieldViewController.m -text
