@@ -52,6 +52,13 @@
 		698495481418FFAD00CDEBF7 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 698495351418FFAD00CDEBF7 /* SBJsonTokeniser.m */; };
 		698495491418FFAD00CDEBF7 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 698495371418FFAD00CDEBF7 /* SBJsonUTF8Stream.m */; };
 		6984954A1418FFAD00CDEBF7 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 698495391418FFAD00CDEBF7 /* SBJsonWriter.m */; };
+		69A867BC1430C4BC0069560C /* StringFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A867BA1430C4BC0069560C /* StringFieldViewController.m */; };
+		69A867BD1430C4BC0069560C /* StringFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69A867BB1430C4BC0069560C /* StringFieldViewController.xib */; };
+		69A867C11430C5EA0069560C /* BaseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A867C01430C5EA0069560C /* BaseFieldViewController.m */; };
+		69A867C51430CD5A0069560C /* NumberFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A867C31430CD590069560C /* NumberFieldViewController.m */; };
+		69A867C61430CD5A0069560C /* NumberFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69A867C41430CD590069560C /* NumberFieldViewController.xib */; };
+		69A867CA1430F5700069560C /* SelectSingleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A867C81430F5700069560C /* SelectSingleViewController.m */; };
+		69A867CB1430F5700069560C /* SelectSingleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69A867C91430F5700069560C /* SelectSingleViewController.xib */; };
 		69B07F9B1416AFEC008DD4E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9A1416AFEC008DD4E0 /* UIKit.framework */; };
 		69B07F9D1416AFEC008DD4E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9C1416AFEC008DD4E0 /* Foundation.framework */; };
 		69B07F9F1416AFEC008DD4E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9E1416AFEC008DD4E0 /* CoreGraphics.framework */; };
@@ -159,6 +166,17 @@
 		698495371418FFAD00CDEBF7 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		698495381418FFAD00CDEBF7 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		698495391418FFAD00CDEBF7 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		69A867B91430C4BC0069560C /* StringFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringFieldViewController.h; sourceTree = "<group>"; };
+		69A867BA1430C4BC0069560C /* StringFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringFieldViewController.m; sourceTree = "<group>"; };
+		69A867BB1430C4BC0069560C /* StringFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StringFieldViewController.xib; sourceTree = "<group>"; };
+		69A867BF1430C5EA0069560C /* BaseFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseFieldViewController.h; sourceTree = "<group>"; };
+		69A867C01430C5EA0069560C /* BaseFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseFieldViewController.m; sourceTree = "<group>"; };
+		69A867C21430CD590069560C /* NumberFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberFieldViewController.h; sourceTree = "<group>"; };
+		69A867C31430CD590069560C /* NumberFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberFieldViewController.m; sourceTree = "<group>"; };
+		69A867C41430CD590069560C /* NumberFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NumberFieldViewController.xib; sourceTree = "<group>"; };
+		69A867C71430F56F0069560C /* SelectSingleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSingleViewController.h; sourceTree = "<group>"; };
+		69A867C81430F5700069560C /* SelectSingleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectSingleViewController.m; sourceTree = "<group>"; };
+		69A867C91430F5700069560C /* SelectSingleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectSingleViewController.xib; sourceTree = "<group>"; };
 		69B07F961416AFEC008DD4E0 /* Open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B07F9A1416AFEC008DD4E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69B07F9C1416AFEC008DD4E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -291,6 +309,15 @@
 				697DF9BA14225255005C8EB5 /* LocationChooserViewController.h */,
 				697DF9BB14225255005C8EB5 /* LocationChooserViewController.m */,
 				697DF9BC14225255005C8EB5 /* LocationChooserViewController.xib */,
+				69A867B91430C4BC0069560C /* StringFieldViewController.h */,
+				69A867BA1430C4BC0069560C /* StringFieldViewController.m */,
+				69A867BB1430C4BC0069560C /* StringFieldViewController.xib */,
+				69A867C21430CD590069560C /* NumberFieldViewController.h */,
+				69A867C31430CD590069560C /* NumberFieldViewController.m */,
+				69A867C41430CD590069560C /* NumberFieldViewController.xib */,
+				69A867C71430F56F0069560C /* SelectSingleViewController.h */,
+				69A867C81430F5700069560C /* SelectSingleViewController.m */,
+				69A867C91430F5700069560C /* SelectSingleViewController.xib */,
 			);
 			path = ReportFields;
 			sourceTree = "<group>";
@@ -468,6 +495,8 @@
 			children = (
 				69F08B86142A71BB0019C816 /* BaseMapViewController.h */,
 				69F08B87142A71BB0019C816 /* BaseMapViewController.m */,
+				69A867BF1430C5EA0069560C /* BaseFieldViewController.h */,
+				69A867C01430C5EA0069560C /* BaseFieldViewController.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -547,6 +576,9 @@
 				697DF9BE14225255005C8EB5 /* LocationChooserViewController.xib in Resources */,
 				69F08B7B142A6E910019C816 /* cross-hairs-small-black-cropped.png in Resources */,
 				69F08B7C142A6E910019C816 /* iconLocation.png in Resources */,
+				69A867BD1430C4BC0069560C /* StringFieldViewController.xib in Resources */,
+				69A867C61430CD5A0069560C /* NumberFieldViewController.xib in Resources */,
+				69A867CB1430F5700069560C /* SelectSingleViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +625,10 @@
 				697DF9BD14225255005C8EB5 /* LocationChooserViewController.m in Sources */,
 				697DF9FA14226E97005C8EB5 /* Locator.m in Sources */,
 				69F08B88142A71BB0019C816 /* BaseMapViewController.m in Sources */,
+				69A867BC1430C4BC0069560C /* StringFieldViewController.m in Sources */,
+				69A867C11430C5EA0069560C /* BaseFieldViewController.m in Sources */,
+				69A867C51430CD5A0069560C /* NumberFieldViewController.m in Sources */,
+				69A867CA1430F5700069560C /* SelectSingleViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +698,7 @@
 				INFOPLIST_FILE = "open311/open311-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				VALIDATE_PRODUCT = NO;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

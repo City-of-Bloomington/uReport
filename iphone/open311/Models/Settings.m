@@ -84,7 +84,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
 - (void)switchToServer:(NSDictionary *)server
 {
     Open311 *open311 = [Open311 sharedOpen311];
-    NSLog(@"Switching to server: %@",[server objectForKey:@"URL"]);
+    DLog(@"Switching to server: %@",[server objectForKey:@"URL"]);
     [open311 reload:[NSURL URLWithString:[server objectForKey:@"URL"]]];
     self.currentServer = server;
 }

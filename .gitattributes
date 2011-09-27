@@ -43,6 +43,17 @@ crm/scripts/migration/0.0-1.0/calltrack/1_constituents.php -text
 crm/scripts/migration/0.0-1.0/calltrack/2_users.php -text
 crm/templates/html/default.inc -text
 iphone/mockups/iphonemockups.png -text
+iphone/open311/Controllers/Base/BaseFieldViewController.h -text
+iphone/open311/Controllers/Base/BaseFieldViewController.m -text
+iphone/open311/Controllers/ReportFields/NumberFieldViewController.h -text
+iphone/open311/Controllers/ReportFields/NumberFieldViewController.m -text
+iphone/open311/Controllers/ReportFields/NumberFieldViewController.xib -text
+iphone/open311/Controllers/ReportFields/SelectSingleViewController.h -text
+iphone/open311/Controllers/ReportFields/SelectSingleViewController.m -text
+iphone/open311/Controllers/ReportFields/SelectSingleViewController.xib -text
+iphone/open311/Controllers/ReportFields/StringFieldViewController.h -text
+iphone/open311/Controllers/ReportFields/StringFieldViewController.m -text
+iphone/open311/Controllers/ReportFields/StringFieldViewController.xib -text
 iphone/open311/Images/cross-hairs-small-black-cropped.png -text
 iphone/open311/Images/home_w.png -text
 iphone/open311/Images/iconLocation.png -text

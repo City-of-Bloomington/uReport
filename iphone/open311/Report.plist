@@ -43,5 +43,7 @@
 		<key>media</key>
 		<string>media</string>
 	</dict>
+	<key>values</key>
+	<dict/>
 </dict>
 </plist>

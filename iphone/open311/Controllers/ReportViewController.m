@@ -24,10 +24,13 @@
 #import "Settings.h"
 #import "Open311.h"
 #import "ActionSheetPicker.h"
-#import "TextFieldViewController.h"
-#import "LocationChooserViewController.h"
 #import "ASIHTTPRequest.h"
 #import "SBJson.h"
+#import "LocationChooserViewController.h"
+#import "TextFieldViewController.h"
+#import "StringFieldViewController.h"
+#import "NumberFieldViewController.h"
+#import "SelectSingleViewController.h"
 
 @implementation ReportViewController
 
@@ -166,17 +169,24 @@
 - (void)loadServiceDefition:(NSString *)service_code
 {
     NSURL *url = [[[[Open311 sharedOpen311] baseURL] URLByAppendingPathComponent:@"services"] URLByAppendingPathComponent:[service_code stringByAppendingString:@".json"]];
-    NSLog(@"Loading URL: %@",[url absoluteString]);
+    DLog(@"Loading URL: %@",[url absoluteString]);
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request startSynchronous];
     if (![request error] && [request responseStatusCode]==200) {
         NSDictionary *service_definition = [[request responseString] JSONValue];
         for (NSDictionary *attribute in [service_definition objectForKey:@"attributes"]) {
             NSString *code = [attribute objectForKey:@"code"];
-            NSLog(@"Attribute found: %@",code);
+            DLog(@"Attribute found: %@",code);
             [[self.reportForm objectForKey:@"fields"] addObject:code];
             [[self.reportForm objectForKey:@"labels"] setObject:[attribute objectForKey:@"description"] forKey:code];
             [[self.reportForm objectForKey:@"types"] setObject:[attribute objectForKey:@"datatype"] forKey:code];
+            
+            NSDictionary *values = [attribute objectForKey:@"values"];
+            if (values) {
+                [[self.reportForm objectForKey:@"values"] setObject:values forKey:code];
+                DLog(@"Added values for %@",code);
+            }
+            
         }
         // The fields the user needs to report on have changed
         [reportTableView reloadData];
@@ -190,6 +200,12 @@
     return [[self.reportForm objectForKey:@"fields"] count];
 }
 
+/**
+ * Render the labels and the text values the user has provided
+ *
+ * We can check the fieldname to decide if we want to apply custom formatting
+ * for the user-provided value
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -198,6 +214,7 @@
     }
     
     NSString *fieldname = [[self.reportForm objectForKey:@"fields"] objectAtIndex:indexPath.row];
+    NSString *type = [[self.reportForm objectForKey:@"types"] objectForKey:fieldname];
 
     cell.textLabel.text = [[self.reportForm objectForKey:@"labels"] objectForKey:fieldname];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -226,14 +243,24 @@
         }
     }
     else {
-        cell.detailTextLabel.text = [data objectForKey:fieldname];
+        // Apply any custom formatting based on data type
+        if ([type isEqualToString:@"singlevaluelist"]) {
+            cell.detailTextLabel.text = [[data objectForKey:fieldname] objectForKey:@"name"];
+        }
+        else if ([type isEqualToString:@"multivaluelist"]) {
+            
+        }
+        else {
+            cell.detailTextLabel.text = [data objectForKey:fieldname];
+        }
     }
-    
-    
     
     return cell;
 }
 
+/**
+ * Create a new view controller based on the data type of the row the user chooses
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -259,6 +286,28 @@
         TextFieldViewController *editTextController = [[TextFieldViewController alloc] initWithFieldname:fieldname report:self.reportForm];
         [self.navigationController pushViewController:editTextController animated:YES];
         [editTextController release];
+    }
+    if ([type isEqualToString:@"string"]) {
+        StringFieldViewController *editStringController = [[StringFieldViewController alloc] initWithFieldname:fieldname report:self.reportForm];
+        [self.navigationController pushViewController:editStringController animated:YES];
+        [editStringController release];
+    }
+    if ([type isEqualToString:@"number"]) {
+        NumberFieldViewController *editNumberController = [[NumberFieldViewController alloc] initWithFieldname:fieldname report:self.reportForm];
+        [self.navigationController pushViewController:editNumberController animated:YES];
+        [editNumberController release];
+        
+    }
+    if ([type isEqualToString:@"datetime"]) {
+        
+    }
+    if ([type isEqualToString:@"singlevaluelist"]) {
+        SelectSingleViewController *selectController = [[SelectSingleViewController alloc] initWithFieldname:fieldname report:self.reportForm];
+        [self.navigationController pushViewController:selectController animated:YES];
+        [selectController release];
+    }
+    if ([type isEqualToString:@"multivaluelist"]) {
+        
     }
 }
 
