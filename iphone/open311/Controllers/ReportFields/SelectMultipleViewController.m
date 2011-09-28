@@ -84,6 +84,14 @@
     }
     cell.textLabel.text = [[values objectAtIndex:indexPath.row] objectForKey:@"name"];
     
+    NSMutableArray *selections = [[self.reportForm objectForKey:@"data"] objectForKey:self.fieldname];
+    for (NSDictionary *value in selections) {
+        if ([[[values objectAtIndex:indexPath.row] objectForKey:@"key"] isEqualToString:[value objectForKey:@"key"]]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            break;
+        }
+    }
+    
     return cell;
 }
 
@@ -95,7 +103,7 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     else {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
 }
 
