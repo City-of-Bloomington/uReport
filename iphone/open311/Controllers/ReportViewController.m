@@ -31,6 +31,7 @@
 #import "StringFieldViewController.h"
 #import "NumberFieldViewController.h"
 #import "SelectSingleViewController.h"
+#import "SelectMultipleViewController.h"
 
 @implementation ReportViewController
 
@@ -248,7 +249,11 @@
             cell.detailTextLabel.text = [[data objectForKey:fieldname] objectForKey:@"name"];
         }
         else if ([type isEqualToString:@"multivaluelist"]) {
-            
+            NSString *selectionText = @"";
+            for (NSDictionary *selection in [data objectForKey:fieldname]) {
+                selectionText = [selectionText stringByAppendingFormat:@"%@, ",[selection objectForKey:@"name"]];
+            }
+            cell.detailTextLabel.text = selectionText;
         }
         else {
             cell.detailTextLabel.text = [data objectForKey:fieldname];
@@ -307,7 +312,9 @@
         [selectController release];
     }
     if ([type isEqualToString:@"multivaluelist"]) {
-        
+        SelectMultipleViewController *multiController = [[SelectMultipleViewController alloc] initWithFieldname:fieldname report:reportForm];
+        [self.navigationController pushViewController:multiController animated:YES];
+        [multiController release];
     }
 }
 

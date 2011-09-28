@@ -51,6 +51,9 @@ iphone/open311/Controllers/Base/BaseFieldViewController.m -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.h -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.m -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.xib -text
+iphone/open311/Controllers/ReportFields/SelectMultipleViewController.h -text
+iphone/open311/Controllers/ReportFields/SelectMultipleViewController.m -text
+iphone/open311/Controllers/ReportFields/SelectMultipleViewController.xib -text
 iphone/open311/Controllers/ReportFields/SelectSingleViewController.h -text
 iphone/open311/Controllers/ReportFields/SelectSingleViewController.m -text
 iphone/open311/Controllers/ReportFields/SelectSingleViewController.xib -text
