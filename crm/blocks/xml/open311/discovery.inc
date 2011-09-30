@@ -14,7 +14,7 @@
 			<specification>http://wiki.open311.org/GeoReport_v2</specification>
 			<url><?php echo BASE_URL; ?>/open311/v2</url>
 			<changeset></changeset>
-			<type>production</type>
+			<type>development</type>
 			<formats>
 				<format>text/xml</format>
 				<format>application/json</format>

@@ -28,6 +28,6 @@
 	<tr><th>changeset</th>
 		<td></td>
 	</tr>
-	<tr><th>type</th><td>production</td></tr>
+	<tr><th>type</th><td>development</td></tr>
 	<tr><th>formats</th><td>text/xml,application/json</td></tr>
 </table>

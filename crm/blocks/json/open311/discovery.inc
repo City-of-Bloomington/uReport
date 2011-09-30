@@ -13,7 +13,7 @@ $discovery = array(
 			'specification'=>'http://wiki.open311.org/GeoReport_v2',
 			'url'=>BASE_URL.'/open311/v2',
 			'changeset'=>'',
-			'type'=>'production',
+			'type'=>'development',
 			'formats'=>array('text/xml','application/json')
 		)
 	)
