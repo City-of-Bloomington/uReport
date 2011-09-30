@@ -7,7 +7,7 @@
 $person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
 
 // Grab the format from the file extension used in the url
-$format = preg_match("/[^.]+$/",$_SERVER['REQUEST_URI'],$matches)
+$format = preg_match("/\.([^.?]+)/",$_SERVER['REQUEST_URI'],$matches)
 	? strtolower($matches[0])
 	: 'html';
 $template = new Template('open311',$format);
