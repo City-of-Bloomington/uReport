@@ -85,23 +85,26 @@ class Template extends View
 	private function includeBlocks($target=null)
 	{
 		ob_start();
-		if ($target) { // panel 
+		if ($target) {
 			// Render any blocks for the given panel
 			if (isset($this->blocks[$target]) && is_array($this->blocks[$target])) {
 				foreach ($this->blocks[$target] as $block) {
 					echo $block->render($this->outputFormat,$this);
 				}
 			}
-			else{
-				foreach($this->blocks as $key=>$value){ // array
-					if($value instanceof Block){
-						if($value->getFile() == $target){
+			else {
+				// Go through the template looking for what they asked for
+				foreach ($this->blocks as $key=>$value) {
+					// If we find a block that matches, render that block
+					if ($value instanceof Block) {
+						if ($value->getFile() == $target) {
 							echo $block->render($this->outputFormat,$this);								continue;
 						}
 					}
-					else{   // panel
+					// If we find a panel that matches, render the blocks in that panel
+					else {
 						foreach ($value as $block) {
-							if($block->getFile() == $target){
+							if ($block->getFile() == $target) {
 								echo $block->render($this->outputFormat,$this);
 								continue;
 							}
@@ -136,7 +139,7 @@ class Template extends View
 			$this->assets[$name][] = $data;
 		}
 	}
-	
+
 	/**
 	 * Loads and calls helper functions
 	 */

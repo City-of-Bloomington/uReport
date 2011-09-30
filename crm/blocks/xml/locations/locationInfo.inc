@@ -7,11 +7,10 @@
  * @param bool $this->disableButtons
  */
 if ($this->location) {
- 
 	$location = View::escape($this->location);
 
 	echo "
-		<location>
+	<location>
 		<name>$location</name>
 	";
 	if (defined('ADDRESS_SERVICE')) {
@@ -33,12 +32,12 @@ if ($this->location) {
 	if (userIsAllowed('People')) {
 		$people = new PersonList(array('address'=>$this->location));
 		if (count($people)) {
-			echo "<people>";
+			echo '<people>';
 			foreach ($people as $person) {
 				$name = View::escape($person->getFullname());
 				echo "<name>$name</name>";
 			}
-			echo "</people>";
+			echo '</people>';
 		}
 
 		if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {

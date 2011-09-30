@@ -34,13 +34,13 @@ if ($this->limit) {
 					<location>$location</location>
 					<enteredDate>$enteredDate</enteredDate>
 				";
-					if (userIsAllowed('People')) { echo "<enteredBy>$enteredBy</enteredBy>"; }
+				if (userIsAllowed('People')) {
+					echo "<enteredBy>$enteredBy</enteredBy>";
+				}
 				echo "
 					<category>$category</category>
-				</ticket>				
+				</ticket>
 				";
 			}
 		?>
-
 </tickets>
-
