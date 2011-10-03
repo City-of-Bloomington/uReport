@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$template = new Template('search');
+$template = !empty($_GET['format']) ? new Template('search',$_GET['format']) : new Template('search');
 if (userIsAllowed('Tickets')) {
 	$template->blocks['search-form'][] = new Block(
 		'tickets/addNewForm.inc',
@@ -25,7 +25,7 @@ if (!TicketList::isValidSearch($_GET) && !empty($_SESSION['USER'])) {
 if (TicketList::isValidSearch($_GET)) {
 	// Create the report
 	$report = (isset($_GET['report']) && $_GET['report']
-				&& is_file(APPLICATION_HOME."/blocks/html/tickets/reports/$_GET[report].inc"))
+				&& is_file(APPLICATION_HOME."/blocks/{$template->outputFormat}/tickets/reports/$_GET[report].inc"))
 		? new Block("tickets/reports/$_GET[report].inc")
 		: new Block('tickets/searchResults.inc');
 
@@ -35,7 +35,9 @@ if (TicketList::isValidSearch($_GET)) {
 		: $_GET['fields'];
 
 
-	$template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
+	if ($template->outputFormat == 'html') {
+		$template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
+	}
 	$template->blocks['search-results'][] = $report;
 }
 

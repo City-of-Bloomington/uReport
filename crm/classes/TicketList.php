@@ -61,7 +61,7 @@ class TicketList extends MongoResultIterator
 			? $this->mongo->tickets->find($search)
 			: $this->mongo->tickets->find();
 
-		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+		if ($this->cursor->count() < self::$MAX_SORTABLE_ROWS) {
 			$this->cursor->sort(self::prepareSort($query));
 		}
 	}
@@ -85,7 +85,7 @@ class TicketList extends MongoResultIterator
 		$search = self::prepareSearch($query);
 		$this->cursor = $this->mongo->tickets->find($search,self::prepareReturnFields($query));
 
-		if (count($this->cursor) < self::$MAX_SORTABLE_ROWS) {
+		if ($this->cursor->count() < self::$MAX_SORTABLE_ROWS) {
 			$this->cursor->sort(self::prepareSort($query));
 		}
 		$this->RETURN_TICKET_OBJECTS = false;
