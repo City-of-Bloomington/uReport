@@ -30,6 +30,7 @@
 #import "TextFieldViewController.h"
 #import "StringFieldViewController.h"
 #import "NumberFieldViewController.h"
+#import "DateFieldViewController.h"
 #import "SelectSingleViewController.h"
 #import "SelectMultipleViewController.h"
 
@@ -255,6 +256,12 @@
             }
             cell.detailTextLabel.text = selectionText;
         }
+        else if ([type isEqualToString:@"datetime"]) {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateStyle:kCFDateFormatterMediumStyle];
+            cell.detailTextLabel.text = [dateFormatter stringFromDate:[data objectForKey:fieldname]];
+            [dateFormatter release];
+        }
         else {
             cell.detailTextLabel.text = [data objectForKey:fieldname];
         }
@@ -304,7 +311,9 @@
         
     }
     if ([type isEqualToString:@"datetime"]) {
-        
+        DateFieldViewController *dateController = [[DateFieldViewController alloc] initWithFieldname:fieldname report:self.reportForm];
+        [self.navigationController pushViewController:dateController animated:YES];
+        [dateController release];
     }
     if ([type isEqualToString:@"singlevaluelist"]) {
         SelectSingleViewController *selectController = [[SelectSingleViewController alloc] initWithFieldname:fieldname report:self.reportForm];

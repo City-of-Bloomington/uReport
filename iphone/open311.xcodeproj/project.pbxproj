@@ -61,6 +61,8 @@
 		69A867C61430CD5A0069560C /* NumberFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69A867C41430CD590069560C /* NumberFieldViewController.xib */; };
 		69A867CA1430F5700069560C /* SelectSingleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A867C81430F5700069560C /* SelectSingleViewController.m */; };
 		69A867CB1430F5700069560C /* SelectSingleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69A867C91430F5700069560C /* SelectSingleViewController.xib */; };
+		69AC1EAE1439FA6B0029B121 /* DateFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69AC1EAC1439FA6B0029B121 /* DateFieldViewController.m */; };
+		69AC1EAF1439FA6B0029B121 /* DateFieldViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69AC1EAD1439FA6B0029B121 /* DateFieldViewController.xib */; };
 		69B07F9B1416AFEC008DD4E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9A1416AFEC008DD4E0 /* UIKit.framework */; };
 		69B07F9D1416AFEC008DD4E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9C1416AFEC008DD4E0 /* Foundation.framework */; };
 		69B07F9F1416AFEC008DD4E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B07F9E1416AFEC008DD4E0 /* CoreGraphics.framework */; };
@@ -182,6 +184,9 @@
 		69A867C71430F56F0069560C /* SelectSingleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSingleViewController.h; sourceTree = "<group>"; };
 		69A867C81430F5700069560C /* SelectSingleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectSingleViewController.m; sourceTree = "<group>"; };
 		69A867C91430F5700069560C /* SelectSingleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectSingleViewController.xib; sourceTree = "<group>"; };
+		69AC1EAB1439FA6B0029B121 /* DateFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateFieldViewController.h; sourceTree = "<group>"; };
+		69AC1EAC1439FA6B0029B121 /* DateFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateFieldViewController.m; sourceTree = "<group>"; };
+		69AC1EAD1439FA6B0029B121 /* DateFieldViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateFieldViewController.xib; sourceTree = "<group>"; };
 		69B07F961416AFEC008DD4E0 /* Open311.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Open311.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69B07F9A1416AFEC008DD4E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69B07F9C1416AFEC008DD4E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -326,6 +331,9 @@
 				6924825C143209CD00EBBD16 /* SelectMultipleViewController.h */,
 				6924825D143209CD00EBBD16 /* SelectMultipleViewController.m */,
 				6924825E143209CD00EBBD16 /* SelectMultipleViewController.xib */,
+				69AC1EAB1439FA6B0029B121 /* DateFieldViewController.h */,
+				69AC1EAC1439FA6B0029B121 /* DateFieldViewController.m */,
+				69AC1EAD1439FA6B0029B121 /* DateFieldViewController.xib */,
 			);
 			path = ReportFields;
 			sourceTree = "<group>";
@@ -588,6 +596,7 @@
 				69A867C61430CD5A0069560C /* NumberFieldViewController.xib in Resources */,
 				69A867CB1430F5700069560C /* SelectSingleViewController.xib in Resources */,
 				69248260143209CD00EBBD16 /* SelectMultipleViewController.xib in Resources */,
+				69AC1EAF1439FA6B0029B121 /* DateFieldViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +648,7 @@
 				69A867C51430CD5A0069560C /* NumberFieldViewController.m in Sources */,
 				69A867CA1430F5700069560C /* SelectSingleViewController.m in Sources */,
 				6924825F143209CD00EBBD16 /* SelectMultipleViewController.m in Sources */,
+				69AC1EAE1439FA6B0029B121 /* DateFieldViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

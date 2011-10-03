@@ -48,6 +48,9 @@ crm/templates/xml/partial.inc -text
 iphone/mockups/iphonemockups.png -text
 iphone/open311/Controllers/Base/BaseFieldViewController.h -text
 iphone/open311/Controllers/Base/BaseFieldViewController.m -text
+iphone/open311/Controllers/ReportFields/DateFieldViewController.h -text
+iphone/open311/Controllers/ReportFields/DateFieldViewController.m -text
+iphone/open311/Controllers/ReportFields/DateFieldViewController.xib -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.h -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.m -text
 iphone/open311/Controllers/ReportFields/NumberFieldViewController.xib -text
