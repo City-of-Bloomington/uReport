@@ -16,10 +16,10 @@ if (count($media)) {
 }
 
 $request = array(
-	'service_request_id'=>$this->ticket->getId(),
+	'service_request_id'=>"{$this->ticket->getId()}",
 	'status'=>$this->ticket->getStatus(),
 	'service_name'=>$this->ticket->getData('category.name'),
-	'service_code'=>$this->ticket->getData('category._id'),
+	'service_code'=>"{$this->ticket->getData('category._id')}",
 	'description'=>$issue->getDescription(),
 	'requested_datetime'=>$this->ticket->getEnteredDate('c'),
 	'updated_datetime'=>$history->getEnteredDate('c'),

@@ -18,10 +18,10 @@ foreach ($this->ticketList as $ticket) {
 	}
 
 	$service_requests[] = array(
-		'service_request_id'=>$ticket->getId(),
+		'service_request_id'=>"{$ticket->getId()}",
 		'status'=>$ticket->getStatus(),
 		'service_name'=>$ticket->getData('category.name'),
-		'service_code'=>$ticket->getData('category._id'),
+		'service_code'=>"{$ticket->getData('category._id')}",
 		'description'=>$issue->getDescription(),
 		'requested_datetime'=>$ticket->getEnteredDate('c'),
 		'updated_datetime'=>$history->getEnteredDate('c'),
