@@ -486,10 +486,12 @@ class Ticket extends MongoRecord
 	/**
 	 * Returns a single issue
 	 *
+	 * Defaults to the first issue, if you don't provide an index
+	 *
 	 * @param int $index
 	 * @param Issue
 	 */
-	public function getIssue($index)
+	public function getIssue($index=0)
 	{
 		if (isset($this->data['issues'][$index])) {
 			return new Issue($this->data['issues'][$index]);

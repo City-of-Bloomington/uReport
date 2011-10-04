@@ -12,17 +12,6 @@ $format = preg_match("/\.([^.?]+)/",$_SERVER['REQUEST_URI'],$matches)
 	: 'html';
 $template = new Template('open311',$format);
 
-// Translate Open311 fields into CRM fields
-$open311Fields = array(
-	'ticket'=>array(
-		'lat'=>'latitude',
-		'long'=>'longitude',
-		'address_string'=>'location'
-	),
-	'issue'=>array(
-
-	)
-);
 
 
 // See if they're asking for a particular request (ticket)
@@ -38,6 +27,7 @@ if (isset($matches[1]) && $matches[1]) {
 			}
 			else {
 				// Not allowed to edit tickets
+				header('HTTP/1.0 403 Forbidden',true,403);
 				$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 			}
 		}
@@ -48,12 +38,14 @@ if (isset($matches[1]) && $matches[1]) {
 			}
 			else {
 				// Not allowed to see this ticket
+				header('HTTP/1.0 403 Forbidden',true,403);
 				$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 			}
 		}
 	}
 	catch (Exception $e) {
 		// Unknown ticket
+
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
@@ -73,32 +65,46 @@ else {
 				throw new Exception('missingService');
 			}
 			if ($category->allowsPosting($person)) {
-				$ticket = new Ticket();
 				$ticketData = array();
-				foreach ($open311Fields['ticket'] as $open311Field=>$crmField) {
-					if (isset($_POST[$open311Field])) {
-						$ticketData[$crmField] = $_POST[$open311Field];
+				$issueData = array('category'=>$category);
+
+				// Translate Open311 fields into CRM fields
+				$open311Fields = array(
+					'ticketData'=>array(
+						'lat'=>'latitude',
+						'long'=>'longitude',
+						'address_string'=>'location'
+					),
+					'issueData'=>array(
+						'description'=>'description',
+						'attribute'=>'customFields'
+					)
+				);
+				foreach ($_POST as $key=>$value) {
+					if (isset($open311Fields['ticketData'][$key])) {
+						$ticketData[$key] = $value;
+					}
+					elseif (isset($open311Fields['issueData'][$key])) {
+						$issueData[$key] = $value;
 					}
 				}
+
+				$ticket = new Ticket();
 				$ticket->set($ticketData);
 
 				$issue = new Issue();
-				$issueData = array(
-					'category'=>$category,
-					'customFields'=>$_POST['attribute']
-				);
-				if (isset($_POST['description'])) {
-					$issueData['notes'] = $_POST['description'];
-				}
 				$issue->set($issueData);
 
 				// Create the History entries
 				$open = new History();
 				$open->setAction('open');
 				$ticket->updateHistory($open);
+				$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 			}
 			else {
 				// Not allowed to create tickets for this category
+				header('HTTP/1.0 403 Forbidden',true,403);
+				$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 			}
 		}
 		catch (Exception $e) {

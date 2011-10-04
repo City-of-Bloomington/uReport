@@ -24,19 +24,21 @@ if (count($media)) {
 }
 
 echo "
-<request>
-	<service_request_id>{$this->ticket->getId()}</service_request_id>
-	<status>{$this->ticket->getStatus()}</status>
-	<service_name>$service_name</service_name>
-	<service_code>$service_code</service_code>
-	<description>$description</description>
-	<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
-	<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
-	<address>$address</address>
-	<address_id>{$this->ticket->getAddress_id()}</address_id>
-	<zipcode>$zipcode</zipcode>
-	<lat>{$this->ticket->getLatitude()}</lat>
-	<long>{$this->ticket->getLongitude()}</long>
-	<media_url>$media_url</media_url>
-</request>
+<service_requests>
+	<request>
+		<service_request_id>{$this->ticket->getId()}</service_request_id>
+		<status>{$this->ticket->getStatus()}</status>
+		<service_name>$service_name</service_name>
+		<service_code>$service_code</service_code>
+		<description>$description</description>
+		<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
+		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
+		<address>$address</address>
+		<address_id>{$this->ticket->getAddress_id()}</address_id>
+		<zipcode>$zipcode</zipcode>
+		<lat>{$this->ticket->getLatitude()}</lat>
+		<long>{$this->ticket->getLongitude()}</long>
+		<media_url>$media_url</media_url>
+	</request>
+</service_requests>
 ";
