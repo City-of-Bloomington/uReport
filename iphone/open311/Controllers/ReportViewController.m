@@ -25,6 +25,7 @@
 #import "Open311.h"
 #import "ActionSheetPicker.h"
 #import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
 #import "SBJson.h"
 #import "LocationChooserViewController.h"
 #import "TextFieldViewController.h"
@@ -38,6 +39,7 @@
 
 @synthesize previousServerURL;
 @synthesize currentService;
+@synthesize service_definition;
 @synthesize reportForm;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -52,6 +54,7 @@
 - (void)dealloc
 {
     [reportForm release];
+    [service_definition release];
     [currentService release];
     [previousServerURL release];
     [reportTableView release];
@@ -74,6 +77,7 @@
     // Do any additional setup after loading the view from its nib.
     [self.navigationItem setTitle:@"New Issue"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Service" style:UIBarButtonItemStylePlain target:self action:@selector(chooseService)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postReport)];
 
     // If the user hasn't chosen a server yet, send them to the MyServers tab
     if (![[Settings sharedSettings] currentServer]) {
@@ -97,6 +101,7 @@
     NSString *currentServerURL = [[[Settings sharedSettings] currentServer] objectForKey:@"URL"];
     if (![self.previousServerURL isEqualToString:currentServerURL]) {
         self.currentService = nil;
+        self.service_definition = nil;
         self.previousServerURL = currentServerURL;
         [self chooseService];
     }
@@ -118,6 +123,11 @@
  * The template for the report is Report.plist in the bundle.
  * We clear out the report by reloading it from the template.
  * Then, we add in any custom attributes defined in the service.
+ *
+ * Todo: Load and populate the device_id
+ *
+ * Todo: Load in fields for firstname, lastname, email, and phone
+ *       populate them with the user's information from the iPhone
  */
 - (void)initReportForm
 {
@@ -125,6 +135,20 @@
     NSPropertyListFormat format;
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:[[NSBundle mainBundle] pathForResource:@"Report" ofType:@"plist"]];
     self.reportForm = (NSMutableDictionary *)[NSPropertyListSerialization propertyListWithData:data options:NSPropertyListMutableContainersAndLeaves format:&format error:&error];
+    [self.reportForm setObject:[self.currentService objectForKey:@"service_code"] forKey:@"service_code"];
+    /*
+     // Load the iPhone's Device ID
+     [self.reportForm setObject:@"" forKey:@"device_id"];
+     */
+    
+    /*
+     // Load the user's firstname, lastname, email, and phone number
+     [self.reportForm setObject:NULL forKey:@"first_name"];
+     [self.reportForm setObject:NULL forKey:@"last_name"];
+     [self.reportForm setObject:NULL forKey:@"email"];
+     [self.reportForm setObject:NULL forKey:@"phone"];
+     */
+    
     [reportTableView reloadData];
 }
 
@@ -137,6 +161,7 @@
 - (void)chooseService
 {
     self.currentService = nil;
+    self.service_definition = nil;
     
     Open311 *open311 = [Open311 sharedOpen311];
     if (open311.services) {
@@ -151,7 +176,6 @@
         [alert show];
         [alert release];
     }
-    [self initReportForm];
 }
 
 /**
@@ -167,31 +191,120 @@
 
 /**
  * Queries the service defintion and populates reportForm with all the attributes
+ *
+ * If the current service does not have any metadata, there is no need 
+ * to load the service_definition.  The defintion is only there to provide
+ * descriptions of the custom attributes the service is expecting.
  */
 - (void)loadServiceDefition:(NSString *)service_code
 {
-    NSURL *url = [[[[Open311 sharedOpen311] baseURL] URLByAppendingPathComponent:@"services"] URLByAppendingPathComponent:[service_code stringByAppendingString:@".json"]];
-    DLog(@"Loading URL: %@",[url absoluteString]);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request startSynchronous];
-    if (![request error] && [request responseStatusCode]==200) {
-        NSDictionary *service_definition = [[request responseString] JSONValue];
-        for (NSDictionary *attribute in [service_definition objectForKey:@"attributes"]) {
-            NSString *code = [attribute objectForKey:@"code"];
-            DLog(@"Attribute found: %@",code);
-            [[self.reportForm objectForKey:@"fields"] addObject:code];
-            [[self.reportForm objectForKey:@"labels"] setObject:[attribute objectForKey:@"description"] forKey:code];
-            [[self.reportForm objectForKey:@"types"] setObject:[attribute objectForKey:@"datatype"] forKey:code];
-            
-            NSDictionary *values = [attribute objectForKey:@"values"];
-            if (values) {
-                [[self.reportForm objectForKey:@"values"] setObject:values forKey:code];
-                DLog(@"Added values for %@",code);
+    self.service_definition = nil;
+    
+    // Only try and load service definition from the server if there's metadata
+    if ([[self.currentService objectForKey:@"metadata"] boolValue]) {
+        NSURL *url = [[[[Open311 sharedOpen311] baseURL] URLByAppendingPathComponent:@"services"] URLByAppendingPathComponent:[service_code stringByAppendingString:@".json"]];
+        DLog(@"Loading URL: %@",[url absoluteString]);
+        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+        [request startSynchronous];
+        if (![request error] && [request responseStatusCode]==200) {
+            self.service_definition = [[request responseString] JSONValue];
+            for (NSDictionary *attribute in [self.service_definition objectForKey:@"attributes"]) {
+                NSString *code = [attribute objectForKey:@"code"];
+                DLog(@"Attribute found: %@",code);
+                [[self.reportForm objectForKey:@"fields"] addObject:code];
+                [[self.reportForm objectForKey:@"labels"] setObject:[attribute objectForKey:@"description"] forKey:code];
+                [[self.reportForm objectForKey:@"types"] setObject:[attribute objectForKey:@"datatype"] forKey:code];
+                
+                NSDictionary *values = [attribute objectForKey:@"values"];
+                if (values) {
+                    [[self.reportForm objectForKey:@"values"] setObject:values forKey:code];
+                    DLog(@"Added values for %@",code);
+                }
+                
             }
-            
+            // The fields the user needs to report on have changed
+            [reportTableView reloadData];
         }
-        // The fields the user needs to report on have changed
-        [reportTableView reloadData];
+    }
+}
+
+/**
+ * Sends the report to the Open311 server
+ *
+ * We need to use the service definition so we can know which fields
+ * are the custom attributes.  We can hard code the references to the
+ * rest of the arguments, since they're defined in the spec.
+ *
+ * Todo: Do something with the service_request_id that comes back on success
+ */
+- (void)postReport
+{
+    NSMutableDictionary *data = [self.reportForm objectForKey:@"data"];
+    Open311 *open311 = [Open311 sharedOpen311];
+    NSURL *url = [[NSURL URLWithString:[open311.endpoint objectForKey:@"url"]] URLByAppendingPathComponent:@"requests.json"];
+    DLog(@"Creating POST to %@", url);
+    ASIFormDataRequest *post = [ASIFormDataRequest requestWithURL:url];
+    
+    // Handle all the normal arguments
+    [post setPostValue:[self.currentService objectForKey:@"service_code"] forKey:@"service_code"];
+    [post setPostValue:[data objectForKey:@"lat"] forKey:@"lat"];
+    [post setPostValue:[data objectForKey:@"long"] forKey:@"long"];
+    [post setPostValue:[data objectForKey:@"address_string"] forKey:@"address_string"];
+    [post setPostValue:[data objectForKey:@"description"] forKey:@"description"];
+    
+    // Handle any custom attributes in the service definition
+    if (self.service_definition) {
+        for (NSDictionary *attribute in [self.service_definition objectForKey:@"attributes"]) {
+            NSString *code = [attribute objectForKey:@"code"];
+            
+            // multivaluelist needs special handling, but all the rest are just strings
+            if ([[[self.reportForm objectForKey:@"types"] objectForKey:code] isEqualToString:@"multivaluelist"]) {
+                for (NSString *value in [data objectForKey:code]) {
+                    [post setPostValue:[data objectForKey:code] forKey:[NSString stringWithFormat:@"attribute[%@][]",code]];
+                }
+            }
+            else {
+                [post setPostValue:[data objectForKey:code] forKey:[NSString stringWithFormat:@"attribute[%@]",code]];
+            }
+        }
+    }
+    // Handle any Media that's been attached
+    
+    // Send in the POST
+    [post startSynchronous];
+    if (![post error] && [post responseStatusCode]==200) {
+        /*
+        // Maybe do something with the service_request_id
+        NSArray *service_requests = [[post responseString] JSONValue];
+        NSDictionary *request = [service_requests objectAtIndex:0];
+        */
+        DLog(@"%@",[post responseString]);
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report Sent" message:@"Thank you, your report has been submitted." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        // Clear the report form
+        [self initReportForm];
+    }
+    else {
+        if ([post error]) {
+            DLog(@"Error reported %@",[[post error] description]);
+        }
+        NSString *status = [NSString stringWithFormat:@"%d",[post responseStatusCode]];
+        DLog(@"Status code was %@", status);
+        NSString *message = [NSString stringWithFormat:@"An error occurred while sending your report to the server.   You might try again later."];
+        if ([post responseString]) {
+            DLog(@"%@",[post responseString]);
+            NSArray *errors = [[post responseString] JSONValue];
+            NSString *description = [[errors objectAtIndex:0] objectForKey:@"description"];
+            if (description) {
+                message = description;
+            }
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sending Failed" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
 }
 
@@ -255,12 +368,6 @@
                 selectionText = [selectionText stringByAppendingFormat:@"%@, ",[selection objectForKey:@"name"]];
             }
             cell.detailTextLabel.text = selectionText;
-        }
-        else if ([type isEqualToString:@"datetime"]) {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateStyle:kCFDateFormatterMediumStyle];
-            cell.detailTextLabel.text = [dateFormatter stringFromDate:[data objectForKey:fieldname]];
-            [dateFormatter release];
         }
         else {
             cell.detailTextLabel.text = [data objectForKey:fieldname];

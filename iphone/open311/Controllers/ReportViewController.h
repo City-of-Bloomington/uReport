@@ -19,6 +19,7 @@
 }
 @property (nonatomic, retain) NSString *previousServerURL;
 @property (nonatomic, retain) NSDictionary *currentService;
+@property (nonatomic, retain) NSDictionary *service_definition;
 @property (nonatomic, retain) NSMutableDictionary *reportForm;
 
 - (void)chooseService;
