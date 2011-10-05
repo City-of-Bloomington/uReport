@@ -17,11 +17,26 @@
 
 - (void)done
 {
-    [[self.reportForm objectForKey:@"data"] setObject:datePicker.date forKey:self.fieldname];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:kCFDateFormatterMediumStyle];
+    [[self.reportForm objectForKey:@"data"] setObject:[dateFormatter stringFromDate:datePicker.date] forKey:self.fieldname];
+    [dateFormatter release];
     [super done];
 }
 
 #pragma mark - View lifecycle
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSString *date = [[self.reportForm objectForKey:@"data"] objectForKey:self.fieldname];
+    if (date) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:kCFDateFormatterMediumStyle];
+        datePicker.date = [dateFormatter dateFromString:date];
+        [dateFormatter release];
+    }
+    [super viewWillAppear:animated];
+}
 
 - (void)viewDidUnload
 {
