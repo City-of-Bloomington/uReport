@@ -714,19 +714,21 @@ class Person extends MongoRecord
 	 */
 	public function sendNotification($message,$subject=null,Person $personFrom=null)
 	{
-		if (!$personFrom) {
-			$personFrom = new Person();
-			$personFrom->setEmail(APPLICATION_NAME."@$_SERVER[SERVER_NAME]");
+		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
+			if (!$personFrom) {
+				$personFrom = new Person();
+				$personFrom->setEmail(APPLICATION_NAME."@$_SERVER[SERVER_NAME]");
+			}
+			if (!$subject) {
+				$subject = APPLICATION_NAME.' Notification';
+			}
+			$mail = new Zend_Mail();
+			$mail->addTo($this->getEmail(),$this->getFullname());
+			$mail->setFrom($personFrom->getEmail(),$personFrom->getFullname());
+			$mail->setSubject($subject);
+			$mail->setBodyText($message);
+			$mail->send();
 		}
-		if (!$subject) {
-			$subject = APPLICATION_NAME.' Notification';
-		}
-		$mail = new Zend_Mail();
-		$mail->addTo($this->getEmail(),$this->getFullname());
-		$mail->setFrom($personFrom->getEmail(),$personFrom->getFullname());
-		$mail->setSubject($subject);
-		$mail->setBodyText($message);
-		$mail->send();
 	}
 
 	/**
