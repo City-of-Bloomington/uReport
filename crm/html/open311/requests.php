@@ -45,7 +45,6 @@ if (isset($matches[1]) && $matches[1]) {
 	}
 	catch (Exception $e) {
 		// Unknown ticket
-
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
@@ -60,13 +59,14 @@ else {
 	}
 	if (isset($_POST['service_code'])) {
 		// Create a new Ticket
+		echo "attempting to create a new ticket\n";
 		try {
 			if (!isset($category)) {
 				throw new Exception('missingService');
 			}
 			if ($category->allowsPosting($person)) {
 				$ticketData = array();
-				$issueData = array('category'=>$category);
+				$issueData = array();
 
 				// Translate Open311 fields into CRM fields
 				$open311Fields = array(
@@ -81,15 +81,19 @@ else {
 					)
 				);
 				foreach ($_POST as $key=>$value) {
-					if (isset($open311Fields['ticketData'][$key])) {
-						$ticketData[$key] = $value;
-					}
-					elseif (isset($open311Fields['issueData'][$key])) {
-						$issueData[$key] = $value;
+					$value = trim($value);
+					if ($value) {
+						if (isset($open311Fields['ticketData'][$key])) {
+							$ticketData[$key] = $value;
+						}
+						elseif (isset($open311Fields['issueData'][$key])) {
+							$issueData[$key] = $value;
+						}
 					}
 				}
 
 				$ticket = new Ticket();
+				$ticket->setCategory($category);
 				$ticket->set($ticketData);
 
 				$issue = new Issue();
@@ -99,7 +103,8 @@ else {
 				$open = new History();
 				$open->setAction('open');
 				$ticket->updateHistory($open);
-				$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
+				print_r($ticket);
+				#$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 			}
 			else {
 				// Not allowed to create tickets for this category
