@@ -9,12 +9,12 @@ $errors = array();
 foreach ($this->errorMessages as $e) {
 	ob_start();
 	$error = $e->getMessage();
-	if (file_exists(APPLICATION_HOME."/blocks/xml/errorMessages/$error.inc")) {
-		include APPLICATION_HOME."/blocks/xml/errorMessages/$error.inc";
+	if (file_exists(APPLICATION_HOME."/blocks/json/errorMessages/$error.inc")) {
+		include APPLICATION_HOME."/blocks/json/errorMessages/$error.inc";
 	}
 	else {
-		echo "<error><description>$error</description></error>";
+		echo "{\"description\":\"$error\"}";
 	}
 	$errors[] = ob_get_clean();
 }
-echo '<errors>'.implode('',$errors).'</errors>';
+echo '['.implode(',',$errors).']';

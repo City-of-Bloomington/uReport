@@ -7,6 +7,7 @@
 if (isset($_GET['callback'])) {
 	echo $_GET['callback'].'(';
 }
+include FRAMEWORK.'/errorMessages.php';
 echo $this->includeBlocks();
 if (isset($_GET['callback'])) {
 	echo ');';

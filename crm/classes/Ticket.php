@@ -59,6 +59,23 @@ class Ticket extends MongoRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
+		if (!$this->getCategory()) {
+			throw new Exception('tickets/missingCategory');
+		}
+
+		// We need at least a location (address or lat/long) or a description
+		// an empty ticket does us no good
+		$issue = $this->getIssue();
+		if (!$issue) {
+			throw new Exception('tickets/missingIssue');
+		}
+		if (!$issue->getDescription() && !$this->getLocation()
+			&& !($this->getLatitude() && $this->getLongitude()) ) {
+			throw new Exception('missingRequiredFields');
+		}
+
+		// The rest of these fields can be populated, if they're not provided
+
 		if (!$this->data['status']) {
 			$this->data['status'] = 'open';
 		}
@@ -82,6 +99,7 @@ class Ticket extends MongoRecord
 				$this->setAssignedPerson($_SESSION['USER']);
 			}
 		}
+
 	}
 
 	/**

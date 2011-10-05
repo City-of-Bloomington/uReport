@@ -59,7 +59,6 @@ else {
 	}
 	if (isset($_POST['service_code'])) {
 		// Create a new Ticket
-		echo "attempting to create a new ticket\n";
 		try {
 			if (!isset($category)) {
 				throw new Exception('missingService');
@@ -99,12 +98,24 @@ else {
 				$issue = new Issue();
 				$issue->set($issueData);
 
+				$ticket->updateIssues($issue);
+
 				// Create the History entries
 				$open = new History();
 				$open->setAction('open');
 				$ticket->updateHistory($open);
-				print_r($ticket);
-				#$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
+
+				// Try and save the ticket
+				try {
+					echo "Trying to save ticket\n";
+					$ticket->save();
+					$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
+				}
+				catch (Exception $e) {
+					header('HTTP/1.0 400 Bad Request',true,400);
+					$_SESSION['errorMessages'][] = $e;
+				}
+
 			}
 			else {
 				// Not allowed to create tickets for this category
@@ -113,6 +124,7 @@ else {
 			}
 		}
 		catch (Exception $e) {
+			header('HTTP/1.0 400 Bad Request',true,400);
 			$_SESSION['errorMessages'][] = $e;
 		}
 	}

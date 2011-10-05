@@ -55,7 +55,7 @@ class Issue extends MongoRecord
 	public function validate($preliminary=false)
 	{
 		if (!$this->getType()) {
-			throw new Exception('missingRequiredFields');
+			$this->setType('Request');
 		}
 
 		if (isset($_SESSION['USER'])) {

@@ -1,2 +1,3 @@
 <?php
-	echo $this->includeBlocks();
+include FRAMEWORK.'/errorMessages.php';
+echo $this->includeBlocks();
