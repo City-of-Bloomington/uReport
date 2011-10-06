@@ -11,6 +11,7 @@
 #import "SBJson.h"
 #import "SynthesizeSingleton.h"
 #import "Settings.h"
+#import "ActionSheetPicker.h"
 
 @implementation Open311
 SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
@@ -38,6 +39,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
     [super dealloc];
 }
 
+/**
+ * Clears out all the current data and reloads Open311 data from the provided URL
+ */
 - (void)reload:(NSURL *)url
 {
     self.endpoint = nil;
@@ -82,5 +86,27 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Open311);
         DLog(@"Loaded %u services",[self.services count]);
     }
 }
+/**
+ * Opens the picker for the user to choose a service from the current server
+ *
+ * We're using ActionSheetPicker written by Tim Cinel
+ * It requires us to pass in a plain NSArray of strings to choose from
+ */
+- (void)chooseServiceForView:(UIView *)view target:(id)target action:(SEL)action
+{
+    if (self.services) {
+        NSMutableArray *data = [NSMutableArray array];
+        for (NSDictionary *service in self.services) {
+            [data addObject:[service objectForKey:@"service_name"]];
+        }
+        [ActionSheetPicker displayActionPickerWithView:view data:data selectedIndex:0 target:target action:action title:@"Choose Service"];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No services" message:@"No services.  Please choose a different server" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+}
+
 
 @end

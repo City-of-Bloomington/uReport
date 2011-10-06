@@ -153,32 +153,19 @@
 }
 
 /**
- * Opens the picker for the user to choose a service from the current server
- *
- * We're using ActionSheetPicker written by Tim Cinel
- * It requires us to pass in a plain NSArray of strings to choose from
+ * Tells the Open311 to open the service picker
  */
 - (void)chooseService
 {
     self.currentService = nil;
     self.service_definition = nil;
     
-    Open311 *open311 = [Open311 sharedOpen311];
-    if (open311.services) {
-        NSMutableArray *data = [NSMutableArray array];
-        for (NSDictionary *service in [[Open311 sharedOpen311] services]) {
-            [data addObject:[service objectForKey:@"service_name"]];
-        }
-        [ActionSheetPicker displayActionPickerWithView:self.view data:data selectedIndex:0 target:self action:@selector(didSelectService::) title:@"Choose Service"];
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No services" message:@"No services to report to.  Please choose a different server" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
+    [[Open311 sharedOpen311] chooseServiceForView:self.view target:self action:@selector(didSelectService::)];
 }
 
 /**
+ * Handler for the Open311 service picker
+ *
  * Sets the user-chosen service and loads it's service definition
  */
 - (void)didSelectService:(NSNumber *)selectedIndex :(id)element
@@ -186,7 +173,7 @@
     self.currentService = [[[Open311 sharedOpen311] services] objectAtIndex:[selectedIndex integerValue]];
     [self.navigationItem setTitle:[self.currentService objectForKey:@"service_name"]];
     [self initReportForm];
-    [self loadServiceDefition:[self.currentService objectForKey:@"service_code"]];
+    [self loadServiceDefinition:[self.currentService objectForKey:@"service_code"]];
 }
 
 /**
@@ -196,7 +183,7 @@
  * to load the service_definition.  The defintion is only there to provide
  * descriptions of the custom attributes the service is expecting.
  */
-- (void)loadServiceDefition:(NSString *)service_code
+- (void)loadServiceDefinition:(NSString *)service_code
 {
     self.service_definition = nil;
     
@@ -234,8 +221,6 @@
  * We need to use the service definition so we can know which fields
  * are the custom attributes.  We can hard code the references to the
  * rest of the arguments, since they're defined in the spec.
- *
- * Todo: Do something with the service_request_id that comes back on success
  */
 - (void)postReport
 {
@@ -269,16 +254,27 @@
         }
     }
     // Handle any Media that's been attached
+    // Todo:
     
     // Send in the POST
     [post startSynchronous];
     if (![post error] && [post responseStatusCode]==200) {
-        /*
-        // Maybe do something with the service_request_id
+        DLog(@"%@",[post responseString]);
+        
+        // Save the request into MyRequests.plist, so we can display it later.
+        // We'll need to include enough information so we ask the Open311 
+        // server for new information later on.
         NSArray *service_requests = [[post responseString] JSONValue];
         NSDictionary *request = [service_requests objectAtIndex:0];
-        */
-        DLog(@"%@",[post responseString]);
+        NSArray *storedData = [NSArray arrayWithObjects:
+                               [[Settings sharedSettings] currentServer],
+                               self.currentService,
+                               [request objectForKey:@"service_request_id"], 
+                               [NSDate date], nil];
+        NSArray *storedKeys = [NSArray arrayWithObjects:@"server", @"service", @"service_request_id", @"date", nil];
+        [[[Settings sharedSettings] myRequests] addObject:[NSDictionary dictionaryWithObjects:storedData forKeys:storedKeys]];
+        DLog(@"POST saved, count is now %@", [[Settings sharedSettings] myRequests]);
+        
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report Sent" message:@"Thank you, your report has been submitted." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
@@ -286,6 +282,8 @@
         
         // Clear the report form
         [self initReportForm];
+        
+        self.tabBarController.selectedIndex = 2;
     }
     else {
         if ([post error]) {

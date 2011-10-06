@@ -25,6 +25,6 @@
 - (void)chooseService;
 - (void)initReportForm;
 - (void)didSelectService:(NSNumber *)selectedIndex:(id)element;
-- (void)loadServiceDefition:(NSString *)service_code;
+- (void)loadServiceDefinition:(NSString *)service_code;
 
 @end

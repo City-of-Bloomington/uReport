@@ -71,12 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==0) {
-        return [[[Settings sharedSettings] myServers] count];
-    }
-    else {
-        return 0;
-    }
+    return [[[Settings sharedSettings] myServers] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +90,6 @@
 {
     [super setEditing:editing animated:animated];
     [self.myServersTableView setEditing:editing animated:animated];
-    
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

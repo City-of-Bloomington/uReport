@@ -48,6 +48,12 @@ crm/templates/xml/partial.inc -text
 iphone/mockups/iphonemockups.png -text
 iphone/open311/Controllers/Base/BaseFieldViewController.h -text
 iphone/open311/Controllers/Base/BaseFieldViewController.m -text
+iphone/open311/Controllers/ListViewController.h -text
+iphone/open311/Controllers/ListViewController.m -text
+iphone/open311/Controllers/ListViewController.xib -text
+iphone/open311/Controllers/MyReportsViewController.h -text
+iphone/open311/Controllers/MyReportsViewController.m -text
+iphone/open311/Controllers/MyReportsViewController.xib -text
 iphone/open311/Controllers/ReportFields/DateFieldViewController.h -text
 iphone/open311/Controllers/ReportFields/DateFieldViewController.m -text
 iphone/open311/Controllers/ReportFields/DateFieldViewController.xib -text
@@ -63,6 +69,9 @@ iphone/open311/Controllers/ReportFields/SelectSingleViewController.xib -text
 iphone/open311/Controllers/ReportFields/StringFieldViewController.h -text
 iphone/open311/Controllers/ReportFields/StringFieldViewController.m -text
 iphone/open311/Controllers/ReportFields/StringFieldViewController.xib -text
+iphone/open311/Controllers/SingleReportViewController.h -text
+iphone/open311/Controllers/SingleReportViewController.m -text
+iphone/open311/Controllers/SingleReportViewController.xib -text
 iphone/open311/Images/cross-hairs-small-black-cropped.png -text
 iphone/open311/Images/home_w.png -text
 iphone/open311/Images/iconLocation.png -text

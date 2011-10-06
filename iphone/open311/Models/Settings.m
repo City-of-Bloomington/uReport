@@ -13,7 +13,7 @@
 @implementation Settings
 SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
 
-@synthesize availableServers,myServers;
+@synthesize availableServers,myServers,myRequests;
 @synthesize currentServer;
 
 
@@ -28,6 +28,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
 
 - (void) dealloc
 {
+    [myRequests release];
     [myServers release];
     [availableServers release];
     [currentServer release];
@@ -35,12 +36,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
 }
 
 /**
- * Loads data from three sources
- *
- * We're using three sources:
- * Available servers come from a plist in the main bundle
- * My Servers are saved out to a plist in the user domain
- * All the rest of the global variables come in from the Settings bundle
+ * Loads all the stored data
  */
 - (void) load
 {
@@ -54,18 +50,45 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(Settings);
         self.myServers = [NSMutableArray arrayWithContentsOfFile:plistPath];
     }
     
+    plistPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"MyRequests.plist"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+        self.myRequests = [[NSMutableArray alloc] init];
+    }
+    else {
+        self.myRequests = [NSMutableArray arrayWithContentsOfFile:plistPath];
+    }
+    
     self.currentServer = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentServer"];
 }
 
 /**
- * Saves data back for two of our sources
+ * Helper function for populating data
  *
- * We only need to save two of our sources (My Servers and Settings)
- * This is because data in Available Servers should never change
+ * Will load data from the given plist if the file exists.
+ * Otherwise, it just creates an empty NSMutableArray that can later
+ * be saved as the desired filename, so it's ready next time
+ */
+- (void)loadPlistIntoArray:(NSMutableArray *)array plistFilename:(NSString *)plistFilename
+{
+    NSString *plistPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:plistFilename];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+        array = [[NSMutableArray alloc] init];
+    }
+    else {
+        array = [NSMutableArray arrayWithContentsOfFile:plistPath];
+    }
+}
+
+/**
+ * Saves all the data we've collected
+ *
+ * We can ignore Available Servers, because that data should never change
  */
 - (void) save
 {
-    [myServers writeToFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"MyServers.plist"] atomically:TRUE];
+    [self.myServers writeToFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"MyServers.plist"] atomically:TRUE];
+    [self.myRequests writeToFile:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"MyRequests.plist"] atomically:TRUE];
     
     [[NSUserDefaults standardUserDefaults] setObject:self.currentServer forKey:@"currentServer"];
     [[NSUserDefaults standardUserDefaults] synchronize];

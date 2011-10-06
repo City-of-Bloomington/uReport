@@ -44,6 +44,10 @@
     if (![[Settings sharedSettings] currentServer]) {
         self.tabBarController.selectedIndex = 3;
     }
+    
+    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:[UIImage imageNamed:@"map.png"], [UIImage imageNamed:@"list.png"], nil]];
+    [segmentedControl addTarget:self action:@selector(switchViewStyle:) forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:segmentedControl];
 }
 
 - (void)viewDidUnload
@@ -56,6 +60,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+}
+
+#pragma mark - Segmented Controller
+- (IBAction)handleSegmentAction:(id)sender
+{
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    if (segmentedControl.selectedSegmentIndex == 1) {
+    }
 }
 
 

@@ -14,5 +14,5 @@
 
 @interface MapViewController : BaseMapViewController
 
-
+- (IBAction)handleSegmentAction:(id)sender;
 @end

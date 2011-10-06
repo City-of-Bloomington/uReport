@@ -13,9 +13,11 @@
 @public
     NSDictionary *availableServers;
     NSMutableArray *myServers;
+    NSMutableArray *myRequests;
 }
 @property (nonatomic, retain) NSDictionary *availableServers;
 @property (nonatomic, retain) NSMutableArray *myServers;
+@property (nonatomic, retain) NSMutableArray *myRequests;
 
 @property (nonatomic, retain) NSDictionary *currentServer;
 
@@ -24,5 +26,7 @@
 - (void)load;
 - (void)save;
 - (void)switchToServer:(NSDictionary *)server;
+
+- (void)loadPlistIntoArray:(NSMutableArray *)array plistFilename:(NSString *)plistFilename;
 
 @end

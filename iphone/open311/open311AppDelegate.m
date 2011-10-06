@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import "ReportViewController.h"
 #import "MapViewController.h"
+#import "MyReportsViewController.h"
 #import "MyServersViewController.h"
 #import "Settings.h"
 #import "Locator.h"
@@ -31,14 +32,15 @@
 {
     HomeViewController* home = [[HomeViewController alloc] init];
     ReportViewController* report = [[ReportViewController alloc] init];
-    MapViewController* map = [[MapViewController alloc] init];
+    MyReportsViewController* myReports = [[MyReportsViewController alloc] init];
     MyServersViewController* servers = [[MyServersViewController alloc] init];
+    //MapViewController* map = [[MapViewController alloc] init];
     
     UINavigationController* reportNav = [[UINavigationController alloc] initWithRootViewController:report];
-    UINavigationController* issueNav = [[UINavigationController alloc] initWithRootViewController:map];
     UINavigationController* serverNav = [[UINavigationController alloc] initWithRootViewController:servers];
-    reportNav.navigationBar.barStyle = UIBarStyleBlack;
+    UINavigationController* issueNav = [[UINavigationController alloc] initWithRootViewController:myReports];
     issueNav.navigationBar.barStyle = UIBarStyleBlack;
+    reportNav.navigationBar.barStyle = UIBarStyleBlack;
     serverNav.navigationBar.barStyle = UIBarStyleBlack;
 
     self.tabBarController = [[UITabBarController alloc] init];
@@ -53,10 +55,11 @@
     
     [home release];
     [report release];
-    [map release];
+    [myReports release];
+    //[map release];
     [servers release];
     [reportNav release];
-    [issueNav release];
+    //[issueNav release];
     [serverNav release];
     [self.tabBarController release];
     
