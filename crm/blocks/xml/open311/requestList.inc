@@ -13,6 +13,8 @@ foreach ($this->ticketList as $ticket) {
 	$issue = $ticket->getIssue();
 	$description = View::escape($issue->getDescription());
 
+	$department = View::escape($this->ticket->getData('assignedPerson.department.name'));
+
 	$history = end($ticket->getHistory());
 
 	$address = View::escape($ticket->getLocation());
@@ -32,6 +34,7 @@ foreach ($this->ticketList as $ticket) {
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
 		<description>$description</description>
+		<agency_responsible>$department</agency_responsible>
 		<requested_datetime>{$ticket->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>

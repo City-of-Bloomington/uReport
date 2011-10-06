@@ -15,18 +15,20 @@ if (count($media)) {
 	$media_url = $m->getURL();
 }
 
-$request = array(
+$request = array(array(
 	'service_request_id'=>"{$this->ticket->getId()}",
 	'status'=>$this->ticket->getStatus(),
 	'service_name'=>$this->ticket->getData('category.name'),
 	'service_code'=>"{$this->ticket->getData('category._id')}",
 	'description'=>$issue->getDescription(),
+	'agency_responsible'=>$this->ticket->getData('assignedPerson.department.name'),
 	'requested_datetime'=>$this->ticket->getEnteredDate('c'),
 	'updated_datetime'=>$history->getEnteredDate('c'),
 	'address'=>$this->ticket->getLocation(),
+	'address_id'=>$this->ticket->getAddress_id(),
 	'zipcode'=>$this->ticket->getZip(),
 	'lat'=>$this->ticket->getLatitude(),
 	'long'=>$this->ticket->getLongitude(),
 	'media_url'=>$media_url
-);
+));
 echo json_encode($request);

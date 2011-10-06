@@ -11,6 +11,8 @@ $service_code = $this->ticket->getData('category._id');
 $issue = $this->ticket->getIssue();
 $description = View::escape($issue->getDescription());
 
+$department = View::escape($this->ticket->getData('assignedPerson.department.name'));
+
 $history = end($this->ticket->getHistory());
 
 $address = View::escape($this->ticket->getLocation());
@@ -31,6 +33,7 @@ echo "
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
 		<description>$description</description>
+		<agency_responsible>$department</agency_responsible>
 		<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>

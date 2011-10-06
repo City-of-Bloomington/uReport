@@ -20,7 +20,7 @@ if (isset($matches[1]) && $matches[1]) {
 	try {
 		$ticket = new Ticket($matches[1]);
 
-		if (isset($_POST)) {
+		if (isset($_POST['description'])) {
 			// Edit an existing ticket
 			if (userIsAllowed('Tickets')) {
 
@@ -45,6 +45,7 @@ if (isset($matches[1]) && $matches[1]) {
 	}
 	catch (Exception $e) {
 		// Unknown ticket
+		header('HTTP/1.0 404 Not Found',true,404);
 		$_SESSION['errorMessages'][] = $e;
 	}
 }
@@ -83,10 +84,10 @@ else {
 					$value = trim($value);
 					if ($value) {
 						if (isset($open311Fields['ticketData'][$key])) {
-							$ticketData[$key] = $value;
+							$ticketData[$open311Fields['ticketData'][$key]] = $value;
 						}
 						elseif (isset($open311Fields['issueData'][$key])) {
-							$issueData[$key] = $value;
+							$issueData[$open311Fields['issueData'][$key]] = $value;
 						}
 					}
 				}
@@ -100,14 +101,8 @@ else {
 
 				$ticket->updateIssues($issue);
 
-				// Create the History entries
-				$open = new History();
-				$open->setAction('open');
-				$ticket->updateHistory($open);
-
 				// Try and save the ticket
 				try {
-					echo "Trying to save ticket\n";
 					$ticket->save();
 					$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 				}
