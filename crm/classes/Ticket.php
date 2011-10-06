@@ -113,9 +113,11 @@ class Ticket extends MongoRecord
 		// log entries to record the open action and assignment action
 		if (!isset($this->data['_id'])) {
 			// Create the History entries
-			$open = new History();
-			$open->setAction('open');
-			$this->updateHistory($open);
+			if ($this->getEnteredByPerson()) {
+				$open = new History();
+				$open->setAction('open');
+				$this->updateHistory($open);
+			}
 
 			$assignment = new History();
 			$assignment->setAction('assignment');
@@ -846,17 +848,22 @@ class Ticket extends MongoRecord
 			'location','latitude','longitude','city','state','zip'
 		);
 		foreach ($fields as $field) {
-			if (isset($post['ticket'][$field])) {
+			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);
-				$this->$set($post['ticket'][$field]);
+				$this->$set($post[$field]);
 			}
 		}
 
-		// If the location the user posted is a valid address, overwrite what
-		// the user posted with data from the AddressService
-		$data = AddressService::getLocationData($this->getLocation());
-		if ($data) {
-			$this->setAddressServiceData($data);
+
+		// If they gave us an address, and we don't have any additional info,
+		// try and get the data from Master Address
+		if ($this->getLocation()
+			&& !($this->getLocation() || $this->getLongitude()
+				|| $this->getCity() || $this->getState() || $this->getZip())) {
+			$data = AddressService::getLocationData($this->getLocation());
+			if ($data) {
+				$this->setAddressServiceData($data);
+			}
 		}
 
 		// If the user posted any Notes for the person they're assigning

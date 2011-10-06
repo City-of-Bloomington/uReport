@@ -32,7 +32,7 @@ class History extends MongoRecord
 	public function validate()
 	{
 		if (!$this->getAction()) {
-			throw new Exception('missingRequiredFields');
+			throw new Exception('history/missingAction');
 		}
 
 		if (!$this->data['enteredDate']) {

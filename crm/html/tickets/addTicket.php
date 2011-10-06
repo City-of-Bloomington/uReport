@@ -61,7 +61,7 @@ if (!isset($currentDepartment)) {
 if(isset($_POST['ticket'])){
 	// Validate Everything and save
 	try {
-		$ticket->set($_POST);
+		$ticket->set($_POST['ticket']);
 		$issue->set($_POST['issue']);
 		$ticket->updateIssues($issue);
 		$ticket->save();
