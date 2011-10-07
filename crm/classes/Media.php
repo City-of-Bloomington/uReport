@@ -48,7 +48,9 @@ class Media extends MongoRecord
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->data['uploaded'] = new MongoDate();
-			$this->setPerson($_SESSION['USER']);
+			if (isset($_SESSION['USER'])) {
+				$this->setPerson($_SESSION['USER']);
+			}
 		}
 	}
 

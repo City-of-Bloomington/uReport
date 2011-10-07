@@ -81,7 +81,10 @@ else {
 					)
 				);
 				foreach ($_POST as $key=>$value) {
-					$value = trim($value);
+					// Attributes will come in as an array, but we still
+					// want to trim all the strings
+					$value = is_string($value) ? trim($value) : $value;
+
 					if ($value) {
 						if (isset($open311Fields['ticketData'][$key])) {
 							$ticketData[$open311Fields['ticketData'][$key]] = $value;
@@ -104,6 +107,21 @@ else {
 				// Try and save the ticket
 				try {
 					$ticket->save();
+
+					// Media can only be attached after the ticket is saved
+					// It uses the ticket_id in the directory structure
+					// Then, we need to save the ticket again to store all
+					// the media's metadata in the ticket
+					if (isset($_FILES['media'])) {
+						try {
+							$ticket->attachMedia($_FILES['media'],0);
+							$ticket->save();
+						}
+						catch (Exception $e) {
+							// Just ignore any media errors for now
+						}
+					}
+
 					$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 				}
 				catch (Exception $e) {
