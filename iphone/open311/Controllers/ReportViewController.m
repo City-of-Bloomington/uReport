@@ -237,16 +237,27 @@
     [post setPostValue:[data objectForKey:@"address_string"] forKey:@"address_string"];
     [post setPostValue:[data objectForKey:@"description"] forKey:@"description"];
     
+    UIImage *image = [data objectForKey:@"media"];
+    if (image) {
+		[post setData:UIImageJPEGRepresentation(image, 1.0) withFileName:@"media.jpg" andContentType:@"image/jpeg" forKey:@"media"];
+        // Give the media enough time to upload
+		[post setTimeOutSeconds:30];
+    }
+    
     // Handle any custom attributes in the service definition
     if (self.service_definition) {
         for (NSDictionary *attribute in [self.service_definition objectForKey:@"attributes"]) {
             NSString *code = [attribute objectForKey:@"code"];
             
-            // multivaluelist needs special handling, but all the rest are just strings
-            if ([[[self.reportForm objectForKey:@"types"] objectForKey:code] isEqualToString:@"multivaluelist"]) {
-                for (NSString *value in [data objectForKey:code]) {
-                    [post setPostValue:[data objectForKey:code] forKey:[NSString stringWithFormat:@"attribute[%@][]",code]];
+            // singlevaluelist and multivaluelist need special handling, but all the rest are just strings
+            NSString *type = [[self.reportForm objectForKey:@"types"] objectForKey:code];
+            if ([type isEqualToString:@"multivaluelist"]) {
+                for (NSDictionary *value in [data objectForKey:code]) {
+                    [post addPostValue:[value objectForKey:@"key"] forKey:[NSString stringWithFormat:@"attribute[%@][]",code]];
                 }
+            }
+            else if ([type isEqualToString:@"singlevaluelist"]) {
+                [post setPostValue:[[data objectForKey:code] objectForKey:@"key"] forKey:[NSString stringWithFormat:@"attribute[%@]",code]];
             }
             else {
                 [post setPostValue:[data objectForKey:code] forKey:[NSString stringWithFormat:@"attribute[%@]",code]];
@@ -265,15 +276,17 @@
         // We'll need to include enough information so we ask the Open311 
         // server for new information later on.
         NSArray *service_requests = [[post responseString] JSONValue];
-        NSDictionary *request = [service_requests objectAtIndex:0];
-        NSArray *storedData = [NSArray arrayWithObjects:
-                               [[Settings sharedSettings] currentServer],
-                               self.currentService,
-                               [request objectForKey:@"service_request_id"], 
-                               [NSDate date], nil];
-        NSArray *storedKeys = [NSArray arrayWithObjects:@"server", @"service", @"service_request_id", @"date", nil];
-        [[[Settings sharedSettings] myRequests] addObject:[NSDictionary dictionaryWithObjects:storedData forKeys:storedKeys]];
-        DLog(@"POST saved, count is now %@", [[Settings sharedSettings] myRequests]);
+        if (service_requests != nil) {
+            NSDictionary *request = [service_requests objectAtIndex:0];
+            NSArray *storedData = [NSArray arrayWithObjects:
+                                   [[Settings sharedSettings] currentServer],
+                                   self.currentService,
+                                   [request objectForKey:@"service_request_id"], 
+                                   [NSDate date], nil];
+            NSArray *storedKeys = [NSArray arrayWithObjects:@"server", @"service", @"service_request_id", @"date", nil];
+            [[[Settings sharedSettings] myRequests] addObject:[NSDictionary dictionaryWithObjects:storedData forKeys:storedKeys]];
+            DLog(@"POST saved, count is now %@", [[Settings sharedSettings] myRequests]);
+        }
         
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report Sent" message:@"Thank you, your report has been submitted." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];

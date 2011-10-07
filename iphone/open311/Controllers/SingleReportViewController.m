@@ -71,6 +71,14 @@
             status.text = [service_request objectForKey:@"status"];
             address.text = [service_request objectForKey:@"address"];
             department.text = [service_request objectForKey:@"agency_responsible"];
+            
+            NSString *media_url = [service_request objectForKey:@"media_url"];
+            if (media_url) {
+                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:media_url]];
+                if (data) {
+                    imageView.image = [UIImage imageWithData:data];
+                }
+            }
         }
         else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Report was garbled" message:[url absoluteString] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
