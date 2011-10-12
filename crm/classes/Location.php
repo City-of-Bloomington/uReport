@@ -48,7 +48,7 @@ class Location
 			}");
 
 			$reduce = new MongoCode("function(key,values) {
-				var result = { count:1,address_id:'',city:'' };
+				var result = { count:0,address_id:'',city:'' };
 
 				for (var i in values) {
 					result.count += values[i].count;
