@@ -38,7 +38,7 @@ if (userIsAllowed('People') && !$this->disableButtons) {
 
 
 $name = View::escape($this->person->getFullname());
-$phone = View::escape($this->person->getPhone());
+$phone = View::escape($this->person->getPhoneNumber());
 $email = View::escape($this->person->getEmail());
 $organization = View::escape($this->person->getOrganization());
 $address = View::escape($this->person->getAddress());

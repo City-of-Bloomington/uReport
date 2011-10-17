@@ -7,7 +7,7 @@
  * @param string $this->return_url
  */
 $fields = array(
-	'firstname','middlename','lastname','email','phone','organization',
+	'firstname','middlename','lastname','email','phoneNumber','organization',
 	'address','city','state','zip'
 );
 foreach ($fields as $field) {
@@ -39,8 +39,8 @@ echo "<h1>$title</h1>";
 				<td><input name="email" id="email" value="<?php echo $email; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="phone">Phone</label></td>
-				<td><input name="phone" id="phone" value="<?php echo $phone; ?>" /></td>
+			<tr><td><label for="phoneNumber">Phone</label></td>
+				<td><input name="phoneNumber" id="phoneNumber" value="<?php echo $phoneNumber; ?>" /></td>
 			</tr>
 
 			<tr><td><label for="organization">Organization</label></td>

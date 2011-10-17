@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
+$user = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
 
 // Grab the format from the file extension used in the url
 $format = preg_match("/\.([^.?]+)/",$_SERVER['REQUEST_URI'],$matches)
@@ -33,7 +33,7 @@ if (isset($matches[1]) && $matches[1]) {
 		}
 		else {
 			// Display an existing ticket
-			if ($ticket->allowsDisplay($person)) {
+			if ($ticket->allowsDisplay($user)) {
 				$template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 			}
 			else {
@@ -64,7 +64,7 @@ else {
 			if (!isset($category)) {
 				throw new Exception('missingService');
 			}
-			if ($category->allowsPosting($person)) {
+			if ($category->allowsPosting($user)) {
 				$ticketData = array();
 				$issueData = array();
 
@@ -102,6 +102,54 @@ else {
 				$issue = new Issue();
 				$issue->set($issueData);
 
+				// See if we can figure out who they're claiming to be
+				$personFields = array(
+					'first_name'=>'firstname',
+					'last_name'=>'lastname',
+					'email'=>'email',
+					'phone'=>'phone.number',
+					'device_id'=>'phone.device_id'
+				);
+				$search = array();
+				foreach ($personFields as $open311Field=>$crmField) {
+					if (!empty($_POST[$open311Field])) {
+						$search[$crmField] = $_POST[$open311Field];
+					}
+				}
+				if (count($search)) {
+					$list = new PersonList($search);
+					// If find exactly one person that matches, report the issue as that person
+					if (count($list) == 1) {
+						foreach ($list as $person) {
+							$issue->setReportedByPerson($person);
+						}
+					}
+					// Else add a new person with the info they gave us
+					else {
+						$person = new Person();
+						$personFields = array(
+							'first_name'=>'firstname',
+							'last_name'=>'lastname',
+							'email'=>'email',
+							'phone'=>'phoneNumber',
+							'device_id'=>'phoneDeviceId'
+						);
+						foreach ($personFields as $key=>$field) {
+							if (!empty($_POST[$key])) {
+								$set = 'set'.ucfirst($field);
+								$person->$set($_POST[$key]);
+							}
+						}
+						try {
+							$person->save();
+							$issue->setReportedByPerson($person);
+						}
+						catch (Exception $e) {
+							// Not sure if we should send an error message or not.
+							// For now, just ignore
+						}
+					}
+				}
 				$ticket->updateIssues($issue);
 
 				// Try and save the ticket
@@ -144,7 +192,7 @@ else {
 	else {
 		// Do a search for tickets
 		$search = array();
-		if (isset($category) && $category->allowsDisplay($person)) {
+		if (isset($category) && $category->allowsDisplay($user)) {
 			$search['category'] = $category->getId();
 		}
 		if (!empty($_REQUEST['start_date'])) {

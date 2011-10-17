@@ -271,6 +271,37 @@ class Person extends MongoRecord
 	}
 
 	/**
+	 * Returns the phone number
+	 *
+	 * 2011-10-14 Changed the structure of data[phone]
+	 * We're now going to be storing multiple fields of information
+	 * about the phone.  The getter needs to accomodate both
+	 * the old and new ways of looking for the phoneNumber
+	 *
+	 * @return string
+	 */
+	public function getPhoneNumber()
+	{
+		$phone = $this->getPhone();
+		if (is_string($phone)) {
+			return $phone;
+		}
+		elseif (isset($phone['number'])) {
+			return $phone['number'];
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPhoneDeviceId()
+	{
+		if (isset($this->data['phone']['device_id'])) {
+			return $this->data['phone']['device_id'];
+		}
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getOrganization()
@@ -366,11 +397,26 @@ class Person extends MongoRecord
 	}
 
 	/**
+	 * Sets the phone number for the person's phone
+	 *
 	 * @param string $string
 	 */
-	public function setPhone($string)
+	public function setPhoneNumber($string)
 	{
-		$this->data['phone'] = trim($string);
+		if (!is_array($this->data['phone'])) {
+			$this->data['phone'] = array();
+		}
+		$this->data['phone']['number'] = trim($string);
+	}
+
+	/**
+	 * Sets the device_id for the person's phone
+	 *
+	 * @param string $string
+	 */
+	public function setPhoneDeviceId($string)
+	{
+		$this->data['phone']['device_id'] = trim($string);
 	}
 
 	/**

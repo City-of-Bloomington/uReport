@@ -5,7 +5,10 @@
 	lastname:'',
 	organization:'',
 	email:'',
-	phone:'',
+	phone:{
+		number:'',
+		device_id:''
+	},
 	address:'',
 	city:'',
 	state:'',

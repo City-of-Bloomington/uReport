@@ -12,7 +12,7 @@ if (!isset($_SESSION['USER'])) {
 
 if (isset($_POST['firstname'])) {
 	$fields = array(
-		'firstname','middlename','lastname','email','phone','organization',
+		'firstname','middlename','lastname','email','phoneNumber','organization',
 		'address','city','state','zip'
 	);
 	foreach ($fields as $field) {
