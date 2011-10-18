@@ -88,8 +88,7 @@ var CLIENT = {
 	 */
 	handleServiceDefinitionResponse: function (r) {
 		var html = '<h2>'+service_name+' Report</h2>'+
-			//'<form onsubmit="postServiceRequest()" method="post">'+
-			'<form action="'+CLIENT.endpoint+'/requests/" method="post">'+
+			'<form name="myForm" onsubmit="return postServiceRequest(this.name)" target="myiframe">'+
 			'	<fieldset>'+				
 			'		<input type="hidden" name="service_code" value="'+r.service_code+'" />'+
 			'		<input type="hidden" name="jurisdiction_id" value="bloomington.in.gov" />'+		
@@ -177,15 +176,83 @@ var CLIENT = {
 		html += '		</table>'+
 		'		<input type="submit" value="Submit" />'+
 		'	</fieldset>'+
-		'</form>';
-		//
+		'</form>'+
+		'<iframe id=\"myiframe\"'+
+		'	name=\"myiframe\"'+
+		'	style=\"width:0px; height:0px; border: 0px\"'+
+		'	src=\"blank.html\">'+
+		'</iframe>';
 		document.getElementById('mainContent').innerHTML = html;
-		
 	},
 	/**
 	 * Send in the post from the form
 	 */
-	postServiceRequest: function () {
+	postServiceRequest: function (formName) {
+
+		theForm = document.forms[formName];
+		//var iframe = document.createElement('iframe');
+		//iframe.setAttribute('id','myiframe');
+		//var newForm = document.createElement('form');
+		var html =
+		'<html>'+
+		'	<head><title></title></head>'+
+		'	<body>'+
+		'		<form id="myform" method="post" action="">';
+		//
+		for (e=0;e<theForm.elements.length;e++) {
+			var elem = theForm.elements[e];
+			if (elem.name != "") {
+				var name = elem.name;
+				var value = "";
+				if(elem.type == 'select-multiple'){
+					html += '			<select name={name} multiple="multiple">';
+					for(var index in set){
+						value = elem.options[index].value;
+						html +='				<option selected="selected" value={value}>{value}'; 			
+					}
+					html += '			</select>';
+				}
+				else {
+					if(elem.type == "select-one"){
+						value = elem.options[elem.selectedIndex];
+					}
+					else{
+						value = elem.value;
+					}
+					html += '			<input name={name} value={value} />';
+				}
+			}
+		}
+		html += '		</form>'+
+				'	</body>'+
+				'</html>';
+	    var iframe = document.getElementById('myiframe');
+		iframe.contentWindow.document.body.innerHTML = html;
+		document.getElementById('myform').submit();
+	},
+	/**
+	 * Update the screen with the servers response to the post
+	 * 
+	 */
+	handleServicePostResponse: function (r) {
+		var id = r.service_request_id;
+		var notice = r.service_notice;
+		var account_id = r.account_id || "";		
+		var html = '<h2>'+service_name+' Post Response</h2>'+
+			'<fieldset>'+				
+			'	<table>'+
+			'		<tr><td><label>Service Request ID</label></td>'+
+			'			<td>{id}</td>'+
+			'		</tr>'+
+			'		<tr><td><label>Service Notice</label></td>'+
+			'			<td>{notice}</td>'+
+			'		</tr>'+
+			'		<tr><td><label>Account ID</label></td>'+
+			'			<td>{account_id}</td>'+
+			'		</tr>'+
+			'	</table>'+
+			'</fieldset>';
+		document.getElementById('mainContent').innerHTML = html;
 	},
 }
 window.addEventListener('load', CLIENT.init, false);

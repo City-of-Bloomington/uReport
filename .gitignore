@@ -1,3 +1,6 @@
 crm/scripts/migration/0.0-1.0/calltrack/3_tickets.php
 crm/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
 jsClient/test.html
+jsClient/test2.html
+jsClient/test3.html
+jsClient/test4.html
