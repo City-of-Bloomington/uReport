@@ -5,254 +5,136 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 var CLIENT = {
-	type: 'development',
-	baseURL: 'https://bloomington.in.gov/ureport/open311/',
-	endpoint: '',
-	service_name:'',
-	/**
-	 * Read what open311 server we want to point to and load it's discovery
-	 * We're most likely going to pass in the server via a parameter in the URL
-	 */
+	endpoint: 'https://bloomington.in.gov/ureport/open311/v2',
+	DEFAULT_LATITUDE: 39.169927,
+	DEFAULT_LONGITUDE: -86.536806,
+	service: {},
+	overlay: {},
 	init: function () {
-		// Use a regular expression to grab the parameter out of the url
-		/*
-		var r = /open311Server=(.+)/;
-		var matches = r.exec(document.location.search);
-		if (matches && matches[1]) {
-			CLIENT.baseURL = matches[1];
-			CLIENT.getDiscovery();
-		}
-		*/
-		if(CLIENT.baseURL){
-			CLIENT.getDiscovery();
+		if (CLIENT.endpoint) {
+			CLIENT.getServiceList(); 
 		}
 		else {
 			alert('No open311 server defined');
 		}
 	},
-	getDiscovery: function () {
-		YUI().use('jsonp', function (Y) {
-			Y.jsonp(CLIENT.baseURL + '/discovery.json?callback={callback}',CLIENT.handleDiscoveryResponse);
-		});
-	},
-	/**
-	 * Go through all the endpoints and pick out one for v2 of the spec
-	 */
-	handleDiscoveryResponse: function (r) {
-		CLIENT.endpoint = '';
-		for (var i in r.endpoints) {
-			if (r.endpoints[i].specification == 'http://wiki.open311.org/GeoReport_v2' &&
-				r.endpoints[i].type == CLIENT.type) {
-				CLIENT.endpoint = r.endpoints[i].url;
-			}
-		}
-		if (CLIENT.endpoint) {
-			CLIENT.getServiceList();
-		}
-		else {
-			alert('Production endpoint not found');
-		}
-	},
 	getServiceList: function () {
-		YUI().use('jsonp', function (Y) {
-			Y.jsonp(
-				CLIENT.endpoint + '/services.json?callback={callback}',
-				CLIENT.handleServiceListResponse
-			);
+		YUI().use('io','json-parse', function (Y) {
+			Y.on('io:complete', function (id, o, args) {
+				var services = Y.JSON.parse(o.responseText);
+				var select = document.getElementById('service_list');
+				for (var i in services) {
+					var option = document.createElement('option');
+					option.setAttribute('value',services[i].service_code);
+					option.text = services[i].service_name;
+					select.appendChild(option);
+				}
+			}, Y);
+			Y.io(CLIENT.endpoint + '/services.json');
 		});
 	},
-	/**
-	 * Update the screen with a drop down for the user to choose a service
-	 */
-	handleServiceListResponse: function (r) {
-		var html = '<form method="get"><fieldset><label>Choose a service<select name="service_code" id="service_code" onchange="CLIENT.getServiceDefinition(this.options[this.selectedIndex].value);service_name=this.options[this.selectedIndex].text;">';
-		for (var i in r) {
-			html += '<option value="' + r[i].service_code + '">' + r[i].service_name + '</option>';
-		}
-		html += '</select></label></fieldset></form>';
-		document.getElementById('mainContent').innerHTML = html;
- 	},
-	getServiceDefinition: function (service_code) {
-		
-		YUI().use('jsonp',function(Y) {
-			var url = CLIENT.endpoint + '/services/' + service_code + '.json?callback={callback}';
-			Y.jsonp(
-				url,
-				CLIENT.handleServiceDefinitionResponse
-			);
-		})
-	},
-	/**
-	 * Update the screen with the form for this service
-	 * this function will render the form
-	 */
-	handleServiceDefinitionResponse: function (r) {
-		var html = '<h2>'+service_name+' Report</h2>'+
-			'<form name="myForm" onsubmit="return postServiceRequest(this.name)" target="myiframe">'+
-			'	<fieldset>'+				
-			'		<input type="hidden" name="service_code" value="'+r.service_code+'" />'+
-			'		<input type="hidden" name="jurisdiction_id" value="bloomington.in.gov" />'+		
-			'		<table>'+
-			'			<tr>'+
-			'				<td><label id="first_name">First Name</label></td>'+
-			'				<td><input name="first_name" id="first_name" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="last_name">Last Name</label></td>'+
-			'				<td><input name="last_name" id="last_name" value="" /></td>'+
-			'			</tr>'+								
-			'			<tr>'+
-			'				<td><label id="phone">Phone</label></td>'+
-			'				<td><input name="phone" id="phone" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="email">Email</label></td>'+
-			'				<td><input name="email" id="email" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="address_string">Address</label></td>'+
-			'				<td><input name="address_string" id="address_string" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="address_id">Address ID</label></td>'+
-			'				<td><input name="address_id" id="address_id" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="lat">Latitude</label></td>'+
-			'				<td><input name="lat" id="lat" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="long">Longitude</label></td>'+
-			'				<td><input name="long" id="long" value="" /></td>'+
-			'			</tr>'+
-			'			<tr>'+
-			'				<td><label id="description">Description</label></td>'+
-			'				<td><textarea name="notes" id="description"></textarea>'+
-			'				</td>'+
-			'			</tr>';
-		for (var i in r.attributes) {
-			var name = r.attributes[i].code;
-			var description = r.attributes[i].description;
-			html += '			<tr>'+
-					'				<td><label id="'+name+'">'+description+'</label>'+
-					'			</td>'+
-					'			<td>';
-			if(r.attributes[i].datatype){
-				var type = r.attributes[i].datatype;
-				switch(type){
-					case 'singlevaluelist':
-						html += '<select name="'+name+'" id="'+name+'">';
-						for(var j in r.attributes[i].values){
-							var key = r.attributes[i].values[j].key;
-							var value= r.attributes[i].values[j].name;
-							html += '				<option value="'+key+'">'+value+'</optoin>';						
-						}
-						html += '			</select>';
-						break;
-					case 'multivaluelist':
-						html += '			<select multiple="multiple" name="'+name+'" id="'+name+'">';
-						for(j in r.attributes[i].values){
-							var key = r.attributes[i].values[j].key;
-							var value = r.attributes[i].values[j].name;
-							html += '				<option value="'+key+'">'+value+'</optoin>';						
-						}
-						html += '			</select>';
-						break;
-					case 'text':
-						html += '			<textarea name="'+name+'" id="'+name+'"></textarea>';
-						break;
-					case 'string':
-					case 'number':
-					case 'datetime':
-					default:	
-						html += '			<input id="'+name+'" name="'+name+'" />';
+	getServiceDefinition: function (select) {
+		CLIENT.service.name = select.options[select.selectedIndex].text;
+		YUI().use('io', 'json-parse', function(Y) {
+			Y.on('io:complete', function (id, o, args) {
+				CLIENT.service = Y.JSON.parse(o.responseText);
+				var html = '';
+				for (var i in CLIENT.service.attributes) {
+					var field = CLIENT.service.attributes[i];
+					html += '<div><label for="' + field.code + '">' + field.description + ':</label><input name="' + field.code + '" /></div>';
 				}
-			}
-			else{
-				html += '			<input id="'+name+'" name="'+name+'" />';
-			}
-			html += '			</td></tr>';
-		}
-		html += '		</table>'+
-		'		<input type="submit" value="Submit" />'+
-		'	</fieldset>'+
-		'</form>'+
-		'<iframe id=\"myiframe\"'+
-		'	name=\"myiframe\"'+
-		'	style=\"width:0px; height:0px; border: 0px\"'+
-		'	src=\"blank.html\">'+
-		'</iframe>';
-		document.getElementById('mainContent').innerHTML = html;
+				document.getElementById('customfields').innerHTML = html;
+				document.getElementById('reportform').addEventListener('submit',CLIENT.postServiceRequest, false);	
+			});
+			Y.io(CLIENT.endpoint + '/services/' + select.options[select.selectedIndex].value + '.json');
+		});
 	},
 	/**
 	 * Send in the post from the form
 	 */
-	postServiceRequest: function (formName) {
-
-		theForm = document.forms[formName];
-		//var iframe = document.createElement('iframe');
-		//iframe.setAttribute('id','myiframe');
-		//var newForm = document.createElement('form');
-		var html =
-		'<html>'+
-		'	<head><title></title></head>'+
-		'	<body>'+
-		'		<form id="myform" method="post" action="">';
-		//
-		for (e=0;e<theForm.elements.length;e++) {
-			var elem = theForm.elements[e];
-			if (elem.name != "") {
-				var name = elem.name;
-				var value = "";
-				if(elem.type == 'select-multiple'){
-					html += '			<select name={name} multiple="multiple">';
-					for(var index in set){
-						value = elem.options[index].value;
-						html +='				<option selected="selected" value={value}>{value}'; 			
-					}
-					html += '			</select>';
-				}
-				else {
-					if(elem.type == "select-one"){
-						value = elem.options[elem.selectedIndex];
-					}
-					else{
-						value = elem.value;
-					}
-					html += '			<input name={name} value={value} />';
-				}
-			}
-		}
-		html += '		</form>'+
-				'	</body>'+
-				'</html>';
-	    var iframe = document.getElementById('myiframe');
-		iframe.contentWindow.document.body.innerHTML = html;
-		document.getElementById('myform').submit();
+	postServiceRequest: function (e) {
+		e.preventDefault();
+		alert('Your report has been submitted.  Thank you');
+		document.getElementById('addressstring').innerHTML = '';
+		document.getElementById('reportform').reset();
+		/*
+		YUI().use('io-form', 'json-parse', function(Y) {
+			Y.io(CLIENT.endpoint + '/requests.json',{
+				method: 'POST',
+				form: { id: document.getElementById('reportform'), upload: true }
+			});
+		});
+		*/
+		return false;
 	},
 	/**
-	 * Update the screen with the servers response to the post
-	 * 
+	 * Open up the google map and have them choose a location
 	 */
-	handleServicePostResponse: function (r) {
-		var id = r.service_request_id;
-		var notice = r.service_notice;
-		var account_id = r.account_id || "";		
-		var html = '<h2>'+service_name+' Post Response</h2>'+
-			'<fieldset>'+				
-			'	<table>'+
-			'		<tr><td><label>Service Request ID</label></td>'+
-			'			<td>{id}</td>'+
-			'		</tr>'+
-			'		<tr><td><label>Service Notice</label></td>'+
-			'			<td>{notice}</td>'+
-			'		</tr>'+
-			'		<tr><td><label>Account ID</label></td>'+
-			'			<td>{account_id}</td>'+
-			'		</tr>'+
-			'	</table>'+
-			'</fieldset>';
-		document.getElementById('mainContent').innerHTML = html;
-	},
+	chooseLocation: function() {
+	}
 }
+
 window.addEventListener('load', CLIENT.init, false);
+document.getElementById('reportform').addEventListener('submit', CLIENT.postServiceRequest, false);
+
+YUI().use('node','overlay',function(Y) {
+	var overlay = new Y.Overlay({
+		srcNode:'#locationchooser',
+		xy: [20,60],
+		bodyContent: '<div id="location_map"></div>',
+		footerContent:'<span class="button"><span class="submit"><button type="button" id="useThisLocation">Use this location</button></span></span><span class="button"><span class="cancel"><button type="button">Cancel</button></span></span>',
+	});
+	overlay.render();
+	overlay.hide();
+	Y.on('click',Y.bind(overlay.hide, overlay),'#locationchooser .cancel button');
+
+	Y.on('click',function(e) {
+		e.preventDefault();
+		overlay.show();
+		var geocoder = new google.maps.Geocoder();
+		var map = new google.maps.Map(document.getElementById('location_map'), {
+			zoom: 14,
+			center: new google.maps.LatLng(CLIENT.DEFAULT_LATITUDE, CLIENT.DEFAULT_LONGITUDE),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				map.setCenter(new google.maps.LatLng(
+					position.coords.latitude,position.coords.longitude
+				));
+			});
+		}
+		var crosshairs = new google.maps.Marker({
+			map: map,
+			icon:'cross-hairs-small-yellow-cropped.png'
+		});
+		crosshairs.bindTo('position',map,'center');
+
+		Y.on('click',function(e) {
+			document.getElementById('lat').value = map.getCenter().lat();
+			document.getElementById('long').value = map.getCenter().lng();
+			geocoder.geocode({latLng:map.getCenter()}, function(results,status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					if (results[0]) {
+						var address = '';
+						for (var i=0; i<results[0].address_components.length; i++) {
+							switch (results[0].address_components[i].types[0]) {
+								case 'street_number':
+									address = results[0].address_components[i].long_name + ' ';
+									break;
+								case 'route':
+									address += results[0].address_components[i].long_name;
+									break;
+							}
+						}
+						document.getElementById('address').value = address;
+						document.getElementById('addressstring').innerHTML = address;
+					}
+				}
+			});
+			overlay.hide();
+		},'#useThisLocation');
+	},'#openMapButton');
+});
+
+

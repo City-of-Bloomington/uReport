@@ -10,6 +10,20 @@
 		Open311
 	</div>
 	<div id="mainContent">
+		<div id="services">
+			<form>
+				<fieldset>
+					<label>
+						Services
+						<select name="service_list" id="service_list" onchange="CLIENT.getServiceDefinition(this);">
+						<option value=""></option>'
+						</select>
+					</label>
+				</fieldset>
+			</form>
+		</div>
+		<div id="report">
+		</div>
 	</div>
 </body>
 <script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
