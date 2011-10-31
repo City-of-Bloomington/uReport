@@ -9,6 +9,7 @@ echo "<services>";
 foreach ($this->categoryList as $category) {
 	$service_code = "{$category->getId()}";
 	$service_name = View::escape($category->getName());
+	$group = View::escape($category->getGroup());
 	$description = View::escape($category->getDescription());
 	$metadata = count($category->getCustomFields()) ? 'true' : 'false';
 
@@ -19,7 +20,7 @@ foreach ($this->categoryList as $category) {
 		<type>realtime</type>
 		<metadata>$metadata</metadata>
 		<keywords></keywords>
-		<group></group>
+		<group>$group</group>
 		<description>$description</description>
 	</service>
 	";

@@ -49,7 +49,7 @@ Zend_Loader_Autoloader::getInstance();
  * YUI
  * What host do you want to use for the YUI libraries
  */
-define('YUI','http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build');
+define('YUI','http://yui.yahooapis.com/3.4.1/build');
 
 /**
  * Used when there's an error on the site.  The Framework will

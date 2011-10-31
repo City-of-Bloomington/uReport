@@ -1,7 +1,11 @@
 {
 	_id:'',
 	name:'',
-	problems:[],
+	group:'',
+	description:'',
+	displayPermissionLevel:'',
+	postingPermissionLevel:'',
+	department: {},
 	customFields:[
 		{
 			name:'',

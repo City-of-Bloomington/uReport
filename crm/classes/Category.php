@@ -122,6 +122,24 @@ class Category extends MongoRecord
 	/**
 	 * @return string
 	 */
+	public function getGroup()
+	{
+		if (isset($this->data['group'])) {
+			return $this->data['group'];
+		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setGroup($string)
+	{
+		$this->data['group'] = trim($string);
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getDescription()
 	{
 		if (isset($this->data['description'])) {
@@ -253,6 +271,7 @@ class Category extends MongoRecord
 	public function set($post)
 	{
 		$this->setName($post['name']);
+		$this->setGroup($post['group']);
 		$this->setDescription($post['description']);
 		$this->setDepartment($post['department']);
 		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
@@ -296,6 +315,19 @@ class Category extends MongoRecord
 			);
 		}
 		return true;
+	}
+
+	/**
+	 * Returns the array of distinct values used for Categories in the system
+	 *
+	 * @param string $fieldname
+	 * @return array
+	 */
+	public static function getDistinct($fieldname)
+	{
+		$mongo = Database::getConnection();
+		$result = $mongo->command(array('distinct'=>'categories','key'=>$fieldname));
+		return $result['values'];
 	}
 }
 

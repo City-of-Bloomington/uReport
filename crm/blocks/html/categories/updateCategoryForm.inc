@@ -7,21 +7,16 @@
  */
 $title = $this->category->getId() ? 'Edit Category' : 'Add Category';
 $department_id = $this->category->getData('department._id');
-$name = isset($_POST['name'])
-	? View::escape($_POST['name'])
-	: View::escape($this->category->getName());
-$description = isset($_POST['description'])
-	? View::escape($_POST['description'])
-	: View::escape($this->category->getDescription());
+
+$fields = array('name','group','description','postingPermissionLevel','displayPermissionLevel');
+foreach ($fields as $field) {
+	$get = 'get'.ucfirst($field);
+	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
+}
+
 $custom_fields = isset($_POST['custom_fields'])
 	? View::escape($_POST['custom_fields'])
 	: json_encode($this->category->getCustomFields());
-$postingPermissionLevel = isset($_POST['postingPermissionLevel'])
-	? $_POST['postingPermissionLevel']
-	: $this->category->getPostingPermissionLevel();
-$displayPermissionLevel = isset($_POST['displayPermissionLevel'])
-	? $_POST['displayPermissionLevel']
-	: $this->category->getDisplayPermissionLevel();
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
@@ -30,6 +25,9 @@ $displayPermissionLevel = isset($_POST['displayPermissionLevel'])
 		<table>
 			<tr><td><label for="name" class="required">Name</label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
+			</tr>
+			<tr><td><label for="group">Group</label></td>
+				<td><input name="group" id="group" value="<?php echo $group; ?>" /></td>
 			</tr>
 		</table>
 		<div>
