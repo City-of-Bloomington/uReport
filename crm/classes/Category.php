@@ -84,8 +84,13 @@ class Category extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Getters and Setters
 	//----------------------------------------------------------------
+	public function __toString()
+	{
+		return $this->getName();
+	}
+
 	/**
 	 * @return string
 	 */
@@ -107,6 +112,14 @@ class Category extends MongoRecord
 	}
 
 	/**
+	 * @param string $string
+	 */
+	public function setName($string)
+	{
+		$this->data['name'] = trim($string);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getDescription()
@@ -114,6 +127,14 @@ class Category extends MongoRecord
 		if (isset($this->data['description'])) {
 			return $this->data['description'];
 		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setDescription($string)
+	{
+		$this->data['description'] = trim($string);
 	}
 
 	/**
@@ -136,35 +157,6 @@ class Category extends MongoRecord
 			return $this->data['customFields'];
 		}
 		return array();
-	}
-
-	/**
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		if (isset($this->data['department'])) {
-			return new Department($this->data['department']);
-		}
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
 	}
 
 	/**
@@ -196,6 +188,15 @@ class Category extends MongoRecord
 		}
 		else {
 			unset($this->data['customFields']);
+		}
+	}
+	/**
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		if (isset($this->data['department'])) {
+			return new Department($this->data['department']);
 		}
 	}
 
@@ -246,15 +247,6 @@ class Category extends MongoRecord
 		$this->data['displayPermissionLevel'] = $level;
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getName();
-	}
-
 	/**
 	 * @param array $post
 	 */
@@ -268,6 +260,9 @@ class Category extends MongoRecord
 		$this->setCustomFields($post['custom_fields']);
 	}
 
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 	/**
 	 * @param Person $person
 	 * @return bool
