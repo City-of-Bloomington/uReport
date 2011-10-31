@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+$status = strtolower($this->ticket->getStatus());
 $service_name = View::escape($this->ticket->getData('category.name'));
 $service_code = $this->ticket->getData('category._id');
 
@@ -29,7 +30,7 @@ echo "
 <service_requests>
 	<request>
 		<service_request_id>{$this->ticket->getId()}</service_request_id>
-		<status>{$this->ticket->getStatus()}</status>
+		<status>$status</status>
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
 		<description>$description</description>

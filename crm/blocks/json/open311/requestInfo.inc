@@ -17,7 +17,7 @@ if (count($media)) {
 
 $request = array(array(
 	'service_request_id'=>"{$this->ticket->getId()}",
-	'status'=>$this->ticket->getStatus(),
+	'status'=>strtolower($this->ticket->getStatus()),
 	'service_name'=>$this->ticket->getData('category.name'),
 	'service_code'=>"{$this->ticket->getData('category._id')}",
 	'description'=>$issue->getDescription(),
