@@ -239,8 +239,7 @@ button {
 .pageNavigation li { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified > td:first-of-type { background:url('images/required_asterik.gif') center left no-repeat; padding-left:16px; }
-tr.verified { background:url('images/required_asterik.gif') center left no-repeat\9; padding-left:16px\9; }
+tr.verified { background-color:#CCFFCC; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 /* JavaScript will apply this style to stuff it wants to hide */
