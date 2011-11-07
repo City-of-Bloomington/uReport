@@ -7,6 +7,7 @@
 MONGODUMP=/usr/local/mongo/bin/mongodump
 MONGO_DB=crm
 BACKUP_DIR=/var/www/backups/crm
+APPLICATION_HOME=/var/www/sites/crm
 
 # How many days worth of tarballs to keep around
 num_days_to_keep=5
@@ -21,6 +22,9 @@ cd $BACKUP_DIR
 
 # Dump the database
 $MONGODUMP -d $MONGO_DB -o $today
+
+# Copy media uploads into this directory, so they're backed up, too.
+cp -R $APPLICATION_HOME/data/media $today
 
 # Tarball the Data
 tar czf $today.tar.gz $today
