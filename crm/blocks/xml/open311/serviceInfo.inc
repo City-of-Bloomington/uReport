@@ -17,6 +17,8 @@ echo "
 			$code  = View::escape($definition['name']);
 			$datatype = isset($definition['type']) ? View::escape($definition['type']) : 'string';
 			$description = isset($definition['label']) ? View::escape($definition['label']) : $code;
+			$required = isset($definition['required']) ? $definition['required'] : false;
+			$required = $required ? "true" : "false";
 			echo "
 			<attribute>
 				<variable>true</variable>
@@ -24,7 +26,7 @@ echo "
 				<order>$order</order>
 				<datatype>$datatype</datatype>
 				<datatype_description></datatype_description>
-				<required>false</required>
+				<required>$required</required>
 				<description>$description</description>
 				<values>
 			";

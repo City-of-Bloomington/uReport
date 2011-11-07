@@ -19,13 +19,14 @@ if ($customFields) {
 		$code  = View::escape($definition['name']);
 		$datatype = isset($definition['type']) ? View::escape($definition['type']) : 'string';
 		$description = isset($definition['label']) ? View::escape($definition['label']) : $code;
+		$required = isset($definition['required']) ? $definition['required'] : false;
 		$attributes[] = array(
 			'variable'=>true,
 			'code'=>$code,
 			'order'=>$order,
 			'datatype'=>$datatype,
 			'datatype_description'=>'',
-			'required'=>false,
+			'required'=>$required,
 			'description'=>$description,
 			'values'=>$values
 		);

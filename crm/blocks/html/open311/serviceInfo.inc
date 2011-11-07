@@ -33,12 +33,14 @@ echo "
 				$datatype = isset($definition['type']) ? View::escape($definition['type']) : 'string';
 				$values = isset($definition['values']) ? View::escape(implode(', ',$definition['values'])) : '';
 				$description = isset($definition['label']) ? View::escape($definition['label']) : $code;
+				$required = isset($definition['required']) ? $definition['required'] : false;
+				$required = $required ? "true" : "false";
 				echo "
 				<tr><th>$order</th>
 					<td>$code</td>
 					<td>true</td>
 					<td>$datatype</td>
-					<td>false</td>
+					<td>$required</td>
 					<td>$values</td>
 					<td>$description</td>
 					<td></td>
