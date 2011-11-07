@@ -16,10 +16,10 @@ $template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 
 // Logged in users should have a default search
 // Search for open tickets assigned to them
-if (!TicketList::isValidSearch($_GET) && !empty($_SESSION['USER'])) {
-	$_GET['status'] = 'open';
-	$_GET['assignedPerson'] = array("{$_SESSION['USER']->getId()}");
-}
+#if (!TicketList::isValidSearch($_GET) && !empty($_SESSION['USER'])) {
+#	$_GET['status'] = 'open';
+#	$_GET['assignedPerson'] = array("{$_SESSION['USER']->getId()}");
+#}
 
 // Build the search query
 if (TicketList::isValidSearch($_GET)) {
