@@ -36,7 +36,7 @@ echo "
 				<td>realtime</td>
 				<td>$metadata</td>
 				<td></td>
-				<td></td>
+				<td>$group</td>
 				<td>$description</td>
 			</tr>
 			";
