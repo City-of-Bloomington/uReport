@@ -59,6 +59,10 @@ if (!isset($currentDepartment)) {
 
 // Process the ticket form when it's posted
 if(isset($_POST['ticket'])){
+	if (isset($_POST['assignedPerson'])) {
+		$_POST['ticket']['assignedPerson'] = $_POST['assignedPerson'];
+		$_POST['ticket']['notes'] = $_POST['notes'];
+	}
 	// Validate Everything and save
 	try {
 		$ticket->set($_POST['ticket']);
