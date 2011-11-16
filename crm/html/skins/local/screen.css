@@ -81,14 +81,13 @@ label { font-weight:bold; }
 #person-panel .personInfo,
 #person-panel .addNewForm,
 #location-panel .locationInfo,
-#location-panel .findLocationForm,
+.findLocationForm,
 #location-panel .addNewForm {
 	 width:290px; float:left; padding:3px; clear:left
 }
 
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList,
-#location-panel .findLocationResults,
 #location-panel .ticketList,
 #ticket-panel .closeTicketForm,
 #ticket-panel .assignTicketForm,
@@ -96,7 +95,8 @@ label { font-weight:bold; }
 #ticket-panel .referTicketForm,
 #ticket-panel .changeStatusForm,
 #person-panel .ticketList,
-.findpeopleResults {
+.findLocationResults,
+.findPeopleResults {
 	margin-left:305px; padding-left:10px; border-left:1px solid #cccccc;
 }
 

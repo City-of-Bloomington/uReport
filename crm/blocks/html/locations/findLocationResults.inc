@@ -5,7 +5,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
- * @param string $this->return_url (optional)
  */
 if (count($this->results)) {
 	echo "
@@ -17,9 +16,8 @@ if (count($this->results)) {
 		</thead>
 		<tbody>
 	";
-	$url = isset($this->return_url)
-		? new URL($this->return_url)
-		: new URL(BASE_URL.'/locations/viewLocation.php');
+
+	$url = new URL(BASE_URL.'/locations/viewLocation.php');
 
 	foreach ($this->results as $location=>$data) {
 		$url->location = $location;
@@ -36,11 +34,6 @@ if (count($this->results)) {
 		";
 	}
 
-	if (isset($_GET['location']['text']) && $this->return_url) {
-		$url->location = $_GET['location']['text'];
-		$location = View::escape($_GET['location']['text']);
-		echo "<tr><td><a href=\"$url\">$location</a></td><td></td></tr>";
-	}
 	echo "
 		</tbody>
 	</table>

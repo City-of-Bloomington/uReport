@@ -4,7 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET person_id
+ * @param GET disableLinks
  */
+$disableLinks = isset($_GET['disableLinks']) ? (bool)$_GET['disableLinks'] : false;
+
 if (!userIsAllowed('People')) {
 	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 	header('Location: '.BASE_URL);
@@ -24,10 +27,13 @@ catch (Exception $e) {
 	exit();
 }
 
-$template = new Template('people');
+$format = isset($_GET['format']) ?  $_GET['format'] : 'html';
+$filename = isset($_GET['partial']) ? 'partial' : 'people';
+$template = new Template($filename, $format);
+
 $template->title = $person->getFullname();
 $template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
-if (userIsAllowed('Tickets')) {
+if (!$disableLinks && userIsAllowed('Tickets')) {
 	$template->blocks['person-panel'][] = new Block(
 		'tickets/addNewForm.inc',
 		array('return_url'=>new URL(BASE_URL.'/tickets/addTicket.php'),'title'=>'Report New Case')
@@ -43,6 +49,7 @@ if (count($tickets)) {
 			'ticketList'=>$tickets,
 			'title'=>'Reported Cases',
 			'limit'=>10,
+			'disableLinks'=>$disableLinks,
 			'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
 		)
 	);
@@ -55,6 +62,7 @@ if (count($tickets)) {
 			'ticketList'=>$tickets,
 			'title'=>'Assigned Cases',
 			'limit'=>10,
+			'disableLinks'=>$disableLinks,
 			'moreLink'=>BASE_URL."/tickets?assignedPerson[]={$person->getId()}"
 		)
 	);
@@ -67,6 +75,7 @@ if (count($tickets)) {
 			'ticketList'=>$tickets,
 			'title'=>'Referred Cases',
 			'limit'=>10,
+			'disableLinks'=>$disableLinks,
 			'moreLink'=>BASE_URL."/tickets?referredPerson={$person->getId()}"
 		)
 	);

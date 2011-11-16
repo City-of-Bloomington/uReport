@@ -12,7 +12,7 @@ if ($this->location) {
 
 	echo "
 	<div class=\"locationInfo\">
-		<h1><a href=\"$url\">$location</a></h1>
+		<h1><a href=\"$url\" class=\"location\">$location</a></h1>
 	";
 	if (defined('ADDRESS_SERVICE')) {
 		$data = AddressService::getLocationData($this->location);

@@ -27,6 +27,16 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 	Y.on('click', Y.bind(overlay.hide, overlay), '#find_location_overlay .cancel button');
 	Y.on('submit', function (e) {
 		e.preventDefault();
+		var results = Y.one('#find_location_overlay .findLocationResults');
+		if (results) {
+			results.remove(true);
+		}
+		overlay.setStdModContent(
+			Y.WidgetStdMod.BODY,
+			'<div class="findLocationResults"><img src="' + BASE_URL + '/skins/local/images/busy.gif" /></div>',
+			Y.WidgetStdMod.AFTER
+		);
+
 		Y.io(BASE_URL + '/locations/partial.php?partial=locations/findLocationResults.inc', {
 			form: { id: e.target },
 			on: {
@@ -42,16 +52,16 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 					);
 					Y.all('#find_location_overlay .findLocationResults a').on('click', function (e) {
 						e.preventDefault();
-						var uri = e.target.get('href') + ';partial=location-panel;disableLinks';
+						var uri = e.target.get('href') + ';partial=location-panel;disableLinks=1';
 						Y.io(uri, {
 							on: {
 								complete: function (id, o, args) {
-									var locationInfo = Y.one('#location-panel .locationInfo'),
-										ticketList = Y.one('#location-panel .ticketList');
-									if (locationInfo) { locationInfo.remove(true); }
-									if (ticketList) { ticketList.remove(true); }
-									Y.one('#location-panel').append(o.responseText);
+									var locationPanel = Y.one('#location-panel');
+									locationPanel.setContent(o.responseText);
 									overlay.hide();
+
+									var location = locationPanel.one('.locationInfo h1 a');
+									document.getElementById('ticket-location').value = location.getContent();
 								}
 							}
 						});

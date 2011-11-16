@@ -89,7 +89,7 @@ if ($this->limit) {
 		if ($this->limit && count($this->ticketList)>$this->limit && $this->moreLink) {
 			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
 		}
-		if (userIsAllowed('Tickets') && !$this->disableButtons && count($this->ticketList)>1) {
+		if (userIsAllowed('Tickets') && !$this->disableLinks && count($this->ticketList)>1) {
 			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 			$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 			echo "

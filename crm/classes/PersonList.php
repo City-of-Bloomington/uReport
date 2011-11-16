@@ -31,7 +31,13 @@ class PersonList extends MongoResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$search[$key] = $value;
+					switch ($key) {
+						case 'department':
+							$search['department._id'] = new MongoId($value);
+							break;
+						default:
+							$search[$key] = $value;
+					}
 				}
 			}
 		}
@@ -58,7 +64,10 @@ class PersonList extends MongoResultIterator
 		}
 		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
-				if (is_string($value)) {
+				if ($key == 'department') {
+					$search['department._id'] = new MongoId($value);
+				}
+				elseif (is_string($value)) {
 					$search[$key] = new MongoRegex("/$value/i");
 				}
 				elseif (is_array($value)) {

@@ -9,7 +9,6 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param GET personQuery
  * @param GET return_url
  */
 if (!userIsAllowed('People')) {
@@ -19,7 +18,7 @@ if (!userIsAllowed('People')) {
 }
 // Look for anything that the user searched for
 $search = array();
-$fields = array('firstname','lastname','email','organization');
+$fields = array('firstname','lastname','email','organization','department');
 foreach ($fields as $field) {
 	if (isset($_GET[$field]) && $_GET[$field]) {
 		$value = trim($_GET[$field]);
@@ -28,18 +27,16 @@ foreach ($fields as $field) {
 		}
 	}
 }
-$personQuery = isset($_GET['personQuery']) ? trim($_GET['personQuery']) : '';
-if ($personQuery) {
-	$search = array('query'=>$personQuery);
-}
 
 // Display the search form and any results
-$template = new Template();
-$searchForm = new Block('people/searchForm.inc');
-if (isset($_GET['return_url'])) {
-	$searchForm->return_url = $_GET['return_url'];
+$template = !empty($_GET['format']) ? new Template('default',$_GET['format']) : new Template();
+if ($template->outputFormat == 'html') {
+	$searchForm = new Block('people/searchForm.inc');
+	if (isset($_GET['return_url'])) {
+		$searchForm->return_url = $_GET['return_url'];
+	}
+	$template->blocks[] = $searchForm;
 }
-$template->blocks[] = $searchForm;
 
 if (count($search)) {
 	if (isset($_GET['setOfPeople'])) {

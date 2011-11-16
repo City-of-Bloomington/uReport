@@ -13,7 +13,7 @@ if (!userIsAllowed('Departments')) {
 $departmentList = new DepartmentList();
 $departmentList->find();
 
-$template = new Template('two-column');
+$template = !empty($_GET['format']) ? new Template('default',$_GET['format']) : new Template('two-column');
 $template->blocks[] = new Block(
 	'departments/departmentList.inc',
 	array('departmentList'=>$departmentList)

@@ -8,6 +8,9 @@ $return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 $url = BASE_URL."/people?return_url=$return_url";
 echo "<div class=\"changePersonButton\">";
 echo $this->template->linkButton(
-	'Lookup Person',$url,'edit',null,null,'button'
+	'Lookup Person',$url,'edit','findPersonButton',null,'button'
 );
-echo "</div>";
+echo "
+</div>
+<div id=\"find_person_overlay\"></div>
+";

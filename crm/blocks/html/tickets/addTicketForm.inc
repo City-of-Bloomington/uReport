@@ -75,6 +75,8 @@ $category = $this->ticket->getCategory();
 	</form>
 </div>
 <?php
-#	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-#	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/choosePerson.js');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
 ?>
