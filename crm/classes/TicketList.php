@@ -92,6 +92,15 @@ class TicketList extends MongoResultIterator
 	}
 
 	/**
+	 * Populates the results using a raw mongo query
+	 */
+	public function findByMongoQuery($query)
+	{
+		$this->RETURN_TICKET_OBJECTS = true;
+		$this->cursor = $this->mongo->tickets->find($query);
+	}
+
+	/**
 	 * Takes the request and creates a Mongo search array
 	 *
 	 * Each of the fields passed in can be an array or a string
