@@ -143,12 +143,14 @@ label { font-weight:bold; }
 
 .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
+.departmentList .department,
 .categoryList .category {
 	border:2px solid black;  margin-top:0.5em;
 	-moz-border-radius:10px;
 	border-radius:10px;
 	overflow:hidden;
 }
+.departmentList .department h3,
 .categoryList .category h3 {
 	background-color:#3366CC; color:white;
 	border-bottom:2px solid black;
