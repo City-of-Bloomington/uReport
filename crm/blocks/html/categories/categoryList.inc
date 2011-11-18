@@ -34,7 +34,7 @@
 
 		echo "<div class=\"tableOfContents\"><ul>";
 		foreach ($groups as $group) {
-			echo "<li><a href=\"#$group[id]\">$group[id]</a></li>";
+			echo "<li><a href=\"".BASE_URL."/categories#$group[id]\">$group[id]</a></li>";
 		}
 		echo "</ul></div>";
 
