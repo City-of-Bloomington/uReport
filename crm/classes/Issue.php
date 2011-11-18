@@ -128,16 +128,6 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getProblem()
-	{
-		if (isset($this->data['problem'])) {
-			return $this->data['problem'];
-		}
-	}
-
-	/**
 	 * @return Person
 	 */
 	public function getEnteredByPerson()
