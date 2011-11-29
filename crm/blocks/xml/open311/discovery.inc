@@ -6,7 +6,7 @@
  */
 ?>
 <discovery>
-	<changeset></changeset>
+	<changeset>2011-11-29T09:48Z-05</changeset>
 	<contact>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></contact>
 	<key_service>You can request a key by emailing <?php echo ADMINISTRATOR_EMAIL; ?></key_service>
 	<endpoints>

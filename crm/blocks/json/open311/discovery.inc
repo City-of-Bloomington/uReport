@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $discovery = array(
-	'changeset'=>'',
+	'changeset'=>'2011-11-29T09:48Z-05',
 	'contact'=>'You can email for assistance '.ADMINISTRATOR_EMAIL,
 	'key_service'=>'You can request a key by emailing '.ADMINISTRATOR_EMAIL,
 	'endpoints'=>array(

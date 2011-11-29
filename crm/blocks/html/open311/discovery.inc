@@ -8,7 +8,7 @@
 <h1>Service Discovery</h1>
 <table>
 	<tr><th>changeset</th>
-		<td></td>
+		<td>2011-11-29T09:48Z-05</td>
 	</tr>
 	<tr><th>contact</th>
 		<td>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></td>
