@@ -156,6 +156,10 @@ label { font-weight:bold; }
 	border-bottom:2px solid black;
 	padding:0.25em;
 }
+.departmentList .department h3 a,
+.categoryList .category h3 a {
+	color:white;
+}
 
 
 .issueList { background-color:#eeeeee; }
