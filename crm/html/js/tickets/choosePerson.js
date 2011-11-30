@@ -41,7 +41,7 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 						o.responseText,
 						Y.WidgetStdMod.AFTER
 					);
-					Y.all('#find_person_overlay .findPeopleResults a').on('click', function (e) {
+					Y.all('#find_person_overlay .findPeopleResults table a').on('click', function (e) {
 						e.preventDefault();
 						var matches = /person_id=([0-9a-f]{24})/.exec(e.target.get('href'));
 						var person_id = matches[1];
