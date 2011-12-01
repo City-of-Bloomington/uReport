@@ -99,24 +99,31 @@ define('DB_HOST','localhost');
 define('DB_NAME','crm');
 
 /**
- * LDAP Configuration
+ * Directory Configuration
  *
- * This supports doing user authentication on multiple LDAP servers
- * Required since city staff are in a seperate LDAP from public user accounts
- * Person::authenticationMethod should be set to match one of these configs
+ * This supports doing user authentication from multiple external
+ * directories, such as LDAP or ADS. This is required since city staff
+ * are in a seperate LDAP directory from public user accounts.
+ * Classes that implement ExternalIdentity should have an entry here.
+ *
+ * See: ExternalIdentity
  */
-$LDAP_CONFIG = array(
-	'LDAP'=>array(
-		'LDAP_SERVER'=>'ldaps://ldap.somewhere.com:636', // Example for SSL
-		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
-		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
-		'LDAP_ADMIN_PASS'=>'password'
+$DIRECTORY_CONFIG = array(
+	'Employee'=>array(
+		'DIRECTORY_SERVER'=>'ldaps://example.org:636',
+		'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
+		'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
+		'DIRECTORY_USER_BINDING'=>'{username}@bloomington.in.gov',
+		'DIRECTORY_ADMIN_BINDING'=>'admin@bloomington.in.gov',
+		'DIRECTORY_ADMIN_PASS'=>'password'
 	),
-	'PublicLDAP'=>array(
-		'LDAP_SERVER'=>'ldaps://ldap.somewhere.com:636', // Example for SSL
-		'LDAP_DN'=>'ou=people,o=ldap.somewhere.com',
-		'LDAP_ADMIN_USER'=>'uid=username,o=ldap.somewhere.com',
-		'LDAP_ADMIN_PASS'=>'password'
+	'Public'=>array(
+		'DIRECTORY_SERVER'=>'ldaps://example.org:636',
+		'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
+		'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
+		'DIRECTORY_USER_BINDING'=>'{username}@bloomington.in.gov',
+		'DIRECTORY_ADMIN_BINDING'=>'admin@bloomington.in.gov',
+		'DIRECTORY_ADMIN_PASS'=>'password'
 	)
 );
 

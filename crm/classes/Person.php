@@ -559,31 +559,40 @@ class Person extends MongoRecord
 	}
 
 	/**
+	 * Should provide the list of methods supported
+	 *
+	 * There should always be at least one method, called "local"
+	 * Additional methods must match classes that implement External Identities
+	 * See: ExternalIdentity.php
+	 *
+	 * @return array
+	 */
+	public static function getAuthenticationMethods()
+	{
+		return array('local','Employee');
+	}
+
+	/**
 	 * Determines which authentication scheme to use for the user and calls the appropriate method
 	 *
 	 * Local users will get authenticated against the database
-	 * Other authenticationMethods will need to write a class implementing ExternalAuthentication
-	 * See: /libraries/framework/classes/ExternalAuthentication.php
-	 *
-	 * LDAP authentication is already provided
-	 * /libraries/framework/classes/LDAP.php
+	 * Other authenticationMethods will need to write a class implementing ExternalIdentity
+	 * See: /libraries/framework/classes/ExternalIdentity.php
 	 *
 	 * @param string $password
 	 * @return boolean
 	 */
 	public function authenticate($password)
 	{
-		if ($this->getUsername())
-		{
-			if ($this->getAuthenticationMethod() == 'local') {
-				return $this->getPassword()==sha1($password);
-			}
-			elseif (array_key_exists($this->getAuthenticationMethod(),$LDAP_CONFIG)) {
-				return LDAP::authenticate(
-					$LDAP_CONFIG[$this->getAuthenticationMethod()],
-					$this->getUsername(),
-					$password
-				);
+		if ($this->getUsername()) {
+			switch($this->getAuthenticationMethod()) {
+				case "local":
+					return $this->getPassword()==sha1($password);
+				break;
+
+				default:
+					$method = $this->getAuthenticationMethod();
+					return $method::authenticate($this->getUsername(),$password);
 			}
 		}
 	}
@@ -778,34 +787,33 @@ class Person extends MongoRecord
 	}
 
 	/**
-	 * @param LDAP $ldap An ldap entry to ready from
+	 * @param ExternalIdentity $identity An object implementing ExternalIdentity
 	 */
-	public function populateFromLDAP(LDAP $ldap)
+	public function populateFromExternalIdentity(ExternalIdentity $identity)
 	{
-		if (!$this->getFirstname() && $ldap->get('givenname')) {
-			$this->setFirstname($ldap->get('givenname'));
+		if (!$this->getFirstname() && $identity->getFirstname()) {
+			$this->setFirstname($identity->getFirstname());
 		}
-		if (!$this->getLastname() && $ldap->get('sn')) {
-			$this->setLastname($ldap->get('sn'));
+		if (!$this->getLastname() && $identity->getLastname()) {
+			$this->setLastname($identity->getLastname());
 		}
-		if (!$this->getEmail() && $ldap->get('mail')) {
-			$this->setEmail($ldap->get('mail'));
+		if (!$this->getEmail() && $identity->getEmail()) {
+			$this->setEmail($identity->getEmail());
 		}
-		if (!$this->getPhone() && $ldap->get('telephonenumber')) {
-			$this->setPhone($ldap->get('telephonenumber'));
+		if (!$this->getPhoneNumber() && $identity->getPhone()) {
+			$this->setPhoneNumber($identity->getPhone());
 		}
-		if (!$this->getAddress() && $ldap->get('postaladdress')) {
-			$this->setAddress($ldap->get('postaladdress'));
+		if (!$this->getAddress() && $identity->getAddress()) {
+			$this->setAddress($identity->getAddress());
 		}
-		if (!$this->getCity() && $ldap->get('l')) {
-			$this->setCity($ldap->get('l'));
+		if (!$this->getCity() && $identity->getCity()) {
+			$this->setCity($identity->getCity());
 		}
-		if (!$this->getState() && $ldap->get('st')) {
-			$this->setState($ldap->get('st'));
+		if (!$this->getState() && $identity->getState()) {
+			$this->setState($identity->getState());
 		}
-		if (!$this->getZip() && $ldap->get('postalcode')) {
-			$this->setZip($ldap->get('postalcode'));
+		if (!$this->getZip() && $identity->getZip()) {
+			$this->setZip($identity->getZip());
 		}
-
 	}
 }

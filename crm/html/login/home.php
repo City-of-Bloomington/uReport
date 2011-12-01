@@ -26,11 +26,12 @@ phpCAS::forceAuthentication();
 // but that doesn't mean they have person record
 // and even if they have a person record, they may not
 // have a user account for that person record.
+$username = phpCAS::getUser();
 try {
-	$_SESSION['USER'] = new Person(phpCAS::getUser());
+	$_SESSION['USER'] = new Person($username);
 	if (!$_SESSION['USER']->getUsername()) {
-		$_SESSION['USER']->setUsername(phpCAS::getUser());
-		$_SESSION['USER']->setAuthenticationMethod('PublicLDAP');
+		$_SESSION['USER']->setUsername($username);
+		$_SESSION['USER']->setAuthenticationMethod('Public');
 		try {
 			$_SESSION['USER']->save();
 		}
@@ -42,13 +43,13 @@ try {
 catch (Exception $e) {
 	// They authenticated against CAS, but do not have a Person record
 	// Find their LDAP accounts, and create a Person record for them
-	foreach ($LDAP_CONFIG as $key=>$config) {
+	foreach (array_keys($DIRECTORY_CONFIG) as $directory) {
 		try {
-			$ldap = new LDAP($config,phpCAS::getUser());
+			$identity = new $directory($username);
 			$_SESSION['USER'] = new Person();
-			$_SESSION['USER']->setUsername(phpCAS::getUser());
-			$_SESSION['USER']->setAuthenticationMethod($key);
-			$_SESSION['USER']->populateFromLDAP($ldap);
+			$_SESSION['USER']->setUsername($username);
+			$_SESSION['USER']->setAuthenticationMethod($directory);
+			$_SESSION['USER']->populateFrompopulateFromExternalIdentity($identity);
 			$_SESSION['USER']->save();
 			break;
 		}

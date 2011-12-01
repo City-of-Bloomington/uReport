@@ -31,19 +31,14 @@ echo "<h1>$title</h1>";
 			</tr>
 			<tr><td><label for="authenticationMethod">Authentication</label></td>
 				<td><select name="authenticationMethod" id="authenticationMethod">
-						<option <?php if ($this->person->getAuthenticationMethod()=='local') echo "selected=\"selected\""; ?>>
-							local
-						</option>
-						<?php
-							if (isset($GLOBALS['LDAP_CONFIG'])) {
-								foreach (array_keys($GLOBALS['LDAP_CONFIG']) as $key) {
-									$selected = $key==$this->person->getAuthenticationMethod()
-										? 'selected="selected"'
-										: '';
-									echo "<option $selected>$key</option>";
-								}
-							}
-						?>
+					<?php
+						foreach (Person::getAuthenticationMethods() as $method) {
+							$selected = $this->person->getAuthenticationMethod()==$method
+								? 'selected="selected"'
+								: '';
+							echo "<option $selected>$method</option>";
+						}
+					?>
 					</select>
 				</td>
 			</tr>
