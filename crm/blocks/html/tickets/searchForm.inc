@@ -52,50 +52,6 @@
 		<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
 			<fieldset id="advanced-search">
 				<table>
-					<?php if (userIsAllowed('People')) { ?>
-						<tr><td><label for="enteredByPerson">Entered By</label></td></tr>
-						<tr><td><select name="enteredByPerson[]" id="enteredByPerson" multiple="true" size="5">
-								<?php
-									$options = array();
-									foreach (Ticket::getDistinct('enteredByPerson._id') as $id) {
-										$person = new Person($id);
-										$options["{$person->getLastname()} {$person->getFirstname()}"] = $person;
-									}
-									ksort($options);
-									foreach ($options as $person) {
-										$selected = (isset($_GET['enteredByPerson'])
-													&& in_array("{$person->getId()}",$_GET['enteredByPerson']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($person->getFullname());
-										echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
-									}
-								?>
-								</select>
-							</td>
-						</tr>
-						<tr><td><label for="assignedPerson">Assigned To</label></td></tr>
-						<tr><td><select name="assignedPerson[]" id="assignedPerson" multiple="true" size="5">
-								<?php
-									$options = array();
-									foreach (Ticket::getDistinct('assignedPerson._id') as $id) {
-										$person = new Person($id);
-										$options["{$person->getLastname()} {$person->getFirstname()}"] = $person;
-									}
-									ksort($options);
-									foreach ($options as $person) {
-										$selected = (isset($_GET['assignedPerson'])
-													&& in_array("{$person->getId()}",$_GET['assignedPerson']))
-											? 'selected="selected"'
-											: '';
-										$name = View::escape($person->getFullname());
-										echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
-									}
-								?>
-								</select>
-							</td>
-						</tr>
-					<?php } ?>
 					<tr><td><label for="department">Department</label></td></tr>
 					<tr><td><select name="department[]" id="department" multiple="true" size="5">
 							<?php

@@ -80,5 +80,18 @@ if (count($tickets)) {
 		)
 	);
 }
+$tickets = $person->getTickets('enteredBy');
+if (count($tickets)) {
+	$template->blocks['person-panel'][] = new Block(
+		'tickets/ticketList.inc',
+		array(
+			'ticketList'=>$tickets,
+			'title'=>'Entered Cases',
+			'limit'=>10,
+			'disableLinks'=>$disableLinks,
+			'moreLink'=>BASE_URL."/tickets?enteredByPerson={$person->getId()}"
+		)
+	);
+}
 
 echo $template->render();
