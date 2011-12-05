@@ -12,10 +12,11 @@ if ($category) {
 	$customFields = $category->getCustomFields();
 	if (count($customFields)) {
 		echo "<table>";
-		foreach ($customFields as $name=>$definition) {
+		foreach ($customFields as $definition) {
+			$name = $definition['name'];
 			$type = isset($definition['type']) ? $definition['type'] : 'string';
-			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
-			$value = $this->issue->getData("customFields.$definition[name]");
+			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($name);
+			$value = $this->issue->getData("customFields.$name");
 
 			$field_name = "issue[customFields][$definition[name]]";
 			$field_id = "issue-customFields-$definition[name]";

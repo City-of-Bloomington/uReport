@@ -9,20 +9,17 @@ $request = explode('?',$_SERVER['REQUEST_URI']);
 $format = preg_match("/\.([^.?]+)/",$request[0],$matches)
 	? strtolower($matches[1])
 	: 'html';
+if ($format == 'php') {
+	$format = 'html';
+}
 
 $template = isset($_GET['partial'])
 	? new Template('partial',$format)
-	: new Template('open311',$format);
+	: new Template('embedding',$format);
 
-
-if (false !== strpos($request[0],'discovery')) {
-	$block = new Block('open311/discovery.inc');
-}
-else {
-	$block = isset($_GET['partial'])
-		? new Block("open311/$_GET[partial]")
-		: new Block('open311/client.inc');
-}
+$block = isset($_GET['partial'])
+	? new Block("open311/$_GET[partial]")
+	: new Block('open311/client.inc');
 
 $template->blocks[] = $block;
 echo $template->render();
