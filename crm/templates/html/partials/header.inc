@@ -9,7 +9,7 @@
 		@import url('<?php echo BASE_URL; ?>/skins/local/layouts/<?php echo $this->layout; ?>.css');
 		@import url('<?php echo BASE_URL; ?>/skins/local/screen.css');
 	</style>
-	<link rel="stylesheet" type"text/css" href="<?php echo BASE_URL; ?>/skins/local/print.css" media="print">
+	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>/skins/local/print.css" media="print">
 	<script type="text/javascript">
 		var BASE_URL = '<?php echo BASE_URL; ?>';
 	</script>
