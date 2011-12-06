@@ -27,13 +27,13 @@ YUI().use('node', 'io', 'json', function (Y) {
 						var people = Y.JSON.parse(o.responseText);
 						var selected = '';
 						for (var i in people) {
-							if (department.defaultPerson._id.$id) {
+							if (department.defaultPerson && department.defaultPerson._id) {
 								selected = department.defaultPerson._id.$id==people[i].id ? 'selected="selected"' : '';
 							}
 							html += '<option value="' + people[i].id + '" ' + selected + '>' + people[i].name + '</option>';
 						}
 					}
-					document.getElementById('assignedPerson').innerHTML = html;
+					Y.one('#assignedPerson').setContent(html);
 				}
 			}
 		});
