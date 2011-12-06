@@ -4,12 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!userIsAllowed('Departments')) {
-	$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-	header('Location: '.BASE_URL);
-	exit();
-}
-
 $departmentList = new DepartmentList();
 $departmentList->find();
 
