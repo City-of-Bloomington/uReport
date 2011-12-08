@@ -197,3 +197,8 @@ define('DISTINCT_QUERY_CACHE_LIFETIME',3600); // Lifetime in seconds
 
 
 define('OPEN311_JURISDICTION','localhost');
+
+/**
+ * Grab a timestamp for calculating process time
+ */
+$startTime = microtime(1);

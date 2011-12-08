@@ -1,6 +1,7 @@
 <div id="footer">
 	<p><?php
 			# Calculate the process time
+			global $startTime;
 			$endTime = microtime(1);
 			$processTime = $endTime - $startTime;
 			echo "<!-- Process Time: $processTime -->";

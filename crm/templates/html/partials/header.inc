@@ -1,4 +1,3 @@
-<?php $startTime = microtime(1); ?>
 <head>
 	<base href="<?php echo BASE_URL; ?>/" />
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
