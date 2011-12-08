@@ -17,7 +17,9 @@ if (count($this->results)) {
 		<tbody>
 	";
 
-	$url = new URL(BASE_URL.'/locations/viewLocation.php');
+	$url = $this->return_url
+		? new URL($this->return_url)
+		: new URL(BASE_URL.'/locations/viewLocation.php');
 
 	foreach ($this->results as $location=>$data) {
 		$url->location = $location;
