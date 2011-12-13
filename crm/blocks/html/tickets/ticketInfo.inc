@@ -112,6 +112,16 @@ if (userIsAllowed('People')) {
 		</tr>
 	";
 }
+	$client = $this->ticket->getClient();
+	if ($client) {
+		$name = View::escape($client->getName());
+		echo "
+		<tr><td></td>
+			<th>Received Via:</th>
+			<td>$name</td>
+		</tr>
+		";
+	}
 echo "
 		<tr><td></td>
 			<th>Date Opened:</th>

@@ -488,6 +488,51 @@ class Ticket extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getClient_id()
+	{
+		if (isset($this->data['client_id'])) {
+			return $this->data['client_id'];
+		}
+	}
+
+	/**
+	 * @param string $id
+	 */
+	public function setClient_id($id)
+	{
+		$this->data['client_id'] = trim($id);
+	}
+
+	/**
+	 * Returns the web service client that submitted this ticket
+	 *
+	 * @return Client
+	 */
+	public function getClient()
+	{
+		if (isset($this->data['client_id'])) {
+			return new Client($this->data['client_id']);
+		}
+	}
+
+	/**
+	 * Sets the web service client that submitted the ticket
+	 *
+	 * @param id|Client $client
+	 */
+	public function setClient($client)
+	{
+		if (!$client instanceof Client) {
+			$client = new Client($client);
+		}
+
+		$this->data['client_id'] = "{$client->getId()}";
+	}
+
+
+	/**
 	 * Returns an array of Issues
 	 *
 	 * @return array
@@ -845,7 +890,7 @@ class Ticket extends MongoRecord
 	{
 		// Set all the location information using any fields the user posted
 		$fields = array(
-			'location','latitude','longitude','city','state','zip'
+			'location','latitude','longitude','city','state','zip','client_id'
 		);
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {

@@ -58,14 +58,23 @@ else {
 			$_SESSION['errorMessages'][] = $e;
 		}
 	}
+	// Create a new Ticket
 	if (isset($_POST['service_code'])) {
-		// Create a new Ticket
+		// Make sure they have an api_key
+		try {
+			if (isset($_POST['api_key'])) {
+				$client = new Client($_POST['api_key']);
+			}
+		}
+		catch (Exception $e) {
+		}
+
 		try {
 			if (!isset($category)) {
 				throw new Exception('missingService');
 			}
-			if ($category->allowsPosting($user)) {
-				$ticketData = array();
+			if (isset($client) && $client->getId() && $category->allowsPosting($user)) {
+				$ticketData = array('client_id'=>"{$client->getId()}");
 				$issueData = array();
 
 				// Translate Open311 fields into CRM fields

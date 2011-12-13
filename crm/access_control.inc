@@ -19,6 +19,7 @@ foreach ($roles as $role) {
 $ZEND_ACL->add(new Zend_Acl_Resource('Users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('People'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Departments'));
+$ZEND_ACL->add(new Zend_Acl_Resource('Clients'));
 
 $ZEND_ACL->add(new Zend_Acl_Resource('Actions'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Categories'));
@@ -29,6 +30,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('NeighborhoodAssociations'));
 
 $ZEND_ACL->add(new Zend_Acl_Resource('Tickets'));
 $ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
+
 /**
  * Assign permissions to the resources
  */
