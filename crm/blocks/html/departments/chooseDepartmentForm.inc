@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->currentDepartment
  */
+$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
 ?>
 <div class="chooseDepartmentForm">
 	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
