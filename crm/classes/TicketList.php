@@ -294,7 +294,8 @@ class TicketList extends MongoResultIterator
 			'description'=>'issues.description',
 			'start_date'=>'enteredDate',
 			'end_date'=>'enteredDate',
-			'client_id'=>'client_id'
+			'client_id'=>'client_id',
+			'type'=>'issues.type'
 		);
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
 			$fields[$key] = $key;

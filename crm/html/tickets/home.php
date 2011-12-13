@@ -36,6 +36,7 @@ if (TicketList::isValidSearch($_GET)) {
 
 
 	if ($template->outputFormat == 'html') {
+		$template->blocks['search-results'][] = new Block('tickets/searchParameters.inc');
 		$template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
 	}
 	$template->blocks['search-results'][] = $report;
