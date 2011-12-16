@@ -130,7 +130,7 @@ label { font-weight:bold; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
 #search-form .fields {
-	min-height:160px; margin:.5em;
+	margin:.5em;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
 }
 #search-form .addNewForm,

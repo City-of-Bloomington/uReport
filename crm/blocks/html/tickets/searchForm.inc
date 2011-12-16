@@ -158,18 +158,18 @@
 							</select>
 						</td>
 					</tr>
-					<tr><td><label for="start_date">Case Created Date</label></td></tr>
-					<tr><td><div><label>Start: (e.g. 1/1/2011)
+					<tr><td><label>Case Created Date </label></td><td>(e.g. (1/1/2011)</td></tr>
+					<tr><td><label for="start_date">Start: </label></td>
+						<td>
 									<input name="start_date" id="start_date" size="10" maxlength="10"
 										value="<?php echo !empty($_GET['start_date']) ? View::escape($_GET['start_date']) : ''; ?>" />
-								</label>
-					
-							</div>
-							<div><label>End:
-									<input name="end_date" id="end_date" size="10" maxlength="10"
-										value="<?php echo !empty($_GET['end_date']) ? View::escape($_GET['end_date']) : ''; ?>" />
-								</label>
-							</div>
+						</td>
+					</tr>
+					<tr>						
+						<td><label for="end_date">End:</label></td>
+						<td>
+							<input name="end_date" id="end_date" size="10" maxlength="10"
+									value="<?php echo !empty($_GET['end_date']) ? View::escape($_GET['end_date']) : ''; ?>" />
 						</td>
 					</tr>
 				</table>
