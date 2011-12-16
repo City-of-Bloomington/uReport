@@ -35,7 +35,7 @@ webserver, you can add a <Directory> command to your httpd.conf.
 PHP:
 PHP must be compiled with support for:
 	PDO
-	MySQL
+	Mongo
 	LDAP
 
 	Actually, you can substitute any database support for MySQL, as our
@@ -43,11 +43,10 @@ framework uses PDO for database interaction.  However, the initial SQL
 schema provided is specific to MySQL.  The schema would need to be modified
 for other databases.
 
-MySQL:
-	MySQL should have support for InnoDB.  Foreign keys are written into
-the database load scripts.  While MyISAM tables will just ignore them,
-you database and your application will be that much more robust with InnoDB
-support.
+Mongo:
+	The mongo driver usually needs to be installed, as it's a relatively new
+extension for PHP.  Information on installing the Mongo extension is at
+http://us.php.net/manual/en/mongo.installation.php
 
 LDAP:
 	LDAP is only used for doing LDAP authentication for users.
