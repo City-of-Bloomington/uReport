@@ -69,6 +69,12 @@ class Department extends MongoRecord
 
 		$mongo = Database::getConnection();
 		$mongo->departments->save($this->data,array('safe'=>true));
+
+		$mongo->categories->update(
+			array('department._id'=>$this->data['_id']),
+			array('$set'=>array('department'=>$this->data)),
+			array('upsert'=>false,'multiple'=>true,'safe'=>false)
+		);
 	}
 
 	public function delete()
