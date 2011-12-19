@@ -219,7 +219,7 @@ class History extends MongoRecord
 		foreach (ActionList::getActions() as $action) {
 			if ($action->getName()==$this->getAction()) {
 				$enteredByPerson = $this->getEnteredByPerson();
-				$enteredByPerson = $enteredByPerson ? $enteredByPerson->getFullname() : '';
+				$enteredByPerson = $enteredByPerson ? $enteredByPerson->getFullname() : APPLICATION_NAME;
 
 				$actionPerson = $this->getActionPerson();
 				$actionPerson = $actionPerson ? $actionPerson->getFullname() : '';
@@ -266,8 +266,9 @@ class History extends MongoRecord
 		$actionPerson = $this->getPersonObject('actionPerson');
 		$url = $ticket ? $ticket->getURL() : '';
 
-		if ($enteredByPerson && $actionPerson
-			&& "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}") {
+		if ($actionPerson
+			&& (!$enteredByPerson
+				|| "{$enteredByPerson->getId()}" != "{$actionPerson->getId()}")) {
 
 			$actionPerson->sendNotification(
 				"$url\n\n{$this->getDescription()}\n\n{$this->getNotes()}",

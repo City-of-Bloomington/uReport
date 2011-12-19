@@ -772,7 +772,8 @@ class Person extends MongoRecord
 		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
 			if (!$personFrom) {
 				$personFrom = new Person();
-				$personFrom->setEmail(APPLICATION_NAME."@$_SERVER[SERVER_NAME]");
+				$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
+				$personFrom->setEmail("$name@$_SERVER[SERVER_NAME]");
 			}
 			if (!$subject) {
 				$subject = APPLICATION_NAME.' Notification';
