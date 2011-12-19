@@ -6,15 +6,25 @@
  */
 ?>
 <discovery>
-	<changeset>2011-11-29T09:48Z-05</changeset>
+	<changeset>2011-12-19T09:02Z-05</changeset>
 	<contact>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></contact>
 	<key_service>You can request a key by emailing <?php echo ADMINISTRATOR_EMAIL; ?></key_service>
 	<endpoints>
 		<endpoint>
 			<specification>http://wiki.open311.org/GeoReport_v2</specification>
-			<url><?php echo BASE_URL; ?>/open311/v2</url>
-			<changeset></changeset>
-			<type>development</type>
+			<url>https://bloomington.in.gov/ureport/open311/v2</url>
+			<changeset>2011-12-19T09:02Z-05</changeset>
+			<type>production</type>
+			<formats>
+				<format>text/xml</format>
+				<format>application/json</format>
+			</formats>
+		</endpoint>
+		<endpoint>
+			<specification>http://wiki.open311.org/GeoReport_v2</specification>
+			<url>https://bloomington.in.gov/test/open311/v2</url>
+			<changeset>2011-12-19T09:02Z-05</changeset>
+			<type>test</type>
 			<formats>
 				<format>text/xml</format>
 				<format>application/json</format>

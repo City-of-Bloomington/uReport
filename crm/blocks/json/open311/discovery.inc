@@ -5,15 +5,22 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $discovery = array(
-	'changeset'=>'2011-11-29T09:48Z-05',
+	'changeset'=>'2011-12-19T09:02Z-05',
 	'contact'=>'You can email for assistance '.ADMINISTRATOR_EMAIL,
 	'key_service'=>'You can request a key by emailing '.ADMINISTRATOR_EMAIL,
 	'endpoints'=>array(
 		array(
 			'specification'=>'http://wiki.open311.org/GeoReport_v2',
-			'url'=>BASE_URL.'/open311/v2',
-			'changeset'=>'',
-			'type'=>'development',
+			'url'=>'https://bloomington.in.gov/ureport/open311/v2',
+			'changeset'=>'2011-12-19T09:02Z-05',
+			'type'=>'production',
+			'formats'=>array('text/xml','application/json')
+		),
+		array(
+			'specification'=>'http://wiki.open311.org/GeoReport_v2',
+			'url'=>'https://bloomington.in.gov/test/open311/v2',
+			'changeset'=>'2011-12-19T09:02Z-05',
+			'type'=>'test',
 			'formats'=>array('text/xml','application/json')
 		)
 	)

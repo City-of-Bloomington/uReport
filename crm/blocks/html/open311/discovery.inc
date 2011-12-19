@@ -8,7 +8,7 @@
 <h1>Service Discovery</h1>
 <table>
 	<tr><th>changeset</th>
-		<td>2011-11-29T09:48Z-05</td>
+		<td>2011-12-19T09:02Z-05</td>
 	</tr>
 	<tr><th>contact</th>
 		<td>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></td>
@@ -18,6 +18,7 @@
 	</tr>
 </table>
 <h2>Endpoints</h2>
+<h3>Production</h3>
 <table>
 	<tr><th>specification</th>
 		<td>http://wiki.open311.org/GeoReport_v2</td>
@@ -26,8 +27,22 @@
 		<td><?php echo BASE_URL; ?>/open311/v2</td>
 	</tr>
 	<tr><th>changeset</th>
-		<td></td>
+		<td>2011-12-19T09:02Z-05</td>
 	</tr>
-	<tr><th>type</th><td>development</td></tr>
+	<tr><th>type</th><td>production</td></tr>
+	<tr><th>formats</th><td>text/xml,application/json</td></tr>
+</table>
+<h3>Test</h3>
+<table>
+	<tr><th>specification</th>
+		<td>http://wiki.open311.org/GeoReport_v2</td>
+	</tr>
+	<tr><th>url</th>
+		<td>https://bloomington.in.gov/test/open311/v2</td>
+	</tr>
+	<tr><th>changeset</th>
+		<td>2011-12-19T09:02Z-05</td>
+	</tr>
+	<tr><th>type</th><td>test</td></tr>
 	<tr><th>formats</th><td>text/xml,application/json</td></tr>
 </table>
