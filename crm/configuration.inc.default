@@ -31,6 +31,13 @@ define('DEFAULT_CITY','Bloomington');
 define('DEFAULT_STATE','IN');
 
 /**
+ * Default coordinates for map center
+ * This should probably be the center of your city
+ */
+define('DEFAULT_LATITUDE',ini_get('date.default_latitude'));
+define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
+
+/**
  * Where on the filesystem the framework is installed.
  */
 define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');

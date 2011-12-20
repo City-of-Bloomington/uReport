@@ -23,21 +23,36 @@ if (count($media)) {
 	$m = $media[0];
 	$media_url = $m->getURL();
 }
+$image = $media_url ? "<img src=\"$media_url\" />" : '';
 
 echo "
-<request>
-	<service_request_id>{$this->ticket->getId()}</service_request_id>
-	<status>$status</status>
-	<service_name>$service_name</service_name>
-	<service_code>$service_code</service_code>
-	<description>$description</description>
-	<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
-	<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
-	<address>$address</address>
-	<address_id>{$this->ticket->getAddress_id()}</address_id>
-	<zipcode>$zipcode</zipcode>
-	<lat>{$this->ticket->getLatitude()}</lat>
-	<long>{$this->ticket->getLongitude()}</long>
-	<media_url>$media_url</media_url>
-</request>
+<h1>$service_name</h1>
+<h2>Case #{$this->ticket->getNumber()}</h2>
+<p>$description</p>
+
+<table>
+	<tr><th>Entered Date:</th>
+		<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
+	</tr>
+	<tr><th>Status:</th>
+		<td>$status</td>
+	</tr>
+	<tr><th>Address:</th>
+		<td>$address</td>
+	</tr>
+	<tr><th>Zip:</th>
+		<td>$zipcode</td>
+	</tr>
+	<tr><th>Lat:</th>
+		<td>{$this->ticket->getLatitude()}</td>
+	</tr>
+	<tr><th>Long:</th>
+		<td>{$this->ticket->getLongitude()}</td>
+	</tr>
+	<tr><th>address_id:</th>
+		<td>{$this->ticket->getAddress_id()}</td>
+	</tr>
+</table>
+
+<div>$image</div>
 ";

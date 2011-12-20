@@ -4,13 +4,35 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$url->parameters = array();
+
+$jurisdiction_id = !empty($_REQUEST['jurisdiction_id'])
+	? View::escape($_REQUEST['jurisdiction_id'])
+	: OPEN311_JURISDICTION;
+
+$api_key = !empty($_REQUEST['api_key'])
+	? View::escape($_REQUEST['api_key'])
+	: '';
+
 $service = new Category($_GET['service_code']);
 $service_code = "{$service->getId()}";
+$service_name = View::escape($service->getName());
+$service_description = View::escape($service->getDescription());
 ?>
+<div class="breadcrumbs">
+	<ul><li><a href="<?php echo $url; ?>">All Reports</a></li>
+		<li><?php echo $service_name; ?></li>
+	</ul>
+</div>
 <div class="clientRequestForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/open311/requests.html">
-		<fieldset>
-			<input name="jurisdiction_id" type="hidden" value="bloomington.in.gov" />
+	<h1><?php echo $service_name; ?></h1>
+	<p class="service_description"><?php echo $service_description; ?></p>
+
+	<form method="post" action="<?php echo $url; ?>">
+		<fieldset><legend>Report Information</legend>
+			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
+			<input name="api_key" type="hidden" value="<?php echo $api_key; ?>" />
 			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
 
 			<div>
@@ -20,14 +42,21 @@ $service_code = "{$service->getId()}";
 				<textarea name="description" id="description"></textarea>
 			</div>
 			<table>
-				<tr><td><label for="address_id">Location</label></td>
-					<td><div id="location"></div>
-						<input name="address_id" id="address_id" type="hidden" />
+				<tr><td><label>Location</label></td>
+					<td><div>
+							<span id="location"></span>
+							<span class="button"><span class="edit"><a id="openMapButton">Open Map</a></span></span>
+						</div>
+						<div id="map_overlay"></div>
 						<input name="address_string" id="address_string" type="hidden" />
 						<input name="lat" id="lat" type="hidden" />
 						<input name="long" id="long" type="hidden" />
 					</td>
 				</tr>
+			</table>
+		</fieldset>
+		<fieldset><legend>Contact Information</legend>
+			<table>
 				<tr><td><label for="first_name">First Name</label></td>
 					<td><input name="first_name" id="first_name" /></td>
 				</tr>
@@ -46,7 +75,7 @@ $service_code = "{$service->getId()}";
 			$customFields = $service->getCustomFields();
 			if ($customFields) {
 				echo "
-				<fieldset>
+				<fieldset><legend>Additional Information</legend>
 					<table>
 				";
 				foreach ($customFields as $field) {
@@ -100,3 +129,13 @@ $service_code = "{$service->getId()}";
 		</fieldset>
 	</form>
 </div>
+<script type="text/javascript">
+	var DEFAULT_LATITUDE = <?php echo DEFAULT_LATITUDE; ?>,
+		DEFAULT_LONGITUDE = <?php echo DEFAULT_LONGITUDE; ?>,
+		BASE_URL = '<?php echo BASE_URL; ?>';
+</script>
+<?php
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts','http://maps.googleapis.com/maps/api/js?sensor=true');
+	$this->template->addToAsset('scripts',BASE_URL.'/js/open311/map_picker.js');
+?>

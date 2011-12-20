@@ -5,12 +5,17 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param GET group
  */
+$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$url->group = $_GET['group'];
 ?>
-<div class="serviceGroup">
-	<h1><?php echo View::escape($_GET['group']); ?></h1>
+<div class="serviceChooser">
+	<h1><a href="<?php echo $url; ?>">
+			<?php echo View::escape($_GET['group']); ?>
+		</a>
+	</h1>
 	<ul>
 	<?php
-		$url = new URL(BASE_URL.'/open311');
+		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$services = new CategoryList(array('group'=>$_GET['group']));
 		foreach ($services as $service) {
 			$url->service_code = "{$service->getId()}";
