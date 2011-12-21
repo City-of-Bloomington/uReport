@@ -29,6 +29,7 @@
 			?>
 		</div>
 	</div>
+	<?php include $dir.'/partials/footer.inc'; ?>
 </body>
 </html>
 <?php
