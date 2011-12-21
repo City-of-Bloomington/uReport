@@ -4,9 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-$url->parameters = array();
-
 $jurisdiction_id = !empty($_REQUEST['jurisdiction_id'])
 	? View::escape($_REQUEST['jurisdiction_id'])
 	: OPEN311_JURISDICTION;
@@ -19,16 +16,21 @@ $service = new Category($_GET['service_code']);
 $service_code = "{$service->getId()}";
 $service_name = View::escape($service->getName());
 $service_description = View::escape($service->getDescription());
+
+$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+if (isset($url->parameters['group']))			{ unset($url->parameters['group']); }
+if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_code']); }
 ?>
 <div class="breadcrumbs">
 	<ul><li><a href="<?php echo $url; ?>">All Reports</a></li>
-		<li><?php echo $service_name; ?></li>
+		<li><a><?php echo $service_name; ?></a></li>
 	</ul>
 </div>
 <div class="clientRequestForm">
 	<h1><?php echo $service_name; ?></h1>
 	<p class="service_description"><?php echo $service_description; ?></p>
 
+	<?php $url->parameters = array(); ?>
 	<form method="post" action="<?php echo $url; ?>">
 		<fieldset><legend>Report Information</legend>
 			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
