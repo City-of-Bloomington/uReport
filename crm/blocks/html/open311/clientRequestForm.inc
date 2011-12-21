@@ -23,7 +23,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 ?>
 <div class="breadcrumbs">
 	<ul><li><a href="<?php echo $url; ?>">All Reports</a></li>
-		<li><a><?php echo $service_name; ?></a></li>
+		<li><?php echo $service_name; ?></li>
 	</ul>
 </div>
 <div class="clientRequestForm">
@@ -32,32 +32,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 
 	<?php $url->parameters = array(); ?>
 	<form method="post" action="<?php echo $url; ?>">
-		<fieldset><legend>Report Information</legend>
-			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
-			<input name="api_key" type="hidden" value="<?php echo $api_key; ?>" />
-			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
-
-			<div>
-				<div>
-					<label for="description">Description</label>
-				</div>
-				<textarea name="description" id="description"></textarea>
-			</div>
-			<table>
-				<tr><td><label>Location</label></td>
-					<td><div>
-							<span id="location"></span>
-							<span class="button"><span class="edit"><a id="openMapButton">Open Map</a></span></span>
-						</div>
-						<div id="map_overlay"></div>
-						<input name="address_string" id="address_string" type="hidden" />
-						<input name="lat" id="lat" type="hidden" />
-						<input name="long" id="long" type="hidden" />
-					</td>
-				</tr>
-			</table>
-		</fieldset>
-		<fieldset><legend>Contact Information</legend>
+	<fieldset><legend>Contact Information</legend>
 			<table>
 				<tr><td><label for="first_name">First Name</label></td>
 					<td><input name="first_name" id="first_name" /></td>
@@ -73,6 +48,38 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 				</tr>
 			</table>
 		</fieldset>
+		<fieldset><legend>Location</legend>
+		<table>
+				<tr>
+					<td><p>If your report involves a specific area or place, please select it using the map.</p>
+					</td>
+				</tr>
+				<tr>
+					<td><div>
+							<span id="location"></span>
+							<span class="button"><span class="edit"><a id="openMapButton">Open Map</a></span></span>
+						</div>
+						<div id="map_overlay"></div>
+						<input name="address_string" id="address_string" type="hidden" />
+						<input name="lat" id="lat" type="hidden" />
+						<input name="long" id="long" type="hidden" />
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<fieldset><legend>Report Details</legend>
+			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
+			<input name="api_key" type="hidden" value="<?php echo $api_key; ?>" />
+			<input name="service_code" type="hidden" value="<?php echo $service_code; ?>" />
+
+			<div>
+				<div>
+					<label for="description">Description</label>
+				</div>
+				<textarea name="description" id="description"></textarea>
+			</div>
+		</fieldset>
+	
 		<?php
 			$customFields = $service->getCustomFields();
 			if ($customFields) {
@@ -124,11 +131,9 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 				";
 			}
 		?>
-		<fieldset>
 			<?php
 				echo $this->formButton('Submit','submit','submit');
 			?>
-		</fieldset>
 	</form>
 </div>
 <script type="text/javascript">
