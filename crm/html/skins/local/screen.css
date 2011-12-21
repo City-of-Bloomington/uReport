@@ -143,6 +143,14 @@ label { font-weight:bold; }
 
 .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
+.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; }
+.breadcrumbs li { list-style:none; float:left; height:20px; line-height:20px; padding-left:4px; }
+.breadcrumbs a {
+	display:block;
+	background:url('images/breadcrumb.gif') no-repeat right center;
+	padding:0 15px 0 0;
+}
+
 .departmentList .department,
 .categoryList .category {
 	border:2px solid black;  margin-top:0.5em;
