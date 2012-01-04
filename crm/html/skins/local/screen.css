@@ -13,9 +13,12 @@ tbody th { text-align:right; }
 ul { list-style-type:bullet; margin-left:1em; padding:0; }
 li { margin:0; }
 
-fieldset { padding:.5em 0; border-top:1px solid #dddddd; }
-legend { font-weight:bold; font-size:110%; }
+fieldset { padding:.5em 0; }
+legend { font-weight:bold; font-size:110%; width:100%; color:darkred; }
 label { font-weight:bold; }
+form td {vertical-align:top; }
+.clientRequestForm fieldset { margin:1em 0; padding:.5em; }
+.clientRequestForm form { border:3px solid #dddddd; padding:.5em 0; }
 
 #banner {
 	height:60px;

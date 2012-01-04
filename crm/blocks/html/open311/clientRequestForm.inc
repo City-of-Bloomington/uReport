@@ -57,7 +57,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 				<tr>
 					<td><div>
 							<span id="location"></span>
-							<span class="button"><span class="edit"><a id="openMapButton">Open Map</a></span></span>
+							<span class="button"><span class="add"><a id="openMapButton">Open Map</a></span></span>
 						</div>
 						<div id="map_overlay"></div>
 						<input name="address_string" id="address_string" type="hidden" />
