@@ -49,13 +49,8 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 			</table>
 		</fieldset>
 		<fieldset><legend>Location</legend>
-		<table>
-				<tr>
-					<td><p>If your report involves a specific area or place, please select it using the map.</p>
-					</td>
-				</tr>
-				<tr>
-					<td><div>
+		<p>If your report involves a specific area or place, please select it using the map.</p>
+		<div>
 							<span id="location"></span>
 							<span class="button"><span class="add"><a id="openMapButton">Open Map</a></span></span>
 						</div>
@@ -63,9 +58,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 						<input name="address_string" id="address_string" type="hidden" />
 						<input name="lat" id="lat" type="hidden" />
 						<input name="long" id="long" type="hidden" />
-					</td>
-				</tr>
-			</table>
+		
 		</fieldset>
 		<fieldset><legend>Report Details</legend>
 			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />

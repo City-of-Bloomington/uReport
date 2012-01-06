@@ -9,8 +9,13 @@ th { color:#333333; font-weight:bold; font-size:90%; padding:0.25em; }
 td { padding:.25em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
+.clientRequestForm table { width:90%; }
+.clientRequestForm tr:nth-child(even) { background:#ffffff; width:100%; }
+.clientRequestForm tr:nth-child(odd) { background:#eeeeee;  width:100%; }
+.clientRequestForm td label { text-align:right; }
+.clientRequestForm select, input, button, textarea { float:left; }
 
-ul { list-style-type:bullet; margin-left:1em; padding:0; }
+ul { margin-left:1em; padding:0; }
 li { margin:0; }
 
 fieldset { padding:.5em 0; }
