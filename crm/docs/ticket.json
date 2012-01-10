@@ -41,6 +41,7 @@
 				_id:'',
 				name:''
 			},
+			labels:[],
 			media:[
 				{
 					filename:'',

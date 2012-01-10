@@ -176,6 +176,26 @@
 				</table>
 			</fieldset>
 
+			<fieldset><legend>Labels</legend>
+				<ul>
+				<?php
+					foreach (Lookups::get('labels') as $label) {
+						$checked = (isset($_GET['labels']) && in_array($label,$_GET['labels']))
+							? 'checked="checked"'
+							: '';
+						$label = View::escape($label);
+						echo "
+						<li><label>
+								<input name=\"labels[]\" type=\"checkbox\" value=\"$label\" $checked />
+								$label
+							</label>
+						</li>
+						";
+					}
+				?>
+				</ul>
+			</fieldset>
+
 			<fieldset><legend>Fields to display</legend>
 				<ul class="fields">
 				<?php
@@ -216,7 +236,3 @@
 		</form>
 	</div>
 </div>
-<?php
-	#$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	#$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
-?>
