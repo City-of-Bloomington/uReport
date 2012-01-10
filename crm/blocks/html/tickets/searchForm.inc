@@ -173,6 +173,23 @@
 							</table>
 						</td>
 					</tr>
+					<tr><td><label for="client_id">Client</label></td></tr>
+					<tr><td><select name="client_id" id="client_id">
+								<option></option>
+								<?php
+									$clients = new ClientList();
+									$clients->find();
+									foreach ($clients as $client) {
+										$selected = (isset($_GET['client_id']) && $_GET['client_id']=="{$client->getId()}")
+											? 'selected="selected"'
+											: '';
+										$name = View::escape($client->getName());
+										echo "<option value=\"{$client->getId()}\">$name</option>";
+									}
+								?>
+							</select>
+						</td>
+					</tr>
 				</table>
 			</fieldset>
 
