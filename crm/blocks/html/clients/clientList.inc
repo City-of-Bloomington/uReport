@@ -9,7 +9,7 @@
 <div class="clientList">
 	<h1>Clients
 		<?php
-			if (userIsAllowed('Departments')) {
+			if (userIsAllowed('Clients')) {
 				echo $this->template->linkButton(
 					'Add',BASE_URL.'/clients/updateClient.php','add'
 				);

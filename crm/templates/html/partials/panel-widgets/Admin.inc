@@ -7,5 +7,6 @@
 		<li><a href="<?php echo BASE_URL; ?>/resolutions">Resolutions</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/actions">Actions</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/clients">Clients</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/labels">Labels</a></li>
 	</ul>
 </div>
