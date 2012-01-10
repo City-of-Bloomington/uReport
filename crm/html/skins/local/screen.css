@@ -9,11 +9,6 @@ th { color:#333333; font-weight:bold; font-size:90%; padding:0.25em; }
 td { padding:.25em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
-.clientRequestForm table { width:90%; }
-.clientRequestForm tr:nth-child(even) { background:#ffffff; width:100%; }
-.clientRequestForm tr:nth-child(odd) { background:#eeeeee;  width:100%; }
-.clientRequestForm td label { text-align:right; }
-.clientRequestForm select, input, button, textarea { float:left; }
 
 ul { margin-left:1em; padding:0; }
 li { margin:0; }
@@ -22,8 +17,6 @@ fieldset { padding:.5em 0; }
 legend { font-weight:bold; font-size:110%; width:100%; color:darkred; }
 label { font-weight:bold; }
 form td {vertical-align:top; }
-.clientRequestForm fieldset { margin:1em 0; padding:.5em; }
-.clientRequestForm form { border:3px solid #dddddd; padding:.5em 0; }
 
 #banner {
 	height:60px;
@@ -158,6 +151,14 @@ form td {vertical-align:top; }
 	background:url('images/breadcrumb.gif') no-repeat right center;
 	padding:0 15px 0 0;
 }
+
+.clientRequestForm table { width:90%; }
+.clientRequestForm tr:nth-child(even) { background:#ffffff; width:100%; }
+.clientRequestForm tr:nth-child(odd) { background:#eeeeee;  width:100%; }
+.clientRequestForm td label { text-align:right; }
+.clientRequestForm select, input, button, textarea { float:left; }
+.clientRequestForm fieldset { margin:1em 0; padding:.5em; }
+.clientRequestForm form { border:3px solid #dddddd; padding:.5em 0; }
 
 .departmentList .department,
 .categoryList .category {
