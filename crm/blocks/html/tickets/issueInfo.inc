@@ -65,6 +65,7 @@ echo "
 
 		$contactMethod = View::escape($this->issue->getContactMethod());
 		$responseMethod = View::escape($this->issue->getResponseMethod());
+		$labels = View::escape(implode(', ',$this->issue->getLabels()));
 		echo "
 		<table>
 			<thead>
@@ -72,6 +73,7 @@ echo "
 					<th>Reported By</th>
 					<th>Contacted Via</th>
 					<th>Respond Via</th>
+					<th>Labels</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -79,6 +81,7 @@ echo "
 					<td>$reportedBy</td>
 					<td>$contactMethod</td>
 					<td>$responseMethod</td>
+					<td>$labels</td>
 				</tr>
 			</tbody>
 		</table>

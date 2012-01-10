@@ -233,6 +233,7 @@ class Issue extends MongoRecord
 		if (isset($this->data['labels'])) {
 			return $this->data['labels'];
 		}
+		return array();
 	}
 
 	/**
@@ -244,6 +245,15 @@ class Issue extends MongoRecord
 			$labels[$key] = trim($value);
 		});
 		$this->data['labels'] = $labels;
+	}
+
+	/**
+	 * @param string $label
+	 * @return bool
+	 */
+	public function hasLabel($label)
+	{
+		return in_array($label,$this->getLabels());
 	}
 
 	/**
@@ -313,9 +323,12 @@ class Issue extends MongoRecord
 	 */
 	public function set($post)
 	{
+		if (!isset($post['labels'])) {
+			$post['labels'] = array();
+		}
 		$fields = array(
 			'type','reportedByPerson','contactMethod','responseMethod','description',
-			'customFields'
+			'customFields','labels'
 		);
 		foreach ($fields as $field) {
 			$set = 'set'.ucfirst($field);

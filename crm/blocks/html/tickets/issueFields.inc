@@ -75,9 +75,28 @@
 			</select>
 		</td>
 	</tr>
+
+	<tr><td><label>Labels</label></td>
+		<td>
+		<?php
+			foreach (Lookups::get('labels') as $label) {
+				$checked = $this->issue->hasLabel($label)
+					? 'checked="checked"'
+					: '';
+				echo "
+				<label>
+					<input type=\"checkbox\" name=\"issue[labels][]\" value=\"$label\" $checked />
+					$label
+				</label>
+				";
+			}
+		?>
+		</td>
+	</tr>
 </table>
 
 <div><label for="issue-description">Describe the issue</label></div>
 <div>
 	<textarea name="issue[description]" id="issue-description" rows="3" cols="60"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>
+
