@@ -156,9 +156,13 @@ form td {vertical-align:top; }
 .clientRequestForm tr:nth-child(even) { background:#ffffff; width:100%; }
 .clientRequestForm tr:nth-child(odd) { background:#eeeeee;  width:100%; }
 .clientRequestForm td label { text-align:right; }
-.clientRequestForm select, input, button, textarea { float:left; }
 .clientRequestForm fieldset { margin:1em 0; padding:.5em; }
 .clientRequestForm form { border:3px solid #dddddd; padding:.5em 0; }
+
+.clientRequestForm select, .clientRequestForm input,
+.clientRequestForm button, .clientRequestForm textarea {
+	float:left;
+}
 
 .departmentList .department,
 .categoryList .category {
