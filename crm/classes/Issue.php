@@ -226,6 +226,27 @@ class Issue extends MongoRecord
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getLabels()
+	{
+		if (isset($this->data['labels'])) {
+			return $this->data['labels'];
+		}
+	}
+
+	/**
+	 * @param array $labels
+	 */
+	public function setLabels($labels)
+	{
+		array_walk($labels, function($value,$key) use(&$labels) {
+			$labels[$key] = trim($value);
+		});
+		$this->data['labels'] = $labels;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getHistory()
