@@ -10,10 +10,10 @@ if (!userIsAllowed('Lookups')) {
 	exit();
 }
 
-if (isset($_POST['labels'])) {
+if (isset($_POST['contactMethods'])) {
 	try {
-		Lookups::save('labels',$_POST['labels']);
-		header('Location: '.BASE_URL.'/lookups/labels.php');
+		Lookups::save('contactMethods',$_POST['contactMethods']);
+		header('Location: '.BASE_URL.'/lookups/contactMethods.php');
 		exit();
 	}
 	catch (Exception $e) {
@@ -22,5 +22,5 @@ if (isset($_POST['labels'])) {
 }
 
 $template = new Template('two-column');
-$template->blocks[] = new Block('lookups/updateLabelsForm.inc');
+$template->blocks[] = new Block('lookups/updateContactMethodsForm.inc');
 echo $template->render();

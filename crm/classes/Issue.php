@@ -11,15 +11,6 @@
  */
 class Issue extends MongoRecord
 {
-	public static $types = array(
-		'Request','Complaint','Violation','Police Report',
-		'Public Report','Comment','Question','Staff Report'
-	);
-
-	public static $contactMethods = array(
-		'Phone','Email','Letter','Mayor Email','Constituent Meeting','Walk In','Web Form'
-	);
-
 	/**
 	 * Populates the object with data
 	 *

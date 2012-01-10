@@ -10,17 +10,6 @@ if (!userIsAllowed('Lookups')) {
 	exit();
 }
 
-if (isset($_POST['labels'])) {
-	try {
-		Lookups::save('labels',$_POST['labels']);
-		header('Location: '.BASE_URL.'/lookups/labels.php');
-		exit();
-	}
-	catch (Exception $e) {
-		$_SESSION['errorMessages'][] = $e;
-	}
-}
-
 $template = new Template('two-column');
-$template->blocks[] = new Block('lookups/updateLabelsForm.inc');
+$template->blocks[] = new Block('lookups/typeList.inc');
 echo $template->render();

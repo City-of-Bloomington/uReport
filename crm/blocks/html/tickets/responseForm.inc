@@ -17,7 +17,7 @@
 				<tr><td><label for="contactMethod">Contact Method</label></td>
 					<td><select name="contactMethod" id="contactMethod">
 							<?php
-								foreach (Issue::$contactMethods as $method) {
+								foreach (Lookups::get('contactMethods') as $method) {
 									$method = View::escape($method);
 									echo "<option>$method</option>";
 								}

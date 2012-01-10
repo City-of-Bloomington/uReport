@@ -10,7 +10,7 @@
 	<tr><td><label for="issue[type]" class="required">Type</label></td>
 		<td><select name="issue[type]" id="issue-type">
 				<?php
-					foreach (Issue::$types as $type) {
+					foreach (Lookups::get('types') as $type) {
 						$selected = ($this->issue->getType()==$type)
 							? 'selected="selected"'
 							: '';
@@ -49,7 +49,7 @@
 		<td><select name="issue[contactMethod]" id="issue-contactMethod">
 				<option></option>
 				<?php
-					foreach (Issue::$contactMethods as $method) {
+					foreach (Lookups::get('contactMethods') as $method) {
 						$selected = $this->issue->getContactMethod()==$method
 							? 'selected="selected"'
 							: '';
@@ -65,7 +65,7 @@
 				<option value="">Do not contact</option>
 				<?php
 					// Use the same drop down as the contact method
-					foreach (Issue::$contactMethods as $method) {
+					foreach (Lookups::get('contactMethods') as $method) {
 						$selected = $this->issue->getContactMethod()==$method
 							? 'selected="selected"'
 							: '';
