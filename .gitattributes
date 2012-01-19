@@ -18,6 +18,7 @@ crm/html/media/media -text
 crm/html/people/mergePeople.php -text
 crm/html/skins/local/images/breadcrumb.png -text
 crm/html/skins/local/images/busy.gif -text
+crm/html/skins/local/images/buttonBackground.png -text
 crm/html/skins/local/images/check_button.png -text
 crm/html/skins/local/images/google_maps_button.png -text
 crm/html/skins/local/images/icons/mime/doc.png -text
