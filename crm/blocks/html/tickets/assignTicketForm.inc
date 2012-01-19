@@ -10,14 +10,11 @@
 	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
 		<fieldset><legend>Assign Case</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
-			<?php
-				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
-
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->ticket->getURL()}';"
-				);
-			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="button" class="cancel"
+				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">
+				Cancel
+			</button>
 		</fieldset>
 	</form>
 </div>

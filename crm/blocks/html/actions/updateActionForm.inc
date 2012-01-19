@@ -48,12 +48,11 @@ $description = View::escape($this->action->getDescription());
 					</td>
 				</tr>
 			</table>
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/actions';"
-				);
-			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="button" class="cancel"
+				onclick="document.location.href='<?php echo BASE_URL; ?>/actions';">
+				Cancel
+			</button>
 		</fieldset>
 	</form>
 </div>

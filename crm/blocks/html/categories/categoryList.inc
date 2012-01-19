@@ -10,9 +10,7 @@
 	<h1>Categories
 		<?php
 			if (userIsAllowed('Categories')) {
-				echo $this->template->linkButton(
-					'Add',BASE_URL.'/categories/updateCategory.php','add'
-				);
+				echo '<a class="add button" href="'.BASE_URL.'/categories/updateCategory.php">Add</a>';
 			}
 		?>
 	</h1>
@@ -47,11 +45,12 @@
 			foreach ($group['categories'] as $category) {
 				$editButton = '';
 				if (userIsAllowed('Categories')) {
-					$editButton = $this->template->linkButton(
-						'Edit',
-						BASE_URL."/categories/updateCategory.php?category_id={$category->getId()}",
-						'edit'
-					);
+					$editButton = "
+					<a class=\"edit button\"
+						href=\"".BASE_URL."/categories/updateCategory.php?category_id={$category->getId()}\">
+						Edit
+					</a>
+					";
 				}
 				$name = View::escape($category->getName());
 				$department = View::escape($category->getData('department.name'));

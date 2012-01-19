@@ -20,7 +20,7 @@
 				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
 				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
 			</div>
-			<?php echo $this->formButton('Merge','submit','submit'); ?>
+			<button type="submit" class="submit">Merge</button>
 		</fieldset>
 	</form>
 </div>

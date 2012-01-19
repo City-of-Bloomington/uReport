@@ -9,9 +9,7 @@
 	<h1>Contact Methods
 		<?php
 			if (userIsAllowed('Lookups')) {
-				echo $this->template->linkButton(
-					'Edit',BASE_URL.'/lookups/updateContactMethods.php','edit'
-				);
+				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateContactMethods.php">Edit</a>';
 			}
 		?>
 	</h1>

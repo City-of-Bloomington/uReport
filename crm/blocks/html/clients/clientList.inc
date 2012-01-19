@@ -10,9 +10,7 @@
 	<h1>Clients
 		<?php
 			if (userIsAllowed('Clients')) {
-				echo $this->template->linkButton(
-					'Add',BASE_URL.'/clients/updateClient.php','add'
-				);
+				echo '<a class="add button" href="'.BASE_URL.'/clients/updateClient.php">Add</a>';
 			}
 		?>
 	</h1>
@@ -28,16 +26,18 @@
 				$editButton = '';
 				$deleteButton = '';
 				if (userIsAllowed('Clients')) {
-					$editButton = $this->template->linkButton(
-						'Edit',
-						BASE_URL."/clients/updateClient.php?client_id={$client->getId()}",
-						'edit'
-					);
-					$deleteButton = $this->template->linkButton(
-						'Delete',
-						BASE_URL."/clients/deleteClient.php?client_id={$client->getId()}",
-						'delete'
-					);
+					$editButton = "
+					<a class=\"edit button\"
+						href=\"".BASE_URL."/clients/updateClient.php?client_id={$client->getId()}\">
+						Edit
+					</a>
+					";
+					$deleteButton = "
+					<a class=\"delete button\"
+						href=\"".BASE_URL."/clients/deleteClient.php?client_id={$client->getId()}\">
+						Delete
+					</a>
+					";
 				}
 				$name = View::escape($client->getName());
 				$url = $client->getURL();

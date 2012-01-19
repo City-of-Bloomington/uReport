@@ -37,41 +37,47 @@ $changeCategoryButton = '';
 $changeLocationButton = '';
 
 if (!$this->disableButtons && userIsAllowed('Tickets')) {
-	$editStatusButton = $this->template->linkButton(
-		'Edit Status',
-		BASE_URL.'/tickets/changeStatus.php?ticket_id='.$this->ticket->getId(),
-		'edit'
-	);
-	$deleteButton = $this->template->linkButton(
-		'Delete Case',
-		BASE_URL.'/tickets/deleteTicket.php?ticket_id='.$this->ticket->getId(),
-		'delete'
-	);
+	$editStatusButton = "
+	<a class=\"edit button\"
+		href=\"".BASE_URL."/tickets/changeStatus.php?ticket_id={$this->ticket->getId()}\">
+		Edit Status
+	</a>
+	";
+	$deleteButton = "
+	<a class=\"delete button\"
+		href=\"".BASE_URL."/tickets/deleteTicket.php?ticket_id={$this->ticket->getId()}\">
+		Delete Case
+	</a>
+	";
 
 	if ($this->ticket->getStatus()!='closed') {
-		$changeCategoryButton = $this->template->linkButton(
-			'Change Category',
-			BASE_URL.'/tickets/changeCategory.php?ticket_id='.$this->ticket->getId(),
-			'edit'
-		);
-		$changeLocationButton = $this->template->linkButton(
-			'Change Location',
-			BASE_URL.'/tickets/changeLocation.php?ticket_id='.$this->ticket->getId(),
-			'edit'
-		);
+		$changeCategoryButton = "
+		<a class=\"edit button\"
+			href=\"".BASE_URL."/tickets/changeCategory.php?ticket_id={$this->ticket->getId()}\">
+			Change Category
+		</a>
+		";
+		$changeLocationButton = "
+		<a class=\"edit button\"
+			href=\"".BASE_URL."/tickets/changeLocation.php?ticket_id={$this->ticket->getId()}\">
+			Change Location
+		</a>
+		";
 		if (userIsAllowed('People')) {
-			$assignButton = $this->template->linkButton(
-				'Assign',
-				BASE_URL.'/tickets/assignTicket.php?ticket_id='.$this->ticket->getId(),
-				'edit'
-			);
+			$assignButton = "
+			<a class=\"edit button\"
+				href=\"".BASE_URL."/tickets/assignTicket.php?ticket_id={$this->ticket->getId()}\">
+				Assign
+			</a>
+			";
 
 			$return_url = $this->ticket->getURL();
-			$referralButton = $this->template->linkButton(
-				'Refer',
-				BASE_URL.'/tickets/referTicket.php?ticket_id='.$this->ticket->getId(),
-				'edit'
-			);
+			$referralButton = "
+			<a class=\"edit button\"
+				href=\"".BASE_URL."/tickets/referTicket.php?ticket_id={$this->ticket->getId()}\">
+				Refer
+			</a>
+			";
 		}
 	}
 

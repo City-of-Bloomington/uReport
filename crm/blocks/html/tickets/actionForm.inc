@@ -36,10 +36,8 @@ if (count($actions)) {
 					<td><textarea name="notes" id="notes" rows="3" cols="50"></textarea></td>
 				</tr>
 			</table>
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton('Cancel','reset','cancel');
-			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="reset" class="cancel">Cancel</button>
 		</fieldset>
 	</form>
 </div>

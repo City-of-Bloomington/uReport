@@ -17,11 +17,11 @@
 					$value = View::escape($value);
 					echo "<input name=\"$key\" type=\"hidden\" value=\"$value\" />";
 				}
-				echo $this->template->formButton('Yes','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->return_url}';"
-				);
 			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="button" class="cancel" onclick="document.location.href='<?php echo $this->return_url; ?>';">
+				Cancel
+			</button>
 		</fieldset>
 	</form>
 </div>

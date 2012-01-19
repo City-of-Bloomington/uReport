@@ -28,9 +28,7 @@
 					</td>
 				</tr>
 			</table>
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-			?>
+			<button type="submit" class="submit">Submit</button>
 		</fieldset>
 	</form>
 </div>

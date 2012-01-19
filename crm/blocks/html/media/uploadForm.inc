@@ -16,10 +16,8 @@ $return_url = $_SERVER['REQUEST_URI'];
 			<input name="return_url" type="hidden" value="<?php echo $return_url; ?>" />
 
 			<input type="file" name="attachment" />
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton('Cancel','reset','cancel');
-			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="reset" class="cancel">Cancel</button>
 		</fieldset>
 	</form>
 </div>

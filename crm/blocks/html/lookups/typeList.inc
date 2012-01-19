@@ -9,9 +9,7 @@
 	<h1>Issue Types
 		<?php
 			if (userIsAllowed('Lookups')) {
-				echo $this->template->linkButton(
-					'Edit',BASE_URL.'/lookups/updateTypes.php','edit'
-				);
+				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateTypes.php">Edit</a>';
 			}
 		?>
 	</h1>

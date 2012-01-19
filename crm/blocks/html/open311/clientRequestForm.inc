@@ -32,7 +32,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 
 	<?php $url->parameters = array(); ?>
 	<form method="post" action="<?php echo $url; ?>">
-	<fieldset><legend>Contact Information</legend>
+		<fieldset><legend>Contact Information</legend>
 			<table>
 				<tr><td><label for="first_name">First Name</label></td>
 					<td><input name="first_name" id="first_name" /></td>
@@ -49,16 +49,15 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 			</table>
 		</fieldset>
 		<fieldset><legend>Location</legend>
-		<p>If your report involves a specific area or place, please select it using the map.</p>
-		<div>
-							<span id="location"></span>
-							<span class="button"><span class="add"><a id="openMapButton">Open Map</a></span></span>
-						</div>
-						<div id="map_overlay"></div>
-						<input name="address_string" id="address_string" type="hidden" />
-						<input name="lat" id="lat" type="hidden" />
-						<input name="long" id="long" type="hidden" />
-		
+			<p>If your report involves a specific area or place, please select it using the map.</p>
+			<div>
+				<span id="location"></span>
+				<a id="openMapButton" class="chooseLocation button">Open Map</a>
+			</div>
+			<div id="map_overlay"></div>
+			<input name="address_string" id="address_string" type="hidden" />
+			<input name="lat" id="lat" type="hidden" />
+			<input name="long" id="long" type="hidden" />
 		</fieldset>
 		<fieldset><legend>Report Details</legend>
 			<input name="jurisdiction_id" type="hidden" value="<?php echo $jurisdiction_id; ?>" />
@@ -72,7 +71,7 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 				<textarea name="description" id="description"></textarea>
 			</div>
 		</fieldset>
-	
+
 		<?php
 			$customFields = $service->getCustomFields();
 			if ($customFields) {
@@ -124,9 +123,9 @@ if (isset($url->parameters['service_code']))	{ unset($url->parameters['service_c
 				";
 			}
 		?>
-			<?php
-				echo $this->formButton('Submit','submit','submit');
-			?>
+		<fieldset>
+			<button type="submit" class="submit">Submit</button>
+		</fieldset>
 	</form>
 </div>
 <script type="text/javascript">

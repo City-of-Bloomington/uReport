@@ -65,12 +65,11 @@ $category = $this->ticket->getCategory();
 
 		<fieldset>
 			<input name="category_id" type="hidden" value="<?php echo $category->getId(); ?>" />
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/tickets';"
-				);
-			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="button" class="cancel"
+				onclick="document.location.href='<?php echo BASE_URL; ?>/tickets';">
+				Cancel
+			</button>
 		</fieldset>
 	</form>
 </div>

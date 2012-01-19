@@ -10,11 +10,12 @@ $username = '';
 if (userIsAllowed('People')) {
 	$username = $this->person->getUsername();
 	if (!$username && userIsAllowed('Users') && !$this->disableButtons) {
-		$username = $this->template->linkButton(
-			'Create Account',
-			BASE_URL.'/users/updateUser.php?person_id='.$this->person->getId(),
-			'add',null,null,'largeButton'
-		);
+		$username = "
+		<a class=\"add button\"
+			href=\"".BASE_URL."/users/updateUser.php?person_id={$this->person->getId()}\">
+			Create Account
+		</a>
+		";
 	}
 
 }
@@ -22,17 +23,19 @@ if (userIsAllowed('People')) {
 $editButton = '';
 $deleteButton = '';
 if (userIsAllowed('People') && !$this->disableButtons) {
-	$editButton = $this->template->linkButton(
-		'Edit',
-		BASE_URL.'/people/updatePerson.php?person_id='.$this->person->getId(),
-		'edit'
-	);
+	$editButton = "
+	<a class=\"edit button\"
+		href=\"".BASE_URL."/people/updatePerson.php?person_id={$this->person->getId()}\">
+		Edit
+	</a>
+	";
 	if (!$this->person->hasTickets()) {
-		$deleteButton = $this->template->linkButton(
-			'Delete Person',
-			BASE_URL.'/people/deletePerson.php?person_id='.$this->person->getId(),
-			'delete'
-		);
+		$deleteButton = "
+		<a class=\"delete button\"
+			href=\"".BASE_URL."/people/deletePerson.php?person_id={$this->person->getId()}\">
+			Delete Person
+		</a>
+		";
 	}
 }
 

@@ -4,11 +4,11 @@ YUI().use('node','overlay','json',function(Y) {
 		srcNode:'#map_overlay',
 		xy: [20,60],
 		bodyContent: '<div id="location_map"></div>',
-		footerContent:'<span class="button"><span class="submit"><button type="button" id="useThisLocation">Use this location</button></span></span><span class="button"><span class="cancel"><button type="button">Cancel</button</div></div>',
+		footerContent:'<button type="button" id="useThisLocation" class="add">Use this location</button><button type="button" class="cancel">Cancel</button>',
 	});
 	overlay.render();
 	overlay.hide();
-	Y.on('click',Y.bind(overlay.hide, overlay),'#map_overlay .cancel button');
+	Y.on('click',Y.bind(overlay.hide, overlay),'#map_overlay button.cancel');
 	Y.on('click',function(e) {
 		e.preventDefault();
 		overlay.show();

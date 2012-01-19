@@ -10,11 +10,12 @@
  */
 $addButton = '';
 if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
-	$addButton = $this->template->linkButton(
-		'Add Issue',
-		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}",
-		'add',null, null,'button'
-	);
+	$addButton = "
+	<a class=\"add button\"
+		href=\"".BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}\">
+		Add Issue
+	</a>
+	";
 }
 echo "
 <div class=\"issueList\">

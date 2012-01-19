@@ -20,7 +20,7 @@
 				<input name="targetPerson" id="targetPerson_b" type="radio" value="b" />
 				<input name="person_id_b" type="hidden" value="<?php echo $this->personB->getId(); ?>" />
 			</div>
-			<?php echo $this->formButton('Merge','submit','submit'); ?>
+			<button type="submit" class="submit">Submit</button>
 		</fieldset>
 	</form>
 </div>

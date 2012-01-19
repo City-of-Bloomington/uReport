@@ -38,9 +38,7 @@
 				echo $name;
 				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 				$url = BASE_URL.'/people?return_url='.urlencode($return_url);
-				echo $this->template->linkButton(
-					'Change Person',$url,'change',null,null,'button'
-				);
+				echo "<a class=\"change button\" href=\"$url\">Change Person</a>";
 			?>
 		</td>
 	</tr>

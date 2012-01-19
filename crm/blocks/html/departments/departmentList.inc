@@ -9,9 +9,7 @@
 <div class="departmentList">
 	<h1><?php
 			if (userIsAllowed('Departments')) {
-				echo $this->template->linkButton(
-					'Add',BASE_URL.'/departments/updateDepartment.php','add'
-				);
+				echo '<a class="add button" href="'.BASE_URL.'/departments/updateDepartment.php">Add</a>';
 			}
 		?>
 		Departments

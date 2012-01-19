@@ -16,10 +16,8 @@ $text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text'
 				if ($return_url) {
 					echo "<input type=\"hidden\" name=\"return_url\" value=\"$return_url\" />";
 				}
-				echo $this->template->formButton(
-					'Search','submit','submit'
-				);
 			?>
+			<button type="button" class="submit">Submit</button>
 		</fieldset>
 	</form>
 </div>

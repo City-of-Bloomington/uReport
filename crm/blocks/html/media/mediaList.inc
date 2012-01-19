@@ -22,9 +22,7 @@
 					$url->ticket_id = (string)$this->ticket->getId();
 					$url->issueIndex = $this->index;
 					$url->mediaIndex = $mediaIndex;
-					$deleteButton = $this->template->linkButton(
-						'Delete Attachment',$url,'delete'
-					);
+					$deleteButton = "<a class=\"delete button\" href=\"$url\">Delete Attachment</a>";
 				}
 				echo "
 				<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">

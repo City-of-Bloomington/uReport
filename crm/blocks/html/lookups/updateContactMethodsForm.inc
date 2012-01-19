@@ -18,12 +18,11 @@ $methods = View::escape(implode(', ',$methods));
 			<div><label for="contactMethods">Contact Methods</label></div>
 			<div><textarea name="contactMethods" id="contactMethods"><?php echo $methods; ?></textarea></div>
 			<div>
-			<?php
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='".BASE_URL."/lookups/contactMethods.php';"
-				);
-			?>
+				<button type="submit" class="submit">Submit</button>
+				<button type="button" class="cancel"
+					onclick="document.location.href='<?php echo BASE_URL; ?>/lookups/contactMethods.php';">
+					Cancel
+				</button>
 			</div>
 		</fieldset>
 	</form>

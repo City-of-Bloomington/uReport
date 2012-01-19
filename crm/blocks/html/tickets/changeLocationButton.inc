@@ -11,11 +11,11 @@ foreach ($_GET as $key=>$value) {
 	}
 }
 $url = BASE_URL.'/locations?return_url='.urlencode($return_url);
-echo "<div class=\"changeLocationButton\">";
-echo $this->template->linkButton(
-	'Lookup Location',$url,'edit','findAddressButton',null,'button'
-);
 echo "
+<div class=\"changeLocationButton\">
+	<a id=\"findAddressButton\" class=\"edit button\" href=\"$url\">
+		Lookup Location
+	</a>
 </div>
 <div id=\"find_location_overlay\"></div>
 ";

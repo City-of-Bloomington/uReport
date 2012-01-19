@@ -12,23 +12,26 @@ $editButton = '';
 $deleteButton = '';
 $responseButton = '';
 if (!$this->disableButtons && userIsAllowed('Issues')) {
-	$editButton = $this->template->linkButton(
-		'Edit Issue',
-		BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}",
-		'edit',null,null,'button'
-	);
-	$deleteButton = $this->template->linkButton(
-		'Delete Issue',
-		BASE_URL."/tickets/deleteIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}",
-		'delete',null,null,'button'
-	);
+	$editButton = "
+	<a class=\"edit button\"
+		href=\"".BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		Edit Issue
+	</a>
+	";
+	$deleteButton = "
+	<a class=\"delete button\"
+		href=\"".BASE_URL."/tickets/deleteIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		Delete Issue
+	</a>
+	";
 
 	if ($this->issue->getReportedByPerson()) {
-		$responseButton = $this->template->linkButton(
-			'Add Response',
-			BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$this->index",
-			'add',null,null,'button'
-		);
+		$responseButton = "
+		<a class=\"add button\"
+			href=\"".BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$this->index\">
+			Add Response
+		</a>
+		";
 	}
 }
 $url = BASE_URL."/tickets/viewIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}";

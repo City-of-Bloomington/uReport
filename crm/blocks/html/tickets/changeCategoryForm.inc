@@ -13,12 +13,12 @@
 			<?php
 				$this->return_url = BASE_URL.'/tickets/changeCategory.php?ticket_id='.$this->ticket->getId();
 				include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
-
-				echo $this->template->formButton('Submit','submit','submit');
-				echo $this->template->formButton(
-					'Cancel','button','cancel',null,"document.location.href='{$this->ticket->getURL()}';"
-				);
 			?>
+			<button type="submit" class="submit">Submit</button>
+			<button type="button" class="cancel"
+				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">
+				Cancel
+			</button>
 		</fieldset>
 	</form>
 </div>

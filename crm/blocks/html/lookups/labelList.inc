@@ -9,9 +9,7 @@
 	<h1>Labels
 		<?php
 			if (userIsAllowed('Lookups')) {
-				echo $this->template->linkButton(
-					'Edit',BASE_URL.'/lookups/updateLabels.php','edit'
-				);
+				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateLabels.php">Edit</a>';
 			}
 		?>
 	</h1>

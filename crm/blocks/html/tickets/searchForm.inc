@@ -16,11 +16,7 @@
 				<form method=\"get\" action=\"".BASE_URL."/tickets/home.php\">
 					<fieldset>
 						<label>Case # <input name=\"number\" value=\"$number\"/></label>
-			";
-						echo $this->template->formButton(
-							'Search','submit','search'
-						);
-			echo "
+						<button type=\"submit\" class=\"search\">Search</button>
 					</fieldset>
 				</form>
 				<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
@@ -245,10 +241,8 @@
 						$report = View::escape($_GET['report']);
 						echo "<input name=\"report\" type=\"hidden\" value=\"$report\" />";
 					}
-					echo $this->template->formButton(
-						'Search','submit','search'
-					);
 				?>
+				<button type="submit" class="search">Search</button>
 			</fieldset>
 		</form>
 	</div>
