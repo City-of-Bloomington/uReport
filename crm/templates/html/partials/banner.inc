@@ -26,7 +26,5 @@
 		<div id="application_name">
 			<a href="<?php echo BASE_URL; ?>/"><?php echo APPLICATION_NAME; ?></a>
 		</div>
-	<div id="location_name">
-		City of Bloomington, Mark Kruzan, Mayor
-	</div>
+	<div id="location_name"><?php echo LOCATION_NAME; ?></div>
 </div>
