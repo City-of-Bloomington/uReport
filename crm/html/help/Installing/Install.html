@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Install</title>
+	<style></style>
+</head>
+<body>
+	<h1>Install</h1>
+	<h2>About this guide</h2>
+		<p>These instructions focus on installing civic-crm on a *nix machine with the Apache
+			webserver.  If you are installing on Windows using IIS, you will need to
+			do the equivalent steps for your environment.
+		</p>
+
+	<h2>Downloading</h2>
+		<p>The latest stable release will always be available as a download at:
+			<a href="http://code.google.com/p/civic-crm/downloads">
+			http://code.google.com/p/civic-crm/downloads</a>.
+		</p>
+
+		<p>If you want to live on the bleeding edge, new features and bug fixes take place in trunk.
+			You can checkout the latest copy of the source code with the command:
+			<code>svn checkout http://civic-crm.googlecode.com/svn/trunk</code>
+		</p>
+
+	<h2>Uncompressing</h2>
+		<p>You can uncompress the tarball with the command (replacing "x.x.x" with
+			your downloaded version number):
+			<code>tar xzvf crm-x.x.x.tar.gz</code>
+		</p>
+		<p>You can then remove the tarball: <code>rm crm-x.x.x.tar.gz</code>
+
+	<h2>Moving into place</h2>
+		<p>You can move the crm directory anywhere accessible by Apache.  We'll be
+			editing Apache's configuration to tell it where we've put the application.
+		</p>
+		<p>Apache will need read permissions for the application and write permissions
+			for the data directory inside the application.  The easiest thing to do is just
+			give Apache ownership of the application.
+			<code>chown -R apache crm</code>
+		</p>
+
+	<h2>Apache Configuration</h2>
+		<p>CRM depends on PHP auto-prepending the configuration file.  This file is the bootstrap.
+			The recommended way is to have Apache auto-prepend the file.  We can do this in the same
+			place we tell Apache where the application is and set up the URL to host it.
+			While we're in there, we also want to set up the mod_rewrite rules for the Open311 service.
+		</p>
+		<h3>Enabling file uploads</h3>
+		<p>PHP default values for post_max_size and upload_max_filesize are usually very small.
+			Employees and members of the public can upload photos and other files to attach to reports.
+			You should adjust these values for your expected use case.
+		</p>
+		<h3>Example configuration:</h3>
+		<code><pre>
+#-------------------------------------------------------------------------
+# This Virtual Host config is intended to redirect all traffic from
+# the unencrypted versions of the application to the encrypted version
+#-------------------------------------------------------------------------
+NameVirtualHost *:80
+&lt;VirtualHost *:80&gt;
+	Redirect /crm https://localhost/crm
+&lt;/VirtualHost*gt;
+#------------------------------------------------------------------------
+# Citizen reporting and work tracking system
+#------------------------------------------------------------------------
+Alias /crm "/var/www/sites/crm/html"
+&lt;Directory "/var/www/sites/crm/html"&gt;
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+
+    php_value auto_prepend_file /var/www/sites/crm/configuration.inc
+&lt;/Directory&gt;
+&lt;Directory "/var/www/sites/crm/html/open311"&gt;
+    RewriteEngine On
+    RewriteBase /crm/open311/
+    RewriteRule v2/services.? /crm/open311/services.php [L]
+    RewriteRule v2/requests.? /crm/open311/requests.php [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule .? /crm/open311/index.php [L]
+
+    php_value post_max_size 10M
+    php_value upload_max_filesize 10M
+&lt;/Directory&gt;
+		</pre></code>
+
+	<h2>CRM configuration</h2>
+		<p>CRM comes with an empty configuration file called
+			<code>configuration.inc.default</code>.
+			The default file must be copied and the new file given the correct name,
+			<code>configuration.inc</code>.
+			You will need to run through the new <code>configuration.inc</code> and
+			provide values for all the settings listed.
+
+	<h2>Verify installation</h2>
+		<p>At this point, you should have the application installed on the webserver.
+			With the configuration.inc in place, you should be able see the application
+			in your browser.  Point your browser to whatever URL you chose in your Apache
+			configuration and make sure the page loads with no errors.  Your should see
+			something like this:
+		</p>
+		<div>
+			<img class="screenshot" src="images/freshInstall.png" alt="Screenshot of a fresh installations" />
+		</div>
+
+
+	<h2>Create an Administrator account</h2>
+		<p>At this point the application is completely empty and ready to start using.
+			The rest of the setup will continue in the browser at your new site.
+			However, you need to create the initial user account for you to log in with.
+			This will need to be an Administrator account so it has permission to do
+			all the rest of the setup.  More administrators can be created as needed
+			using the web interface.
+		</p>
+		<p>In your application install directory is a PHP script that can create user accounts.
+			<code><pre>
+include '../configuration.inc';
+
+$person = new Person();
+
+// Fill these out as needed
+$person->setFirstname('Admin');
+$person->setLastname('Person');
+$person->setEmail('admin@localhost');
+$person->setUsername('administrator');
+$person->setAuthenticationMethod('local');
+$person->setPassword('');
+
+// No more changes needed
+$person->setRoles(array('Administrator'));
+$person->save();
+			</pre></code>
+			Once it's been modified, you'll need to run it from the command line.
+			<code>php scripts/createAdminUser.php</code>
+		</p>
+		<p>Once the <code>createAdminUser.php</code> script has been run, you should be
+			able to log into the site using the account information you just created.
+		</p>
+
+</body>
+</html>
