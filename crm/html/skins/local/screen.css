@@ -17,9 +17,9 @@ ul { margin-left:1em; padding:0; }
 li { margin:0; }
 
 fieldset { padding:.5em 0; }
-legend { font-weight:bold; font-size:110%; width:100%; color:darkred; }
+legend { font-weight:bold; font-size:110%; width:100%; color:#500; }
 label { font-weight:bold; }
-form td {vertical-align:top; }
+form td { vertical-align:top; }
 
 /**
  * Base styles for buttons and button links
@@ -33,7 +33,7 @@ button, .button {
 .add { background:url('images/plus_button.png') left center no-repeat; }
 .edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
 .search { background:url('images/buttonBackground.png') left center no-repeat; padding-left:10px; }
-.submit { background:url('images/check_button.png') left center no-repeat; }
+.submit, .login { background:url('images/check_button.png') left center no-repeat; }
 .delete, .cancel { background:url('images/x_button.png') left center no-repeat; }
 .chooseLocation { background:url('images/reticule_button.png') left center no-repeat; }
 

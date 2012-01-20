@@ -485,6 +485,18 @@ class Person extends MongoRecord
 	}
 
 	/**
+	 * Returns the encrypted password string for this user
+	 *
+	 * @return string
+	 */
+	public function getPassword()
+	{
+		if (isset($this->data['password'])) {
+			return $this->data['password'];
+		}
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getAuthenticationMethod()

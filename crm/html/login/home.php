@@ -9,7 +9,7 @@ $return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_UR
 // If they don't have CAS configured, send them onto the application's
 // internal authentication system
 if (!defined('CAS')) {
-	header('Location: '.BASE_URL.'/login.php?return_url='.$return_url);
+	header('Location: '.BASE_URL.'/login/login.php?return_url='.$return_url);
 	exit();
 }
 
