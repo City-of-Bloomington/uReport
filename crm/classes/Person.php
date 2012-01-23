@@ -581,7 +581,8 @@ class Person extends MongoRecord
 	 */
 	public static function getAuthenticationMethods()
 	{
-		return array('local','Employee');
+		global $DIRECTORY_CONFIG;
+		return array_merge(array('local'), array_keys($DIRECTORY_CONFIG));
 	}
 
 	/**

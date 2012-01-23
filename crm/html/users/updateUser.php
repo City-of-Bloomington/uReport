@@ -49,8 +49,6 @@ if (isset($_POST['username'])) {
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
-			print_r($user);
-			exit();
 		}
 	}
 
@@ -66,7 +64,11 @@ if (isset($_POST['username'])) {
 
 // Display the form
 $template = new Template('two-column');
-$template->blocks[] = new Block('people/personInfo.inc',array('person'=>$user));
+if ($user->getId()) {
+	$template->blocks[] = new Block(
+		'people/personInfo.inc',
+		array('person'=>$user,'disableButtons'=>true)
+	);
+}
 $template->blocks[] = new Block('users/updateUserForm.inc',array('person'=>$user));
 echo $template->render();
-
