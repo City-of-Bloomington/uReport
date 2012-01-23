@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Backup</title>
+	<style></style>
+</head>
+<body>
+	<h1>Backup</h1>
+		<p>Backing up a CRM install involves backing up both the database and any media uploaded.</p>
+
+	<h2>Backing up the database</h2>
+		<p>Backing up and restoring a Mongo database is covered in the
+			<a href="http://www.mongodb.org/display/DOCS/Backups">Mongo documentation</a>.
+			You can use <code><a href="http://www.mongodb.org/display/DOCS/Import+Export+Tools#ImportExportTools-mongodump">mongodump</a></code>
+			to create a backup.
+		</p>
+		<p><code>mongodump -d crm</code></p>
+
+	<h2>Backing up media uploads</h2>
+		<p>Uploaded media is stored in <code>data/media</code>.
+			Any backup just needs to preserve the contents of that directory.
+			You can create a tarball of the directory with
+			<code>tar czvf media.tar.gz data/media</code>
+		</p>
+
+	<h2>Automated Backups</h2>
+		<p>CRM incldues a script suitably for use in CRON that automates a complete backup.
+			You will need to edit <code>scripts/backup.sh</code> with the values for your
+			installation.
+		</p>
+		<p>The backup script is written to create nightly tarballs using the date as the filename.
+			To save hard drive space, it purges old snapshots.
+			If you have a tape backup system in place, be sure to add this location to your dailies.
+		</p>
+		<code><pre>
+#!/bin/bash
+# Creates a tarball containing a full snapshot of the data in the site
+MONGODUMP=/usr/local/mongo/bin/mongodump
+MONGO_DB=crm
+BACKUP_DIR=/var/www/backups/crm
+APPLICATION_HOME=/var/www/sites/crm
+
+# How many days worth of tarballs to keep around
+num_days_to_keep=5
+		</pre></code>
+		<p>Most linux systems have a <code>/etc/cron.daily</code> directory.
+			You should be able to just copy <code>scripts/backup.sh</code> to
+			<code>/etc/cron.daily</code> and make it executable.
+		</p>
+		<code><pre>
+cp scripts/backup.sh /etc/cron.daily/crm
+chmod +x /etc/cron.daily/crm
+		</pre></code>
+
+	<h1>Restore</h1>
+	<h2>Restoring the database</h2>
+		<p>You can use <code><a href="http://www.mongodb.org/display/DOCS/Import+Export+Tools#ImportExportTools-mongorestore">mongorestore</a></code>
+			to restore data from a dump.
+		</p>
+		<p><code>mongorestore -d crm {dumpdirectory}</code></p>
+
+	<h2>Restoring the media uploads</h2>
+		<p>If you've got a tarball of media, you can uncompress it with
+			<code>tar xzvf media.tar.gz</code>.  To restore it you just have to
+			put the old files back into place in your installation.
+			<code>cp -R media data/media</code>
+		</p>
+		<p>Depending on your Apache setup, after restoring the media, you may
+			need to adjust permissions on the newly-restored files before Apache
+			will serve them again. <code>chown -R apache data/media</code>
+		</p>
+	<h2>Restoring from automated backups</h2>
+		<p>If you're using the backup script to do automated nightly backups,
+			you can restore one of the nightlies by uncompressing it, restoring the
+			database, and putting the media back in place.
+		</p>
+</body>
+</html>

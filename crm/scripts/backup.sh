@@ -1,9 +1,9 @@
 #!/bin/bash
+# Creates a tarball containing a full snapshot of the data in the site
+#
 # @copyright Copyright 2011 City of Bloomington, Indiana
 # @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 # @author Cliff Ingham <inghamn@bloomington.in.gov>
-#
-# Creates a tarball containing a full snapshot of the data in the site
 MONGODUMP=/usr/local/mongo/bin/mongodump
 MONGO_DB=crm
 BACKUP_DIR=/var/www/backups/crm
