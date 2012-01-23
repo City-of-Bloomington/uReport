@@ -1,5 +1,5 @@
 <div id="banner">
-	<div id="utilityBar">
+	<ul id="utilityBar">
 		<?php
 			if (userIsAllowed('Users')) {
 				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
@@ -22,9 +22,9 @@
 				";
 			}
 		?>
+	</ul>
+	<div id="application_name">
+		<a href="<?php echo BASE_URL; ?>/"><?php echo APPLICATION_NAME; ?></a>
 	</div>
-		<div id="application_name">
-			<a href="<?php echo BASE_URL; ?>/"><?php echo APPLICATION_NAME; ?></a>
-		</div>
 	<div id="location_name"><?php echo LOCATION_NAME; ?></div>
 </div>

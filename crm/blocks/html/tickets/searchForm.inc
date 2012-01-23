@@ -49,7 +49,7 @@
 			<fieldset id="advanced-search">
 				<table>
 					<tr><td><label for="department">Department</label></td></tr>
-					<tr><td><select name="department[]" id="department" multiple="true" size="5">
+					<tr><td><select name="department[]" id="department" multiple="multiple" size="5">
 							<?php
 								$list = new DepartmentList();
 								$list->find();
@@ -74,7 +74,7 @@
 							";
 								switch ($config['formElement']) {
 									case 'select':
-										echo "<select name=\"{$key}[]\" id=\"$key\" multiple=\"true\" size=\"5\">";
+										echo "<select name=\"{$key}[]\" id=\"$key\" multiple=\"multiple\" size=\"5\">";
 										$options = array();
 										foreach (Ticket::getDistinct($key) as $value) {
 											if (trim($value)) {
@@ -122,7 +122,7 @@
 						if (count($list)) {
 						echo "
 						<tr><td><label for=\"category\">Category</label></td></tr>
-						<tr><td><select name=\"category[]\" id=\"category\" multiple=\"true\" size=\"5\">
+						<tr><td><select name=\"category[]\" id=\"category\" multiple=\"multiple\" size=\"5\">
 						";
 							foreach ($list as $category) {
 								$selected = (isset($_GET['category'])
@@ -221,10 +221,11 @@
 						if ((false === strpos($name,'Person') || userIsAllowed('People'))
 							&& $name!='id') {
 							$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
+							$value = View::escape($definition['displayName']);
 							echo "
 							<li><label>
 									<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
-									$definition[displayName]
+									$value
 								</label>
 							</li>
 							";
