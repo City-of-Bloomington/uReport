@@ -4,11 +4,11 @@
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:darkred; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
 h3 { font-size:100%; font-weight:bold; }
-a { text-decoration:none; color:#0066CC; }
+a { text-decoration:none; color:#06c; }
 p { margin:0 .5em .5em .5em; }
 
 table { margin:0 .5em .5em .5em; }
-th { color:#333333; font-weight:bold; font-size:90%; padding:0.25em; }
+th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
 td { padding:.25em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
@@ -57,7 +57,7 @@ button, .button {
 #utilityBar { float:right; width:40%;}
 #utilityBar li { display:inline; margin-right:1em; color:white; }
 
-#menuBar { margin-bottom:.5em; border-bottom:1px solid #cccccc; }
+#menuBar { margin-bottom:.5em; border-bottom:1px solid #ccc; }
 #menuBar ul { margin:.5em; padding:0; }
 #menuBar li { display:inline; margin-right:1em;}
 #menuBar a { font-size:123.1%; }
@@ -67,14 +67,8 @@ button, .button {
 #footer li { display:inline; margin-right:.5em; }
 #footer a { font-weight:bold; color:black; }
 
-#panel-container {}
-
-#content-panel {}
-
-#panel-one { }
 #panel-one div {
 	border:2px solid black; margin-bottom:0.5em;
-	-moz-border-radius:10px;
 	border-radius:10px;
 	overflow:hidden;
 }
@@ -141,7 +135,6 @@ button, .button {
 }
 
 .ticketList table { border:1px solid #aaaaaa; }
-.ticketList tr:nth-child(even) { background: #cccccc }
 .ticketList td { border-bottom:1px solid #aaaaaa; }
 
 .locationInfo > div { margin:.5em 0; }
@@ -171,10 +164,10 @@ button, .button {
 #search-form .addNewForm,
 #search-form .quickSearches,
 #search-form .advancedSearch {
-	background-color:white; border:1px solid #cccccc; margin:5px 0; padding-left:5px;
+	background-color:white; border:1px solid #ccc; margin:5px 0; padding-left:5px;
 }
 #search-results { margin-left:33%; padding:0 1em; }
-#search-results td { border-bottom:1px solid #dddddd; }
+#search-results td { border-bottom:1px solid #ddd; }
 
 .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
@@ -186,41 +179,55 @@ button, .button {
 	padding:0 15px 0 0;
 }
 
+#groupChooser li { list-style-type:none; }
+
 .clientRequestForm table { width:90%; }
-.clientRequestForm tr:nth-child(even) { background:#ffffff; width:100%; }
-.clientRequestForm tr:nth-child(odd) { background:#eeeeee;  width:100%; }
 .clientRequestForm td label { text-align:right; }
 .clientRequestForm fieldset { margin:1em 0; padding:.5em; }
-.clientRequestForm form { border:3px solid #dddddd; padding:.5em 0; }
+.clientRequestForm form { border:3px solid #ddd; padding:.5em 0; }
 
 .clientRequestForm select, .clientRequestForm input,
 .clientRequestForm button, .clientRequestForm textarea {
 	float:left;
 }
 
+/**
+ *  Tables with alternating row background colors
+ */
+.searchResults tbody tr:nth-child(odd),
+.ticketList tbody tr:nth-child(even),
+.clientRequestForm tbody tr:nth-child(odd) {
+	background:#eee;
+}
+
+/**
+ * Screens with rounded rectangle boxes with headers
+ */
 .departmentList .department,
-.categoryList .category {
+.categoryList .category,
+.serviceChooser {
 	border:2px solid black;  margin-top:0.5em;
-	-moz-border-radius:10px;
 	border-radius:10px;
 	overflow:hidden;
 }
 .departmentList .department h3,
-.categoryList .category h3 {
-	background-color:#3366CC; color:white;
+.categoryList .category h3,
+.serviceChooser h1 {
+	background-color:#36c; color:white;
 	border-bottom:2px solid black;
-	padding:0.25em;
+	padding:0.25em; margin-top:0;
 }
 .departmentList .department h3 a,
-.categoryList .category h3 a {
+.categoryList .category h3 a,
+.serviceChooser h1 a {
 	color:white;
 }
 
 
-.issueList { background-color:#eeeeee; }
+.issueList { background-color:#eee; }
 .issueList h1 { margin:.25em; }
 .issueList .issueInfo {
-	border:1px solid #cccccc; margin:.5em; padding:.25em; background-color:white;
+	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
 }
 .issueInfo .notes { margin-bottom:.25em; }
 
@@ -257,11 +264,8 @@ button, .button {
 .pageNavigation li { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified { background-color:#CCFFCC; }
+tr.verified { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
-
-/* JavaScript will apply this style to stuff it wants to hide */
-.hidden { display:none; }
 
 /* YUI Styles */
 /* Autocomplete styles */
