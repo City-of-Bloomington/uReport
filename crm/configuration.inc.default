@@ -134,8 +134,8 @@ $DIRECTORY_CONFIG = array(
 //		'DIRECTORY_SERVER'=>'ldaps://example.org:636',
 //		'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
 //		'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
-//		'DIRECTORY_USER_BINDING'=>'{username}@bloomington.in.gov',
-//		'DIRECTORY_ADMIN_BINDING'=>'admin@bloomington.in.gov',
+//		'DIRECTORY_USER_BINDING'=>'{username}@example.org',
+//		'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
 //		'DIRECTORY_ADMIN_PASS'=>'password'
 //	)
 );
