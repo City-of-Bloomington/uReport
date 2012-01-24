@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URL.'/js/open311/accordian.js');
+$this->template->addToAsset('scripts',BASE_URL.'/js/open311/groupChooser.js');
 ?>
 <div id="groupChooser">
 	<h1>All Reports</h1>
