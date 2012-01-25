@@ -1,6 +1,11 @@
 "use strict";
 YUI().use('node', function(Y) {
 	var services = Y.all('#groupChooser .serviceChooser');
+	services.each(function (node) {
+		node.one('h1 a').on('click', function (e) {
+			e.preventDefault();
+		});
+	});
 
 	function closeAll() {
 		services.each(function (node) {
