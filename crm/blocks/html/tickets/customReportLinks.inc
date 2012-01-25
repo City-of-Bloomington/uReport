@@ -7,10 +7,10 @@
 ?>
 <div class="customReportLinks">
 	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-		<fieldset><legend>Change display</legend>
+		<fieldset><legend>Search Results Display Options</legend>
 			<label>Display as:
 				<select name="report">
-					<option value="">Search Results</option>
+					<option value="">Standard</option>
 					<?php
 						$reports = glob(APPLICATION_HOME.'/blocks/html/tickets/reports/*.inc');
 						if (count($reports)) {

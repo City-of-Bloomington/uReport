@@ -14,6 +14,12 @@ crm/docs/DeveloperGuide/ConceptArt/images/history_change.jpg -text
 crm/docs/DeveloperGuide/ConceptArt/images/newcase.jpg -text
 crm/docs/DeveloperGuide/ConceptArt/images/same_field.jpg -text
 crm/html/departments/updateMyDepartment.php -text
+crm/html/help/images/actions.jpg -text
+crm/html/help/images/case_issues.png -text
+crm/html/help/images/edit.png -text
+crm/html/help/images/metadata.jpg -text
+crm/html/help/images/newcase.jpg -text
+crm/html/help/images/newissue.jpg -text
 crm/html/js/open311/cross-hairs-small-black-cropped.png -text
 crm/html/media/media -text
 crm/html/people/mergePeople.php -text

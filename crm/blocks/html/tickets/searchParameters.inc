@@ -58,7 +58,7 @@ foreach (TicketList::getSearchableFields() as $key=>$value) {
 }
 
 if ($params) {
-	echo "<div class=\"searchParameters\"><h1>Current Search</h1>";
+	echo "<div class=\"searchParameters\"><h1>Current Search</h1><p>Your current search parameters. Click on one of the labels to delete that parameter from your search.</p><span> ";
 	foreach ($params as $p) {
 		$key = $p['key'];
 		$displayName = $p['displayName'];
@@ -76,5 +76,5 @@ if ($params) {
 			}
 		}
 	}
-	echo "</div>";
+	echo "</span></div>";
 }
