@@ -1,14 +1,14 @@
 <div id="banner">
 	<ul id="utilityBar">
 		<?php
-			if (userIsAllowed('Users')) {
+			if (userIsAllowed('users')) {
 				echo "<li><a href=\"".BASE_URL."/admin\">Admin</a></li>";
 			}
 			if (isset($_SESSION['USER'])) {
 				$name = View::escape("{$_SESSION['USER']->getFirstname()} {$_SESSION['USER']->getLastname()}");
 				echo "
-				<li><a href=\"".BASE_URL."/admin\">My Account</a></li>
-				<li><a href=\"".BASE_URL."/login/logout.php\">Logout</a></li>
+				<li><a href=\"".BASE_URL."/account\">My Account</a></li>
+				<li><a href=\"".BASE_URL."/login/logout\">Logout</a></li>
 				<li>Signed in as $name</li>
 				<li><a href=\"http://code.google.com/p/civic-crm/wiki/Home\">Help</a></li>
 				";

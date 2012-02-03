@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 ?>
 <div class="changeStatusForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
 		<fieldset><legend>Change Status</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>

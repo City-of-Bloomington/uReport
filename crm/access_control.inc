@@ -5,40 +5,48 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $ZEND_ACL = new Zend_Acl();
-/**
- * Load the roles from the database
- */
-$roles = array('Administrator','Staff');
-foreach ($roles as $role) {
-	$ZEND_ACL = $ZEND_ACL->addRole(new Zend_Acl_Role($role));
-}
+$ZEND_ACL->addRole(new Zend_Acl_Role('Anonymous'))
+		 ->addRole(new Zend_Acl_Role('Public'), 'Anonymous')
+		 ->addRole(new Zend_Acl_Role('Staff'), 'Public')
+		 ->addRole(new Zend_Acl_Role('Administrator'), 'Staff');
 
 /**
  * Declare all the resources
  */
-$ZEND_ACL->add(new Zend_Acl_Resource('Users'));
-$ZEND_ACL->add(new Zend_Acl_Resource('People'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Departments'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Clients'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Lookups'));
+$ZEND_ACL->add(new Zend_Acl_Resource('index'));
+$ZEND_ACL->add(new Zend_Acl_Resource('login'));
+$ZEND_ACL->add(new Zend_Acl_Resource('admin'));
+$ZEND_ACL->add(new Zend_Acl_Resource('account'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('Actions'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Categories'));
-$ZEND_ACL->add(new Zend_Acl_Resource('IssueTypes'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Resolutions'));
-$ZEND_ACL->add(new Zend_Acl_Resource('ContactMethods'));
-$ZEND_ACL->add(new Zend_Acl_Resource('NeighborhoodAssociations'));
+$ZEND_ACL->add(new Zend_Acl_Resource('users'));
+$ZEND_ACL->add(new Zend_Acl_Resource('people'));
+$ZEND_ACL->add(new Zend_Acl_Resource('departments'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('Tickets'));
-$ZEND_ACL->add(new Zend_Acl_Resource('Issues'));
+$ZEND_ACL->add(new Zend_Acl_Resource('actions'));
+$ZEND_ACL->add(new Zend_Acl_Resource('categories'));
+$ZEND_ACL->add(new Zend_Acl_Resource('labels'));
+$ZEND_ACL->add(new Zend_Acl_Resource('types'));
+$ZEND_ACL->add(new Zend_Acl_Resource('resolutions'));
+$ZEND_ACL->add(new Zend_Acl_Resource('contactMethods'));
+$ZEND_ACL->add(new Zend_Acl_Resource('neighborhoodAssociations'));
 
-/**
- * Assign permissions to the resources
- */
+$ZEND_ACL->add(new Zend_Acl_Resource('locations'));
+$ZEND_ACL->add(new Zend_Acl_Resource('tickets'));
+$ZEND_ACL->add(new Zend_Acl_Resource('issues'));
+$ZEND_ACL->add(new Zend_Acl_Resource('media'));
+
+$ZEND_ACL->add(new Zend_Acl_Resource('open311'));
+$ZEND_ACL->add(new Zend_Acl_Resource('clients'));
+
+// Permissions for non-authenticated web browsing
+$ZEND_ACL->allow(null,array('login','open311'));
+$ZEND_ACL->allow(null,
+				array('index','tickets','issues','locations'),
+				array('index','view','partial'));
+
+// Staff permission
+$ZEND_ACL->allow('Staff',array('account','tickets','people','issues','media'));
+$ZEND_ACL->allow('Staff','departments',array('index','view','choose'));
+
 // Administrator is allowed access to everything
 $ZEND_ACL->allow('Administrator');
-
-// Staff Permissions
-$ZEND_ACL->allow('Staff','Tickets');
-$ZEND_ACL->allow('Staff','People');
-$ZEND_ACL->allow('Staff','Issues');

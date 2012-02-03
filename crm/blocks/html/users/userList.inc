@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2007-2011 City of Bloomington, Indiana
+ * @copyright 2007-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->userList
@@ -8,8 +8,8 @@
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userIsAllowed('Users')) {
-				echo '<a class="add button" href="'.BASE_URL.'/users/updateUser.php">Add User Account</a>';
+			if (userIsAllowed('users','add')) {
+				echo '<a class="add button" href="'.BASE_URI.'/users/update">Add User Account</a>';
 			}
 		?>
 		User Accounts
@@ -30,17 +30,17 @@
 			foreach ($this->userList as $user) {
 				$editButton = '';
 				$deleteButton = '';
-				if (userIsAllowed('Users')) {
+				if (userIsAllowed('users','update')) {
 					$editButton = "
 					<a class=\"edit button\"
-						href=\"".BASE_URL."/users/updateUser.php?person_id={$user->getId()}\">
-						Edit User Account
+						href=\"".BASE_URI."/users/update?person_id={$user->getId()}\">
+						Edit Account
 					</a>
 					";
 					$deleteButton = "
 					<a class=\"delete button\"
-						href=\"".BASE_URL."/users/deleteUser.php?person_id={$user->getId()}\">
-						Delete User Account
+						href=\"".BASE_URI."/users/delete?person_id={$user->getId()}\">
+						Delete Account
 					</a>
 					";
 				}
@@ -57,13 +57,7 @@
 					<td>$name</td>
 					<td>$departmentName</td>
 					<td>{$user->getAuthenticationMethod()}</td>
-					<td>
-				";
-						foreach ($user->getRoles() as $role) {
-							echo "$role ";
-						}
-				echo "
-					</td>
+					<td>{$user->getRole()}</td>
 					<td>$deleteButton</td>
 				</tr>
 				";

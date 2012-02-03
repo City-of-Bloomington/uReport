@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->responses
@@ -26,7 +26,7 @@
 				$notes = View::escape($response->getNotes());
 				echo "
 				<tr><td>{$response->getDate(DATE_FORMAT)}</td>
-					<td><a href=\"".BASE_URL."/people/viewPerson.php?person_id=$id\">$name</a></td>
+					<td><a href=\"".BASE_URL."/people/view?person_id=$id\">$name</a></td>
 					<td>$contactMethod</td>
 					<td>$notes</td>
 				</tr>

@@ -7,23 +7,23 @@
 ?>
 <div class="searchForm">
 	<?php
-		if (userIsAllowed('Tickets')) {
+		if (userIsAllowed('tickets','add')) {
 			$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
 			echo "
 			<div class=\"quickSearches\">
 				<h1>Existing Cases</h1>
 				<h2>Quick Search</h2>
-				<form method=\"get\" action=\"".BASE_URL."/tickets/home.php\">
+				<form method=\"get\" action=\"".BASE_URL."/tickets\">
 					<fieldset>
 						<label>Case # <input name=\"number\" value=\"$number\"/></label>
 						<button type=\"submit\" class=\"search\">Search</button>
 					</fieldset>
 				</form>
-				<ul><li><a href=\"".BASE_URL."/tickets/home.php?status=open\">
+				<ul><li><a href=\"".BASE_URL."/tickets?status=open\">
 							All open cases
 						</a>
 					</li>
-					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;assignedPerson[]={$_SESSION['USER']->getId()}\">
+					<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson[]={$_SESSION['USER']->getId()}\">
 							All open cases assigned to me
 						</a>
 					</li>
@@ -31,7 +31,7 @@
 				if ($_SESSION['USER']->getDepartment()) {
 					$dept = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets/home.php?status=open;department[]=$dept[_id]\">
+					<li><a href=\"".BASE_URL."/tickets?status=open;department[]=$dept[_id]\">
 							All open cases for my department
 						</a>
 					</li>
@@ -45,7 +45,7 @@
 	?>
 	<div class="advancedSearch">
 		<h2>Advanced Search</h2>
-		<form method="get" action="<?php echo BASE_URL; ?>/tickets/home.php">
+		<form method="get" action="<?php echo BASE_URL; ?>/tickets">
 			<fieldset id="advanced-search">
 				<table>
 					<tr><td><label for="department">Department</label></td></tr>
@@ -218,7 +218,7 @@
 					}
 
 					foreach (TicketList::getDisplayableFields() as $name=>$definition) {
-						if ((false === strpos($name,'Person') || userIsAllowed('People'))
+						if ((false === strpos($name,'Person') || userIsAllowed('people','view'))
 							&& $name!='id') {
 							$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
 							$value = View::escape($definition['displayName']);

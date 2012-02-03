@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -11,16 +11,16 @@
 $editButton = '';
 $deleteButton = '';
 $responseButton = '';
-if (!$this->disableButtons && userIsAllowed('Issues')) {
+if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()};index={$this->index}\">
 		Edit Issue
 	</a>
 	";
 	$deleteButton = "
 	<a class=\"delete button\"
-		href=\"".BASE_URL."/tickets/deleteIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		href=\"".BASE_URL."/issues/delete?ticket_id={$this->ticket->getId()};index={$this->index}\">
 		Delete Issue
 	</a>
 	";
@@ -28,13 +28,13 @@ if (!$this->disableButtons && userIsAllowed('Issues')) {
 	if ($this->issue->getReportedByPerson()) {
 		$responseButton = "
 		<a class=\"add button\"
-			href=\"".BASE_URL."/tickets/addResponse.php?ticket_id={$this->ticket->getId()};index=$this->index\">
+			href=\"".BASE_URL."/issues/respond?ticket_id={$this->ticket->getId()};index=$this->index\">
 			Add Response
 		</a>
 		";
 	}
 }
-$url = BASE_URL."/tickets/viewIssue.php?ticket_id={$this->ticket->getId()};index={$this->index}";
+$url = BASE_URL."/issues?ticket_id={$this->ticket->getId()};index={$this->index}";
 $type = View::escape($this->issue->getType());
 echo "
 <div class=\"issueInfo\">
@@ -51,17 +51,17 @@ echo "
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	if (userIsAllowed('People')) {
+	if (userIsAllowed('people','view')) {
 		$enteredBy = $this->issue->getEnteredByPerson();
 		if ($enteredBy) {
-			$href = BASE_URL."/people/viewPerson.php?person_id={$enteredBy->getId()}";
+			$href = BASE_URL."/people/view?person_id={$enteredBy->getId()}";
 			$enteredBy = View::escape($enteredBy->getFullname());
 			$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 		}
 
 		$reportedBy = $this->issue->getReportedByPerson();
 		if ($reportedBy) {
-			$href = BASE_URL."/people/viewPerson.php?person_id={$reportedBy->getId()}";
+			$href = BASE_URL."/people/view?person_id={$reportedBy->getId()}";
 			$reportedBy = View::escape($reportedBy->getFullname());
 			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 		}
@@ -104,7 +104,7 @@ echo "
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	if (userIsAllowed('People')) {
+	if (userIsAllowed('people','view')) {
 		$this->responses = $this->issue->getResponses();
 		if ($this->responses) {
 			include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';

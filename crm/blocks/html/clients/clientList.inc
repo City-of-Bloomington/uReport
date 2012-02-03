@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param ClientList $this->clientList
@@ -9,8 +9,8 @@
 <div class="clientList">
 	<h1>Clients
 		<?php
-			if (userIsAllowed('Clients')) {
-				echo '<a class="add button" href="'.BASE_URL.'/clients/updateClient.php">Add</a>';
+			if (userIsAllowed('clients','update')) {
+				echo '<a class="add button" href="'.BASE_URL.'/clients/update">Add</a>';
 			}
 		?>
 	</h1>
@@ -25,16 +25,16 @@
 			foreach ($this->clientList as $client) {
 				$editButton = '';
 				$deleteButton = '';
-				if (userIsAllowed('Clients')) {
+				if (userIsAllowed('clients','update')) {
 					$editButton = "
 					<a class=\"edit button\"
-						href=\"".BASE_URL."/clients/updateClient.php?client_id={$client->getId()}\">
+						href=\"".BASE_URL."/clients/update?client_id={$client->getId()}\">
 						Edit
 					</a>
 					";
 					$deleteButton = "
 					<a class=\"delete button\"
-						href=\"".BASE_URL."/clients/deleteClient.php?client_id={$client->getId()}\">
+						href=\"".BASE_URL."/clients/delete?client_id={$client->getId()}\">
 						Delete
 					</a>
 					";

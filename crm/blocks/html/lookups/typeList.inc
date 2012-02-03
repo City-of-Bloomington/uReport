@@ -8,8 +8,8 @@
 <div class="typeList">
 	<h1>Issue Types
 		<?php
-			if (userIsAllowed('Lookups')) {
-				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateTypes.php">Edit</a>';
+			if (userIsAllowed('types','update')) {
+				echo '<a class="edit button" href="'.BASE_URL.'/types/update">Edit</a>';
 			}
 		?>
 	</h1>

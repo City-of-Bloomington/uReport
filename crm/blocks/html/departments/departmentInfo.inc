@@ -1,16 +1,16 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->department
  */
 $editButton = '';
 $deleteButton = '';
-if (userIsAllowed('Departments')) {
+if (userIsAllowed('departments','update')) {
 	$editButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URL."/departments/updateDepartment.php?department_id={$this->department->getId()}\">
+		href=\"".BASE_URL."/departments/update?department_id={$this->department->getId()}\">
 		Edit
 	</a>
 	";
@@ -18,7 +18,7 @@ if (userIsAllowed('Departments')) {
 	if (!count($this->department->getPeople())) {
 		$deleteButton = "
 		<a class=\"delete button\"
-			href=\"".BASE_URL."/departments/deleteDepartment.php?department_id={$this->department->getId()}\">
+			href=\"".BASE_URL."/departments/delete?department_id={$this->department->getId()}\">
 			Delete
 		</a>
 		";
@@ -51,7 +51,7 @@ $statuses = implode(', ',$statuses);
 
 echo "
 <div class=\"department\">
-	<h3><a href=\"".BASE_URL."/departments/viewDepartment.php?department_id={$this->department->getId()}\">
+	<h3><a href=\"".BASE_URL."/departments/view?department_id={$this->department->getId()}\">
 			$name
 		</a>
 		$editButton $deleteButton

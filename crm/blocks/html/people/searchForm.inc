@@ -8,11 +8,14 @@
 if (!isset($_GET['setOfPeople'])) {
 	$_GET['setOfPeople'] = 'all';
 }
+$return_url = $this->return_url ? $this->return_url : BASE_URL.'/people/view';
 ?>
 <div class="findPeople yui3-skin-sam">
-	<h1><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h1>
+	<h2><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h2>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
+			<input type="hidden" name="return_url" value="<?php echo $return_url; ?>" />
+
 			<div><label>
 					<input type="radio" name="setOfPeople" value="all"
 						<?php if ($_GET['setOfPeople']=='all') echo 'checked="checked"'; ?> />

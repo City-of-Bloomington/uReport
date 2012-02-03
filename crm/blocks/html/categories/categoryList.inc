@@ -9,8 +9,8 @@
 <div class="categoryList">
 	<h1>Categories
 		<?php
-			if (userIsAllowed('Categories')) {
-				echo '<a class="add button" href="'.BASE_URL.'/categories/updateCategory.php">Add</a>';
+			if (userIsAllowed('categories','update')) {
+				echo '<a class="add button" href="'.BASE_URL.'/categories/update">Add</a>';
 			}
 		?>
 	</h1>
@@ -44,10 +44,10 @@
 			";
 			foreach ($group['categories'] as $category) {
 				$editButton = '';
-				if (userIsAllowed('Categories')) {
+				if (userIsAllowed('categories','update')) {
 					$editButton = "
 					<a class=\"edit button\"
-						href=\"".BASE_URL."/categories/updateCategory.php?category_id={$category->getId()}\">
+						href=\"".BASE_URL."/categories/update?category_id={$category->getId()}\">
 						Edit
 					</a>
 					";

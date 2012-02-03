@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -21,7 +21,7 @@ $description = View::escape($this->action->getDescription());
 			<td>The person the action is about</td>
 		</tr>
 	</table>
-	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="post" action="<?php echo BASE_URL; ?>/actions/update">
 		<fieldset><legend>Action</legend>
 			<input name="action_id" type="hidden" value="<?php echo $this->action->getId(); ?>" />
 			<table>

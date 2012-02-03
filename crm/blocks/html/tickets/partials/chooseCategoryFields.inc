@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->return_url
@@ -20,6 +20,7 @@
 					";
 				}
 				catch (Exception $e) {
+					# Just ignore bad categories.  The user will just have to pick another
 				}
 			}
 
@@ -34,7 +35,7 @@
 	?>
 	</select>
 </label>
-<div><a href="<?php echo BASE_URL; ?>/categories/chooseCategory.php?return_url=<?php echo "{$this->return_url}"; ?>">
+<div><a href="<?php echo BASE_URL; ?>/categories/choose?return_url=<?php echo "{$this->return_url}"; ?>">
 		Choose from all categories
 	</a>
 </div>

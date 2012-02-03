@@ -6,7 +6,7 @@
  * @param array $this->groups An array of group names
  */
 ?>
-<div class="groups.inc">
+<div class="groups">
 	<h1>Category Groups</h1>
 	<ul>
 	<?php

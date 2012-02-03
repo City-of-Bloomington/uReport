@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param DepartmentList $this->departmentList
@@ -8,8 +8,8 @@
 ?>
 <div class="departmentList">
 	<h1><?php
-			if (userIsAllowed('Departments')) {
-				echo '<a class="add button" href="'.BASE_URL.'/departments/updateDepartment.php">Add</a>';
+			if (userIsAllowed('departments','update')) {
+				echo '<a class="add button" href="'.BASE_URL.'/departments/update">Add</a>';
 			}
 		?>
 		Departments

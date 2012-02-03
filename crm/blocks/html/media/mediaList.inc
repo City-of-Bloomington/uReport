@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -18,7 +18,7 @@
 			foreach ($this->mediaList as $mediaIndex=>$media) {
 				$deleteButton = '';
 				if (!$this->disableButtons) {
-					$url = new URL(BASE_URL.'/media/delete.php');
+					$url = new URL(BASE_URL.'/media/delete');
 					$url->ticket_id = (string)$this->ticket->getId();
 					$url->issueIndex = $this->index;
 					$url->mediaIndex = $mediaIndex;
@@ -39,7 +39,7 @@
 			";
 		}
 
-		if (!$this->disableButtons && userIsAllowed('Tickets')) {
+		if (!$this->disableButtons && userIsAllowed('media','upload')) {
 			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
 		}
 	?>

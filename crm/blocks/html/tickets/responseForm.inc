@@ -9,7 +9,7 @@
 ?>
 <div class="responseForm">
 	<h1>Record a response</h1>
-	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>How did you respond to the person?</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<input name="index" type="hidden" value="<?php echo $this->index; ?>" />

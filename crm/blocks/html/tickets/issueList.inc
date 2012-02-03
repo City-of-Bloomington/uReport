@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
@@ -9,10 +9,10 @@
  * @param bool $this->disableComments
  */
 $addButton = '';
-if (!$this->disableButtons && $this->ticket && userIsAllowed('Issues')) {
+if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
 	$addButton = "
 	<a class=\"add button\"
-		href=\"".BASE_URL."/tickets/updateIssue.php?ticket_id={$this->ticket->getId()}\">
+		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()}\">
 		Add Issue
 	</a>
 	";

@@ -9,7 +9,7 @@
  * APPLICATION_HOME/blocks/xml/...
  * APPLICATION_HOME/blocks/json/..
  *
- * @copyright 2006-2010 City of Bloomington, Indiana
+ * @copyright 2006-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -72,18 +72,5 @@ class Block extends View
 	public function getFile()
 	{
 		return $this->file;
-	}
-
-	/**
-	 * Passes helper function calls off to the Template
-	 */
-	public function __call($functionName,$arguments)
-	{
-		if ($this->template) {
-			return $this->template->__call($functionName,$arguments);
-		}
-		else {
-			throw new BadMethodCallException("Block::$functionName");
-		}
 	}
 }

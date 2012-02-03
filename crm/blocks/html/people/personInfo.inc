@@ -1,18 +1,18 @@
 <?php
 /**
- * @copyright 2009-2011 City of Bloomington, Indiana
+ * @copyright 2009-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  * @param bool $this->disableButtons
  */
 $username = '';
-if (userIsAllowed('People')) {
+if (userIsAllowed('people','view')) {
 	$username = $this->person->getUsername();
-	if (!$username && userIsAllowed('Users') && !$this->disableButtons) {
+	if (!$username && userIsAllowed('users','add') && !$this->disableButtons) {
 		$username = "
 		<a class=\"add button\"
-			href=\"".BASE_URL."/users/updateUser.php?person_id={$this->person->getId()}\">
+			href=\"".BASE_URL."/users/update?person_id={$this->person->getId()}\">
 			Create Account
 		</a>
 		";
@@ -22,17 +22,17 @@ if (userIsAllowed('People')) {
 
 $editButton = '';
 $deleteButton = '';
-if (userIsAllowed('People') && !$this->disableButtons) {
+if (userIsAllowed('people','update') && !$this->disableButtons) {
 	$editButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URL."/people/updatePerson.php?person_id={$this->person->getId()}\">
+		href=\"".BASE_URL."/people/update?person_id={$this->person->getId()}\">
 		Edit
 	</a>
 	";
 	if (!$this->person->hasTickets()) {
 		$deleteButton = "
 		<a class=\"delete button\"
-			href=\"".BASE_URL."/people/deletePerson.php?person_id={$this->person->getId()}\">
+			href=\"".BASE_URL."/people/delete?person_id={$this->person->getId()}\">
 			Delete Person
 		</a>
 		";

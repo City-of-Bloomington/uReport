@@ -1,7 +1,8 @@
 <?php
 /**
  * Global, shared functions for all PHP web applications
- * @copyright 2006-2009 City of Bloomington, Indiana.
+ *
+ * @copyright 2006-2012 City of Bloomington, Indiana.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @package GlobalFunctions
@@ -12,11 +13,15 @@
  */
 function autoload($class)
 {
-	if (file_exists(APPLICATION_HOME."/classes/$class.php")) {
-		require_once(APPLICATION_HOME."/classes/$class.php");
+	if (false !== strpos($class, 'Controller')
+		&& file_exists(APPLICATION_HOME."/controllers/$class.php")) {
+		include APPLICATION_HOME."/controllers/$class.php";
+	}
+	elseif (file_exists(APPLICATION_HOME."/models/$class.php")) {
+		include APPLICATION_HOME."/models/$class.php";
 	}
 	elseif (file_exists(FRAMEWORK."/classes/$class.php")) {
-		require_once(FRAMEWORK."/classes/$class.php");
+		include FRAMEWORK."/classes/$class.php";
 	}
 }
 
@@ -153,14 +158,14 @@ if (ERROR_REPORTING != 'PHP_DEFAULT') {
  * This is implemented by checking against a Zend_Acl object
  * The Zend_Acl should be created in configuration.inc
  *
- * @param Zend_Acl_Resource|string $resource
+ * @param string $resource
+ * @param string $action
  * @return boolean
  */
-function userIsAllowed($resource)
+function userIsAllowed($resource, $action=null)
 {
 	global $ZEND_ACL;
 	if (isset($_SESSION['USER'])) {
-		return $_SESSION['USER']->isAllowed($resource);
+		return $_SESSION['USER']->isAllowed($resource, $action);
 	}
-	return false;
 }

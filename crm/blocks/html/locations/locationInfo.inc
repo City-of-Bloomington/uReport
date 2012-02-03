@@ -7,7 +7,7 @@
  * @param bool $this->disableButtons
  */
 if ($this->location) {
-	$url = new URL(BASE_URL.'/locations/viewLocation.php?location='.$this->location);
+	$url = new URL(BASE_URL.'/locations/view?location='.$this->location);
 	$location = View::escape($this->location);
 
 	echo "
@@ -30,7 +30,7 @@ if ($this->location) {
 		}
 	}
 
-	if (userIsAllowed('People')) {
+	if (userIsAllowed('people','view')) {
 		$people = new PersonList(array('address'=>$this->location));
 		if (count($people)) {
 			echo "<h1>People</h1><ul>";

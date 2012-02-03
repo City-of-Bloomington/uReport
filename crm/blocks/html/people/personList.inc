@@ -6,6 +6,7 @@
  * @param PersonList $this->personList
  * @param string $this->return_url (optional) The url to use for each of th search results
  */
+echo "REDIRECT_URL: $_SERVER[REDIRECT_URL] return_url: {$this->return_url}\n";
 ?>
 <div class="interfaceBox">
 	<h1>People</h1>

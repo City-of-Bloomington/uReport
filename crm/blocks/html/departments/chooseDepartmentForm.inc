@@ -9,7 +9,7 @@ $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
 ?>
 <div class="chooseDepartmentForm">
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Department</legend>
 			<table>
 				<tr><td><label for="department_id">Department</label></td>

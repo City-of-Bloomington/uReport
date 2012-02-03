@@ -8,7 +8,7 @@
  */
 ?>
 <div class="mergeForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/people/mergePeople.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/people/merge">
 		<fieldset>
 			<div class="target_a">
 				<input name="targetPerson" id="targetPerson_a" type="radio" value="a" checked="checked" />

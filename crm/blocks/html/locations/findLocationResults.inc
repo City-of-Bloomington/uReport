@@ -19,7 +19,7 @@ if (count($this->results)) {
 
 	$url = $this->return_url
 		? new URL($this->return_url)
-		: new URL(BASE_URL.'/locations/viewLocation.php');
+		: new URL(BASE_URL.'/locations/view');
 
 	foreach ($this->results as $location=>$data) {
 		$url->location = $location;

@@ -6,7 +6,7 @@
  */
 ?>
 <div class="findForm">
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Filter Users</legend>
 			<table>
 				<tr><td><label for="department_id">Department</label></td>

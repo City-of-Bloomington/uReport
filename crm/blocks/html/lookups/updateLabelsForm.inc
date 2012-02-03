@@ -13,14 +13,14 @@ $labels = View::escape(implode(', ',$labels));
 		Type the labels you want to use for issues, seperated by commas.
 		These will show up on the issue editing screen and on the ticket search form.
 	</p>
-	<form method="post" action="<?php echo BASE_URL; ?>/lookups/updateLabels.php">
+	<form method="post" action="<?php echo BASE_URI; ?>/labels/update">
 		<fieldset>
 			<div><label for="labels">Labels</label></div>
 			<div><textarea name="labels" id="labels"><?php echo $labels; ?></textarea></div>
 			<div>
 				<button type="submit" class="submit">Submit</button>
 				<button type="button" class="cancel"
-					onclick="document.location.href='<?php echo BASE_URL; ?>/lookups/labels.php';">
+					onclick="document.location.href='<?php echo BASE_URI; ?>/labels';">
 					Cancel
 				</button>
 			</div>

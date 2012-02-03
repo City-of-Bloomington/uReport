@@ -12,8 +12,6 @@ $service_code = $this->ticket->getData('category._id');
 $issue = $this->ticket->getIssue();
 $description = View::escape($issue->getDescription());
 
-$history = end($this->ticket->getHistory());
-
 $address = View::escape($this->ticket->getLocation());
 $zipcode = View::escape($this->ticket->getZip());
 

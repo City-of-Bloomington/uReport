@@ -6,7 +6,7 @@
  */
 ?>
 <div class="customReportLinks">
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Search Results Display Options</legend>
 			<label>Display as:
 				<select name="report">

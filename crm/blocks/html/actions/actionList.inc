@@ -1,14 +1,14 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
 <div class="interfaceBox">
 	<h1><?php
-			if (userIsAllowed('Actions')) {
-				echo '<a class="add button" href="'.BASE_URL.'/actions/updateAction.php">Add</a>';
+			if (userIsAllowed('actions','update')) {
+				echo '<a class="add button" href="'.BASE_URL.'/actions/update">Add</a>';
 			}
 		?>
 		Actions
@@ -25,10 +25,10 @@
 		<?php
 			foreach (ActionList::getActions() as $action) {
 				$editButton = '';
-				if (userIsAllowed('Actions')) {
+				if (userIsAllowed('actions','update')) {
 					$editButton = "
 					<a class=\"edit button\"
-						href=\"".BASE_URL."/actions/updateAction.php?action_id={$action->getId()}\">
+						href=\"".BASE_URL."/actions/update?action_id={$action->getId()}\">
 						Edit
 					</a>
 					";

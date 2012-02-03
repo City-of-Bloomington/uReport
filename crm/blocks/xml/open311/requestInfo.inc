@@ -14,7 +14,8 @@ $description = View::escape($issue->getDescription());
 
 $department = View::escape($this->ticket->getData('assignedPerson.department.name'));
 
-$history = end($this->ticket->getHistory());
+$h = $this->ticket->getHistory();
+$history = end($h);
 
 $address = View::escape($this->ticket->getLocation());
 $zipcode = View::escape($this->ticket->getZip());

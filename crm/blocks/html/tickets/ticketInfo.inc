@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
-$location = $location ? "<a href=\"".BASE_URL."/locations/viewLocation.php?location=$location\">$location</a>" : '';
+$location = $location ? "<a href=\"".BASE_URL."/locations/view?location=$location\">$location</a>" : '';
 
-if (userIsAllowed('People')) {
+if (userIsAllowed('people','view')) {
 	$url = new URL(BASE_URL.'/people/viewPerson.php');
 	$personFields = array('enteredBy','assigned','referred');
 	foreach ($personFields as $field) {
@@ -36,16 +36,16 @@ $deleteButton = '';
 $changeCategoryButton = '';
 $changeLocationButton = '';
 
-if (!$this->disableButtons && userIsAllowed('Tickets')) {
+if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 	$editStatusButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URL."/tickets/changeStatus.php?ticket_id={$this->ticket->getId()}\">
+		href=\"".BASE_URL."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
 		Edit Status
 	</a>
 	";
 	$deleteButton = "
 	<a class=\"delete button\"
-		href=\"".BASE_URL."/tickets/deleteTicket.php?ticket_id={$this->ticket->getId()}\">
+		href=\"".BASE_URL."/tickets/delete?ticket_id={$this->ticket->getId()}\">
 		Delete Case
 	</a>
 	";
@@ -53,20 +53,20 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 	if ($this->ticket->getStatus()!='closed') {
 		$changeCategoryButton = "
 		<a class=\"edit button\"
-			href=\"".BASE_URL."/tickets/changeCategory.php?ticket_id={$this->ticket->getId()}\">
+			href=\"".BASE_URL."/tickets/changeCategory?ticket_id={$this->ticket->getId()}\">
 			Change Category
 		</a>
 		";
 		$changeLocationButton = "
 		<a class=\"edit button\"
-			href=\"".BASE_URL."/tickets/changeLocation.php?ticket_id={$this->ticket->getId()}\">
+			href=\"".BASE_URL."/tickets/changeLocation?ticket_id={$this->ticket->getId()}\">
 			Change Location
 		</a>
 		";
-		if (userIsAllowed('People')) {
+		if (userIsAllowed('people','view')) {
 			$assignButton = "
 			<a class=\"edit button\"
-				href=\"".BASE_URL."/tickets/assignTicket.php?ticket_id={$this->ticket->getId()}\">
+				href=\"".BASE_URL."/tickets/assign?ticket_id={$this->ticket->getId()}\">
 				Assign
 			</a>
 			";
@@ -74,7 +74,7 @@ if (!$this->disableButtons && userIsAllowed('Tickets')) {
 			$return_url = $this->ticket->getURL();
 			$referralButton = "
 			<a class=\"edit button\"
-				href=\"".BASE_URL."/tickets/referTicket.php?ticket_id={$this->ticket->getId()}\">
+				href=\"".BASE_URL."/tickets/refer?ticket_id={$this->ticket->getId()}\">
 				Refer
 			</a>
 			";
@@ -102,7 +102,7 @@ echo "
 			<td>$status</td>
 		</tr>
 ";
-if (userIsAllowed('People')) {
+if (userIsAllowed('people','view')) {
 	echo "
 		<tr><td>$assignButton</td>
 			<th>Assigned To:</th>

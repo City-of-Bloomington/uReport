@@ -7,8 +7,8 @@
 		<li><a href="<?php echo BASE_URL; ?>/resolutions">Resolutions</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/actions">Actions</a></li>
 		<li><a href="<?php echo BASE_URL; ?>/clients">Clients</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/lookups/labels.php">Labels</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/lookups/contactMethods.php">Contact Methods</a></li>
-		<li><a href="<?php echo BASE_URL; ?>/lookups/types.php">Issue Types</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/labels">Labels</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/contactMethods">Contact Methods</a></li>
+		<li><a href="<?php echo BASE_URL; ?>/types">Issue Types</a></li>
 	</ul>
 </div>

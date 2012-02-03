@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -9,7 +9,7 @@ $name = View::escape($this->resolution->getName());
 $description = View::escape($this->resolution->getDescription());
 ?>
 <h1><?php echo $title; ?></h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo BASE_URL; ?>/resolutions/update">
 	<fieldset><legend>Resolution Info</legend>
 		<input name="resolution_id" type="hidden" value="<?php echo "{$this->resolution->getId()}"; ?>" />
 		<table>

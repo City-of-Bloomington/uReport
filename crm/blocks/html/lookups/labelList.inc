@@ -8,8 +8,8 @@
 <div class="labelList">
 	<h1>Labels
 		<?php
-			if (userIsAllowed('Lookups')) {
-				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateLabels.php">Edit</a>';
+			if (userIsAllowed('labels','update')) {
+				echo '<a class="edit button" href="'.BASE_URL.'/labels/update">Edit</a>';
 			}
 		?>
 	</h1>

@@ -8,8 +8,8 @@
 <div class="contactMethodList">
 	<h1>Contact Methods
 		<?php
-			if (userIsAllowed('Lookups')) {
-				echo '<a class="edit button" href="'.BASE_URL.'/lookups/updateContactMethods.php">Edit</a>';
+			if (userIsAllowed('contactMethods','update')) {
+				echo '<a class="edit button" href="'.BASE_URL.'/contactMethods/update">Edit</a>';
 			}
 		?>
 	</h1>

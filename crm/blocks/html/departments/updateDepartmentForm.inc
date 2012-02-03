@@ -11,7 +11,7 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 ?>
 <div class="updateDepartmentForm">
 <h1><?php echo $title; ?> Department</h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo BASE_URL; ?>/departments">
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>

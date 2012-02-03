@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -12,7 +12,7 @@ $category = $this->ticket->getCategory();
 <div class="addTicketForm">
 	<h1>New <?php echo View::escape($category->getName()); ?> Case</h1>
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/addTicket.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
 		<fieldset class="ticketFields">
 			<legend>Location Info</legend>
 			<table>

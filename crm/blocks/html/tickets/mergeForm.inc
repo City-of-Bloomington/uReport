@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticketA
@@ -8,7 +8,7 @@
  */
 ?>
 <div class="mergeForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/mergeTickets.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/merge">
 		<fieldset>
 			<div class="target_a">
 				<input name="targetTicket" id="targetTicket_a" type="radio" value="a" checked="checked" />

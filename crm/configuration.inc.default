@@ -21,7 +21,8 @@ define('APPLICATION_HOME','/var/www/sites/application_name');
  * The URL to get to this site
  * Do NOT use a trailing slash
  */
-define('BASE_URL','http://localhost');
+define('BASE_URL','http://localhost/crm');
+define('BASE_URI','/crm');
 
 /**
  * Where on the filesystem the internal framework is installed.
@@ -190,12 +191,8 @@ if (!defined('STDIN')) {
 
 /**
  * Load the Zend_Acl
- * Access control is going to handled using the Zend_Acl
- * We only need to load it, if someone is logged in
  */
-if (isset($_SESSION['USER'])) {
-	include APPLICATION_HOME.'/access_control.inc';
-}
+include APPLICATION_HOME.'/access_control.inc';
 
 /**
  * Grab a timestamp for calculating process time

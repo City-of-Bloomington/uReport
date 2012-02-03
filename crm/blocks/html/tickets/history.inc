@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->history
@@ -23,10 +23,8 @@
 		<tbody>
 		<?php
 			foreach ($this->history as $event) {
-				$url = new URL(BASE_URL.'/people/viewPerson.php');
-
 				$action = View::escape($event->getAction());
-				if (userIsAllowed('People')) {
+				if (userIsAllowed('people','view')) {
 					$description = View::escape($event->getDescription());
 					$description = $description ? $description : $action;
 				}
@@ -39,7 +37,18 @@
 				";
 					if (!$this->disableComments) {
 						if ($event->getAction()=='categoryChange') {
-							$notes = $this->template->customFieldJSON($event->getNotes());
+							$j = json_decode($event->getNotes());
+							if ($j) {
+								$notes = "<table>";
+								foreach ($j as $data) {
+									$name = View::escape($data->name);
+									$label = $data->label ? View::escape($data->label) : '';
+									$value = is_array($data->value) ? implode(', ',$data->value) : $data->value;
+									$value = View::escape($value);
+									$notes.= "<tr><th>$name</th><td>$label</td><td>$value</td></tr>";
+								}
+								$notes.= "</table>";
+							}
 						}
 						else {
 							$notes = View::escape($event->getNotes());

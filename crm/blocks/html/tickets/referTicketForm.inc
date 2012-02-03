@@ -8,7 +8,7 @@
  */
 ?>
 <div class="referTicketForm">
-	<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Refer Case</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>

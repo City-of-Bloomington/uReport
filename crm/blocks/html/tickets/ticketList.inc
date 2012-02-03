@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
@@ -22,7 +22,7 @@ if ($this->limit) {
 			<tr><th>Status</th>
 				<th>Location</th>
 				<th>Entered Date</th>
-				<?php if (userIsAllowed('People')) { echo "<th>Entered By</th>"; } ?>
+				<?php if (userIsAllowed('people','view')) { echo "<th>Entered By</th>"; } ?>
 				<th>Category</th>
 				<th></th>
 			</tr>
@@ -40,8 +40,6 @@ if ($this->limit) {
 				$enteredByPerson = $ticket->getEnteredByPerson();
 				$enteredBy = $enteredByPerson ? View::escape($enteredByPerson->getFullname()) : '';
 				$category = View::escape($ticket->getData('category.name'));
-				if (userIsAllowed('People')) {
-				}
 				if (!$this->disableLinks) {
 					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
 					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";
@@ -54,15 +52,15 @@ if ($this->limit) {
 					<td>$location</td>
 					<td>$enteredDate</td>
 				";
-					if (userIsAllowed('People')) { echo "<td>$enteredBy</td>"; }
+					if (userIsAllowed('people','view')) { echo "<td>$enteredBy</td>"; }
 				echo "
 					<td>$category</td>
 					<td>
 				";
 					if (!$this->disableButtons
-							&& userIsAllowed('Tickets')
+							&& userIsAllowed('issues','update')
 							&& $ticket->getStatus()!=='closed') {
-						$url = new URL(BASE_URL.'/tickets/updateIssue.php');
+						$url = new URL(BASE_URL.'/issues/update');
 						$url->ticket_id = "{$ticket->getId()}";
 						if (isset($_GET['person_id'])) {
 							try {
@@ -87,11 +85,11 @@ if ($this->limit) {
 		if ($this->limit && count($this->ticketList)>$this->limit && $this->moreLink) {
 			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
 		}
-		if (userIsAllowed('Tickets') && !$this->disableLinks && count($this->ticketList)>1) {
+		if (userIsAllowed('tickets','merge') && !$this->disableLinks && count($this->ticketList)>1) {
 			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 			$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 			echo "
-			<form method=\"get\" action=\"".BASE_URL."/tickets/mergeTickets.php\">
+			<form method=\"get\" action=\"".BASE_URL."/tickets/merge\">
 				<fieldset><legend>Merge Two Cases</legend>
 					<p>Add two cases by dragging one of the rows or typing in the IDs to compare cases and move data between them.</p>
 					<div>

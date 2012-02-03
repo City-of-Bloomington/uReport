@@ -59,7 +59,7 @@ foreach ($this->ticketList as $row) {
 			}
 			$value = View::escape($value);
 			echo "
-			<td><a href=\"".BASE_URL."/tickets/viewTicket.php?ticket_id=$row[_id]\">
+			<td><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
 					$value
 				</a>
 			</td>

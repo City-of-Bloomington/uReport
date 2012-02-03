@@ -19,7 +19,7 @@ $custom_fields = isset($_POST['custom_fields'])
 	: json_encode($this->category->getCustomFields());
 ?>
 <h1><?php echo $title; ?></h1>
-<form method="post" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+<form method="post" action="<?php echo BASE_URL; ?>/categories/update">
 	<fieldset><legend>Category</legend>
 		<input name="category_id" type="hidden" value="<?php echo $this->category->getId(); ?>" />
 		<table>

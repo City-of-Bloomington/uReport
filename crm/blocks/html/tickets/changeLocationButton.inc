@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
+$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REDIRECT_URL']);
 foreach ($_GET as $key=>$value) {
 	if ($key!=='location') {
 		$return_url->$key = $value;

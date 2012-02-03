@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 ?>
 <div class="closeTicketForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/closeTicket.php">
+	<form method="post" action="<?php echo BASE_URL; ?>/tickets/close">
 		<fieldset><legend>Close This Case</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>

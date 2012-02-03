@@ -9,7 +9,7 @@
 ?>
 <div class="confirm">
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Confirm'; ?></h1>
-	<form method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
+	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Are you sure?</legend>
 			<input name="confirm" type="hidden" value="1" />
 			<?php

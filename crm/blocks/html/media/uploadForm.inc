@@ -9,7 +9,7 @@
 $return_url = $_SERVER['REQUEST_URI'];
 ?>
 <div class="uploadForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/media/upload.php" enctype="multipart/form-data">
+	<form method="post" action="<?php echo BASE_URL; ?>/media/upload" enctype="multipart/form-data">
 		<fieldset><legend>Upload an attachment</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<input name="index" type="hidden" value="<?php echo $this->index; ?>" />
