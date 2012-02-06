@@ -9,25 +9,30 @@ class AddressService
 	/**
 	 * Define custom form fields for dealing with AddressServiceCache data
 	 *
-	 * AddressServiceCache fields can be included in forms, such as search.
+	 * AddressServiceCache fields can be included in forms, such as search,
+	 * and displayed with the rest of the ticket information.
+	 *
+	 * When the sytem displays ticket information, it will look at this
+	 * array for any additional fields of information to display
+	 *
 	 * When the system draws a search form, a call will be made to get this
 	 * description of any custom fields to include.
 	 * The description will be used as the label
 	 * The formElement controls what HTML form element to render.
-	 *		If select, then a drop down will be created, populated with all
-	 *		possible values from the addressServiceCache
+	 *		If the formElement is "select", then a drop down will be created,
+	 *		populated with all possible values from the addressServiceCache
 	 *
 	 *		All other form elements will be rendered as a plain text input
 	 */
 	public static $customFieldDescriptions = array(
-		'neighborhoodAssociation'=>array(
-			'description'=>'Neighborhood Association',
-			'formElement'=>'select'
-		),
-		'township'=>array(
-			'description'=>'Township',
-			'formElement'=>'select'
-		)
+		//'neighborhoodAssociation'=>array(
+		//	'description'=>'Neighborhood Association',
+		//	'formElement'=>'select'
+		//),
+		//'township'=>array(
+		//	'description'=>'Township',
+		//	'formElement'=>'select'
+		//)
 	);
 
 	/**
