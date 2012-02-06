@@ -3,8 +3,7 @@
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:darkred; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
-h3 { font-size:110%; font-weight:bold; }
-h4 {font-size:100%; font-weight:bold; }
+h3 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#06c; }
 p { margin:0 .5em .5em .5em; }
 
@@ -123,7 +122,6 @@ button, .button {
 	max-height:300px; overflow:auto;
 }
 
-
 /**
  * Custom Styles for individual screens
  */
@@ -153,10 +151,7 @@ button, .button {
 .mergeForm .target_b { float:right; width:48%; }
 .mergeForm .button { position:absolute; left:40%; }
 
-
 #search-form { border-right:1px solid #cccccc; background-color:#eeeeee; }
-#search-form td select { width:200px; overflow:hidden; }
-#search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
 #search-form .fields {
 	margin:.5em;
@@ -167,6 +162,7 @@ button, .button {
 #search-form .advancedSearch {
 	background-color:white; border:1px solid #ccc; margin:5px 0; padding-left:5px;
 }
+#advanced-search > div > div { margin:5px; }
 #search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #ddd; }
 
@@ -179,8 +175,6 @@ button, .button {
 	background:url('images/breadcrumb.png') no-repeat right center;
 	padding:0 15px 0 0;
 }
-
-#groupChooser li { list-style-type:none; }
 
 .clientRequestForm table { width:90%; }
 .clientRequestForm td label { text-align:right; }
@@ -206,23 +200,31 @@ button, .button {
  */
 .departmentList .department,
 .categoryList .category,
-.serviceChooser {
+#advanced-search > div {
 	border:2px solid black;  margin-top:0.5em;
 	border-radius:10px;
 	overflow:hidden;
 }
 .departmentList .department h3,
 .categoryList .category h3,
-.serviceChooser h1 {
+#advanced-search h3 {
 	background-color:#36c; color:white;
 	border-bottom:2px solid black;
 	padding:0.25em; margin-top:0;
 }
 .departmentList .department h3 a,
-.categoryList .category h3 a,
-.serviceChooser h1 a {
+.categoryList .category h3 a {
 	color:white;
 }
+
+/* Collapsing and Expanding styles */
+#panel-container .collapsed h3, #panel-container .expanded h3 {
+	padding-left:26px; cursor:pointer;
+}
+#panel-container .collapsed h3 { background:#36c url('images/plus.png') 6px 50% no-repeat; }
+#panel-container .collapsed ul { display:none; }
+#panel-container .expanded h3 { background:#36c url('images/minus.png') 6px 50% no-repeat; }
+
 
 
 .issueList { background-color:#eee; }
