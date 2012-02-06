@@ -31,12 +31,20 @@ class Open311Client
 	/**
 	 * Creates a CRM Ticket from an Open311 client POST
 	 *
+	 * A valid Client api_key is required in the POST
+	 *
 	 * @param array $post The raw POST from the client
-	 * @param Client $client
 	 * @return Ticket
 	 */
-	public static function createTicket($post, Client $client=null)
+	public static function createTicket($post)
 	{
+		if (!empty($post['api_key'])) {
+			$client = new Client($post['api_key']);
+		}
+		else {
+			throw new Exception('clients/unknownClient');
+		}
+
 		$ticketData = array();
 		$issueData = array();
 
