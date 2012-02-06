@@ -29,5 +29,5 @@ $person->setAuthenticationMethod('local');
 $person->setPassword('');
 
 // No more changes needed
-$person->setRoles(array('Administrator'));
+$person->setRole('Administrator');
 $person->save();

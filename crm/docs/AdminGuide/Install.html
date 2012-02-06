@@ -7,7 +7,7 @@
 <body>
 	<h1>Install</h1>
 	<h2>About this guide</h2>
-		<p>These instructions focus on installing civic-crm on a *nix machine with the Apache
+		<p>These instructions focus on installing crm on a *nix machine with the Apache
 			webserver.  If you are installing on Windows using IIS, you will need to
 			do the equivalent steps for your environment.
 		</p>
@@ -41,10 +41,8 @@
 		</p>
 
 	<h2>Apache Configuration</h2>
-		<p>CRM depends on PHP auto-prepending the configuration file.  This file is the bootstrap.
-			The recommended way is to have Apache auto-prepend the file.  We can do this in the same
-			place we tell Apache where the application is and set up the URL to host it.
-			While we're in there, we also want to set up the mod_rewrite rules for the Open311 service.
+		<p>We need to tell Apache where the application is and set up the URL to host it.
+			We also need to set up the mod_rewrite rules to route all traffic to index.php.
 		</p>
 		<h3>Enabling file uploads</h3>
 		<p>PHP default values for post_max_size and upload_max_filesize are usually very small.
@@ -52,7 +50,7 @@
 			You should adjust these values for your expected use case.
 		</p>
 		<h3>Example configuration:</h3>
-		<code><pre>
+<pre><code>
 #-------------------------------------------------------------------------
 # This Virtual Host config is intended to redirect all traffic from
 # the unencrypted versions of the application to the encrypted version
@@ -64,28 +62,23 @@ NameVirtualHost *:80
 #------------------------------------------------------------------------
 # Citizen reporting and work tracking system
 #------------------------------------------------------------------------
-Alias /crm "/var/www/sites/crm/html"
-&lt;Directory "/var/www/sites/crm/html"&gt;
+Alias /crm "/var/www/sites/crm/public"
+&lt;Directory "/var/www/sites/crm/public"&gt;
     Options FollowSymLinks
     AllowOverride None
     Order allow,deny
     Allow from all
 
-    php_value auto_prepend_file /var/www/sites/crm/configuration.inc
-&lt;/Directory&gt;
-&lt;Directory "/var/www/sites/crm/html/open311"&gt;
     RewriteEngine On
-    RewriteBase /crm/open311/
-    RewriteRule v2/services.? /crm/open311/services.php [L]
-    RewriteRule v2/requests.? /crm/open311/requests.php [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteBase /crm
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule .? /crm/open311/index.php [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule .? /crm/index.php [NC,L]
 
     php_value post_max_size 10M
     php_value upload_max_filesize 10M
 &lt;/Directory&gt;
-		</pre></code>
+</code></pre>
 
 	<h2>CRM configuration</h2>
 		<p>CRM comes with an empty configuration file called
@@ -130,7 +123,7 @@ $person->setAuthenticationMethod('local');
 $person->setPassword('');
 
 // No more changes needed
-$person->setRoles(array('Administrator'));
+$person->setRole('Administrator');
 $person->save();
 			</pre></code>
 			Once it's been modified, you'll need to run it from the command line.
