@@ -3,7 +3,8 @@
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:darkred; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
-h3 { font-size:100%; font-weight:bold; }
+h3 { font-size:110%; font-weight:bold; }
+h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#06c; }
 p { margin:0 .5em .5em .5em; }
 
@@ -25,17 +26,17 @@ form td { vertical-align:top; }
  * Base styles for buttons and button links
  */
 button, .button {
-	border:1px solid #777; border-radius:4px;
 	display:inline-block;
-	background-image: linear-gradient(top, #eee, #ccc);
-	padding:0 10px 0 24px;
+	padding:5px 10px 5px 24px;
+	border:1px solid $#cccccc;
 }
-.add { background:url('images/plus_button.png') left center no-repeat; }
-.edit, .change { background:url('images/pencil_button.png') left center no-repeat; }
-.search { background:url('images/buttonBackground.png') left center no-repeat; padding-left:10px; }
-.submit, .login { background:url('images/check_button.png') left center no-repeat; }
-.delete, .cancel { background:url('images/x_button.png') left center no-repeat; }
-.chooseLocation { background:url('images/reticule_button.png') left center no-repeat; }
+
+.add { background:url('images/addbutton.png') left center no-repeat; }
+.edit, .change { background:url('images/editbutton.png') left center no-repeat; }
+.search { background:url('images/addbutton.png') left center no-repeat; padding-left:10px; }
+.submit, .login { background:url('images/addbutton.png') left center no-repeat; }
+.delete, .cancel { background:url('images/deletebutton.png') left center no-repeat; }
+.chooseLocation { background:url('images/addbutton.png') left center no-repeat; }
 
 /**
  * Page Layout Styles
@@ -152,6 +153,8 @@ button, .button {
 .mergeForm .button { position:absolute; left:40%; }
 
 #search-form { border-right:1px solid #cccccc; background-color:#eeeeee; }
+#search-form td select { width:200px; overflow:hidden; }
+#search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
 #search-form .fields {
 	margin:.5em;
@@ -162,7 +165,7 @@ button, .button {
 #search-form .advancedSearch {
 	background-color:white; border:1px solid #ccc; margin:5px 0; padding-left:5px;
 }
-#advanced-search > div > div { margin:5px; }
+#advanced-search > div > div { margin:10px 5px; }
 #search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #ddd; }
 
