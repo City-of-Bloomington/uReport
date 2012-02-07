@@ -9,14 +9,14 @@ include '../configuration.inc';
 if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 	$resource = 'open311';
 	if (preg_match(
-				'/\/crm\/open311\/discovery(\.([a-z]+))?/',
+				'#'.BASE_URI.'/open311/discovery(\.([a-z]+))?#',
 				$_SERVER['REQUEST_URI'],
 				$matches)) {
 		$action = 'discovery';
 		$_REQUEST['format'] = !empty($matches[2]) ? $matches[2] : 'html';
 	}
 	elseif (preg_match(
-				'/\/crm\/open311\/v2\/(services|requests)(\/([0-9a-f]{24}))?(\.([a-z]+))?/',
+				'#'.BASE_URI.'/open311/v2/(services|requests)(/([0-9a-f]{24}))?(\.([a-z]+))?#',
 				$_SERVER['REQUEST_URI'],
 				$matches)) {
 		$action = $matches[1];
@@ -28,7 +28,7 @@ if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 	}
 }
 // Check for default routes
-elseif (preg_match('|'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?|',$_SERVER['REQUEST_URI'],$matches)) {
+elseif (preg_match('#'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?#',$_SERVER['REQUEST_URI'],$matches)) {
 	$resource = isset($matches[2]) ? $matches[2] : 'index';
 	$action = isset($matches[4]) ? $matches[4] : 'index';
 }
