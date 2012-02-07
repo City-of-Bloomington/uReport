@@ -25,7 +25,7 @@ class Open311Client
 		'last_name'=>'lastname',
 		'email'=>'email',
 		'phone'=>'phone.number',
-		'device_id'=>'phone.device_id'
+		'phoneDeviceId'=>'phone.device_id'
 	);
 
 	/**
