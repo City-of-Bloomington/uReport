@@ -126,7 +126,7 @@ button, .button {
 .ticketInfo table .button {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:5px 0px 5px 25px; 
+	width:0; padding:5px 0px 5px 25px;
 	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
 }
 
@@ -186,7 +186,7 @@ button, .button {
 }
 
 /**
- *  Tables with alternating row background colors
+ * Tables with alternating row background colors
  */
 .searchResults tbody tr:nth-child(odd),
 .ticketList tbody tr:nth-child(even),
@@ -196,17 +196,17 @@ button, .button {
 }
 
 /**
-Side Navigation */
+ * Side Navigation
+ */
 .departmentList .department,
-.categoryList .category
-{
+.categoryList .category {
 	border:2px solid #dddddd;  margin-top:0.5em;
 	overflow:hidden;
 }
 .departmentList .department h3,
 .categoryList .category h3,
 #advanced-search h3 {
-background-color:#cccccc; 	
+	background-color:#cccccc;
 }
 .departmentList .department h3 a,
 .categoryList .category h3 a {
@@ -214,9 +214,11 @@ background-color:#cccccc;
 }
 
 /* Collapsing and Expanding styles */
-.advancedSearch h3 {border-top:3px solid #ffffff; border-bottom:1px solid #dddddd; padding:5px 10px 5px 3px;}
+.advancedSearch h3 {
+	border-top:3px solid #ffffff; border-bottom:1px solid #dddddd; padding:5px 10px 5px 3px;
+}
 #panel-container .collapsed h3, #panel-container .expanded h3 {
-	 cursor:pointer; 
+	 cursor:pointer;
 }
 #panel-container .collapsed h3 { background:#dddddd url('images/minus.png') 95% center no-repeat; }
 #panel-container .collapsed ul { display:none; }
