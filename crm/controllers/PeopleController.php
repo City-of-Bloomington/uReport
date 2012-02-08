@@ -134,7 +134,7 @@ class PeopleController extends Controller
 		$this->template->title = $person->getFullname();
 		$this->template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
 		if (!$disableLinks && userIsAllowed('tickets','add')) {
-			$template->blocks['person-panel'][] = new Block(
+			$this->template->blocks['person-panel'][] = new Block(
 				'tickets/addNewForm.inc',
 				array('title'=>'Report New Case')
 			);
