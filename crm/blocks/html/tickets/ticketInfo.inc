@@ -89,32 +89,37 @@ echo "
 <div class=\"ticketInfo\">
 	<h1>Case #$id $deleteButton</h1>
 	<table>
-		<tr><td>$changeCategoryButton</td>
+		<tr>
 			<th>Category:</th>
 			<td>$category</td>
+			<td>$changeCategoryButton</td>
 		</tr>
-		<tr><td>$changeLocationButton</td>
+		<tr>
 			<th>Location:</th>
 			<td>$location</td>
+			<td>$changeLocationButton</td>
 		</tr>
-		<tr><td>$editStatusButton</td>
+		<tr>
 			<th>Status:</th>
 			<td>$status</td>
+			<td>$editStatusButton</td>
 		</tr>
 ";
 if (userIsAllowed('people','view')) {
 	echo "
-		<tr><td>$assignButton</td>
+		<tr>
 			<th>Assigned To:</th>
 			<td>$assigned</td>
+			<td>$assignButton</td>
 		</tr>
-		<tr><td>$referralButton</td>
+		<tr>
 			<th>Referred To:</th>
 			<td>$referred</td>
+			<td>$referralButton</td>
 		</tr>
-		<tr><td></td>
 			<th>Created By:</th>
 			<td>$enteredBy</td>
+			<td></td>
 		</tr>
 	";
 }
@@ -122,16 +127,18 @@ if (userIsAllowed('people','view')) {
 	if ($client) {
 		$name = View::escape($client->getName());
 		echo "
-		<tr><td></td>
+		<tr>
 			<th>Received Via:</th>
 			<td>$name</td>
+			<td></td>
 		</tr>
 		";
 	}
 echo "
-		<tr><td></td>
+		<tr>
 			<th>Date Opened:</th>
 			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
+			<td></td>
 		</tr>
 	</table>
 </div>

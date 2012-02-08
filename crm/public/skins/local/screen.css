@@ -10,7 +10,7 @@ p { margin:0 .5em .5em .5em; }
 
 table { margin:0 .5em .5em .5em; }
 th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
-td { padding:.25em; }
+td { padding:.4em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
@@ -70,12 +70,9 @@ button, .button {
 
 #panel-one div {
 	border:2px solid black; margin-bottom:0.5em;
-	border-radius:10px;
 	overflow:hidden;
 }
 #panel-one div h1 {
-	background-color:#3366CC; color:white;
-	border-bottom:2px solid black;
 	margin:0; padding:.25em;
 }
 #panel-one div ul { margin:.25em; padding:0; }
@@ -129,9 +126,8 @@ button, .button {
 .ticketInfo table .button {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:0 10px 0 10px; /* Squeeze the size down to the size of the icon */
-	background-position:-6px 50%; /* Shift the background image because of less padding */
-	vertical-align:middle;
+	width:0; padding:5px 0px 5px 25px; 
+	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
 }
 
 .ticketList table { border:1px solid #aaaaaa; }
@@ -140,7 +136,6 @@ button, .button {
 .locationInfo > div { margin:.5em 0; }
 
 .findPeople { width:290px; float:left; }
-
 #ticket-panel .addTicketForm .ticketFields { display:none; }
 #ticket-panel .addTicketForm .reportedByPerson { display:none; }
 #ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
@@ -165,6 +160,7 @@ button, .button {
 #search-form .advancedSearch {
 	background-color:white; border:1px solid #ccc; margin:5px 0; padding-left:5px;
 }
+#search-form .addNewForm div { margin:10px 0; }
 #advanced-search > div > div { margin:10px 5px; }
 #search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #ddd; }
@@ -194,26 +190,23 @@ button, .button {
  */
 .searchResults tbody tr:nth-child(odd),
 .ticketList tbody tr:nth-child(even),
-.clientRequestForm tbody tr:nth-child(odd) {
+.clientRequestForm tbody tr:nth-child(odd),
+.ticketInfo tbody tr:nth-child(odd) {
 	background:#eee;
 }
 
 /**
- * Screens with rounded rectangle boxes with headers
- */
+Side Navigation */
 .departmentList .department,
-.categoryList .category,
-#advanced-search > div {
-	border:2px solid black;  margin-top:0.5em;
-	border-radius:10px;
+.categoryList .category
+{
+	border:2px solid #dddddd;  margin-top:0.5em;
 	overflow:hidden;
 }
 .departmentList .department h3,
 .categoryList .category h3,
 #advanced-search h3 {
-	background-color:#36c; color:white;
-	border-bottom:2px solid black;
-	padding:0.25em; margin-top:0;
+background-color:#cccccc; 	
 }
 .departmentList .department h3 a,
 .categoryList .category h3 a {
@@ -221,12 +214,13 @@ button, .button {
 }
 
 /* Collapsing and Expanding styles */
+.advancedSearch h3 {border-top:3px solid #ffffff; border-bottom:1px solid #dddddd; padding:5px 10px 5px 3px;}
 #panel-container .collapsed h3, #panel-container .expanded h3 {
-	padding-left:26px; cursor:pointer;
+	 cursor:pointer; 
 }
-#panel-container .collapsed h3 { background:#36c url('images/plus.png') 6px 50% no-repeat; }
+#panel-container .collapsed h3 { background:#dddddd url('images/minus.png') 95% center no-repeat; }
 #panel-container .collapsed ul { display:none; }
-#panel-container .expanded h3 { background:#36c url('images/minus.png') 6px 50% no-repeat; }
+#panel-container .expanded h3 { background:#dddddd url('images/plus.png') 95% center  no-repeat; }
 
 
 
