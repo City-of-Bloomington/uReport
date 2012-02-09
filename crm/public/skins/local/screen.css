@@ -98,7 +98,7 @@ button, .button {
 #location-panel .locationInfo,
 .findLocationForm,
 #location-panel .addNewForm {
-	 width:290px; float:left; padding:3px; clear:left
+	 width:380px; float:left; padding:3px; clear:left
 }
 
 /* Blocks we want to show up in the right column of a Panel */
@@ -112,7 +112,7 @@ button, .button {
 #person-panel .ticketList,
 .findLocationResults,
 .findPeopleResults {
-	margin-left:305px; padding-left:10px; border-left:1px solid #cccccc;
+	margin-left:400px; padding-left:10px; border-left:1px solid #cccccc;
 }
 
 #ticketCreation #location-panel,
@@ -126,7 +126,7 @@ button, .button {
 .ticketInfo table .button {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:5px 0px 5px 25px;
+	width:0; padding:0 0 0 25px;
 	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
 }
 

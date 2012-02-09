@@ -33,4 +33,4 @@ $selected_id = "{$assignedPerson->getData('department._id')}" == "{$this->curren
 	</tr>
 </table>
 <div><label for="notes">Note to the assignee</label></div>
-<div><textarea name="notes" id="notes" rows="3" cols="50"></textarea></div>
+<div><textarea name="notes" id="notes"></textarea></div>

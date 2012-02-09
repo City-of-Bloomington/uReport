@@ -33,7 +33,7 @@ if (count($actions)) {
 				</tr>
 				<tr>
 					<td><label for="notes">Comment</label></td>
-					<td><textarea name="notes" id="notes" rows="3" cols="50"></textarea></td>
+					<td><textarea name="notes" id="notes"></textarea></td>
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>

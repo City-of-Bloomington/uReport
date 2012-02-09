@@ -95,6 +95,6 @@
 
 <div><label for="issue-description">Describe the issue</label></div>
 <div>
-	<textarea name="issue[description]" id="issue-description" rows="3" cols="60"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
+	<textarea name="issue[description]" id="issue-description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>
 

@@ -25,7 +25,7 @@
 					</td>
 				</tr>
 				<tr><td><label id="notes">Comment</label></td>
-					<td><textarea id="notes" name="notes" rows="3" cols="50"></textarea></td>
+					<td><textarea id="notes" name="notes"></textarea></td>
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>

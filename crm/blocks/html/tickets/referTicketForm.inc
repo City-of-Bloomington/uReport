@@ -20,7 +20,7 @@
 				</tr>
 			</table>
 			<div><label for="notes">Notes</label></div>
-			<div><textarea name="notes" id="notes" rows="3" cols="50"></textarea></div>
+			<div><textarea name="notes" id="notes"></textarea></div>
 			<button type="submit" class="submit">Submit</button>
 			<button type="button" class="cancel"
 				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">

@@ -63,7 +63,7 @@ if ($category) {
 					echo "
 					<tr><td colspan=\"2\">
 							<div><label for=\"$field_id\">$label</label></div>
-							<textarea name=\"$field_name\" id=\"$field_id\" rows=\"3\" cols=\"50\">$value</textarea>
+							<textarea name=\"$field_name\" id=\"$field_id\">$value</textarea>
 						</td>
 					</tr>
 					";
