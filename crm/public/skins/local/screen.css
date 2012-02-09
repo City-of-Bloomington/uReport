@@ -158,10 +158,11 @@ button, .button {
 #search-form .addNewForm,
 #search-form .quickSearches,
 #search-form .advancedSearch {
-	background-color:white; border:1px solid #ccc; margin:5px 0; padding-left:5px;
+	background-color:white; border:1px solid #ccc; margin:5px 0; padding:2px;
 }
 #search-form .addNewForm div { margin:10px 0; }
-#advanced-search > div > div { margin:10px 5px; }
+#advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
+#advanced-search div { margin:3px 0 12px 0; }
 #search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #ddd; }
 
@@ -214,15 +215,14 @@ button, .button {
 }
 
 /* Collapsing and Expanding styles */
-.advancedSearch h3 {
-	border-top:3px solid #ffffff; border-bottom:1px solid #dddddd; padding:5px 10px 5px 3px;
-}
-#panel-container .collapsed h3, #panel-container .expanded h3 {
+.collapsed h3, .expanded h3 {
 	 cursor:pointer;
 }
-#panel-container .collapsed h3 { background:#dddddd url('images/minus.png') 95% center no-repeat; }
-#panel-container .collapsed ul { display:none; }
-#panel-container .expanded h3 { background:#dddddd url('images/plus.png') 95% center  no-repeat; }
+.collapsed h3 { background:url('images/plus.png') 95% center no-repeat; }
+.collapsed ul, .collapsed div, .collapsed table {
+	display:none;
+}
+.expanded h3 { background:url('images/minus.png') 95% center  no-repeat; }
 
 
 

@@ -1,18 +1,18 @@
 "use strict";
 YUI().use('node', function(Y) {
-	var fields = Y.all('#advanced-search .multiselect');
+	var fields = Y.all('#advanced-search div');
 	fields.each(function (node) {
 		node.addClass('collapsed');
 	});
 
 	function toggle(e) {
-		if (this.hasClass('collapsed')) {
-			this.replaceClass('collapsed','expanded');
+		if (this.get('parentNode').hasClass('collapsed')) {
+			this.get('parentNode').replaceClass('collapsed','expanded');
 		}
 		else {
-			this.replaceClass('expanded','collapsed');
+			this.get('parentNode').replaceClass('expanded','collapsed');
 		}
 	}
 
-	Y.delegate('click', toggle, '#advanced-search', '.multiselect');
+	Y.delegate('click', toggle, '#advanced-search', 'h3');
 });

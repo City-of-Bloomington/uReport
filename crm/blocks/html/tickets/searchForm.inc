@@ -49,8 +49,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 		<h2>Advanced Search</h2>
 		<form method="get" action="<?php echo BASE_URL; ?>/tickets">
 			<fieldset id="advanced-search">
-				<div class="multiselect">
-					<h3>Department</h3>
+				<div><h3>Department</h3>
 					<ul>
 					<?php
 						$list = new DepartmentList();
@@ -77,8 +76,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 					$list = new CategoryList(array('displayableTo'=>$person));
 					if (count($list)) {
 						echo "
-						<div class=\"multiselect\">
-							<h3>Category</h3>
+						<div><h3>Category</h3>
 							<ul>
 						";
 							foreach ($list as $category) {
@@ -103,8 +101,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 
 					foreach (AddressService::$customFieldDescriptions as $key=>$config) {
 						echo "
-						<div class=\"multiselect\">
-							<h3>$config[description]</h3>
+						<div><h3>$config[description]</h3>
 							<ul>
 						";
 						switch ($config['formElement']) {
@@ -140,8 +137,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						";
 					}
 				?>
-				<div class="multiselect">
-					<h3>Labels</h3>
+				<div><h3>Labels</h3>
 					<ul>
 					<?php
 						foreach (Lookups::get('labels') as $label) {
