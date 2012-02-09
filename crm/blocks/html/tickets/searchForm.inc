@@ -13,7 +13,6 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 			$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
 			echo "
 			<div class=\"quickSearches\">
-				<h1>Existing Cases</h1>
 				<h2>Quick Search</h2>
 				<form method=\"get\" action=\"".BASE_URL."/tickets\">
 					<fieldset>

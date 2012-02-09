@@ -14,12 +14,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->title
  */
-$title = $this->title ? View::escape($this->title) : 'New Cases';
+$title = $this->title ? View::escape($this->title) : 'New Case';
 ?>
 <div class="addNewForm">
-	<h1><?php echo $title; ?></h1>
+	<h2><?php echo $title; ?></h2>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets/add">
-		<fieldset><legend>Choose a category</legend>
+		<fieldset>
 			<?php
 				$block = new Block(
 					'tickets/partials/chooseCategoryFields.inc',

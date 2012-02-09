@@ -7,7 +7,7 @@
  */
 ?>
 <label>
-	Category
+	Choose a category
 	<select name="category_id">
 	<?php
 		if ($_SESSION['USER']->getDepartment()) {
