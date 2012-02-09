@@ -28,7 +28,7 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 
 	Y.on('submit', function (e) {
 		e.preventDefault();
-		Y.io(BASE_URL + '/people/partial?partial=people/searchResults.inc', {
+		Y.io(BASE_URL + '/people/partial?partial=people/searchResults.inc;disableButtons=1', {
 			form: { id: e.target },
 			on: {
 				complete: function (id, o, args) {

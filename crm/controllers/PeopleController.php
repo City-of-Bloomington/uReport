@@ -75,6 +75,9 @@ class PeopleController extends Controller
 		if (isset($_GET['return_url'])) {
 			$block->return_url = $_GET['return_url'];
 		}
+		if (isset($_GET['disableButtons'])) {
+			$block->disableButtons = true;
+		}
 
 		// Look for anything that the user searched for
 		$search = array();

@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  * @param string $this->return_url (optional) The url to use for each of th search results
+ * @param bool $this->disableButtons
  */
 ?>
 <div class="findPeopleResults">
@@ -16,7 +17,7 @@
 		else {
 			echo '<p>No results found</p>';
 		}
-		if (userIsAllowed('people','add')) {
+		if (!$this->disableButtons && userIsAllowed('people','add')) {
 			echo '<a class="add button" href="'.BASE_URL.'/people/update">Add a Person</a>';
 		}
 	?>
