@@ -7,7 +7,7 @@
 include '../configuration.inc';
 
 // These are the basic actions that all things should have
-$actions = array(null,'index','view','partial','add','update','delete');
+$actions = array(null,'index','view','add','update','delete');
 
 foreach ($ZEND_ACL->getRoles() as $role) {
 	echo "--------------------------\n$role\n--------------------------\n";

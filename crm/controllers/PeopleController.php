@@ -60,66 +60,13 @@ class PeopleController extends Controller
 	}
 
 	/**
-	 * Displays a single block
-	 *
-	 * The script is a mirror of ::index()
-	 * It responds to the same requests, but also lets you specify
-	 * a single block to to output.
-	 *
-	 * @param GET partial
-	 */
-	public function partial()
-	{
-		$block = new Block($_GET['partial']);
-
-		if (isset($_GET['return_url'])) {
-			$block->return_url = $_GET['return_url'];
-		}
-		if (isset($_GET['disableButtons'])) {
-			$block->disableButtons = true;
-		}
-
-		// Look for anything that the user searched for
-		$search = array();
-		$fields = array('firstname','lastname','email','organization');
-		foreach ($fields as $field) {
-			if (isset($_GET[$field]) && $_GET[$field]) {
-				$value = trim($_GET[$field]);
-				if ($value) {
-					$search[$field] = $value;
-				}
-			}
-		}
-
-		if (count($search)) {
-			if (isset($_GET['setOfPeople'])) {
-				switch ($_GET['setOfPeople']) {
-					case 'staff':
-						$search['username'] = array('$exists'=>true);
-						break;
-					case 'public':
-						$search['username'] = array('$exists'=>false);
-						break;
-				}
-			}
-			$personList = new PersonList();
-			$personList->search($search);
-			$block->personList = $personList;
-		}
-
-		$this->template->setFilename('partial');
-		$this->template->blocks[] = $block;
-	}
-
-	/**
 	 * @param GET person_id
 	 * @param GET disableLinks
 	 */
 	public function view()
 	{
 		$disableLinks = isset($_GET['disableLinks']) ? (bool)$_GET['disableLinks'] : false;
-		$filename = isset($_GET['partial']) ? 'partial' : 'people';
-		$this->template->setFilename($filename);
+		$this->template->setFilename('people');
 
 		if (!isset($_GET['person_id'])) {
 			header('Location: '.BASE_URL.'/people');

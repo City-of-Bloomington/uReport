@@ -33,9 +33,9 @@ elseif (preg_match('#'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?#',$_SERVER
 	$action = isset($matches[4]) ? $matches[4] : 'index';
 }
 
-// Create the default Template
+// Create the Template
 $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
-$template = new Template('default',$format);
+$template = new Template('default', $format);
 
 // Execute the Controller::action()
 if (isset($resource) && isset($action)) {
@@ -55,4 +55,7 @@ else {
 	$template->blocks[] = new Block('404.inc');
 }
 
+if (!empty($_REQUEST['partial'])) {
+	$template->setFilename('partial');
+}
 echo $template->render();

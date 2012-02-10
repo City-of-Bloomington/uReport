@@ -127,10 +127,10 @@ class Template extends View
 					// If we find a block that matches, render that block
 					if ($value instanceof Block) {
 						if ($value->getFile() == $target) {
-							echo $block->render($this->outputFormat,$this);								continue;
+							echo $value->render($this->outputFormat,$this);								continue;
 						}
 					}
-					// If we find a panel that matches, render the blocks in that panel
+					// The block they asked for might be inside a panel
 					else {
 						foreach ($value as $block) {
 							if ($block->getFile() == $target) {

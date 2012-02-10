@@ -54,8 +54,7 @@ class LocationsController extends Controller
 		}
 		$ticketList = new TicketList(array('location'=>$location));
 
-		$filename = isset($_GET['partial']) ? 'partial' : 'locations';
-		$this->template->setFilename($filename);
+		$this->template->setFilename('locations');
 
 		$this->template->blocks['location-panel'][] = new Block(
 			'locations/locationInfo.inc',
@@ -76,27 +75,5 @@ class LocationsController extends Controller
 				'disableButtons'=>isset($_GET['disableButtons'])
 			)
 		);
-	}
-
-	/**
-	* Displays a single block
-	*
-	* This function is a mirror of ::index()
-	* It responds to the same requests, but also lets you specify
-	* a single block to to output.
-	*/
-	public function partial()
-	{
-		$block = new Block($_GET['partial']);
-
-		if (isset($_GET['return_url'])) {
-			$block->return_url = $_GET['return_url'];
-		}
-		if (isset($_GET['location'])) {
-			$block->results = Location::search($_GET['location']);
-		}
-
-		$this->template->setFilename('partial');
-		$this->template->blocks[] = $block;
 	}
 }

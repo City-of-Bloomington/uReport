@@ -42,7 +42,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('clients'));
 $ZEND_ACL->allow(null,array('login','open311'));
 $ZEND_ACL->allow(null,
 				array('index','tickets','issues','locations'),
-				array('index','view','partial'));
+				array('index','view'));
 
 // Staff permission
 $ZEND_ACL->allow('Staff',array('account','tickets','people','issues','media'));
