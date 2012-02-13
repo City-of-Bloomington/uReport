@@ -22,7 +22,7 @@
 	</tr>
 
 	<tr class="reportedByPerson">
-		<td><label for="issue-reportedByPerson">Reported By</label></td>
+		<td><label for="issue-reportedByPerson">Reported By Person ID</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$id = '';
@@ -32,14 +32,8 @@
 					$name = View::escape($reportedByPerson->getFullname());
 				}
 			?>
-			<input type="hidden" name="issue[reportedByPerson]" id="issue-reportedByPerson"
+			<input name="issue[reportedByPerson]" id="issue-reportedByPerson"
 				value="<?php echo "$id"; ?>" />
-			<?php
-				echo $name;
-				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-				$url = BASE_URL.'/people?return_url='.urlencode($return_url);
-				echo "<a class=\"change button\" href=\"$url\">Change Person</a>";
-			?>
 		</td>
 	</tr>
 

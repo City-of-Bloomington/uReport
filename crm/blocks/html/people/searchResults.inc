@@ -18,7 +18,11 @@
 			echo '<p>No results found</p>';
 		}
 		if (!$this->disableButtons && userIsAllowed('people','add')) {
-			echo '<a class="add button" href="'.BASE_URL.'/people/update">Add a Person</a>';
+			$url = BASE_URL.'/people/update';
+			if ($this->return_url) {
+				$url.= '?return_url='.$this->return_url;
+			}
+			echo "<a class=\"add button\" href=\"$url\">Add a Person</a>";
 		}
 	?>
 </div>

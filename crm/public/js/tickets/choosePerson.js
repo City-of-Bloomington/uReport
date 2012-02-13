@@ -8,7 +8,7 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 			points: [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]
 		}
 	});
-	Y.io(BASE_URL + '/people/partial?partial=people/searchForm.inc', {
+	Y.io(BASE_URL + '/people?partial=people/searchForm.inc;return_url=' + document.location.href, {
 		on: {
 			complete: function (id, o, args) {
 				overlay.set('bodyContent', o.responseText);
@@ -28,7 +28,7 @@ YUI().use('node', 'overlay', 'io-form', function (Y) {
 
 	Y.on('submit', function (e) {
 		e.preventDefault();
-		Y.io(BASE_URL + '/people/partial?partial=people/searchResults.inc;disableButtons=1', {
+		Y.io(BASE_URL + '/people?partial=people/searchResults.inc;return_url=' + document.location.href, {
 			form: { id: e.target },
 			on: {
 				complete: function (id, o, args) {
