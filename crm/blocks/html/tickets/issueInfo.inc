@@ -37,19 +37,25 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 $url = BASE_URL."/issues?ticket_id={$this->ticket->getId()};index={$this->index}";
 $type = View::escape($this->issue->getType());
 echo "
-<div class=\"issueInfo\">
-	<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
-		<span class=\"issueType\"><a href=\"$url\">$type</a></span>
-		$editButton
-		$responseButton
-		$deleteButton
-	</h2>
+	<div class=\"issueInfo\">
+	<div class=\"issueHeader\">
+		<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
+			<span class=\"issueType\"><a href=\"$url\">$type</a></span>
+		</h2>
+	</div>
 ";
-	if (!$this->disableComments) {
-		$description = View::escape($this->issue->getDescription());
-		echo "<div class=\"notes\">$description</div>";
-	}
+echo "
+		<div id=\"issueActions\">
+			$editButton
+			$responseButton
+			$deleteButton
+		</div>
+		";
 
+	if (!$this->disableButtons && userIsAllowed('media','upload')) {
+			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
+		}
+	
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$enteredBy = $this->issue->getEnteredByPerson();
@@ -70,30 +76,38 @@ echo "
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
 		echo "
-		<table>
-			<thead>
-				<tr><th>Created by</th>
-					<th>Reported By</th>
-					<th>Contacted Via</th>
-					<th>Respond Via</th>
-					<th>Labels</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr><td>$enteredBy</td>
-					<td>$reportedBy</td>
-					<td>$contactMethod</td>
-					<td>$responseMethod</td>
-					<td>$labels</td>
-				</tr>
-			</tbody>
-		</table>
+		<div id=\"issuePrimaryData\">
+			<table>
+				<tbody>
+					<tr><th>Created by</th>
+						<td>$enteredBy</td>
+					</tr>
+					<tr>
+						<th>Reported By</th>
+						<td>$reportedBy</td>
+	
+					</tr>	
+					<tr>
+						<th>Contacted Via</th>
+						<td>$contactMethod</td>
+					</tr>
+					<tr>
+						<th>Respond Via</th>
+						<td>$responseMethod</td>
+					</tr>
+					<tr>
+						<th>Labels</th>
+						<td>$labels</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		";
 	}
 	$customFields = $this->ticket->getData('category.customFields');
 	if ($customFields) {
 		$customFieldData = $this->issue->getCustomFields();
-		echo "<table>";
+		echo "<div id=\"custom\"><table>";
 		foreach ($customFields as $definition) {
 			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
 			$value = isset($customFieldData[$definition['name']]) ? $customFieldData[$definition['name']] : '';
@@ -102,7 +116,17 @@ echo "
 		}
 		echo "</table>";
 	}
-
+	
+	
+	echo "</div>";
+	
+	if (!$this->disableComments) {
+		$description = View::escape($this->issue->getDescription());
+		echo "<div class=\"notes\"><h2>Details:</h2>$description</div>";
+	}
+	$this->mediaList = $this->issue->getMedia();
+	include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
+	
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$this->responses = $this->issue->getResponses();
@@ -111,12 +135,11 @@ echo "
 		}
 	}
 
-	$this->mediaList = $this->issue->getMedia();
-	include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
 
 	$this->history = $this->issue->getHistory();
 	if (count($this->history)) {
 		include APPLICATION_HOME.'/blocks/html/tickets/history.inc';
 	}
 
-echo "</div>";
+echo "
+		</div>";

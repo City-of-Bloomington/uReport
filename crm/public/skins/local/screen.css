@@ -1,11 +1,11 @@
 /**
  * Styles for generica html elements
  */
-h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:darkred; }
+h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
 h3 { font-size:110%; font-weight:bold; }
 h4 { font-size:100%; font-weight:bold; }
-a { text-decoration:none; color:#06c; }
+a { text-decoration:none; color:#0000a6; }
 p { margin:0 .5em .5em .5em; }
 
 table { margin:0 .5em .5em .5em; }
@@ -18,7 +18,7 @@ ul { margin-left:1em; padding:0; }
 li { margin:0; }
 
 fieldset { padding:.5em 0; }
-legend { font-weight:bold; font-size:110%; width:100%; color:#500; }
+legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
 label { font-weight:bold; }
 form td { vertical-align:top; }
 
@@ -44,8 +44,8 @@ button, .button {
 #banner {
 	height:60px;
 	background-color:#003366;
-	background-image: -moz-linear-gradient( rgba(6,42,78,1), rgba(15,98,180,.5), rgba(6,42,78,1));
-	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(6,42,78,1)), color-stop(.5, rgba(15,98,180,.5)), color-stop(1, rgba(6,42,78,1)));
+	background-image: -moz-linear-gradient( rgba(0,0,65,1), rgba(0,0,100,.5), rgba(0,0,65,1));
+	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(0,0,65,1)), color-stop(.5, rgba(0,0,100,.5)), color-stop(1, rgba(0,0,65,1)));
 	margin:0; padding:5px 0;
 	position:relative;
 	color:white;
@@ -225,15 +225,22 @@ button, .button {
 .expanded h3 { background:url('images/minus.png') 95% center  no-repeat; }
 
 
-
+/*Issue information */
 .issueList { background-color:#eee; }
+.issueHeader { width:200px; float:left; }
 .issueList h1 { margin:.25em; }
 .issueList .issueInfo {
 	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
 }
-.issueInfo .notes { margin-bottom:.25em; }
+.issueInfo .notes { margin-bottom:.5em; clear:left; }
+#issuePrimaryData { width:300px; float:left; margin-top:15px; }
+#custom { margin-top:15px; margin-left:315px; }
 
-.mediaList { margin-left:.5em; }
+#issueActions { height:30px; float:left; padding:.25em; }
+.mediaList { margin-left:550px; border:1px solid #dddddd; padding:.25em; height:30px; }
+.mediaList legend { width:auto; float:left; line-height:30px; font-size:1em; margin:0 .25em; }
+.mediaList fieldset { position:relative; padding:0; display:inline-block; vertical-align:middle; }
+
 
 /* ICONS FOR MIME TYPES */
 .jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }

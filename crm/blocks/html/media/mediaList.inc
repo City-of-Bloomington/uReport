@@ -9,7 +9,7 @@
  * @param bool $this->disableButtons
  */
 ?>
-<div class="mediaList">
+
 	<?php
 		if (count($this->mediaList)) {
 			echo "
@@ -25,12 +25,14 @@
 					$deleteButton = "<a class=\"delete button\" href=\"$url\">Delete Attachment</a>";
 				}
 				echo "
-				<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
+				<tr>
+				<td>{$media->getUploaded(DATE_FORMAT)}</td>
+				<td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
 							{$media->getFilename()}
 						</a>
 						$deleteButton
 					</td>
-					<td>{$media->getUploaded(DATE_FORMAT)}</td>
+					
 				</tr>
 				";
 			}
@@ -39,8 +41,5 @@
 			";
 		}
 
-		if (!$this->disableButtons && userIsAllowed('media','upload')) {
-			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
-		}
+		
 	?>
-</div>

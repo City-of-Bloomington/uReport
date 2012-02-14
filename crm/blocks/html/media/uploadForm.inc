@@ -8,16 +8,18 @@
  */
 $return_url = $_SERVER['REQUEST_URI'];
 ?>
-<div class="uploadForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/media/upload" enctype="multipart/form-data">
-		<fieldset><legend>Upload an attachment</legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
-			<input name="index" type="hidden" value="<?php echo $this->index; ?>" />
-			<input name="return_url" type="hidden" value="<?php echo $return_url; ?>" />
-
-			<input type="file" name="attachment" />
-			<button type="submit" class="submit">Submit</button>
-			<button type="reset" class="cancel">Cancel</button>
-		</fieldset>
-	</form>
+<div class="mediaList">
+	<div class="uploadForm">
+		<form method="post" action="<?php echo BASE_URL; ?>/media/upload" enctype="multipart/form-data">
+			<fieldset><legend>Upload an attachment</legend>
+				<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+				<input name="index" type="hidden" value="<?php echo $this->index; ?>" />
+				<input name="return_url" type="hidden" value="<?php echo $return_url; ?>" />
+	
+				<input type="file" name="attachment" />
+				<button type="submit" class="submit">Submit</button>
+				<button type="reset" class="cancel">Cancel</button>
+			</fieldset>
+		</form>
+	</div>
 </div>
