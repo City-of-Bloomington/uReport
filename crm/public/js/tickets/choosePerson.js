@@ -1,66 +1,49 @@
 "use strict";
-YUI().use('node', 'overlay', 'io-form', function (Y) {
-	var overlay = new Y.Overlay({
-		srcNode: '#find_person_overlay',
-		footerContent: '<button type="button" class="cancel">Cancel</button>',
-		align: {
-			node: '#findPersonButton',
-			points: [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]
-		}
-	});
-	Y.io(BASE_URL + '/people?partial=people/searchForm.inc;return_url=' + document.location.href, {
-		on: {
-			complete: function (id, o, args) {
-				overlay.set('bodyContent', o.responseText);
-			}
-		}
-	});
-	overlay.render();
-	overlay.hide();
+/**
+ * Opens a new window for the user to lookup/add a person
+ *
+ * When the user finally selects or adds a person, the HTML is supposed
+ * to call the callback function, PERSON_CHOOSER.setPerson().
+ *
+ * Every HTML block involved needs to pass along the callback parameter.
+ * Any link or action that can be considered selecting a person should
+ * use the callback function, instead of it's normal href.
+ * People Blocks: searchForm, searchResults, personList, updatePersonForm
+ *
+ * PeopleController actions need to replace header redirections with
+ * a redirection to an empty page with javascript for the callback function.
+ * PeopleController::update
+ *
+ * @copyright 2012 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+var PERSON_CHOOSER = {
+	popup: {},
+	setPerson: function (person_id) {
+		YUI().use('node', 'io', function (Y) {
+			var personPanel = Y.one('#person-panel');
+			personPanel.setContent('<img src="' + BASE_URL + '/skins/local/images/busy.gif" />');
 
-	Y.on('click', function (e) {
-		e.preventDefault();
-		overlay.show();
-	}, '#findPersonButton');
-
-
-	Y.on('click', Y.bind(overlay.hide, overlay), '#find_person_overlay button.cancel');
-
-	Y.on('submit', function (e) {
-		e.preventDefault();
-		Y.io(BASE_URL + '/people?partial=people/searchResults.inc;return_url=' + document.location.href, {
-			form: { id: e.target },
-			on: {
-				complete: function (id, o, args) {
-					var results = Y.one('#find_person_overlay .findPeopleResults');
-					if (results) {
-						results.remove(true);
+			Y.io(BASE_URL + '/people/view?partial=person-panel;disableButtons=1;person_id=' + person_id, {
+				on: {
+					complete: function (id, o, args) {
+						personPanel.setContent(o.responseText);
+						document.getElementById('issue-reportedByPerson').value = person_id;
+						PERSON_CHOOSER.popup.close();
 					}
-					overlay.setStdModContent(
-						Y.WidgetStdMod.BODY,
-						o.responseText,
-						Y.WidgetStdMod.AFTER
-					);
-					Y.all('#find_person_overlay .findPeopleResults table a').on('click', function (e) {
-						e.preventDefault();
-						var matches = /person_id=([0-9a-f]{24})/.exec(e.target.get('href'));
-						var person_id = matches[1];
-						var personPanel = Y.one('#person-panel');
-						overlay.hide();
-
-						var uri = e.target.get('href') + ';partial=person-panel;disableLinks=1';
-						personPanel.setContent('<img src="' + BASE_URL + '/skins/local/images/busy.gif" />');
-						Y.io(uri, {
-							on: {
-								complete: function (id, o, args) {
-									personPanel.setContent(o.responseText);
-									document.getElementById('issue-reportedByPerson').value = person_id;
-								}
-							}
-						});
-					});
 				}
-			}
+			});
 		});
-	},'#find_person_overlay form');
+	}
+};
+YUI().use('node', function (Y) {
+	Y.on('click', function (e) {
+		PERSON_CHOOSER.popup = window.open(
+			BASE_URL + '/people?popup=1;callback=PERSON_CHOOSER.setPerson',
+			'popup',
+			'menubar=no,location=no,status=no,width=800,height=600'
+		);
+		e.preventDefault();
+	}, '#findPersonButton');
 });

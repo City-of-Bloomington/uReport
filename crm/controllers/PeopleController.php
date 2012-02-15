@@ -32,9 +32,6 @@ class PeopleController extends Controller
 		// Display the search form and any results
 		if ($this->template->outputFormat == 'html') {
 			$searchForm = new Block('people/searchForm.inc');
-			if (isset($_GET['return_url'])) {
-				$searchForm->return_url = $_GET['return_url'];
-			}
 			$this->template->blocks[] = $searchForm;
 		}
 
@@ -52,9 +49,6 @@ class PeopleController extends Controller
 			$personList = new PersonList();
 			$personList->search($search);
 			$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
-			if (isset($_GET['return_url'])) {
-				$searchResults->return_url = $_GET['return_url'];
-			}
 			$this->template->blocks[] = $searchResults;
 		}
 	}
@@ -125,14 +119,10 @@ class PeopleController extends Controller
 	public function update()
 	{
 		$errorURL = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/people';
-		$return_url = isset($_REQUEST['return_url'])
-			? new URL($_REQUEST['return_url'])
-			: new URL(BASE_URL.'/people/view');
 
 		if (isset($_REQUEST['person_id']) && $_REQUEST['person_id']) {
 			try {
 				$person = new Person($_REQUEST['person_id']);
-				$return_url->person_id = "{$person->getId()}";
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -158,8 +148,14 @@ class PeopleController extends Controller
 
 			try {
 				$person->save();
-				$return_url->person_id = "{$person->getId()}";
 
+				if (isset($_REQUEST['return_url'])) {
+					$return_url = new URL($_REQUEST['return_url']);
+					$return_url->person_id = $person->getId();
+				}
+				else {
+					$return_url = $person->getURL();
+				}
 				header("Location: $return_url");
 				exit();
 			}
@@ -169,10 +165,7 @@ class PeopleController extends Controller
 		}
 
 		$this->template->title = 'Update a person';
-		$this->template->blocks[] = new Block(
-			'people/updatePersonForm.inc',
-			array('person'=>$person,'return_url'=>$return_url)
-		);
+		$this->template->blocks[] = new Block('people/updatePersonForm.inc',array('person'=>$person));
 	}
 
 	public function delete()

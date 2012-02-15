@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
- * @param string $this->return_url (optional) The url to use for each of th search results
  * @param bool $this->disableButtons
  */
 ?>
@@ -18,9 +17,14 @@
 			echo '<p>No results found</p>';
 		}
 		if (!$this->disableButtons && userIsAllowed('people','add')) {
-			$url = BASE_URL.'/people/update';
-			if ($this->return_url) {
-				$url.= '?return_url='.$this->return_url;
+			$url = new URL(BASE_URL.'/people/update');
+
+			// Preserve any extra parameters passed in
+			$fields = array('firstname','lastname','email','organization','setOfPeople');
+			foreach ($_REQUEST as $key=>$value) {
+				if (!in_array($key,$fields)) {
+					$url->$key = $value;
+				}
 			}
 			echo "<a class=\"add button\" href=\"$url\">Add a Person</a>";
 		}

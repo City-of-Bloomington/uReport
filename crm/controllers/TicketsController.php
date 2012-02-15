@@ -18,7 +18,7 @@ class TicketsController extends Controller
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL);
+			header('Location: '.BASE_URL.'/tickets');
 			exit();
 		}
 	}
@@ -416,10 +416,8 @@ class TicketsController extends Controller
 			);
 		}
 		else {
-			$this->template->blocks['ticket-panel'][] = new Block(
-				'people/searchForm.inc',
-				array('return_url'=>BASE_URL.'/tickets/refer?ticket_id='.$ticket->getId())
-			);
+			$_REQUEST['return_url'] = BASE_URL.'/tickets/refer?ticket_id='.$ticket->getId();
+			$this->template->blocks['ticket-panel'][] = new Block('people/searchForm.inc');
 		}
 		$this->template->blocks['history-panel'][] = new Block(
 			'tickets/history.inc',

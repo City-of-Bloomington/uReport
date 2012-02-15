@@ -1,73 +1,46 @@
 "use strict";
-// Activate the Find Address Form as an overlay
-YUI().use('node', 'overlay', 'io-form', function (Y) {
-	var overlay = new Y.Overlay({
-		srcNode: '#find_location_overlay',
-		footerContent: '<button type="button" class="cancel">Cancel</button>',
-		align: {
-			node: '#findAddressButton',
-			points: [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]
-		}
-	});
-	Y.io(BASE_URL + '/locations/partial?partial=locations/findLocationForm.inc;return_url=' + BASE_URL + '/locations/view', {
-		on: {
-			complete: function (id, o, args) {
-				overlay.set('bodyContent', o.responseText);
-			}
-		}
-	});
-	overlay.render();
-	overlay.hide();
+/**
+ * Opens a new window for the user to lookup a location
+ *
+ * When the user finally selects a location, the HTML is supposed
+ * to call the callback function, LOCATION_CHOOSER.setLocation().
+ *
+ * Every HTML block involved needs to pass along the callback parameter.
+ * Any link or action that can be considered selecting a person should
+ * use the callback function, instead of it's normal href.
+ *
+ * @copyright 2012 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+var LOCATION_CHOOSER = {
+	popup: {},
+	setLocation: function (location) {
+		YUI().use('node', 'io', function (Y) {
+			var locationPanel = Y.one('#location-panel');
+			locationPanel.setContent('<img src="' + BASE_URL + '/skins/local/images/busy.gif" />');
 
-	Y.on('click', function (e) {
-		e.preventDefault();
-		overlay.show();
-	}, '#findAddressButton');
+			Y.io(BASE_URL + '/locations/view?partial=location-panel;disableLinks=1;location=' + location, {
+				on: {
+					complete: function (id, o, args) {
+						locationPanel.setContent(o.responseText);
+						var location = locationPanel.one('.locationInfo h1 a');
+						document.getElementById('ticket-location').value = location.getContent();
 
-	Y.on('click', Y.bind(overlay.hide, overlay), '#find_location_overlay button.cancel');
-	Y.on('submit', function (e) {
-		e.preventDefault();
-		var results = Y.one('#find_location_overlay .findLocationResults');
-		if (results) {
-			results.remove(true);
-		}
-		overlay.setStdModContent(
-			Y.WidgetStdMod.BODY,
-			'<div class="findLocationResults"><img src="' + BASE_URL + '/skins/local/images/busy.gif" /></div>',
-			Y.WidgetStdMod.AFTER
-		);
-
-		Y.io(BASE_URL + '/locations/partial?partial=locations/findLocationResults.inc', {
-			form: { id: e.target },
-			on: {
-				complete: function (id, o, args) {
-					var results = Y.one('#find_location_overlay .findLocationResults');
-					if (results) {
-						results.remove(true);
+						LOCATION_CHOOSER.popup.close();
 					}
-					overlay.setStdModContent(
-						Y.WidgetStdMod.BODY,
-						o.responseText,
-						Y.WidgetStdMod.AFTER
-					);
-					Y.all('#find_location_overlay .findLocationResults a').on('click', function (e) {
-						e.preventDefault();
-						var uri = e.target.get('href') + ';partial=location-panel;disableLinks=1';
-						Y.io(uri, {
-							on: {
-								complete: function (id, o, args) {
-									var locationPanel = Y.one('#location-panel');
-									locationPanel.setContent(o.responseText);
-									overlay.hide();
-
-									var location = locationPanel.one('.locationInfo h1 a');
-									document.getElementById('ticket-location').value = location.getContent();
-								}
-							}
-						});
-					});
 				}
-			}
+			});
 		});
-	},'#find_location_overlay form');
+	}
+};
+YUI().use('node', function (Y) {
+	Y.on('click', function (e) {
+		LOCATION_CHOOSER.popup = window.open(
+			BASE_URL + '/locations?popup=1;callback=LOCATION_CHOOSER.setLocation',
+			'popup',
+			'menubar=no,location=no,status=no,width=800,height=600'
+		);
+		e.preventDefault();
+	}, '#findAddressButton');
 });

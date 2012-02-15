@@ -1,7 +1,7 @@
 <div class="findLocationResults">
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
@@ -17,12 +17,18 @@ if (count($this->results)) {
 		<tbody>
 	";
 
-	$url = $this->return_url
-		? new URL($this->return_url)
+	$url = !empty($_REQUEST['return_url'])
+		? new URL($_REQUEST['return_url'])
 		: new URL(BASE_URL.'/locations/view');
 
 	foreach ($this->results as $location=>$data) {
-		$url->location = $location;
+		if (isset($_REQUEST['callback'])) {
+			$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
+			$url = "javascript:self.opener.$callback('$location');";
+		}
+		else {
+			$url->location = $location;
+		}
 
 		$location = View::escape($location);
 		$city = isset($data['city']) ? ", $data[city]" : '';

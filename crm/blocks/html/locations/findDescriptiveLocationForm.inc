@@ -1,11 +1,9 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param string $this->return_url
  */
-$return_url = isset($this->return_url) ? View::escape($this->return_url) : '';
 $text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text']) : '';
 ?>
 <div class="findDescriptiveLocationForm">
@@ -13,8 +11,13 @@ $text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text'
 		<fieldset><legend>Find a descriptive location</legend>
 			<input name="location[text]" id="location-text" value="<?php echo $text; ?>" />
 			<?php
-				if ($return_url) {
-					echo "<input type=\"hidden\" name=\"return_url\" value=\"$return_url\" />";
+				// Preserve any extra parameters passed in
+				foreach ($_REQUEST as $key=>$value) {
+					if ($key != 'location') {
+						$key = View::escape($key);
+						$value = View::escape($value);
+						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+					}
 				}
 			?>
 			<button type="button" class="submit">Submit</button>

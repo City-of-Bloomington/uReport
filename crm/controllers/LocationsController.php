@@ -15,9 +15,6 @@ class LocationsController extends Controller
 
 		if ($this->template->outputFormat=='html') {
 			$findForm = new Block('locations/findLocationForm.inc');
-			if (isset($_GET['return_url'])) {
-				$findForm->return_url = $_GET['return_url'];
-			}
 			$this->template->blocks['location-panel'][] = $findForm;
 		}
 

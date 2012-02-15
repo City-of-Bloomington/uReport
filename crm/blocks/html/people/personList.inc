@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright 2009-2011 City of Bloomington, Indiana
+ * @copyright 2009-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
- * @param string $this->return_url (optional) The url to use for each of th search results
  */
 ?>
 <div class="interfaceBox">
@@ -23,9 +22,13 @@
 				$return_url = new URL($this->return_url);
 			}
 			foreach ($this->personList as $person) {
-				if (isset($return_url)) {
-					$return_url->person_id = "{$person->getId()}";
-					$url = "$return_url";
+				if (isset($_REQUEST['return_url'])) {
+					$url = new URL($_REQUEST['return_url']);
+					$url->person_id = "{$person->getId()}";
+				}
+				elseif (isset($_REQUEST['callback'])) {
+					$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
+					$url = "javascript:self.opener.$callback('{$person->getId()}');";
 				}
 				else {
 					$url = $person->getURL();

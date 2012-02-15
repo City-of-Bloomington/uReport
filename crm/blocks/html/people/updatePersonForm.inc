@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
- * @param string $this->return_url
  */
 $fields = array(
 	'firstname','middlename','lastname','email','phoneNumber','organization',
@@ -22,7 +21,16 @@ $title = $this->title ? View::escape($this->title) : $title;
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Person Info</legend>
 			<input name="person_id" type="hidden" value="<?php echo $this->person->getId(); ?>" />
-
+			<?php
+				// Preserve any extra parameters passed in
+				foreach ($_REQUEST as $key=>$value) {
+					if (!in_array($key,$fields)) {
+						$key = View::escape($key);
+						$value = View::escape($value);
+						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+					}
+				}
+			?>
 			<table>
 				<tr><td><label for="firstname" class="required">Firstname</label></td>
 					<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
@@ -70,10 +78,20 @@ $title = $this->title ? View::escape($this->title) : $title;
 		</fieldset>
 
 		<fieldset><legend>Submit</legend>
-			<input name="return_url" type="hidden" value="<?php echo View::escape($this->return_url); ?>" />
 			<button type="submit" class="submit">Submit</button>
+			<?php
+				if (isset($_REQUEST['return_url'])) {
+					$return_url = urlencode($_REQUEST['return_url']);
+				}
+				elseif ($this->person->getId()) {
+					$return_url = $this->person->getURL();
+				}
+				else {
+					$return_url = BASE_URL.'/people';
+				}
+			?>
 			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo $this->return_url; ?>';">
+				onclick="document.location.href='<?php echo $return_url; ?>';">
 				Cancel
 			</button>
 		</fieldset>
