@@ -16,7 +16,7 @@
 		// the process of adding a ticket
 		// We don't want them to be able to add new stuff with locations
 		// that are just random text
-		if (!$this->return_url) {
+		if (!isset($_REQUEST['return_url'])) {
 			include APPLICATION_HOME.'/blocks/html/locations/findDescriptiveLocationForm.inc';
 		}
 	?>

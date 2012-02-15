@@ -18,9 +18,6 @@
 		</thead>
 		<tbody>
 		<?php
-			if ($this->return_url) {
-				$return_url = new URL($this->return_url);
-			}
 			foreach ($this->personList as $person) {
 				if (isset($_REQUEST['return_url'])) {
 					$url = new URL($_REQUEST['return_url']);
