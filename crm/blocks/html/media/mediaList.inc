@@ -8,38 +8,30 @@
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons
  */
-?>
-
-	<?php
-		if (count($this->mediaList)) {
-			echo "
-			<table>
-			";
-			foreach ($this->mediaList as $mediaIndex=>$media) {
-				$deleteButton = '';
-				if (!$this->disableButtons) {
-					$url = new URL(BASE_URL.'/media/delete');
-					$url->ticket_id = (string)$this->ticket->getId();
-					$url->issueIndex = $this->index;
-					$url->mediaIndex = $mediaIndex;
-					$deleteButton = "<a class=\"delete button\" href=\"$url\">Delete Attachment</a>";
-				}
-				echo "
-				<tr>
-				<td>{$media->getUploaded(DATE_FORMAT)}</td>
-				<td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
-							{$media->getFilename()}
-						</a>
-						$deleteButton
-					</td>
-					
-				</tr>
-				";
-			}
-			echo "
-			</table>
-			";
+if (count($this->mediaList)) {
+	echo "
+	<table>
+	";
+	foreach ($this->mediaList as $mediaIndex=>$media) {
+		$deleteButton = '';
+		if (!$this->disableButtons) {
+			$url = new URL(BASE_URL.'/media/delete');
+			$url->ticket_id = (string)$this->ticket->getId();
+			$url->issueIndex = $this->index;
+			$url->mediaIndex = $mediaIndex;
+			$deleteButton = "<a class=\"delete button\" href=\"$url\">Delete Attachment</a>";
 		}
-
-		
-	?>
+		echo "
+		<tr><td>{$media->getUploaded(DATE_FORMAT)}</td>
+			<td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
+					{$media->getFilename()}
+				</a>
+				$deleteButton
+			</td>
+		</tr>
+		";
+	}
+	echo "
+	</table>
+	";
+}

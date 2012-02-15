@@ -37,7 +37,7 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 $url = BASE_URL."/issues?ticket_id={$this->ticket->getId()};index={$this->index}";
 $type = View::escape($this->issue->getType());
 echo "
-	<div class=\"issueInfo\">
+<div class=\"issueInfo\">
 	<div class=\"issueHeader\">
 		<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
 			<span class=\"issueType\"><a href=\"$url\">$type</a></span>
@@ -45,17 +45,17 @@ echo "
 	</div>
 ";
 echo "
-		<div id=\"issueActions\">
-			$editButton
-			$responseButton
-			$deleteButton
-		</div>
-		";
+	<div id=\"issueActions\">
+		$editButton
+		$responseButton
+		$deleteButton
+	</div>
+";
 
 	if (!$this->disableButtons && userIsAllowed('media','upload')) {
 			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
 		}
-	
+
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$enteredBy = $this->issue->getEnteredByPerson();
@@ -85,8 +85,8 @@ echo "
 					<tr>
 						<th>Reported By</th>
 						<td>$reportedBy</td>
-	
-					</tr>	
+
+					</tr>
 					<tr>
 						<th>Contacted Via</th>
 						<td>$contactMethod</td>
@@ -116,17 +116,15 @@ echo "
 		}
 		echo "</table>";
 	}
-	
-	
 	echo "</div>";
-	
+
 	if (!$this->disableComments) {
 		$description = View::escape($this->issue->getDescription());
 		echo "<div class=\"notes\"><h2>Details:</h2>$description</div>";
 	}
 	$this->mediaList = $this->issue->getMedia();
 	include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
-	
+
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$this->responses = $this->issue->getResponses();
@@ -135,11 +133,11 @@ echo "
 		}
 	}
 
-
 	$this->history = $this->issue->getHistory();
 	if (count($this->history)) {
 		include APPLICATION_HOME.'/blocks/html/tickets/history.inc';
 	}
 
 echo "
-		</div>";
+</div>
+";
