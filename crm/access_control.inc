@@ -14,6 +14,7 @@ $ZEND_ACL->addRole(new Zend_Acl_Role('Anonymous'))
  * Declare all the resources
  */
 $ZEND_ACL->add(new Zend_Acl_Resource('index'));
+$ZEND_ACL->add(new Zend_Acl_Resource('callback'));
 $ZEND_ACL->add(new Zend_Acl_Resource('login'));
 $ZEND_ACL->add(new Zend_Acl_Resource('admin'));
 $ZEND_ACL->add(new Zend_Acl_Resource('account'));
@@ -39,7 +40,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('open311'));
 $ZEND_ACL->add(new Zend_Acl_Resource('clients'));
 
 // Permissions for non-authenticated web browsing
-$ZEND_ACL->allow(null,array('login','open311'));
+$ZEND_ACL->allow(null,array('callback','login','open311'));
 $ZEND_ACL->allow(null,
 				array('index','tickets','issues','locations'),
 				array('index','view'));

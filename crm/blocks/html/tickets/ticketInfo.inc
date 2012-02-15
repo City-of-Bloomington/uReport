@@ -7,7 +7,9 @@
  * @param bool $this->disableButtons
  */
 $location = View::escape($this->ticket->getLocation());
-$location = $location ? "<a href=\"".BASE_URL."/locations/view?location=$location\">$location</a>" : '';
+$location = $location
+	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"
+	: '';
 
 if (userIsAllowed('people','view')) {
 	$url = new URL(BASE_URL.'/people/viewPerson.php');
@@ -117,6 +119,7 @@ if (userIsAllowed('people','view')) {
 			<td>$referred</td>
 			<td>$referralButton</td>
 		</tr>
+		<tr>
 			<th>Created By:</th>
 			<td>$enteredBy</td>
 			<td></td>

@@ -59,9 +59,7 @@ class PeopleController extends Controller
 	 */
 	public function view()
 	{
-		$disableLinks = isset($_GET['disableLinks']) ? (bool)$_GET['disableLinks'] : false;
 		$this->template->setFilename('people');
-
 		if (!isset($_GET['person_id'])) {
 			header('Location: '.BASE_URL.'/people');
 			exit();
@@ -74,15 +72,21 @@ class PeopleController extends Controller
 			header('Location: '.BASE_URL.'/people');
 			exit();
 		}
-
 		$this->template->title = $person->getFullname();
-		$this->template->blocks['person-panel'][] = new Block('people/personInfo.inc',array('person'=>$person));
-		if (!$disableLinks && userIsAllowed('tickets','add')) {
+
+
+		$disableButtons = isset($_REQUEST['disableButtons']) ? (bool)$_REQUEST['disableButtons'] : false;
+		$this->template->blocks['person-panel'][] = new Block(
+			'people/personInfo.inc',
+			array('person'=>$person,'disableButtons'=>$disableButtons)
+		);
+		if (!$disableButtons && userIsAllowed('tickets','add')) {
 			$this->template->blocks['person-panel'][] = new Block(
 				'tickets/addNewForm.inc',
 				array('title'=>'Report New Case')
 			);
 		}
+
 		$this->template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
 
 		$lists = array(
@@ -91,6 +95,7 @@ class PeopleController extends Controller
 			'referred'=>'Referred Cases',
 			'enteredBy'=>'Entered Cases'
 		);
+		$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 		foreach ($lists as $listType=>$title) {
 			$this->addTicketList($listType, $title, $person, $disableLinks);
 		}
@@ -152,6 +157,11 @@ class PeopleController extends Controller
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = new URL($_REQUEST['return_url']);
 					$return_url->person_id = $person->getId();
+				}
+				elseif (isset($_REQUEST['callback'])) {
+					$return_url = new URL(BASE_URL.'/callback');
+					$return_url->callback = $_REQUEST['callback'];
+					$return_url->data = "{$person->getId()}";
 				}
 				else {
 					$return_url = $person->getURL();

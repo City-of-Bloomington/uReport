@@ -89,9 +89,12 @@ $title = $this->title ? View::escape($this->title) : $title;
 				else {
 					$return_url = BASE_URL.'/people';
 				}
+
+				$onclick = isset($_REQUEST['callback'])
+					? 'self.close()'
+					: "document.location.href='$return_url';";
 			?>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo $return_url; ?>';">
+			<button type="button" class="cancel" onclick="<?php echo $onclick; ?>">
 				Cancel
 			</button>
 		</fieldset>
