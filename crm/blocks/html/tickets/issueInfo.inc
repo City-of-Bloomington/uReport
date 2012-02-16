@@ -11,6 +11,7 @@
 $editButton = '';
 $deleteButton = '';
 $responseButton = '';
+$uploadButton = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
@@ -28,8 +29,16 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	if ($this->issue->getReportedByPerson()) {
 		$responseButton = "
 		<a class=\"add button\"
-			href=\"".BASE_URL."/issues/respond?ticket_id={$this->ticket->getId()};index=$this->index\">
+			href=\"".BASE_URL."/issues/respond?ticket_id={$this->ticket->getId()};index={$this->index}\">
 			Add Response
+		</a>
+		";
+	}
+	if (userIsAllowed('media','upload')) {
+		$uploadButton = "
+		<a class=\"upload button\"
+			href=\"".BASE_URL."/media/upload?ticket_id={$this->ticket->getId()};index={$this->index}\">
+			Upload Attachment
 		</a>
 		";
 	}
@@ -49,13 +58,9 @@ echo "
 		$editButton
 		$responseButton
 		$deleteButton
+		$uploadButton
 	</div>
 ";
-
-	if (!$this->disableButtons && userIsAllowed('media','upload')) {
-			include APPLICATION_HOME.'/blocks/html/media/uploadForm.inc';
-		}
-
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$enteredBy = $this->issue->getEnteredByPerson();

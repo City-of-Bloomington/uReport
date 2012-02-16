@@ -89,7 +89,7 @@ $id = $this->ticket->getNumber() ? $this->ticket->getNumber() : $this->ticket->g
 $category = $this->ticket->getData('category.name') ? View::escape($this->ticket->getData('category.name')) : '';
 echo "
 <div class=\"ticketInfo\">
-	<h1>Case #$id $deleteButton</h1>
+	<h2><a href=\"{$this->ticket->getURL()}\">Case #$id</a> $deleteButton</h2>
 	<table>
 		<tr>
 			<th>Category:</th>

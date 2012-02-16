@@ -44,21 +44,43 @@ class MediaController extends Controller
 	 * @param POST ticket_id
 	 * @param POST index
 	 * @param POST attachment
-	 * @param POST return_url
 	 */
 	public function upload()
 	{
-		$ticket = $this->loadTicket($_POST['ticket_id']);
-		try {
-			$ticket->attachMedia($_FILES['attachment'],$_POST['index']);
-			$ticket->save();
+		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$issues = $ticket->getIssues();
+		if (!isset($issues[$_REQUEST['index']])) {
+			$_SESSION['errorMessages'][] = new Exception('tickets/unknownIssue');
+			header('Location: '.$ticket->getURL());
+			exit();
 		}
-		catch (Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
+		$issue = $issues[$_REQUEST['index']];
+
+		if (isset($_FILES['attachment'])) {
+			try {
+				$ticket->attachMedia($_FILES['attachment'],$_POST['index']);
+				$ticket->save();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+
+			header('Location: '.$ticket->getURL());
+			exit();
 		}
 
-		$return_url = isset($_POST['return_url']) ? $_POST['return_url'] : $ticket->getURL();
-		header('Location: '.$return_url);
-		exit();
+		$this->template->setFilename('tickets');
+		$this->template->blocks['ticket-panel'][] = new Block(
+			'tickets/ticketInfo.inc',
+			array('ticket'=>$ticket,'disableButtons'=>1)
+		);
+		$this->template->blocks['ticket-panel'][] = new Block(
+			'media/uploadForm.inc',
+			array('ticket'=>$ticket,'index'=>$_REQUEST['index'])
+		);
+		$this->template->blocks['issue-panel'][] = new Block(
+			'tickets/issueInfo.inc',
+			array('ticket'=>$ticket,'issue'=>$issue,'index'=>$_REQUEST['index'],'disableButtons'=>1)
+		);
 	}
 }
