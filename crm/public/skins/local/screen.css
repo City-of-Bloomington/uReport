@@ -29,6 +29,8 @@ button, .button {
 	display:inline-block;
 	padding:5px 10px 5px 24px;
 	border:1px solid #cccccc;
+	font-size:12px; font-weight:bold;
+	color:black;
 }
 
 .add { background:url('images/addbutton.png') left center no-repeat; }
