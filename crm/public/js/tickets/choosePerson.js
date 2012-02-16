@@ -42,7 +42,7 @@ YUI().use('node', function (Y) {
 		PERSON_CHOOSER.popup = window.open(
 			BASE_URL + '/people?popup=1;callback=PERSON_CHOOSER.setPerson',
 			'popup',
-			'menubar=no,location=no,status=no,width=800,height=600'
+			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);
 		e.preventDefault();
 	}, '#findPersonButton');

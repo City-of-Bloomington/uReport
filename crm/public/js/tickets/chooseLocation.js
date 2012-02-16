@@ -39,7 +39,7 @@ YUI().use('node', function (Y) {
 		LOCATION_CHOOSER.popup = window.open(
 			BASE_URL + '/locations?popup=1;callback=LOCATION_CHOOSER.setLocation',
 			'popup',
-			'menubar=no,location=no,status=no,width=800,height=600'
+			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);
 		e.preventDefault();
 	}, '#findAddressButton');
