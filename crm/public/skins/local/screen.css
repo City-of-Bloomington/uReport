@@ -76,7 +76,7 @@ button, .button {
 	border:2px solid black; margin-bottom:0.5em;
 	overflow:hidden;
 }
-#panel-one div h1 {
+#panel-one div h2 {
 	margin:0; padding:.25em;
 }
 #panel-one div ul { margin:.25em; padding:0; }

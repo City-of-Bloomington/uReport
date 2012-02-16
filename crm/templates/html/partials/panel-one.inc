@@ -1,6 +1,6 @@
 <div id="panel-one">
 	<div>
-		<h1>My Account</h1>
+		<h2>My Account</h2>
 		<ul>
 			<li><a href="<?php echo BASE_URL; ?>/account/update">Personal Info</a></li>
 			<?php
