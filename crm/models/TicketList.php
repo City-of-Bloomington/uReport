@@ -246,7 +246,7 @@ class TicketList extends MongoResultIterator
 			'id'=>array('displayName'=>'Ticket ID','index'=>'_id'),
 			'number'=>array('displayName'=>'Case #','index'=>'number'),
 			'enteredDate'=>array('displayName'=>'Case Date','index'=>'enteredDate'),
-			'enteredByPerson'=>array('displayName'=>'Case Entered By','index'=>'enteredByPerson'),
+			'enteredByPerson'=>array('displayName'=>'Entered By','index'=>'enteredByPerson'),
 			'assignedPerson'=>array('displayName'=>'Assigned To','index'=>'assignedPerson'),
 			'referredPerson'=>array('displayName'=>'Referred To','index'=>'referredPerson'),
 			'category'=>array('displayName'=>'Category','index'=>'category.name'),
