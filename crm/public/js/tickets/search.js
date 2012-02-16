@@ -15,4 +15,16 @@ YUI().use('node', function(Y) {
 	}
 
 	Y.delegate('click', toggle, '#advanced-search', 'h3');
+
+	Y.one('#search-form').insert('<button type="button" class="toggle">Toggle</button>', 0);
+	function togglePanel(e) {
+		var panelContainer = this.get('parentNode').get('parentNode');
+		if (panelContainer.hasClass('slidingPanelHidden')) {
+			panelContainer.removeClass('slidingPanelHidden');
+		}
+		else {
+			panelContainer.addClass('slidingPanelHidden');
+		}
+	}
+	Y.delegate('click', togglePanel, '#search-form', 'button.toggle');
 });

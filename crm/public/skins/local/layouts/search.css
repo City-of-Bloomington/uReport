@@ -1,3 +1,6 @@
 /*Search panel with two vertical columns*/
-#search-form { width:32%; float:left; padding:.5em; }
-#search-results { margin-left:33%; padding:0 1em; }
+#search-form { width:300px; float:left; padding-right:5px; }
+#search-results { margin-left:310px; padding:0 1em; }
+
+.slidingPanelHidden #search-form { position:absolute; left:-280px; }
+.slidingPanelHidden #search-results { margin-left:20px; }

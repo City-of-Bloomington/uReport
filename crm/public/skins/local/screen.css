@@ -27,10 +27,11 @@ form td { vertical-align:top; }
  */
 button, .button {
 	display:inline-block;
-	padding:5px 10px 5px 24px;
+	padding:2px 10px 2px 24px;
 	border:1px solid #cccccc;
 	font-size:12px; font-weight:bold;
 	color:black;
+	border-radius:5px;
 }
 
 .add { background:url('images/addbutton.png') left center no-repeat; }
@@ -150,7 +151,7 @@ button, .button {
 .mergeForm .target_b { float:right; width:48%; }
 .mergeForm .button { position:absolute; left:40%; }
 
-#search-form { border-right:1px solid #cccccc; background-color:#eeeeee; }
+#search-form { border-right:1px solid #cccccc; background-color:#eee; border-radius:0 10px 10px 0; }
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
@@ -166,8 +167,18 @@ button, .button {
 #search-form .addNewForm div { margin:10px 0; }
 #advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
 #advanced-search div { margin:3px 0 12px 0; }
-#search-results { margin-left:33%; padding:0 1em; }
 #search-results td { border-bottom:1px solid #ddd; }
+
+#search-form button.toggle {
+	/* Hide the text.  Only show the icon */
+	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
+	width:0; padding:0 0 0 25px;
+	vertical-align:middle; background:white url('images/arrow_left.png') 8px center no-repeat;
+}
+.slidingPanelHidden #search-form button.toggle {
+	background-image:url('images/arrow_right.png');
+}
+
 
 .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
@@ -268,9 +279,9 @@ button, .button {
 .dxf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
 .kml  { height:16px; padding: 0px 0px 10px 22px; background: url('images/mime/kml_feed_small.png') no-repeat; }
 .swf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/flash.gif') no-repeat; }
-.ascending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sort.png') top right no-repeat; }
-.descending { height:16px; padding: 0px 20px 0px 0px; background:url('images/sortdescending.png') top right no-repeat; }
-.top { height:16px; padding: 0px 20px 0px 0px; background:url('images/sortdescending.png') top right no-repeat; }
+.ascending { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_down.png') top right no-repeat; }
+.descending { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_up.png') top right no-repeat; }
+.top { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_up.png') top right no-repeat; }
 
 .pageNavigation { margin:.5em; }
 .pageNavigation li { display:inline; margin:.5em; }

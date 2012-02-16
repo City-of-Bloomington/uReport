@@ -47,6 +47,10 @@ crm/public/index.php -text
 crm/public/js/open311/cross-hairs-small-black-cropped.png -text
 crm/public/media -text
 crm/public/skins/local/images/addbutton.png -text
+crm/public/skins/local/images/arrow_down.png -text
+crm/public/skins/local/images/arrow_left.png -text
+crm/public/skins/local/images/arrow_right.png -text
+crm/public/skins/local/images/arrow_up.png -text
 crm/public/skins/local/images/breadcrumb.png -text
 crm/public/skins/local/images/busy.gif -text
 crm/public/skins/local/images/buttonBackground.png -text
@@ -80,9 +84,6 @@ crm/public/skins/local/images/plus.png -text
 crm/public/skins/local/images/plus_button.png -text
 crm/public/skins/local/images/required_asterik.gif -text
 crm/public/skins/local/images/reticule_button.png -text
-crm/public/skins/local/images/sort.png -text
-crm/public/skins/local/images/sortdescending.png -text
-crm/public/skins/local/images/sortright.png -text
 crm/public/skins/local/images/x_button.png -text
 crm/scripts/migration/0.0-1.0/calltrack/1_constituents.php -text
 crm/scripts/migration/0.0-1.0/calltrack/2_users.php -text
