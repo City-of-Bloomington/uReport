@@ -5,6 +5,11 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+$dept = $_SESSION['USER']->getDepartment();
+if ($dept) {
+	$department = new Department($dept['_id']);
+	$statuses = $department->getCustomStatuses();
+	if (count($statuses)) {
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
@@ -15,17 +20,12 @@
 					<td><select name="status" id="status">
 							<option>open</option>
 							<?php
-								$dept = $_SESSION['USER']->getDepartment();
-								if ($dept) {
-									$department = new Department($dept['_id']);
-
-									foreach ($department->getCustomStatuses() as $status) {
-										$selected = $this->ticket->getStatus()==$status
-											? 'selected="selected"'
-											: '';
-										$status = View::escape($status);
-										echo "<option $selected>$status</option>";
-									}
+								foreach ($statuses as $status) {
+									$selected = $this->ticket->getStatus()==$status
+										? 'selected="selected"'
+										: '';
+									$status = View::escape($status);
+									echo "<option $selected>$status</option>";
 								}
 							?>
 						</select>
@@ -43,3 +43,6 @@
 		</fieldset>
 	</form>
 </div>
+<?php
+	}
+}
