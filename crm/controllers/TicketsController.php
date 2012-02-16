@@ -76,7 +76,7 @@ class TicketsController extends Controller
 		);
 
 		if (userIsAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
-			$this->template->blocks['ticket-panel'][] = new Block(
+			$this->template->blocks['history-panel'][] = new Block(
 				'tickets/actionForm.inc',
 				array('ticket'=>$ticket)
 			);

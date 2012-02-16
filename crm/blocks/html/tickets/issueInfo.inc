@@ -119,9 +119,8 @@ echo "
 			$value = is_array($value) ? implode(', ',$value) : View::escape($value);
 			echo "<tr><th>$label</th><td>$value</td></tr>";
 		}
-		echo "</table>";
+		echo "</table></div>";
 	}
-	echo "</div>";
 
 	if (!$this->disableComments) {
 		$description = View::escape($this->issue->getDescription());

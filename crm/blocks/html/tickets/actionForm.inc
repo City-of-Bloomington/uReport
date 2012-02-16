@@ -10,6 +10,8 @@ $actions = $department->getActions();
 if (count($actions)) {
 ?>
 <div class="actionForm">
+	<h1>Case Actions</h1>
+	<p>Update the history log with actions performed on this case</p>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/recordAction">
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />

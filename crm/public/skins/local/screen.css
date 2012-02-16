@@ -96,12 +96,13 @@ button, .button {
 }
 
 /* Blocks we want to show up in the left column of a Panel */
-#ticket-panel .ticketInfo,
 #person-panel .personInfo,
 #person-panel .addNewForm,
 #location-panel .locationInfo,
 .findLocationForm,
-#location-panel .addNewForm {
+#location-panel .addNewForm,
+#ticket-panel .actionForm,
+#ticket-panel .ticketInfo {
 	 width:380px; float:left; padding:3px; clear:left
 }
 
@@ -110,7 +111,6 @@ button, .button {
 #location-panel .ticketList,
 #ticket-panel .closeTicketForm,
 #ticket-panel .assignTicketForm,
-#ticket-panel .actionForm,
 #ticket-panel .referTicketForm,
 #ticket-panel .changeStatusForm,
 #person-panel .ticketList,
