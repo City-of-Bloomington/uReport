@@ -167,7 +167,7 @@ button, .button {
 #search-form .addNewForm div { margin:10px 0; }
 #advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
 #advanced-search div { margin:3px 0 12px 0; }
-#search-results td { border-bottom:1px solid #ddd; }
+#search-results .searchResultsRows div { border-bottom:1px solid #ddd; }
 
 #search-form button.toggle {
 	/* Hide the text.  Only show the icon */
@@ -204,7 +204,6 @@ button, .button {
 /**
  * Tables with alternating row background colors
  */
-.searchResults tbody tr:nth-child(odd),
 .ticketList tbody tr:nth-child(even),
 .clientRequestForm tbody tr:nth-child(odd),
 .ticketInfo tbody tr:nth-child(odd) {

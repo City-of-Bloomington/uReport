@@ -14,24 +14,22 @@ echo "
 	<h1>Search Results</h1>
 ";
 	if (count($ticketList)) {
-		echo "<table>";
-
 		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 		$ticketList = $ticketList->getPaginator(50,$page);
 
+		echo "<table>";
 		$header = new Block(
 			'tickets/partials/searchResultsColumnHeaders.inc',
 			array('ticketList'=>$ticketList)
 		);
 		echo $header->render('html',$this->template);
+		echo "</table>";
 
 		$body = new Block(
 			'tickets/partials/searchResultsRows.inc',
 			array('ticketList'=>$ticketList)
 		);
 		echo $body->render('html',$this->template);
-
-		echo "</table>";
 	}
 	else {
 		echo "<p>No cases found<p>";
