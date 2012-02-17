@@ -17,6 +17,10 @@ if (count($actions)) {
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
 				<tr><td><label for="action">Action</label></td>
+					<td><label for="actionDate">Date</label></td>
+					<td><label for="notes">Comment</label></td>
+				</tr>
+				<tr>
 					<td><select name="action" id="action">
 							<option></option>
 							<?php
@@ -27,15 +31,10 @@ if (count($actions)) {
 							?>
 						</select>
 					</td>
-				</tr>
-				<tr><td><label for="actionDate">Date</label></td>
 					<td><input name="actionDate" id="actionDate"
 							value="<?php echo date(DATE_FORMAT); ?>" />
 					</td>
-				</tr>
-				<tr>
-					<td><label for="notes">Comment</label></td>
-					<td><textarea name="notes" id="notes"></textarea></td>
+					<td colspan="2"><textarea name="notes" id="notes"></textarea></td>
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>

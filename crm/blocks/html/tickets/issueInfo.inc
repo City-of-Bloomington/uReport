@@ -50,16 +50,14 @@ echo "
 	<div class=\"issueHeader\">
 		<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
 			<span class=\"issueType\"><a href=\"$url\">$type</a></span>
-		</h2>
-	</div>
-";
-echo "
-	<div id=\"issueActions\">
-		$editButton
-		$responseButton
-		$deleteButton
-		$uploadButton
-	</div>
+			<span id=\"issueActions\">
+				$editButton
+				$responseButton
+				$deleteButton
+				$uploadButton
+			</span>
+	</h2>
+</div>
 ";
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
