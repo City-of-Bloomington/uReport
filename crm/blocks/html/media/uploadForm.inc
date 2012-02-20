@@ -15,7 +15,7 @@
 
 			<input type="file" name="attachment" />
 			<button type="submit" class="submit">Upload</button>
-			<a href="<?php echo $this->ticket->getURL(); ?>">Cancel</a>
+			<a class="cancel button" href="<?php echo $this->ticket->getURL(); ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

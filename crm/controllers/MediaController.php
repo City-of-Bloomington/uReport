@@ -74,7 +74,11 @@ class MediaController extends Controller
 			'tickets/ticketInfo.inc',
 			array('ticket'=>$ticket,'disableButtons'=>1)
 		);
-		$this->template->blocks['ticket-panel'][] = new Block(
+		$this->template->blocks['history-panel'][] = new Block(
+			'tickets/history.inc',
+			array('history'=>$ticket->getHistory())
+		);
+		$this->template->blocks['issue-panel'][] = new Block(
 			'media/uploadForm.inc',
 			array('ticket'=>$ticket,'index'=>$_REQUEST['index'])
 		);
