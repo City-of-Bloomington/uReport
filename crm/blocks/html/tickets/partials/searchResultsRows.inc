@@ -95,7 +95,7 @@ foreach ($this->ticketList as $row) {
 		foreach ($dl as $dt=>$dd) {
 			$dt = View::escape($dt);
 			$dd = View::escape($dd);
-			echo "<li><label>$dt:</label> $dd\n";
+			echo "<li><label>$dt:</label> $dd</li>\n";
 		}
 		echo '</ul>';
 	}

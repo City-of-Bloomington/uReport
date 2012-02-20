@@ -24,7 +24,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 							All open cases
 						</a>
 					</li>
-					<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson[]={$_SESSION['USER']->getId()}\">
+					<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson%5B%5D={$_SESSION['USER']->getId()}\">
 							All open cases assigned to me
 						</a>
 					</li>
@@ -32,7 +32,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 				if ($_SESSION['USER']->getDepartment()) {
 					$dept = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets?status=open;department[]=$dept[_id]\">
+					<li><a href=\"".BASE_URL."/tickets?status=open;department%5B%5D=$dept[_id]\">
 							All open cases for my department
 						</a>
 					</li>
