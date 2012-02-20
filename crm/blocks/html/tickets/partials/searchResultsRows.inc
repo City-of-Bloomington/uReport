@@ -33,7 +33,7 @@ foreach ($this->ticketList as $row) {
 				case 'zip':
 					$$field = isset($row[$field]) ? View::escape($row[$field]) : '';
 					break;
-
+				
 				case 'category':
 					$$field = isset($row['category']['name'])
 						? View::escape($row['category']['name'])
@@ -85,10 +85,10 @@ foreach ($this->ticketList as $row) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
-					Case:$number $category $status $location $city $state $zip
+					$number $category $status
 				</a>
 			</h3>
-			<p>$description</p>
+			<span>$location $city $state $zip</span>
 	";
 	if (count($dl)) {
 		echo '<ul>';
@@ -100,6 +100,7 @@ foreach ($this->ticketList as $row) {
 		echo '</ul>';
 	}
 	echo "
+		<p>$description</p>
 		</div>
 	</div>
 	";

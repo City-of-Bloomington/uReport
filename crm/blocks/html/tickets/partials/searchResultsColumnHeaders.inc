@@ -8,6 +8,7 @@
 echo "
 <thead>
 	<tr>
+	<th>Sort by:</th>
 ";
 	if (count($this->ticketList)) {
 		if (isset($_GET['sort'])) {
