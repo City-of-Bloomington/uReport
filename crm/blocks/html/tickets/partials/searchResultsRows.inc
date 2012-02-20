@@ -85,7 +85,7 @@ foreach ($this->ticketList as $row) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
-					$number $category $status
+					Case # $number $category $status
 				</a>
 			</h3>
 			<span>$location $city $state $zip</span>
