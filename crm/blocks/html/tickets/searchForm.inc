@@ -116,6 +116,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 									$checked = (isset($_GET[$key]) && in_array($value,$_GET[$key]))
 										? 'checked="checked"'
 										: '';
+									$value = View::escape($value);
 									echo "
 									<li><label>
 											<input name=\"{$key}[]\" type=\"checkbox\" value=\"$value\" $checked />
