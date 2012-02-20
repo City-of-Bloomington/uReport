@@ -49,8 +49,8 @@ class TicketsController extends Controller
 
 
 			if ($this->template->outputFormat == 'html') {
-				$this->template->blocks['search-results'][] = new Block('tickets/searchParameters.inc');
 				$this->template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
+				$this->template->blocks['search-results'][] = new Block('tickets/searchParameters.inc');
 			}
 			$this->template->blocks['search-results'][] = $report;
 		}

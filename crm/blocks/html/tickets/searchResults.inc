@@ -14,7 +14,6 @@ $ticketList->findRawData($_GET);
 
 echo "
 <div class=\"searchResults\">
-	<h1>Search Results</h1>
 ";
 	if (count($ticketList)) {
 		$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
