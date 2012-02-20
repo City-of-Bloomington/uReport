@@ -164,6 +164,9 @@ button, .button {
 	margin:.5em;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
 }
+.searchResults { margin-top:1em; }
+.searchResults table { background-color:#eeeeee; }
+.searchResults th { padding:.5em; border-right:1px solid #cccccc; }
 #search-form .addNewForm,
 #search-form .quickSearches,
 #search-form .advancedSearch {
@@ -172,7 +175,7 @@ button, .button {
 #search-form .addNewForm div { margin:10px 0; }
 #advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
 #advanced-search div { margin:3px 0 12px 0; }
-.searchResultsRows div { border-bottom:1px solid #ddd; overflow:auto; padding:4px; }
+.searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
 .searchResultsRows ul { margin:0; list-style-type:none; }
 
 #search-form button.toggle {
