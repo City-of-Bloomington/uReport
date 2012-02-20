@@ -21,7 +21,7 @@ foreach ($this->ticketList as $row) {
 	foreach ($_GET['fields'] as $field=>$value) {
 		// Make sure the user is allowed to see this field
 		if (array_key_exists($field,$displayableFields)
-			&& (false === strpos($field,'Person') || userIsAllowed('People'))) {
+			&& (false === strpos($field,'Person') || userIsAllowed('people'))) {
 			// Format the data being asked for
 			switch ($field) {
 				case 'number':
@@ -84,18 +84,20 @@ foreach ($this->ticketList as $row) {
 	}
 	echo "
 		<div>
-			<a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">$number</a>
-			$category, $status, $location, $city, $state, $zip
+			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
+					Case:$number $category $status $location $city $state $zip
+				</a>
+			</h3>
 			<p>$description</p>
 	";
 	if (count($dl)) {
-		echo '<dl>';
+		echo '<ul>';
 		foreach ($dl as $dt=>$dd) {
 			$dt = View::escape($dt);
 			$dd = View::escape($dd);
-			echo "<dt>$dt</dt><dd>$dd</dd>\n";
+			echo "<li><label>$dt:</label> $dd\n";
 		}
-		echo '</dl>';
+		echo '</ul>';
 	}
 	echo "
 		</div>

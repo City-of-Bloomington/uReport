@@ -159,7 +159,8 @@ button, .button {
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
-#search-form .fields {
+#search-form .fields,
+.searchResultsRows ul {
 	margin:.5em;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
 }
@@ -171,7 +172,8 @@ button, .button {
 #search-form .addNewForm div { margin:10px 0; }
 #advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
 #advanced-search div { margin:3px 0 12px 0; }
-#search-results .searchResultsRows div { border-bottom:1px solid #ddd; }
+.searchResultsRows div { border-bottom:1px solid #ddd; overflow:auto; padding:4px; }
+.searchResultsRows ul { margin:0; list-style-type:none; }
 
 #search-form button.toggle {
 	/* Hide the text.  Only show the icon */
@@ -193,16 +195,6 @@ button, .button {
 	display:block;
 	background:url('images/breadcrumb.png') no-repeat right center;
 	padding:0 15px 0 0;
-}
-
-.clientRequestForm table { width:90%; }
-.clientRequestForm td label { text-align:right; }
-.clientRequestForm fieldset { margin:1em 0; padding:.5em; }
-.clientRequestForm form { border:3px solid #ddd; padding:.5em 0; }
-
-.clientRequestForm select, .clientRequestForm input,
-.clientRequestForm button, .clientRequestForm textarea {
-	float:left;
 }
 
 /**

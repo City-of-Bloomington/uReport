@@ -29,7 +29,7 @@ echo "
 		foreach ($_GET['fields'] as $name=>$value) {
 			// Make sure they're allowed to see this field
 			if (array_key_exists($name,$displayableFields)
-				&& (false === strpos($name,'Person') || userIsAllowed('People'))) {
+				&& (false === strpos($name,'Person') || userIsAllowed('people'))) {
 
 				$label = $displayableFields[$name]['displayName'];
 
