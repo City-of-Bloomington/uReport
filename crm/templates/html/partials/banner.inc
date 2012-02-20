@@ -14,8 +14,9 @@
 				";
 			}
 			else {
+				$return_url = View::escape($_SERVER['REQUEST_URI']);
 				echo "
-				<li><a href=\"".BASE_URL."/login?return_url=$_SERVER[REQUEST_URI]\">
+				<li><a href=\"".BASE_URL."/login?return_url=$return_url\">
 						Login
 					</a>
 				</li>
