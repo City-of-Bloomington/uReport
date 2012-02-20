@@ -230,6 +230,9 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						if ((false === strpos($name,'Person') || userIsAllowed('people','view'))
 							&& $name!='id') {
 							$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
+							if ($name == 'number') {
+								$checked = 'checked="checked" readonly="readonly"';
+							}
 							$value = View::escape($definition['displayName']);
 							echo "
 							<li><label>

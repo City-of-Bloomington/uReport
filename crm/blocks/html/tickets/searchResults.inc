@@ -6,6 +6,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+if ($this->template->outputFormat == 'html' && !isset($_GET['fields']['number'])) {
+	$_GET['fields']['number'] = 1;
+}
 $ticketList = new TicketList();
 $ticketList->findRawData($_GET);
 
