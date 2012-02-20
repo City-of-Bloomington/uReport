@@ -330,10 +330,6 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
-		$this->template->blocks['ticket-panel'][] = new Block(
 			'departments/chooseDepartmentForm.inc',
 			array('currentDepartment'=>$currentDepartment)
 		);
@@ -405,10 +401,6 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
 		if (isset($person)) {
 			$this->template->blocks['ticket-panel'][] = new Block(
 				'tickets/referTicketForm.inc',
@@ -510,10 +502,6 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
-		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/changeStatusForm.inc',
 			array('ticket'=>$ticket)
 		);
@@ -571,11 +559,11 @@ class TicketsController extends Controller
 			}
 		}
 
-		$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$_REQUEST['return_url'] = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'locations/findLocationForm.inc',
-			array('return_url'=>$return_url,'includeExternalResults'=>true)
+			array('includeExternalResults'=>true)
 		);
 		$this->template->blocks['history-panel'][] = new Block(
 			'tickets/history.inc',
@@ -626,10 +614,6 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/changeCategoryForm.inc',
 			array('ticket'=>$ticket)
@@ -692,10 +676,6 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/closeTicketForm.inc',
 			array('ticket'=>$ticket)
