@@ -8,7 +8,7 @@
 echo "
 <thead>
 	<tr>
-	<th>Sort by:</th>
+	<td>Sort by:</td>
 ";
 	if (count($this->ticketList)) {
 		if (isset($_GET['sort'])) {
@@ -52,7 +52,7 @@ echo "
 	}
 	// Remember to leave an empty cell for any buttons we might want to add in the results
 echo "
-		<th></th>
+		
 	</tr>
 </thead>
 ";
