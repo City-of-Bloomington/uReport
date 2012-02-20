@@ -100,8 +100,7 @@ button, .button {
 #location-panel .locationInfo,
 .findLocationForm,
 #location-panel .addNewForm,
-#history-panel .actionForm,
-#ticket-panel .ticketInfo {
+#history-panel .actionForm {
 	 width:380px; float:left; padding:3px; clear:left
 }
 
@@ -127,15 +126,18 @@ button, .button {
 /**
  * Custom Styles for individual screens
  */
+.actionForm { overflow:auto; }
+.actionForm form { background-color:#eee; margin-bottom:10px; padding:0 4px; border-radius:5px; display:table; }
+.actionForm fieldset { float:left; display:table; }
+.actionForm .buttons { clear:left; }
 
-.actionForm form { background-color:#eeeeee; margin-bottom:10px; }
-.actionForm textarea { width:100%; }
-
-.ticketInfo table .button {
+.ticketInfo li { width:280px; }
+.ticketInfo ul .button {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
 	width:0; padding:0 0 0 25px;
 	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
+	float:right;
 }
 
 .ticketList table { border:1px solid #aaaaaa; }
@@ -159,9 +161,11 @@ button, .button {
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
+
 #search-form .fields,
-.searchResultsRows ul {
-	margin:.5em;
+.searchResultsRows ul,
+.ticketInfo ul {
+	list-style-type:none;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
 }
 .searchResults { margin-top:1em; }
@@ -176,7 +180,6 @@ button, .button {
 #advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
 #advanced-search div { margin:3px 0 12px 0; }
 .searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
-.searchResultsRows ul { margin:0; list-style-type:none; }
 
 #search-form button.toggle {
 	/* Hide the text.  Only show the icon */

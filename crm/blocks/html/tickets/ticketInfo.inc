@@ -90,59 +90,56 @@ $category = $this->ticket->getData('category.name') ? View::escape($this->ticket
 echo "
 <div class=\"ticketInfo\">
 	<h2><a href=\"{$this->ticket->getURL()}\">Case #$id</a> $deleteButton</h2>
-	<table>
-		<tr>
-			<th>Category:</th>
-			<td>$category</td>
-			<td>$changeCategoryButton</td>
-		</tr>
-		<tr>
-			<th>Location:</th>
-			<td>$location</td>
-			<td>$changeLocationButton</td>
-		</tr>
-		<tr>
-			<th>Status:</th>
-			<td>$status</td>
-			<td>$editStatusButton</td>
-		</tr>
+	<ul>
+		<li>
+			<label>Category:</label>
+			$category
+			$changeCategoryButton
+		</li>
+		<li>
+			<label>Location:</label>
+			$location
+			$changeLocationButton
+		</li>
+		<li>
+			<label>Status:</label>
+			$status
+			$editStatusButton
+		</li>
 ";
 if (userIsAllowed('people','view')) {
 	echo "
-		<tr>
-			<th>Assigned To:</th>
-			<td>$assigned</td>
-			<td>$assignButton</td>
-		</tr>
-		<tr>
-			<th>Referred To:</th>
-			<td>$referred</td>
-			<td>$referralButton</td>
-		</tr>
-		<tr>
-			<th>Created By:</th>
-			<td>$enteredBy</td>
-			<td></td>
-		</tr>
+		<li>
+			<label>Assigned To:</label>
+			$assigned
+			$assignButton
+		</li>
+		<li>
+			<label>Referred To:</label>
+			$referred
+			$referralButton
+		</li>
+		<li>
+			<label>Created By:</label>
+			$enteredBy
+		</li>
 	";
 }
 	$client = $this->ticket->getClient();
 	if ($client) {
 		$name = View::escape($client->getName());
 		echo "
-		<tr>
-			<th>Received Via:</th>
-			<td>$name</td>
-			<td></td>
-		</tr>
+		<li>
+			<label>Received Via:</label>
+			$name
+		</li>
 		";
 	}
 echo "
-		<tr>
-			<th>Date Opened:</th>
-			<td>{$this->ticket->getEnteredDate(DATE_FORMAT)}</td>
-			<td></td>
-		</tr>
-	</table>
+		<li>
+			<label>Date Opened:</label>
+			{$this->ticket->getEnteredDate(DATE_FORMAT)}
+		</li>
+	</ul>
 </div>
 ";
