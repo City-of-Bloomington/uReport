@@ -3,7 +3,7 @@
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
-h3 { font-size:110%; font-weight:bold; }
+h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
 p { margin:0 .5em .5em .5em; }
@@ -21,6 +21,8 @@ fieldset { padding:.5em 0; }
 legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
 label { font-weight:bold; }
 form td { vertical-align:top; }
+textarea { width:250px; height:50px; }
+
 
 /**
  * Base styles for buttons and button links
@@ -157,7 +159,7 @@ button, .button {
 .mergeForm .target_b { float:right; width:48%; }
 .mergeForm .button { position:absolute; left:40%; }
 
-#search-form { border-right:1px solid #cccccc; background-color:#eee; border-radius:0 10px 10px 0; }
+#search-form { border-right:1px solid #cccccc; background-color:#eee; }
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
@@ -177,9 +179,19 @@ button, .button {
 	background-color:white; border:1px solid #ccc; margin:5px 0; padding:2px;
 }
 #search-form .addNewForm div { margin:10px 0; }
-#advanced-search h3 { background-color:#ddd; padding:4px; border-radius:5px 5px 0 0; }
-#advanced-search div { margin:3px 0 12px 0; }
+#advanced-search h3 { padding:5px 10px 5px 3px; border-bottom:1px solid #dddddd; }
+#advanced-search div { margin:10px 5px; }
 .searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
+
+/* Collapsing and Expanding styles */
+.collapsed h3, .expanded h3 {
+	 cursor:pointer;
+}
+.collapsed h3 { background:#dddddd url('images/plus.png') 95% center no-repeat; }
+.collapsed ul, .collapsed div, .collapsed table {
+	display:none;
+}
+.expanded h3 { background:#dddddd url('images/minus.png') 95% center  no-repeat; }
 
 #search-form button.toggle {
 	/* Hide the text.  Only show the icon */
@@ -208,7 +220,8 @@ button, .button {
  */
 .ticketList tbody tr:nth-child(even),
 .clientRequestForm tbody tr:nth-child(odd),
-.ticketInfo tbody tr:nth-child(odd) {
+.ticketInfo li:nth-child(odd),
+#issuePrimaryData tbody tr:nth-child(odd) {
 	background:#eee;
 }
 
@@ -221,30 +234,19 @@ button, .button {
 	overflow:hidden;
 }
 .departmentList .department h3,
-.categoryList .category h3,
-#advanced-search h3 {
-	background-color:#cccccc;
+.categoryList .category h3 {
+	background-color:#eeeeee;
 }
 .departmentList .department h3 a,
 .categoryList .category h3 a {
-	color:white;
+	color:black;
 }
-
-/* Collapsing and Expanding styles */
-.collapsed h3, .expanded h3 {
-	 cursor:pointer;
-}
-.collapsed h3 { background:url('images/plus.png') 95% center no-repeat; }
-.collapsed ul, .collapsed div, .collapsed table {
-	display:none;
-}
-.expanded h3 { background:url('images/minus.png') 95% center  no-repeat; }
 
 
 /*Issue information */
 .issueList { background-color:#eee; }
-.issueHeader { width:100%; vertical-align:middle; }
-.issueHeader .date, .issueHeader .issueType { float:left; padding:0 10px 0 0; }
+.issueHeader { width:100%; display:block; }
+.issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
 .issueList h1 { margin:.25em; }
 .issueList .issueInfo {
 	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
@@ -313,4 +315,12 @@ input.yui3-dd-drop-over { background-color:green; }
 #location_map {
 	width:100%; height:300px;
 	border:2px solid black;
+}
+/* Admin Styles */
+.interfaceBox table .button .edit {
+/* Hide the text.  Only show the icon */
+	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
+	width:0; padding:0 0 0 25px;
+	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
+	float:right;
 }
