@@ -16,13 +16,14 @@
 	</h1>
 	<table>
 		<thead>
-			<tr><th></th>
+			<tr>
 				<th>Username</th>
 				<th>Name</th>
 				<th>Department</th>
 				<th>Authentication</th>
 				<th>Roles</th>
 				<th></th>
+				<th></th>				
 			</tr>
 		</thead>
 		<tbody>
@@ -52,12 +53,13 @@
 				$department = $user->getDepartment();
 				$departmentName = View::escape($department['name']);
 				echo "
-				<tr><td>$editButton</td>
+				<tr>
 					<td>$username</td>
 					<td>$name</td>
 					<td>$departmentName</td>
 					<td>{$user->getAuthenticationMethod()}</td>
 					<td>{$user->getRole()}</td>
+					<td>$editButton</td>
 					<td>$deleteButton</td>
 				</tr>
 				";
