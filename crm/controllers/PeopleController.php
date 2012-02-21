@@ -80,24 +80,27 @@ class PeopleController extends Controller
 			'people/personInfo.inc',
 			array('person'=>$person,'disableButtons'=>$disableButtons)
 		);
-		if (!$disableButtons && userIsAllowed('tickets','add')) {
-			$this->template->blocks['person-panel'][] = new Block(
-				'tickets/addNewForm.inc',
-				array('title'=>'Report New Case')
+
+		if ($this->template->outputFormat == 'html') {
+			if (!$disableButtons && userIsAllowed('tickets','add')) {
+				$this->template->blocks['person-panel'][] = new Block(
+					'tickets/addNewForm.inc',
+					array('title'=>'Report New Case')
+				);
+			}
+
+			$this->template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
+
+			$lists = array(
+				'reportedBy'=>'Reported Cases',
+				'assigned'=>'Assigned Cases',
+				'referred'=>'Referred Cases',
+				'enteredBy'=>'Entered Cases'
 			);
-		}
-
-		$this->template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
-
-		$lists = array(
-			'reportedBy'=>'Reported Cases',
-			'assigned'=>'Assigned Cases',
-			'referred'=>'Referred Cases',
-			'enteredBy'=>'Entered Cases'
-		);
-		$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
-		foreach ($lists as $listType=>$title) {
-			$this->addTicketList($listType, $title, $person, $disableLinks);
+			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
+			foreach ($lists as $listType=>$title) {
+				$this->addTicketList($listType, $title, $person, $disableLinks);
+			}
 		}
 	}
 

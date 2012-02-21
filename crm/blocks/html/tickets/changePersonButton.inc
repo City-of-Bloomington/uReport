@@ -12,5 +12,4 @@ echo "
 		Lookup Person
 	</a>
 </div>
-<div id=\"find_person_overlay\"></div>
 ";

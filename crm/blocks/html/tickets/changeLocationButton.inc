@@ -12,5 +12,4 @@ echo "
 		Lookup Location
 	</a>
 </div>
-<div id=\"find_location_overlay\"></div>
 ";

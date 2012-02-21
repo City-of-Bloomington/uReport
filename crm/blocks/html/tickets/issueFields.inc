@@ -22,7 +22,7 @@
 	</tr>
 
 	<tr class="reportedByPerson">
-		<td><label for="issue-reportedByPerson">Reported By Person ID</label></td>
+		<td><label for="issue-reportedByPerson">Reported By Person</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$id = '';
@@ -31,9 +31,14 @@
 					$id = $reportedByPerson->getId();
 					$name = View::escape($reportedByPerson->getFullname());
 				}
+				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 			?>
-			<input name="issue[reportedByPerson]" id="issue-reportedByPerson"
+			<input type="hidden" name="issue[reportedByPerson]" id="issue-reportedByPerson"
 				value="<?php echo "$id"; ?>" />
+			<span id="issue-reportedByPerson-name"><?php echo $name; ?></span>
+			<a class="edit button" href="<?php echo BASE_URI."/people?return_url=$return_url"; ?>">
+				Change Person
+			</a>
 		</td>
 	</tr>
 
@@ -91,4 +96,7 @@
 <div>
 	<textarea name="issue[description]" id="issue-description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>
-
+<?php
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URI.'/js/issues/changePerson.js');
+?>
