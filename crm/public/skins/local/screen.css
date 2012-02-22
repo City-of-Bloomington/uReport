@@ -3,7 +3,7 @@
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
 h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
-h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
+h3 { font-size:110%; font-weight:bold; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
 p { margin:0 .5em .5em .5em; }
@@ -60,7 +60,7 @@ button, .button {
 #application_name { width:60%; margin-left:5px; }
 #application_name a { font-weight:bold; font-size:174%; }
 #location_name { width:75%; margin-left:5px;  }
-#utilityBar { float:right; width:40%;}
+#utilityBar { float:right; width:50%; text-align:right; }
 #utilityBar li { display:inline; margin-right:1em; color:white; }
 
 #menuBar { margin-bottom:.5em; border-bottom:1px solid #ccc; }
@@ -109,10 +109,6 @@ button, .button {
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList,
 #location-panel .ticketList,
-#ticket-panel .closeTicketForm,
-#ticket-panel .assignTicketForm,
-#ticket-panel .referTicketForm,
-#ticket-panel .changeStatusForm,
 #person-panel .ticketList,
 .findLocationResults,
 .findPeopleResults {
