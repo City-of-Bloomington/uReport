@@ -23,9 +23,9 @@ var PERSON_CHOOSER = {
 	setPerson: function (person_id) {
 		YUI().use('node', 'io', function (Y) {
 			var personPanel = Y.one('#person-panel');
-			personPanel.setContent('<img src="' + BASE_URL + '/skins/local/images/busy.gif" />');
+			personPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
-			Y.io(BASE_URL + '/people/view?partial=person-panel;disableButtons=1;person_id=' + person_id, {
+			Y.io(CRM.BASE_URL + '/people/view?partial=person-panel;disableButtons=1;person_id=' + person_id, {
 				on: {
 					complete: function (id, o, args) {
 						personPanel.setContent(o.responseText);
@@ -40,7 +40,7 @@ var PERSON_CHOOSER = {
 YUI().use('node', function (Y) {
 	Y.on('click', function (e) {
 		PERSON_CHOOSER.popup = window.open(
-			BASE_URL + '/people?popup=1;callback=PERSON_CHOOSER.setPerson',
+			CRM.BASE_URL + '/people?popup=1;callback=PERSON_CHOOSER.setPerson',
 			'popup',
 			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);

@@ -5,8 +5,10 @@
 	<script type="text/javascript">
 	<?php
 		$callback = preg_replace('/[^a-zA-Z_\.]/','',$_REQUEST['callback']);
-		$data = addslashes($_REQUEST['data']);
-		echo "self.opener.$callback('$data');";
+		$data = !empty($_REQUEST['data'])
+			? "'".addslashes($_REQUEST['data'])."'"
+			: '';
+		echo "self.opener.$callback($data);";
 	?>
 	</script>
 </head>

@@ -22,6 +22,11 @@
 				if (isset($_REQUEST['return_url'])) {
 					$url = new URL($_REQUEST['return_url']);
 					$url->person_id = "{$person->getId()}";
+					foreach ($_REQUEST as $key=>$value) {
+						if ($value && $key!='ticket_id' && $key!='return_url') {
+							$url->$key = $value;
+						}
+					}
 				}
 				elseif (isset($_REQUEST['callback'])) {
 					$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);

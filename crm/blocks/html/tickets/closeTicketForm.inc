@@ -10,6 +10,16 @@
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/close">
 		<fieldset><legend>Close This Case</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+			<?php
+				// Preserve any extra parameters passed in
+				foreach ($_REQUEST as $key=>$value) {
+					if ($key!='ticket_id' && $key!='return_url') {
+						$key = View::escape($key);
+						$value = View::escape($value);
+						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+					}
+				}
+			?>
 			<table>
 				<tr><td><label for="resolution">Resolution</label></td>
 					<td><select name="resolution" id="resolution">
@@ -28,11 +38,9 @@
 					<td><textarea id="notes" name="notes"></textarea></td>
 				</tr>
 			</table>
-			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">
-				Cancel
-			</button>
+			<?php
+				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
+			?>
 		</fieldset>
 	</form>
 </div>

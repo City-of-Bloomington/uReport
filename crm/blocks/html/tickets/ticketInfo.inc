@@ -12,7 +12,7 @@ $location = $location
 	: '';
 
 if (userIsAllowed('people','view')) {
-	$url = new URL(BASE_URL.'/people/viewPerson.php');
+	$url = new URL(BASE_URL.'/people/view.php');
 	$personFields = array('enteredBy','assigned','referred');
 	foreach ($personFields as $field) {
 		$$field = '';
@@ -42,7 +42,7 @@ if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 	$editStatusButton = "
 	<a class=\"edit button\"
 		href=\"".BASE_URL."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
-		Edit Status
+		Change Status
 	</a>
 	";
 	$deleteButton = "
@@ -142,4 +142,9 @@ echo "
 		</li>
 	</ul>
 </div>
+<script type=\"text/javascript\">
+	CRM.ticket_id = '{$this->ticket->getId()}';
+</script>
 ";
+$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/actionForms.js');

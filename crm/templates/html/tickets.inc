@@ -8,8 +8,10 @@
 ?>
 <body>
 	<?php
-		include $dir.'/partials/banner.inc';
-		include $dir.'/partials/menubar.inc';
+		if (!isset($_REQUEST['popup'])) {
+			include $dir.'/partials/banner.inc';
+			include $dir.'/partials/menubar.inc';
+		}
 	?>
 
 	<div id="panel-container">
@@ -20,13 +22,25 @@
 				<?php echo $this->includeBlocks('ticket-panel'); ?>
 			</div>
 			<div id="action-panel">
-				<?php echo $this->includeBlocks('history-panel'); ?>
+				<?php
+					if (!isset($_REQUEST['popup'])) {
+						echo $this->includeBlocks('history-panel');
+					}
+				?>
 			</div>
 			<div id="issue-panel">
-				<?php echo $this->includeBlocks('issue-panel'); ?>
+				<?php
+					if (!isset($_REQUEST['popup'])) {
+						echo $this->includeBlocks('issue-panel');
+					}
+				?>
 			</div>
 			<div id="location-panel">
-				<?php echo $this->includeBlocks('location-panel'); ?>
+				<?php
+					if (!isset($_REQUEST['popup'])) {
+						echo $this->includeBlocks('location-panel');
+					}
+				?>
 			</div>
 		</div>
 	</div>

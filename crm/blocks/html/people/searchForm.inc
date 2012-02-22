@@ -57,6 +57,15 @@ if (!isset($_GET['setOfPeople'])) {
 			?>
 			</table>
 			<button type="submit" class="search">Search</button>
+			<?php
+				if (isset($_REQUEST['callback'])) {
+					echo "
+					<button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
+						Cancel
+					</button>
+					";
+				}
+			?>
 		</fieldset>
 	</form>
 </div>

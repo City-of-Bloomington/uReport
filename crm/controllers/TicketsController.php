@@ -23,6 +23,7 @@ class TicketsController extends Controller
 		}
 	}
 
+
 	/**
 	 * Provides ticket searching
 	 */
@@ -186,8 +187,7 @@ class TicketsController extends Controller
 				$ticket->updateIssues($issue);
 				$ticket->save();
 
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -319,8 +319,7 @@ class TicketsController extends Controller
 
 				$history->sendNotification($ticket);
 
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -391,8 +390,8 @@ class TicketsController extends Controller
 				$ticket->updateHistory($history);
 
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -455,8 +454,7 @@ class TicketsController extends Controller
 
 			try {
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -491,8 +489,7 @@ class TicketsController extends Controller
 
 			try {
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -551,8 +548,7 @@ class TicketsController extends Controller
 			$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
 			try {
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -594,18 +590,17 @@ class TicketsController extends Controller
 
 	/**
 	 * @param REQUEST ticket_id
-	 * @param POST category_id
+	 * @param REQUEST category_id
 	 */
 	public function changeCategory()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
-		if (isset($_POST['category_id'])) {
+		if (isset($_REQUEST['category_id'])) {
 			try {
-				$ticket->setCategory($_POST['category_id']);
+				$ticket->setCategory($_REQUEST['category_id']);
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -614,6 +609,7 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
+		$this->template->title = 'Change Category';
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/changeCategoryForm.inc',
 			array('ticket'=>$ticket)
@@ -665,8 +661,7 @@ class TicketsController extends Controller
 
 			try {
 				$ticket->save();
-				header('Location: '.$ticket->getURL());
-				exit();
+				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -729,8 +724,7 @@ class TicketsController extends Controller
 					$targetTicket = $ticketB;
 				}
 
-				header('Location: '.$targetTicket->getURL());
-				exit();
+				$this->redirectToTicketView($targetTicket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -779,5 +773,21 @@ class TicketsController extends Controller
 				'disableComments'=>true
 			)
 		);
+	}
+
+	/**
+	 * @param Ticket $ticket
+	 */
+	private function redirectToTicketView(Ticket $ticket)
+	{
+		if (isset($_REQUEST['callback'])) {
+			$return_url = new URL(BASE_URL.'/callback');
+			$return_url->callback = $_REQUEST['callback'];
+		}
+		else {
+			$return_url = $ticket->getURL();
+		}
+		header("Location: $return_url");
+		exit();
 	}
 }

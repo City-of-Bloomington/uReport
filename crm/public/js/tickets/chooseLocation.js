@@ -18,9 +18,9 @@ var LOCATION_CHOOSER = {
 	setLocation: function (location) {
 		YUI().use('node', 'io', function (Y) {
 			var locationPanel = Y.one('#location-panel');
-			locationPanel.setContent('<img src="' + BASE_URL + '/skins/local/images/busy.gif" />');
+			locationPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
-			Y.io(BASE_URL + '/locations/view?partial=location-panel;disableLinks=1;location=' + location, {
+			Y.io(CRM.BASE_URL + '/locations/view?partial=location-panel;disableLinks=1;location=' + location, {
 				on: {
 					complete: function (id, o, args) {
 						locationPanel.setContent(o.responseText);
@@ -37,7 +37,7 @@ var LOCATION_CHOOSER = {
 YUI().use('node', function (Y) {
 	Y.on('click', function (e) {
 		LOCATION_CHOOSER.popup = window.open(
-			BASE_URL + '/locations?popup=1;callback=LOCATION_CHOOSER.setLocation',
+			CRM.BASE_URL + '/locations?popup=1;callback=LOCATION_CHOOSER.setLocation',
 			'popup',
 			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);

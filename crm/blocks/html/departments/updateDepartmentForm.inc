@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
@@ -11,7 +11,7 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 ?>
 <div class="updateDepartmentForm">
 <h1><?php echo $title; ?> Department</h1>
-<form method="post" action="<?php echo BASE_URL; ?>/departments">
+<form method="post" action="<?php echo BASE_URL; ?>/departments/update">
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>

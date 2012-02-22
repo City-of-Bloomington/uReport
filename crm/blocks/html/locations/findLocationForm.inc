@@ -19,5 +19,12 @@
 		if (!isset($_REQUEST['return_url'])) {
 			include APPLICATION_HOME.'/blocks/html/locations/findDescriptiveLocationForm.inc';
 		}
+		if (isset($_REQUEST['callback'])) {
+			echo "
+			<div>
+				<button type=\"button\" class=\"cancel\" onclick=\"self.close();\">Cancel</button>
+			</div>
+			";
+		}
 	?>
 </div>

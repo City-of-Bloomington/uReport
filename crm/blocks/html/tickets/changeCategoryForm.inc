@@ -11,14 +11,18 @@
 		<fieldset><legend>Change Category</legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<?php
-				$this->return_url = BASE_URL.'/tickets/changeCategory.php?ticket_id='.$this->ticket->getId();
+				// Preserve any extra parameters passed in
+				foreach ($_REQUEST as $key=>$value) {
+					if ($key!='ticket_id' && $key!='return_url') {
+						$key = View::escape($key);
+						$value = View::escape($value);
+						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+					}
+				}
+				$this->return_url = BASE_URL."/tickets/changeCategory.php?ticket_id={$this->ticket->getId()}";
 				include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
+				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
 			?>
-			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">
-				Cancel
-			</button>
 		</fieldset>
 	</form>
 </div>

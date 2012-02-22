@@ -27,7 +27,7 @@ YUI().use('node','overlay','json',function(Y) {
 		}
 		var crosshairs = new google.maps.Marker({
 			map: map,
-			icon:BASE_URL + '/js/open311/cross-hairs-small-black-cropped.png'
+			icon:CRM.BASE_URL + '/js/open311/cross-hairs-small-black-cropped.png'
 		});
 		crosshairs.bindTo('position',map,'center');
 

@@ -7,8 +7,9 @@
 		@import url('<?php echo BASE_URL; ?>/skins/local/screen.css');
 	</style>
 	<script type="text/javascript">
-		var BASE_URL = '<?php echo BASE_URL; ?>';
+		var CRM = {
+			BASE_URL: '<?php echo BASE_URL; ?>'
+		};
 	</script>
-
-	<title><?php echo APPLICATION_NAME; ?></title>
+	<title><?php echo $this->title ? View::escape($this->title) : APPLICATION_NAME; ?></title>
 </head>

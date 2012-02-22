@@ -9,7 +9,7 @@ YUI().use('node', 'io', 'json', function (Y) {
 	Y.on('change', function (e) {
 		var department_id = e.target.get('value');
 		var department = {};
-		var url = BASE_URL + '/departments/view?format=json;department_id=' + department_id;
+		var url = CRM.BASE_URL + '/departments/view?format=json;department_id=' + department_id;
 		Y.io(url, {
 			on: {
 				complete: function (id, o, args) {
@@ -18,7 +18,7 @@ YUI().use('node', 'io', 'json', function (Y) {
 			}
 		});
 
-		url = BASE_URL + '/people?format=json;department=' + department_id;
+		url = CRM.BASE_URL + '/people?format=json;department=' + department_id;
 		Y.io(url, {
 			on: {
 				complete: function (id, o, args) {

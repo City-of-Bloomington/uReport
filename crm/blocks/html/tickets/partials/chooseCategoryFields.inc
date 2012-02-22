@@ -35,7 +35,16 @@
 	?>
 	</select>
 </label>
-<div><a href="<?php echo BASE_URL; ?>/categories/choose?return_url=<?php echo "{$this->return_url}"; ?>">
-		Choose from all categories
-	</a>
+<div>
+	<?php
+		$url = new URL(BASE_URL.'/categories/choose');
+		// Preserve any extra parameters passed in
+		foreach ($_REQUEST as $key=>$value) {
+			if ($key!='ticket_id' && $key!='return_url') {
+				$url->$key = $value;
+			}
+		}
+		$url->return_url = $this->return_url;
+		echo "<a href=\"$url\">Choose from all categories</a>";
+	?>
 </div>
