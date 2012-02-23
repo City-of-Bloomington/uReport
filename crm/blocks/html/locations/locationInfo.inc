@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
@@ -12,7 +12,7 @@ if ($this->location) {
 
 	echo "
 	<div class=\"locationInfo\">
-		<h1><a href=\"$url\" class=\"location\">$location</a></h1>
+		<h2><a href=\"$url\" class=\"location\">$location</a></h2>
 	";
 	if (defined('ADDRESS_SERVICE')) {
 		$data = AddressService::getLocationData($this->location);
@@ -33,7 +33,7 @@ if ($this->location) {
 	if (userIsAllowed('people','view')) {
 		$people = new PersonList(array('address'=>$this->location));
 		if (count($people)) {
-			echo "<h1>People</h1><ul>";
+			echo "<h3>People</h3><ul>";
 			foreach ($people as $person) {
 				$name = View::escape($person->getFullname());
 				echo "<li><a href=\"{$person->getURL()}\">$name</a></li>";
@@ -47,7 +47,7 @@ if ($this->location) {
 			$xml = new SimpleXMLElement($url,null,true);
 			$owners = $xml->xpath("//Owner");
 			if (count($owners)) {
-				echo '<h1>Owners</h1><ul>';
+				echo '<h3>Owners</h3><ul>';
 				foreach ($owners as $owner) {
 					echo "<li>{$owner->Name}</li>";
 				}

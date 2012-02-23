@@ -79,45 +79,25 @@ echo "
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
 		echo "
-		<div id=\"issuePrimaryData\">
-			<table>
-				<tbody>
-					<tr><th>Created by</th>
-						<td>$enteredBy</td>
-					</tr>
-					<tr>
-						<th>Reported By</th>
-						<td>$reportedBy</td>
-
-					</tr>
-					<tr>
-						<th>Contacted Via</th>
-						<td>$contactMethod</td>
-					</tr>
-					<tr>
-						<th>Respond Via</th>
-						<td>$responseMethod</td>
-					</tr>
-					<tr>
-						<th>Labels</th>
-						<td>$labels</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<ul><li><label>Created By:</label> $enteredBy</li>
+			<li><label>Reported By:</label> $reportedBy</li>
+			<li><label>Contacted Via:</label> $contactMethod</li>
+			<li><label>Respond Via:</label> $responseMethod</li>
+			<li><label>Labels:</label> $labels</li>
 		";
-	}
-	$customFields = $this->ticket->getData('category.customFields');
-	if ($customFields) {
-		$customFieldData = $this->issue->getCustomFields();
-		echo "<div id=\"custom\"><table>";
-		foreach ($customFields as $definition) {
-			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
-			$value = isset($customFieldData[$definition['name']]) ? $customFieldData[$definition['name']] : '';
-			$value = is_array($value) ? implode(', ',$value) : View::escape($value);
-			echo "<tr><th>$label</th><td>$value</td></tr>";
-		}
-		echo "</table></div>";
+			$customFields = $this->ticket->getData('category.customFields');
+			if ($customFields) {
+				$customFieldData = $this->issue->getCustomFields();
+				foreach ($customFields as $definition) {
+					$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
+					$value = isset($customFieldData[$definition['name']]) ? $customFieldData[$definition['name']] : '';
+					$value = is_array($value) ? implode(', ',$value) : View::escape($value);
+					echo "<li><label>$label:</label> $value</li>\n";
+				}
+			}
+		echo "
+		</ul>
+		";
 	}
 
 	if (!$this->disableComments) {

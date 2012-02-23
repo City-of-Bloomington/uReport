@@ -2,7 +2,7 @@
  * Styles for generica html elements
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
-h2 { font-size:123.1%; font-weight:bold;  margin:.5em 0 .25em 0; }
+h2 { font-size:123.1%; font-weight:bold;  margin-bottom:.25em; }
 h3 { font-size:110%; font-weight:bold; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
@@ -109,7 +109,10 @@ button, .button {
 /* Blocks we want to show up in the right column of a Panel */
 #location-panel .locationList,
 #location-panel .ticketList,
+#location-panel .ticketLocationInfo,
+#location-panel .ticketSelectForMergeForm,
 #person-panel .ticketList,
+#person-panel .stats,
 .findLocationResults,
 .findPeopleResults {
 	margin-left:400px; padding-left:10px; border-left:1px solid #cccccc;
@@ -138,10 +141,11 @@ button, .button {
 	float:right;
 }
 
-.ticketList table { border:1px solid #aaaaaa; }
-.ticketList td { border-bottom:1px solid #aaaaaa; }
+.locationInfo ul { list-style-type:none; margin:0; }
 
-.locationInfo > div { margin:.5em 0; }
+.ticketList { margin-bottom:.5em; }
+.ticketList table { border:1px solid #aaa; }
+.ticketList td { border-bottom:1px solid #aaa; }
 
 .findPeople { width:290px; float:left; }
 #ticket-panel .addTicketForm .ticketFields { display:none; }
@@ -155,14 +159,15 @@ button, .button {
 .mergeForm .target_b { float:right; width:48%; }
 .mergeForm .button { position:absolute; left:40%; }
 
-#search-form { border-right:1px solid #cccccc; background-color:#eee; }
+#search-form { border-right:1px solid #ccc; background-color:#eee; }
 #search-form td select { width:200px; overflow:hidden; }
 #search-form td { padding:.25em .25em; }
 #search-form li { list-style-type:none; margin:.15em; padding:0; }
 
 #search-form .fields,
 .searchResultsRows ul,
-.ticketInfo ul {
+.ticketInfo ul,
+.issueInfo ul {
 	list-style-type:none;
 	-webkit-column-count:2; -moz-column-count:2; column-count:2;
 }
@@ -203,21 +208,13 @@ button, .button {
 
 .tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
 
-.breadcrumbs ul { border:1px solid #dedede; height:20px; padding:0; line-height:20px; }
-.breadcrumbs li { list-style:none; float:left; height:20px; padding-left:4px; }
-.breadcrumbs a {
-	display:block;
-	background:url('images/breadcrumb.png') no-repeat right center;
-	padding:0 15px 0 0;
-}
-
 /**
- * Tables with alternating row background colors
+ * Alternating row background colors
  */
 .ticketList tbody tr:nth-child(even),
 .clientRequestForm tbody tr:nth-child(odd),
 .ticketInfo li:nth-child(odd),
-#issuePrimaryData tbody tr:nth-child(odd) {
+.issueInfo li:nth-child(odd) {
 	background:#eee;
 }
 
@@ -239,7 +236,7 @@ button, .button {
 }
 
 
-/*Issue information */
+/* Issue information */
 .issueList { background-color:#eee; }
 .issueHeader { width:100%; display:block; }
 .issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
@@ -248,8 +245,6 @@ button, .button {
 	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
 }
 .issueInfo .notes { margin-bottom:.5em; clear:left; }
-#issuePrimaryData { width:300px; float:left; margin-top:15px; }
-#custom { margin-top:15px; margin-left:315px; }
 
 .mediaList { margin-left:550px; border:1px solid #dddddd; padding:.25em; height:30px; }
 .mediaList legend { width:auto; float:left; line-height:30px; font-size:1em; margin:0 .25em; }

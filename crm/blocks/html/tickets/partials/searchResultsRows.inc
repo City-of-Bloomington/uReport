@@ -33,7 +33,7 @@ foreach ($this->ticketList as $row) {
 				case 'zip':
 					$$field = isset($row[$field]) ? View::escape($row[$field]) : '';
 					break;
-				
+
 				case 'category':
 					$$field = isset($row['category']['name'])
 						? View::escape($row['category']['name'])
