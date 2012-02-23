@@ -435,34 +435,22 @@ class TicketsController extends Controller
 	}
 
 	/**
-	 * @param REQUEST ticket_id
+	 * @param POST ticket_id
 	 */
 	public function recordAction()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket($_POST['ticket_id']);
 
-		// Handle any stuff the user posts
-		if (isset($_POST['action']) && $_POST['action']) {
-			// add a record to ticket history
-			$history = new History();
-			$history->setAction($_POST['action']);
-			$history->setActionDate($_POST['actionDate']);
-			$history->setEnteredByPerson($_SESSION['USER']);
-			$history->setActionPerson($_SESSION['USER']);
-			$history->setNotes($_POST['notes']);
+		$history = new History();
+		$history->set($_POST);
+		try {
 			$ticket->updateHistory($history);
-
-			try {
-				$ticket->save();
-				$this->redirectToTicketView($ticket);
-			}
-			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
+			$ticket->save();
 		}
-
-		header('Location: '.$ticket->getURL());
-		exit();
+		catch (Exception $e) {
+			$_SESSION['errorMessages'][] = $e;
+		}
+		$this->redirectToTicketView($ticket);
 	}
 
 	/**

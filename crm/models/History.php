@@ -277,4 +277,16 @@ class History extends MongoRecord
 			);
 		}
 	}
+
+	/**
+	 * @param array $post
+	 */
+	public function set($post)
+	{
+		$this->setAction($post['action']);
+		$this->setActionDate($post['actionDate']);
+		$this->setEnteredByPerson($_SESSION['USER']);
+		$this->setActionPerson($_SESSION['USER']);
+		$this->setNotes($post['notes']);
+	}
 }

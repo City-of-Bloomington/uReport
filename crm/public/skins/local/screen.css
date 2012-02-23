@@ -69,6 +69,12 @@ button, .button {
 #menuBar a { font-size:123.1%; }
 #menuBar a:visited { color:blue; }
 
+#errorMessages { background-color:#fcc; padding:4px; border-radius:10px; }
+#errorMessages h2 {
+	padding-left:20px;
+	background:url('images/emblem-important.png') left center no-repeat;
+}
+
 #footer { padding:.5em; }
 #footer li { display:inline; margin-right:.5em; }
 #footer a { font-weight:bold; color:black; }

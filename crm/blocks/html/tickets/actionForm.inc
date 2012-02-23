@@ -16,7 +16,7 @@ if (count($actions)) {
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="action">Action</label></td>
+				<tr><td><label for="action" class="required">Action</label></td>
 					<td><select name="action" id="action">
 							<option></option>
 							<?php

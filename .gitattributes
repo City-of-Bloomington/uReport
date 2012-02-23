@@ -60,6 +60,7 @@ crm/public/skins/local/images/delete.png -text
 crm/public/skins/local/images/deletebutton.png -text
 crm/public/skins/local/images/edit.png -text
 crm/public/skins/local/images/editbutton.png -text
+crm/public/skins/local/images/emblem-important.png -text
 crm/public/skins/local/images/google_maps_button.png -text
 crm/public/skins/local/images/icons/mime/doc.png -text
 crm/public/skins/local/images/icons/mime/dwg-autocad-drawing.ico -text
