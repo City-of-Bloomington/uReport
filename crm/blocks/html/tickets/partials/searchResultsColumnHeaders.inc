@@ -7,8 +7,7 @@
  */
 echo "
 <thead>
-	<tr>
-	<td>Sort by:</td>
+	<tr><td>Sort by:</td>
 ";
 	if (count($this->ticketList)) {
 		if (isset($_GET['sort'])) {
@@ -40,9 +39,7 @@ echo "
 						? $url->sort = array($name=>-1)
 						: $url->sort = array($name=>1);
 					$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
-					echo "
-					<th><a href=\"$url\" $class>$label</a></th>
-					";
+					echo "<th><a href=\"$url\" $class>$label</a></th>";
 				}
 				else {
 					echo "<th>$label</th>";
@@ -52,7 +49,6 @@ echo "
 	}
 	// Remember to leave an empty cell for any buttons we might want to add in the results
 echo "
-		
 	</tr>
 </thead>
 ";
