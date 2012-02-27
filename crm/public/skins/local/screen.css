@@ -225,19 +225,22 @@ button, .button {
 }
 
 /**
- * Side Navigation
+ * Interface Boxes
  */
 .departmentList .department,
-.categoryList .category {
+.categoryList .category,
+.clientList div {
 	border:2px solid #dddddd;  margin-top:0.5em;
 	overflow:hidden;
 }
-.departmentList .department h3,
-.categoryList .category h3 {
+.departmentList h3,
+.categoryList h3,
+.clientList h3 {
 	background-color:#eeeeee;
 }
-.departmentList .department h3 a,
-.categoryList .category h3 a {
+.departmentList h3 a,
+.categoryList h3 a,
+.clientList h3 a {
 	color:black;
 }
 
