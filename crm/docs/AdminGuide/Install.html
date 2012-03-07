@@ -73,6 +73,7 @@ Alias /crm "/var/www/sites/crm/public"
     RewriteBase /crm
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_URI} !/media/[0-9]{4}
     RewriteRule .? /crm/index.php [NC,L]
 
     php_value post_max_size 10M
