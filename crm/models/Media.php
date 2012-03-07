@@ -245,7 +245,7 @@ class Media extends MongoRecord
 	 */
 	public function getURL()
 	{
-		return BASE_URL."/media/media/{$this->data['directory']}/{$this->data['filename']}";
+		return BASE_URL."/media/{$this->data['directory']}/{$this->data['filename']}";
 	}
 
 	/**
