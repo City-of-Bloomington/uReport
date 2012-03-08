@@ -24,7 +24,7 @@ var LOCATION_CHOOSER = {
 				on: {
 					complete: function (id, o, args) {
 						locationPanel.setContent(o.responseText);
-						var location = locationPanel.one('.locationInfo h1 a');
+						var location = locationPanel.one('.locationInfo h2 a');
 						document.getElementById('ticket-location').value = location.getContent();
 
 						LOCATION_CHOOSER.popup.close();
