@@ -199,7 +199,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						</tr>
 					</table>
 				</div>
-				<div><h3><label for="client_id">Client</label></h3>
+				<div><h3><label for="client_id">Received Via</label></h3>
 					<div><select name="client_id" id="client_id">
 							<option></option>
 							<?php
