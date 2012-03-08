@@ -210,7 +210,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 										? 'selected="selected"'
 										: '';
 									$name = View::escape($client->getName());
-									echo "<option value=\"{$client->getId()}\">$name</option>";
+									echo "<option value=\"{$client->getId()}\" $selected>$name</option>";
 								}
 							?>
 						</select>

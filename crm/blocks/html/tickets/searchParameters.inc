@@ -26,6 +26,11 @@ function lookupHumanReadableValue($key, $value)
 			return $category->getName();
 			break;
 
+		case 'client_id':
+			$client = new Client($value);
+			return $client->getName();
+			break;
+
 		default:
 			return $value;
 	}
