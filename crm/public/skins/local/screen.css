@@ -42,6 +42,7 @@ button, .button {
 .delete, .cancel { background:url('images/deletebutton.png') left center no-repeat; }
 .chooseLocation { background:url('images/addbutton.png') left center no-repeat; }
 .upload { background:url('images/addbutton.png') left center no-repeat; }
+.changePersonButton, .changeLocationButton { margin:.5em 0; }
 
 /**
  * Page Layout Styles
