@@ -20,7 +20,7 @@ $text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text'
 					}
 				}
 			?>
-			<button type="button" class="submit">Submit</button>
+			<button type="submit" class="submit">Submit</button>
 		</fieldset>
 	</form>
 </div>
