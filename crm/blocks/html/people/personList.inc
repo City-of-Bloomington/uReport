@@ -13,6 +13,7 @@
 			<tr><th>Name</th>
 				<th>Email</th>
 				<th>Address</th>
+				<th>Phone</th>
 				<th>Organization</th>
 			</tr>
 		</thead>
@@ -38,11 +39,13 @@
 
 				$name = View::escape($person->getFullname());
 				$address = View::escape($person->getAddress());
+				$phone = View::escape($person->getPhoneNumber());
 				$organization = View::escape($person->getOrganization());
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>
 					<td><a href=\"$url\">{$person->getEmail()}</a></td>
 					<td><a href=\"$url\">$address</a></td>
+					<td><a href=\"$url\">$phone</a></td>
 					<td><a href=\"$url\">$organization</a></td>
 				</tr>
 				";
