@@ -59,6 +59,10 @@ class Category extends MongoRecord
 		if(!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		if (!$this->getData('group.name')) {
+			throw new Exception('categories/missingGroup');
+		}
 	}
 
 	/**
@@ -120,21 +124,27 @@ class Category extends MongoRecord
 	}
 
 	/**
-	 * @return string
+	 * @return CategoryGroup
 	 */
 	public function getGroup()
 	{
-		if (isset($this->data['group'])) {
-			return $this->data['group'];
+		if (isset($this->data['group']['_id'])) {
+			return new CategoryGroup($this->data['group']);
 		}
 	}
 
 	/**
-	 * @param string $string
+	 * @param string $id
 	 */
-	public function setGroup($string)
+	public function setGroup($id)
 	{
-		$this->data['group'] = trim($string);
+		if ($id) {
+			$group = new CategoryGroup($id);
+			$this->data['group'] = $group->getData();
+		}
+		else {
+			unset($this->data['group']);
+		}
 	}
 
 	/**

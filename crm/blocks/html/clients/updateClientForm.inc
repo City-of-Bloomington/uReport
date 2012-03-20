@@ -16,8 +16,8 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 <div class="updateClientForm">
 	<h1><?php echo $title; ?></h1>
 	<form method="post" action="<?php echo BASE_URL; ?>/clients/update">
-		<input name="client_id" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 		<fieldset><legend>Client Info</legend>
+			<input name="client_id" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 			<table>
 				<tr><td><label for="name">Name</label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>

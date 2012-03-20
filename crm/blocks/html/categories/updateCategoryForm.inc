@@ -8,7 +8,7 @@
 $title = $this->category->getId() ? 'Edit Category' : 'Add Category';
 $department_id = $this->category->getData('department._id');
 
-$fields = array('name','group','description','postingPermissionLevel','displayPermissionLevel');
+$fields = array('name','description','postingPermissionLevel','displayPermissionLevel');
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
@@ -27,7 +27,20 @@ $custom_fields = isset($_POST['custom_fields'])
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 			<tr><td><label for="group">Group</label></td>
-				<td><input name="group" id="group" value="<?php echo $group; ?>" /></td>
+				<td><select name="group" id="group">
+					<?php
+						$groups = new CategoryGroupList();
+						$groups->find();
+						foreach ($groups as $group) {
+							$selected = $this->category->getData('group._id')==$group->getId()
+								? 'selected="selected"'
+								: '';
+							$name = View::escape($group->getName());
+							echo "<option value=\"{$group->getId()}\" $selected>$name</option>";
+						}
+					?>
+					</select>
+				</td>
 			</tr>
 		</table>
 		<div>

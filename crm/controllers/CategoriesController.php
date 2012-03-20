@@ -12,7 +12,10 @@ class CategoriesController extends Controller
 		$categoryList->find();
 
 		$this->template->setFilename('two-column');
-		$this->template->blocks[] = new Block('categories/categoryList.inc',array('categoryList'=>$categoryList));
+		$this->template->blocks[] = new Block(
+			'categories/categoryList.inc',
+			array('categoryList'=>$categoryList)
+		);
 	}
 
 	public function update()
@@ -64,20 +67,6 @@ class CategoriesController extends Controller
 		$this->template->blocks[] = new Block(
 			'categories/categoryChoices.inc',
 			array('categoryList'=>$categoryList,'return_url'=>$return_url)
-		);
-	}
-
-	/**
-	 * Displays the list of distinct category groups
-	 *
-	 * This function is primarily intended for web service calls.
-	 * Although viewing it as HTML won't hurt anything
-	 */
-	public function groups()
-	{
-		$this->template->blocks[] = new Block(
-			'categories/groups.inc',
-			array('groups'=>Category::getDistinct('group'))
 		);
 	}
 }

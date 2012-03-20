@@ -25,7 +25,7 @@ class CategoryList extends MongoResultIterator
 	 * @param array $fields
 	 * @param array $order
 	 */
-	public function find($fields=null,$order=array('name'=>1))
+	public function find($fields=null,$order=array('group.order'=>1,'group.name'=>1,'name'=>1))
 	{
 		$search = array();
 		if (count($fields)) {

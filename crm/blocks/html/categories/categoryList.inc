@@ -7,81 +7,71 @@
  */
 ?>
 <div class="categoryList">
-	<h1>Categories
+	<h2>Categories
 		<?php
 			if (userIsAllowed('categories','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/categories/update">Add</a>';
+				echo '<a class="add button" href="'.BASE_URI.'/categories/update">Add</a>';
 			}
 		?>
-	</h1>
+	</h2>
 	<?php
-		$groups = array();
-		$ids = array();
+		$toc = '<div class="tableOfContents"><ul>';
+		$html = '';
+		$previous = null;
 		foreach ($this->categoryList as $category) {
 			$group = $category->getGroup();
-			if (!$group) {
-				$group = 'other';
-			}
-			$groups[$group]['categories'][] = $category;
-			if (empty($groups[$group]['id'])) {
-				$groups[$group]['id'] = preg_replace('/[^a-zA-Z]/','',$group);
-			}
 
-		}
-		ksort($groups);
+			if ($group && "{$group->getId()}"!=$previous) {
+				$anchor = preg_replace('[^a-zA-Z]','',$group->getName());
+				$name = View::escape($group->getName());
 
-		echo "<div class=\"tableOfContents\"><ul>";
-		foreach ($groups as $group) {
-			echo "<li><a href=\"".BASE_URL."/categories#$group[id]\">$group[id]</a></li>";
-		}
-		echo "</ul></div>";
-
-		foreach ($groups as $groupName=>$group) {
-			$groupName = View::escape($groupName);
-			echo "
-			<div class=\"group\">
-				<h2><a id=\"$group[id]\">$groupName</a></h2>
-			";
-			foreach ($group['categories'] as $category) {
-				$editButton = '';
-				if (userIsAllowed('categories','update')) {
-					$editButton = "
-					<a class=\"edit button\"
-						href=\"".BASE_URL."/categories/update?category_id={$category->getId()}\">
-						Edit
-					</a>
-					";
+				if ($previous) {
+					$html.= '</div>';
 				}
-				$name = View::escape($category->getName());
-				$department = View::escape($category->getData('department.name'));
-				$postPermission = View::escape($category->getPostingPermissionLevel());
-				$displayPermission = View::escape($category->getDisplayPermissionLevel());
-				$description = View::escape($category->getDescription());
-				echo "
-				<div class=\"category\">
-					<h3>$name $editButton</h3>
-					<p>$description</p>
-					<table>
-						<thead>
-							<tr><th>Department</th>
-								<th>Posting</th>
-								<th>Display</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>$department</td>
-								<td>$postPermission</td>
-								<td>$displayPermission</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				$html.= "<div class=\"group\"><h3><a id=\"$anchor\">$name</a></h3>";
+				$toc.= "<li><a href=\"".BASE_URI."/categories#$anchor\">$name</a></li>";
+
+				$previous = "{$group->getId()}";
+			}
+
+			$editButton = '';
+			if (userIsAllowed('categories','update')) {
+				$editButton = "
+				<a class=\"edit button\"
+					href=\"".BASE_URI."/categories/update?category_id={$category->getId()}\">
+					Edit
+				</a>
 				";
 			}
-		echo "
-		</div>
-		";
+			$name = View::escape($category->getName());
+			$department = View::escape($category->getData('department.name'));
+			$postPermission = View::escape($category->getPostingPermissionLevel());
+			$displayPermission = View::escape($category->getDisplayPermissionLevel());
+			$description = View::escape($category->getDescription());
+			$html.= "
+			<div class=\"category\">
+				<h4>$name $editButton</h4>
+				<p>$description</p>
+				<table>
+					<thead>
+						<tr><th>Department</th>
+							<th>Posting</th>
+							<th>Display</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>$department</td>
+							<td>$postPermission</td>
+							<td>$displayPermission</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			";
 		}
+		echo $toc;
+		echo $html;
+		echo '</div>'; // Close out the last Group div
 	?>
 </div>

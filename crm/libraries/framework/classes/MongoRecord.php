@@ -10,6 +10,8 @@ abstract class MongoRecord
 
 	/**
 	 * Returns any field stored in $data
+	 *
+	 * @param string $fieldname
 	 */
 	public function get($fieldname)
 	{
