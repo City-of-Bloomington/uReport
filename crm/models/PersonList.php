@@ -35,6 +35,12 @@ class PersonList extends MongoResultIterator
 						case 'department':
 							$search['department._id'] = new MongoId($value);
 							break;
+						case 'phoneNumber':
+							$search['phone.number'] = $value;
+							break;
+						case 'phoneDeviceId':
+							$search['phone.device_id'] = $value;
+							break;
 						default:
 							$search[$key] = $value;
 					}
@@ -64,6 +70,9 @@ class PersonList extends MongoResultIterator
 		}
 		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
+				if ($key == 'phoneNumber')   $key = 'phone.number';
+				if ($key == 'phoneDeviceId') $key = 'phone.device_id';
+
 				if ($key == 'department') {
 					$search['department._id'] = new MongoId($value);
 				}
