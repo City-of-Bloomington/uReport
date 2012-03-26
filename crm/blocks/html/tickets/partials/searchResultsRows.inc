@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+// Make sure Ticket Number is always displayed
+$_GET['fields']['number'] = 1;
+
 foreach ($this->ticketList as $row) {
 	echo '<div class="searchResultsRows">';
 	// Go through each of the fields the user wants displayed
@@ -18,6 +21,7 @@ foreach ($this->ticketList as $row) {
 	}
 
 	$dl = array();
+
 	foreach ($_GET['fields'] as $field=>$value) {
 		// Make sure the user is allowed to see this field
 		if (array_key_exists($field,$displayableFields)
@@ -85,7 +89,7 @@ foreach ($this->ticketList as $row) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
-					Case # $number $category $status
+					Case # $number $category $status $resolution
 				</a>
 			</h3>
 			<span>$location $city $state $zip</span>

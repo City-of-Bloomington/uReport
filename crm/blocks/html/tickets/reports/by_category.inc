@@ -5,11 +5,10 @@
  * If categories are chosen in the search, we only display those categories.
  * If categories are not chosen, we will go through all the categories in the system
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->fields The ticket fields to display.
- * @param array $this->sort (optional) A mongo array that defines the sort
+* @param array $this->sort (optional) A mongo array that defines the sort
  */
 if (isset($_GET['category'])) {
 	// Remove all the requested categories from the search
@@ -21,6 +20,10 @@ else {
 	$categories = new CategoryList();
 	$categories->find();
 }
+
+// Make sure Ticket Number is always displayed
+$_GET['fields']['number'] = 1;
+
 
 echo "
 <div class=\"searchResults\">
@@ -57,13 +60,13 @@ echo "
 			";
 			$header = new Block(
 				'tickets/partials/searchResultsColumnHeaders.inc',
-				array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+				array('ticketList'=>$ticketList)
 			);
 			$ticketData.= $header->render('html',$this->template);
 
 			$body = new Block(
 				'tickets/partials/searchResultsRows.inc',
-				array('ticketList'=>$ticketList,'fieldsToDisplay'=>$this->fieldsToDisplay)
+				array('ticketList'=>$ticketList)
 			);
 			$ticketData.= $body->render('html',$this->template);
 
