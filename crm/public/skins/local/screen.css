@@ -314,7 +314,7 @@ input.yui3-dd-drop-over { background-color:green; }
 .yui3-dd-drop-active-valid { border: 2px solid green; }
 
 #location_map {
-	width:100%; height:300px;
+	width:98%; height:300px;
 	border:2px solid black;
 }
 /* Admin Styles */

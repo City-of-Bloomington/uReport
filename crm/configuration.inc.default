@@ -37,10 +37,10 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
 define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
 
 /**
- * YUI
- * What host do you want to use for the YUI libraries
+ * JavaScript Libraries
  */
 define('YUI','http://yui.yahooapis.com/3.4.1/build');
+define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=FALSE');
 
 /**
  * Addresses can be validated against a master address web service
