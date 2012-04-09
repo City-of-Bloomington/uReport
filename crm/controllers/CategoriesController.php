@@ -62,7 +62,7 @@ class CategoriesController extends Controller
 		$return_url = new URL($_GET['return_url']);
 
 		$categoryList = new CategoryList();
-		$categoryList->find();
+		$categoryList->find(null,array('name'=>1));
 
 		$this->template->blocks[] = new Block(
 			'categories/categoryChoices.inc',

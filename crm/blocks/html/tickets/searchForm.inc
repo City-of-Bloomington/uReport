@@ -72,7 +72,8 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 				</div>
 				<?php
 					$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
-					$list = new CategoryList(array('displayableTo'=>$person));
+					$list = new CategoryList();
+					$list->find(array('displayableTo'=>$person),array('name'=>1));
 					if (count($list)) {
 						echo "
 						<div><h3>Category</h3>
