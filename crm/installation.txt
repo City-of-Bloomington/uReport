@@ -56,34 +56,35 @@ comment out the LDAP stuff.
 ---------------------------------------------------------------------
 Installation
 ---------------------------------------------------------------------
-	The best way is to have PHP auto_prepend the configuration.inc.
+	We rely on Apache's mod_rewrite to route all traffic to /public/index.php
 If this is the only web application on your apache server, you can just point
-your apache's web directory to the html directory inside the application and
-edit the auto_prepend in your php.ini file.
+your apache's web directory to the public directory inside the application and
+add the Rewrite rules.
 
 	For us, we're running multiple applications, and have a seperate entry in
 our Apache config for each one.  This does essentially the same thing.
 
 Add to httpd.conf:
 
-Alias /civic-crm "/path/to/civic-crm/html"
-<Directory "/path/to/civic-crm/html">
+Alias /crm "/path/to/crm/public"
+<Directory "/path/to/crm/public">
     Options FollowSymLinks
     AllowOverride None
     Order allow,deny
     Allow from all
 
-	php_value auto_prepend_file /path/to/civic-crm/configuration.inc
+    RewriteEngine On
+    RewriteBase /crm
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule .? /crm/index.php [NC,L]
 </Directory>
 
 
 	If you're running in a shared hosting environment, you cannot do Alias or
-Directory commands.  However the html can be moved into your web directory.
-To make sure the configuration file gets loaded, create an htaccess file in
-this application's html directory with the php_value line from above.
-
-	If you cannot edit your httpd.conf or use htaccess files, you will need to
-add an include() command to the top of every last PHP script in the html directory.
+Directory commands.  However the public directory can be moved into your web
+directory. To make sure the configuration file gets loaded, create an htaccess
+file in this application's html directory with the php_value line from above.
 
 ---------------------------------------------------------------------
 Configuration
