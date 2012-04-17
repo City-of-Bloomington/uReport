@@ -6,7 +6,8 @@
  * @param Ticket $this->ticket
  */
 $issue = $this->ticket->getIssue();
-$history = end($this->ticket->getHistory());
+$h = $this->ticket->getHistory();
+$history = end($h);
 
 $media_url = '';
 $media = $issue->getMedia();

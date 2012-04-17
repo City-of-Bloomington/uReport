@@ -13,9 +13,10 @@ foreach ($this->ticketList as $ticket) {
 	$issue = $ticket->getIssue();
 	$description = View::escape($issue->getDescription());
 
-	$department = View::escape($this->ticket->getData('assignedPerson.department.name'));
+	$department = View::escape($ticket->getData('assignedPerson.department.name'));
 
-	$history = end($ticket->getHistory());
+	$h = $ticket->getHistory();
+	$history = end($h);
 
 	$address = View::escape($ticket->getLocation());
 	$zipcode = View::escape($ticket->getZip());
