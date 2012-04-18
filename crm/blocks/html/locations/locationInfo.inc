@@ -33,7 +33,8 @@ if ($this->location) {
 	if (userIsAllowed('people','view')) {
 		$people = new PersonList(array('address'=>$this->location));
 		if (count($people)) {
-			echo "<h3>People</h3><ul>";
+			echo "<h3>People</h3>
+			<p>A list of people who've listed this as their address. Note: it might not be their current address.</p> <ul>";
 			foreach ($people as $person) {
 				$name = View::escape($person->getFullname());
 				echo "<li><a href=\"{$person->getURL()}\">$name</a></li>";

@@ -2,8 +2,8 @@
  * Styles for generica html elements
  */
 h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
-h2 { font-size:123.1%; font-weight:bold;  margin-bottom:.25em; }
-h3 { font-size:110%; font-weight:bold; }
+h2 { font-size:123.1%; font-weight:bold;  margin:.15em 0; }
+h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
 p { margin:0 .5em .5em .5em; }
