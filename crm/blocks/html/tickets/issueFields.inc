@@ -59,7 +59,7 @@
 
 	<tr><td><label for="issue-responseMethod">Response Method</label></td>
 		<td><select name="issue[responseMethod]" id="issue-responseMethod">
-				<option value="">Do not contact</option>
+				<option value=""></option>
 				<?php
 					// Use the same drop down as the contact method
 					foreach (Lookups::get('contactMethods') as $method) {
