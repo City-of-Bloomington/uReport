@@ -65,7 +65,8 @@ class Person extends MongoRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->data['firstname'] && !$this->data['lastname']) {
+		if ((!$this->data['firstname'] && !$this->data['lastname'])
+			&& !$this->data['organization']) {
 			throw new Exception('missingRequiredFields');
 		}
 
