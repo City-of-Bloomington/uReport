@@ -1,1 +1,1 @@
-<p>Sorry, you're not allowed to go there.</p>
+<p>Sorry, you must be logged in to view this content. Please log in and try the link again.</p>
