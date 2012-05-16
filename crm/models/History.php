@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -53,158 +53,38 @@ class History extends MongoRecord
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getAction()
-	{
-		if (isset($this->data['action'])) {
-			return $this->data['action'];
-		}
-	}
+	//----------------------------------------------------------------
+	// Generic Getters & Setters
+	//----------------------------------------------------------------
+	public function getAction() { return parent::get('action'); }
+	public function getNotes()  { return parent::get('notes');  }
+	public function getEnteredDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('enteredDate', $format, $timezone); }
+	public function getActionDate ($format=null, DateTimeZone $timezone=null) { return parent::getDateData('actionDate',  $format, $timezone); }
+	public function getEnteredByPerson() { return parent::getPersonObject('enteredByPerson'); }
+	public function getActionPerson()    { return parent::getPersonObject('actionPerson');    }
+
+	public function setAction($s) { $this->data['action'] = trim($s); }
+	public function setNotes ($s) { $this->data['notes']  = trim($s); }
+	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
+	public function setActionDate ($date) { parent::setDateData('actionDate',  $date); }
+	public function setEnteredByPerson($person) { parent::setPersonData('enteredByPerson', $person); }
+	public function setActionPerson   ($person) { parent::setPersonData('actionPerson',    $person); }
 
 	/**
-	 * @param string $string
+	 * @param array $post
 	 */
-	public function setAction($string)
+	public function set($post)
 	{
-		$this->data['action'] = trim($string);
+		$this->setAction($post['action']);
+		$this->setActionDate($post['actionDate']);
+		$this->setEnteredByPerson($_SESSION['USER']);
+		$this->setActionPerson($_SESSION['USER']);
+		$this->setNotes($post['notes']);
 	}
 
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|MongoDate
-	 */
-	public function getEnteredDate($format=null)
-	{
-		if ($format) {
-			return date($format,$this->data['enteredDate']->sec);
-		}
-		else {
-			return $this->date['enteredDate'];
-		}
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Dates should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string $date
-	 */
-	public function setEnteredDate($date)
-	{
-		$date = trim($date);
-		if ($date) {
-			$this->data['enteredDate'] = new MongoDate(strtotime($date));
-		}
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|MongoDate
-	 */
-	public function getActionDate($format=null)
-	{
-		if ($format) {
-			return date($format,$this->data['actionDate']->sec);
-		}
-		else {
-			return $this->date['actionDate'];
-		}
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param int|string|array $date
-	 */
-	public function setActionDate($date)
-	{
-		$date = trim($date);
-		if ($date) {
-			$this->data['actionDate'] = new MongoDate(strtotime($date));
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if (isset($this->data['enteredByPerson'])) {
-			return new Person($this->data['enteredByPerson']);
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setEnteredByPerson($person)
-	{
-		$this->setPersonData('enteredByPerson',$person);
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getActionPerson()
-	{
-		if (isset($this->data['actionPerson'])) {
-			return new Person($this->data['actionPerson']);
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setActionPerson($person)
-	{
-		$this->setPersonData('actionPerson',$person);
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		if (isset($this->data['notes'])) {
-			return $this->data['notes'];
-		}
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setNotes($text)
-	{
-		$this->data['notes'] = trim($text);
-	}
-
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 	/**
 	 * Returns the parsed description
 	 *
@@ -276,17 +156,5 @@ class History extends MongoRecord
 				$enteredByPerson
 			);
 		}
-	}
-
-	/**
-	 * @param array $post
-	 */
-	public function set($post)
-	{
-		$this->setAction($post['action']);
-		$this->setActionDate($post['actionDate']);
-		$this->setEnteredByPerson($_SESSION['USER']);
-		$this->setActionPerson($_SESSION['USER']);
-		$this->setNotes($post['notes']);
 	}
 }

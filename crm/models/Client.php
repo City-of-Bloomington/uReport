@@ -2,7 +2,7 @@
 /**
  * A Web Service Client authorized to POST tickets
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -75,78 +75,15 @@ class Client extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getId()
-	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
+	public function getId()   { return parent::get('_id');   }
+	public function getName() { return parent::get('name');  }
+	public function getURL()  { return parent::get('url');   }
+	public function getContactPerson() { return parent::getPersonObject('contactPerson'); }
 
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->data['name'])) {
-			return $this->data['name'];
-		}
-	}
+	public function setName($s) { $this->data['name'] = trim($s); }
+	public function setURL ($s) { $this->data['url']  = trim($s); }
+	public function setContactPerson($person) { parent::setPersonData('contactPerson', $person); }
 
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getURL()
-	{
-		if (isset($this->data['url'])) {
-			return $this->data['url'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setURL($string)
-	{
-		$url = new URL($string);
-		$this->data['url'] = $url->getURL();
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getContactPerson()
-	{
-		if (isset($this->data['contactPerson'])) {
-			return new Person($this->data['contactPerson']);
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setContactPerson($person)
-	{
-		$this->setPersonData('contactPerson',$person);
-	}
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
 	/**
 	 * @param array $post
 	 */
@@ -156,4 +93,7 @@ class Client extends MongoRecord
 		$this->setURL($post['url']);
 		$this->setContactPerson($post['contactPerson_id']);
 	 }
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 }

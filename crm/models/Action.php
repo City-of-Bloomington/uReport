@@ -80,10 +80,10 @@ class Action extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()          { return $this->get('_id');         }
-	public function getName()        { return $this->get('name');        }
-	public function getDescription() { return $this->get('description'); }
-	public function getType()        { return $this->get('type');        }
+	public function getId()          { return parent::get('_id');         }
+	public function getName()        { return parent::get('name');        }
+	public function getDescription() { return parent::get('description'); }
+	public function getType()        { return parent::get('type');        }
 
 	public function setName($s)        { $this->data['name']        = trim($s); }
 	public function setDescription($s) { $this->data['description'] = trim($s); }

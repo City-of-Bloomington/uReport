@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2011 City of Bloomington, Indiana
+ * @copyright 2006-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -66,23 +66,26 @@ class Media extends MongoRecord
 		}
 	}
 
+	/**
+	 * Deletes the file from the hard drive
+	 */
 	public function delete()
 	{
-		// Delete the file from the hard drive
 		unlink(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
 	}
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getFilename()
-	{
-		if (isset($this->data['filename'])) {
-			return $this->data['filename'];
-		}
-	}
+	public function getFilename()   { return parent::get('filename');   }
+	public function getMime_type()  { return parent::get('mime_type');  }
+	public function getMedia_type() { return parent::get('media_type'); }
+	public function getUploaded($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
+	public function getPerson() { return parent::getPersonObject('person'); }
+
+	public function setPerson($person) { parent::setPersonData('person',$person); }
+
+	public function getType() { return $this->getMedia_type(); }
+	public function getModified($f=null, DateTimeZone $tz) { return $this->getUploaded($f, $tz); }
 
 	/**
 	 * Returns the path of the file, relative to /data/media
@@ -93,97 +96,12 @@ class Media extends MongoRecord
 	 *
 	 * @return string
 	 */
-	public function getDirectory()
-	{
-		if (isset($this->data['directory'])) {
-			return $this->data['directory'];
-		}
-	}
-	/**
-	 * @return string
-	 */
-	public function getMime_type()
-	{
-		if (isset($this->data['mime_type'])) {
-			return $this->data['mime_type'];
-		}
-	}
+	public function getDirectory() { return parent::get('directory'); }
 
-	/**
-	 * @return string
-	 */
-	public function getMedia_type()
-	{
-		if (isset($this->data['media_type'])) {
-			return $this->data['media_type'];
-		}
-	}
-
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the MongoDate object is returned
-	 *
-	 * @param string $format
-	 * @return string|MongoDate
-	 */
-	public function getUploaded($format=null)
-	{
-		if (isset($this->data['uploaded'])) {
-			if ($format) {
-				return date($format,$this->data['uploaded']->sec);
-			}
-			else {
-				return $this->data['uploaded'];
-			}
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getPerson()
-	{
-		if (isset($this->data['person'])) {
-			return new Person($this->data['person']);
-		}
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * @param Person $person
-	 */
-	public function setPerson($person)
-	{
-		$this->setPersonData('person',$person);
-	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
-	/**
-	 * Alias for getMedia_type()
-	 */
-	public function getType()
-	{
-		return $this->getMedia_type();
-	}
-
-	/**
-	 * Alias for Upload date
-	 *
-	 * Media doesn't get modified, it just gets re-uploaded
-	 */
-	public function getModified($format)
-	{
-		return $this->getUploaded($format);
-	}
-
 	/**
 	 * Populates this object by reading information on a file
 	 *

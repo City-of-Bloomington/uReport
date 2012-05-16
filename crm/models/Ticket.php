@@ -165,35 +165,27 @@ class Ticket extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return $this->get('_id');        }
-	public function getNumber()     { return $this->get('number');     }
-	public function getStatus()     { return $this->get('status');     }
-	public function getResolution() { return $this->get('resolution'); }
-	public function getLocation()   { return $this->get('location');   }
-	public function getAddress_id() { return $this->get('address_id'); }
-	public function getCity()       { return $this->get('city');       }
-	public function getState()      { return $this->get('state');      }
-	public function getZip()        { return $this->get('zip');        }
-	public function getClient_id()  { return $this->get('client_id');  }
+	public function getId()         { return parent::get('_id');        }
+	public function getNumber()     { return parent::get('number');     }
+	public function getStatus()     { return parent::get('status');     }
+	public function getResolution() { return parent::get('resolution'); }
+	public function getLocation()   { return parent::get('location');   }
+	public function getAddress_id() { return parent::get('address_id'); }
+	public function getCity()       { return parent::get('city');       }
+	public function getState()      { return parent::get('state');      }
+	public function getZip()        { return parent::get('zip');        }
+	public function getClient_id()  { return parent::get('client_id');  }
 	public function getEnteredByPerson() { return parent::getPersonObject('enteredByPerson'); }
 	public function getAssignedPerson()  { return parent::getPersonObject('assignedPerson');  }
 	public function getReferredPerson()  { return parent::getPersonObject('referredPerson');  }
-
-	public function getEnteredDate($format=null, DateTimeZone $timezone=null)
-	{
-		return parent::getDateData('enteredDate', $format, $timezone);
-	}
+	public function getEnteredDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('enteredDate', $format, $timezone); }
 
 	public function setLocation($s)    { $this->data['location']   = trim($s); }
 	public function setAddress_id($id) { $this->data['address_id'] = (int)$id; }
 	public function setCity($s)        { $this->data['city']       = trim($s); }
 	public function setState($s)       { $this->data['state']      = trim($s); }
 	public function setZip($s)         { $this->data['zip']        = trim($s); }
-
-	public function setEnteredDate($date)
-	{
-		parent::setDateData('enteredDate', $date);
-	}
+	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
 
 	//----------------------------------------------------------------
 	// Custom functions

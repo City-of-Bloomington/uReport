@@ -5,7 +5,7 @@
  * Issues are only stored inside Tickets.
  * They do not have their own collection in Mongo
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -63,159 +63,50 @@ class Issue extends MongoRecord
 		}
 	}
 
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getDate($format=null)
-	{
-		if ($format) {
-			return date($format,$this->data['date']->sec);
-		}
-		else {
-			return $this->data['date'];
-		}
-	}
+	//----------------------------------------------------------------
+	// Generic Getters & Setters
+	//----------------------------------------------------------------
+	public function getType()           { return parent::get('type'); }
+	public function getContactMethod()  { return parent::get('contactMethod'); }
+	public function getResponseMethod() { return parent::get('responseMethod'); }
+	public function getDescription()    { return parent::get('description'); }
+	public function getCustomFields()   { return parent::get('customFields'); }
+	public function getDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
+	public function getEnteredByPerson()  { return parent::getPersonObject('enteredByPerson'); }
+	public function getReportedByPerson() { return parent::getPersonObject('reportedByPerson'); }
+
+	public function setType          ($s) { $this->data['type']           = trim($s); }
+	public function setContactMethod ($s) { $this->data['contactMethod']  = trim($s); }
+	public function setResponseMethod($s) { $this->data['responseMethod'] = trim($s); }
+	public function setDescription   ($s) { $this->data['description']    = trim($s); }
+	public function setCustomFields($array) { $this->data['customFields'] = $array; }
+	public function setDate($date) { parent::setDateData('date', $date); }
+	public function setEnteredByPerson ($person) { parent::setPersonData('enteredByPerson', $person); }
+	public function setReportedByPerson($person) { parent::setPersonData('reportedByPerson',$person); }
 
 	/**
-	 * Sets the date
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string|MongoDate $date
+	 * @param array $post
 	 */
-	public function setDate($date)
+	public function set($post)
 	{
-		if (!$date instanceof MongoDate) {
-			$date = trim($date);
-			$date = new MongoDate(strtotime($date));
+		if (!isset($post['labels'])) {
+			$post['labels'] = array();
 		}
-		$this->data['date'] = $date;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType()
-	{
-		if (isset($this->data['type'])) {
-			return $this->data['type'];
+		$fields = array(
+			'type','reportedByPerson','contactMethod','responseMethod','description',
+			'customFields','labels'
+		);
+		foreach ($fields as $field) {
+			$set = 'set'.ucfirst($field);
+			if (isset($post[$field])) {
+				$this->$set($post[$field]);
+			}
 		}
 	}
 
-	/**
-	 * @param string $string
-	 */
-	public function setType($string)
-	{
-		$this->data['type'] = trim($string);
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if (isset($this->data['enteredByPerson'])) {
-			return new Person($this->data['enteredByPerson']);
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setEnteredByPerson($person)
-	{
-		$this->setPersonData('enteredByPerson',$person);
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getReportedByPerson()
-	{
-		if (isset($this->data['reportedByPerson'])) {
-			return new Person($this->data['reportedByPerson']);
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setReportedByPerson($person)
-	{
-		$this->setPersonData('reportedByPerson',$person);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getContactMethod()
-	{
-		if (isset($this->data['contactMethod'])) {
-			return $this->data['contactMethod'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setContactMethod($string)
-	{
-		$this->data['contactMethod'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getResponseMethod()
-	{
-		if (isset($this->data['responseMethod'])) {
-			return $this->data['responseMethod'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setResponseMethod($string)
-	{
-		$this->data['responseMethod'] = trim($string);
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getDescription()
-	{
-		if (isset($this->data['description'])) {
-			return $this->data['description'];
-		}
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setDescription($text)
-	{
-		$this->data['description'] = trim($text);
-	}
-
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 	/**
 	 * @return string
 	 */
@@ -276,7 +167,7 @@ class Issue extends MongoRecord
 	}
 
 	/**
-	 * @return array An array of Response objects
+	 * @return array
 	 */
 	public function getResponses()
 	{
@@ -287,45 +178,5 @@ class Issue extends MongoRecord
 			}
 		}
 		return $responses;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getCustomFields()
-	{
-		if (isset($this->data['customFields'])) {
-			return $this->data['customFields'];
-		}
-	}
-
-	/**
-	 * @param array $post
-	 */
-	public function setCustomFields($post)
-	{
-		$this->data['customFields'] = $post;
-	}
-
-	/**
-	 * Populates available fields from the given array
-	 *
-	 * @param array $post
-	 */
-	public function set($post)
-	{
-		if (!isset($post['labels'])) {
-			$post['labels'] = array();
-		}
-		$fields = array(
-			'type','reportedByPerson','contactMethod','responseMethod','description',
-			'customFields','labels'
-		);
-		foreach ($fields as $field) {
-			$set = 'set'.ucfirst($field);
-			if (isset($post[$field])) {
-				$this->$set($post[$field]);
-			}
-		}
 	}
 }

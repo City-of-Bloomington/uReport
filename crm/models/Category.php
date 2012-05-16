@@ -90,12 +90,12 @@ class Category extends MongoRecord
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function __toString()                { return $this->get('name');                   }
-	public function getId()                     { return $this->get('_id');                    }
-	public function getName()                   { return $this->get('name');                   }
-	public function getDescription()            { return $this->get('description');            }
-	public function getPostingPermissionLevel() { return $this->get('postingPermissionLevel'); }
-	public function getDisplayPermissionLevel() { return $this->get('displayPermissionLevel'); }
+	public function __toString()                { return parent::get('name');                   }
+	public function getId()                     { return parent::get('_id');                    }
+	public function getName()                   { return parent::get('name');                   }
+	public function getDescription()            { return parent::get('description');            }
+	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
+	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 
 	public function setName($s)                   { $this->data['name']                   = trim($s); }
 	public function setDescription($s)            { $this->data['description']            = trim($s); }

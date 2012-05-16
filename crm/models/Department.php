@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -91,39 +91,19 @@ class Department extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
+	public function __toString() { return parent::get('name'); }
+	public function getId()      { return parent::get('_id');  }
+	public function getName()    { return parent::get('name'); }
+	public function getDefaultPerson() { return parent::getPersonObject('defaultPerson'); }
 
-	/**
-	 * @return string Mongo's unique identifier
-	 */
-	public function getId()
-	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
+	public function setName($s)  { $this->data['name'] = trim($s); }
+	public function setDefaultPerson($person) { parent::setPersonData('defaultPerson',$person); }
 
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->data['name'])) {
-			return $this->data['name'];
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getDefaultPerson()
-	{
-		if (isset($this->data['defaultPerson'])) {
-			return new Person($this->data['defaultPerson']);
-		}
-	}
-
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 	/**
 	 * @return array
 	 */
@@ -133,30 +113,6 @@ class Department extends MongoRecord
 			return $this->data['customStatuses'];
 		}
 		return array();
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setDefaultPerson($person)
-	{
-		$this->setPersonData('defaultPerson',$person);
 	}
 
 	/*
@@ -171,15 +127,6 @@ class Department extends MongoRecord
 				$this->data['customStatuses'][] = $status;
 			}
 		}
-	}
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getName();
 	}
 
 	/**
