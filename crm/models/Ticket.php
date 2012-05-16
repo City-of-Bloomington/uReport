@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -140,6 +140,10 @@ class Ticket extends MongoRecord
 		}
 		$mongo->tickets->save($this->data,array('safe'=>true));
 
+		#$search = new Search();
+		#$search->add($this);
+		#$search->solrClient->commit();
+
 		// If this is a brand new ticket, and we've just assigned it to someone
 		// We need to send them the notification
 		if (isset($assignment)) {
@@ -159,74 +163,41 @@ class Ticket extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return MongoId
-	 */
-	public function getId()
+	public function getId()         { return $this->get('_id');        }
+	public function getNumber()     { return $this->get('number');     }
+	public function getStatus()     { return $this->get('status');     }
+	public function getResolution() { return $this->get('resolution'); }
+	public function getLocation()   { return $this->get('location');   }
+	public function getAddress_id() { return $this->get('address_id'); }
+	public function getCity()       { return $this->get('city');       }
+	public function getState()      { return $this->get('state');      }
+	public function getZip()        { return $this->get('zip');        }
+	public function getClient_id()  { return $this->get('client_id');  }
+	public function getEnteredByPerson() { return parent::getPersonObject('enteredByPerson'); }
+	public function getAssignedPerson()  { return parent::getPersonObject('assignedPerson');  }
+	public function getReferredPerson()  { return parent::getPersonObject('referredPerson');  }
+
+	public function getEnteredDate($format=null, DateTimeZone $timezone=null)
 	{
-		return $this->data['_id'];
+		return parent::getDateData('enteredDate', $format, $timezone);
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getNumber()
-	{
-		if (isset($this->data['number'])) {
-			return $this->data['number'];
-		}
-	}
+	public function setLocation($s)    { $this->data['location']   = trim($s); }
+	public function setAddress_id($id) { $this->data['address_id'] = (int)$id; }
+	public function setCity($s)        { $this->data['city']       = trim($s); }
+	public function setState($s)       { $this->data['state']      = trim($s); }
+	public function setZip($s)         { $this->data['zip']        = trim($s); }
 
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the MongoDate object is returned
-	 *
-	 * @param string $format
-	 * @return string|MongoDate
-	 */
-	public function getEnteredDate($format=null)
-	{
-		if (isset($this->data['enteredDate'])) {
-			if ($format) {
-				return date($format,$this->data['enteredDate']->sec);
-			}
-			else {
-				return $this->data['enteredDate'];
-			}
-		}
-	}
-
-	/**
-	 * Sets the date
-	 *
-	 * Dates should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string $date
-	 */
 	public function setEnteredDate($date)
 	{
-		$date = trim($date);
-		if ($date) {
-			$this->data['enteredDate'] = new MongoDate(strtotime($date));
-		}
+		parent::setDateData('enteredDate', $date);
 	}
 
-	/**
-	 * @return Person
-	 */
-	public function getEnteredByPerson()
-	{
-		if (isset($this->data['enteredByPerson'])) {
-			return new Person($this->data['enteredByPerson']);
-		}
-	}
-
+	//----------------------------------------------------------------
+	// Custom functions
+	//----------------------------------------------------------------
 	/**
 	 * Sets person data
 	 *
@@ -245,21 +216,11 @@ class Ticket extends MongoRecord
 
 		if ($person instanceof Person) {
 			if ($person->getUsername()) {
-				$this->setPersonData('enteredByPerson',$person);
+				parent::setPersonData('enteredByPerson',$person);
 			}
 			else {
 				throw new Exception('tickets/personRequiresUsername');
 			}
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getAssignedPerson()
-	{
-		if (isset($this->data['assignedPerson'])) {
-			return new Person($this->data['assignedPerson']);
 		}
 	}
 
@@ -281,21 +242,11 @@ class Ticket extends MongoRecord
 
 		if ($person instanceof Person) {
 			if ($person->getUsername()) {
-				$this->setPersonData('assignedPerson',$person);
+				parent::setPersonData('assignedPerson', $person);
 			}
 			else {
 				throw new Exception('tickets/personRequiresUsername');
 			}
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getReferredPerson()
-	{
-		if (isset($this->data['referredPerson'])) {
-			return new Person($this->data['referredPerson']);
 		}
 	}
 
@@ -308,16 +259,19 @@ class Ticket extends MongoRecord
 	 */
 	public function setReferredPerson($person)
 	{
-		$this->setPersonData('referredPerson',$person);
+		parent::setPersonData('referredPerson',$person);
 	}
 
 	/**
-	 * @return string
+	 * Returns the department of the person this ticket is assigned to.
+	 *
+	 * @return Department
 	 */
-	public function getStatus()
+	public function getDepartment()
 	{
-		if (isset($this->data['status'])) {
-			return $this->data['status'];
+		$person = $this->getAssignedPerson();
+		if ($person && $person->getDepartment()) {
+			return new Department($person->getDepartment());
 		}
 	}
 
@@ -337,16 +291,6 @@ class Ticket extends MongoRecord
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getResolution()
-	{
-		if (isset($this->data['resolution'])) {
-			return $this->data['resolution'];
-		}
-	}
-
-	/**
 	 * @param string $resolution
 	 */
 	public function setResolution($resolution)
@@ -361,23 +305,6 @@ class Ticket extends MongoRecord
 		$this->data['status'] = 'closed';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getLocation()
-	{
-		if (isset($this->data['location'])) {
-			return $this->data['location'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setLocation($string)
-	{
-		$this->data['location'] = trim($string);
-	}
 
 	/**
 	 * @return float
@@ -416,86 +343,15 @@ class Ticket extends MongoRecord
 	}
 
 	/**
-	 * @return int
-	 */
-	public function getAddress_id()
-	{
-		if (isset($this->data['address_id'])) {
-			return $this->data['address_id'];
-		}
-	}
-
-	/**
-	 * @param int $id
-	 */
-	public function setAddress_id($id)
-	{
-		$this->data['address_id'] = (int)$id;
-	}
-
-	/**
 	 * @return string
 	 */
-	public function getCity()
+	public function getLatLong()
 	{
-		if (isset($this->data['city'])) {
-			return $this->data['city'];
+		if ($this->getLatitude() && $this->getLongitude()) {
+			return "{$this->getLatitude()},{$this->getLongitude()}";
 		}
 	}
 
-	/**
-	 * @param string $string
-	 */
-	public function setCity($string)
-	{
-		$this->data['city'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getState()
-	{
-		if (isset($this->data['state'])) {
-			return $this->data['state'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setState($string)
-	{
-		$this->data['state'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getZip()
-	{
-		if (isset($this->data['zip'])) {
-			return $this->data['zip'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setZip($string)
-	{
-		$this->data['zip'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getClient_id()
-	{
-		if (isset($this->data['client_id'])) {
-			return $this->data['client_id'];
-		}
-	}
 
 	/**
 	 * @param string $id
@@ -564,6 +420,17 @@ class Ticket extends MongoRecord
 		if (isset($this->data['issues'][$index])) {
 			return new Issue($this->data['issues'][$index]);
 		}
+	}
+
+	/**
+	 * Returns the description of the first issue in this ticket
+	 *
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		$issue = $this->getIssue();
+		return $issue ? $issue->getDescription() : '';
 	}
 
 	/**
