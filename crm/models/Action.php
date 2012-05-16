@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -78,63 +78,15 @@ class Action extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getId()
-	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
+	public function getId()          { return parent::get('_id');         }
+	public function getName()        { return parent::get('name');        }
+	public function getDescription() { return parent::get('description'); }
+	public function getType()        { return parent::get('type');        }
 
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->data['name'])) {
-			return $this->data['name'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		if (isset($this->data['description'])) {
-			return $this->data['description'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType()
-	{
-		if (isset($this->data['type'])) {
-			return $this->data['type'];
-		}
-	}
+	public function setName($s)        { $this->data['name']        = trim($s); }
+	public function setDescription($s) { $this->data['description'] = trim($s); }
 
 	/**
 	 * @param string $string

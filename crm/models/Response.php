@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -37,103 +37,13 @@ class Response extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
-	/**
-	 * Returns the date/time in the desired format
-	 *
-	 * Format is specified using PHP's date() syntax
-	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the Date object is returned
-	 *
-	 * @param string $format
-	 * @return string|DateTime
-	 */
-	public function getDate($format=null)
-	{
-		if ($format) {
-			return date($format,$this->data['date']->sec);
-		}
-		else {
-			return $this->data['date'];
-		}
-	}
+	public function getContactMethod() { return parent::get('contactMethod'); }
+	public function getNotes()         { return parent::get('notes');         }
+	public function getPerson() { return parent::getPersonObject('person'); }
+	public function getDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('date', $f, $tz); }
 
-	/**
-	 * @return string
-	 */
-	public function getContactMethod()
-	{
-		if (isset($this->data['contactMethod'])) {
-			return $this->data['contactMethod'];
-		}
-	}
-
-	/**
-	 * @return text
-	 */
-	public function getNotes()
-	{
-		if (isset($this->data['notes'])) {
-			return $this->data['notes'];
-		}
-	}
-
-	/**
-	 * @return Person
-	 */
-	public function getPerson()
-	{
-		if (isset($this->data['person'])) {
-			return new Person($this->data['person']);
-		}
-	}
-
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-	/**
-	 * Sets the date
-	 *
-	 * Date string formats should be in something strtotime() understands
-	 * http://www.php.net/manual/en/function.strtotime.php
-	 *
-	 * @param string|MongoDate $date
-	 */
-	public function setDate($date)
-	{
-		if (!$date instanceof MongoDate) {
-			$date = trim($date);
-			$date = new MongoDate(strtotime($date));
-		}
-		$this->data['date'] = $date;
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setContactMethod($string)
-	{
-		$this->data['contactMethod'] = trim($string);
-	}
-
-	/**
-	 * @param text $text
-	 */
-	public function setNotes($text)
-	{
-		$this->data['notes'] = trim($text);
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setPerson($person)
-	{
-		$this->setPersonData('person',$person);
-	}
-
+	public function setContactMethod($s) { $this->data['contactMethod'] = trim($s); }
+	public function setNotes        ($s) { $this->data['notes']         = trim($s); }
+	public function setPerson($person) { parent::setPersonData('person', $person); }
+	public function setDate($date) { parent::setDateData('date', $date); }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -71,66 +71,13 @@ class Resolution extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
+	public function __toString()     { return parent::get('name');        }
+	public function getId()          { return parent::get('_id');         }
+	public function getName()        { return parent::get('name');        }
+	public function getDescription() { return parent::get('description'); }
 
-	/**
-	 * @return MongoId
-	 */
-	public function getId()
-	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->data['name'])) {
-			return $this->data['name'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		if (isset($this->data['description'])) {
-			return $this->data['description'];
-		}
-	}
-
-	//----------------------------------------------------------------
-	// Generic Setters
-	//----------------------------------------------------------------
-
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
-	}
-
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
-	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getName();
-	}
+	public function setName       ($s) { $this->data['name']        = trim($s); }
+	public function setDescription($s) { $this->data['description'] = trim($s); }
 }

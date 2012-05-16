@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2011 City of Bloomington, Indiana
+ * @copyright 2009-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -207,345 +207,66 @@ class Person extends MongoRecord
 	}
 
 	//----------------------------------------------------------------
-	// Generic Getters
+	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	/**
-	 * @return int
-	 */
-	public function getId()
-	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
+	public function getId()           { return parent::get('_id');          }
+	public function getFirstname()    { return parent::get('firstname');    }
+	public function getMiddlename()   { return parent::get('middlename');   }
+	public function getLastname()     { return parent::get('lastname');     }
+	public function getEmail()        { return parent::get('email');        }
+	public function getOrganization() { return parent::get('organization'); }
+	public function getAddress()      { return parent::get('address');      }
+	public function getCity()         { return parent::get('city');         }
+	public function getState()        { return parent::get('state');        }
+	public function getZip()          { return parent::get('zip');          }
+
+	public function setFirstname   ($s) { $this->data['firstname']    = trim($s); }
+	public function setMiddlename  ($s) { $this->data['middlename']   = trim($s); }
+	public function setLastname    ($s) { $this->data['lastname']     = trim($s); }
+	public function setEmail       ($s) { $this->data['email']        = trim($s); }
+	public function setOrganization($s) { $this->data['organization'] = trim($s); }
+	public function setAddress     ($s) { $this->data['address']      = trim($s); }
+	public function setCity        ($s) { $this->data['city']         = trim($s); }
+	public function setState       ($s) { $this->data['state']        = trim($s); }
+	public function setZip         ($s) { $this->data['zip']          = trim($s); }
+
 
 	/**
-	 * @return string
+	 * @param array $post
 	 */
-	public function getFirstname()
+	public function set($post)
 	{
-		if (isset($this->data['firstname'])) {
-			return $this->data['firstname'];
+		$fields = array('firstname','lastname','email','department',
+						'username','authenticationMethod','role');
+		foreach ($fields as $f) {
+			if (isset($post[$f])) {
+				$set = 'set'.ucfirst($f);
+				$this->$set($post[$f]);
+			}
+			if (!empty($post['password'])) {
+				$this->setPassword($post['password']);
+			}
 		}
-	}
 
-	/**
-	 * @return string
-	 */
-	public function getMiddlename()
-	{
-		if (isset($this->data['middlename'])) {
-			return $this->data['middlename'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getLastname()
-	{
-		if (isset($this->data['lastname'])) {
-			return $this->data['lastname'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEmail()
-	{
-		if (isset($this->data['email'])) {
-			return $this->data['email'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPhone()
-	{
-		if (isset($this->data['phone'])) {
-			return $this->data['phone'];
-		}
-	}
-
-	/**
-	 * Returns the phone number
-	 *
-	 * 2011-10-14 Changed the structure of data[phone]
-	 * We're now going to be storing multiple fields of information
-	 * about the phone.  The getter needs to accomodate both
-	 * the old and new ways of looking for the phoneNumber
-	 *
-	 * @return string
-	 */
-	public function getPhoneNumber()
-	{
-		$phone = $this->getPhone();
-		if (is_string($phone)) {
-			return $phone;
-		}
-		elseif (isset($phone['number'])) {
-			return $phone['number'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPhoneDeviceId()
-	{
-		if (isset($this->data['phone']['device_id'])) {
-			return $this->data['phone']['device_id'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getOrganization()
-	{
-		if (isset($this->data['organization'])) {
-			return $this->data['organization'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getAddress()
-	{
-		if (isset($this->data['address'])) {
-			return $this->data['address'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCity()
-	{
-		if (isset($this->data['city'])) {
-			return $this->data['city'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getState()
-	{
-		if (isset($this->data['state'])) {
-			return $this->data['state'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getZip()
-	{
-		if (isset($this->data['zip'])) {
-			return $this->data['zip'];
-		}
-	}
-
-	/**
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		if (isset($this->data['department'])) {
-			return $this->data['department'];
+		$method = $this->getAuthenticationMethod();
+		if ($this->getUsername() && $method && $method != 'local') {
+			$identity = new $method($this->getUsername());
+			$this->populateFromExternalIdentity($identity);
 		}
 	}
 
 	//----------------------------------------------------------------
-	// Generic Setters
+	// User Authentication
 	//----------------------------------------------------------------
-	/**
-	 * @param string $string
-	 */
-	public function setFirstname($string)
-	{
-		$this->data['firstname'] = trim($string);
-	}
+	public function getUsername()             { return parent::get('username'); }
+	public function getPassword()             { return parent::get('password'); } # Encrypted
+	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
+	public function getRole()                 { return parent::get('roles'); }
 
-	/**
-	 * @param string $string
-	 */
-	public function setMiddlename($string)
-	{
-		$this->data['middlename'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setLastname($string)
-	{
-		$this->data['lastname'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setEmail($string)
-	{
-		$this->data['email'] = strtolower(trim($string));
-	}
-
-	/**
-	 * Sets the phone number for the person's phone
-	 *
-	 * @param string $string
-	 */
-	public function setPhoneNumber($string)
-	{
-		if (!is_array($this->data['phone'])) {
-			$this->data['phone'] = array();
-		}
-		$this->data['phone']['number'] = trim($string);
-	}
-
-	/**
-	 * Sets the device_id for the person's phone
-	 *
-	 * @param string $string
-	 */
-	public function setPhoneDeviceId($string)
-	{
-		$this->data['phone']['device_id'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setOrganization($string)
-	{
-		$this->data['organization'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setAddress($string)
-	{
-		$this->data['address'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setCity($string)
-	{
-		$this->data['city'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setState($string)
-	{
-		$this->data['state'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setZip($string)
-	{
-		$this->data['zip'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDepartment($string)
-	{
-		$department = new Department($string);
-
-		$this->data['department'] = array(
-			'_id'=>$department->getId(),
-			'name'=>$department->getName()
-		);
-	}
-	//----------------------------------------------------------------
-	// User Authentication implementation
-	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getUsername()
-	{
-		if (isset($this->data['username'])) {
-			return $this->data['username'];
-		}
-	}
-
-	/**
-	 * Returns the encrypted password string for this user
-	 *
-	 * @return string
-	 */
-	public function getPassword()
-	{
-		if (isset($this->data['password'])) {
-			return $this->data['password'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getAuthenticationMethod()
-	{
-		if (isset($this->data['authenticationMethod'])) {
-			return $this->data['authenticationMethod'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRole()
-	{
-		if (isset($this->data['role'])) {
-			return $this->data['role'];
-		}
-	}
-
-	/**
-	 * @param string $role
-	 */
-	public function setRole($role)
-	{
-		$this->data['roles'] = trim($role);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setUsername($string)
-	{
-		$this->data['username'] = strtolower(trim($string));
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setAuthenticationMethod($string)
-	{
-		$this->data['authenticationMethod'] = trim($string);
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setPassword($string)
-	{
-		$this->data['password'] = sha1($string);
-	}
+	public function setUsername            ($s) { $this->data['username']             = trim($s); }
+	public function setPassword            ($s) { $this->data['password']             = sha1($s); }
+	public function setAuthenticationMethod($s) { $this->data['authenticationMethod'] = trim($s); }
+	public function setRole                ($s) { $this->data['roles']                = trim($s); }
 
 	/**
 	 * Should provide the list of methods supported
@@ -606,8 +327,94 @@ class Person extends MongoRecord
 
 	//----------------------------------------------------------------
 	// Custom Functions
-	// We recommend adding all your custom code down here at the bottom
 	//----------------------------------------------------------------
+	/**
+	 * @return array
+	 */
+	public function getPhone() { return parent::get('phone'); }
+
+	/**
+	 * Returns the phone number
+	 *
+	 * 2011-10-14 Changed the structure of data[phone]
+	 * We're now going to be storing multiple fields of information
+	 * about the phone.  The getter needs to accomodate both
+	 * the old and new ways of looking for the phoneNumber
+	 *
+	 * @return string
+	 */
+	public function getPhoneNumber()
+	{
+		$phone = $this->getPhone();
+		if (is_string($phone)) {
+			return $phone;
+		}
+		elseif (isset($phone['number'])) {
+			return $phone['number'];
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPhoneDeviceId()
+	{
+		if (isset($this->data['phone']['device_id'])) {
+			return $this->data['phone']['device_id'];
+		}
+	}
+
+	/**
+	 * Sets the phone number for the person's phone
+	 *
+	 * @param string $string
+	 */
+	public function setPhoneNumber($string)
+	{
+		if (!is_array($this->data['phone'])) {
+			$this->data['phone'] = array();
+		}
+		$this->data['phone']['number'] = trim($string);
+	}
+
+	/**
+	 * Sets the device_id for the person's phone
+	 *
+	 * @param string $string
+	 */
+	public function setPhoneDeviceId($string)
+	{
+		$this->data['phone']['device_id'] = trim($string);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDepartment() { return parent::get('department'); }
+
+	/**
+	 * @return string
+	 */
+	public function getDepartment_id()
+	{
+		if (isset($this->data['department']['_id'])) {
+			return $this->data['department']['_id'];
+		}
+	}
+
+	/**
+	 * @param string $string
+	 */
+	public function setDepartment($string)
+	{
+		$department = new Department($string);
+
+		$this->data['department'] = array(
+			'_id'=>$department->getId(),
+			'name'=>$department->getName()
+		);
+	}
+
 	/**
 	 * @return string
 	 */
@@ -618,16 +425,6 @@ class Person extends MongoRecord
 		}
 		else {
 			return $this->getOrganization();
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDepartment_id()
-	{
-		if (isset($this->data['department']['_id'])) {
-			return $this->data['department']['_id'];
 		}
 	}
 
@@ -770,30 +567,6 @@ class Person extends MongoRecord
 			$mail->setSubject($subject);
 			$mail->setBodyText($message);
 			$mail->send();
-		}
-	}
-
-	/**
-	 * @param array $post
-	 */
-	public function set($post)
-	{
-		$fields = array('firstname','lastname','email','department',
-						'username','authenticationMethod','role');
-		foreach ($fields as $f) {
-			if (isset($post[$f])) {
-				$set = 'set'.ucfirst($f);
-				$this->$set($post[$f]);
-			}
-			if (!empty($post['password'])) {
-				$this->setPassword($post['password']);
-			}
-		}
-
-		$method = $this->getAuthenticationMethod();
-		if ($this->getUsername() && $method && $method != 'local') {
-			$identity = new $method($this->getUsername());
-			$this->populateFromExternalIdentity($identity);
 		}
 	}
 

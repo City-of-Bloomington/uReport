@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -90,37 +90,30 @@ class Category extends MongoRecord
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function __toString()
-	{
-		return $this->getName();
-	}
+	public function __toString()                { return parent::get('name');                   }
+	public function getId()                     { return parent::get('_id');                    }
+	public function getName()                   { return parent::get('name');                   }
+	public function getDescription()            { return parent::get('description');            }
+	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
+	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
+
+	public function setName($s)                   { $this->data['name']                   = trim($s); }
+	public function setDescription($s)            { $this->data['description']            = trim($s); }
+	public function setPostingPermissionLevel($s) { $this->data['postingPermissionLevel'] = trim($s); }
+	public function setDisplayPermissionLevel($s) { $this->data['displayPermissionLevel'] = trim($s); }
 
 	/**
-	 * @return string
+	 * @param array $post
 	 */
-	public function getId()
+	public function set($post)
 	{
-		if (isset($this->data['_id'])) {
-			return $this->data['_id'];
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getName()
-	{
-		if (isset($this->data['name'])) {
-			return $this->data['name'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setName($string)
-	{
-		$this->data['name'] = trim($string);
+		$this->setName($post['name']);
+		$this->setGroup($post['group']);
+		$this->setDescription($post['description']);
+		$this->setDepartment($post['department']);
+		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
+		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
+		$this->setCustomFields($post['custom_fields']);
 	}
 
 	/**
@@ -145,24 +138,6 @@ class Category extends MongoRecord
 		else {
 			unset($this->data['group']);
 		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		if (isset($this->data['description'])) {
-			return $this->data['description'];
-		}
-	}
-
-	/**
-	 * @param string $string
-	 */
-	public function setDescription($string)
-	{
-		$this->data['description'] = trim($string);
 	}
 
 	/**
@@ -218,6 +193,7 @@ class Category extends MongoRecord
 			unset($this->data['customFields']);
 		}
 	}
+
 	/**
 	 * @return Department
 	 */
@@ -239,55 +215,7 @@ class Category extends MongoRecord
 		$this->data['department'] = $department->getData();
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPostingPermissionLevel()
-	{
-		return isset($this->data['postingPermissionLevel'])
-			? $this->data['postingPermissionLevel']
-			: '';
-	}
 
-	/**
-	 * @param string $level
-	 */
-	public function setPostingPermissionLevel($level)
-	{
-		$this->data['postingPermissionLevel'] = $level;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDisplayPermissionLevel()
-	{
-		return isset($this->data['displayPermissionLevel'])
-			? $this->data['displayPermissionLevel']
-			: '';
-	}
-
-	/**
-	 * @param string $level
-	 */
-	public function setDisplayPermissionLevel($level)
-	{
-		$this->data['displayPermissionLevel'] = $level;
-	}
-
-	/**
-	 * @param array $post
-	 */
-	public function set($post)
-	{
-		$this->setName($post['name']);
-		$this->setGroup($post['group']);
-		$this->setDescription($post['description']);
-		$this->setDepartment($post['department']);
-		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
-		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
-		$this->setCustomFields($post['custom_fields']);
-	}
 
 	//----------------------------------------------------------------
 	// Custom Functions

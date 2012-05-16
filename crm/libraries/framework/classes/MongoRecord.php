@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -78,9 +78,10 @@ abstract class MongoRecord
 	}
 
 	/**
+	 * @param string $fieldname
 	 * @param string|array|Person $person
 	 */
-	public function setPersonData($fieldname,$person)
+	public function setPersonData($fieldname, $person)
 	{
 		if (is_string($person)) {
 			$person = new Person($person);
@@ -95,6 +96,49 @@ abstract class MongoRecord
 		}
 		else {
 			throw new Exception('invalidPerson');
+		}
+	}
+
+	/**
+	 * Returns the date/time in the desired format
+	 *
+	 * Format is specified using PHP's date() syntax
+	 * http://www.php.net/manual/en/function.date.php
+	 * If no format is given, the MongoDate object is returned
+	 *
+	 * @param string $field
+	 * @param string $format
+	 * @param DateTimeZone $timezone
+	 * @return string|MongoDate
+	 */
+	public function getDateData($dateField, $format=null, DateTimeZone $timezone=null)
+	{
+		if (isset($this->data[$dateField])) {
+			if ($format) {
+				$date = DateTime::createFromFormat('U', $this->data[$dateField]->sec);
+				if ($timezone) { $date->setTimezone($timezone); }
+				return $date->format($format);
+			}
+			else {
+				return $this->data[$dateField];
+			}
+		}
+	}
+
+	/**
+	 * Sets a date
+	 *
+	 * Dates should be in something strtotime() understands
+	 * http://www.php.net/manual/en/function.strtotime.php
+	 *
+	 * @param string $dateField
+	 * @param string $date
+	 */
+	public function setDateData($dateField, $date)
+	{
+		$date = trim($date);
+		if ($date) {
+			$this->data[$dateField] = new MongoDate(strtotime($date));
 		}
 	}
 }

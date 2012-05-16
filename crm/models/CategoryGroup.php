@@ -86,27 +86,21 @@ class CategoryGroup extends MongoRecord
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()			{ return $this->get('_id'); }
-	public function getName()		{ return $this->get('name'); }
-	public function getOrder()		{ return $this->get('order'); }
-	public function __toString()	{ return $this->get('name'); }
+	public function getId()			{ return parent::get('_id');   }
+	public function getName()		{ return parent::get('name');  }
+	public function getOrder()		{ return parent::get('order'); }
+	public function __toString()	{ return parent::get('name');  }
 
 	public function setName($string)	{ $this->data['name']  = trim($string); }
-	public function setOrder($int)		{ $this->data['order'] = (int)$int; }
+	public function setOrder($int)		{ $this->data['order'] = (int)$int;     }
 
 	/**
 	 * @param array $post
 	 */
 	public function set($post)
 	{
-		$fields = array('name','order');
-
-		foreach ($fields as $field) {
-			if (isset($post[$field])) {
-				$set = 'set'.ucfirst($field);
-				$this->$set($post[$field]);
-			}
-		}
+		$this->setName($post['name']);
+		$this->setOrder($post['order']);
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
