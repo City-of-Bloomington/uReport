@@ -4,8 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Media extends MongoRecord
+class Media extends ActiveRecord
 {
+	protected $tablename = 'media';
+
+	private $issue;
+	private $person;
+
 	public static $extensions = array(
 		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),
 		'gif' =>array('mime_type'=>'image/gif','media_type'=>'image'),
@@ -37,17 +42,35 @@ class Media extends MongoRecord
 	 * Passing in an associative array of data will populate this object without
 	 * hitting the database.
 	 *
-	 * @param array $data
+	 * Passing in a scalar will load the data from the database.
+	 * This will load all fields in the table as properties of this class.
+	 * You may want to replace this with, or add your own extra, custom loading
+	 *
+	 * @param int|array $id
 	 */
-	public function __construct($data=null)
+	public function __construct($id=null)
 	{
-		if (is_array($data)) {
-			$this->data = $data;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
+			}
+			else {
+				$zend_db = Database::getConnection();
+				$sql = 'select * from media where id=?';
+				$result = $zend_db->fetchRow($sql, array($id));
+			}
+
+			if ($result) {
+				$this->data = $result;
+			}
+			else {
+				throw new Exception('media/unknownMedia');
+			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->data['uploaded'] = new MongoDate();
+			$this->setUploaded('now');
 			if (isset($_SESSION['USER'])) {
 				$this->setPerson($_SESSION['USER']);
 			}
@@ -61,9 +84,9 @@ class Media extends MongoRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->data['filename'] || !$this->data['mime_type'] || !$this->data['media_type']) {
-			throw new Exception('missingRequiredFields');
-		}
+		if (!$this->data['filename'])   { throw new Exception('media/missingFilename');  }
+		if (!$this->data['mime_type'])  { throw new Exception('media/missingMimeType');  }
+		if (!$this->data['media_type']) { throw new Exception('media/missingMediaType'); }
 	}
 
 	/**
@@ -76,16 +99,21 @@ class Media extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
+	public function getId()         { return parent::get('id');         }
+	public function getIssue_id()   { return parent::get('issue_id');   }
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getMedia_type() { return parent::get('media_type'); }
+	public function getPerson_id()  { return parent::get('person_id');  }
 	public function getUploaded($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
-	public function getPerson() { return parent::getPersonObject('person'); }
 
-	public function setPerson($person) { parent::setPersonData('person',$person); }
+	public function getIssue()  { return parent::getForeignKeyObject('Issue',  'issue_id');  }
+	public function getPerson() { return parent::getForeignKeyObject('Person', 'person_id'); }
 
-	public function getType() { return $this->getMedia_type(); }
-	public function getModified($f=null, DateTimeZone $tz) { return $this->getUploaded($f, $tz); }
+	public function setIssue_id($id)     { parent::setForeignKeyField ('Issue',  'issue_id',  $id); }
+	public function setPerson_id($id)    { parent::setForeignKeyField ('Person', 'person_id', $id); }
+	public function setIssue(Issue $i)   { parent::setForeignKeyObject('Issue',  'issue_id',  $i);  }
+	public function setPerson(Person $p) { parent::setForeignKeyObject('Person', 'person_id', $p);  }
 
 	/**
 	 * Returns the path of the file, relative to /data/media
@@ -97,6 +125,11 @@ class Media extends MongoRecord
 	 * @return string
 	 */
 	public function getDirectory() { return parent::get('directory'); }
+
+
+	public function getType() { return $this->getMedia_type(); }
+	public function getModified($f=null, DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
+
 
 
 	//----------------------------------------------------------------

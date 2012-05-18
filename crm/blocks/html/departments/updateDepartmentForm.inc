@@ -66,7 +66,7 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 				if ($action->getType()=='department') {
 					$id = $action->getId();
 					$name = View::escape($action->getName());
-					$checked = $this->department->hasAction($name)
+					$checked = $this->department->hasAction($action)
 						? 'checked="checked"'
 						: '';
 					echo "
@@ -90,7 +90,7 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 			foreach ($list as $category) {
 				$id = $category->getId();
 				$name = View::escape($category->getName());
-				$checked = $this->department->hasCategory($name)
+				$checked = $this->department->hasCategory($category)
 					? 'checked="checked"'
 					: '';
 				echo "

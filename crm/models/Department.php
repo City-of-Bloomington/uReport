@@ -4,8 +4,14 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Department extends MongoRecord
+class Department extends ActiveRecord
 {
+	protected $tablename = 'departments';
+	protected $allowsDelete = false;
+
+	private $defaultPerson;
+	private $categories = array();
+	private $actions = array();
 	/**
 	 * Populates the object with data
 	 *
@@ -25,14 +31,11 @@ class Department extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
-				}
-				else {
-					$search = array('name'=>$id);
-				}
-				$result = $mongo->departments->findOne($search);
+				$zend_db = Database::getConnection();
+				$sql = ctype_digit($id)
+					? 'select * from departments where id=?'
+					: 'select * from departments where name=?';
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -60,22 +63,6 @@ class Department extends MongoRecord
 		}
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-
-		$mongo = Database::getConnection();
-		$mongo->departments->save($this->data,array('safe'=>true));
-
-		$mongo->categories->update(
-			array('department._id'=>$this->data['_id']),
-			array('$set'=>array('department'=>$this->data)),
-			array('upsert'=>false,'multiple'=>true,'safe'=>false)
-		);
-	}
 
 	public function delete()
 	{
@@ -84,8 +71,7 @@ class Department extends MongoRecord
 				throw new Exception('departments/stillHasPeople');
 			}
 			else {
-				$mongo = Database::getConnection();
-				$mongo->departments->remove(array('_id'=>$this->getId()));
+				parent::delete();
 			}
 		}
 	}
@@ -93,13 +79,15 @@ class Department extends MongoRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function __toString() { return parent::get('name'); }
-	public function getId()      { return parent::get('_id');  }
-	public function getName()    { return parent::get('name'); }
-	public function getDefaultPerson() { return parent::getPersonObject('defaultPerson'); }
+	public function __toString()          { return parent::get('name');             }
+	public function getId()               { return parent::get('id');               }
+	public function getName()             { return parent::get('name');             }
+	public function getDefaultPerson_id() { return parent::get('defaultPerson_id'); }
+	public function getDefaultPerson()    { return parent::getForeignKeyObject('Person', 'defaultPerson_id'); }
 
 	public function setName($s)  { $this->data['name'] = trim($s); }
-	public function setDefaultPerson($person) { parent::setPersonData('defaultPerson',$person); }
+	public function setDefaultPerson_id($id)    { parent::setForeignKeyField( 'Person', 'defaultPerson_id', $id); }
+	public function setDefaultPerson(Person $p) { parent::setForeignKeyObject('Person', 'defaultPerson_id', $p);  }
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -109,10 +97,7 @@ class Department extends MongoRecord
 	 */
 	public function getCustomStatuses()
 	{
-		if (isset($this->data['customStatuses'])) {
-			return $this->data['customStatuses'];
-		}
-		return array();
+		return explode(', ', parent::get('customStatuses'));
 	}
 
 	/*
@@ -120,117 +105,119 @@ class Department extends MongoRecord
 	 */
 	public function setCustomStatuses($string)
 	{
-		$this->data['customStatuses'] = array();
+		$customStatuses = array();
 		foreach (explode(',',$string) as $status) {
 			$status = trim($status);
 			if ($status) {
-				$this->data['customStatuses'][] = $status;
+				$customStatuses[] = $status;
 			}
 		}
+		$this->data['customStatuses'] = implode(',', $customStatuses);
 	}
 
 	/**
-	 * Returns an array of category data
-	 *
+	 * Returns an array of Category objects, indexed by Id
 	 * @return array
 	 */
 	public function getCategories()
 	{
-		if (isset($this->data['categories'])) {
-			return $this->data['categories'];
+		if (!count($this->categories) && $this->getId()) {
+			$list = new CategoryList(array('department_id'=>$this->getId()));
+			foreach ($list as $c) {
+				$this->categories[$c->getId()] = $c;
+			}
 		}
-		return array();
+		return $this->categories;
 	}
 
 	/**
 	 * @param array $categories
 	 */
-	public function setCategories($categories)
+	public function saveCategories($categories)
 	{
-		$this->data['categories'] = array();
+		if ($this->getId()) {
+			$this->categories = array();
+			$zend_db = Database::getConnection();
+			$zend_db->delete('department_categories','department_id='.$this->getId());
 
-		foreach ($categories as $id) {
-			try {
-				$category = new Category($id);
-				$this->data['categories'][] = array(
-					'_id'=>$category->getId(),
-					'name'=>$category->getName()
-				);
-			}
-			catch (Exception $e) {
-				// Just ignore the bad ones
+			foreach (array_keys($categories) as (int)$id) {
+				try {
+					$zend_db->insert('department_categories', array(
+						'department_id'=>$this->getId(),
+						'category_id'=>$id
+					));
+				}
+				catch (Exception $e) {
+					// Just ignore the bad ones
+				}
 			}
 		}
 	}
 
 	/**
-	 * @param string $name
+	 * @param Category $category
 	 * @return bool
 	 */
-	public function hasCategory($name)
+	public function hasCategory(Category $category)
 	{
-		foreach ($this->getCategories() as $category) {
-			if ($name == $category['name']) {
-				return true;
-			}
+		if ($this->getId()) {
+			return in_array($category->getId(), array_keys($this->getCategories()));
 		}
 	}
 
 	/**
-	 * Returns an array of action data
+	 * Returns an array of Action objects, indexed by Id
 	 *
 	 * @return array
 	 */
 	public function getActions()
 	{
-		if (isset($this->data['actions'])) {
-			return $this->data['actions'];
+		if (!count($this->actions)  && $this->getId()) {
+			$list = new ActionList(array('department_id'=>$this->getId()));
+			foreach ($list as $action) {
+				$this->actions[$action->getId()] = $action;
+			}
 		}
-		return array();
+		return $this->actions;
 	}
 
 	/**
 	 * @param array $actions
 	 */
-	public function setActions($actions)
+	public function saveActions($actions)
 	{
-		$this->data['actions'] = array();
+		if ($this->getId()) {
+			$this->actions = array();
+			$zend_db = Database::getConnection();
+			$zend_db->delete('department_actions','department_id='.$this->getId());
 
-		foreach ($actions as $id) {
-			try {
-				$action = new Action($id);
-				$this->data['actions'][] = array(
-					'_id'=>$action->getId(),
-					'name'=>$action->getName()
+			foreach (array_keys($actions) as (int)$id) {
+				$zend_db->insert('department_actions',
+					array(
+						'department_id'=>$this->getId(),
+						'action_id'=>$id
+					)
 				);
 			}
-			catch (Exception $e) {
-				// Just ignore the bad ones
-			}
 		}
 	}
 
 	/**
-	 * @param string $name
+	 * @param Action $action
 	 * @return bool
 	 */
-	public function hasAction($name)
+	public function hasAction(Action $action)
 	{
-		foreach ($this->getActions() as $action) {
-			if ($name == $action['name']) {
-				return true;
-			}
-		}
+		return in_array($action->getId(), array_keys($this->getActions()));
 	}
 
 	/**
-	 * @return UserList
+	 * @return PersonList
 	 */
 	public function getPeople()
 	{
-		if (isset($this->data['_id'])) {
-			return new PersonList(array('department._id'=>$this->data['_id']));
+		if ($this->getId()) {
+			return new PersonList(array('department_id'=>$this->getId()));
 		}
-		return array();
 	}
 }

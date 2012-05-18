@@ -2,34 +2,53 @@
 /**
  * A class for working with Issues
  *
- * Issues are only stored inside Tickets.
- * They do not have their own collection in Mongo
+ * Issues are part of Ticket records
  *
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Issue extends MongoRecord
+class Issue extends ActiveRecord
 {
+	protected $tablename = 'issues';
+
+	private $labels array();
+
 	/**
 	 * Populates the object with data
 	 *
-	 * @param array $data
+	 * Passing in an associative array of data will populate this object without
+	 * hitting the database.
+	 *
+	 * Passing in a scalar will load the data from the database.
+	 * This will load all fields in the table as properties of this class.
+	 * You may want to replace this with, or add your own extra, custom loading
+	 *
+	 * @param int|array $id
 	 */
-	public function __construct($data=null)
+	public function __construct($id=null)
 	{
-		if (isset($data)) {
-			if (is_array($data)) {
-				$this->data = $data;
+		if ($id) {
+			if (is_array($id)) {
+				$result = $id;
 			}
 			else {
-				throw new Exception('issue/invalidData');
+				$zend_db = Database::getConnection();
+				$sql = 'select * from issues where id=?';
+				$result = $zend_db->fetchRow($sql, array($id));
+			}
+
+			if ($result) {
+				$this->data = $result;
+			}
+			else {
+				throw new Exception('issues/unknownIssue');
 			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->data['date'] = new MongoDate();
+			$this->setDate('now');
 
 			if (isset($_SESSION['USER'])) {
 				$this->setEnteredByPerson($_SESSION['USER']);
@@ -45,44 +64,55 @@ class Issue extends MongoRecord
 	 */
 	public function validate($preliminary=false)
 	{
-		if (!$this->getType()) {
-			$this->setType('Request');
+		if (!$this->getIssueType_id()) {
+			throw new Exception('issues/missingType');
 		}
 
 		if (isset($_SESSION['USER'])) {
-			if (!isset($this->data['enteredByPerson'])) {
+			if (!$this->getEnteredByPerson_id()) {
 				$this->setEnteredByPerson($_SESSION['USER']);
 			}
-			if (!isset($this->data['reportedByPerson'])) {
+			if (!$this->getReportedByPerson_id()) {
 				$this->setReportedByPerson($_SESSION['USER']);
 			}
 		}
 
-		if (!isset($this->data['date'])) {
-			$this->data['date'] = new MongoDate();
+		if (!isset($this->getDate())) {
+			$this->setDate('now');
 		}
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getType()           { return parent::get('type'); }
-	public function getContactMethod()  { return parent::get('contactMethod'); }
-	public function getResponseMethod() { return parent::get('responseMethod'); }
-	public function getDescription()    { return parent::get('description'); }
-	public function getCustomFields()   { return parent::get('customFields'); }
+	public function getId()                  { return parent::get('id');                  }
+	public function getTicket_id()           { return parent::get('ticket_id');           }
+	public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
+	public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
+	public function getIssueType_id()        { return parent::get('issueType_id');        }
+	public function getEnteredByPerson_id()  { return parent::get('enteredByPerson_id');  }
+	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
+	public function getDescription()         { return parent::get('description');         }
 	public function getDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
-	public function getEnteredByPerson()  { return parent::getPersonObject('enteredByPerson'); }
-	public function getReportedByPerson() { return parent::getPersonObject('reportedByPerson'); }
+	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id');    }
+	public function getResponseMethod()   { return parent::getForeignKeyObject('ContactMethod', 'responseMethod_id');   }
+	public function getEnteredByPerson()  { return parent::getForeignKeyObject('Person',        'enteredByPerson_id');  }
+	public function getReportedByPerson() { return parent::getForeignKeyObject('Person',        'reportedByPerson_id'); }
 
-	public function setType          ($s) { $this->data['type']           = trim($s); }
-	public function setContactMethod ($s) { $this->data['contactMethod']  = trim($s); }
-	public function setResponseMethod($s) { $this->data['responseMethod'] = trim($s); }
-	public function setDescription   ($s) { $this->data['description']    = trim($s); }
-	public function setCustomFields($array) { $this->data['customFields'] = $array; }
-	public function setDate($date) { parent::setDateData('date', $date); }
-	public function setEnteredByPerson ($person) { parent::setPersonData('enteredByPerson', $person); }
-	public function setReportedByPerson($person) { parent::setPersonData('reportedByPerson',$person); }
+	public function setDescription ($s) { $this->data['description']    = trim($s); }
+	public function setDate($d)         { parent::setDateData('date', $d); }
+	public function setTicket_id          ($id) { parent::setForeignKeyField('Ticket',        'ticket_id',           $id); }
+	public function setContactMethod_id   ($id) { parent::setForeignKeyField('ContactMethod', 'contactMethod_id',    $id); }
+	public function setResponseMethod_id  ($id) { parent::setForeignKeyField('ContactMethod', 'responseMethod_id',   $id); }
+	public function setIssueType_id       ($id) { parent::setForeignKeyField('IssueType',     'issueType_id',        $id); }
+	public function setEnteredByPerson_id ($id) { parent::setForeignKeyField('Person',        'enteredByPerson_id',  $id); }
+	public function setReportedByPerson_id($id) { parent::setForeignKeyField('Person',        'reportedByPerson_id', $id); }
+	public function setTicket          (Ticket        $o) { parent::setForeignKeyObject('Ticket',        'ticket_id',           $o); }
+	public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id',    $o); }
+	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'responseMethod_id',   $o); }
+	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject('IssueType',     'issueType_id',        $o); }
+	public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject('Person',        'enteredByPerson_id',  $o); }
+	public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject('Person',        'reportedByPerson_id', $o); }
 
 	/**
 	 * @param array $post
@@ -108,34 +138,76 @@ class Issue extends MongoRecord
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
-	 * @return string
+	 * @return array
+	 */
+	public function getCustomFields()
+	{
+		return json_decode(parent::get('customFields'));
+	}
+
+	/**
+	 * @param array $array
+	 */
+	public function setCustomFields($array)
+	{
+		$this->data['customFields'] = json_encode($array);
+	}
+
+	/**
+	 * Returns an array of Labels indexed by Id
+	 *
+	 * @return array
 	 */
 	public function getLabels()
 	{
-		if (isset($this->data['labels'])) {
-			return $this->data['labels'];
+		if (!count($this->labels) && $this->getId()) {
+			$list = new LabelList(array('issue_id'=>$this->getId()));
+			foreach ($list as $label) {
+				$this->labels[$label->getId()] = $label;
+			}
 		}
-		return array();
+		return $this->labels;
 	}
 
 	/**
+	 * Reads labels from POST array
+	 *
+	 * Labels should be in the form: array($id=>$checked)
+	 * Example:
+	 * array(32=>'On',12=>'On')
+	 *
 	 * @param array $labels
 	 */
-	public function setLabels($labels)
+	public function saveLabels($labels)
 	{
-		array_walk($labels, function($value,$key) use(&$labels) {
-			$labels[$key] = trim($value);
-		});
-		$this->data['labels'] = $labels;
+		if ($this->getId()) {
+			$this->labels = array();
+			$zend_db = Database::getConnection();
+			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
+
+			try {
+				foreach (array_keys($labels) as (int)$id) {
+					$zend_db->insert('issue_labels', array(
+						'issue_id'=>$this->data['id'],
+						'label_id'=>$id
+					));
+				}
+			}
+			catch (Exception $e) {
+				// Just ignore the bad ones
+			}
+		}
 	}
 
 	/**
-	 * @param string $label
+	 * @param Label $l
 	 * @return bool
 	 */
-	public function hasLabel($label)
+	public function hasLabel(Label $l)
 	{
-		return in_array($label,$this->getLabels());
+		if ($this->getId()) {
+			return in_array($l->getId(), array_keys($this->getLabels()));
+		}
 	}
 
 	/**

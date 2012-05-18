@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class CategoryGroup extends MongoRecord
+class CategoryGroup extends ActiveRecord
 {
+	protected $tablename = 'categoryGroups';
+	protected $allowsDelete = true;
+
 	/**
 	 * Populates the object with data
 	 *
@@ -25,15 +28,11 @@ class CategoryGroup extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
-				}
-				else {
-					$search = array('name'=>(string)$id);
-				}
-				$result = $mongo->categoryGroups->findOne($search);
+				$zend_db = Database::getConnection();
+				$sql = ctype_digit($id)
+					? 'select * from categoryGroups where id=?'
+					: 'select * from categoryGroups where name=?';
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -61,46 +60,24 @@ class CategoryGroup extends MongoRecord
 		}
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-		$mongo = Database::getConnection();
-		$mongo->categoryGroups->save($this->data,array('safe'=>true));
-
-		$mongo->categories->update(
-			array('group._id'=>$this->data['_id']),
-			array('$set'=>array('group'=>$this->data)),
-			array('upsert'=>false,'multiple'=>true,'safe'=>false)
-		);
-	}
-
-	public function delete()
-	{
-		$mongo = Database::getConnection();
-		$mongo->categoryGroups->remove(array('_id'=>$this->getId()));
-	}
-
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()			{ return parent::get('_id');   }
-	public function getName()		{ return parent::get('name');  }
-	public function getOrder()		{ return parent::get('order'); }
-	public function __toString()	{ return parent::get('name');  }
+	public function getId()			{ return parent::get('id');       }
+	public function getName()		{ return parent::get('name');     }
+	public function getOrdering()   { return parent::get('ordering'); }
+	public function __toString()	{ return parent::get('name');     }
 
-	public function setName($string)	{ $this->data['name']  = trim($string); }
-	public function setOrder($int)		{ $this->data['order'] = (int)$int;     }
+	public function setName($s)	    { $this->data['name']     = trim($s); }
+	public function setOrdering($i)	{ $this->data['ordering'] = (int)$i;  }
 
 	/**
 	 * @param array $post
 	 */
 	public function set($post)
 	{
-		$this->setName($post['name']);
-		$this->setOrder($post['order']);
+		$this->setName    ($post['name']);
+		$this->setOrdering($post['ordering']);
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -110,6 +87,6 @@ class CategoryGroup extends MongoRecord
 	 */
 	public function getCategories()
 	{
-		return new CategoryList(array('group._id'=>$this->data['_id']));
+		return new CategoryList(array('categoryGroup_id'=>$this->getId()));
 	}
 }

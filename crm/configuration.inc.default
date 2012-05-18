@@ -7,10 +7,14 @@ define('LOCATION_NAME','City of Bloomington, Mark Kruzan, Mayor');
 
 /**
  * Database Setup
+ * Refer to the PDO documentation for DSN sytnax for your database type
+ * http://www.php.net/manual/en/pdo.drivers.php
  */
-define('DB_ADAPTER','mongodb');
+define('DB_ADAPTER','Pdo_Mysql');
 define('DB_HOST','localhost');
-define('DB_NAME','crm');
+define('DB_NAME',APPLICATION_NAME);
+define('DB_USER',APPLICATION_NAME);
+define('DB_PASS','password');
 
 /**
  * Where on the filesystem this application is installed

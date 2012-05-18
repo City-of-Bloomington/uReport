@@ -4,8 +4,19 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Ticket extends MongoRecord
+class Ticket extends ActiveRecord
 {
+	protected $tablename = 'tickets';
+	protected $allowsDelete = true;
+
+	private $resolution;
+	private $category;
+	private $client;
+	private $enteredByPerson;
+	private $assignedPerson;
+	private $referredPerson;
+
+
 	private $assignmentNotes;	// A temp variable for preserving posted assignment notes
 								// until we call Ticket::save()
 
@@ -28,8 +39,9 @@ class Ticket extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-				$result = $mongo->tickets->findOne(array('_id'=>new MongoId($id)));
+				$zend_db = Database::getConnection();
+				$sql = 'select * from tickets where id=?';
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -42,10 +54,10 @@ class Ticket extends MongoRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->data['enteredDate'] = new MongoDate();
-			$this->data['status'] = 'open';
-			$this->data['city'] = DEFAULT_CITY;
-			$this->data['state'] = DEFAULT_STATE;
+			$this->setEnteredDate('now');
+			$this->setStatus('open');
+			$this->setCity(DEFAULT_CITY);
+			$this->setState(DEFAULT_STATE);
 			if (isset($_SESSION['USER'])) {
 				$this->setEnteredByPerson($_SESSION['USER']);
 			}
@@ -81,19 +93,20 @@ class Ticket extends MongoRecord
 		}
 
 		if (!$this->data['enteredDate']) {
-			$this->data['enteredDate'] = new MongoDate();
+			$this->setEnteredDate('now');
 		}
 
-		if (!$this->getPersonData('enteredByPerson','_id')) {
+		if (!$this->getEnteredByPerson_id()) {
 			if (isset($_SESSION['USER'])) {
 				$this->setEnteredByPerson($_SESSION['USER']);
 			}
 		}
 
-		if (!$this->getPersonData('assignedPerson','_id')) {
-			if (isset($this->data['category']['department'])) {
-				$department = new Department($this->data['category']['department']);
-				$this->setAssignedPerson($department->getDefaultPerson());
+		if (!$this->getAssignedPerson_id()) {
+			$c = $this->getCategory();
+			if ($c->getDepartment_id()) {
+				$d = $c->getDepartment();
+				$this->setAssignedPerson($d->getDefaultPerson());
 			}
 			else {
 				$this->setAssignedPerson($_SESSION['USER']);
@@ -102,170 +115,94 @@ class Ticket extends MongoRecord
 
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
 	public function save()
 	{
-		$this->validate();
-
 		// The initial Ticket creation needs to generate
 		// log entries to record the open action and assignment action
-		if (!isset($this->data['_id'])) {
+		if (!$this->getId()) {
 			// Create the History entries
-			if ($this->getEnteredByPerson()) {
-				$open = new History();
+			if ($this->getEnteredByPerson_id()) {
+				$open = new TicketHistory();
 				$open->setAction('open');
-				$this->updateHistory($open);
 			}
 
-			$assignment = new History();
+			$assignment = new TicketHistory();
 			$assignment->setAction('assignment');
 			$assignment->setActionPerson($this->getAssignedPerson());
 			$assignment->setNotes($this->assignmentNotes);
-			$this->updateHistory($assignment);
 		}
 
-		// Write the ticket out to the database
-		$mongo = Database::getConnection();
-		if (!$this->getNumber()) {
-			$counter = $mongo->command(array(
-				'findAndModify'=>'counters',
-				'query'=>array('_id'=>'tickets'),
-				'update'=>array('$inc'=>array('next'=>1)),
-				'new'=>true,
-				'upsert'=>true
-			));
-			$this->data['number'] = $counter['value']['next'];
+		parent::save();
+
+		if (isset($open)) {
+			$open->setTicket($this);
+			$open->save();
 		}
-		$mongo->tickets->save($this->data,array('safe'=>true));
+		if (isset($assignment)) {
+			$assignment->setTicket($this);
+			$assignment->save();
+			$assignment->sendNotification($this);
+		}
 
 		#$search = new Search();
 		#$search->add($this);
 		#$search->solrClient->commit();
-
-		// If this is a brand new ticket, and we've just assigned it to someone
-		// We need to send them the notification
-		if (isset($assignment)) {
-			$assignment->sendNotification($this);
-		}
 	}
 
-	/**
-	 * Deletes this ticket from the database
-	 */
 	public function delete()
 	{
-		if ($this->getId()) {
-			$mongo = Database::getConnection();
-			$mongo->tickets->remove(array('_id'=>$this->getId()));
-		}
+		foreach ($this->getIssues()  as $i) { $i->delete(); }
+		foreach ($this->getHistory() as $h) { $h->delete(); }
+		parent::delete();
 	}
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('_id');        }
-	public function getNumber()     { return parent::get('number');     }
-	public function getStatus()     { return parent::get('status');     }
-	public function getResolution() { return parent::get('resolution'); }
-	public function getLocation()   { return parent::get('location');   }
+	public function getId()         { return parent::get('id');         }
 	public function getAddress_id() { return parent::get('address_id'); }
+	public function getLatitude()   { return parent::get('latitude');   }
+	public function getLongitude()  { return parent::get('longitude');  }
+	public function getLocation()   { return parent::get('location');   }
 	public function getCity()       { return parent::get('city');       }
 	public function getState()      { return parent::get('state');      }
 	public function getZip()        { return parent::get('zip');        }
-	public function getClient_id()  { return parent::get('client_id');  }
-	public function getEnteredByPerson() { return parent::getPersonObject('enteredByPerson'); }
-	public function getAssignedPerson()  { return parent::getPersonObject('assignedPerson');  }
-	public function getReferredPerson()  { return parent::getPersonObject('referredPerson');  }
-	public function getEnteredDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('enteredDate', $format, $timezone); }
+	public function getStatus()     { return parent::get('status');     }
+	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $t); }
+	public function getResolution_id()      { return parent::get('resolution_id');      }
+	public function getCategory_id()        { return parent::get('category_id');        }
+	public function getClient_id()          { return parent::get('client_id');          }
+	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
+	public function getAssignedPerson_id()  { return parent::get('assignedPerson_id');  }
+	public function getReferredPerson_id()  { return parent::get('referredPerson_id');  }
+	public function getResolution()      { return parent::getForeignKeyObject('Resolution', 'resolution_id');      }
+	public function getCategory()        { return parent::getForeignKeyObject('Category',   'category_id');        }
+	public function getClient()          { return parent::getForeignKeyObject('Client',     'client_id');          }
+	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person',     'enteredByPerson_id'); }
+	public function getAssignedPerson()  { return parent::getForeignKeyObject('Person',     'assignedPerson_id');  }
+	public function getReferredPerson()  { return parent::getForeignKeyObject('Person',     'referredPerson_id');  }
 
-	public function setLocation($s)    { $this->data['location']   = trim($s); }
-	public function setAddress_id($id) { $this->data['address_id'] = (int)$id; }
-	public function setCity($s)        { $this->data['city']       = trim($s); }
-	public function setState($s)       { $this->data['state']      = trim($s); }
-	public function setZip($s)         { $this->data['zip']        = trim($s); }
+
+	public function setAddress_id($id) { $this->data['address_id'] = (int)$id;  }
+	public function setLatitude($s)    { $this->data['latitude']   = (float)$s; }
+	public function setLongitude($s)   { $this->data['longitude']  = (float)$s; }
+	public function setLocation($s)    { $this->data['location']   = trim($s);  }
+	public function setCity($s)        { $this->data['city']       = trim($s);  }
+	public function setState($s)       { $this->data['state']      = trim($s);  }
+	public function setZip($s)         { $this->data['zip']        = trim($s);  }
 	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
-
-	//----------------------------------------------------------------
-	// Custom functions
-	//----------------------------------------------------------------
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setEnteredByPerson($person)
-	{
-		if (is_string($person)) {
-			$person = new Person($person);
-		}
-		elseif (is_array($person)) {
-			$person = new Person($person['_id']);
-		}
-
-		if ($person instanceof Person) {
-			if ($person->getUsername()) {
-				parent::setPersonData('enteredByPerson',$person);
-			}
-			else {
-				throw new Exception('tickets/personRequiresUsername');
-			}
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setAssignedPerson($person)
-	{
-		if (is_string($person)) {
-			$person = new Person($person);
-		}
-		elseif (is_array($person)) {
-			$person = new Person($person['_id']);
-		}
-
-		if ($person instanceof Person) {
-			if ($person->getUsername()) {
-				parent::setPersonData('assignedPerson', $person);
-			}
-			else {
-				throw new Exception('tickets/personRequiresUsername');
-			}
-		}
-	}
-
-	/**
-	 * Sets person data
-	 *
-	 * See: MongoRecord->setPersonData
-	 *
-	 * @param string|array|Person $person
-	 */
-	public function setReferredPerson($person)
-	{
-		parent::setPersonData('referredPerson',$person);
-	}
-
-	/**
-	 * Returns the department of the person this ticket is assigned to.
-	 *
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		$person = $this->getAssignedPerson();
-		if ($person && $person->getDepartment()) {
-			return new Department($person->getDepartment());
-		}
-	}
+	public function setResolution_id     ($id) { parent::setForeignKeyField('Resolution', 'resolution_id',      $id); }
+	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
+	public function setClient_id         ($id) { parent::setForeignKeyField('Client',     'client_id',          $id); }
+	public function setEnteredByPerson_id($id) { parent::setForeignKeyField('Person',     'enteredByPerson_id', $id); }
+	public function setAssignedPerson_id ($id) { parent::setForeignKeyField('Person',     'assignedPerson_id',  $id); }
+	public function setReferredPerson_id ($id) { parent::setForeignKeyField('Person',     'referredPerson_id',  $id); }
+	public function setResolution     (Resolution $o) { parent::setForeignKeyObject('Person',   'resolution_id',      $o); }
+	public function setCategory       (Category   $o) { parent::setForeignKeyObject('Category', 'category_id',        $o); }
+	public function setClient         (Client     $o) { parent::setForeignKeyObject('Client',   'client_id',          $o); }
+	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject('Person',   'enteredByPerson_id', $o); }
+	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject('Person',   'assignedPerson_id',  $o); }
+	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject('Person',   'referredPerson_id',  $o); }
 
 	/**
 	 * Sets the status and clears resolution, if necessary
@@ -278,61 +215,28 @@ class Ticket extends MongoRecord
 	{
 		$this->data['status'] = trim($string);
 		if ($this->data['status'] != 'closed') {
-			unset($this->data['resolution']);
+			unset($this->data['resolution_id']);
+			$this->resolution = null;
+		}
+	}
+	//----------------------------------------------------------------
+	// Custom functions
+	//----------------------------------------------------------------
+
+	/**
+	 * Returns the department of the person this ticket is assigned to.
+	 *
+	 * @return Department
+	 */
+	public function getDepartment()
+	{
+		$person = $this->getAssignedPerson();
+		if ($person && $person->getDepartment_id()) {
+			return $person->getDepartment();
 		}
 	}
 
-	/**
-	 * @param string $resolution
-	 */
-	public function setResolution($resolution)
-	{
-		$resolution = trim($resolution);
-		if ($resolution) {
-			$this->data['resolution'] = $resolution;
-		}
-		elseif (isset($this->data['resolution'])) {
-			unset($this->data['resolution']);
-		}
-		$this->data['status'] = 'closed';
-	}
 
-
-	/**
-	 * @return float
-	 */
-	public function getLatitude()
-	{
-		if (isset($this->data['coordinates']['latitude'])) {
-			return $this->data['coordinates']['latitude'];
-		}
-	}
-
-	/**
-	 * @param float $float
-	 */
-	public function setLatitude($float)
-	{
-		$this->data['coordinates']['latitude'] = (float)$float;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getLongitude()
-	{
-		if (isset($this->data['coordinates']['longitude'])) {
-			return $this->data['coordinates']['longitude'];
-		}
-	}
-
-	/**
-	 * @param float $float
-	 */
-	public function setLongitude($float)
-	{
-		$this->data['coordinates']['longitude'] = (float)$float;
-	}
 
 	/**
 	 * @return string
@@ -344,45 +248,6 @@ class Ticket extends MongoRecord
 		}
 	}
 
-
-	/**
-	 * @param string $id
-	 */
-	public function setClient_id($id)
-	{
-		if (preg_match('/[0-9a-f]{24}/',$id)) {
-			$id = new MongoId($id);
-			$this->data['client_id'] = $id;
-		}
-	}
-
-	/**
-	 * Returns the web service client that submitted this ticket
-	 *
-	 * @return Client
-	 */
-	public function getClient()
-	{
-		if (isset($this->data['client_id'])) {
-			return new Client($this->data['client_id']);
-		}
-	}
-
-	/**
-	 * Sets the web service client that submitted the ticket
-	 *
-	 * @param id|Client $client
-	 */
-	public function setClient($client)
-	{
-		if (!$client instanceof Client) {
-			$client = new Client($client);
-		}
-
-		$this->data['client_id'] = "{$client->getId()}";
-	}
-
-
 	/**
 	 * Returns an array of Issues
 	 *
@@ -390,13 +255,7 @@ class Ticket extends MongoRecord
 	 */
 	public function getIssues()
 	{
-		$issues = array();
-		if (isset($this->data['issues'])) {
-			foreach ($this->data['issues'] as $data) {
-				$issues[] = new Issue($data);
-			}
-		}
-		return $issues;
+		return new IssueList(array('ticket_id'=>$this->getId()));
 	}
 
 	/**
@@ -409,8 +268,9 @@ class Ticket extends MongoRecord
 	 */
 	public function getIssue($index=0)
 	{
-		if (isset($this->data['issues'][$index])) {
-			return new Issue($this->data['issues'][$index]);
+		$list = $this->getIssues();
+		if (isset($list[0])) {
+			return $list[0];
 		}
 	}
 
@@ -423,36 +283,6 @@ class Ticket extends MongoRecord
 	{
 		$issue = $this->getIssue();
 		return $issue ? $issue->getDescription() : '';
-	}
-
-	/**
-	 * @param Issue $issue
-	 * @param int $index
-	 */
-	public function updateIssues(Issue $issue, $index=null)
-	{
-		$issue->validate();
-
-		if (!isset($this->data['issues'])) {
-			$this->data['issues'] = array();
-		}
-
-		if (isset($index) && isset($this->data['issues'][$index])) {
-			$this->data['issues'][$index] = $issue->getData();
-		}
-		else {
-			$this->data['issues'][] = $issue->getData();
-		}
-	}
-
-	/**
-	 * @param int $index
-	 */
-	public function removeIssue($index)
-	{
-		if (isset($this->data['issues'][$index])) {
-			unset($this->data['issues'][$index]);
-		}
 	}
 
 	/**
@@ -521,47 +351,6 @@ class Ticket extends MongoRecord
 		return $history;
 	}
 
-	/**
-	 * @param History $history
-	 * @param int $index		The index of the history item to update
-	 */
-	public function updateHistory(History $history, $index=null)
-	{
-		$history->validate();
-
-		if (!isset($this->data['history'])) {
-			$this->data['history'] = array();
-		}
-
-		if (isset($index) && isset($this->data['history'][$index])) {
-			$this->data['history'][$index] = $history->getData();
-		}
-		else {
-			$this->data['history'][] = $history->getData();
-		}
-	}
-
-	/**
-	 * @param int $issueIndex	The index of the issue whose history you want to update
-	 * @param History $history
-	 * @param int $index		The index of the history item to update
-	 */
-	public function updateIssueHistory($issueIndex, History $history, $index=null)
-	{
-		$history->validate();
-		if (isset($this->data['issues'][$issueIndex])) {
-			if (!isset($this->data['issues'][$issueIndex]['history'])) {
-				$this->data['issues'][$issueIndex]['history'] = array();
-			}
-
-			if (isset($index) && isset($this->data['issues'][$issueIndex]['history'][$index])) {
-				$this->data['issues'][$issueIndex]['history'][$index] = $history->getData();
-			}
-			else {
-				$this->data['issues'][$issueIndex]['history'][] = $history->getData();
-			}
-		}
-	}
 
 	/**
 	 * @return string

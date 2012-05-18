@@ -1,73 +1,52 @@
 <?php
 /**
- * A collection class for Resolution objects
- *
- * This class creates a zend_db select statement.
- * ZendDbResultIterator handles iterating and paginating those results.
- * As the results are iterated over, ZendDbResultIterator will pass each desired
- * row back to this class's loadResult() which will be responsible for hydrating
- * each Resolution object
- *
- * Beyond the basic $fields handled, you will need to write your own handling
- * of whatever extra $fields you need
- *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class ResolutionList extends MongoResultIterator
+class ResolutionList extends ZendDbResultIterator
 {
-	/**
-	 * Populates the collection if you pass in $fields
-	 *
-	 * @param array $fields
-	 */
 	public function __construct($fields=null)
 	{
 		parent::__construct();
-		if (is_array($fields)) {
-			$this->find($fields);
-		}
+		if (is_array($fields)) { $this->find($fields); }
 	}
 
 	/**
-	 * Populates the collection, using strict matching of the requested fields
+	 * Populates the collection
 	 *
 	 * @param array $fields
-	 * @param array $order
+	 * @param string|array $order Multi-column sort should be given as an array
+	 * @param int $limit
+	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order=null)
+	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
 	{
-		$search = array();
+		$this->select->from('resolutions');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					if (false !== strpos($key,'_id')) {
-						$value = new MongoId($value);
-					}
-					$search[$key] = $value;
+					$this->select->where("$key=?", $value);
 				}
 			}
 		}
-		if (count($search)) {
-			$this->cursor = $this->mongo->resolutions->find($search);
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
 		}
-		else {
-			$this->cursor = $this->mongo->resolutions->find();
+		if ($groupBy) {
+			$this->select->group($groupBy);
 		}
-		if ($order) {
-			$this->cursor->sort($order);
-		}
+		$this->populateList();
 	}
 
 	/**
-	 * Hydrates all the Resolution objects from a database result set
+	 * Loads a single object for the row returned from ZendDbResultIterator
 	 *
-	 * @param array $data A single data record returned from Mongo
-	 * @return Resolution
+	 * @param array $key
 	 */
-	public function loadResult($data)
+	protected function loadResult($key)
 	{
-		return new Resolution($data);
+		return new Resolution($this->result[$key]);
 	}
 }

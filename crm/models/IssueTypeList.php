@@ -1,22 +1,15 @@
 <?php
 /**
- * A collection class for Department objects
- *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class DepartmentList extends ZendDbResultIterator
+class IssueTypeList extends ZendDbResultIterator
 {
-	/**
-	 * @param array $fields
-	 */
 	public function __construct($fields=null)
 	{
 		parent::__construct();
-		if (is_array($fields)) {
-			$this->find($fields);
-		}
+		if (is_array($fields)) { $this->find($fields); }
 	}
 
 	/**
@@ -29,7 +22,7 @@ class DepartmentList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
 	{
-		$this->select->from('departments');
+		$this->select->from('issueTypes');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
@@ -54,6 +47,6 @@ class DepartmentList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new Department($this->result[$key]);
+		return new IssueType($this->result[$key]);
 	}
 }
