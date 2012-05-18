@@ -9,8 +9,8 @@ class Person extends ActiveRecord
 	protected $tablename = 'people';
 	protected $allowsDelete = true;
 
-	private $department;
-	private $phones = array();
+	protected $department;
+	protected $phones = array();
 
 	/**
 	 * Populates the object with data
@@ -135,9 +135,15 @@ class Person extends ActiveRecord
 	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
 
 	public function setUsername            ($s) { $this->data['username']             = trim($s); }
-	public function setPassword            ($s) { $this->data['password']             = sha1($s); }
 	public function setRole                ($s) { $this->data['role']                 = trim($s); }
 	public function setAuthenticationMethod($s) { $this->data['authenticationMethod'] = trim($s); }
+
+	public function setPassword($s)
+	{
+		$s = trim($s);
+		if ($s) { $this->data['password'] = sha1($s); }
+		else    { $this->data['password'] = null;     }
+	}
 
 	/**
 	 * @param array $post
@@ -233,13 +239,26 @@ class Person extends ActiveRecord
 	 */
 	public function getPhones()
 	{
-		if (!count($this->phones && $this->getId()) {
+		if (!count($this->phones) && $this->getId()) {
 			$phones = new PhoneList(array('person_id'=>$this->getId()));
 			foreach ($phones as $p) {
 				$this->phones[$p->getId()] = $p;
 			}
 		}
 		return $this->phones;
+	}
+
+	/**
+	 * Returns the number from this person's first phone record
+	 *
+	 * @return string
+	 */
+	public function getPhoneNumber()
+	{
+		$phones = $this->getPhones();
+		if (count($phones)) {
+			return $phones[0]->getNumber();
+		}
 	}
 
 	/**
@@ -292,24 +311,29 @@ class Person extends ActiveRecord
 	 */
 	public function hasTickets()
 	{
-		if ($this->getId()) {
-			$mongo = Database::getConnection();
-			$tickets = $mongo->tickets->findOne(array(
-				'$or'=>array(
-					array('enteredByPerson._id'=>new MongoId($this->data['_id'])),
-					array('assignedPerson._id'=>new MongoId($this->data['_id'])),
-					array('referredPerson._id'=>new MongoId($this->data['_id'])),
-					array('issues.enteredByPerson._id'=>new MongoId($this->data['_id'])),
-					array('issues.reportedByPerson._id'=>new MongoId($this->data['_id'])),
-					array('issues.responses.person._id'=>new MongoId($this->data['_id'])),
-					array('issues.media.person._id'=>new MongoId($this->data['_id'])),
-					array('history.enteredByPerson._id'=>new MongoId($this->data['_id'])),
-					array('history.actionPerson._id'=>new MongoId($this->data['_id']))
-				)
-			));
-			if ($tickets) {
-				return true;
-			}
+		$id = (int)$this->getId();
+		if ($id) {
+			$zend_db = Database::getConnection();
+			$fields = array(
+				"t.enteredByPerson_id=$id",
+				"t.assignedPerson_id=$id",
+				"t.referredPerson_id=$id",
+				"h.enteredByPerson_id=$id",
+				"h.actionPerson_id=$id",
+				"i.enteredByPerson_id=$id",
+				"i.reportedByPerson_id=$id",
+				"r.person_id=$id",
+				"m.person_id=$id"
+			);
+			$or = implode(' or ', $fields);
+			$sql = "select t.id from tickets t
+					left join ticketHistory h on t.id=h.ticket_id
+					left join issues i on t.id=i.ticket_id
+					left join responses r on i.id=r.issue_id
+					left join media m on i.id=m.issue_id
+					where ($or) limit 1";
+			$result = $zend_db->fetchCol($sql);
+			return count($result) ? true : false;
 		}
 	}
 
@@ -335,6 +359,27 @@ class Person extends ActiveRecord
 			$mail->setSubject($subject);
 			$mail->setBodyText($message);
 			$mail->send();
+		}
+	}
+
+	/**
+	 * Returns the array of distinct field values for People records
+	 *
+	 * This is primarily used to populate autocomplete lists for search forms
+	 * Make sure to keep this function as fast as possible
+	 *
+	 * @param string $fieldname
+	 * @param string $query Text to match in the $fieldname
+	 * @return array
+	 */
+	public static function getDistinct($fieldname, $query=null)
+	{
+		$validFields = array('firstname', 'lastname', 'email', 'organization');
+		$fieldname = trim($fieldname);
+		if (in_array($fieldname, $validFields)) {
+			$zend_db = Database::getConnection();
+			$sql = "select distinct $fieldname from people where $fieldname like ?";
+			return $zend_db->fetchCol($sql, array("$query%"));
 		}
 	}
 

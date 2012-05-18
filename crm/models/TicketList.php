@@ -22,8 +22,8 @@ class TicketList extends ZendDbResultIterator
 	{
 		parent::__construct();
 
-		$this->select->from(array('t'=>'tickets'));
-		$this->select->joinLeft(array('c'=>'categories'), 't.category_id=c.id');
+		$this->select->from(array('t'=>'tickets'), 't.*');
+		$this->select->joinLeft(array('c'=>'categories'), 't.category_id=c.id', array());
 
 		if (is_array($fields)) {
 			$this->find($fields);
@@ -43,7 +43,14 @@ class TicketList extends ZendDbResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$this->select->where("t.$key=?", $value);
+					switch ($key) {
+						case 'reportedByPerson_id':
+							$this->select->joinLeft(array('i'=>'issues'), 't.id=i.ticket_id', array());
+							$this->select->where("i.$key=?", $value);
+							break;
+						default:
+							$this->select->where("t.$key=?", $value);
+					}
 				}
 			}
 		}

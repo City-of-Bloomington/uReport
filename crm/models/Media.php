@@ -8,8 +8,8 @@ class Media extends ActiveRecord
 {
 	protected $tablename = 'media';
 
-	private $issue;
-	private $person;
+	protected $issue;
+	protected $person;
 
 	public static $extensions = array(
 		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),

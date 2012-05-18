@@ -6,5 +6,5 @@
  */
 class TicketHistory extends History
 {
-	protected $tablename = 'ticket_history';
+	protected $tablename = 'ticketHistory';
 }

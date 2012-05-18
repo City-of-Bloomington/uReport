@@ -8,8 +8,8 @@ class Category extends ActiveRecord
 {
 	protected $tablename = 'categories';
 
-	private $department;
-	private $categoryGroup;
+	protected $department;
+	protected $categoryGroup;
 
 	/**
 	 * Populates the object with data

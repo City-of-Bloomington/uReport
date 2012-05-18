@@ -14,9 +14,9 @@ class UsersController extends Controller
 
 	public function index()
 	{
-		$search = array('username'=>array('$exists'=>true));
-		if (isset($_GET['department_id']) && $_GET['department_id']) {
-			$search['department._id'] = new MongoId($_GET['department_id']);
+		$search = array('user_account'=>true);
+		if (!empty($_GET['department_id'])) {
+			$search['department_id'] = $_GET['department_id'];
 		}
 		$people = new PersonList($search);
 

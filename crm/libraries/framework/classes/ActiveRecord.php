@@ -112,10 +112,10 @@ abstract class ActiveRecord
 	public function getForeignKeyObject($class, $field)
 	{
 		$var = lcfirst($class);
-		if (!$this->$$var && isset($this->data[$field])) {
-			$this->$$var = new $class($this->data[$field]);
+		if (!$this->$var && isset($this->data[$field])) {
+			$this->$var = new $class($this->data[$field]);
 		}
-		return $this->$$var;
+		return $this->$var;
 	}
 
 	/**
@@ -130,9 +130,16 @@ abstract class ActiveRecord
 	 */
 	public function setForeignKeyField($class, $field, $id)
 	{
+		$id = trim($id);
 		$var = lcfirst($class);
-		$this->$$var = new $class($id);
-		$this->data[$field] = $this->$$var->getId();
+		if ($id) {
+			$this->$var = new $class($id);
+			$this->data[$field] = $this->$var->getId();
+		}
+		else {
+			$this->$var = null;
+			$this->data[$field] = null;
+		}
 	}
 
 	/**
@@ -150,7 +157,7 @@ abstract class ActiveRecord
 		if ($object instanceof $class) {
 			$var = lcfirst($class);
 			$this->data[$field] = $object->getId();
-			$this->$$var = $object;
+			$this->$var = $object;
 		}
 	}
 }

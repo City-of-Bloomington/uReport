@@ -11,7 +11,7 @@ class Client extends ActiveRecord
 	protected $tablename = 'clients';
 	protected $allowsDelete = true;
 
-	private $contactPerson;
+	protected $contactPerson;
 	/**
 	 * Populates the object with data
 	 *

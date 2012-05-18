@@ -9,12 +9,12 @@ class Ticket extends ActiveRecord
 	protected $tablename = 'tickets';
 	protected $allowsDelete = true;
 
-	private $resolution;
-	private $category;
-	private $client;
-	private $enteredByPerson;
-	private $assignedPerson;
-	private $referredPerson;
+	protected $resolution;
+	protected $category;
+	protected $client;
+	protected $enteredByPerson;
+	protected $assignedPerson;
+	protected $referredPerson;
 
 
 	private $assignmentNotes;	// A temp variable for preserving posted assignment notes

@@ -4,7 +4,7 @@
 		<ul>
 			<li><a href="<?php echo BASE_URL; ?>/account/update">Personal Info</a></li>
 			<?php
-				if ($_SESSION['USER']->getDepartment()) {
+				if ($_SESSION['USER']->getDepartment_id()) {
 					echo "
 					<li><a href=\"".BASE_URL."/account/updateMyDepartment\">
 							Department

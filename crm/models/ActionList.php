@@ -12,6 +12,9 @@ class ActionList extends ZendDbResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+
+		$this->select->from(array('a'=>'actions'), 'a.*');
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -27,13 +30,11 @@ class ActionList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='a.name',$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('a'=>'actions'));
-
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
 					case 'department_id':
-						$this->select->joinLeft(array('d'=>'department_actions'),'a.id=d.action_id');
+						$this->select->joinLeft(array('d'=>'department_actions'),'a.id=d.action_id', array());
 						$this->select->where('d.department_id=?', $value);
 						break;
 					default:

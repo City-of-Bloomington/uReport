@@ -39,10 +39,10 @@ class PeopleController extends Controller
 			if (isset($_GET['setOfPeople'])) {
 				switch ($_GET['setOfPeople']) {
 					case 'staff':
-						$search['username'] = array('$exists'=>true);
+						$search['user_account'] = true;
 						break;
 					case 'public':
-						$search['username'] = array('$exists'=>false);
+						$search['user_account'] = false;
 						break;
 				}
 			}

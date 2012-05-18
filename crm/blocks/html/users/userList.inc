@@ -23,7 +23,7 @@
 				<th>Authentication</th>
 				<th>Roles</th>
 				<th></th>
-				<th></th>				
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>

@@ -9,7 +9,7 @@ class Department extends ActiveRecord
 	protected $tablename = 'departments';
 	protected $allowsDelete = false;
 
-	private $defaultPerson;
+	protected $defaultPerson;
 	private $categories = array();
 	private $actions = array();
 	/**

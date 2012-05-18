@@ -6,5 +6,5 @@
  */
 class IssueHistory extends History
 {
-	protected $tablename = 'issue_history';
+	protected $tablename = 'issueHistory';
 }

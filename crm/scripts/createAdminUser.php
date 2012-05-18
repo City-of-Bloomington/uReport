@@ -21,11 +21,11 @@ include '../configuration.inc';
 $person = new Person();
 
 // Fill these out as needed
-$person->setFirstname('Admin');
-$person->setLastname('Person');
-$person->setEmail('admin@localhost');
-$person->setUsername('administrator');
-$person->setAuthenticationMethod('local');
+$person->setFirstname('Cliff');
+$person->setLastname('Ingham');
+$person->setEmail('inghamn@bloomington.in.gov');
+$person->setUsername('inghamn');
+$person->setAuthenticationMethod('Employee');
 $person->setPassword('');
 
 // No more changes needed

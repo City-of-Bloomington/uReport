@@ -6,11 +6,11 @@
  */
 abstract class History extends ActiveRecord
 {
-	private $enteredByPerson;
-	private $actionPerson;
+	protected $enteredByPerson;
+	protected $actionPerson;
 
-	private $ticket;
-	private $issue;
+	protected $ticket;
+	protected $issue;
 
 	/**
 	 * @param array $data
@@ -46,7 +46,7 @@ abstract class History extends ActiveRecord
 			throw new Exception('history/missingAction');
 		}
 
-		$id_field = $this->tablename == 'ticket_history' ? 'ticket_id' : 'issue_id';
+		$id_field = $this->tablename == 'ticketHistory' ? 'ticket_id' : 'issue_id';
 		if (!$this->data[$id_field]) {
 			throw new Exception('missingRequiredFields');
 		}
@@ -109,7 +109,7 @@ abstract class History extends ActiveRecord
 		$this->setActionPerson($_SESSION['USER']);
 		$this->setNotes($post['notes']);
 
-		$this->tablename == 'ticket_history'
+		$this->tablename == 'ticketHistory'
 			? $this->setTicket_id($post['ticket_id'])
 			: $this->setIssue_id($post['issue_id']);
 	}

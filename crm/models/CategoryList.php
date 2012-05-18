@@ -14,6 +14,10 @@ class CategoryList extends ZendDbResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+
+		$this->select->from(array('c'=>'categories'), 'c.*');
+		$this->select->joinLeft(array('g'=>'categoryGroups'),'c.categoryGroup_id=g.id', array());
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -29,8 +33,6 @@ class CategoryList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order=array('g.ordering','g.name','c.name'),$limit=null,$groupBy=null)
 	{
-		$this->select->from(array('c'=>'categories'));
-		$this->select->joinLeft(array('g'=>'categoryGroups'),'c.categoryGroup_id=g.id');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
@@ -62,7 +64,7 @@ class CategoryList extends ZendDbResultIterator
 						}
 						break;
 					case 'department_id':
-						$this->select->joinLeft(array('d'=>'department_categories'),'c.id=d.category_id');
+						$this->select->joinLeft(array('d'=>'department_categories'),'c.id=d.category_id', array());
 						$this->select->where('d.department_id=?', $value);
 						break;
 

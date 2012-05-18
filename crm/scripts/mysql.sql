@@ -126,7 +126,7 @@ create table tickets (
 	foreign key (resolution_id)      references resolutions(id)
 );
 
-create table ticket_history (
+create table ticketHistory (
 	id                 int       unsigned not null primary key auto_increment,
 	ticket_id          int       unsigned not null,
 	enteredByPerson_id int       unsigned not null,
@@ -181,7 +181,7 @@ create table issue_labels (
 	foreign key (label_id) references labels(id)
 );
 
-create table issue_history (
+create table issueHistory (
 	id                 int       unsigned not null primary key auto_increment,
 	issue_id           int       unsigned not null,
 	enteredByPerson_id int       unsigned not null,
