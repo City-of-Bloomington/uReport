@@ -43,7 +43,7 @@
 			<div>
 				<h3>$name $editButton $deleteButton</h3>
 				<table>
-					<tr><th>api_key</th><td>{$client->getId()}</td></tr>
+					<tr><th>api_key</th><td>{$client->getApi_key()}</td></tr>
 					<tr><th>url</th><td><a href=\"$url\">$url</a></td></tr>
 					<tr><th>contact</th><td><a href=\"{$contact->getURL()}\">$contactName</a></td></tr>
 				</table>

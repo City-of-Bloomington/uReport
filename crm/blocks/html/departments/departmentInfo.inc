@@ -33,13 +33,13 @@ if ($defaultPerson) {
 
 $categories = array();
 foreach ($this->department->getCategories() as $category) {
-	$categories[] = View::escape($category['name']);
+	$categories[] = View::escape($category->getName());
 }
 $categories = implode(', ',$categories);
 
 $actions = array();
 foreach ($this->department->getActions() as $action) {
-	$actions[] = View::escape($action['name']);
+	$actions[] = View::escape($action->getName());
 }
 $actions = implode(', ',$actions);
 

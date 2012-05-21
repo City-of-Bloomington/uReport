@@ -11,7 +11,10 @@ class Department extends ActiveRecord
 
 	protected $defaultPerson;
 	private $categories = array();
-	private $actions = array();
+	private $actions    = array();
+
+	private $categoriesUpdated = false;
+	private $actionsUpdated    = false;
 	/**
 	 * Populates the object with data
 	 *
@@ -32,7 +35,7 @@ class Department extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from departments where id=?'
 					: 'select * from departments where name=?';
 				$result = $zend_db->fetchRow($sql, array($id));
@@ -57,10 +60,16 @@ class Department extends ActiveRecord
 	 */
 	public function validate()
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
 		}
+	}
+
+	public function save()
+	{
+		parent::save();
+		if ($this->categoriesUpdated) $this->saveCategories(array_keys($this->getCategories()));
+		if ($this->actionsUpdated)    $this->saveActions   (array_keys($this->getActions()));
 	}
 
 
@@ -88,6 +97,28 @@ class Department extends ActiveRecord
 	public function setName($s)  { $this->data['name'] = trim($s); }
 	public function setDefaultPerson_id($id)    { parent::setForeignKeyField( 'Person', 'defaultPerson_id', $id); }
 	public function setDefaultPerson(Person $p) { parent::setForeignKeyObject('Person', 'defaultPerson_id', $p);  }
+
+	/**
+	 * Handler for Controller::update action
+	 *
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setName($post['name']);
+		$this->setCustomStatuses($post['customStatuses']);
+		if ($_POST['defaultPerson_id']) {
+			$this->setDefaultPerson_id($post['defaultPerson_id']);
+		}
+
+		isset($post['categories'])
+			? $this->setCategories(array_keys($post['categories']))
+			: $this->setCategories(array());
+
+		isset($post['actions'])
+			? $this->setActions(array_keys($post['actions']))
+			: $this->setActions(array());
+	}
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -131,20 +162,37 @@ class Department extends ActiveRecord
 	}
 
 	/**
-	 * @param array $categories
+	 * Updates the categories, but does not save them to the database
+	 *
+	 * @param array $category_ids
 	 */
-	public function saveCategories($categories)
+	public function setCategories($category_ids)
+	{
+		$this->categoriesUpdated = true;
+		$this->categories = array();
+		foreach ($category_ids as $id) {
+			$c = new Category($id);
+			$this->categories[$c->getId()] = $c;
+		}
+	}
+
+	/**
+	 * Saves new categories directly to the database
+	 *
+	 * @param array $category_ids
+	 */
+	public function saveCategories($category_ids)
 	{
 		if ($this->getId()) {
 			$this->categories = array();
 			$zend_db = Database::getConnection();
 			$zend_db->delete('department_categories','department_id='.$this->getId());
 
-			foreach (array_keys($categories) as (int)$id) {
+			foreach ($category_ids as $id) {
 				try {
 					$zend_db->insert('department_categories', array(
 						'department_id'=>$this->getId(),
-						'category_id'=>$id
+						'category_id'=>(int)$id
 					));
 				}
 				catch (Exception $e) {
@@ -182,20 +230,37 @@ class Department extends ActiveRecord
 	}
 
 	/**
-	 * @param array $actions
+	 * Updates the actions, but does not save them to the database
+	 *
+	 * @param array $action_ids
 	 */
-	public function saveActions($actions)
+	public function setActions($action_ids)
+	{
+		$this->actionsUpdated = true;
+		$this->actions = array();
+		foreach ($action_ids as $id) {
+			$a = new Action($id);
+			$this->actions[$a->getId()] = $a;
+		}
+	}
+
+	/**
+	 * Saves new Actions directly to the database
+	 *
+	 * @param array $action_ids
+	 */
+	public function saveActions($action_ids)
 	{
 		if ($this->getId()) {
 			$this->actions = array();
 			$zend_db = Database::getConnection();
 			$zend_db->delete('department_actions','department_id='.$this->getId());
 
-			foreach (array_keys($actions) as (int)$id) {
+			foreach ($action_ids as $id) {
 				$zend_db->insert('department_actions',
 					array(
 						'department_id'=>$this->getId(),
-						'action_id'=>$id
+						'action_id'=>(int)$id
 					)
 				);
 			}

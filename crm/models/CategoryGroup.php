@@ -29,7 +29,7 @@ class CategoryGroup extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from categoryGroups where id=?'
 					: 'select * from categoryGroups where name=?';
 				$result = $zend_db->fetchRow($sql, array($id));

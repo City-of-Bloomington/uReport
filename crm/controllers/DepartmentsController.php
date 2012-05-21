@@ -55,26 +55,10 @@ class DepartmentsController extends Controller
 		$return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/departments';
 
 		if (isset($_POST['name'])) {
-			$department->setName($_POST['name']);
-			$department->setCustomStatuses($_POST['customStatuses']);
 			try {
-				if ($_POST['defaultPerson']) {
-					$department->setDefaultPerson($_POST['defaultPerson']);
-				}
-				if (isset($_POST['categories'])) {
-					$department->setCategories(array_keys($_POST['categories']));
-				}
-				else {
-					$department->setCategories(array());
-				}
-				if (isset($_POST['actions'])) {
-					$department->setActions(array_keys($_POST['actions']));
-				}
-				else {
-					$department->setActions(array());
-				}
-
+				$department->handleUpdate($_POST);
 				$department->save();
+
 				header('Location: '.$return_url);
 				exit();
 			}

@@ -28,7 +28,7 @@ class IssueType extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from issueTypes where id=?'
 					: 'select * from issueTypes where name=?';
 				$result = $zend_db->fetchRow($sql, array($id));

@@ -38,7 +38,7 @@ class ClientsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$client->set($_POST);
+			$client->handleUpdate($_POST);
 			try {
 				$client->save();
 				header('Location: '.BASE_URL.'/clients');

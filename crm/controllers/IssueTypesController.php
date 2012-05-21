@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class LabelsController extends Controller
+class IssueTypesController extends Controller
 {
 	public function __construct(Template $template)
 	{
@@ -14,30 +14,30 @@ class LabelsController extends Controller
 
 	public function index()
 	{
-		$this->template->blocks[] = new Block('labels/list.inc');
+		$this->template->blocks[] = new Block('issueTypes/list.inc');
 	}
 
 	public function update()
 	{
-		if (!empty($_REQUEST['label_id'])) {
+		if (!empty($_REQUEST['issueType_id'])) {
 			try {
-				$label = new Label($_REQUEST['label_id']);
+				$type = new IssueType($_REQUEST['issueType_id']);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.BASE_URL.'/labels');
+				header('Location: '.BASE_URL.'/issueTypes');
 				exit();
 			}
 		}
 		else {
-			$label = new Label();
+			$type = new IssueType();
 		}
 
 		if (isset($_POST['name'])) {
-			$label->setName($_POST['name']);
+			$type->setName($_POST['name']);
 			try {
-				$label->save();
-				header('Location: '.BASE_URL.'/labels');
+				$type->save();
+				header('Location: '.BASE_URL.'/issueTypes');
 				exit();
 			}
 			catch (Exception $e) {
@@ -45,6 +45,6 @@ class LabelsController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('labels/updateForm.inc',array('label'=>$label));
+		$this->template->blocks[] = new Block('issueTypes/updateForm.inc',array('issueType'=>$type));
 	}
 }

@@ -31,7 +31,7 @@ class Category extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from categories where id=?'
 					: 'select * from categories where name=?';
 
@@ -57,14 +57,8 @@ class Category extends ActiveRecord
 	 */
 	public function validate()
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->data['name']) {
-			throw new Exception('missingRequiredFields');
-		}
-
-		if (!$this->getData('group.name')) {
-			throw new Exception('categories/missingGroup');
-		}
+		if (!$this->data['name'])             { throw new Exception('categories/missingName');  }
+		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
 	}
 
 	//----------------------------------------------------------------
@@ -73,8 +67,8 @@ class Category extends ActiveRecord
 	public function __toString()                { return parent::get('name');                   }
 	public function getId()                     { return parent::get('id');                     }
 	public function getName()                   { return parent::get('name');                   }
-	public function getDepartment_id()          { return parent::get('department_id';           }
-	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id';        }
+	public function getDepartment_id()          { return parent::get('department_id');          }
+	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
 	public function getDescription()            { return parent::get('description');            }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }

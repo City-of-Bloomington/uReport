@@ -25,6 +25,9 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 				<tr><td><label for="url">URL</label></td>
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
+				<tr><td><label>API Key</label></td>
+					<td><?php echo $this->client->getApi_key(); ?></td>
+				</tr>
 			</table>
 		</fieldset>
 		<fieldset><legend>Contact Info</legend>

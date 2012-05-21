@@ -27,7 +27,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('actions'));
 $ZEND_ACL->add(new Zend_Acl_Resource('categories'));
 $ZEND_ACL->add(new Zend_Acl_Resource('categoryGroups'));
 $ZEND_ACL->add(new Zend_Acl_Resource('labels'));
-$ZEND_ACL->add(new Zend_Acl_Resource('types'));
+$ZEND_ACL->add(new Zend_Acl_Resource('issueTypes'));
 $ZEND_ACL->add(new Zend_Acl_Resource('resolutions'));
 $ZEND_ACL->add(new Zend_Acl_Resource('contactMethods'));
 $ZEND_ACL->add(new Zend_Acl_Resource('neighborhoodAssociations'));

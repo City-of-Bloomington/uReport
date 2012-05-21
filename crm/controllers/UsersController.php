@@ -43,13 +43,16 @@ class UsersController extends Controller
 		// Handle POST data
 		if (isset($_POST['username'])) {
 			try {
-				$user->set($_POST);
+				$user->handleUpdateUserAccount($_POST);
 				$user->save();
 				header('Location: '.BASE_URL.'/users');
 				exit();
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
+				print_r($e);
+				print_r($user);
+				exit();
 			}
 		}
 

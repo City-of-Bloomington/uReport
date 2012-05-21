@@ -143,18 +143,8 @@ class PeopleController extends Controller
 		}
 
 		if (isset($_POST['firstname'])) {
-			$fields = array(
-				'firstname','middlename','lastname','email','phoneNumber','organization',
-				'address','city','state','zip'
-			);
-			foreach ($fields as $field) {
-				if (isset($_POST[$field])) {
-					$set = 'set'.ucfirst($field);
-					$person->$set($_POST[$field]);
-				}
-			}
-
 			try {
+				$person->handleUpdate($_POST);
 				$person->save();
 
 				if (isset($_REQUEST['return_url'])) {

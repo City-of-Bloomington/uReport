@@ -6,9 +6,11 @@
  * @param Category $this->category
  */
 $title = $this->category->getId() ? 'Edit Category' : 'Add Category';
-$department_id = $this->category->getData('department._id');
 
-$fields = array('name','description','postingPermissionLevel','displayPermissionLevel');
+$fields = array(
+	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
+	'categoryGroup_id', 'department_id'
+);
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
@@ -26,13 +28,13 @@ $custom_fields = isset($_POST['custom_fields'])
 			<tr><td><label for="name" class="required">Name</label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
-			<tr><td><label for="group">Group</label></td>
-				<td><select name="group" id="group">
+			<tr><td><label for="categoryGroup_id">Group</label></td>
+				<td><select name="categoryGroup_id" id="categoryGroup_id">
 					<?php
 						$groups = new CategoryGroupList();
 						$groups->find();
 						foreach ($groups as $group) {
-							$selected = $this->category->getData('group._id')==$group->getId()
+							$selected = $categoryGroup_id==$group->getId()
 								? 'selected="selected"'
 								: '';
 							$name = View::escape($group->getName());
@@ -48,13 +50,13 @@ $custom_fields = isset($_POST['custom_fields'])
 			<textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
 		</div>
 		<div>
-			<div><label for="department">Default Department Assignment</label></div>
-			<select name="department" id="department">
+			<div><label for="department_id">Default Department Assignment</label></div>
+			<select name="department_id" id="department_id">
 			<?php
 				$list = new DepartmentList();
 				$list->find();
 				foreach ($list as $department) {
-					$selected = "{$department->getId()}"=="$department_id"
+					$selected = $department->getId()==$department_id
 						? 'selected="selected"'
 						: '';
 					$name = View::escape($department->getName());

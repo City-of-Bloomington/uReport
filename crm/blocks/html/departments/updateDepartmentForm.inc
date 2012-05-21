@@ -21,8 +21,8 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 				</td>
 			</tr>
 
-			<tr><td><label for="defaultPerson">Default Person</label></td>
-				<td><select name="defaultPerson" id="defaultPerson">
+			<tr><td><label for="defaultPerson_id">Default Person</label></td>
+				<td><select name="defaultPerson_id" id="defaultPerson_id">
 						<option value=""></option>
 						<?php
 							$defaultPerson = $this->department->getDefaultPerson();
@@ -62,7 +62,9 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 		<legend>Actions</legend>
 		<ul>
 		<?php
-			foreach (ActionList::getActions() as $action) {
+			$list = new ActionList();
+			$list->find();
+			foreach ($list as $action) {
 				if ($action->getType()=='department') {
 					$id = $action->getId();
 					$name = View::escape($action->getName());

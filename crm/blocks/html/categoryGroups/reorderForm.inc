@@ -20,7 +20,7 @@
 				$groups->find();
 				foreach ($groups as $group) {
 					$name = View::escape($group->getName());
-					$order = (int)$group->getOrder();
+					$order = (int)$group->getOrdering();
 					echo "
 					<tr><td><label for=\"categoryGroups_{$group->getId()}\">$name</label></td>
 						<td><input name=\"categoryGroups[{$group->getId()}]\"

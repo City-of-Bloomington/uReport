@@ -6,7 +6,7 @@
  */
 class Label extends ActiveRecord
 {
-	protected $tablename = 'label';
+	protected $tablename = 'labels';
 	/**
 	 * Populates the object with data
 	 *
@@ -27,7 +27,7 @@ class Label extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from labels where id=?'
 					: 'select * from labels where name=?';
 				$result = $zend_db->fetchRow($sql, array($id));

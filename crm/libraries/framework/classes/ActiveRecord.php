@@ -111,7 +111,7 @@ abstract class ActiveRecord
 	 */
 	public function getForeignKeyObject($class, $field)
 	{
-		$var = lcfirst($class);
+		$var = preg_replace('/_id$/', '', $field);
 		if (!$this->$var && isset($this->data[$field])) {
 			$this->$var = new $class($this->data[$field]);
 		}
@@ -131,13 +131,13 @@ abstract class ActiveRecord
 	public function setForeignKeyField($class, $field, $id)
 	{
 		$id = trim($id);
-		$var = lcfirst($class);
+		$var = preg_replace('/_id$/', '', $field);
 		if ($id) {
 			$this->$var = new $class($id);
 			$this->data[$field] = $this->$var->getId();
 		}
 		else {
-			$this->$var = null;
+			$this->$field = null;
 			$this->data[$field] = null;
 		}
 	}
@@ -155,9 +155,19 @@ abstract class ActiveRecord
 	public function setForeignKeyObject($class, $field, $object)
 	{
 		if ($object instanceof $class) {
-			$var = lcfirst($class);
+			$var = preg_replace('/_id$/', '', $field);
 			$this->data[$field] = $object->getId();
 			$this->$var = $object;
 		}
+	}
+
+	/**
+	 * Returns whether the value can be an ID for a record
+	 *
+	 * return @bool
+	 */
+	public static function isId($id)
+	{
+		return (is_int($id) || (is_string($id) && ctype_digit($id)));
 	}
 }

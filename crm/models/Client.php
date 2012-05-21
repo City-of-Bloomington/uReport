@@ -46,6 +46,7 @@ class Client extends ActiveRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->data['api_key'] = uniqid();
 		}
 	}
 
@@ -58,6 +59,10 @@ class Client extends ActiveRecord
 		if (!$this->getName() || !$this->getContactPerson()) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		if (!$this->getApi_key()) {
+			$this->data['api_key'] = uniqid();
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -66,6 +71,7 @@ class Client extends ActiveRecord
 	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getURL()              { return parent::get('url');              }
+	public function getApi_key()          { return parent::get('api_key');          }
 	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
 	public function getContactPerson()    { return parent::getForeignKeyObject('Person', 'contactPerson_id'); }
 
@@ -74,10 +80,11 @@ class Client extends ActiveRecord
 	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person', 'contactPerson_id', $id); }
 	public function setContactPerson(Person $p) { parent::setForeignKeyObject('Person', 'contactPerson_id', $p);  }
 
+
 	/**
 	 * @param array $post
 	 */
-	 public function set($post)
+	 public function handleUpdate($post)
 	 {
 		$this->setName            ($post['name']);
 		$this->setURL             ($post['url']);

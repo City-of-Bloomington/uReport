@@ -14,14 +14,29 @@ class ContactMethodsController extends Controller
 
 	public function index()
 	{
-		$this->template->blocks[] = new Block('lookups/contactMethodList.inc');
+		$this->template->blocks[] = new Block('contactMethods/list.inc');
 	}
 
 	public function update()
 	{
-		if (isset($_POST['contactMethods'])) {
+		if (!empty($_REQUEST['contactMethod_id'])) {
 			try {
-				Lookups::save('contactMethods',$_POST['contactMethods']);
+				$method = new ContactMethod($_REQUEST['contactMethod_id']);
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+				header('Location: '.BASE_URL.'/contactMethods');
+				exit();
+			}
+		}
+		else {
+			$method = new ContactMethod();
+		}
+
+		if (isset($_POST['name'])) {
+			$method->setName($_POST['name']);
+			try {
+				$method->save();
 				header('Location: '.BASE_URL.'/contactMethods');
 				exit();
 			}
@@ -30,6 +45,9 @@ class ContactMethodsController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('lookups/updateContactMethodsForm.inc');
+		$this->template->blocks[] = new Block(
+			'contactMethods/updateForm.inc',
+			array('contactMethod'=>$method)
+		);
 	}
 }

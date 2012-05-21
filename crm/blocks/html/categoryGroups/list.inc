@@ -43,7 +43,7 @@
 					";
 				}
 				$name = View::escape($group->getName());
-				$order = (int)$group->getOrder();
+				$order = (int)$group->getOrdering();
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>

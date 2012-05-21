@@ -24,7 +24,6 @@ crm/controllers/Open311Controller.php -text
 crm/controllers/PeopleController.php -text
 crm/controllers/ResolutionsController.php -text
 crm/controllers/TicketsController.php -text
-crm/controllers/TypesController.php -text
 crm/controllers/UsersController.php -text
 crm/docs/AdminGuide/images/freshInstall.png -text
 crm/docs/DeveloperGuide/ConceptArt/images/addcase.jpg -text

@@ -63,7 +63,7 @@ class CategoryGroupsController extends Controller
 			foreach ($_POST['categoryGroups'] as $id=>$order) {
 				try {
 					$group = new CategoryGroup($id);
-					$group->setOrder($order);
+					$group->setOrdering($order);
 					$group->save();
 				}
 				catch (Exception $e) {

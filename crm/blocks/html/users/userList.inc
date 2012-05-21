@@ -51,7 +51,7 @@
 				$email = View::escape($user->getEmail());
 
 				$department = $user->getDepartment();
-				$departmentName = View::escape($department['name']);
+				$departmentName = $department ? View::escape($department->getName()) : '';
 				echo "
 				<tr>
 					<td>$username</td>

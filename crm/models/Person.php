@@ -11,6 +11,7 @@ class Person extends ActiveRecord
 
 	protected $department;
 	protected $phones = array();
+	protected $phonesUpdated = false;
 
 	/**
 	 * Populates the object with data
@@ -32,7 +33,7 @@ class Person extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				if (ctype_digit($id)) {
+				if (ActiveRecord::isId($id)) {
 					$sql = 'select * from people where id=?';
 				}
 				elseif (false !== strpos($id,'@')) {
@@ -72,6 +73,14 @@ class Person extends ActiveRecord
 
 		if (isset($this->data['username']) && !isset($this->data['authenticationMethod'])) {
 			$this->data['authenticationMethod'] = 'local';
+		}
+	}
+
+	public function save()
+	{
+		parent::save();
+		if ($this->phonesUpdated) {
+			foreach ($this->phones as $phone) { $phone->save(); }
 		}
 	}
 
@@ -148,9 +157,26 @@ class Person extends ActiveRecord
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
-		$fields = array('firstname','lastname','email','department',
+		$fields = array(
+			'firstname','middlename','lastname','email','phoneNumber','organization',
+			'address','city','state','zip'
+		);
+		foreach ($fields as $field) {
+			if (isset($post[$field])) {
+				$set = 'set'.ucfirst($field);
+				$this->$set($post[$field]);
+			}
+		}
+	}
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdateUserAccount($post)
+	{
+		$fields = array('firstname','lastname','email','department_id',
 						'username','authenticationMethod','role');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
@@ -240,26 +266,53 @@ class Person extends ActiveRecord
 	public function getPhones()
 	{
 		if (!count($this->phones) && $this->getId()) {
-			$phones = new PhoneList(array('person_id'=>$this->getId()));
-			foreach ($phones as $p) {
-				$this->phones[$p->getId()] = $p;
-			}
+			$this->phones = new PhoneList(array('person_id'=>$this->getId()));
 		}
 		return $this->phones;
 	}
 
 	/**
-	 * Returns the number from this person's first phone record
+	 * Makes sure there is at least one phone loaded
 	 *
-	 * @return string
+	 * All the forms on the system currently expect only one phone
+	 * We are in a transition to storing many phones per person.
+	 * There are several instances where we treat the person as if
+	 * they only have one phone, though.
+	 * For instance, Open311 only supports one phone per person
+	 * For these getters/setters we are treating the first phone record
+	 * as their only phone.
 	 */
+	private function loadFirstPhoneForEditing()
+	{
+		$this->phonesUpdated = true;
+		$this->getPhones();
+
+		if (!isset($this->phones[0])) {
+			$this->phones[0] = new Phone();
+			$this->phones[0]->setPerson($this);
+		}
+	}
 	public function getPhoneNumber()
 	{
 		$phones = $this->getPhones();
-		if (count($phones)) {
-			return $phones[0]->getNumber();
-		}
+		if (count($phones)) { return $phones[0]->getNumber(); }
 	}
+	public function getPhoneDeviceId()
+	{
+		$phones = $this->getPhones();
+		if (count($phones)) { return $phones[0]->getDeviceId(); }
+	}
+	public function setPhoneNumber($number)
+	{
+		$this->loadFirstPhoneForEditing();
+		$this->phones[0]->setNumber($number);
+	}
+	public function setPhoneDeviceId($id)
+	{
+		$this->loadFirstPhoneForEditing();
+		$this->phones[0]->setDeviceId($id);
+	}
+
 
 	/**
 	 * @return string

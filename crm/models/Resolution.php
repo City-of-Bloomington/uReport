@@ -26,7 +26,7 @@ class Resolution extends ActiveRecord
 				$result = $id;
 			}
 			else {
-				$sql = ctype_digit($id)
+				$sql = ActiveRecord::isId($id)
 					? 'select * from resolutions where id=?'
 					: 'select * from resolutions where name=?';
 				$zend_db = Database::getConnection();

@@ -72,6 +72,7 @@ create table categories (
 	categoryGroup_id       int          unsigned,
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	postingPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
+	customFields           text,
 	foreign key (department_id)    references departments   (id),
 	foreign key (categoryGroup_id) references categoryGroups(id)
 );
