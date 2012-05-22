@@ -29,32 +29,26 @@ class TicketsController extends Controller
 	 */
 	public function index()
 	{
+		$this->template->setFilename('search');
 		if (userIsAllowed('tickets','add')) {
 			$this->template->blocks['search-form'][] = new Block('tickets/addNewForm.inc');
 		}
-		$this->template->setFilename('search');
-		$this->template->blocks['search-form'][] = new Block('tickets/searchForm.inc');
 
-		// Build the search query
-		if (TicketList::isValidSearch($_GET)) {
-			// Create the report
-			$report = (isset($_GET['report']) && $_GET['report']
-						&& is_file(APPLICATION_HOME."/blocks/{$this->template->outputFormat}/tickets/reports/$_GET[report].inc"))
-				? new Block("tickets/reports/$_GET[report].inc")
-				: new Block('tickets/searchResults.inc');
+		$search = new Search();
+		$solrObject = $search->query($_GET);
 
-			// Tell the report what fields we want displayed
-			$_GET['fields'] = empty($_GET['fields'])
-				? TicketList::$defaultFieldsToDisplay
-				: $_GET['fields'];
-
-
-			if ($this->template->outputFormat == 'html') {
-				$this->template->blocks['search-results'][] = new Block('tickets/customReportLinks.inc');
-				$this->template->blocks['search-results'][] = new Block('tickets/searchParameters.inc');
-			}
-			$this->template->blocks['search-results'][] = $report;
-		}
+		$this->template->blocks['search-form'][] = new Block(
+			'tickets/searchForm.inc',
+			array('solrObject'=>$solrObject)
+		);
+		$this->template->blocks['search-results'][] = new Block(
+			'tickets/searchParameters.inc',
+			array('solrObject'=>$solrObject)
+		);
+		$this->template->blocks['search-results'][] = new Block(
+			'tickets/searchResults.inc',
+			array('solrObject'=>$solrObject)
+		);
 	}
 
 	/**
@@ -137,16 +131,15 @@ class TicketsController extends Controller
 		}
 
 		// Handle any Person choice passed in
-		if (isset($_REQUEST['person_id'])) {
-			$person = new Person($_REQUEST['person_id']);
-			$issue->setReportedByPerson($person);
+		if (!empty($_REQUEST['person_id'])) {
+			$issue->setReportedByPerson_id($_REQUEST['person_id']);
 		}
 
 		// Handle any Category choice passed in
-		if (isset($_REQUEST['category_id'])) {
+		if (!empty($_REQUEST['category_id'])) {
 			$category = new Category($_REQUEST['category_id']);
 			if ($category->allowsPosting($_SESSION['USER'])) {
-				$ticket->setCategory($_REQUEST['category_id']);
+				$ticket->setCategory($category);
 			}
 			else {
 				$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -169,15 +162,13 @@ class TicketsController extends Controller
 		// the ticket to the current User, and use the current user's department
 		if (!isset($currentDepartment)) {
 			$ticket->setAssignedPerson($_SESSION['USER']);
-
-			$dept = $_SESSION['USER']->getDepartment();
-			$currentDepartment = new Department((string)$dept['_id']);
+			$currentDepartment = $_SESSION['USER']->getDepartment();
 		}
 
 		// Process the ticket form when it's posted
 		if (isset($_POST['ticket'])) {
-			if (isset($_POST['assignedPerson'])) {
-				$_POST['ticket']['assignedPerson'] = $_POST['assignedPerson'];
+			if (isset($_POST['assignedPerson_id'])) {
+				$_POST['ticket']['assignedPerson_id'] = $_POST['assignedPerson_id'];
 				$_POST['ticket']['notes'] = $_POST['notes'];
 			}
 			// Validate Everything and save

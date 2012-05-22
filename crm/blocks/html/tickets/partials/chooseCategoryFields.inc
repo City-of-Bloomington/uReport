@@ -10,7 +10,7 @@
 	Choose a category
 	<select name="category_id">
 	<?php
-		if ($_SESSION['USER']->getDepartment()) {
+		if ($_SESSION['USER']->getDepartment_id()) {
 			if (isset($_REQUEST['category_id'])) {
 				try {
 					$category = new Category($_REQUEST['category_id']);
@@ -24,12 +24,9 @@
 				}
 			}
 
-			$dept = $_SESSION['USER']->getDepartment();
-			$department = new Department($dept['_id']);
-
-			foreach ($department->getCategories() as $departmentCategory) {
-				$name = View::escape($departmentCategory['name']);
-				echo "<option value=\"$departmentCategory[_id]\">$name</option>";
+			foreach ($_SESSION['USER']->getDepartment()->getCategories() as $c) {
+				$name = View::escape($c->getName());
+				echo "<option value=\"{$c->getId()}\">$name</option>";
 			}
 		}
 	?>

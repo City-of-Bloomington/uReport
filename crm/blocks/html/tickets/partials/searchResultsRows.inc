@@ -1,14 +1,14 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketList $this->ticketList
+ * @param array $this->tickets
  */
 // Make sure Ticket Number is always displayed
 $_GET['fields']['number'] = 1;
 
-foreach ($this->ticketList as $row) {
+foreach ($this->tickets as $ticket) {
 	echo '<div class="searchResultsRows">';
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
@@ -27,6 +27,7 @@ foreach ($this->ticketList as $row) {
 		if (array_key_exists($field,$displayableFields)
 			&& (false === strpos($field,'Person') || userIsAllowed('people'))) {
 			// Format the data being asked for
+			$get = 'get'.ucfirst($field);
 			switch ($field) {
 				case 'number':
 				case 'status':
@@ -35,60 +36,52 @@ foreach ($this->ticketList as $row) {
 				case 'city':
 				case 'state':
 				case 'zip':
-					$$field = isset($row[$field]) ? View::escape($row[$field]) : '';
+				case 'description':
+					$$field = $ticket->$get() ? View::escape($ticket->$get()) : '';
 					break;
 
 				case 'category':
-					$$field = isset($row['category']['name'])
-						? View::escape($row['category']['name'])
-						: '';
-					break;
-
-				case 'description':
-					$$field = isset($row['issues'][0]['description'])
-						? View::escape($row['issues'][0]['description'])
-						: '';
+					$category = $ticket->$get();
+					$$field = $category ? View::escape($category->getName()) : '';
 					break;
 
 				case 'enteredByPerson':
 				case 'assignedPerson':
 				case 'referredPerson':
-					if (isset($row[$field])) {
-						$person = new Person($row[$field]);
+					$person = $ticket->$get();
+					if ($person) {
 						$dl[$displayableFields[$field]['displayName']] = View::escape($person->getFullname());
 					}
 					break;
 
 				case 'enteredDate':
-					if (isset($row[$field]->sec)) {
-						$dl[$displayableFields[$field]['displayName']] = date(DATE_FORMAT,$row[$field]->sec);
-					}
+					$dl[$displayableFields[$field]['displayName']] = $ticket->$get(DATE_FORMAT);
 					break;
 
 
 				case 'department':
-					$dl[$displayableFields[$field]['displayName']] = isset($row['assignedPerson']['department']['name'])
-						? View::escape($row['assignedPerson']['department']['name'])
+					$department = $ticket->$get();
+					$dl[$displayableFields[$field]['displayName']] = $department
+						? View::escape($department->getName())
 						: '';
 					break;
 
 				case 'latitude':
 				case 'longitude':
-					$dl[$displayableFields[$field]['displayName']] = isset($row['coordinates'][$field])
-						? $row['coordinates'][$field]
-						: '';
+					$dl[$displayableFields[$field]['displayName']] = $ticket->$get();
 					break;
 
 				default:
-					$dl[$displayableFields[$field]['displayName']] = isset($row[$displayableFields[$field]['index']])
-						? View::escape($row[$displayableFields[$field]['index']])
+					$data = $ticket->getData();
+					$dl[$displayableFields[$field]['displayName']] = isset($data[$displayableFields[$field]['index']])
+						? View::escape($data[$displayableFields[$field]['index']])
 						: '';
 			}
 		}
 	}
 	echo "
 		<div>
-			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id=$row[_id]\">
+			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id={$ticket->getId()}\">
 					Case # $number $category $status $resolution
 				</a>
 			</h3>

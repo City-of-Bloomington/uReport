@@ -5,72 +5,12 @@
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param SolrObject $this->solrObject
  */
-function lookupHumanReadableValue($key, $value)
-{
-	switch ($key) {
-		case 'enteredByPerson':
-		case 'assignedPerson':
-		case 'referredPerson':
-			$person = new Person($value);
-			return $person->getFullname();
-			break;
+$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-		case 'department':
-			$department = new Department($value);
-			return $department->getName();
-			break;
-
-		case 'category':
-			$category = new Category($value);
-			return $category->getName();
-			break;
-
-		case 'client_id':
-			$client = new Client($value);
-			return $client->getName();
-			break;
-
-		default:
-			return $value;
-	}
-}
-// Go through all the possible search fields and translate the raw
-// search values into the human readable names
-$params = array();
-$displayableFields = TicketList::getDisplayableFields();
-$searchableFields = TicketList::getSearchableFields();
-
-foreach (TicketList::getSearchableFields() as $key=>$value) {
-	if (!empty($_GET[$key])) {
-		if (isset($displayableFields[$key])) {
-			$name = $displayableFields[$key]['displayName'];
-		}
-		else {
-			$name = ucfirst($key);
-		}
-
-		$p = array('key'=>$key,'displayName'=>$name);
-
-		if (is_array($_GET[$key])) {
-			foreach ($_GET[$key] as $value) {
-				$p['values'][] = array(
-					'key'=>$value,
-					'displayName'=>lookupHumanReadableValue($key,$value)
-				);
-			}
-		}
-		else {
-			$p['value'] = array(
-				'key'=>$_GET[$key],
-				'displayName'=>lookupHumanReadableValue($key,$_GET[$key])
-			);
-		}
-		$params[] = $p;
-	}
-}
-
-if ($params) {
+if (isset($this->solrObject->responseHeader->params->fq)) {
+	$fq = $this->solrObject->responseHeader->params->fq;
 	echo "
 	<div class=\"searchParameters\">
 		<h2>Current Search</h2>
@@ -79,23 +19,26 @@ if ($params) {
 		</p>
 		<span>
 	";
-	foreach ($params as $p) {
-		$key = $p['key'];
-		$displayName = $p['displayName'];
-		if (isset($p['value'])) {
-			$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-			unset($url->parameters[$key]);
-			echo "<a class=\"delete button\" href=\"$url\">".View::escape("$displayName: {$p['value']['displayName']}")."</a>";
+	// There may only be one filterQuery
+	if (!is_array($fq)) { $fq = array($fq); }
 
+	foreach ($fq as $facet) {
+		list($key, $value) = explode(':', $facet);
+
+		$deleteURL = clone $currentURL;
+		if (isset($deleteURL->$key)) {
+			unset($deleteURL->$key);
 		}
-		else {
-			foreach ($p['values'] as $i=>$v) {
-				$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-				unset($url->parameters[$key][$i]);
-				echo "<a class=\"delete button\" href=\"$url\">".View::escape("$displayName: $v[displayName]")."</a>";
-			}
-		}
+
+		$displayName = Search::$facetFields['ticket'][$key];
+		$displayValue = Search::getDisplayName('ticket', $key, $value);
+		echo "
+		<a class=\"delete button\" href=\"$deleteURL\">
+			$displayName: $displayValue
+		</a>
+		";
 	}
+
 	echo "
 		</span>
 	</div>

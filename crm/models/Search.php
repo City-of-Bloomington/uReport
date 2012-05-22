@@ -17,18 +17,27 @@ class Search
 	 *
 	 * The order declared here is the same order these facets will be
 	 * displayed, when used.
+	 *
+	 * Security Notice:
+	 * Make sure to keep this initial list limited to "safe" fields.
+	 * That is: fields that are okay to display to any anonymous person.
+	 * Use __construct() to add fields that should be kept hidden
+	 * unless a person is authorized to see them.
 	 */
 	public static $facetFields = array(
 		'ticket'=>array(
-			'category_id'=>'Category',
+			'category_id'  =>'Category',
 			'department_id'=>'Department',
-			'status'=>'Status',
-			'client_id'=>'Client',
-			'label'=>'Label',
-			'type'=>'Type',
+			'status'       =>'Status',
+			'client_id'    =>'Client',
+			'label'        =>'Label',
+			'type'         =>'Type',
 		)
 	);
 
+	/**
+	 * Connects to Solr and adds additional facet fields
+	 */
 	public function __construct()
 	{
 		$this->solrClient = new SolrClient(array(
@@ -37,10 +46,11 @@ class Search
 			'path'    => SOLR_SERVER_PATH
 		));
 
-		// Add additional fields to the faceted browsing
+		// Add facets for the AddressService custom fields
 		foreach (AddressService::$customFieldDescriptions as $key=>$desc) {
 			self::$facetFields['ticket'][$key] = $desc['description'];
 		}
+		// Add facets that are only to be used if the current user is authorized
 		if (userIsAllowed('people', 'view')) {
 			self::$facetFields['ticket']['assignedPerson_id'] = 'Assigned To';
 		}
@@ -85,11 +95,11 @@ class Search
 	 * @param SolrObject $object
 	 * @return array An array of CRM models based on the search results
 	 */
-	public static function hydrateDocs(SolrObject $object)
+	public static function hydrateDocs(SolrObject $o)
 	{
 		$models = array();
-		if (isset($object->response->docs)) {
-			foreach ($object->response->docs as $doc) {
+		if (isset($o->response->docs) && $o->response->numFound) {
+			foreach ($o->response->docs as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
 						$models[] = new Ticket($doc->id);
@@ -133,40 +143,33 @@ class Search
 	{
 		if ($record instanceof Ticket) {
 			$document = new SolrInputDocument();
+			$document->addField('recordKey', "t_{$record->getId()}");
 			$document->addField('recordType', 'ticket');
-			$document->addField('id', (string)$record->getId());
 			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), DateTimeZone::UTC);
 			if ($record->getLatLong()) {
 				$document->addField('coordinates', $record->getLatLong());
 			}
-			if ($record->getCategory()) {
-				$document->addField('category_id', "{$record->getCategory()->getId()}");
-			}
 
-			$stringFields = array(
-				'status','resolution','client_id',
-				'location','city','state','zip'
+			$fields = array(
+				'id', 'category_id', 'client_id',
+				'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
+				'address_id', 'location', 'city', 'state', 'zip',
+				'status', 'resolution_id'
 			);
-			foreach ($stringFields as $field) {
-				$get = 'get'.ucfirst($field);
+			foreach ($fields as $f) {
+				$get = 'get'.ucfirst($f);
 				if ($record->$get()) {
-					$document->addField($field, $record->$get());
+					$document->addField($f, $record->$get());
 				}
 			}
-
-			$personFields = array('enteredBy','assigned','referred');
-			foreach ($personFields as $field) {
-				$get = 'get'.ucfirst($field).'Person';
-				$person = $record->$get();
-				if ($person) {
-					$document->addField($field.'Person_id',(string)$person->getId());
-					if ($field == 'assigned' && $person->getDepartment_id()) {
-						$document->addField('department_id', $person->getDepartment_id());
-					}
-				}
+			$person = $record->getAssignedPerson();
+			if ($person && $person->getDepartment_id()) {
+				$document->addField('department_id', $person->getDepartment_id());
 			}
 
-			$issueFields = array('type','contactMethod');
+			$issueFields = array(
+				'contactMethod_id', 'responseMethod_id', 'issueType_id', 'reportedByPerson_id'
+			);
 			$description = '';
 			foreach ($record->getIssues() as $issue) {
 				$description.= $issue->getDescription();
@@ -175,7 +178,7 @@ class Search
 					$document->addField($field, $issue->$get());
 				}
 				foreach ($issue->getLabels() as $label) {
-					$document->addField('label', $label);
+					$document->addField('label_id', $label);
 				}
 			}
 			if ($description) {
@@ -207,22 +210,17 @@ class Search
 	public static function getDisplayName($recordType, $facetFieldKey, $value)
 	{
 		if (isset(self::$facetFields[$recordType][$facetFieldKey])) {
-			switch ($facetFieldKey) {
-				case 'client_id':
-				case 'department_id':
-				case 'category_id':
-					$class = self::$facetFields[$recordType][$facetFieldKey];
-					$o = new $class($value);
-					return $o->getName();
-				break;
-
-				case 'assignedPerson_id':
-					$o = new Person($value);
-					return $o->getFullname();
-				break;
-
-				default:
-					return $value;
+			if (preg_match('/Person_id$/', $facetFieldKey)) {
+				$o = new Person($value);
+				return $o->getFullname();
+			}
+			elseif (preg_match('/_id$/', $facetFieldKey)) {
+				$class = self::$facetFields[$recordType][$facetFieldKey];
+				$o = new $class($value);
+				return $o->getName();
+			}
+			else {
+				return $value;
 			}
 		}
 	}
@@ -230,7 +228,6 @@ class Search
 	public static function getSortableFields($recordType='ticket')
 	{
 		$fields = array(
-			'number',
 			'enteredDate',
 			'status','resolution',
 			'location','city','state','zip'

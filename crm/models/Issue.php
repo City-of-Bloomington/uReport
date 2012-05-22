@@ -12,7 +12,7 @@ class Issue extends ActiveRecord
 {
 	protected $tablename = 'issues';
 
-	private $labels array();
+	private $labels = array();
 
 	/**
 	 * Populates the object with data
@@ -77,7 +77,7 @@ class Issue extends ActiveRecord
 			}
 		}
 
-		if (!isset($this->getDate())) {
+		if (!$this->getDate()) {
 			$this->setDate('now');
 		}
 	}
@@ -186,10 +186,10 @@ class Issue extends ActiveRecord
 			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
 
 			try {
-				foreach (array_keys($labels) as (int)$id) {
+				foreach (array_keys($labels) as $id) {
 					$zend_db->insert('issue_labels', array(
 						'issue_id'=>$this->data['id'],
-						'label_id'=>$id
+						'label_id'=>(int)$id
 					));
 				}
 			}

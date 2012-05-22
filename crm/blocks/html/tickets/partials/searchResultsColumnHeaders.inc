@@ -1,29 +1,27 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketList $this->ticketList
+ * @param array $this->tickets
  */
 echo "
 <thead>
 	<tr><td>Sort by:</td>
 ";
-	if (count($this->ticketList)) {
+	if (count($this->tickets)) {
+		$currentSort = Search::$defaultSort;
 		if (isset($_GET['sort'])) {
 			$keys = array_keys($_GET['sort']);
-			$currentSortField = $keys[0];
-			$currentSortDirection = $_GET['sort'][$currentSortField]==1 ? 'ascending' : 'descending';
-		}
-		else {
-			$currentSortField = 'enteredDate';
-			$currentSortDirection = 'descending';
+			$currentSort['field'] = $keys[0];
+			$currentSort['order'] = ($_GET['sort'][$keys[0]] == SolrQuery::ORDER_ASC)
+				? SolrQuery::ORDER_ASC
+				: SolrQuery::ORDER_DESC;
 		}
 
 		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$displayableFields = TicketList::getDisplayableFields();
-		$sortableFields = TicketList::getSortableFields();
-		$sortingIsSupported = count($this->ticketList) < TicketList::$MAX_SORTABLE_ROWS;
+		$sortableFields = Search::getSortableFields('ticket');
 
 		// Loop through all the fields the user asked to see
 		foreach ($_GET['fields'] as $name=>$value) {
@@ -33,12 +31,19 @@ echo "
 
 				$label = $displayableFields[$name]['displayName'];
 
-				// Draw any sorting buttons we might need
-				if ($sortingIsSupported && array_key_exists($name,$sortableFields)) {
-					$url->sort = (isset($_GET['sort'][$name]) && $_GET['sort'][$name]==1)
-						? $url->sort = array($name=>-1)
-						: $url->sort = array($name=>1);
-					$class = $name==$currentSortField ? "class=\"$currentSortDirection\"" : '';
+				// If this field is being used for sorting,
+				// draw a url that reverses the sort order
+				if (in_array($name, $sortableFields)) {
+					$url->sort = ($currentSort['field'] == $name
+								  && $currentSort['order'] == SolrQuery::ORDER_ASC)
+						? array($name=>SolrQuery::ORDER_DESC)
+						: array($name=>SolrQuery::ORDER_ASC);
+					$class = '';
+					if ($name == $currentSort['field']) {
+						$class = $currentSort['order'] == SolrQuery::ORDER_ASC
+							? 'class="ascending"'
+							: 'class="descending"';
+					}
 					echo "<th><a href=\"$url\" $class>$label</a></th>";
 				}
 				else {

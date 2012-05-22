@@ -3,6 +3,7 @@
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param SolrObject $this->solrObject
  */
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
@@ -10,13 +11,13 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 <div class="searchForm">
 	<?php
 		if (userIsAllowed('tickets','add')) {
-			$number = isset($_GET['number']) ? (int)$_GET['number'] : '';
+			$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 			echo "
 			<div class=\"quickSearches\">
 				<h2>Quick Search</h2>
 				<form method=\"get\" action=\"".BASE_URL."/tickets\">
 					<fieldset>
-						<label>Case # <input name=\"number\" value=\"$number\"/></label>
+						<label>Case # <input name=\"id\" value=\"$id\"/></label>
 						<button type=\"submit\" class=\"search\">Search</button>
 					</fieldset>
 				</form>
@@ -29,10 +30,10 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						</a>
 					</li>
 				";
-				if ($_SESSION['USER']->getDepartment()) {
-					$dept = $_SESSION['USER']->getDepartment();
+				if ($_SESSION['USER']->getDepartment_id()) {
+					$d = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets?status=open;department%5B%5D=$dept[_id]\">
+					<li><a href=\"".BASE_URL."/tickets?status=open;department%5B%5D={$d->getId()}\">
 							All open cases for my department
 						</a>
 					</li>
@@ -46,177 +47,39 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 	?>
 	<div class="advancedSearch">
 		<h2>Advanced Search</h2>
-		<form method="get" action="<?php echo BASE_URL; ?>/tickets">
+		<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 			<fieldset id="advanced-search">
-				<div><h3>Department</h3>
-					<ul>
-					<?php
-						$list = new DepartmentList();
-						$list->find();
-						foreach ($list as $department) {
-							$checked = (isset($_GET['department'])
-										&& in_array("{$department->getId()}",$_GET['department']))
-								? 'checked="checked"'
-								: '';
-							$name = View::escape($department->getName());
-							echo "
-							<li><label>
-									<input name=\"department[]\" type=\"checkbox\" value=\"{$department->getId()}\" $checked />
-									$name
-								</label>
-							</li>
-							";
-						}
-					?>
-					</ul>
-				</div>
 				<?php
-					$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
-					$list = new CategoryList();
-					$list->find(array('displayableTo'=>$person),array('name'=>1));
-					if (count($list)) {
-						echo "
-						<div><h3>Category</h3>
-							<ul>
-						";
-							foreach ($list as $category) {
-								$checked = (isset($_GET['category'])
-											&& in_array("{$category->getId()}",$_GET['category']))
-									? 'checked="checked"'
-									: '';
-								$name = View::escape($category);
-								echo "
-								<li><label>
-										<input name=\"category[]\" type=\"checkbox\" value=\"{$category->getId()}\" $checked />
-										$name
-									</label>
-								</li>
-								";
-							}
-						echo "
-							</ul>
-						</div>
-						";
-					}
+					if (isset($this->solrObject->facet_counts->facet_fields)) {
+						$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
+						$facetFields = $this->solrObject->facet_counts->facet_fields;
+						$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-					foreach (AddressService::$customFieldDescriptions as $key=>$config) {
-						echo "
-						<div><h3>$config[description]</h3>
-							<ul>
-						";
-						switch ($config['formElement']) {
-							case 'select':
-								$options = array();
-								foreach (Ticket::getDistinct($key) as $value) {
-									if (trim($value)) {
-										$options[] = $value;
+						foreach (Search::$facetFields['ticket'] as $key=>$displayName) {
+							$list = '';
+							foreach ($facetFields[$key] as $value=>$count) {
+								if ($count) {
+									$url = clone $currentURL;
+									$url->$key = $value;
+									try {
+										$displayValue = Search::getDisplayName('ticket', $key, $value);
+										$list.= "<li><a href=\"$url\">$displayValue</a> ($count)</li>";
+									}
+									catch (Exception $e) {
+										// Don't bother displaying any facets that are no longer in the system
 									}
 								}
-								sort($options);
-								foreach ($options as $value) {
-									$checked = (isset($_GET[$key]) && in_array($value,$_GET[$key]))
-										? 'checked="checked"'
-										: '';
-									$value = View::escape($value);
-									echo "
-									<li><label>
-											<input name=\"{$key}[]\" type=\"checkbox\" value=\"$value\" $checked />
-											$value
-										</label>
-									</li>
-									";
-								}
-								break;
-
-							default:
-								$value = isset($_GET[$key]) ? View::escape($_GET[$key]) : '';
-								echo "<input name=\"$key\" id=\"$key\" value=\"$value\" />";
+							}
+							if ($list) {
+								echo "
+								<div><h3>$displayName</h3>
+									<ul>$list</ul>
+								</div>
+								";
+							}
 						}
-						echo "
-							</ul>
-						</div>
-						";
 					}
 				?>
-				<div><h3>Labels</h3>
-					<ul>
-					<?php
-						foreach (Lookups::get('labels') as $label) {
-							$checked = (isset($_GET['labels']) && in_array($label,$_GET['labels']))
-								? 'checked="checked"'
-								: '';
-							$label = View::escape($label);
-							echo "
-							<li><label>
-									<input name=\"labels[]\" type=\"checkbox\" value=\"$label\" $checked />
-									$label
-								</label>
-							</li>
-							";
-						}
-					?>
-					</ul>
-				</div>
-				<div><h3><label for="type">Type</label></h3>
-					<div><select name="type" id="type"><option></option>
-						<?php
-							foreach (Ticket::getDistinct('issues.type') as $type) {
-								$selected = (isset($_GET['type']) && $_GET['type']==$type)
-									? 'selected="selected"'
-									: '';
-								$type = View::escape($type);
-								echo "<option value=\"$type\" $selected>$type</option>";
-							}
-						?>
-						</select>
-					</div>
-				</div>
-				<div><h3><label for="status">Status</label></h3>
-					<div><select name="status" id="status">
-							<option></option>
-							<?php
-								foreach (Ticket::getDistinct('status') as $status) {
-									$selected = (isset($_GET['status']) && $_GET['status']==$status)
-										? 'selected="selected"'
-										: '';
-									$status = View::escape($status);
-									echo "<option $selected>$status</option>";
-								}
-							?>
-					</select>
-					</div>
-				</div>
-				<div><h3>Case Created Date (e.g. 1/1/2011)</h3>
-					<table>
-						<tr><td><label for="start_date">Start: </label></td>
-							<td><input name="start_date" id="start_date" size="10" maxlength="10"
-									value="<?php echo !empty($_GET['start_date']) ? View::escape($_GET['start_date']) : ''; ?>" />
-							</td>
-						</tr>
-						<tr><td><label for="end_date">End:</label></td>
-							<td><input name="end_date" id="end_date" size="10" maxlength="10"
-									value="<?php echo !empty($_GET['end_date']) ? View::escape($_GET['end_date']) : ''; ?>" />
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div><h3><label for="client_id">Received Via</label></h3>
-					<div><select name="client_id" id="client_id">
-							<option></option>
-							<?php
-								$clients = new ClientList();
-								$clients->find();
-								foreach ($clients as $client) {
-									$selected = (isset($_GET['client_id']) && $_GET['client_id']=="{$client->getId()}")
-										? 'selected="selected"'
-										: '';
-									$name = View::escape($client->getName());
-									echo "<option value=\"{$client->getId()}\" $selected>$name</option>";
-								}
-							?>
-						</select>
-					</div>
-				</div>
 			</fieldset>
 
 

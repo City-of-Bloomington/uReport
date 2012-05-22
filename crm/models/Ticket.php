@@ -342,13 +342,7 @@ class Ticket extends ActiveRecord
 	 */
 	public function getHistory()
 	{
-		$history = array();
-		if (isset($this->data['history'])) {
-			foreach ($this->data['history'] as $data) {
-				$history[] = new History($data);
-			}
-		}
-		return $history;
+		return new TicketHistoryList(array('ticket_id'=>$this->getId()));
 	}
 
 
@@ -358,63 +352,6 @@ class Ticket extends ActiveRecord
 	public function getURL()
 	{
 		return BASE_URL."/tickets/view?ticket_id={$this->getId()}";
-	}
-
-	/**
-	 * @return Category
-	 */
-	public function getCategory()
-	{
-		if (isset($this->data['category'])) {
-			return new Category($this->data['category']);
-		}
-	}
-
-	/**
-	 * Changes a new category on this ticket
-	 *
-	 * Changing categories involves a definition change of custom fields.
-	 * Issues on the ticket will already have user-submitted data matching
-	 * the previous category's custom field definition.
-	 * We need to write out the current issue custom field data to
-	 * a comment in the history, so it's not lost.
-	 * Subsequent submissions for the new custom field data will
-	 * use and override the existing custom field data.
-	 * Fields that have the same name will be preserved during future edits
-	 * to the issue.
-	 *
-	 * @param MongoId|string|Category $category
-	 */
-	public function setCategory($category)
-	{
-		$oldCategory = $this->getCategory();
-
-		if (!$category instanceof Category) {
-			$category = new Category($category);
-		}
-		if ($category instanceof Category) {
-			$this->data['category'] = $category->getData();
-		}
-
-		if ($oldCategory && "{$oldCategory->getId()}"!="{$category->getId()}") {
-			$oldCustomFields = $oldCategory->getCustomFields();
-
-			foreach ($this->getIssues() as $index=>$issue) {
-				// Serialize any existing custom field data into a history entry
-				$notes = array();
-				$customData = $issue->getCustomFields();
-				foreach ($oldCustomFields as $definition) {
-					$definition['value'] = $customData[$definition['name']];
-					$notes[] = $definition;
-				}
-				if ($notes) {
-					$history = new History();
-					$history->setAction('categoryChange');
-					$history->setNotes(json_encode($notes));
-					$this->updateIssueHistory($index,$history);
-				}
-			}
-		}
 	}
 
 	/**
