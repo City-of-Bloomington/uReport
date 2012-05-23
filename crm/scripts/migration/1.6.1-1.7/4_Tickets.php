@@ -44,12 +44,11 @@ function createHistory($o, $h)
 // Tickets
 $result = $mongo->tickets->find();
 foreach ($result as $r) {
-	echo "Ticket: $r[number] \n";
 	// Start a ticket record, using mongo's ticket number as the ID
 	$d = DateTime::createFromFormat('U', $r['enteredDate']->sec);
 	$data = array(
 		'id'=>$r['number'],
-		'enteredDate'=>$d->format('Y-m-d H:i:s');
+		'enteredDate'=>$d->format('Y-m-d H:i:s')
 	);
 	if (!empty($r['category'])) {
 		$c = new Category($r['category']['name']);
@@ -73,13 +72,24 @@ foreach ($result as $r) {
 		$data['longitude'] = $r['coordinates']['longitude'];
 	}
 	if (!empty($r['resolution'])) {
-		$resolution = new Resolution($r['resolution']);
-		$data['resolution_id'] = $resolution->getId();
+		try {
+			$resolution = new Resolution($r['resolution']);
+			$data['resolution_id'] = $resolution->getId();
+		}
+		catch (Exception $e) { } // Just ignore bad Resolutions
 	}
 
-	$zend_db->insert('tickets', $data);
+	try {
+		$zend_db->insert('tickets', $data);
+	}
+	catch (Exception $e) {
+		echo "Ticket save failed {$e->getMessage()}\n";
+		print_r($data);
+		print_r($r);
+		exit();
+	}
 	$ticket = new Ticket($data['id']);
-	echo "Ticket: {$ticket->getId()}\n";
+	echo "Ticket: {$ticket->getId()} ";
 
 	if (isset($r['history'])) {
 		foreach ($r['history'] as $h) { createHistory($ticket, $h); }
@@ -91,10 +101,16 @@ foreach ($result as $r) {
 		$issue = new Issue();
 		$issue->setTicket($ticket);
 		if (!empty($i['contactMethod'])) {
-			$issue->setContactMethod(new ContactMethod($i['contactMethod']));
+			try {
+				$issue->setContactMethod(new ContactMethod($i['contactMethod']));
+			}
+			catch (Exception $e) { } // Just ignore bad contactMethods
 		}
 		if (!empty($i['responseMethod'])) {
-			$issue->setResponseMethod(new ResponseMethod($i['responseMethod']));
+			try {
+				$issue->setResponseMethod(new ContactMethod($i['responseMethod']));
+			}
+			catch (Exception $e) { } // Just ignore bad contactMethods
 		}
 		if (!empty($i['type'])) {
 			$issue->setIssueType(new IssueType($i['type']));
@@ -107,7 +123,7 @@ foreach ($result as $r) {
 		}
 		if (!empty($i['date'])) {
 			$d = DateTime::createFromFormat('U', $i['date']->sec);
-			$issue->setDate($d->format('Y-m-d H:i:s');
+			$issue->setDate($d->format('Y-m-d H:i:s'));
 		}
 		if (!empty($i['enteredByPerson'])) {
 			$id = getPersonIdFromCrosswalk($i['enteredByPerson']['_id']);
@@ -136,7 +152,7 @@ foreach ($result as $r) {
 				$response->setIssue($issue);
 				if (!empty($res['date'])) {
 					$d = DateTime::createFromFormat('U', $res['date']->sec);
-					$response->setDate($d->format('Y-m-d H:i:s');
+					$response->setDate($d->format('Y-m-d H:i:s'));
 				}
 				if (!empty($res['contactMethod'])) {
 					$response->setContactMethod(new ContactMethod($res['contactMethod']));
@@ -150,6 +166,9 @@ foreach ($result as $r) {
 				}
 				$response->save();
 			}
+		}
+		if (isset($i['media'])) {
+			// To Do: Handle Media files
 		}
 		echo "[$count] ";
 	}

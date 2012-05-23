@@ -104,7 +104,7 @@ create table clients (
 
 create table tickets (
 	id                 int         unsigned not null primary key auto_increment,
-	category_id        int         unsigned not null,
+	category_id        int         unsigned,
 	client_id          int         unsigned,
 	enteredByPerson_id int         unsigned,
 	assignedPerson_id  int         unsigned,

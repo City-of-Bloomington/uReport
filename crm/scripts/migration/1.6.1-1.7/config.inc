@@ -24,6 +24,6 @@ $zend_db->query($sql);
 function getPersonIdFromCrosswalk($mongo_id)
 {
 	global $zend_db;
-	$sql = 'select person_id from people_crosswalk where id=?';
-	return $zend_db->fetchCol($sql, array((string)$mongo_id));
+	$sql = 'select person_id from people_crosswalk where mongo_id=?';
+	return $zend_db->fetchOne($sql, array((string)$mongo_id));
 }

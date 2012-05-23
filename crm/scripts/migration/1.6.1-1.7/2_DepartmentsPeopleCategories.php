@@ -103,11 +103,20 @@ foreach ($result as $r) {
 	if (!empty($r['categories'])) {
 		$ids = array();
 		foreach ($r['categories'] as $c) {
-			$category = new Category($c['name']);
-			$ids[] = $category->getId();
+			try {
+				$category = new Category($c['name']);
+				$ids[] = $category->getId();
+			}
+			catch (Exception $e) {
+				// Departments may have old categories we have deleted
+				// Just ignore them
+			}
 		}
 		$d->setCategories($ids);
 	}
 	$d->save();
-	echo "Department: Linked defaultPerson and categories\n";
+
+	$p = $d->getDefaultPerson();
+	$p = $p ? $p->getFullname() : '';
+	echo "Department: {$d->getName()} Person: $p\n";
 }
