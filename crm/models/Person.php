@@ -261,12 +261,12 @@ class Person extends MongoRecord
 	public function getUsername()             { return parent::get('username'); }
 	public function getPassword()             { return parent::get('password'); } # Encrypted
 	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
-	public function getRole()                 { return parent::get('roles'); }
+	public function getRole()                 { return parent::get('role'); }
 
 	public function setUsername            ($s) { $this->data['username']             = trim($s); }
 	public function setPassword            ($s) { $this->data['password']             = sha1($s); }
 	public function setAuthenticationMethod($s) { $this->data['authenticationMethod'] = trim($s); }
-	public function setRole                ($s) { $this->data['roles']                = trim($s); }
+	public function setRole                ($s) { $this->data['role']                 = trim($s); }
 
 	/**
 	 * Should provide the list of methods supported
