@@ -64,9 +64,9 @@ class Issue extends ActiveRecord
 	 */
 	public function validate($preliminary=false)
 	{
-		if (!$this->getIssueType_id()) {
-			throw new Exception('issues/missingType');
-		}
+		if (!$this->getTicket_id())    { throw new Exception('issues/missingTicket'); }
+		if (!$this->getIssueType_id()) { throw new Exception('issues/missingType');   }
+		if (!$this->getDate()) { $this->setDate('now'); }
 
 		if (isset($_SESSION['USER'])) {
 			if (!$this->getEnteredByPerson_id()) {
@@ -77,9 +77,6 @@ class Issue extends ActiveRecord
 			}
 		}
 
-		if (!$this->getDate()) {
-			$this->setDate('now');
-		}
 	}
 
 	public function save() { parent::save(); }

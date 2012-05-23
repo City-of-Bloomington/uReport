@@ -65,13 +65,13 @@ class Person extends ActiveRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if ((!$this->data['firstname'] && !$this->data['lastname'])
-			&& !$this->data['organization']) {
+		if ((!$this->getFirstname() && !$this->getLastname())
+			&& !$this->getOrganization()) {
 			throw new Exception('missingRequiredFields');
 		}
 
-		if (isset($this->data['username']) && !isset($this->data['authenticationMethod'])) {
-			$this->data['authenticationMethod'] = 'local';
+		if ($this->getUsername() && !$this->getAuthenticationMethod()) {
+			$this->setAuthenticationMethod('local');
 		}
 	}
 
@@ -79,7 +79,12 @@ class Person extends ActiveRecord
 	{
 		parent::save();
 		if ($this->phonesUpdated) {
-			foreach ($this->phones as $phone) { $phone->save(); }
+			foreach ($this->phones as $phone) {
+				if (!$phone->getPerson_id()) {
+					$phone->setPerson($this);
+				}
+				$phone->save();
+			}
 		}
 	}
 

@@ -61,13 +61,13 @@ insert actions (name,type,description) values('referral',  'system','{enteredByP
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
 	name     varchar(50) not null,
-	ordering tinyint     unsigned not null default 0
+	ordering tinyint     unsigned
 );
 
 create table categories (
 	id                     int          unsigned not null primary key auto_increment,
 	name                   varchar(50)  not null,
-	description            varchar(128) not null,
+	description            varchar(128),
 	department_id          int          unsigned not null,
 	categoryGroup_id       int          unsigned,
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',

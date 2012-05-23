@@ -477,7 +477,8 @@ class Ticket extends ActiveRecord
 	{
 		// Set all the location information using any fields the user posted
 		$fields = array(
-			'location','latitude','longitude','city','state','zip','client_id'
+			'category_id', 'client_id',
+			'location', 'latitude', 'longitude', 'city', 'state', 'zip'
 		);
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
@@ -501,8 +502,8 @@ class Ticket extends ActiveRecord
 		// If the user posted any Notes for the person they're assigning
 		// this ticket to, we need to temporarily save those.
 		// Initial assignment creation doesn't happen until Ticket::save()
-		if (isset($post['assignedPerson'])) {
-			$this->setAssignedPerson($post['assignedPerson']);
+		if (isset($post['assignedPerson_id'])) {
+			$this->setAssignedPerson($post['assignedPerson_id']);
 		}
 		if (isset($post['notes'])) {
 			$this->assignmentNotes = $post['notes'];
