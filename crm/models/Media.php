@@ -89,12 +89,15 @@ class Media extends ActiveRecord
 		if (!$this->data['media_type']) { throw new Exception('media/missingMediaType'); }
 	}
 
+	public function save() { parent::save(); }
+
 	/**
 	 * Deletes the file from the hard drive
 	 */
 	public function delete()
 	{
 		unlink(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
+		parent::delete();
 	}
 	//----------------------------------------------------------------
 	// Generic Getters & Setters

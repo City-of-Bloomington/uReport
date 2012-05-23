@@ -40,7 +40,7 @@ class CategoryGroupsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$group->set($_POST);
+			$group->handleUpdate($_POST);
 			try {
 				$group->save();
 				header('Location: '.BASE_URL.'/categoryGroups');

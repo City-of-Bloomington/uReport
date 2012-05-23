@@ -42,9 +42,7 @@ class ResolutionsController extends Controller
 
 
 		if (isset($_POST['name'])) {
-			$resolution->setName($_POST['name']);
-			$resolution->setDescription($_POST['description']);
-
+			$resolution->handleUpdate($_POST);
 			try {
 				$resolution->save();
 				header('Location: '.BASE_URL.'/resolutions');

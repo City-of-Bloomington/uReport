@@ -38,7 +38,7 @@ class CategoriesController extends Controller
 
 		if (isset($_POST['name'])) {
 			try {
-				$category->set($_POST);
+				$category->handleUpdate($_POST);
 				$category->save();
 				header('Location: '.BASE_URL.'/categories');
 				exit();

@@ -34,6 +34,7 @@ class TicketsController extends Controller
 			$this->template->blocks['search-form'][] = new Block('tickets/addNewForm.inc');
 		}
 
+		/*
 		$search = new Search();
 		$solrObject = $search->query($_GET);
 
@@ -49,6 +50,7 @@ class TicketsController extends Controller
 			'tickets/searchResults.inc',
 			array('solrObject'=>$solrObject)
 		);
+		*/
 	}
 
 	/**

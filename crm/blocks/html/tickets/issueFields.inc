@@ -1,20 +1,23 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
 ?>
 <table>
-	<tr><td><label for="issue[type]" class="required">Type</label></td>
-		<td><select name="issue[type]" id="issue-type">
+	<tr><td><label for="issue[issueType_id]" class="required">Type</label></td>
+		<td><select name="issue[issueType_id]" id="issue-issueType_id">
 				<?php
-					foreach (Lookups::get('types') as $type) {
-						$selected = ($this->issue->getType()==$type)
+					$list = new IssueTypeList();
+					$list->find();
+					foreach ($list as $type) {
+						$selected = $this->issue->getIssueType_id()==$type->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$type</option>";
+						$name = View::escape($type->getName());
+						echo "<option value=\"{$type->getId()}\" $selected>$type</option>";
 					}
 				?>
 			</select>
@@ -42,15 +45,18 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-contactMethod">Received via</label></td>
-		<td><select name="issue[contactMethod]" id="issue-contactMethod">
+	<tr><td><label for="issue-contactMethod_id">Received via</label></td>
+		<td><select name="issue[contactMethod_id]" id="issue-contactMethod_id">
 				<option></option>
 				<?php
-					foreach (Lookups::get('contactMethods') as $method) {
-						$selected = $this->issue->getContactMethod()==$method
+					$contactMethods = new ContactMethodList();
+					$contactMethods->find();
+					foreach ($contactMethods as $method) {
+						$selected = $this->issue->getContactMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$method</option>";
+						$name = View::escape($method->getName());
+						echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
 					}
 				?>
 			</select>
@@ -62,11 +68,12 @@
 				<option value=""></option>
 				<?php
 					// Use the same drop down as the contact method
-					foreach (Lookups::get('contactMethods') as $method) {
-						$selected = $this->issue->getContactMethod()==$method
+					foreach ($contactMethods as $method) {
+						$selected = $this->issue->getResponseMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$method</option>";
+						$name = View::escape($method->getName());
+						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
 					}
 				?>
 			</select>
@@ -76,14 +83,18 @@
 	<tr><td><label>Labels</label></td>
 		<td>
 		<?php
-			foreach (Lookups::get('labels') as $label) {
+			$list = new LabelList();
+			$list->find();
+			foreach ($list as $label) {
 				$checked = $this->issue->hasLabel($label)
 					? 'checked="checked"'
 					: '';
+				$name = View::escape($label->getName());
 				echo "
 				<label>
-					<input type=\"checkbox\" name=\"issue[labels][]\" value=\"$label\" $checked />
-					$label
+					<input type=\"checkbox\" name=\"issue[labels][]\"
+						value=\"{$label->getId()}\" $checked />
+					$name
 				</label>
 				";
 			}

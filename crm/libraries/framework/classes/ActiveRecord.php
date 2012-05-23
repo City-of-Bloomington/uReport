@@ -7,7 +7,6 @@
 abstract class ActiveRecord
 {
 	protected $tablename;
-	protected $allowsDelete = false;
 	protected $data = array();
 
 	const MYSQL_DATE_FORMAT = 'Y-m-d H:i:s';
@@ -17,7 +16,7 @@ abstract class ActiveRecord
 	/**
 	 * Writes the database back to the database
 	 */
-	public function save()
+	protected function save()
 	{
 		$this->validate();
 		$zend_db = Database::getConnection();
@@ -33,9 +32,9 @@ abstract class ActiveRecord
 	/**
 	 * Removes this record from the database
 	 */
-	public function delete()
+	protected function delete()
 	{
-		if ($this->getId() && $this->allowsDelete) {
+		if ($this->getId()) {
 			$zend_db = Database::getConnection();
 			$zend_db->delete($this->tablename, 'id='.$this->getId());
 		}
@@ -46,11 +45,21 @@ abstract class ActiveRecord
 	 *
 	 * @param string $fieldname
 	 */
-	public function get($fieldname)
+	protected function get($fieldname)
 	{
 		if (isset($this->data[$fieldname])) {
 			return $this->data[$fieldname];
 		}
+	}
+
+	/**
+	 * @param string $fieldname
+	 * @param string $value
+	 */
+	protected function set($fieldname, $value)
+	{
+		$value = trim($value);
+		$this->data[$fieldname] = $value ? $value : null;
 	}
 
 	/**
@@ -65,7 +74,7 @@ abstract class ActiveRecord
 	 * @param DateTimeZone $timezone
 	 * @return string
 	 */
-	public function getDateData($dateField, $format=null, DateTimeZone $timezone=null)
+	protected function getDateData($dateField, $format=null, DateTimeZone $timezone=null)
 	{
 		if (isset($this->data[$dateField])) {
 			if ($format) {
@@ -88,7 +97,7 @@ abstract class ActiveRecord
 	 * @param string $dateField
 	 * @param string $date
 	 */
-	public function setDateData($dateField, $date)
+	protected function setDateData($dateField, $date)
 	{
 		$date = trim($date);
 		if ($date) {
@@ -109,7 +118,7 @@ abstract class ActiveRecord
 	 * @param string $class
 	 * @param string $field
 	 */
-	public function getForeignKeyObject($class, $field)
+	protected function getForeignKeyObject($class, $field)
 	{
 		$var = preg_replace('/_id$/', '', $field);
 		if (!$this->$var && isset($this->data[$field])) {
@@ -128,7 +137,7 @@ abstract class ActiveRecord
 	 * @param string $field
 	 * @param string $id
 	 */
-	public function setForeignKeyField($class, $field, $id)
+	protected function setForeignKeyField($class, $field, $id)
 	{
 		$id = trim($id);
 		$var = preg_replace('/_id$/', '', $field);
@@ -152,7 +161,7 @@ abstract class ActiveRecord
 	 * @param string $field
 	 * @param Object $object
 	 */
-	public function setForeignKeyObject($class, $field, $object)
+	protected function setForeignKeyObject($class, $field, $object)
 	{
 		if ($object instanceof $class) {
 			$var = preg_replace('/_id$/', '', $field);

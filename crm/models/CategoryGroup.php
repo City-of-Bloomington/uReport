@@ -7,7 +7,6 @@
 class CategoryGroup extends ActiveRecord
 {
 	protected $tablename = 'categoryGroups';
-	protected $allowsDelete = true;
 
 	/**
 	 * Populates the object with data
@@ -60,6 +59,9 @@ class CategoryGroup extends ActiveRecord
 		}
 	}
 
+	public function save()   { parent::save();   }
+	public function delete() { parent::delete(); }
+
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
@@ -68,13 +70,13 @@ class CategoryGroup extends ActiveRecord
 	public function getOrdering()   { return parent::get('ordering'); }
 	public function __toString()	{ return parent::get('name');     }
 
-	public function setName($s)	    { $this->data['name']     = trim($s); }
-	public function setOrdering($i)	{ $this->data['ordering'] = (int)$i;  }
+	public function setName    ($s) { parent::set('name',     $s); }
+	public function setOrdering($s)	{ parent::set('ordering', $s); }
 
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		$this->setName    ($post['name']);
 		$this->setOrdering($post['ordering']);

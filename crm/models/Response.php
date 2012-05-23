@@ -6,6 +6,8 @@
  */
 class Response extends ActiveRecord
 {
+	protected $tablename = 'responses';
+
 	/**
 	 * Populates the object with data
 	 *
@@ -26,7 +28,7 @@ class Response extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from labels where id=?';
+				$sql = 'select * from responses where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
@@ -50,6 +52,8 @@ class Response extends ActiveRecord
 		if (!$this->getPerson_id()) { throw new Exception('response/unknownPerson'); }
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters
 	//----------------------------------------------------------------
@@ -57,7 +61,7 @@ class Response extends ActiveRecord
 	public function getNotes()            { return parent::get('notes');            }
 	public function getDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('date', $f, $tz); }
 
-	public function setNotes($s) { $this->data['notes'] = trim($s); }
+	public function setNotes($s) { parent::set('notes', $s); }
 	public function setDate($d) { parent::setDateData('date', $d); }
 
 	public function getIssue_id()         { return parent::get('issue_id');         }

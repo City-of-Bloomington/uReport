@@ -64,6 +64,8 @@ class Action extends ActiveRecord
 		}
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -72,8 +74,8 @@ class Action extends ActiveRecord
 	public function getDescription() { return parent::get('description'); }
 	public function getType()        { return parent::get('type');        }
 
-	public function setName($s)        { $this->data['name']        = trim($s); }
-	public function setDescription($s) { $this->data['description'] = trim($s); }
+	public function setName($s)        { parent::set('name',        $s); }
+	public function setDescription($s) { parent::set('description', $s); }
 
 	/**
 	 * @param string $string
@@ -81,8 +83,16 @@ class Action extends ActiveRecord
 	public function setType($string)
 	{
 		$string = trim($string);
-		if (in_array($string, self::$types)) {
-			$this->data['type'] = $string;
-		}
+		if (in_array($string, self::$types)) { $this->data['type'] = $string; }
+	}
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setName($post['name']);
+		$this->setDescription($post['description']);
+		$this->setType($post['type']);
 	}
 }

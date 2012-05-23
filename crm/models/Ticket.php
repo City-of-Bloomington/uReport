@@ -7,7 +7,6 @@
 class Ticket extends ActiveRecord
 {
 	protected $tablename = 'tickets';
-	protected $allowsDelete = true;
 
 	protected $resolution;
 	protected $category;
@@ -183,13 +182,13 @@ class Ticket extends ActiveRecord
 	public function getReferredPerson()  { return parent::getForeignKeyObject('Person',     'referredPerson_id');  }
 
 
-	public function setAddress_id($id) { $this->data['address_id'] = (int)$id;  }
-	public function setLatitude($s)    { $this->data['latitude']   = (float)$s; }
-	public function setLongitude($s)   { $this->data['longitude']  = (float)$s; }
-	public function setLocation($s)    { $this->data['location']   = trim($s);  }
-	public function setCity($s)        { $this->data['city']       = trim($s);  }
-	public function setState($s)       { $this->data['state']      = trim($s);  }
-	public function setZip($s)         { $this->data['zip']        = trim($s);  }
+	public function setAddress_id($s)  { parent::set('address_id', $s); }
+	public function setLatitude  ($s)  { parent::set('latitude',   $s); }
+	public function setLongitude ($s)  { parent::set('longitude',  $s); }
+	public function setLocation  ($s)  { parent::set('location',   $s); }
+	public function setCity      ($s)  { parent::set('city',       $s); }
+	public function setState     ($s)  { parent::set('state',      $s); }
+	public function setZip       ($s)  { parent::set('zip',        $s); }
 	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
 	public function setResolution_id     ($id) { parent::setForeignKeyField('Resolution', 'resolution_id',      $id); }
 	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
@@ -474,7 +473,7 @@ class Ticket extends ActiveRecord
 	 *
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		// Set all the location information using any fields the user posted
 		$fields = array(

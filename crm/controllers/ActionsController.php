@@ -36,11 +36,9 @@ class ActionsController extends Controller
 
 
 		if (isset($_POST['name'])) {
-			$action->setName($_POST['name']);
-			$action->setDescription($_POST['description']);
-			$action->setType($_POST['type']);
-
+			$action->handleUpdate($_POST);
 			try {
+
 				$action->save();
 				header('Location: '.BASE_URL.'/actions');
 				exit();

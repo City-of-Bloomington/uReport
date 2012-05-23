@@ -61,6 +61,8 @@ class Category extends ActiveRecord
 		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
@@ -72,16 +74,22 @@ class Category extends ActiveRecord
 	public function getDescription()            { return parent::get('description');            }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
+	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
+	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
 
-	public function setName                  ($s) { $this->data['name']                   = trim($s); }
-	public function setDescription           ($s) { $this->data['description']            = trim($s); }
-	public function setPostingPermissionLevel($s) { $this->data['postingPermissionLevel'] = trim($s); }
-	public function setDisplayPermissionLevel($s) { $this->data['displayPermissionLevel'] = trim($s); }
+	public function setName                  ($s) { parent::set('name',                  $s); }
+	public function setDescription           ($s) { parent::set('description',           $s); }
+	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
+	public function setDisplayPermissionLevel($s) { parent::set('displayPermissionLevel',$s); }
+	public function setDepartment_id   ($id)           { parent::setForeignKeyField( 'Department',    'department_id',    $id); }
+	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( 'CategoryGroup', 'categoryGroup_id', $id); }
+	public function setDepartment   (Department    $o) { parent::setForeignKeyObject('Department',    'department_id',    $o);  }
+	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $o);  }
 
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		$this->setName                  ($post['name']);
 		$this->setDescription           ($post['description']);
@@ -91,14 +99,6 @@ class Category extends ActiveRecord
 		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
 		$this->setCustomFields          ($post['custom_fields']);
 	}
-
-	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
-	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
-	public function setDepartment_id($id)              { parent::setForeignKeyField('Department',     'department_id',    $id); }
-	public function setCategoryGroup_id($id)           { parent::setForeignKeyField('CategoryGroup',  'categoryGroup_id', $id); }
-	public function setDepartment(Department $d)       { parent::setForeignKeyObject('Department',    'department_id',    $d);  }
-	public function setCategoryGroup(CategoryGroup $g) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $g);  }
-
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------

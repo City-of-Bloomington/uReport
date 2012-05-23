@@ -9,7 +9,6 @@
 class Client extends ActiveRecord
 {
 	protected $tablename = 'clients';
-	protected $allowsDelete = true;
 
 	protected $contactPerson;
 	/**
@@ -65,6 +64,9 @@ class Client extends ActiveRecord
 		}
 	}
 
+	public function save()   { parent::save();   }
+	public function delete() { parent::delete(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
@@ -75,8 +77,8 @@ class Client extends ActiveRecord
 	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
 	public function getContactPerson()    { return parent::getForeignKeyObject('Person', 'contactPerson_id'); }
 
-	public function setName($s) { $this->data['name'] = trim($s); }
-	public function setURL ($s) { $this->data['url']  = trim($s); }
+	public function setName($s) { parent::set('name', $s); }
+	public function setURL ($s) { parent::set('url',  $s); }
 	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person', 'contactPerson_id', $id); }
 	public function setContactPerson(Person $p) { parent::setForeignKeyObject('Person', 'contactPerson_id', $p);  }
 

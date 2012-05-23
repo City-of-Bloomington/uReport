@@ -34,7 +34,7 @@ class LabelsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$label->setName($_POST['name']);
+			$label->handleUpdate($_POST);
 			try {
 				$label->save();
 				header('Location: '.BASE_URL.'/labels');

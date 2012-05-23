@@ -7,7 +7,6 @@
 class Phone extends ActiveRecord
 {
 	protected $tablename = 'phones';
-	protected $allowsDelete = true;
 	/**
 	 * Populates the object with data
 	 *
@@ -50,6 +49,8 @@ class Phone extends ActiveRecord
 		if (!$this->getPerson_id()) { throw new Exception('phones/missingPerson'); }
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -57,8 +58,8 @@ class Phone extends ActiveRecord
 	public function getNumber()   { return parent::get('number');   }
 	public function getDeviceId() { return parent::get('deviceId'); }
 
-	public function setNumber  ($s) { $this->data['number']   = trim($s); }
-	public function setDeviceId($s) { $this->data['deviceId'] = trim($s); }
+	public function setNumber  ($s) { parent::set('number',   $s); }
+	public function setDeviceId($s) { parent::set('deviceId', $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
 	public function getPerson()    { return parent::getForeignKeyObject('Person', 'person_id');      }

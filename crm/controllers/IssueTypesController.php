@@ -34,7 +34,7 @@ class IssueTypesController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$type->setName($_POST['name']);
+			$type->handleUpdate($post);
 			try {
 				$type->save();
 				header('Location: '.BASE_URL.'/issueTypes');

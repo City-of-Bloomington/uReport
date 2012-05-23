@@ -54,6 +54,8 @@ class IssueType extends ActiveRecord
 		}
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -61,5 +63,13 @@ class IssueType extends ActiveRecord
 	public function getId()      { return parent::get('id');   }
 	public function getName()    { return parent::get('name'); }
 
-	public function setName($s) { $this->data['name'] = trim($s); }
+	public function setName($s) { parent::set('name', $s); }
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setName($post['name']);
+	}
 }

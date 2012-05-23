@@ -34,7 +34,7 @@ class ContactMethodsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$method->setName($_POST['name']);
+			$method->handleUpdate($_POST);
 			try {
 				$method->save();
 				header('Location: '.BASE_URL.'/contactMethods');

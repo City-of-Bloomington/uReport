@@ -7,7 +7,6 @@
 class Department extends ActiveRecord
 {
 	protected $tablename = 'departments';
-	protected $allowsDelete = false;
 
 	protected $defaultPerson;
 	private $categories = array();
@@ -94,7 +93,7 @@ class Department extends ActiveRecord
 	public function getDefaultPerson_id() { return parent::get('defaultPerson_id'); }
 	public function getDefaultPerson()    { return parent::getForeignKeyObject('Person', 'defaultPerson_id'); }
 
-	public function setName($s)  { $this->data['name'] = trim($s); }
+	public function setName($s)  { parent::set('name', $s); }
 	public function setDefaultPerson_id($id)    { parent::setForeignKeyField( 'Person', 'defaultPerson_id', $id); }
 	public function setDefaultPerson(Person $p) { parent::setForeignKeyObject('Person', 'defaultPerson_id', $p);  }
 

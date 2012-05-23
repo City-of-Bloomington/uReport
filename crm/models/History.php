@@ -70,6 +70,9 @@ abstract class History extends ActiveRecord
 		}
 	}
 
+	public function save()   { parent::save();   }
+	public function delete() { parent::delete(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -83,8 +86,8 @@ abstract class History extends ActiveRecord
 	public function getEnteredByPerson()    { return parent::getForeignKeyObject(  'Person', 'enteredByPerson_id');      }
 	public function getActionPerson()       { return parent::getForeignKeyObject(  'Person', 'actionPerson_id');         }
 
-	public function setAction($s) { $this->data['action'] = trim($s); }
-	public function setNotes ($s) { $this->data['notes']  = trim($s); }
+	public function setAction($s) { parent::set('action', $s); }
+	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
 	public function setActionDate ($d) { parent::setDateData('actionDate',  $d); }
 	public function setEnteredByPerson_id($id)    { parent::setForeignKeyField( 'Person', 'enteredByPerson_id', $id); }
@@ -101,7 +104,7 @@ abstract class History extends ActiveRecord
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		$this->setAction($post['action']);
 		$this->setActionDate($post['actionDate']);

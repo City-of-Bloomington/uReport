@@ -7,7 +7,6 @@
 class Person extends ActiveRecord
 {
 	protected $tablename = 'people';
-	protected $allowsDelete = true;
 
 	protected $department;
 	protected $phones = array();
@@ -123,15 +122,15 @@ class Person extends ActiveRecord
 	public function getState()         { return parent::get('state');        }
 	public function getZip()           { return parent::get('zip');          }
 
-	public function setFirstname   ($s) { $this->data['firstname']    = trim($s); }
-	public function setMiddlename  ($s) { $this->data['middlename']   = trim($s); }
-	public function setLastname    ($s) { $this->data['lastname']     = trim($s); }
-	public function setEmail       ($s) { $this->data['email']        = trim($s); }
-	public function setOrganization($s) { $this->data['organization'] = trim($s); }
-	public function setAddress     ($s) { $this->data['address']      = trim($s); }
-	public function setCity        ($s) { $this->data['city']         = trim($s); }
-	public function setState       ($s) { $this->data['state']        = trim($s); }
-	public function setZip         ($s) { $this->data['zip']          = trim($s); }
+	public function setFirstname   ($s) { parent::set('firstname',    $s); }
+	public function setMiddlename  ($s) { parent::set('middlename',   $s); }
+	public function setLastname    ($s) { parent::set('lastname',     $s); }
+	public function setEmail       ($s) { parent::set('email',        $s); }
+	public function setOrganization($s) { parent::set('organization', $s); }
+	public function setAddress     ($s) { parent::set('address',      $s); }
+	public function setCity        ($s) { parent::set('city',         $s); }
+	public function setState       ($s) { parent::set('state',        $s); }
+	public function setZip         ($s) { parent::set('zip',          $s); }
 
 	public function getDepartment_id()    { return parent::get('department_id'); }
 	public function getDepartment()       { return parent::getForeignKeyObject('Department', 'department_id');      }
@@ -143,9 +142,9 @@ class Person extends ActiveRecord
 	public function getRole()                 { return parent::get('role');     }
 	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
 
-	public function setUsername            ($s) { $this->data['username']             = trim($s); }
-	public function setRole                ($s) { $this->data['role']                 = trim($s); }
-	public function setAuthenticationMethod($s) { $this->data['authenticationMethod'] = trim($s); }
+	public function setUsername            ($s) { parent::set('username',             $s); }
+	public function setRole                ($s) { parent::set('role',                 $s); }
+	public function setAuthenticationMethod($s) { parent::set('authenticationMethod', $s); }
 
 	public function setPassword($s)
 	{

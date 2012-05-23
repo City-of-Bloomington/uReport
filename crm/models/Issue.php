@@ -82,6 +82,8 @@ class Issue extends ActiveRecord
 		}
 	}
 
+	public function save() { parent::save(); }
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -99,7 +101,7 @@ class Issue extends ActiveRecord
 	public function getEnteredByPerson()  { return parent::getForeignKeyObject('Person',        'enteredByPerson_id');  }
 	public function getReportedByPerson() { return parent::getForeignKeyObject('Person',        'reportedByPerson_id'); }
 
-	public function setDescription ($s) { $this->data['description']    = trim($s); }
+	public function setDescription ($s) { parent::set('description', $s); }
 	public function setDate($d)         { parent::setDateData('date', $d); }
 	public function setTicket_id          ($id) { parent::setForeignKeyField('Ticket',        'ticket_id',           $id); }
 	public function setContactMethod_id   ($id) { parent::setForeignKeyField('ContactMethod', 'contactMethod_id',    $id); }
@@ -117,7 +119,7 @@ class Issue extends ActiveRecord
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
 		if (!isset($post['labels'])) {
 			$post['labels'] = array();
