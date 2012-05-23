@@ -51,8 +51,11 @@ foreach ($result as $r) {
 		'enteredDate'=>$d->format('Y-m-d H:i:s')
 	);
 	if (!empty($r['category'])) {
-		$c = new Category($r['category']['name']);
-		$data['category_id'] = $c->getId();
+		try {
+			$c = new Category($r['category']['name']);
+			$data['category_id'] = $c->getId();
+		}
+		catch (Exception $e) { } // Just ignore bad categories
 	}
 	$peopleFields = array('enteredByPerson', 'assignedPerson', 'referredPerson');
 	foreach ($peopleFields as $f) {
@@ -171,6 +174,7 @@ foreach ($result as $r) {
 			// To Do: Handle Media files
 		}
 		echo "[$count] ";
+		$count++;
 	}
 	echo "Done\n";
 }
