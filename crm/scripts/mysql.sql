@@ -132,13 +132,14 @@ create table ticketHistory (
 	ticket_id          int       unsigned not null,
 	enteredByPerson_id int       unsigned,
 	actionPerson_id    int       unsigned,
+	action_id          int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
 	actionDate         timestamp,
-	action             varchar(128),
 	notes              text,
 	foreign key (ticket_id)          references tickets(id),
 	foreign key (enteredByPerson_id) references people (id),
-	foreign key (actionPerson_id)    references people (id)
+	foreign key (actionPerson_id)    references people (id),
+	foreign key (action_id)          references actions(id)
 );
 
 create table contactMethods (
@@ -188,13 +189,14 @@ create table issueHistory (
 	issue_id           int       unsigned not null,
 	enteredByPerson_id int       unsigned,
 	actionPerson_id    int       unsigned,
+	action_id          int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
 	actionDate         timestamp,
-	action             varchar(128),
 	notes              text,
-	foreign key (issue_id)           references issues(id),
-	foreign key (enteredByPerson_id) references people(id),
-	foreign key (actionPerson_id)    references people(id)
+	foreign key (issue_id)           references issues (id),
+	foreign key (enteredByPerson_id) references people (id),
+	foreign key (actionPerson_id)    references people (id),
+	foreign key (action_id)          references actions(id)
 );
 
 create table media (

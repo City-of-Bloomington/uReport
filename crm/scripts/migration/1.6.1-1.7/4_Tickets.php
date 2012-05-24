@@ -33,7 +33,16 @@ function createHistory($o, $h)
 		if ($id) { $history->setActionPerson_id($id); }
 	}
 	if (!empty($h['action'])) {
-		$history->setAction($h['action']);
+		try {
+			$action = new Action($h['action']);
+		}
+		catch (Exception $e) {
+			$action = new Action();
+			$action->setName($h['action']);
+			$action->setDescription($h['action']);
+			$action->setType('system');
+		}
+		$history->setAction($action);
 	}
 	if (!empty($h['notes'])) {
 		$history->setNotes($h['notes']);
@@ -42,6 +51,7 @@ function createHistory($o, $h)
 }
 
 // Tickets
+$ticketCount = 0;
 $result = $mongo->tickets->find();
 foreach ($result as $r) {
 	// Start a ticket record, using mongo's ticket number as the ID
@@ -92,7 +102,8 @@ foreach ($result as $r) {
 		exit();
 	}
 	$ticket = new Ticket($data['id']);
-	echo "Ticket: {$ticket->getId()} ";
+	$ticketCount++;
+	echo "[$ticketCount] Ticket: {$ticket->getId()} ";
 
 	if (isset($r['history'])) {
 		foreach ($r['history'] as $h) { createHistory($ticket, $h); }

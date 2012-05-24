@@ -11,6 +11,7 @@ abstract class History extends ActiveRecord
 
 	protected $ticket;
 	protected $issue;
+	protected $action;
 
 	/**
 	 * @param array $data
@@ -25,6 +26,12 @@ abstract class History extends ActiveRecord
 				$zend_db = Database::getConnection();
 				$sql = "select * from {$this->tablename} where id=?";
 				$result = $zend_db->fetchRow($sql, array($id));
+			}
+			if ($result) {
+				$this->data = $result;
+			}
+			else {
+				throw new Exception('history/unknownHistory');
 			}
 		}
 		else {
@@ -51,14 +58,8 @@ abstract class History extends ActiveRecord
 			throw new Exception('missingRequiredFields');
 		}
 
-
-		if (!$this->data['enteredDate']) {
-			$this->setEnteredDate('now');
-		}
-
-		if (!$this->data['actionDate']) {
-			$this->setActionDate('now');
-		}
+		if (!$this->data['enteredDate']) { $this->setEnteredDate('now'); }
+		if (!$this->data['actionDate'] ) { $this->setActionDate ('now'); }
 
 		if (isset($_SESSION['USER'])) {
 			if (!isset($this->data['enteredByPerson_id'])) {
@@ -77,23 +78,25 @@ abstract class History extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function getId()                 { return parent::get('id');                 }
-	public function getAction()             { return parent::get('action');             }
 	public function getNotes()              { return parent::get('notes');              }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getActionPerson_id()    { return parent::get('actionPerson_id');    }
+	public function getAction_id()          { return parent::get('action_id');          }
 	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
 	public function getActionDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
-	public function getEnteredByPerson()    { return parent::getForeignKeyObject(  'Person', 'enteredByPerson_id');      }
-	public function getActionPerson()       { return parent::getForeignKeyObject(  'Person', 'actionPerson_id');         }
+	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person', 'enteredByPerson_id'); }
+	public function getActionPerson()    { return parent::getForeignKeyObject('Person', 'actionPerson_id');    }
+	public function getAction()          { return parent::getForeignKeyObject('Action', 'action_id');          }
 
-	public function setAction($s) { parent::set('action', $s); }
 	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
 	public function setActionDate ($d) { parent::setDateData('actionDate',  $d); }
 	public function setEnteredByPerson_id($id)    { parent::setForeignKeyField( 'Person', 'enteredByPerson_id', $id); }
 	public function setActionPerson_id   ($id)    { parent::setForeignKeyField( 'Person', 'actionPerson_id',    $id); }
+	public function setAction_id         ($id)    { parent::setForeignKeyField( 'Action', 'action_id',          $id); }
 	public function setEnteredByPerson(Person $p) { parent::setForeignKeyObject('Person', 'enteredByPerson_id', $p);  }
 	public function setActionPerson   (Person $p) { parent::setForeignKeyObject('Person', 'actionPerson_id',    $p);  }
+	public function setAction         (Action $o) { parent::setForeignKeyObject('Action', 'action_id',          $o);  }
 
 	// History is either for a Ticket or an Issue
 	public function getTicket_id() { return parent::get('ticket_id');          }
@@ -108,11 +111,11 @@ abstract class History extends ActiveRecord
 	 */
 	public function handleUpdate($post)
 	{
-		$this->setAction($post['action']);
+		$this->setAction_id ($post['action_id'] );
 		$this->setActionDate($post['actionDate']);
+		$this->setNotes     ($post['notes']     );
 		$this->setEnteredByPerson($_SESSION['USER']);
-		$this->setActionPerson($_SESSION['USER']);
-		$this->setNotes($post['notes']);
+		$this->setActionPerson   ($_SESSION['USER']);
 
 		$this->tablename == 'ticketHistory'
 			? $this->setTicket_id($post['ticket_id'])
@@ -133,25 +136,16 @@ abstract class History extends ActiveRecord
 	 */
 	public function getDescription()
 	{
-		$actions = new ActionList();
-		$actions->find();
-		foreach ($actions as $action) {
-			if ($action->getName() == $this->getAction()) {
-				$enteredByPerson = $this->getEnteredByPerson();
-				$enteredByPerson = $enteredByPerson ? $enteredByPerson->getFullname() : APPLICATION_NAME;
+		$ep = $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '';
+		$ap = $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '';
 
-				$actionPerson = $this->getActionPerson();
-				$actionPerson = $actionPerson ? $actionPerson->getFullname() : '';
-
-				return $this->parseDescription(
-					$action->getDescription(),
-					array(
-						'enteredByPerson'=>$enteredByPerson,
-						'actionPerson'=>$actionPerson
-					)
-				);
-			}
-		}
+		return $this->parseDescription(
+			$this->getAction()->getDescription(),
+			array(
+				'enteredByPerson'=> $ep,
+				'actionPerson'   => $ap
+			)
+		);
 	}
 
 	/**
@@ -165,10 +159,10 @@ abstract class History extends ActiveRecord
 	 * @param array $placeholders
 	 * @return string
 	 */
-	public function parseDescription($description,$placeholders)
+	public function parseDescription($description, $placeholders)
 	{
 		foreach ($placeholders as $key=>$value) {
-			$description = preg_replace("/\{$key\}/",$value,$description);
+			$description = preg_replace("/\{$key\}/", $value, $description);
 		}
 		return $description;
 	}
