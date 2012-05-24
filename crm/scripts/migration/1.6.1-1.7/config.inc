@@ -23,7 +23,7 @@ $sql = "create table people_crosswalk (
 	primary key (person_id, mongo_id),
 	foreign key (person_id) references people(id)
 )";
-#$zend_db->query($sql);
+$zend_db->query($sql);
 function getPersonIdFromCrosswalk($mongo_id)
 {
 	global $zend_db;
