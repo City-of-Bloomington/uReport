@@ -26,11 +26,11 @@ function createHistory($o, $h)
 	}
 	if (!empty($h['enteredByPerson'])) {
 		$id = getPersonIdFromCrosswalk($h['enteredByPerson']['_id']);
-		$history->setEnteredByPerson_id($id);
+		if ($id) { $history->setEnteredByPerson_id($id); }
 	}
 	if (!empty($h['actionPerson'])) {
 		$id = getPersonIdFromCrosswalk($h['actionPerson']['_id']);
-		$history->setActionPerson_id($id);
+		if ($id) { $history->setActionPerson_id($id); }
 	}
 	if (!empty($h['action'])) {
 		$history->setAction($h['action']);
@@ -59,9 +59,9 @@ foreach ($result as $r) {
 	}
 	$peopleFields = array('enteredByPerson', 'assignedPerson', 'referredPerson');
 	foreach ($peopleFields as $f) {
-		if (!empty($r[$f])) {
+		if (!empty($r[$f]['_id'])) {
 			$id = getPersonIdFromCrosswalk($r[$f]['_id']);
-			$data[$f.'_id'] = $id;
+			if ($id) { $data[$f.'_id'] = $id; }
 		}
 	}
 	$fields = array('address_id', 'location', 'city', 'state', 'zip', 'status');
@@ -128,21 +128,19 @@ foreach ($result as $r) {
 			$d = DateTime::createFromFormat('U', $i['date']->sec);
 			$issue->setDate($d->format('Y-m-d H:i:s'));
 		}
-		if (!empty($i['enteredByPerson'])) {
+		if (!empty($i['enteredByPerson']['_id'])) {
 			$id = getPersonIdFromCrosswalk($i['enteredByPerson']['_id']);
-			$issue->setEnteredByPerson_id($id);
+			if ($id) { $issue->setEnteredByPerson_id($id); }
 		}
-		if (!empty($i['reportedByPerson'])) {
+		if (!empty($i['reportedByPerson']['_id'])) {
 			$id = getPersonIdFromCrosswalk($i['reportedByPerson']['_id']);
-			$issue->setReportedByPerson_id($id);
+			if ($id) { $issue->setReportedByPerson_id($id); }
 		}
 		$issue->save();
 
 		if (!empty($i['labels'])) {
 			$labels = array();
-			foreach ($i['labels'] as $l) {
-				$labels[$l] = 1;
-			}
+			foreach ($i['labels'] as $l) { $labels[$l] = 1; }
 			$issue->saveLabels($labels);
 		}
 
@@ -163,16 +161,38 @@ foreach ($result as $r) {
 				if (!empty($res['notes'])) {
 					$response->setNotes($res['notes']);
 				}
-				if (!empty($res['person'])) {
+				if (!empty($res['person']['_id'])) {
 					$id = getPersonIdFromCrosswalk($res['person']['_id']);
-					$response->setPerson_id($id);
+					if ($id) { $response->setPerson_id($id); }
 				}
 				$response->save();
 			}
 		}
 		if (isset($i['media'])) {
-			// To Do: Handle Media files
+			foreach ($i['media'] as $m) {
+				// To Do: Handle Media files
+				$year  = $ticket->getEnteredDate('Y');
+				$month = $ticket->getEnteredDate('m');
+				$day   = $ticket->getEnteredDate('d');
+				$dir   = OLD_MEDIA_PATH."/$year/$month/$day/$r[_id]";
+				if (is_file("$dir/$m[filename]")) {
+					$media = new Media();
+					$media->setIssue($issue);
+
+					$d = DateTime::createFromFormat('U', $m['uploaded']->sec);
+					$media->setUploaded($d->format('Y-m-d H:i:s'));
+
+					if (!empty($m['person']['_id'])) {
+						$id = getPersonIdFromCrosswalk($m['person']['_id']);
+						if ($id) { $media->setPerson_id($id); }
+					}
+					$media->setFile("$dir/$m[filename]");
+					// $media->save(); // Not needed since setFile() will call save()
+					echo "Media: $m[filename] ";
+				}
+			}
 		}
+
 		echo "[$count] ";
 		$count++;
 	}

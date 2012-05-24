@@ -1,5 +1,10 @@
 <?php
 /**
+ * Media will be attached to Issues
+ *
+ * Files will be stored as /data/media/YYYY/MM/DD/$media_id.ext
+ * User provided filenames will be stored in the database
+ *
  * @copyright 2006-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
@@ -11,6 +16,9 @@ class Media extends ActiveRecord
 	protected $issue;
 	protected $person;
 
+	/**
+	 * Whitelist of accepted file types
+	 */
 	public static $extensions = array(
 		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),
 		'gif' =>array('mime_type'=>'image/gif','media_type'=>'image'),
@@ -96,7 +104,7 @@ class Media extends ActiveRecord
 	 */
 	public function delete()
 	{
-		unlink(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
+		unlink(APPLICATION_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 		parent::delete();
 	}
 	//----------------------------------------------------------------
@@ -118,23 +126,10 @@ class Media extends ActiveRecord
 	public function setIssue(Issue $i)   { parent::setForeignKeyObject('Issue',  'issue_id',  $i);  }
 	public function setPerson(Person $p) { parent::setForeignKeyObject('Person', 'person_id', $p);  }
 
-	/**
-	 * Returns the path of the file, relative to /data/media
-	 *
-	 * Media is stored in the data directory, outside of the web directory
-	 * This variable only contains the partial path.
-	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
-	 *
-	 * @return string
-	 */
-	public function getDirectory() { return parent::get('directory'); }
 
 
 	public function getType() { return $this->getMedia_type(); }
 	public function getModified($f=null, DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
-
-
-
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
@@ -145,8 +140,9 @@ class Media extends ActiveRecord
 	 * It tries to read as much meta-data about the file as possible
 	 *
 	 * @param array|string Either a $_FILES array or a path to a file
+	 * @param string $directory Where to place save the file
 	 */
-	public function setFile($file,$directory)
+	public function setFile($file, $directory)
 	{
 		# Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
@@ -161,26 +157,60 @@ class Media extends ActiveRecord
 		$extension = $this->getExtension();
 
 		// Find out the mime type for this file
-		if (!array_key_exists(strtolower($extension),Media::$extensions)) {
+		if (array_key_exists(strtolower($extension),Media::$extensions)) {
+			$this->data['mime_type']  = Media::$extensions[$extension]['mime_type'];
+			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
+		}
+		else {
 			throw new Exception('media/unknownFileType');
 		}
 
 		// Move the file where it's supposed to go
 		if (!is_dir(APPLICATION_HOME."/data/media/$directory")) {
-			mkdir(APPLICATION_HOME."/data/media/$directory",0777,true);
+			mkdir  (APPLICATION_HOME."/data/media/$directory",0777,true);
 		}
-		$newFile = APPLICATION_HOME."/data/media/$directory/$filename";
-		rename($tempFile,$newFile);
-		chmod($newFile,0666);
+		$newFile  = APPLICATION_HOME."/data/media/$directory/{$this->getInternalFilename()}";
+		rename($tempFile, $newFile);
+		chmod($newFile, 0666);
 
-		if (is_file($newFile)) {
-			$this->data['directory'] = $directory;
-			$this->data['mime_type'] = Media::$extensions[$extension]['mime_type'];
-			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
-		}
-		else {
+		// Check and make sure the file was saved
+		if (!is_file($newFile)) {
 			throw new Exception('media/badServerPermissions');
 		}
+	}
+
+	/**
+	 * Returns the path of the file, relative to /data/media
+	 *
+	 * Media is stored in the data directory, outside of the web directory
+	 * This variable only contains the partial path.
+	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
+	 *
+	 * @return string
+	 */
+	public function getDirectory()
+	{
+		$d = getdate($this->getUploaded('U'));
+		return "$d[year]/$d[mon]/$d[mday]";
+	}
+
+	/**
+	 * Returns the file name used on the server
+	 *
+	 * We do not use the filename the user chose when saving the files.
+	 * We've got a chicken-or-egg problem here.  We want to use the id
+	 * as the filename, but the id doesn't exist until the info's been saved
+	 * to the database.
+	 *
+	 * If we don't have an id yet, try and save to the database first.
+	 * If that fails, we most likely don't have enough required info yet
+	 *
+	 * @return string
+	 */
+	public function getInternalFilename()
+	{
+		if (!$this->getId()) { $this->save(); }
+		return "{$this->getId()}.{$this->getExtension()}";
 	}
 
 	/**
@@ -199,7 +229,7 @@ class Media extends ActiveRecord
 	 */
 	public function getURL()
 	{
-		return BASE_URL."/media/{$this->data['directory']}/{$this->data['filename']}";
+		return BASE_URL."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
 	}
 
 	/**
@@ -207,7 +237,7 @@ class Media extends ActiveRecord
 	 */
 	public function getFilesize()
 	{
-		return filesize(APPLICATION_HOME."/data/media/{$this->data['directory']}/{$this->data['filename']}");
+		return filesize(APPLICATION_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 	}
 
 	/**

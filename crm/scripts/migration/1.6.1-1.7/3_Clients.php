@@ -9,7 +9,7 @@ require_once './config.inc';
 // Clients
 $result = $mongo->clients->find();
 foreach ($result as $r) {
-	$id = getPersonIdFromCrosswalk($r['_id']);
+	$id = getPersonIdFromCrosswalk($r['contactPerson']['_id']);
 
 	$zend_db->insert('clients',array(
 		'name'=>$r['name'],

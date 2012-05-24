@@ -100,6 +100,8 @@ abstract class History extends ActiveRecord
 	public function getIssue_id()  { return parent::get('issue_id');           }
 	public function setTicket_id($id) { parent::setForeignKeyField('Ticket', 'ticket_id', $id); }
 	public function setIssue_id ($id) { parent::setForeignKeyField('Issue',  'issue_id',  $id); }
+	public function setTicket(Ticket $o) { parent::setForeignKeyObject('Ticket', 'ticket_id', $o); }
+	public function setIssue (Issue  $o) { parent::setForeignKeyObject('Issue',  'issue_id',  $o); }
 
 	/**
 	 * @param array $post

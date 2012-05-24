@@ -167,7 +167,7 @@ class Ticket extends ActiveRecord
 	public function getState()      { return parent::get('state');      }
 	public function getZip()        { return parent::get('zip');        }
 	public function getStatus()     { return parent::get('status');     }
-	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $t); }
+	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
 	public function getResolution_id()      { return parent::get('resolution_id');      }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }

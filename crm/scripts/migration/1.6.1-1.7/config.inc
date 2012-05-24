@@ -6,6 +6,9 @@
  */
 require_once '../../../configuration.inc';
 
+// Point to a directory containing all the media from the old server
+define('OLD_MEDIA_PATH', '/var/www/sites/crm/data/media');
+
 // Connect to the old Mongo database
 // Make sure to open up the mongo port (27017) in the firewall
 $connection = new Mongo('mongodb://rogue.bloomington.in.gov');

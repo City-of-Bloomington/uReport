@@ -130,7 +130,7 @@ create table tickets (
 create table ticketHistory (
 	id                 int       unsigned not null primary key auto_increment,
 	ticket_id          int       unsigned not null,
-	enteredByPerson_id int       unsigned not null,
+	enteredByPerson_id int       unsigned,
 	actionPerson_id    int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
 	actionDate         timestamp,
@@ -167,6 +167,7 @@ create table issues (
 	date                timestamp not null default CURRENT_TIMESTAMP,
 	description         text,
 	customFields        text,
+	foreign key (ticket_id)           references tickets       (id),
 	foreign key (contactMethod_id)    references contactMethods(id),
 	foreign key (responseMethod_id)   references contactMethods(id),
 	foreign key (issueType_id)        references issueTypes    (id),
@@ -185,7 +186,7 @@ create table issue_labels (
 create table issueHistory (
 	id                 int       unsigned not null primary key auto_increment,
 	issue_id           int       unsigned not null,
-	enteredByPerson_id int       unsigned not null,
+	enteredByPerson_id int       unsigned,
 	actionPerson_id    int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
 	actionDate         timestamp,
@@ -200,7 +201,6 @@ create table media (
 	id         int          unsigned not null primary key auto_increment,
 	issue_id   int          unsigned not null,
 	filename   varchar(128) not null,
-	directory  varchar(255) not null,
 	mime_type  varchar(128),
 	media_type varchar(50),
 	uploaded   timestamp    not null default CURRENT_TIMESTAMP,
