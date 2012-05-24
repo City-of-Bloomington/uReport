@@ -12,17 +12,17 @@ $assignedPerson = $this->ticket->getAssignedPerson();
 if (!$assignedPerson) {
 	$assignedPerson = $_SESSION['USER'];
 }
-$selected_id = "{$assignedPerson->getData('department._id')}" == "{$this->currentDepartment->getId()}"
-	? "{$assignedPerson->getId()}"
-	: "{$this->currentDepartment->getData('defaultPerson._id')}";
+$selected_id = $assignedPerson->getDepartment_id() == $this->currentDepartment->getId()
+	? $assignedPerson->getId()
+	: $this->currentDepartment->getDefaultPerson_id();
 ?>
 <table>
-	<tr><td><label for="assignedPerson">Person</label></td>
-		<td><select name="assignedPerson" id="assignedPerson">
+	<tr><td><label for="assignedPerson_id">Person</label></td>
+		<td><select name="assignedPerson_id" id="assignedPerson_id">
 			<?php
 				foreach ($this->currentDepartment->getPeople() as $person) {
 					$name = View::escape($person->getFullname());
-					$selected = "{$person->getId()}"==$selected_id
+					$selected = $person->getId() == $selected_id
 						? 'selected="selected"'
 						: '';
 					echo "<option value=\"{$person->getId()}\" $selected>$name</option>";

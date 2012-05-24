@@ -37,9 +37,9 @@
 					$url = $person->getURL();
 				}
 
-				$name = View::escape($person->getFullname());
-				$address = View::escape($person->getAddress());
-				$phone = View::escape($person->getPhoneNumber());
+				$name         = View::escape($person->getFullname());
+				$address      = View::escape($person->getAddress());
+				$phone        = View::escape($person->getPhoneNumber());
 				$organization = View::escape($person->getOrganization());
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>

@@ -3,15 +3,13 @@
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
  * @param Issue $this->issue
- * @param int $this->index
  * @param bool $this->disableButtons
  */
 $editButton = '';
 $deleteButton = '';
 $responseButton = '';
-$uploadButton = '';
+$uploadButton   = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
@@ -44,7 +42,7 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	}
 }
 $url = BASE_URL."/issues?ticket_id={$this->ticket->getId()};index={$this->index}";
-$type = View::escape($this->issue->getType());
+$type = View::escape($this->issue->getIssueType());
 echo "
 <div class=\"issueInfo\">
 	<div class=\"issueHeader\">
@@ -75,7 +73,7 @@ echo "
 			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 		}
 
-		$contactMethod = View::escape($this->issue->getContactMethod());
+		$contactMethod  = View::escape($this->issue->getContactMethod());
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
 		echo "
@@ -85,7 +83,9 @@ echo "
 			<li><label>Respond Via:</label> $responseMethod</li>
 			<li><label>Labels:</label> $labels</li>
 		";
-			$customFields = $this->ticket->getData('category.customFields');
+			$customFields = $this->ticket->getCategory_id()
+				? $this->ticket->getCategory()->getCustomFields()
+				: null;
 			if ($customFields) {
 				$customFieldData = $this->issue->getCustomFields();
 				foreach ($customFields as $definition) {

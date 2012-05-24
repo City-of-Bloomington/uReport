@@ -248,13 +248,19 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * Returns an array of Issues
-	 *
-	 * @return array
+	 * @return IssueList
 	 */
 	public function getIssues()
 	{
-		return new IssueList(array('ticket_id'=>$this->getId()));
+		$issues = array();
+
+		$zend_db = Database::getConnection();
+		$sql = 'select * from issues where ticket_id=?';
+		$result = $zend_db->query($sql, array($this->getId()));
+		foreach ($result as $row) {
+			$issues[] = new Issue($row);
+		}
+		return $issues;
 	}
 
 	/**
@@ -318,30 +324,19 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @param int $issueIndex
-	 * @param int $mediaIndex
-	 */
-	public function deleteMedia($issueIndex,$mediaIndex)
-	{
-		if (isset($this->data['issues'][$issueIndex]['media'][$mediaIndex])) {
-			$media = new Media($this->data['issues'][$issueIndex]['media'][$mediaIndex]);
-
-			// remove the file from the hard drive
-			$media->delete();
-
-			// remove the data from the ticket
-			unset($this->data['issues'][$issueIndex]['media'][$mediaIndex]);
-
-			$this->save();
-		}
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getHistory()
 	{
-		return new TicketHistoryList(array('ticket_id'=>$this->getId()));
+		$history = array();
+
+		$zend_db = Database::getConnection();
+		$sql = 'select * from ticketHistory where ticket_id=?';
+		$result = $zend_db->query($sql, array($this->getId()));
+		foreach ($result as $row) {
+			$history[] = new TicketHistory($row);
+		}
+		return $history;
 	}
 
 
@@ -398,33 +393,16 @@ class Ticket extends ActiveRecord
 	 */
 	public static function getDistinct($fieldname)
 	{
-		if (defined('DISTINCT_QUERY_CACHE')) {
-			$cache = Zend_Cache::factory(
-				'Core','File',
-				array('lifetime'=>DISTINCT_QUERY_CACHE_LIFETIME),
-				array(
-					'cache_dir'=>APPLICATION_HOME.'/data/cache',
-					'read_control_type'=>'strlen'
-				)
-			);
-
-			$id = preg_replace('/[^a-zA-Z]/','',$fieldname);
-			if (($data = $cache->load($id))===false) {
-				$mongo = Database::getConnection();
-				$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
-				$data = $result['values'];
-				$cache->save(serialize($data));
-				return $data;
-			}
-			else {
-				return unserialize($data);
-			}
-		}
-		else {
-			// Return non-cached results
-			$mongo = Database::getConnection();
-			$result = $mongo->command(array('distinct'=>'tickets','key'=>$fieldname));
-			return $result['values'];
+		$validFields = array(
+			'category_id', 'client_id',
+			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
+			'city', 'state', 'zip',
+			'status', 'resolution_id'
+		);
+		if (in_array($fieldname, $validFields)) {
+			$zend_db = Database::getConnection();
+			$sql = "select distinct $fieldname from tickets order by $fieldname";
+			return $zend_db->fetchCol($sql);
 		}
 	}
 

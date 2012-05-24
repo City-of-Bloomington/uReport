@@ -9,6 +9,7 @@ class LabelList extends ZendDbResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+		$this->select->from(array('l'=>'labels'), 'l.*');
 		if (is_array($fields)) { $this->find($fields); }
 	}
 
@@ -20,13 +21,19 @@ class LabelList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='l.name',$limit=null,$groupBy=null)
 	{
-		$this->select->from('labels');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$this->select->where("$key=?", $value);
+					switch ($key) {
+						case 'issue_id':
+							$this->select->joinLeft(array('i'=>'issue_labels'), 'l.id=i.label_id', array());
+							$this->select->where('i.issue_id=?', $value);
+							break;
+						default:
+							$this->select->where("l.$key=?", $value);
+					}
 				}
 			}
 		}

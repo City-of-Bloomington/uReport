@@ -93,9 +93,9 @@ class PeopleController extends Controller
 
 			$lists = array(
 				'reportedBy'=>'Reported Cases',
-				'assigned'=>'Assigned Cases',
-				'referred'=>'Referred Cases',
-				'enteredBy'=>'Entered Cases'
+				'assigned'  =>'Assigned Cases',
+				'referred'  =>'Referred Cases',
+				'enteredBy' =>'Entered Cases'
 			);
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			foreach ($lists as $listType=>$title) {
@@ -106,21 +106,32 @@ class PeopleController extends Controller
 
 	/**
 	 * Adds a ticketList about the Person to the template
+	 *
+	 * @param string $listType (enteredBy, assigned, reportedBy, referred)
+	 * @param string $title
+	 * @param Person $person
+	 * @param bool $disableLinks
 	 */
 	private function addTicketList($listType, $title, Person $person, $disableLinks)
 	{
-		$tickets = $person->getTickets($listType);
+		$field = $listType.'Person_id';
+
+		$tickets = new TicketList();
+		$tickets->find(array($field=>$person->getId()), null, 10);
+
 		if (count($tickets)) {
-			$this->template->blocks['person-panel'][] = new Block(
+			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
-					'ticketList'=>$tickets,
-					'title'=>$title,
-					'limit'=>10,
-					'disableLinks'=>$disableLinks,
-					'moreLink'=>BASE_URL."/tickets?{$listType}Person={$person->getId()}"
+					'ticketList'  => $tickets,
+					'title'       => $title,
+					'disableLinks'=> $disableLinks
 				)
 			);
+			if (count($tickets) >= 10) {
+				$block->moreLink = BASE_URL."/tickets?{$listType}Person={$person->getId()}";
+			}
+			$this->template->blocks['person-panel'][] = $block;
 		}
 	}
 

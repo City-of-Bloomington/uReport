@@ -21,14 +21,14 @@
 				}
 			?>
 			<table>
-				<tr><td><label for="resolution">Resolution</label></td>
-					<td><select name="resolution" id="resolution">
+				<tr><td><label for="resolution_id">Resolution</label></td>
+					<td><select name="resolution_id" id="resolution_id">
 						<?php
 							$list = new ResolutionList();
 							$list->find();
 							foreach ($list as $resolution) {
 								$name = View::escape($resolution->getName());
-								echo "<option>$name</option>";
+								echo "<option value=\"{$resolution->getId()}\">$name</option>";
 							}
 						?>
 						</select>

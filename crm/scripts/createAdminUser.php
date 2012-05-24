@@ -26,7 +26,7 @@ $person->setLastname('Ingham');
 $person->setEmail('inghamn@bloomington.in.gov');
 $person->setUsername('inghamn');
 $person->setAuthenticationMethod('Employee');
-$person->setPassword('');
+//$person->setPassword('');
 
 // No more changes needed
 $person->setRole('Administrator');

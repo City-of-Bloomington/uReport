@@ -12,6 +12,13 @@ class Issue extends ActiveRecord
 {
 	protected $tablename = 'issues';
 
+	protected $ticket;
+	protected $contactMethod;
+	protected $responseMethod;
+	protected $issueType;
+	protected $enteredByPerson;
+	protected $reportedByPerson;
+
 	private $labels = array();
 
 	/**
@@ -95,6 +102,7 @@ class Issue extends ActiveRecord
 	public function getDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
 	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id');    }
 	public function getResponseMethod()   { return parent::getForeignKeyObject('ContactMethod', 'responseMethod_id');   }
+	public function getIssueType()        { return parent::getForeignKeyObject('IssueType',     'issueType_id');        }
 	public function getEnteredByPerson()  { return parent::getForeignKeyObject('Person',        'enteredByPerson_id');  }
 	public function getReportedByPerson() { return parent::getForeignKeyObject('Person',        'reportedByPerson_id'); }
 

@@ -8,12 +8,8 @@
  * @param string $this->title
  * @param bool $this->disableButtons
  * @param Ticket $this->filterTicket A ticket to leave out of the display
- * @param int $this->limit
  * @param string $this->moreLink
  */
-if ($this->limit) {
-	$this->ticketList->limit($this->limit);
-}
 ?>
 <div class="ticketList">
 	<h2><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h2>
@@ -33,15 +29,19 @@ if ($this->limit) {
 					&& "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
 					continue;
 				}
-				$status = View::escape($ticket->getStatus());
-				$location = View::escape($ticket->getLocation());
+				$status      = View::escape($ticket->getStatus());
+				$location    = View::escape($ticket->getLocation());
 				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
-				$category = View::escape($ticket->getData('category.name'));
+
+				$category = $ticket->getCategory_id()
+					? View::escape($ticket->getCategory()->getName())
+					: '';
+
 				if (!$this->disableLinks) {
-					$status = "<a href=\"{$ticket->getURL()}\">$status</a>";
-					$location = "<a href=\"{$ticket->getURL()}\">$location</a>";
+					$status      = "<a href=\"{$ticket->getURL()}\">$status</a>";
+					$location    = "<a href=\"{$ticket->getURL()}\">$location</a>";
 					$enteredDate = "<a href=\"{$ticket->getURL()}\">$enteredDate</a>";
-					$category = "<a href=\"{$ticket->getURL()}\">$category</a>";
+					$category    = "<a href=\"{$ticket->getURL()}\">$category</a>";
 				}
 				echo "
 				<tr><td>$status</td>
@@ -75,7 +75,7 @@ if ($this->limit) {
 		</tbody>
 	</table>
 	<?php
-		if ($this->limit && count($this->ticketList)>$this->limit && $this->moreLink) {
+		if ($this->moreLink) {
 			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
 		}
 	?>

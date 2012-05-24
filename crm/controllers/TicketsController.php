@@ -133,8 +133,8 @@ class TicketsController extends Controller
 		}
 
 		// Handle any Person choice passed in
-		if (!empty($_REQUEST['person_id'])) {
-			$issue->setReportedByPerson_id($_REQUEST['person_id']);
+		if (!empty($_REQUEST['reportedByPerson_id'])) {
+			$issue->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
 		}
 
 		// Handle any Category choice passed in
@@ -175,7 +175,7 @@ class TicketsController extends Controller
 			}
 			// Validate Everything and save
 			try {
-				$ticket->set($_POST['ticket']);
+				$ticket->handleUpdate($_POST);
 				$issue->set($_POST['issue']);
 				$ticket->updateIssues($issue);
 				$ticket->save();
