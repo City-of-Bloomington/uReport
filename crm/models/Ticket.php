@@ -15,9 +15,7 @@ class Ticket extends ActiveRecord
 	protected $assignedPerson;
 	protected $referredPerson;
 
-
-	private $assignmentNotes;	// A temp variable for preserving posted assignment notes
-								// until we call Ticket::save()
+	private $issues;
 
 	/**
 	 * Populates the object with data
@@ -78,6 +76,9 @@ class Ticket extends ActiveRecord
 		// an empty ticket does us no good
 		$issue = $this->getIssue();
 		if (!$issue) {
+			echo "Missing issue\n";
+			print_r($this);
+			exit();
 			throw new Exception('tickets/missingIssue');
 		}
 		if (!$issue->getDescription() && !$this->getLocation()
@@ -116,32 +117,7 @@ class Ticket extends ActiveRecord
 
 	public function save()
 	{
-		// The initial Ticket creation needs to generate
-		// log entries to record the open action and assignment action
-		if (!$this->getId()) {
-			// Create the History entries
-			if ($this->getEnteredByPerson_id()) {
-				$open = new TicketHistory();
-				$open->setAction('open');
-			}
-
-			$assignment = new TicketHistory();
-			$assignment->setAction('assignment');
-			$assignment->setActionPerson($this->getAssignedPerson());
-			$assignment->setNotes($this->assignmentNotes);
-		}
-
 		parent::save();
-
-		if (isset($open)) {
-			$open->setTicket($this);
-			$open->save();
-		}
-		if (isset($assignment)) {
-			$assignment->setTicket($this);
-			$assignment->save();
-			$assignment->sendNotification($this);
-		}
 
 		#$search = new Search();
 		#$search->add($this);
@@ -252,15 +228,17 @@ class Ticket extends ActiveRecord
 	 */
 	public function getIssues()
 	{
-		$issues = array();
+		if (!$this->issues) {
+			$this->issues = array();
 
-		$zend_db = Database::getConnection();
-		$sql = 'select * from issues where ticket_id=?';
-		$result = $zend_db->query($sql, array($this->getId()));
-		foreach ($result as $row) {
-			$issues[] = new Issue($row);
+			$zend_db = Database::getConnection();
+			$sql = 'select * from issues where ticket_id=?';
+			$result = $zend_db->query($sql, array($this->getId()));
+			foreach ($result as $row) {
+				$this->issues[] = new Issue($row);
+			}
 		}
-		return $issues;
+		return $this->issues;
 	}
 
 	/**
@@ -346,22 +324,6 @@ class Ticket extends ActiveRecord
 	public function getURL()
 	{
 		return BASE_URL."/tickets/view?ticket_id={$this->getId()}";
-	}
-
-	/**
-	 * Returns the note field of each Issue in the ticket
-	 *
-	 * @return array
-	 */
-	public function getNotes()
-	{
-		$notes = array();
-		foreach ($this->data['issues'] as $issue) {
-			if (isset($issue['notes'])) {
-				$notes[] = $issue['notes'];
-			}
-		}
-		return $notes;
 	}
 
 	/**
@@ -455,7 +417,7 @@ class Ticket extends ActiveRecord
 	{
 		// Set all the location information using any fields the user posted
 		$fields = array(
-			'category_id', 'client_id',
+			'category_id', 'client_id', 'assignedPerson_id',
 			'location', 'latitude', 'longitude', 'city', 'state', 'zip'
 		);
 		foreach ($fields as $field) {
@@ -476,16 +438,59 @@ class Ticket extends ActiveRecord
 				$this->setAddressServiceData($data);
 			}
 		}
+	}
 
-		// If the user posted any Notes for the person they're assigning
-		// this ticket to, we need to temporarily save those.
-		// Initial assignment creation doesn't happen until Ticket::save()
-		if (isset($post['assignedPerson_id'])) {
-			$this->setAssignedPerson($post['assignedPerson_id']);
+	/**
+	 * Does all the database work for TicketController::add
+	 *
+	 * Saves the ticket, the issue, and creates history entries
+	 * for the open and assignment actions.
+	 *
+	 * This function calls save() as needed.  After using this function,
+	 * there's no need to make an additional save() call.
+	 *
+	 * @param array $post
+	 */
+	public function handleAdd($post)
+	{
+		$zend_db = Database::getConnection();
+		$zend_db->beginTransaction();
+		try {
+			$this ->handleUpdate($post);
+
+			// We must add an issue to the ticket for validation to pass
+			$issue = new Issue();
+			$issue->handleUpdate($post);
+			$this->issues = array($issue);
+
+			$this->save();
+
+			$issue->setTicket($this);
+			$issue->save();
+
+			$history = new TicketHistory();
+			$history->setTicket($this);
+			$history->setAction(new Action('open'));
+			if (isset($_SESSION['USER'])) {
+				$history->setEnteredByPerson($_SESSION['USER']);
+			}
+			$history->save();
+
+			$history = new TicketHistory();
+			$history->setTicket($this);
+			$history->setAction(new Action('assignment'));
+			$history->setActionPerson_id($post['assignedPerson_id']);
+			$history->setNotes($post['notes']);
+			if (isset($_SESSION['USER'])) {
+				$history->setEnteredByPerson($_SESSION['USER']);
+			}
+			$history->save();
 		}
-		if (isset($post['notes'])) {
-			$this->assignmentNotes = $post['notes'];
+		catch (Exception $e) {
+			$zend_db->rollBack();
+			throw $e;
 		}
+		$zend_db->commit();
 	}
 
 	/**

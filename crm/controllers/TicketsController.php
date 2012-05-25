@@ -124,19 +124,9 @@ class TicketsController extends Controller
 	public function add()
 	{
 		$ticket = new Ticket();
-		$issue = new Issue();
+		$issue  = new Issue();
 
-		// Handle any Location choice passed in
-		if (isset($_GET['location']) && $_GET['location']) {
-			$ticket->setLocation($_GET['location']);
-			$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
-		}
-
-		// Handle any Person choice passed in
-		if (!empty($_REQUEST['reportedByPerson_id'])) {
-			$issue->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
-		}
-
+		// Categories are required before starting the process
 		// Handle any Category choice passed in
 		if (!empty($_REQUEST['category_id'])) {
 			$category = new Category($_REQUEST['category_id']);
@@ -149,6 +139,23 @@ class TicketsController extends Controller
 				exit();
 			}
 		}
+		else {
+			$this->template->setFilename('search');
+			$this->template->blocks['search-form'][] = new Block('tickets/addNewForm.inc');
+			$_SESSION['errorMessages'][] = new Exception('tickets/missingCategory');
+			return;
+		}
+
+		// Handle any Location choice passed in
+		if (!empty($_GET['location'])) {
+			$ticket->setLocation($_GET['location']);
+			$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+		}
+
+		// Handle any Person choice passed in
+		if (!empty($_REQUEST['reportedByPerson_id'])) {
+			$issue->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
+		}
 
 		// Handle any Department choice passed in
 		// Choosing a department here will cause the assignment form
@@ -158,6 +165,7 @@ class TicketsController extends Controller
 				$currentDepartment = new Department($_GET['department_id']);
 			}
 			catch (Exception $e) {
+				// Ignore any bad departments passed in
 			}
 		}
 		// If they haven't chosen a department, start by assigning
@@ -168,25 +176,15 @@ class TicketsController extends Controller
 		}
 
 		// Process the ticket form when it's posted
-		if (isset($_POST['ticket'])) {
-			if (isset($_POST['assignedPerson_id'])) {
-				$_POST['ticket']['assignedPerson_id'] = $_POST['assignedPerson_id'];
-				$_POST['ticket']['notes'] = $_POST['notes'];
-			}
-			// Validate Everything and save
+		if (isset($_POST['category_id'])) {
 			try {
-				$ticket->handleUpdate($_POST);
-				$issue->set($_POST['issue']);
-				$ticket->updateIssues($issue);
-				$ticket->save();
-
+				$ticket->handleAdd($_POST); // Calls save as needed - no need to save() again
 				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-
 
 		$this->template->setFilename('ticketCreation');
 		$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
@@ -213,24 +211,24 @@ class TicketsController extends Controller
 		if (isset($person)) {
 			$this->template->blocks['person-panel'][] = new Block(
 				'people/personInfo.inc',
-				array(
-					'person'=>$person,
-					'disableButtons'=>true
-				)
+				array('person'=>$person, 'disableButtons'=>true)
 			);
-			$reportedTickets = $person->getTickets('reportedBy');
+			$reportedTickets = new TicketList();
+			$reportedTickets->find(array('reportedByPerson_id'=>$person->getId()), null, 10);
 			if (count($reportedTickets)) {
-				$this->template->blocks['person-panel'][] = new Block(
+				$block = new Block(
 					'tickets/ticketList.inc',
 					array(
-						'ticketList'=>$reportedTickets,
-						'title'=>'Reported Cases',
-						'disableButtons'=>true,
-						'disableLinks'=>true,
-						'limit'=>10,
-						'moreLink'=>BASE_URL."/tickets?reportedByPerson={$person->getId()}"
+						'ticketList'    => $reportedTickets,
+						'title'         => 'Reported Cases',
+						'disableButtons'=> true,
+						'disableLinks'  => true
 					)
 				);
+				if (count($reportedTickets) >= 10) {
+					$block->moreLink = BASE_URL."/tickets?reportedByPerson_id={$person->getId()}";
+				}
+				$this->template->blocks['person-panel'][] = $block;
 			}
 		}
 		//-------------------------------------------------------------------

@@ -177,6 +177,6 @@ abstract class ActiveRecord
 	 */
 	public static function isId($id)
 	{
-		return (is_int($id) || (is_string($id) && ctype_digit($id)));
+		return ((is_int($id) && $id>0) || (is_string($id) && ctype_digit($id)));
 	}
 }

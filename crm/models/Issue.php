@@ -20,6 +20,7 @@ class Issue extends ActiveRecord
 	protected $reportedByPerson;
 
 	private $labels = array();
+	private $labelsModified = false;
 
 	/**
 	 * Populates the object with data
@@ -86,7 +87,11 @@ class Issue extends ActiveRecord
 
 	}
 
-	public function save() { parent::save(); }
+	public function save()
+	{
+		parent::save();
+		if ($this->labelsModified) { $this->saveLabels(); }
+	}
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
@@ -130,8 +135,8 @@ class Issue extends ActiveRecord
 			$post['labels'] = array();
 		}
 		$fields = array(
-			'type','reportedByPerson','contactMethod','responseMethod','description',
-			'customFields','labels'
+			'issueType_id', 'description', 'customFields', 'labels',
+			'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
 		);
 		foreach ($fields as $field) {
 			$set = 'set'.ucfirst($field);
@@ -179,29 +184,38 @@ class Issue extends ActiveRecord
 	/**
 	 * Reads labels from POST array
 	 *
-	 * Labels should be in the form: array($id=>$checked)
-	 * Example:
-	 * array(32=>'On',12=>'On')
-	 *
-	 * @param array $labels
+	 * @param array $label_ids
 	 */
-	public function saveLabels($labels)
+	public function setLabels($label_ids)
+	{
+		$this->labelsModified = true;
+		$this->labels = array();
+		foreach ($label_ids as $id) {
+			$label = new Label($id);
+			$this->labels[$label->getId()] = $label;
+		}
+	}
+
+	/**
+	 * Writes the labels back out to the database
+	 */
+	private function saveLabels()
 	{
 		if ($this->getId()) {
-			$this->labels = array();
 			$zend_db = Database::getConnection();
 			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
-
-			try {
-				foreach (array_keys($labels) as $id) {
+			foreach ($this->labels as $id=>$label) {
+				try {
 					$zend_db->insert('issue_labels', array(
 						'issue_id'=>$this->data['id'],
-						'label_id'=>(int)$id
+						'label_id'=>$label->getId()
 					));
 				}
-			}
-			catch (Exception $e) {
-				// Just ignore the bad ones
+				catch (Exception $e) {
+					echo $e->getMessage()."\n";
+					print_r($this);
+					exit();
+				}
 			}
 		}
 	}
