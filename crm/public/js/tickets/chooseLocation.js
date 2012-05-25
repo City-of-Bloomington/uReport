@@ -17,6 +17,8 @@ var LOCATION_CHOOSER = {
 	popup: {},
 	setLocation: function (location) {
 		YUI().use('node', 'io', function (Y) {
+			document.getElementById('location').value = location;
+
 			var locationPanel = Y.one('#location-panel');
 			locationPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
@@ -24,9 +26,6 @@ var LOCATION_CHOOSER = {
 				on: {
 					complete: function (id, o, args) {
 						locationPanel.setContent(o.responseText);
-						var location = locationPanel.one('.locationInfo h2 a');
-						document.getElementById('ticket-location').value = location.getContent();
-
 						LOCATION_CHOOSER.popup.close();
 					}
 				}

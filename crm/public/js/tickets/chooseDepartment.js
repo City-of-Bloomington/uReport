@@ -27,8 +27,8 @@ YUI().use('node', 'io', 'json', function (Y) {
 						var people = Y.JSON.parse(o.responseText);
 						var selected = '';
 						for (var i in people) {
-							if (department.defaultPerson && department.defaultPerson._id) {
-								selected = department.defaultPerson._id.$id==people[i].id ? 'selected="selected"' : '';
+							if (department.defaultPerson_id) {
+								selected = department.defaultPerson_id == people[i].id ? 'selected="selected"' : '';
 							}
 							html += '<option value="' + people[i].id + '" ' + selected + '>' + people[i].name + '</option>';
 						}

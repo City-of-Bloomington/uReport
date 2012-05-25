@@ -22,6 +22,8 @@ var PERSON_CHOOSER = {
 	popup: {},
 	setPerson: function (person_id) {
 		YUI().use('node', 'io', function (Y) {
+			document.getElementById('reportedByPerson_id').value = person_id;
+
 			var personPanel = Y.one('#person-panel');
 			personPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
@@ -29,7 +31,6 @@ var PERSON_CHOOSER = {
 				on: {
 					complete: function (id, o, args) {
 						personPanel.setContent(o.responseText);
-						document.getElementById('issue-reportedByPerson').value = person_id;
 						PERSON_CHOOSER.popup.close();
 					}
 				}
