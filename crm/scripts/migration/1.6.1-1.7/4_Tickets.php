@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 require_once './config.inc';
+$TICKET_FAILURE_LOG = fopen('./ticketFailure.log', 'w');
 
 function createHistory($o, $h)
 {
@@ -18,11 +19,11 @@ function createHistory($o, $h)
 	}
 	if (!empty($h['enteredDate'])) {
 		$d = DateTime::createFromFormat('U', $h['enteredDate']->sec);
-		$history->setEnteredDate($d->format('Y-m-d H:i:s'));
+		if ($d) { $history->setEnteredDate($d->format('Y-m-d H:i:s')); }
 	}
 	if (!empty($h['actionDate'])) {
 		$d = DateTime::createFromFormat('U', $h['actionDate']->sec);
-		$history->setActionDate($d->format('Y-m-d H:i:s'));
+		if ($d) { $history->setActionDate($d->format('Y-m-d H:i:s')); }
 	}
 	if (!empty($h['enteredByPerson'])) {
 		$id = getPersonIdFromCrosswalk($h['enteredByPerson']['_id']);
@@ -84,6 +85,13 @@ foreach ($result as $r) {
 		$data['latitude']  = $r['coordinates']['latitude'];
 		$data['longitude'] = $r['coordinates']['longitude'];
 	}
+
+	// Address Service Fields
+	$af = array();
+	if (!empty($r['neighborhoodAssociation'])) { $af['neighborhoodAssociation'] = $r['neighborhoodAssociation']; }
+	if (!empty($r['township']))                { $af['township']                = $r['township'];                }
+	if (count($af)) { $data['additionalFields'] = json_encode($af); }
+
 	if (!empty($r['resolution'])) {
 		try {
 			$resolution = new Resolution($r['resolution']);
@@ -96,10 +104,13 @@ foreach ($result as $r) {
 		$zend_db->insert('tickets', $data);
 	}
 	catch (Exception $e) {
-		echo "Ticket save failed {$e->getMessage()}\n";
-		print_r($data);
-		print_r($r);
-		exit();
+		// Just log the problem tickets and move on
+		// We'll need to check the log once we're done
+		echo "Ticket save failed: {$e->getMessage()}\n";
+		fwrite($TICKET_FAILURE_LOG, $e->getMessage()."\n");
+		fwrite($TICKET_FAILURE_LOG, print_r($data, true));
+		fwrite($TICKET_FAILURE_LOG, print_r($r,    true));
+		continue;
 	}
 	$ticket = new Ticket($data['id']);
 	$ticketCount++;
@@ -191,7 +202,7 @@ foreach ($result as $r) {
 					$media->setIssue($issue);
 
 					$d = DateTime::createFromFormat('U', $m['uploaded']->sec);
-					$media->setUploaded($d->format('Y-m-d H:i:s'));
+					if ($d) { $media->setUploaded($d->format('Y-m-d H:i:s')); }
 
 					if (!empty($m['person']['_id'])) {
 						$id = getPersonIdFromCrosswalk($m['person']['_id']);

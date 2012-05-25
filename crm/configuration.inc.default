@@ -51,7 +51,7 @@ define('SOLR_SERVER_PATH', '/solr/crm');
  * JavaScript Libraries
  */
 define('YUI','http://yui.yahooapis.com/3.4.1/build');
-define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=FALSE');
+define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=false');
 
 /**
  * Addresses can be validated against a master address web service

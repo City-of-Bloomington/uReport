@@ -1,1 +1,1 @@
-<p>You must choose a category to create a new ticket.</p>
+<p>Tickets must have a category</p>

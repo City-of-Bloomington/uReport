@@ -20,6 +20,7 @@ var ACTION_FORM = {
 				Y.io(CRM.BASE_URL + '/tickets/changeLocation.php?ticket_id=' + CRM.ticket_id + ';location=' + location, {
 					on: {
 						complete: function (id, o, args) {
+							alert(o.responseText);
 							ACTION_FORM.closeAndReload();
 						}
 					}

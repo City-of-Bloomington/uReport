@@ -119,6 +119,7 @@ create table tickets (
 	zip                varchar(40),
 	status             varchar(20) not null default 'open',
 	resolution_id      int         unsigned,
+	additionalFields   varchar(255),
 	foreign key (category_id)        references categories (id),
 	foreign key (client_id)          references clients    (id),
 	foreign key (enteredByPerson_id) references people     (id),

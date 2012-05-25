@@ -89,8 +89,9 @@ echo "
 			if ($customFields) {
 				$customFieldData = $this->issue->getCustomFields();
 				foreach ($customFields as $definition) {
-					$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($definition['name']);
-					$value = isset($customFieldData[$definition['name']]) ? $customFieldData[$definition['name']] : '';
+					$fieldname = $definition->name;
+					$label = isset($definition->label) ? View::escape($definition->label) : View::escape($fieldname);
+					$value = isset($customFieldData->$fieldname) ? $customFieldData->$fieldname : '';
 					$value = is_array($value) ? implode(', ',$value) : View::escape($value);
 					echo "<li><label>$label:</label> $value</li>\n";
 				}

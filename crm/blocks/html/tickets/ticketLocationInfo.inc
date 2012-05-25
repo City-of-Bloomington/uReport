@@ -10,18 +10,18 @@
 	<h2>Additional Location Information</h2>
 	<table>
 	<?php
-		$additionalFields = array('city','state','zip','latitude','longitude');
-		foreach ($additionalFields as $field) {
+		$locationFields = array('city','state','zip','latitude','longitude');
+		foreach ($locationFields as $field) {
 			$get = 'get'.ucfirst($field);
 			$$field = View::escape($this->ticket->$get());
 			if ($$field) {
 				echo "<tr><th>$field</th><td>{$$field}</td></tr>";
 			}
 		}
-		foreach (array_keys(AddressService::$customFieldDescriptions) as $field) {
-			$value = View::escape($this->ticket->get($field));
-			if ($value) {
-				echo "<tr><th>$field</th><td>$value</td></tr>";
+		$additionalFields = $this->ticket->getAdditionalFields();
+		if ($additionalFields) {
+			foreach ($additionalFields as $key=>$value) {
+				echo "<tr><th>$key</th><td>$value</td></tr>";
 			}
 		}
 	?>
@@ -31,14 +31,14 @@
 			echo "
 			<div id=\"location_map\"></div>
 			<script type=\"text/javascript\">
-				var DEFAULT_LATITUDE = ".DEFAULT_LATITUDE.";
+				var DEFAULT_LATITUDE  = ".DEFAULT_LATITUDE.";
 				var DEFAULT_LONGITUDE = ".DEFAULT_LONGITUDE.";
-				var points = [{latitude:$latitude,longitude:$longitude}];
+				var points = [{latitude:$latitude, longitude:$longitude}];
 			</script>
 			";
-			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-			$this->template->addToAsset('scripts',GOOGLE_MAPS);
-			$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/map.js');
+			$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
+			$this->template->addToAsset('scripts', GOOGLE_MAPS);
+			$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
 		}
 	?>
 </div>

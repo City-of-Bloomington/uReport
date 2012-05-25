@@ -190,10 +190,26 @@ class Ticket extends ActiveRecord
 	{
 		$this->data['status'] = trim($string);
 		if ($this->data['status'] != 'closed') {
-			unset($this->data['resolution_id']);
-			$this->resolution = null;
+			$this->data['resolution_id'] = null;
+			$this->resolution            = null;
 		}
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getAdditionalFields()
+	{
+		return json_decode(parent::get('additionalFields'));
+	}
+	/**
+	 * @param array $array
+	 */
+	public function setAdditionalFields($array)
+	{
+		$this->data['additionalFields'] = json_encode($array);
+	}
+
 	//----------------------------------------------------------------
 	// Custom functions
 	//----------------------------------------------------------------
@@ -379,7 +395,9 @@ class Ticket extends ActiveRecord
 				$this->$set($value);
 			}
 			else {
-				$this->data[$key] = (string)$value;
+				$d = $this->getAdditionalFields();
+				$d->$key = (string)$value;
+				$this->setAdditionalFields($d);
 			}
 		}
 	}
@@ -402,9 +420,9 @@ class Ticket extends ActiveRecord
 			$this->$set('');
 		}
 		foreach (AddressService::$customFieldDescriptions as $key=>$definition) {
-			if (isset($this->data[$key])) {
-				unset($this->data[$key]);
-			}
+			$d = $this->getAdditionalFields();
+			if (isset($d->$key)) { unset($d->$key); }
+			$this->setAdditionalFields($d);
 		}
 	}
 

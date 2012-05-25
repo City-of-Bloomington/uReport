@@ -288,25 +288,23 @@ class TicketsController extends Controller
 			}
 		}
 		if (!isset($currentDepartment)) {
-			$dept = $_SESSION['USER']->getDepartment();
-			$currentDepartment = new Department((string)$dept['_id']);
+			$currentDepartment = $_SESSION['USER']->getDepartment();
 		}
 
-
 		// Handle any stuff the user posts
-		if (isset($_REQUEST['assignedPerson'])) {
+		if (isset($_REQUEST['assignedPerson_id'])) {
 			try {
-				$ticket->setAssignedPerson($_REQUEST['assignedPerson']);
+				$ticket->setAssignedPerson_id($_REQUEST['assignedPerson_id']);
+				$ticket->save();
 
 				// add a record to ticket history
-				$history = new History();
-				$history->setAction('assignment');
+				$history = new TicketHistory();
+				$history->setTicket($ticket);
+				$history->setAction(new Action('assignment'));
 				$history->setEnteredByPerson($_SESSION['USER']);
 				$history->setActionPerson($ticket->getAssignedPerson());
 				$history->setNotes($_REQUEST['notes']);
-				$ticket->updateHistory($history);
-
-				$ticket->save();
+				$history->save();
 
 				$history->sendNotification($ticket);
 
@@ -368,19 +366,19 @@ class TicketsController extends Controller
 		}
 
 		// Handle any stuff the user posts
-		if (isset($_POST['referredPerson'])) {
+		if (isset($_POST['referredPerson_id'])) {
 			try {
-				$ticket->setReferredPerson($_POST['referredPerson']);
+				$ticket->setReferredPerson_id($_POST['referredPerson_id']);
+				$ticket->save();
 
 				// add a record to ticket history
-				$history = new History();
-				$history->setAction('referral');
+				$history = new TicketHistory();
+				$history->setTicket($ticket);
+				$history->setAction(new Action('referral'));
 				$history->setEnteredByPerson($_SESSION['USER']);
 				$history->setActionPerson($ticket->getReferredPerson());
 				$history->setNotes($_POST['notes']);
-				$ticket->updateHistory($history);
-
-				$ticket->save();
+				$history->save();
 
 				$this->redirectToTicketView($ticket);
 			}
@@ -432,11 +430,10 @@ class TicketsController extends Controller
 	{
 		$ticket = $this->loadTicket($_POST['ticket_id']);
 
-		$history = new History();
-		$history->set($_POST);
+		$history = new TicketHistory();
+		$history->handleUpdate($_POST);
 		try {
-			$ticket->updateHistory($history);
-			$ticket->save();
+			$history->save();
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -456,18 +453,24 @@ class TicketsController extends Controller
 				header('Location: '.BASE_URL."/tickets/close?ticket_id={$ticket->getId()}");
 				exit();
 			}
-			$ticket->setStatus($_POST['status']);
-
-			// add a record to ticket history
-			$history = new History();
-			$history->setAction($_POST['status']);
-			$history->setEnteredByPerson($_SESSION['USER']);
-			$history->setActionPerson($_SESSION['USER']);
-			$history->setNotes($_POST['notes']);
-			$ticket->updateHistory($history);
-
 			try {
+				$ticket->setStatus($_POST['status']);
 				$ticket->save();
+
+				try {
+					$action = new Action($_POST['status']);
+
+					// add a record to ticket history
+					$history = new TicketHistory();
+					$history->setTicket($ticket);
+					$history->setAction($action);
+					$history->setNotes($_POST['notes']);
+					$history->save();
+				}
+				catch (Exception $e) {
+					// If the status doesn't have an action, don't record a history entry
+				}
+
 				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
@@ -577,7 +580,7 @@ class TicketsController extends Controller
 
 		if (isset($_REQUEST['category_id'])) {
 			try {
-				$ticket->setCategory($_REQUEST['category_id']);
+				$ticket->setCategory_id($_REQUEST['category_id']);
 				$ticket->save();
 				$this->redirectToTicketView($ticket);
 			}
@@ -626,27 +629,25 @@ class TicketsController extends Controller
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
-		if (isset($_POST['resolution'])) {
-			$ticket->setResolution($_POST['resolution']);
-			$ticket->setStatus('closed');
-
-			// add a record to ticket history
-			$history = new History();
-			$history->setAction('close');
-			$history->setEnteredByPerson($_SESSION['USER']);
-			$history->setActionPerson($_SESSION['USER']);
-			$history->setNotes($_POST['notes']);
-			$ticket->updateHistory($history);
-
+		if (isset($_POST['resolution_id'])) {
 			try {
+				$ticket->setResolution_id($_POST['resolution_id']);
+				$ticket->setStatus('closed');
 				$ticket->save();
+
+				// add a record to ticket history
+				$history = new TicketHistory();
+				$history->setTicket($ticket);
+				$history->setAction(new Action('close'));
+				$history->setNotes($_POST['notes']);
+				$history->save();
+
 				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-
 
 		// Display the view
 		$this->template->setFilename('tickets');
