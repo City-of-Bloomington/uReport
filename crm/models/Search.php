@@ -26,12 +26,12 @@ class Search
 	 */
 	public static $facetFields = array(
 		'ticket'=>array(
-			'category_id'  =>'Category',
-			'department_id'=>'Department',
-			'status'       =>'Status',
-			'client_id'    =>'Client',
-			'label'        =>'Label',
-			'type'         =>'Type',
+			'category_id'  => 'Category',
+			'department_id'=> 'Department',
+			'status'       => 'Status',
+			'client_id'    => 'Client',
+			'label_id'     => 'Label',
+			'issueType_id' => 'IssueType',
 		)
 	);
 
@@ -175,7 +175,9 @@ class Search
 				$description.= $issue->getDescription();
 				foreach ($issueFields as $field) {
 					$get = 'get'.ucfirst($field);
-					$document->addField($field, $issue->$get());
+					if ($issue->$get()) {
+						$document->addField($field, $issue->$get());
+					}
 				}
 				foreach ($issue->getLabels() as $label) {
 					$document->addField('label_id', $label);
@@ -229,7 +231,7 @@ class Search
 	{
 		$fields = array(
 			'enteredDate',
-			'status','resolution',
+			'status',
 			'location','city','state','zip'
 		);
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {

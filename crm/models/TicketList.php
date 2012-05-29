@@ -12,7 +12,7 @@ class TicketList extends ZendDbResultIterator
 	 * The set of fields we want to display in search results by default
 	 */
 	public static $defaultFieldsToDisplay = array(
-		'enteredDate'=>'on','location'=>'on','description'=>'on'
+		'enteredDate'=>'on', 'location'=>'on', 'description'=>'on'
 	);
 
 	/**
@@ -95,34 +95,33 @@ class TicketList extends ZendDbResultIterator
 	/**
 	 * Returns fields that can be displayed in ticketList and searchResults
 	 *
-	 * The displayName will be a nice, readable label for the field
-	 * The index points to the desired data in the Mongo record
+	 * The key should be the fieldname in the database
+	 * The value should be a nice, readable label for the field
 	 *
 	 * @return array
 	 */
 	public static function getDisplayableFields()
 	{
 		$fields = array(
-			'id'=>array('displayName'=>'Ticket ID','index'=>'_id'),
-			'number'=>array('displayName'=>'Case #','index'=>'number'),
-			'enteredDate'=>array('displayName'=>'Case Date','index'=>'enteredDate'),
-			'enteredByPerson'=>array('displayName'=>'Entered By','index'=>'enteredByPerson'),
-			'assignedPerson'=>array('displayName'=>'Assigned To','index'=>'assignedPerson'),
-			'referredPerson'=>array('displayName'=>'Referred To','index'=>'referredPerson'),
-			'category'=>array('displayName'=>'Category','index'=>'category.name'),
-			'department'=>array('displayName'=>'Department','index'=>'assignedPerson'),
-			'status'=>array('displayName'=>'Status','index'=>'status'),
-			'resolution'=>array('displayName'=>'Resolution','index'=>'resolution'),
-			'location'=>array('displayName'=>'Location','index'=>'location'),
-			'latitude'=>array('displayName'=>'Latitude','index'=>'coordinates.latitude'),
-			'longitude'=>array('displayName'=>'Longitude','index'=>'coordinates.longitude'),
-			'city'=>array('displayName'=>'City','index'=>'city'),
-			'state'=>array('displayName'=>'State','index'=>'state'),
-			'zip'=>array('displayName'=>'Zip','index'=>'zip'),
-			'description'=>array('displayName'=>'Description','index'=>'issues.description')
+			'id'                => 'Case #',
+			'enteredDate'       => 'Case Date',
+			'enteredByPerson_id'=> 'Entered By',
+			'assignedPerson_id' => 'Assigned To',
+			'referredPerson_id' => 'Referred To',
+			'category_id'       => 'Category',
+			'department_id'     => 'Department',
+			'status'            => 'Status',
+			'resolution_id'     => 'Resolution',
+			'location'          => 'Location',
+			'latitude'          => 'Latitude',
+			'longitude'         => 'Longitude',
+			'city'              => 'City',
+			'state'             => 'State',
+			'zip'               => 'Zip',
+			'description'       => 'Description',
 		);
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
-			$fields[$key] = array('displayName'=>$value['description'],'index'=>$key);
+			$fields[$key] = $value['description'];
 		}
 		return $fields;
 	}
@@ -130,64 +129,22 @@ class TicketList extends ZendDbResultIterator
 	/**
 	 * Returns fields this class knows how to search for
 	 *
+	 * These should match the fieldnames in the database
+	 *
 	 * @return array
 	 */
 	public static function getSearchableFields()
 	{
 		$fields = array(
-			'number'=>'number',
-			'enteredDate'=>'enteredDate',
-			'enteredByPerson'=>'enteredByPerson._id',
-			'assignedPerson'=>'assignedPerson._id',
-			'referredPerson'=>'referredPerson._id',
-			'reportedByPerson'=>'issues.reportedByPerson._id',
-			'category'=>'category._id',
-			'department'=>'assignedPerson.department._id',
-			'status'=>'status',
-			'resolution'=>'resolution',
-			'location'=>'location',
-			'latitude'=>'coordinates.latitude',
-			'longitude'=>'coordinates.longitude',
-			'city'=>'city',
-			'state'=>'state',
-			'zip'=>'zip',
-			'description'=>'issues.description',
-			'start_date'=>'enteredDate',
-			'end_date'=>'enteredDate',
-			'client_id'=>'client_id',
-			'labels'=>'issues.labels',
-			'type'=>'issues.type'
-		);
-		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
-			$fields[$key] = $key;
-		}
-		return $fields;
-	}
-
-	/**
-	 * Returns fields this class can use for sorting ticket list results
-	 *
-	 * @return array
-	 */
-	public static function getSortableFields()
-	{
-		$fields = array(
-			'number'=>'number',
-			'enteredDate'=>'enteredDate',
-			'enteredByPerson'=>'enteredByPerson.lastname',
-			'assignedPerson'=>'assignedPerson.lastname',
-			'referredPerson'=>'referredPerson.lastname',
-			'category'=>'category.name',
-			'department'=>'assignedPerson.department.name',
-			'status'=>'status',
-			'resolution'=>'resolution',
-			'location'=>'coordinates.location',
-			'latitude'=>'coordinates.latitude',
-			'longitude'=>'longitude',
-			'city'=>'city',
-			'state'=>'state',
-			'zip'=>'zip',
-			'description'=>'issues.description'
+			'enteredDate', 'description',
+			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id', 'reportedByPerson_id',
+			'category_id', 'department_id', 'client_id',
+			'status', 'resolution_id',
+			'location', 'latitude', 'longitude',
+			'city', 'state', 'zip',
+			'start_date',
+			'end_date',
+			'label_id', 'issueType_id'
 		);
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
 			$fields[$key] = $key;

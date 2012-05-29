@@ -119,9 +119,9 @@ class Ticket extends ActiveRecord
 	{
 		parent::save();
 
-		#$search = new Search();
-		#$search->add($this);
-		#$search->solrClient->commit();
+		$search = new Search();
+		$search->add($this);
+		$search->solrClient->commit();
 	}
 
 	public function delete()

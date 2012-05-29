@@ -91,15 +91,14 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						$_GET['fields'] = TicketList::$defaultFieldsToDisplay;
 					}
 
-					foreach (TicketList::getDisplayableFields() as $name=>$definition) {
-						if ((false === strpos($name,'Person') || userIsAllowed('people','view'))
-							&& $name!='id' && $name!='number') {
-							$checked = isset($_GET['fields'][$name]) ? 'checked="checked"' : '';
-							$value = View::escape($definition['displayName']);
+					foreach (TicketList::getDisplayableFields() as $field=>$name) {
+						if ((false === strpos($field,'Person') || userIsAllowed('people', 'view'))
+							&& $field!='id') {
+							$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
 							echo "
 							<li><label>
-									<input name=\"fields[$name]\" id=\"fields-$name\" type=\"checkbox\" $checked />
-									$value
+									<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />
+									$name
 								</label>
 							</li>
 							";

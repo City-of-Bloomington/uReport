@@ -24,12 +24,15 @@ echo "
 		$sortableFields = Search::getSortableFields('ticket');
 
 		// Loop through all the fields the user asked to see
-		foreach ($_GET['fields'] as $name=>$value) {
+		// The key will be the fieldname and the value will be "On" or 1
+		// or whatever the browser gives to checkboxes when you post a form.
+		// We'll loop through all of the fieldnames that were checked
+		foreach ($_GET['fields'] as $name => $checked) {
 			// Make sure they're allowed to see this field
-			if (array_key_exists($name,$displayableFields)
-				&& (false === strpos($name,'Person') || userIsAllowed('people'))) {
+			if (array_key_exists($name, $displayableFields)
+				&& (false === strpos($name, 'Person') || userIsAllowed('people'))) {
 
-				$label = $displayableFields[$name]['displayName'];
+				$label = $displayableFields[$name];
 
 				// If this field is being used for sorting,
 				// draw a url that reverses the sort order
