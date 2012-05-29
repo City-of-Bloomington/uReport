@@ -21,6 +21,7 @@ class Issue extends ActiveRecord
 
 	private $labels = array();
 	private $labelsModified = false;
+	private $history = array();
 
 	/**
 	 * Populates the object with data
@@ -93,6 +94,19 @@ class Issue extends ActiveRecord
 		if ($this->labelsModified) { $this->saveLabels(); }
 	}
 
+	public function delete()
+	{
+		if ($this->getId()) {
+			foreach ($this->getMedia() as $m) { $m->delete(); }
+
+			$zend_db = Database::getConnection();
+			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
+			$zend_db->delete('issueHistory', 'issue_id='.$this->getId());
+			$zend_db->delete('responses',    'issue_id='.$this->getId());
+			parent::delete();
+		}
+	}
+
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
@@ -105,6 +119,7 @@ class Issue extends ActiveRecord
 	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
 	public function getDescription()         { return parent::get('description');         }
 	public function getDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
+	public function getTicket()           { return parent::getForeignKeyObject('Ticket',        'ticket_id');           }
 	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id');    }
 	public function getResponseMethod()   { return parent::getForeignKeyObject('ContactMethod', 'responseMethod_id');   }
 	public function getIssueType()        { return parent::getForeignKeyObject('IssueType',     'issueType_id');        }
@@ -236,40 +251,30 @@ class Issue extends ActiveRecord
 	 */
 	public function getHistory()
 	{
-		$history = array();
-		if (isset($this->data['history'])) {
-			foreach ($this->data['history'] as $data) {
-				$history[] = new History($data);
+		if (!count($this->history)) {
+			$zend_db = Database::getConnection();
+			$sql = 'select * from issueHistory where issue_id=?';
+			$r = $zend_db->fetchAll($sql, array($this->getId()));
+			foreach ($r as $row) {
+				$this->history[] = new IssueHistory($row);
 			}
 		}
-		return $history;
+		return $this->history;
 	}
 
 	/**
-	 * @return array
+	 * @return MediaList
 	 */
 	public function getMedia()
 	{
-		$media = array();
-		if (isset($this->data['media'])) {
-			foreach ($this->data['media'] as $data) {
-				$media[] = new Media($data);
-			}
-		}
-		return $media;
+		return new MediaList(array('issue_id'=>$this->getId()));
 	}
 
 	/**
-	 * @return array
+	 * @return ResponseList
 	 */
 	public function getResponses()
 	{
-		$responses = array();
-		if (isset($this->data['responses'])) {
-			foreach ($this->data['responses'] as $data) {
-				$responses[] = new Response($data);
-			}
-		}
-		return $responses;
+		return new ResponseList(array('issue_id'=>$this->getId()));
 	}
 }

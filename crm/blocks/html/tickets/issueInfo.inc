@@ -4,22 +4,22 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
- * @param bool $this->disableButtons
+ * @param bool  $this->disableButtons
  */
-$editButton = '';
-$deleteButton = '';
+$editButton     = '';
+$deleteButton   = '';
 $responseButton = '';
 $uploadButton   = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		href=\"".BASE_URL."/issues/update?issue_id={$this->issue->getId()}\">
 		Edit Issue
 	</a>
 	";
 	$deleteButton = "
 	<a class=\"delete button\"
-		href=\"".BASE_URL."/issues/delete?ticket_id={$this->ticket->getId()};index={$this->index}\">
+		href=\"".BASE_URL."/issues/delete?issue_id={$this->issue->getId()}\">
 		Delete Issue
 	</a>
 	";
@@ -27,7 +27,7 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	if ($this->issue->getReportedByPerson()) {
 		$responseButton = "
 		<a class=\"add button\"
-			href=\"".BASE_URL."/issues/respond?ticket_id={$this->ticket->getId()};index={$this->index}\">
+			href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
 			Add Response
 		</a>
 		";
@@ -35,13 +35,13 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	if (userIsAllowed('media','upload')) {
 		$uploadButton = "
 		<a class=\"upload button\"
-			href=\"".BASE_URL."/media/upload?ticket_id={$this->ticket->getId()};index={$this->index}\">
+			href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
 			Upload Attachment
 		</a>
 		";
 	}
 }
-$url = BASE_URL."/issues?ticket_id={$this->ticket->getId()};index={$this->index}";
+$url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
 $type = View::escape($this->issue->getIssueType());
 echo "
 <div class=\"issueInfo\">
@@ -83,9 +83,8 @@ echo "
 			<li><label>Respond Via:</label> $responseMethod</li>
 			<li><label>Labels:</label> $labels</li>
 		";
-			$customFields = $this->ticket->getCategory_id()
-				? $this->ticket->getCategory()->getCustomFields()
-				: null;
+			$t = $this->issue->getTicket();
+			$customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
 			if ($customFields) {
 				$customFieldData = $this->issue->getCustomFields();
 				foreach ($customFields as $definition) {

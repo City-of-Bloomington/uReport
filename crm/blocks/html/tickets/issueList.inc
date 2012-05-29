@@ -4,9 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
- * @param Ticket $this->ticket
- * @param bool $this->disableButtons
- * @param bool $this->disableComments
+ * @param Ticket    $this->ticket
+ * @param bool      $this->disableButtons
+ * @param bool      $this->disableComments
  */
 $addButton = '';
 if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
@@ -19,14 +19,15 @@ if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
 }
 echo "
 <div class=\"issueList\">
-	<h1>Associated Issues 	$addButton</h1>
+	<h1>Associated Issues $addButton</h1>
 ";
-	foreach ($this->issueList as $index=>$issue) {
+	foreach ($this->issueList as $issue) {
 		$block = new Block(
 			'tickets/issueInfo.inc',
 			array(
-				'ticket'=>$this->ticket,'issue'=>$issue,'index'=>$index,
-				'disableButtons'=>$this->disableButtons,'disableComments'=>$this->disableComments
+				'issue'          => $issue,
+				'disableButtons' => $this->disableButtons,
+				'disableComments'=> $this->disableComments
 			)
 		);
 		echo $block->render('html',$this->template);

@@ -12,14 +12,14 @@ if (count($this->mediaList)) {
 	echo "
 	<table>
 	";
-	foreach ($this->mediaList as $mediaIndex=>$media) {
+	foreach ($this->mediaList as $media) {
 		$deleteButton = '';
 		if (!$this->disableButtons) {
-			$url = new URL(BASE_URL.'/media/delete');
-			$url->ticket_id = (string)$this->ticket->getId();
-			$url->issueIndex = $this->index;
-			$url->mediaIndex = $mediaIndex;
-			$deleteButton = "<a class=\"delete button\" href=\"$url\">Delete Attachment</a>";
+			$deleteButton = "
+			<a class=\"delete button\" href=\"".BASE_URL."/media/delete?media_id={$media->getId()}\">
+				Delete Attachment
+			</a>
+			";
 		}
 		echo "
 		<tr><td>{$media->getUploaded(DATE_FORMAT)}</td>

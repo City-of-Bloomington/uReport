@@ -1,15 +1,25 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * A collection class for Media
+ *
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class ResponseList extends ZendDbResultIterator
+class MediaList extends ZendDbResultIterator
 {
+	/**
+	 * @param array $fields
+	 */
 	public function __construct($fields=null)
 	{
 		parent::__construct();
-		if (is_array($fields)) { $this->find($fields); }
+
+		$this->select->from('media');
+
+		if (is_array($fields)) {
+			$this->find($fields);
+		}
 	}
 
 	/**
@@ -20,9 +30,8 @@ class ResponseList extends ZendDbResultIterator
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order='date',$limit=null,$groupBy=null)
+	public function find($fields=null,$order='uploaded',$limit=null,$groupBy=null)
 	{
-		$this->select->from('responses');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
@@ -47,6 +56,6 @@ class ResponseList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new Response($this->result[$key]);
+		return new Media($this->result[$key]);
 	}
 }

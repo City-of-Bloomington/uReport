@@ -87,9 +87,9 @@ class TicketsController extends Controller
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/issueList.inc',
 			array(
-				'issueList'=>$ticket->getIssues(),
-				'ticket'=>$ticket,
-				'disableButtons'=>$ticket->getStatus()=='closed'
+				'issueList'     => $ticket->getIssues(),
+				'ticket'        => $ticket,
+				'disableButtons'=> $ticket->getStatus()=='closed'
 			)
 		);
 
@@ -108,10 +108,10 @@ class TicketsController extends Controller
 				$this->template->blocks['location-panel'][] = new Block(
 					'tickets/ticketList.inc',
 					array(
-						'ticketList'=>$ticketList,
-						'title'=>'Other cases for this location',
-						'filterTicket'=>$ticket,
-						'disableButtons'=>true
+						'ticketList'    => $ticketList,
+						'title'         => 'Other cases for this location',
+						'filterTicket'  => $ticket,
+						'disableButtons'=> true
 					)
 				);
 			}

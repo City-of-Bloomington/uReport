@@ -8,12 +8,13 @@ class MediaController extends Controller
 {
 	/**
 	 * @param string $id
+	 * @return Issue
 	 */
-	private function loadTicket($id)
+	private function loadIssue($id)
 	{
 		try {
-			$ticket = new Ticket($id);
-			return $ticket;
+			$issue = new Issue($id);
+			return $issue;
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -27,39 +28,33 @@ class MediaController extends Controller
 	}
 
 	/**
-	 * @param GET ticket_id
-	 * @param GET issueIndex
-	 * @param GET mediaIndex
+	 * @param GET media_id
 	 */
 	public function delete()
 	{
-		$ticket = $this->loadTicket($_GET['ticket_id']);
-		$ticket->deleteMedia($_GET['issueIndex'],$_GET['mediaIndex']);
+		$media = new Media($_GET['media_id']);
+		$ticket = $media->getIssue()->getTicket();
+		$media->delete();
 
 		header('Location: '.$ticket->getURL());
 		exit();
 	}
 
 	/**
-	 * @param POST ticket_id
-	 * @param POST index
+	 * @param POST issue_id
 	 * @param POST attachment
 	 */
 	public function upload()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
-		$issues = $ticket->getIssues();
-		if (!isset($issues[$_REQUEST['index']])) {
-			$_SESSION['errorMessages'][] = new Exception('tickets/unknownIssue');
-			header('Location: '.$ticket->getURL());
-			exit();
-		}
-		$issue = $issues[$_REQUEST['index']];
+		$issue = $this->loadIssue($_REQUEST['issue_id']);
+		$ticket = $issue->getTicket();
 
 		if (isset($_FILES['attachment'])) {
 			try {
-				$ticket->attachMedia($_FILES['attachment'],$_POST['index']);
-				$ticket->save();
+				$media = new Media();
+				$media->setIssue($issue);
+				$media->setFile($_FILES['attachment']);
+				// Setting the file calls ->save() internally
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -72,19 +67,18 @@ class MediaController extends Controller
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>1)
+			array('ticket'=>$ticket, 'disableButtons'=>1)
 		);
 		$this->template->blocks['history-panel'][] = new Block(
 			'tickets/history.inc',
 			array('history'=>$ticket->getHistory())
 		);
 		$this->template->blocks['issue-panel'][] = new Block(
-			'media/uploadForm.inc',
-			array('ticket'=>$ticket,'index'=>$_REQUEST['index'])
+			'media/uploadForm.inc', array('issue'=>$issue)
 		);
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/issueInfo.inc',
-			array('ticket'=>$ticket,'issue'=>$issue,'index'=>$_REQUEST['index'],'disableButtons'=>1)
+			array('issue'=>$issue, 'disableButtons'=>1)
 		);
 	}
 }

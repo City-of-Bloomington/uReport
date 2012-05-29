@@ -116,20 +116,21 @@ class Media extends ActiveRecord
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getMedia_type() { return parent::get('media_type'); }
 	public function getPerson_id()  { return parent::get('person_id');  }
-	public function getUploaded($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
+	public function getUploaded($f=null, DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
 
 	public function getIssue()  { return parent::getForeignKeyObject('Issue',  'issue_id');  }
 	public function getPerson() { return parent::getForeignKeyObject('Person', 'person_id'); }
 
-	public function setIssue_id($id)     { parent::setForeignKeyField ('Issue',  'issue_id',  $id); }
+	public function setIssue_id ($id)    { parent::setForeignKeyField ('Issue',  'issue_id',  $id); }
 	public function setPerson_id($id)    { parent::setForeignKeyField ('Person', 'person_id', $id); }
-	public function setIssue(Issue $i)   { parent::setForeignKeyObject('Issue',  'issue_id',  $i);  }
-	public function setPerson(Person $p) { parent::setForeignKeyObject('Person', 'person_id', $p);  }
-
+	public function setIssue (Issue  $o) { parent::setForeignKeyObject('Issue',  'issue_id',  $o);  }
+	public function setPerson(Person $o) { parent::setForeignKeyObject('Person', 'person_id', $o);  }
+	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 
 
 	public function getType() { return $this->getMedia_type(); }
 	public function getModified($f=null, DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
@@ -140,9 +141,8 @@ class Media extends ActiveRecord
 	 * It tries to read as much meta-data about the file as possible
 	 *
 	 * @param array|string Either a $_FILES array or a path to a file
-	 * @param string $directory Where to place save the file
 	 */
-	public function setFile($file, $directory)
+	public function setFile($file)
 	{
 		# Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
@@ -166,6 +166,7 @@ class Media extends ActiveRecord
 		}
 
 		// Move the file where it's supposed to go
+		$directory = $this->getDirectory();
 		if (!is_dir(APPLICATION_HOME."/data/media/$directory")) {
 			mkdir  (APPLICATION_HOME."/data/media/$directory",0777,true);
 		}

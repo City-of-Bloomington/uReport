@@ -8,6 +8,10 @@ class Response extends ActiveRecord
 {
 	protected $tablename = 'responses';
 
+	protected $issue;
+	protected $person;
+	protected $contactMethod;
+
 	/**
 	 * Populates the object with data
 	 *
@@ -43,13 +47,22 @@ class Response extends ActiveRecord
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->setDate('now');
+			if (isset($_SESSION['USER'])) {
+				$this->setPerson($_SESSION['USER']);
+			}
 		}
 	}
 
 	public function validate()
 	{
+		if (!$this->getIssue_id()) { throw new Exception('issues/unknownIssue'); }
+
 		if (!$this->getDate()) { $this->setDate('now'); }
-		if (!$this->getPerson_id()) { throw new Exception('response/unknownPerson'); }
+
+		if (!$this->getPerson_id()) {
+			if (isset($_SESSION['USER'])) { $this->setPerson($_SESSION['USER']); }
+			else { throw new Exception('response/unknownPerson'); }
+		}
 	}
 
 	public function save() { parent::save(); }
@@ -77,4 +90,14 @@ class Response extends ActiveRecord
 	public function setIssue        (Issue         $o) { parent::setForeignKeyObject('Issue',         'issue_id',         $o); }
 	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id', $o); }
 	public function setPerson       (Person        $o) { parent::setForeignKeyObject('Person',        'person_id',        $o); }
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setIssue_id($post['issue_id']);
+		$this->setContactMethod_id($post['contactMethod_id']);
+		$this->setNotes($post['notes']);
+	}
 }
