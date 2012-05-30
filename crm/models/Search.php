@@ -189,10 +189,12 @@ class Search
 				$document->addField('description', $description);
 			}
 
-			foreach (AddressService::$customFieldDescriptions as $field=>$def) {
-				$value = $record->get($field);
-				if ($value) {
-					$document->addField($field, $value);
+			$additionalFields = $record->getAdditionalFields();
+			if ($additionalFields) {
+				foreach ($additionalFields as $key=>$value) {
+					if ($value) {
+						$document->addField($key, $value);
+					}
 				}
 			}
 
