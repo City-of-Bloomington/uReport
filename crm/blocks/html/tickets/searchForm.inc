@@ -117,7 +117,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 			<fieldset><legend>Submit</legend>
 				<?php
 					$h = $this->template->getHelper('renderInputs');
-					echo $h->renderInputs($_GET);
+					echo $h->renderInputs($_GET, null, array('query', 'fields'));
 				?>
 				<button type="submit" class="search">Search</button>
 			</fieldset>
