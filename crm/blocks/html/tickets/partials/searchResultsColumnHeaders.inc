@@ -49,9 +49,6 @@ echo "
 					}
 					echo "<th><a href=\"$url\" $class>$label</a></th>";
 				}
-				else {
-					echo "<th>$label</th>";
-				}
 			}
 		}
 	}

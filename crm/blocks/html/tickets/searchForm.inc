@@ -111,22 +111,8 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 
 			<fieldset><legend>Submit</legend>
 				<?php
-					if (isset($_GET['report'])) {
-						$report = View::escape($_GET['report']);
-						echo "<input name=\"report\" type=\"hidden\" value=\"$report\" />";
-					}
-
-					// Handle searches by Person
-					// Even though we don't display these to the user,
-					// the search form still needs to respond to these fields
-					$f = array('enteredBy','reportedBy','assigned','referred');
-					foreach ($f as $v) {
-						$personField = $v.'Person';
-						if (isset($_GET[$personField])) {
-							$value = View::escape($_GET[$personField]);
-							echo "<input type=\"hidden\" name=\"$personField\" value=\"$value\" />\n";
-						}
-					}
+					$h = $this->template->getHelper('renderInputs');
+					echo $h->renderInputs($_GET);
 				?>
 				<button type="submit" class="search">Search</button>
 			</fieldset>
