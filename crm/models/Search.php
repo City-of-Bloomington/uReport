@@ -62,7 +62,9 @@ class Search
 	 */
 	public function query($get)
 	{
-		$query = new SolrQuery('*:*');
+		$query = !empty($get['query'])
+			? new SolrQuery("{!df=description}$get[query]")
+			: new SolrQuery('*:*');
 		$query->setFacet(true);
 		$query->setRows(self::ITEMS_PER_PAGE);
 		if (!empty($get['page'])) {

@@ -48,6 +48,11 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 	<div class="advancedSearch">
 		<h2>Advanced Search</h2>
 		<form method="get" action="<?php echo BASE_URI; ?>/tickets">
+			<fieldset>
+				<label>Search
+					<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
+				</label>
+			</fieldset>
 			<fieldset id="advanced-search">
 				<?php
 					if (isset($this->solrObject->facet_counts->facet_fields)) {

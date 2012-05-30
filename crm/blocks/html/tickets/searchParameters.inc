@@ -9,38 +9,47 @@
  */
 $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-if (isset($this->solrObject->responseHeader->params->fq)) {
-	$fq = $this->solrObject->responseHeader->params->fq;
+if (!empty($_GET['query'])
+	|| isset($this->solrObject->responseHeader->params->fq)) {
+	$q = !empty($_GET['query'])
+		? 'Results for: '.View::escape($_GET['query'])
+		: 'Current Search';
+	$fq = isset($this->solrObject->responseHeader->params->fq)
+		? $this->solrObject->responseHeader->params->fq
+		: array();
 	echo "
 	<div class=\"searchParameters\">
-		<h2>Current Search</h2>
+		<h2>$q</h2>
+	";
+	if (count($fq)) {
+		echo "
 		<p>Your current search parameters.
 			Click on one of the labels to delete that parameter from your search.
 		</p>
 		<span>
-	";
-	// There may only be one filterQuery
-	if (!is_array($fq)) { $fq = array($fq); }
-
-	foreach ($fq as $facet) {
-		list($key, $value) = explode(':', $facet);
-
-		$deleteURL = clone $currentURL;
-		if (isset($deleteURL->$key)) {
-			unset($deleteURL->$key);
-		}
-
-		$displayName = Search::$facetFields['ticket'][$key];
-		$displayValue = Search::getDisplayName('ticket', $key, $value);
-		echo "
-		<a class=\"delete button\" href=\"$deleteURL\">
-			$displayName: $displayValue
-		</a>
 		";
-	}
+		// There may only be one filterQuery
+		if (!is_array($fq)) { $fq = array($fq); }
 
+		foreach ($fq as $facet) {
+			list($key, $value) = explode(':', $facet);
+
+			$deleteURL = clone $currentURL;
+			if (isset($deleteURL->$key)) {
+				unset($deleteURL->$key);
+			}
+
+			$displayName = Search::$facetFields['ticket'][$key];
+			$displayValue = Search::getDisplayName('ticket', $key, $value);
+			echo "
+			<a class=\"delete button\" href=\"$deleteURL\">
+				$displayName: $displayValue
+			</a>
+			";
+		}
+		echo "</span>";
+	}
 	echo "
-		</span>
 	</div>
 	";
 }
