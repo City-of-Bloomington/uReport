@@ -7,10 +7,13 @@
 include '../../configuration.inc';
 $search = new Search();
 
-$tickets = new TicketList();
-$tickets->find();
+$sql = 'select * from tickets';
+$zend_db = Database::getConnection();
+$query = $zend_db->query($sql);
+
 $c = 0;
-foreach ($tickets as $ticket) {
+while ($row = $query->fetch()) {
+	$ticket = new Ticket($row);
 	$search->add($ticket);
 	$c++;
 	echo "$c: {$ticket->getId()}\n";
