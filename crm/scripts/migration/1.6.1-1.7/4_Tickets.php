@@ -51,6 +51,21 @@ function createHistory($o, $h)
 	$history->save();
 }
 
+function handleContactMethod($o, $data, $fieldname)
+{
+	$set = 'set'.ucfirst($fieldname);
+	try {
+		$o->$set(new ContactMethod($data[$fieldname]));
+	}
+	catch (Exception $e) {
+		$c = new ContactMethod();
+		$c->setName($data[$fieldname]);
+		$c->save();
+
+		$o->$set($c);
+	}
+}
+
 // Tickets
 $ticketCount = 0;
 $result = $mongo->tickets->find();
@@ -126,16 +141,10 @@ foreach ($result as $r) {
 		$issue = new Issue();
 		$issue->setTicket($ticket);
 		if (!empty($i['contactMethod'])) {
-			try {
-				$issue->setContactMethod(new ContactMethod($i['contactMethod']));
-			}
-			catch (Exception $e) { } // Just ignore bad contactMethods
+			handleContactMethod($issue, $i, 'contactMethod');
 		}
 		if (!empty($i['responseMethod'])) {
-			try {
-				$issue->setResponseMethod(new ContactMethod($i['responseMethod']));
-			}
-			catch (Exception $e) { } // Just ignore bad contactMethods
+			handleContactMethod($issue, $i, 'responseMethod');
 		}
 		if (!empty($i['type'])) {
 			$issue->setIssueType(new IssueType($i['type']));
@@ -178,7 +187,7 @@ foreach ($result as $r) {
 					$response->setDate($d->format('Y-m-d H:i:s'));
 				}
 				if (!empty($res['contactMethod'])) {
-					$response->setContactMethod(new ContactMethod($res['contactMethod']));
+					handleContactMethod($response, $res, 'contactMethod');
 				}
 				if (!empty($res['notes'])) {
 					$response->setNotes($res['notes']);
