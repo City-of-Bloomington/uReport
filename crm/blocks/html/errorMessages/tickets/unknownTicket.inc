@@ -1,1 +1,1 @@
-<p>That ticket is no longer in the system.</p>
+<p>That ticket is not in the system.</p>
