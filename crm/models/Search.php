@@ -35,7 +35,8 @@ class Search
 		'zip'             => 'Zip',
 		'issueType_id'    => 'Issue Type',
 		'label_id'        => 'Label',
-		'contactMethod_id'=> 'Received Via'
+		'contactMethod_id'=> 'Received Via',
+		'enteredDate'     => 'Case Date'
 	);
 
 	/**
@@ -127,7 +128,20 @@ class Search
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
 			if (!empty($get[$field])) {
-				$query->addFilterQuery("$field:$get[$field]");
+				if (false !== strpos($field, 'Date')
+					&& (!empty($get[$field]['start']) || !empty($get[$field]['end']))) {
+					$start = !empty($get[$field]['start'])
+						? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
+						: '*';
+					$end = !empty($get[$field]['end'])
+						? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
+						: '*';
+					$value = "[$start TO $end]";
+				}
+				else {
+					$value = $get[$field];
+				}
+				$query->addFilterQuery("$field:$value");
 			}
 		}
 
@@ -212,7 +226,7 @@ class Search
 			}
 
 			$issueFields = array(
-				'contactMethod_id', 'responseMethod_id', 'issueType_id', 'reportedByPerson_id'
+				'contactMethod_id', 'issueType_id', 'reportedByPerson_id'
 			);
 			$description = '';
 			foreach ($record->getIssues() as $issue) {
@@ -223,7 +237,7 @@ class Search
 						$document->addField($field, $issue->$get());
 					}
 				}
-				foreach ($issue->getLabels() as $label) {
+				foreach (array_keys($issue->getLabels()) as $label) {
 					$document->addField('label_id', $label);
 				}
 			}
@@ -258,11 +272,19 @@ class Search
 	public static function getDisplayName($recordType, $fieldname, $value)
 	{
 		if (isset(self::$searchableFields[$fieldname])) {
-			if (preg_match('/Person_id$/', $fieldname)) {
+			if (false !== strpos($fieldname, 'Date')) {
+				// Reformat Solr date ranges
+				// enteredDate:[2011-06-15T00:00:00Z TO 2011-06-30T00:00:00Z]
+				preg_match('/\[(.+)\sTO\s(.+)\]/', $value, $matches);
+				$start = substr($matches[1], 0, 10);
+				$end   = substr($matches[2], 0, 10);
+				return "$start - $end";
+			}
+			elseif (false !== strpos($fieldname, 'Person_id')) {
 				$o = new Person($value);
 				return $o->getFullname();
 			}
-			elseif (preg_match('/_id$/', $fieldname)) {
+			elseif (false !== strpos($fieldname, '_id')) {
 				$class = ucfirst(substr($fieldname, 0, -3));
 				$o = new $class($value);
 				return $o->getName();

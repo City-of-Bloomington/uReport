@@ -87,6 +87,20 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						}
 					}
 				?>
+				<div><h3>Case Date</h3>
+					<table>
+						<tr><td><label for="enteredDate-start">Start:</label></td>
+							<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
+									value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />
+							</td>
+						</tr>
+						<tr><td><label for="enteredDate-end">End:</label></td>
+							<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
+									value="<?php echo !empty($_GET['enteredDate']['end']) ? View::escape($_GET['enteredDate']['end']) : ''; ?>" />
+							</td>
+						</tr>
+					</table>
+				</div>
 			</fieldset>
 
 

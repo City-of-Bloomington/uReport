@@ -32,7 +32,9 @@ if (!empty($_GET['query'])
 		if (!is_array($fq)) { $fq = array($fq); }
 
 		foreach ($fq as $facet) {
-			list($key, $value) = explode(':', $facet);
+			preg_match('/([^:]+):(.+)/', $facet, $matches);
+			$key = $matches[1];
+			$value = $matches[2];
 
 			$deleteURL = clone $currentURL;
 			if (isset($deleteURL->$key)) {
