@@ -128,20 +128,22 @@ class Search
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
 			if (!empty($get[$field])) {
-				if (false !== strpos($field, 'Date')
-					&& (!empty($get[$field]['start']) || !empty($get[$field]['end']))) {
-					$start = !empty($get[$field]['start'])
-						? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
-						: '*';
-					$end = !empty($get[$field]['end'])
-						? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
-						: '*';
-					$value = "[$start TO $end]";
+				if (false !== strpos($field, 'Date')) {
+					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
+						echo "Attempting to query by date range\n";
+						$start = !empty($get[$field]['start'])
+							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
+							: '*';
+						$end = !empty($get[$field]['end'])
+							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
+							: '*';
+						$query->addFilterQuery("$field:[$start TO $end]");
+					}
 				}
 				else {
-					$value = $get[$field];
+					$query->addFilterQuery("$field:$get[$field]");
 				}
-				$query->addFilterQuery("$field:$value");
+
 			}
 		}
 
