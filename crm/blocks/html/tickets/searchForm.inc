@@ -22,19 +22,19 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 					</fieldset>
 				</form>
 				<ul><li><a href=\"".BASE_URL."/tickets?status=open\">
-							All open cases
+							Open Cases
 						</a>
 					</li>
-					<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson%5B%5D={$_SESSION['USER']->getId()}\">
-							All open cases assigned to me
+					<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
+							My Cases
 						</a>
 					</li>
 				";
 				if ($_SESSION['USER']->getDepartment_id()) {
 					$d = $_SESSION['USER']->getDepartment();
 					echo "
-					<li><a href=\"".BASE_URL."/tickets?status=open;department%5B%5D={$d->getId()}\">
-							All open cases for my department
+					<li><a href=\"".BASE_URL."/tickets?status=open;department_id={$d->getId()}\">
+							My Department's Cases
 						</a>
 					</li>
 					";
