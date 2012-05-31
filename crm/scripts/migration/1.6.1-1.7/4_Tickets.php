@@ -167,13 +167,11 @@ foreach ($result as $r) {
 			$id = getPersonIdFromCrosswalk($i['reportedByPerson']['_id']);
 			if ($id) { $issue->setReportedByPerson_id($id); }
 		}
+		if (!empty($i['labels'])) {
+			$issue->setLabels($i['labels']);
+		}
 		$issue->save();
 
-		if (!empty($i['labels'])) {
-			$labels = array();
-			foreach ($i['labels'] as $l) { $labels[$l] = 1; }
-			$issue->saveLabels($labels);
-		}
 
 		if (isset($i['history'])) {
 			foreach ($i['history'] as $h) { createHistory($issue, $h); }

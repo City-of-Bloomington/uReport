@@ -220,17 +220,10 @@ class Issue extends ActiveRecord
 			$zend_db = Database::getConnection();
 			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
 			foreach ($this->labels as $id=>$label) {
-				try {
-					$zend_db->insert('issue_labels', array(
-						'issue_id'=>$this->data['id'],
-						'label_id'=>$label->getId()
-					));
-				}
-				catch (Exception $e) {
-					echo $e->getMessage()."\n";
-					print_r($this);
-					exit();
-				}
+				$zend_db->insert('issue_labels', array(
+					'issue_id'=>$this->data['id'],
+					'label_id'=>$label->getId()
+				));
 			}
 		}
 	}
