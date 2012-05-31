@@ -519,7 +519,7 @@ class Ticket extends ActiveRecord
 	 */
 	public function allowsDisplay($person)
 	{
-		$category = isset($this->data['category']) ? $this->getCategory() : new Category();
+		$category = $this->getCategory_id() ? $this->getCategory() : new Category();
 		return $category->allowsDisplay($person);
 	}
 }

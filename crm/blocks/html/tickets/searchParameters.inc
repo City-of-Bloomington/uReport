@@ -35,19 +35,21 @@ if (!empty($_GET['query'])
 			preg_match('/([^:]+):(.+)/', $facet, $matches);
 			$key = $matches[1];
 			$value = $matches[2];
+			// Users should not change the permission level they're searching as
+			if ($key != 'displayPermissionLevel') {
+				$deleteURL = clone $currentURL;
+				if (isset($deleteURL->$key)) {
+					unset($deleteURL->$key);
+				}
 
-			$deleteURL = clone $currentURL;
-			if (isset($deleteURL->$key)) {
-				unset($deleteURL->$key);
+				$displayName = Search::$searchableFields[$key];
+				$displayValue = Search::getDisplayName('ticket', $key, $value);
+				echo "
+				<a class=\"delete button\" href=\"$deleteURL\">
+					$displayName: $displayValue
+				</a>
+				";
 			}
-
-			$displayName = Search::$searchableFields[$key];
-			$displayValue = Search::getDisplayName('ticket', $key, $value);
-			echo "
-			<a class=\"delete button\" href=\"$deleteURL\">
-				$displayName: $displayValue
-			</a>
-			";
 		}
 		echo "</span>";
 	}

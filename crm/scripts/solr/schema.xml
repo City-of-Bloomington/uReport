@@ -167,6 +167,8 @@
 	<field name="state"         type="string" indexed="true" stored="true" />
 	<field name="zip"           type="string" indexed="true" stored="true" />
 
+	<field name="displayPermissionLevel" type="string" indexed="true" stored="false" />
+
 	<field name="enteredByPerson_id"  type="int" indexed="true" stored="false" />
 	<field name="assignedPerson_id"   type="int" indexed="true" stored="false" />
 	<field name="referredPerson_id"   type="int" indexed="true" stored="false" />

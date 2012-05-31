@@ -145,6 +145,16 @@ class Search
 			}
 		}
 
+		// User permissions
+		if (!isset($_SESSION['USER'])
+			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
+			$permissions = 'anonymous';
+			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
+				$permissions.= ' OR public';
+			}
+			$query->addFilterQuery("displayPermissionLevel:$permissions");
+		}
+
 		$solrResponse = $this->solrClient->query($query);
 		return $solrResponse->getResponse();
 	}
@@ -206,6 +216,9 @@ class Search
 			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), DateTimeZone::UTC);
 			if ($record->getLatLong()) {
 				$document->addField('coordinates', $record->getLatLong());
+			}
+			if ($record->getCategory()) {
+				$document->addField('displayPermissionLevel', $record->getCategory()->getDisplayPermissionLevel());
 			}
 
 			$fields = array(

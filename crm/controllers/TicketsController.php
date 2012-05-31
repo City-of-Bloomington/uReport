@@ -58,61 +58,60 @@ class TicketsController extends Controller
 	{
 		$ticket = $this->loadTicket($_GET['ticket_id']);
 
-		if (!$ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
-			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
-			header('Location: '.BASE_URL.'/tickets');
-			exit();
-		}
-
-		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket)
-		);
-
-		if (userIsAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
-			$this->template->blocks['history-panel'][] = new Block(
-				'tickets/actionForm.inc',
-				array('ticket'=>$ticket)
-			);
-		}
-
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory())
-		);
-
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array(
-				'issueList'     => $ticket->getIssues(),
-				'ticket'        => $ticket,
-				'disableButtons'=> $ticket->getStatus()=='closed'
-			)
-		);
-
-		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
-			);
-			$this->template->blocks['location-panel'][] = new Block(
-				'tickets/ticketLocationInfo.inc',
+		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+			$this->template->setFilename('tickets');
+			$this->template->blocks['ticket-panel'][] = new Block(
+				'tickets/ticketInfo.inc',
 				array('ticket'=>$ticket)
 			);
 
-			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
-			if (count($ticketList) > 1) {
-				$this->template->blocks['location-panel'][] = new Block(
-					'tickets/ticketList.inc',
-					array(
-						'ticketList'    => $ticketList,
-						'title'         => 'Other cases for this location',
-						'filterTicket'  => $ticket,
-						'disableButtons'=> true
-					)
+			if (userIsAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
+				$this->template->blocks['history-panel'][] = new Block(
+					'tickets/actionForm.inc',
+					array('ticket'=>$ticket)
 				);
 			}
+
+			$this->template->blocks['history-panel'][] = new Block(
+				'tickets/history.inc',
+				array('history'=>$ticket->getHistory())
+			);
+
+			$this->template->blocks['issue-panel'][] = new Block(
+				'tickets/issueList.inc',
+				array(
+					'issueList'     => $ticket->getIssues(),
+					'ticket'        => $ticket,
+					'disableButtons'=> $ticket->getStatus()=='closed'
+				)
+			);
+
+			if ($ticket->getLocation()) {
+				$this->template->blocks['location-panel'][] = new Block(
+					'locations/locationInfo.inc',
+					array('location'=>$ticket->getLocation(),'disableButtons'=>true)
+				);
+				$this->template->blocks['location-panel'][] = new Block(
+					'tickets/ticketLocationInfo.inc',
+					array('ticket'=>$ticket)
+				);
+
+				$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
+				if (count($ticketList) > 1) {
+					$this->template->blocks['location-panel'][] = new Block(
+						'tickets/ticketList.inc',
+						array(
+							'ticketList'    => $ticketList,
+							'title'         => 'Other cases for this location',
+							'filterTicket'  => $ticket,
+							'disableButtons'=> true
+						)
+					);
+				}
+			}
+		}
+		else {
+			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
 		}
 	}
 
