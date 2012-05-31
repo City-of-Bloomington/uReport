@@ -14,11 +14,11 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 			$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 			echo "
 			<div class=\"quickSearches\">
-				<h2>Quick Search</h2>
+				<h2>Quick Links</h2>
 				<form method=\"get\" action=\"".BASE_URL."/tickets\">
 					<fieldset>
-						<label>Case # <input name=\"id\" value=\"$id\"/></label>
-						<button type=\"submit\" class=\"search\">Search</button>
+						<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
+						<button type=\"submit\" class=\"search\">Go</button>
 					</fieldset>
 				</form>
 				<ul><li><a href=\"".BASE_URL."/tickets?status=open\">
@@ -46,7 +46,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 		}
 	?>
 	<div class="advancedSearch">
-		<h2>Advanced Search</h2>
+		<h2>Search</h2>
 		<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 			<fieldset>
 				<label>Search
