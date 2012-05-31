@@ -298,26 +298,6 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @param array|string $file Either a $_FILES array or a path to a file
-	 */
-	public function attachMedia($file,$index)
-	{
-		if (!array_key_exists($index,$this->data['issues'])) {
-			throw new Exception('tickets/unknownIssueIndex');
-		}
-
-		$year = $this->getEnteredDate('Y');
-		$month = $this->getEnteredDate('m');
-		$day = $this->getEnteredDate('d');
-		$directory = "$year/$month/$day/{$this->data['_id']}";
-
-		$media = new Media();
-		$media->setFile($file,$directory);
-
-		$this->data['issues'][$index]['media'][] = $media->getData();
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getHistory()
@@ -352,35 +332,19 @@ class Ticket extends ActiveRecord
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
-		foreach ($ticket->getIssues() as $issue) {
-			$this->updateIssues($issue);
-		}
-		foreach ($ticket->getHistory() as $history) {
-			$this->updateHistory($history);
-		}
-
-		$this->save();
-		$ticket->delete();
-	}
-
-	/**
-	 * Returns the array of distinct values used for Tickets in the system
-	 *
-	 * @param string $fieldname
-	 * @return array
-	 */
-	public static function getDistinct($fieldname)
-	{
-		$validFields = array(
-			'category_id', 'client_id',
-			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
-			'city', 'state', 'zip',
-			'status', 'resolution_id'
-		);
-		if (in_array($fieldname, $validFields)) {
+		if ($this->getId()) {
 			$zend_db = Database::getConnection();
-			$sql = "select distinct $fieldname from tickets order by $fieldname";
-			return $zend_db->fetchCol($sql);
+			$zend_db->beginTransaction();
+			try {
+				$zend_db->update('ticketHistory', array('ticket_id'=>$this->getId()), 'ticket_id='.$ticket->getId());
+				$zend_db->update('issues',        array('ticket_id'=>$this->getId()), 'ticket_id='.$ticket->getId());
+				$zend_db->delete('tickets', 'id='.$ticket->getId());
+			}
+			catch (Exception $e) {
+				$zend_db->rollBack();
+				throw $e;
+			}
+			$zend_db->commit();
 		}
 	}
 

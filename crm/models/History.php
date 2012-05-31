@@ -139,13 +139,16 @@ abstract class History extends ActiveRecord
 		$ep = $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '';
 		$ap = $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '';
 
-		return $this->parseDescription(
-			$this->getAction()->getDescription(),
-			array(
-				'enteredByPerson'=> $ep,
-				'actionPerson'   => $ap
-			)
-		);
+		$a = $this->getAction();
+		if ($a) {
+			return $this->parseDescription(
+				$this->getAction()->getDescription(),
+				array(
+					'enteredByPerson'=> $ep,
+					'actionPerson'   => $ap
+				)
+			);
+		}
 	}
 
 	/**
