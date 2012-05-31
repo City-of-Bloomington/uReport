@@ -117,7 +117,7 @@ class PeopleController extends Controller
 		$field = $listType.'Person_id';
 
 		$tickets = new TicketList();
-		$tickets->find(array($field=>$person->getId()), null, 10);
+		$tickets->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
 
 		if (count($tickets)) {
 			$block = new Block(
