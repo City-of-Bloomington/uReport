@@ -11,13 +11,14 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 <div class="searchForm">
 	<?php
 		if (userIsAllowed('tickets','add')) {
+			// Solr stores ticket_id as 'id'
 			$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 			echo "
 			<div class=\"quickSearches\">
 				<h2>Quick Links</h2>
 				<form method=\"get\" action=\"".BASE_URL."/tickets\">
 					<fieldset>
-						<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
+ 						<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
 						<button type=\"submit\" class=\"search\">Go</button>
 					</fieldset>
 				</form>
@@ -60,7 +61,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 						$facetFields = $this->solrObject->facet_counts->facet_fields;
 						$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
-						foreach (Search::$facetFields['ticket'] as $key=>$displayName) {
+						foreach (Search::$facetFields['ticket'] as $key) {
 							$list = '';
 							foreach ($facetFields[$key] as $value=>$count) {
 								if ($count) {
@@ -76,6 +77,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 								}
 							}
 							if ($list) {
+								$displayName = Search::$searchableFields[$key];
 								echo "
 								<div><h3>$displayName</h3>
 									<ul>$list</ul>

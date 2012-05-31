@@ -25,6 +25,9 @@ if (count($tickets)) {
 	</div>
 	";
 }
+else {
+	echo "<div class=\"searchResults\"><h2>No Cases Found</h2></div>";
+}
 
 $paginator = new Zend_Paginator(new SolrPaginatorAdapter($this->solrObject));
 $paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);

@@ -39,7 +39,7 @@ if (!empty($_GET['query'])
 				unset($deleteURL->$key);
 			}
 
-			$displayName = Search::$facetFields['ticket'][$key];
+			$displayName = Search::$searchableFields[$key];
 			$displayValue = Search::getDisplayName('ticket', $key, $value);
 			echo "
 			<a class=\"delete button\" href=\"$deleteURL\">

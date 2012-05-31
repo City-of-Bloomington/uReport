@@ -13,10 +13,35 @@ class Search
 	const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
 
 	/**
-	 * These are the base facets all users are allowed to search on
+	 * The full list of fields that can be searched on
 	 *
-	 * The order declared here is the same order these facets will be
-	 * displayed, when used.
+	 * Security Notice:
+	 * Make sure to keep this initial list limited to "safe" fields.
+	 * That is: fields that are okay to display to any anonymous person.
+	 * Use __construct() to add fields that should be kept hidden
+	 * unless a person is authorized to see them.
+	 */
+	public static $searchableFields = array(
+		'id'              => 'Case #',
+		'department_id'   => 'Department',
+		'category_id'     => 'Category',
+		'client_id'       => 'Client',
+		'status'          => 'Status',
+		'resolution_id'   => 'Resolution',
+		'address_id'      => 'Adress ID',
+		'location'        => 'Location',
+		'city'            => 'City',
+		'state'           => 'State',
+		'zip'             => 'Zip',
+		'issueType_id'    => 'Issue Type',
+		'label_id'        => 'Label',
+		'contactMethod_id'=> 'Received Via'
+	);
+
+	/**
+	 * These are the base facets
+	 *
+	 * http://wiki.apache.org/solr/SolrFacetingOverview
 	 *
 	 * Security Notice:
 	 * Make sure to keep this initial list limited to "safe" fields.
@@ -26,12 +51,13 @@ class Search
 	 */
 	public static $facetFields = array(
 		'ticket'=>array(
-			'category_id'  => 'Category',
-			'department_id'=> 'Department',
-			'status'       => 'Status',
-			'client_id'    => 'Client',
-			'label_id'     => 'Label',
-			'issueType_id' => 'IssueType',
+			'category_id',
+			'department_id',
+			'status',
+			'client_id',
+			'label_id',
+			'issueType_id',
+			'contactMethod_id'
 		)
 	);
 
@@ -48,24 +74,32 @@ class Search
 
 		// Add facets for the AddressService custom fields
 		foreach (AddressService::$customFieldDescriptions as $key=>$desc) {
-			self::$facetFields['ticket'][$key] = $desc['description'];
+			self::$searchableFields[$key] = $desc['description'];
+			self::$facetFields['ticket'][] = $key;
 		}
 		// Add facets that are only to be used if the current user is authorized
 		if (userIsAllowed('people', 'view')) {
-			self::$facetFields['ticket']['assignedPerson_id'] = 'Assigned To';
+			self::$searchableFields['enteredByPerson_id']  = 'Entered By';
+			self::$searchableFields['assignedPerson_id']   = 'Assigned To';
+			self::$searchableFields['referredPerson_id']   = 'Referred To';
+			self::$searchableFields['reportedByPerson_id'] = 'Reported By';
+			self::$facetFields['ticket'][] = 'assignedPerson_id';
 		}
 	}
 
 	/**
 	 * @param array $_GET
+	 * @param string $recordType
 	 * @return SolrObject
 	 */
-	public function query($get)
+	public function query($get, $recordType=null)
 	{
 		$query = !empty($get['query'])
 			? new SolrQuery("{!df=description}$get[query]")
 			: new SolrQuery('*:*');
-		$query->setFacet(true);
+		if ($recordType) { $query->addFilterQuery("recordType:$recordType"); }
+
+		// Pagination
 		$query->setRows(self::ITEMS_PER_PAGE);
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
@@ -73,6 +107,7 @@ class Search
 			$query->setStart($page * self::ITEMS_PER_PAGE);
 		}
 
+		// Sorting
 		$sort = self::$defaultSort;
 		if (isset($get['sort'])) {
 			$keys = array_keys($_GET['sort']);
@@ -83,12 +118,19 @@ class Search
 		}
 		$query->addSortField($sort['field'], $sort['order']);
 
-		foreach (self::$facetFields['ticket'] as $field=>$displayName) {
+		// Facets
+		$query->setFacet(true);
+		foreach (self::$facetFields['ticket'] as $field) {
 			$query->addFacetField($field);
+		}
+
+		// Search Parameters
+		foreach (self::$searchableFields as $field=>$displayName) {
 			if (!empty($get[$field])) {
 				$query->addFilterQuery("$field:$get[$field]");
 			}
 		}
+
 		$solrResponse = $this->solrClient->query($query);
 		return $solrResponse->getResponse();
 	}
@@ -203,25 +245,25 @@ class Search
 	}
 
 	/**
-	 * Returns the display name of a CRM object corresponding to a facet
+	 * Returns the display name of a CRM object corresponding to a search field
 	 *
-	 * For each of the self::$facetFields we need a way to look up the CRM
-	 * object corresponding to the facet values in the search index.
-	 * Example: self::getDisplayName('ticket', 'department_id', '4e08f7f0992b949b72000022');
+	 * For each of the self::$searchableFields we need a way to look up the CRM
+	 * object corresponding to the value in the search index.
+	 * Example: self::getDisplayName('ticket', 'department_id', 32);
 	 *
 	 * @param string $recordType
-	 * @param string $facetFieldKey
+	 * @param string $fieldname
 	 * @param string $value
 	 */
-	public static function getDisplayName($recordType, $facetFieldKey, $value)
+	public static function getDisplayName($recordType, $fieldname, $value)
 	{
-		if (isset(self::$facetFields[$recordType][$facetFieldKey])) {
-			if (preg_match('/Person_id$/', $facetFieldKey)) {
+		if (isset(self::$searchableFields[$fieldname])) {
+			if (preg_match('/Person_id$/', $fieldname)) {
 				$o = new Person($value);
 				return $o->getFullname();
 			}
-			elseif (preg_match('/_id$/', $facetFieldKey)) {
-				$class = self::$facetFields[$recordType][$facetFieldKey];
+			elseif (preg_match('/_id$/', $fieldname)) {
+				$class = ucfirst(substr($fieldname, 0, -3));
 				$o = new $class($value);
 				return $o->getName();
 			}
