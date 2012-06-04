@@ -68,17 +68,10 @@
 			</li>
 		</ul>
 
-	<h2><a href="http://www.mongodb.org">Mongo</a></h2>
-		<p>We chose to go with a No-SQL database because of the schema flexibility it offered.
-			You will need to install the database server and the
-			<a href="http://php.net/mongo">mongo PHP extension</a>.
-		</p>
-		<p>Once you have a mongo server up and running, there's usually nothing more to do.
-			Mongo will automically create the database and collections on the fly.
-			If you haven't used mongo before, you can read up on this feature and others at
-			<a href="http://www.mongodb.org/display/DOCS/Tutorial">
-			http://www.mongodb.org/display/DOCS/Tutorial</a>.
-		</p>
+	<h2><a href="http://dev.mysql.com">MySQL</a> (or an equivalent, such as
+		<a href="http://mariadb.org">MariaDB</a>)
+	</h2>
+		<p>There are several drop-in replacements for MySQL.</p>
 
 	<h2>Third Party Libraries</h2>
 		<h3><a href="http://framework.zend.com">Zend Framework</a></h3>
@@ -92,6 +85,12 @@
 				on external hosting for YUI, either from Yahoo or Google.  However, if you want,
 				you can download YUI and host it yourself.
 				In our configuration, we'll point to whatever host you're using for YUI.
+			</p>
+	<h2>External Web Services (required)</h2>
+		<h3><a href="http://lucene.apache.org/solr/">Solr</a></h3>
+			<p>The search interface is written to use Solr.  You will need to install a Solr server
+				somewhere accessible to this web application.  In the configuration, we'll point
+				to wherever you installed Solr.
 			</p>
 	<h2>External Web Services (optional)</h2>
 		<p>As a city, there's a lot of information that's useful for the reports that resides
