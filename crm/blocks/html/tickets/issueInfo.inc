@@ -59,17 +59,25 @@ echo "
 ";
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
-		$enteredBy = $this->issue->getEnteredByPerson();
-		if ($enteredBy) {
-			$href = BASE_URL."/people/view?person_id={$enteredBy->getId()}";
-			$enteredBy = View::escape($enteredBy->getFullname());
+		$enteredBy = '';
+		$p = $this->issue->getEnteredByPerson();
+		if ($p) {
+			$enteredBy = View::escape($p->getFullname());
+			$enteredBy.= $p->getPhoneNumber() ? " ({$p->getPhoneNumber()})" : '';
+			$enteredBy.= $p->getEmail()       ? " <{$p->getEmail()}>"        : '';
+
+			$href = BASE_URL."/people/view?person_id={$p->getId()}";
 			$enteredBy = "<a href=\"$href\">$enteredBy</a>";
 		}
 
-		$reportedBy = $this->issue->getReportedByPerson();
-		if ($reportedBy) {
-			$href = BASE_URL."/people/view?person_id={$reportedBy->getId()}";
-			$reportedBy = View::escape($reportedBy->getFullname());
+		$reportedBy = '';
+		$p = $this->issue->getReportedByPerson();
+		if ($p) {
+			$reportedBy = View::escape($p->getFullname());
+			$reportedBy.= $p->getPhoneNumber() ? " ({$p->getPhoneNumber()})" : '';
+			$reportedBy.= $p->getEmail()       ? " <{$p->getEmail()}>"       : '';
+
+			$href = BASE_URL."/people/view?person_id={$p->getId()}";
 			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 		}
 
