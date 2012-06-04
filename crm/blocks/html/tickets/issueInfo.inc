@@ -76,13 +76,12 @@ echo "
 		$contactMethod  = View::escape($this->issue->getContactMethod());
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
-		echo "
-		<ul><li><label>Created By:</label> $enteredBy</li>
-			<li><label>Reported By:</label> $reportedBy</li>
-			<li><label>Contacted Via:</label> $contactMethod</li>
-			<li><label>Respond Via:</label> $responseMethod</li>
-			<li><label>Labels:</label> $labels</li>
-		";
+		echo "<ul>";
+		if ($enteredBy)      { echo "<li><label>Created By:   </label> $enteredBy     </li>"; }
+		if ($reportedBy)     { echo "<li><label>Reported By:  </label> $reportedBy    </li>"; }
+		if ($contactMethod)  { echo "<li><label>Contacted Via:</label> $contactMethod </li>"; }
+		if ($responseMethod) { echo "<li><label>Respond Via:  </label> $responseMethod</li>"; }
+		if ($labels)         { echo "<li><label>Labels:       </label> $labels        </li>"; }
 			$t = $this->issue->getTicket();
 			$customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
 			if ($customFields) {
@@ -92,7 +91,7 @@ echo "
 					$label = isset($definition->label) ? View::escape($definition->label) : View::escape($fieldname);
 					$value = isset($customFieldData->$fieldname) ? $customFieldData->$fieldname : '';
 					$value = is_array($value) ? implode(', ',$value) : View::escape($value);
-					echo "<li><label>$label:</label> $value</li>\n";
+					if ($value) { echo "<li><label>$label:</label> $value</li>\n"; }
 				}
 			}
 		echo "
@@ -102,15 +101,18 @@ echo "
 
 	if (!$this->disableComments) {
 		$description = View::escape($this->issue->getDescription());
-		echo "<div class=\"notes\"><h2>Details:</h2>$description</div>";
+		if ($description) { echo "<div class=\"notes\"><h2>Details:</h2>$description</div>"; }
 	}
+
 	$this->mediaList = $this->issue->getMedia();
-	include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
+	if (count($this->mediaList)) {
+		include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
+	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$this->responses = $this->issue->getResponses();
-		if ($this->responses) {
+		if (count($this->responses)) {
 			include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
 		}
 	}
