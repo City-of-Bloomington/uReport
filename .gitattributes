@@ -1,4 +1,5 @@
 * text=auto !eol
+crm/assets/minustag.psd -text
 crm/blocks/html/404.inc -text
 crm/blocks/html/errorMessages/media/badServerPermissions.inc -text
 crm/blocks/html/errorMessages/media/unknownFileType.inc -text
@@ -79,6 +80,7 @@ crm/public/skins/local/images/icons/mime/windowsMedia.png -text
 crm/public/skins/local/images/icons/mime/xls.png -text
 crm/public/skins/local/images/icons/mime/zip.png -text
 crm/public/skins/local/images/minus.png -text
+crm/public/skins/local/images/minusTag.png -text
 crm/public/skins/local/images/pencil_button.png -text
 crm/public/skins/local/images/plus.png -text
 crm/public/skins/local/images/plus_button.png -text

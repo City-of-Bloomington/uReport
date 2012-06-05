@@ -45,7 +45,7 @@ if (!empty($_GET['query'])
 				$displayName = Search::$searchableFields[$key];
 				$displayValue = Search::getDisplayName('ticket', $key, $value);
 				echo "
-				<a class=\"delete button\" href=\"$deleteURL\">
+				<a class=\"minusTag button\" href=\"$deleteURL\">
 					$displayName: $displayValue
 				</a>
 				";
