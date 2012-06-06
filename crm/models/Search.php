@@ -130,7 +130,6 @@ class Search
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
-						echo "Attempting to query by date range\n";
 						$start = !empty($get[$field]['start'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
 							: '*';
