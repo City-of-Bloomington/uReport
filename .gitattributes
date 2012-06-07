@@ -1,4 +1,5 @@
 * text=auto !eol
+crm/assets/buttons.psd -text
 crm/assets/minustag.psd -text
 crm/blocks/html/404.inc -text
 crm/blocks/html/errorMessages/media/badServerPermissions.inc -text
