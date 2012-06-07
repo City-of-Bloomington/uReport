@@ -76,9 +76,6 @@ class Ticket extends ActiveRecord
 		// an empty ticket does us no good
 		$issue = $this->getIssue();
 		if (!$issue) {
-			echo "Missing issue\n";
-			print_r($this);
-			exit();
 			throw new Exception('tickets/missingIssue');
 		}
 		if (!$issue->getDescription() && !$this->getLocation()

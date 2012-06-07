@@ -164,18 +164,6 @@ $DIRECTORY_CONFIG = array(
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
-/**
- * Caching
- * Selecting distinct values from the full collection in Mongo is really slow.
- * As of r493, the only place this call is made is when displaying the search form
- * The search form populates a bunch of drop down boxes based on these queries
- * Enabling this cache can greatly improve the speed of the search form,
- * at the expense of one of the drop-downs not reflecting the latest values
- * See: Ticket::getDistinct()
- */
-define('DISTINCT_QUERY_CACHE',true);
-define('DISTINCT_QUERY_CACHE_LIFETIME',3600); // Lifetime in seconds
-
 //-------------------------------------------------------------------
 // Bootstrap code
 // No editing is usually needed after this point
