@@ -1,6 +1,48 @@
 /*Search panel with two vertical columns*/
 #search-form { width:300px; float:left; padding-right:5px; }
-#search-results { margin-left:310px; padding:0 1em; }
+#search-results { border-top:1px solid #ccc; margin-left:300px; padding:0 1em; background-color:#eeeeee; }
 
 .slidingPanelHidden #search-form { position:absolute; left:-280px; }
 .slidingPanelHidden #search-results { margin-left:20px; }
+
+#search-form { border-top:1px solid #ccc; background-color:#eee; }
+#search-form td select { width:200px; overflow:hidden; }
+#search-form td { padding:.25em .25em; }
+#search-form li { margin:.15em; padding:0; }
+
+#search-form .fields,
+.searchResultsRows ul,
+.ticketInfo ul,
+.issueInfo ul {
+	-webkit-column-count:2; -moz-column-count:2; column-count:2;
+}
+.searchResults table { background-color:#eeeeee; }
+.searchResults th { padding:.5em; border-right:1px solid #cccccc; }
+#search-form > div, .searchResults {
+	background-color:white; border:1px solid #ccc; margin:.5em 0; padding:.25em;
+}
+#search-form .addNewForm div { margin:10px 0; }
+#advanced-search h3 { padding:5px 10px 5px 3px; border-bottom:1px solid #dddddd; }
+#advanced-search div { margin:10px 5px; }
+.searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
+
+/* Collapsing and Expanding styles */
+.collapsed h3, .expanded h3 {
+	 cursor:pointer;
+}
+.collapsed h3 { background:#dddddd url('../images/plus.png') 95% center no-repeat; }
+.collapsed ul, .collapsed div, .collapsed table {
+	display:none;
+}
+.expanded h3 { background:#dddddd url('../images/minus.png') 95% center  no-repeat; }
+
+#search-form button.toggle {
+	/* Hide the text.  Only show the icon */
+	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
+	width:0; padding:0 0 0 25px;
+	vertical-align:middle; background:white url('../images/arrow_left.png') 8px center no-repeat;
+	float:right;
+}
+.slidingPanelHidden #search-form button.toggle {
+	background-image:url('../images/arrow_right.png');
+}

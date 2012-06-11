@@ -17,7 +17,7 @@
 $title = $this->title ? View::escape($this->title) : 'New Case';
 ?>
 <div class="addNewForm">
-	<h2><?php echo $title; ?></h2>
+	<h1><?php echo $title; ?></h1>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets/add">
 		<fieldset>
 			<?php
@@ -30,7 +30,7 @@ $title = $this->title ? View::escape($this->title) : 'New Case';
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_REQUEST, null, array('category_id'));
 			?>
-			<button type="submit" class="add">Add New Case</button>
+			<div><button type="submit" class="add">Add New Case</button></div>
 		</fieldset>
 	</form>
 </div>

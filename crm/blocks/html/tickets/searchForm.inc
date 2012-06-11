@@ -12,7 +12,7 @@ if (userIsAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h2>Quick Links</h2>
+		<h1>Quick Links</h1>
 		<form method=\"get\" action=\"".BASE_URL."/tickets\">
 			<fieldset>
 				<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
@@ -44,7 +44,7 @@ if (userIsAllowed('tickets','add')) {
 }
 ?>
 <div>
-	<h2>Search</h2>
+	<h1>Search</h1>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 		<fieldset>
 			<label>Search

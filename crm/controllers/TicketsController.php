@@ -31,7 +31,7 @@ class TicketsController extends Controller
 	{
 		$this->template->setFilename('search');
 		if (userIsAllowed('tickets','add')) {
-			$this->template->blocks['search-form'][] = new Block('tickets/addNewForm.inc');
+			$this->template->blocks['search-results'][] = new Block('tickets/addNewForm.inc');
 		}
 
 		$search = new Search();

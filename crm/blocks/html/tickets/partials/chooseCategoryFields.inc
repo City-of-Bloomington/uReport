@@ -6,9 +6,11 @@
  * @param string $this->return_url
  */
 ?>
-<label>
+<label id="category">
 	Choose a category
-	<select name="category_id">
+</label>
+<div>
+<select id="category" name="category_id">
 	<?php
 		if ($_SESSION['USER']->getDepartment_id()) {
 			if (isset($_REQUEST['category_id'])) {
@@ -30,8 +32,9 @@
 			}
 		}
 	?>
-	</select>
-</label>
+</select>
+</div>
+
 <div>
 	<?php
 		$url = new URL(BASE_URL.'/categories/choose');
@@ -42,6 +45,6 @@
 			}
 		}
 		$url->return_url = $this->return_url;
-		echo "<a href=\"$url\">Choose from all categories</a>";
+		echo "<a href=\"$url\">More categories</a>";
 	?>
 </div>
