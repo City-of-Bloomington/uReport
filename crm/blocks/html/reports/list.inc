@@ -9,5 +9,6 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
 ?>
 <div><h2>Reports</h2>
 	<ul><li><a href="<?php echo BASE_URI; ?>/reports/assignments">Assignments</a></li>
+		<li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories  </a></li>
 	</ul>
 </div>

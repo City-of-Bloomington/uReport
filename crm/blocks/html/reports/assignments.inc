@@ -5,42 +5,36 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->data
  */
+include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
+$h = $this->template->getHelper('formatDuration');
 ?>
-<div><h2>Assignments Report</h2>
+<div class="searchResultsRows">
+	<h2>Assignments Report</h2>
 	<p>List people who are currently assigned tickets.</p>
 <?php
-	include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
-
-function getNiceDuration($durationInSeconds) {
-	$duration = '';
-	$days     = floor($durationInSeconds / 86400);
-	$durationInSeconds -= $days * 86400;
-	$hours    = floor($durationInSeconds / 3600);
-	$durationInSeconds -= $hours * 3600;
-	$minutes  = floor($durationInSeconds / 60);
-
-	if($minutes > 0) { $duration = "$minutes minutes"; }
-	if($hours   > 0) { $duration = "$hours hours";     }
-	if($days    > 0) { $duration = "$days days";       }
-	return $duration;
-}
 foreach ($this->data as $id=>$o) {
+	$first = View::escape($o['person']['firstname']);
+	$last = View::escape($o['person']['lastname']);
 	echo "
 	<div>
-		<h2><a href=\"".BASE_URL."/people/view?person_id=$id\">$o[firstname] $o[lastname]</a></h2>
+		<h2><a href=\"".BASE_URL."/people/view?person_id=$id\">$first $last</a></h2>
 		<table>
-			<thead><tr><th>Status</th><th>Count</th><th>Avg Time Until Close</th></thead>
+			<thead><tr><th>Category</th><th>Status</th><th>Count</th><th>Avg Time Until Close</th></thead>
 			<tbody>
 	";
-	foreach (array('open','closed') as $status) {
-		if (isset($o[$status])) {
-			$avg = getNiceDuration($o[$status]['seconds']);
-			echo "
-			<tr><th>$status</th>
-				<td>{$o[$status]['count']}</td>
-				<td>$avg</td>
-			</tr>
-			";
+	foreach ($o['categories'] as $cid=>$c) {
+		foreach (array('open','closed') as $status) {
+			$name = View::escape($c['name']);
+			if (isset($c[$status])) {
+				$avg = $h->formatDuration($c[$status]['seconds']);
+				echo "
+				<tr><th>$name</th>
+					<th>$status</th>
+					<td>{$c[$status]['count']}</td>
+					<td>$avg</td>
+				</tr>
+				";
+			}
 		}
 	}
 	echo "

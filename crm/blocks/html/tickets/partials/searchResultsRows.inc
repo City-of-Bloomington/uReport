@@ -5,8 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->tickets
  */
+echo '<div class="searchResultsRows">';
 foreach ($this->tickets as $ticket) {
-	echo '<div class="searchResultsRows">';
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
 	$displayableFields = TicketList::getDisplayableFields();
@@ -96,6 +96,6 @@ foreach ($this->tickets as $ticket) {
 	echo "
 		<p>$description</p>
 		</div>
-	</div>
 	";
 }
+echo "</div>";

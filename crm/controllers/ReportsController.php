@@ -29,6 +29,8 @@ class ReportsController extends Controller
 	public function categories()
 	{
 		$data = Report::categories($_GET);
-		$this->template->blocks[] = new Block('reports/categories.inc', array('data'=>$data));
+		$this->template->blocks['search-results'][] = new Block(
+			'reports/categories.inc', array('data'=>$data)
+		);
 	}
 }
