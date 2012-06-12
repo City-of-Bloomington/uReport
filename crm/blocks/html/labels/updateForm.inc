@@ -20,10 +20,7 @@ $name = View::escape($this->label->getName());
 			</table>
 
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URI; ?>/labels';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/labels">Cancel</a>
 		</fieldset>
 	</form>
 </div>

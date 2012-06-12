@@ -24,9 +24,6 @@ $description = View::escape($this->resolution->getDescription());
 
 		</table>
 		<button type="submit" class="submit">Submit</button>
-		<button type="button" class="cancel"
-			onclick="document.location.href='<?php echo BASE_URL; ?>/resolutions';">
-			Cancel
-		</button>
+		<a class="cancel" href="<?php echo BASE_URL; ?>/resolutions">Cancel</a>
 	</fieldset>
 </form>

@@ -91,12 +91,10 @@ $title = $this->title ? View::escape($this->title) : $title;
 				}
 
 				$onclick = isset($_REQUEST['callback'])
-					? 'self.close()'
-					: "document.location.href='$return_url';";
+					? 'onclick="self.close();"'
+					: '';
+				echo "<a class=\"cancel\" href=\"$return_url\" $onclick>Cancel</a>";
 			?>
-			<button type="button" class="cancel" onclick="<?php echo $onclick; ?>">
-				Cancel
-			</button>
 		</fieldset>
 	</form>
 </div>

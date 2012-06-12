@@ -20,10 +20,7 @@ $name = View::escape($this->issueType->getName());
 			</table>
 
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URI; ?>/issueTypes';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/issueTypes">Cancel</a>
 		</fieldset>
 	</form>
 </div>

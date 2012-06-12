@@ -20,10 +20,7 @@ $name = View::escape($this->contactMethod->getName());
 			</table>
 
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URI; ?>/contactMethods';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/contactMethods">Cancel</a>
 		</fieldset>
 	</form>
 </div>

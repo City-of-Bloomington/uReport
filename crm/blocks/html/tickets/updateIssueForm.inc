@@ -19,10 +19,7 @@ $title = is_null($this->issue->getId()) ? 'Add Issue' : 'Edit Issue';
 				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 			?>
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo $this->ticket->getURL(); ?>';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo $this->ticket->getURL(); ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

@@ -66,10 +66,7 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URI; ?>/users';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/users">Cancel</a>
 		</fieldset>
 	</form>
 </div>

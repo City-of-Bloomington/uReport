@@ -41,10 +41,7 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 		</fieldset>
 		<fieldset>
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URL; ?>/clients';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URL; ?>/clients">Cancel</a>
 		</fieldset>
 	</form>
 </div>
