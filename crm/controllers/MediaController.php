@@ -42,7 +42,7 @@ class MediaController extends Controller
 
 	/**
 	 * @param POST issue_id
-	 * @param POST attachment
+	 * @param FILES attachment
 	 */
 	public function upload()
 	{

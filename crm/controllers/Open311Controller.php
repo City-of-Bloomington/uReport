@@ -94,15 +94,17 @@ class Open311Controller extends Controller
 		// Handle POST Service Request
 		elseif (isset($_POST['service_code'])) {
 			try {
-				$ticket = Open311Client::createTicket($_POST);
-				$ticket->save();
+				$ticket = new Ticket();
+				$ticket->handleAdd(Open311Client::translatePostArray($_POST));
 
 				// Media can only be attached after the ticket is saved
-				// It uses the ticket_id in the directory structure
+				// It uses the issue_id in the directory structure
 				if (isset($_FILES['media'])) {
+					$issue = $ticket->getIssue();
 					try {
-						$ticket->attachMedia($_FILES['media'],0);
-						$ticket->save();
+						$media = new Media();
+						$media->setIssue($issue);
+						$media->setFile($_FILES['media']);
 					}
 					catch (Exception $e) {
 						// Just ignore any media errors for now

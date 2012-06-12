@@ -164,8 +164,9 @@ class Person extends ActiveRecord
 	public function handleUpdate($post)
 	{
 		$fields = array(
-			'firstname','middlename','lastname','email','phoneNumber','organization',
-			'address','city','state','zip'
+			'firstname', 'middlename', 'lastname', 'email', 'organization',
+			'phoneNumber', 'phoneDeviceId',
+			'address', 'city', 'state', 'zip'
 		);
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {

@@ -93,7 +93,8 @@ class Ticket extends ActiveRecord
 			$this->setEnteredDate('now');
 		}
 
-		if (!$this->getEnteredByPerson_id()) {
+		// Don't auto-populate the enteredByPerson except during ticket creation
+		if (!$this->getId() && !$this->getEnteredByPerson_id()) {
 			if (isset($_SESSION['USER'])) {
 				$this->setEnteredByPerson($_SESSION['USER']);
 			}
@@ -441,6 +442,10 @@ class Ticket extends ActiveRecord
 			$issue = new Issue();
 			$issue->handleUpdate($post);
 			$this->issues = array($issue);
+
+			if (!$this->getEnteredByPerson_id() && $issue->getReportByPerson_id()) {
+				$this->setEnteredByPerson_id($issue->getReportByPerson_id());
+			}
 
 			$this->save();
 
