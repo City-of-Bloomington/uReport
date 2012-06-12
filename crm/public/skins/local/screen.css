@@ -40,7 +40,7 @@ button, .button {
 .search { background:url('images/submitbutton.png') left center no-repeat; }
 .submit, .login { background:url('images/submitbutton.png') left center no-repeat; }
 .delete, .cancel { background:url('images/deletebutton.png') left center no-repeat; }
-.minusTag {background:url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
+.minusTag {background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
 .chooseLocation { background:url('images/addbutton.png') left center no-repeat; }
 .upload { background:url('images/addbutton.png') left center no-repeat; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
