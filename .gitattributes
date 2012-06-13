@@ -88,7 +88,6 @@ crm/public/skins/local/images/plus_button.png -text
 crm/public/skins/local/images/required_asterik.gif -text
 crm/public/skins/local/images/reticule_button.png -text
 crm/public/skins/local/images/submitbutton.png -text
-crm/public/skins/local/layouts/default.css -text
 crm/scripts/migration/0.0-1.0/calltrack/1_constituents.php -text
 crm/scripts/migration/0.0-1.0/calltrack/2_users.php -text
 crm/scripts/migration/1.5-1.6/updatePeopleRoles.js -text

@@ -43,11 +43,6 @@ class Template extends View
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getFilename() { return $this->filename; }
-
-	/**
 	 * @param string $filename
 	 */
 	public function setFilename($filename)

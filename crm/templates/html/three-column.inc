@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
+	$this->layout = 'three-column';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
