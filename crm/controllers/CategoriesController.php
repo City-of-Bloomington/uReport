@@ -11,7 +11,7 @@ class CategoriesController extends Controller
 		$categoryList = new CategoryList();
 		$categoryList->find();
 
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block(
 			'categories/categoryList.inc',
 			array('categoryList'=>$categoryList)

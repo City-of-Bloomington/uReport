@@ -1,0 +1,7 @@
+#panel-container { overflow:auto; }
+
+.panel { }
+
+#left { width:380px; float:left; }
+#right { margin-left:390px; }
+

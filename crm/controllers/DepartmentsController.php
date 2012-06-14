@@ -10,7 +10,7 @@ class DepartmentsController extends Controller
 	{
 		parent::__construct($template);
 		if ($this->template->outputFormat == 'html') {
-			$this->template->setFilename('two-column');
+			$this->template->setFilename('backend');
 		}
 	}
 

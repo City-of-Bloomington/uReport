@@ -10,8 +10,8 @@ class ReportsController extends Controller
 	{
 		parent::__construct($template);
 		$this->template->setFilename('search');
-		$this->template->blocks['search-form'][]    = new Block('reports/list.inc');
-		$this->template->blocks['search-form'][]    = new Block('reports/searchForm.inc');
+		$this->template->blocks['left'][]    = new Block('reports/list.inc');
+		$this->template->blocks['left'][]    = new Block('reports/searchForm.inc');
 	}
 
 	public function index()
@@ -21,7 +21,7 @@ class ReportsController extends Controller
 	public function assignments()
 	{
 		$data = Report::assignments($_GET);
-		$this->template->blocks['search-results'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'reports/assignments.inc', array('data'=>$data)
 		);
 	}
@@ -29,7 +29,7 @@ class ReportsController extends Controller
 	public function categories()
 	{
 		$data = Report::categories($_GET);
-		$this->template->blocks['search-results'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'reports/categories.inc', array('data'=>$data)
 		);
 	}

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'merging';
+	$this->layout = '50_50';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -13,18 +13,15 @@
 	?>
 
 	<div id="panel-container">
-		<div id="content-panel">
-			<?php
-				include FRAMEWORK.'/errorMessages.php';
-
-				echo $this->includeBlocks();
-			?>
+		<?php
+			include FRAMEWORK.'/errorMessages.php';
+			echo $this->includeBlocks();
+		?>
+		<div id="left">
+			<?php echo $this->includeBlocks('left'); ?>
 		</div>
-		<div id="merge-panel-one">
-			<?php echo $this->includeBlocks('merge-panel-one'); ?>
-		</div>
-		<div id="merge-panel-two">
-			<?php echo $this->includeBlocks('merge-panel-two'); ?>
+		<div id="right">
+			<?php echo $this->includeBlocks('right'); ?>
 		</div>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>

@@ -32,7 +32,7 @@ class PeopleController extends Controller
 		// Display the search form and any results
 		if ($this->template->outputFormat == 'html') {
 			$searchForm = new Block('people/searchForm.inc');
-			$this->template->blocks[] = $searchForm;
+			$this->template->blocks['left'][] = $searchForm;
 		}
 
 		if (count($search)) {

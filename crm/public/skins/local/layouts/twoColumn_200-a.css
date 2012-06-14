@@ -1,0 +1,6 @@
+#panel-container { overflow:auto; }
+
+.panel { }
+
+#sidebar { width:172px; float:left; }
+#content { margin-left:182px; }

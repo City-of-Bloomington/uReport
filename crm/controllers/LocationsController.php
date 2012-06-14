@@ -15,7 +15,7 @@ class LocationsController extends Controller
 
 		if ($this->template->outputFormat=='html') {
 			$findForm = new Block('locations/findLocationForm.inc');
-			$this->template->blocks['location-panel'][] = $findForm;
+			$this->template->blocks['left'][] = $findForm;
 		}
 
 		if (isset($_GET['location'])) {
@@ -30,7 +30,7 @@ class LocationsController extends Controller
 			}
 
 			if ($this->template->outputFormat=='html') {
-				$this->template->blocks['location-panel'][] = $results;
+				$this->template->blocks['right'][] = $results;
 			}
 			else {
 				$this->template->blocks[] = $results;
@@ -53,17 +53,17 @@ class LocationsController extends Controller
 
 		$this->template->setFilename('locations');
 
-		$this->template->blocks['location-panel'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'locations/locationInfo.inc',
 			array('location'=>$location,'disableButtons'=>isset($_GET['disableButtons']))
 		);
 		if (!isset($_GET['disableLinks']) && userIsAllowed('tickets','add')) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['right'][] = new Block(
 				'tickets/addNewForm.inc',
 				array('title'=>'Report New Case')
 			);
 		}
-		$this->template->blocks['location-panel'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'tickets/ticketList.inc',
 			array(
 				'ticketList'=>$ticketList,
@@ -73,7 +73,7 @@ class LocationsController extends Controller
 			)
 		);
 		if (userIsAllowed('tickets','merge') && !isset($_GET['disableLinks']) && count($ticketList)>1) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['left'][] = new Block(
 				'tickets/ticketSelectForMergeForm.inc'
 			);
 		}

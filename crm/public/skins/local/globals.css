@@ -1,0 +1,32 @@
+#banner {
+	height:60px;
+	background-color:#003366;
+	background-image: -moz-linear-gradient( rgba(0,0,65,1), rgba(0,0,100,.5), rgba(0,0,65,1));
+	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(0,0,65,1)), color-stop(.5, rgba(0,0,100,.5)), color-stop(1, rgba(0,0,65,1)));
+	margin:0; padding:5px 0;
+	position:relative;
+	color:white;
+}
+
+#banner a { color:white; }
+#application_name { width:60%; margin-left:5px; }
+#application_name a { font-weight:bold; font-size:174%; }
+#location_name { width:75%; margin-left:5px;  }
+#utilityBar { float:right; width:50%; text-align:right; }
+#utilityBar li { display:inline; margin-right:1em; color:white; }
+
+#menuBar { margin-bottom:.5em; border-bottom:1px solid #ccc; }
+#menuBar ul { margin:.5em; padding:0; }
+#menuBar li { display:inline; margin-right:1em;}
+#menuBar a { font-size:123.1%; }
+#menuBar a:visited { color:blue; }
+
+#errorMessages { background-color:#fcc; padding:4px; border-radius:10px; }
+#errorMessages h2 {
+	padding-left:20px;
+	background:url('images/emblem-important.png') left center no-repeat;
+}
+
+#footer { padding:.5em; }
+#footer li { display:inline; margin-right:.5em; }
+#footer a { font-weight:bold; color:black; }
