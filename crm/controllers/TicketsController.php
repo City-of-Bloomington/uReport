@@ -37,15 +37,15 @@ class TicketsController extends Controller
 		$search = new Search();
 		$solrObject = $search->query($_GET);
 
-		$this->template->blocks['search-form'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'tickets/searchForm.inc',
 			array('solrObject'=>$solrObject)
 		);
-		$this->template->blocks['search-results'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/searchParameters.inc',
 			array('solrObject'=>$solrObject)
 		);
-		$this->template->blocks['search-results'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/searchResults.inc',
 			array('solrObject'=>$solrObject)
 		);
