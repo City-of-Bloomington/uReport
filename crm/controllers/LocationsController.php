@@ -63,7 +63,7 @@ class LocationsController extends Controller
 				array('title'=>'Report New Case')
 			);
 		}
-		$this->template->blocks['left'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/ticketList.inc',
 			array(
 				'ticketList'=>$ticketList,
@@ -73,7 +73,7 @@ class LocationsController extends Controller
 			)
 		);
 		if (userIsAllowed('tickets','merge') && !isset($_GET['disableLinks']) && count($ticketList)>1) {
-			$this->template->blocks['left'][] = new Block(
+			$this->template->blocks['right'][] = new Block(
 				'tickets/ticketSelectForMergeForm.inc'
 			);
 		}

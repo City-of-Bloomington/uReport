@@ -48,7 +48,7 @@ class CategoriesController extends Controller
 			}
 		}
 
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc',array('category'=>$category));
 	}
 

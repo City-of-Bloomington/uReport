@@ -1,5 +1,3 @@
-#panel-container { overflow:auto; }
 .panel { }
-
 #left { width:300px; float:left; }
 #right { margin-left:310px; }

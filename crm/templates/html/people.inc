@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'full-width';
+	$this->layout = 'twoColumn_400-a';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -14,15 +14,12 @@
 		}
 	?>
 	<div id="panel-container">
-		<div id="content-panel">
-			<?php include FRAMEWORK.'/errorMessages.php'; ?>
-
-			<div id="person-panel">
-				<?php echo $this->includeBlocks('person-panel'); ?>
-			</div>
-			<div id="ticket-panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
-			</div>
+		<?php include FRAMEWORK.'/errorMessages.php'; ?>
+		<div id="left" class="panel">
+			<?php echo $this->includeBlocks('left'); ?>
+		</div>
+		<div id="right" class="panel">
+			<?php echo $this->includeBlocks('right'); ?>
 		</div>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>

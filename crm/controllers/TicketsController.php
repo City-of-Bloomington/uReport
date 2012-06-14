@@ -87,18 +87,18 @@ class TicketsController extends Controller
 			);
 
 			if ($ticket->getLocation()) {
-				$this->template->blocks['location-panel'][] = new Block(
+				$this->template->blocks['bottom-left'][] = new Block(
 					'locations/locationInfo.inc',
 					array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 				);
-				$this->template->blocks['location-panel'][] = new Block(
+				$this->template->blocks['bottom-right'][] = new Block(
 					'tickets/ticketLocationInfo.inc',
 					array('ticket'=>$ticket)
 				);
 
 				$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
 				if (count($ticketList) > 1) {
-					$this->template->blocks['location-panel'][] = new Block(
+					$this->template->blocks['bottom-right'][] = new Block(
 						'tickets/ticketList.inc',
 						array(
 							'ticketList'    => $ticketList,
@@ -189,11 +189,11 @@ class TicketsController extends Controller
 		// Location Panel
 		//-------------------------------------------------------------------
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['right-top'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['right-top'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -206,7 +206,7 @@ class TicketsController extends Controller
 		// Person Panel
 		//-------------------------------------------------------------------
 		if (isset($person)) {
-			$this->template->blocks['person-panel'][] = new Block(
+			$this->template->blocks['right-bottom'][] = new Block(
 				'people/personInfo.inc',
 				array('person'=>$person, 'disableButtons'=>true)
 			);
@@ -225,15 +225,15 @@ class TicketsController extends Controller
 				if (count($reportedTickets) >= 10) {
 					$block->moreLink = BASE_URL."/tickets?reportedByPerson_id={$person->getId()}";
 				}
-				$this->template->blocks['person-panel'][] = $block;
+				$this->template->blocks['right-bottom'][] = $block;
 			}
 		}
 		//-------------------------------------------------------------------
 		// Ticket Panel
 		//-------------------------------------------------------------------
-		$this->template->blocks['ticket-panel'][] = new Block('tickets/changeLocationButton.inc');
-		$this->template->blocks['ticket-panel'][] = new Block('tickets/changePersonButton.inc');
-		$this->template->blocks['ticket-panel'][] = new Block(
+		$this->template->blocks['left'][] = new Block('tickets/changeLocationButton.inc');
+		$this->template->blocks['left'][] = new Block('tickets/changePersonButton.inc');
+		$this->template->blocks['left'][] = new Block(
 			'tickets/addTicketForm.inc',
 			array(
 				'ticket'=>$ticket,
@@ -331,11 +331,11 @@ class TicketsController extends Controller
 			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -405,11 +405,11 @@ class TicketsController extends Controller
 			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -496,11 +496,11 @@ class TicketsController extends Controller
 			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -549,13 +549,13 @@ class TicketsController extends Controller
 			array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
 			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
 			if (count($ticketList) > 1) {
-				$this->template->blocks['location-panel'][] = new Block(
+				$this->template->blocks['bottom-right'][] = new Block(
 					'tickets/ticketList.inc',
 					array(
 						'ticketList'=>$ticketList,
@@ -602,11 +602,11 @@ class TicketsController extends Controller
 			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -661,11 +661,11 @@ class TicketsController extends Controller
 			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -715,15 +715,15 @@ class TicketsController extends Controller
 			array('ticketA'=>$ticketA,'ticketB'=>$ticketB)
 		);
 
-		$this->template->blocks['merge-panel-one'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'tickets/ticketInfo.inc',
 			array('ticket'=>$ticketA,'disableButtons'=>true)
 		);
-		$this->template->blocks['merge-panel-one'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'tickets/history.inc',
 			array('history'=>$ticketA->getHistory(),'disableComments'=>true)
 		);
-		$this->template->blocks['merge-panel-one'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'tickets/issueList.inc',
 			array(
 				'issueList'=>$ticketA->getIssues(),
@@ -733,15 +733,15 @@ class TicketsController extends Controller
 			)
 		);
 
-		$this->template->blocks['merge-panel-two'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/ticketInfo.inc',
 			array('ticket'=>$ticketB,'disableButtons'=>true)
 		);
-		$this->template->blocks['merge-panel-two'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/history.inc',
 			array('history'=>$ticketB->getHistory(),'disableComments'=>true)
 		);
-		$this->template->blocks['merge-panel-two'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'tickets/issueList.inc',
 			array(
 				'issueList'=>$ticketB->getIssues(),

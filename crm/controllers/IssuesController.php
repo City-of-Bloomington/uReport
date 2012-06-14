@@ -109,12 +109,12 @@ class IssuesController extends Controller
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/updateIssueForm.inc', array('issue'=>$issue, 'ticket'=>$ticket)
 		);
-		$this->template->blocks['location-panel'][] = new Block(
+		$this->template->blocks['bottom-left'][] = new Block(
 			'locations/locationInfo.inc',
 			array('location'=>$ticket->getLocation())
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
@@ -213,11 +213,11 @@ class IssuesController extends Controller
 			'tickets/responseForm.inc', array('issue'=>$issue)
 		);
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation())
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),

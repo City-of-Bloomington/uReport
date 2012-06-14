@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'ticketCreation';
+	$this->layout = 'threePanel';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -11,20 +11,17 @@
 		include $dir.'/partials/banner.inc';
 		include $dir.'/partials/menubar.inc';
 	?>
-
 	<div id="panel-container">
-		<div id="content-panel">
-			<div id="ticketCreation" class="yui3-skin-sam">
-				<?php include FRAMEWORK.'/errorMessages.php'; ?>
-				<div id="location-panel">
-					<?php echo $this->includeBlocks('location-panel'); ?>
-				</div>
-				<div id="person-panel">
-					<?php echo $this->includeBlocks('person-panel'); ?>
-				</div>
-				<div id="ticket-panel">
-					<?php echo $this->includeBlocks('ticket-panel'); ?>
-				</div>
+		<div id="ticketCreation" class="yui3-skin-sam">
+			<?php include FRAMEWORK.'/errorMessages.php'; ?>
+			<div id="left" class="panel">
+				<?php echo $this->includeBlocks('left'); ?>
+			</div>
+			<div id="right-top" class="panel">
+				<?php echo $this->includeBlocks('right-top'); ?>
+			</div>
+			<div id="right-bottom" class="panel">
+				<?php echo $this->includeBlocks('right-bottom'); ?>
 			</div>
 		</div>
 	</div>

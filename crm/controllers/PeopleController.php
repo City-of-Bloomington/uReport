@@ -76,20 +76,20 @@ class PeopleController extends Controller
 
 
 		$disableButtons = isset($_REQUEST['disableButtons']) ? (bool)$_REQUEST['disableButtons'] : false;
-		$this->template->blocks['person-panel'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$person,'disableButtons'=>$disableButtons)
 		);
 
 		if ($this->template->outputFormat == 'html') {
 			if (!$disableButtons && userIsAllowed('tickets','add')) {
-				$this->template->blocks['person-panel'][] = new Block(
+				$this->template->blocks['right'][] = new Block(
 					'tickets/addNewForm.inc',
 					array('title'=>'Report New Case')
 				);
 			}
 
-			$this->template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
+			$this->template->blocks['right'][] = new Block('people/stats.inc',array('person'=>$person));
 
 			$lists = array(
 				'reportedBy'=>'Reported Cases',
@@ -131,7 +131,7 @@ class PeopleController extends Controller
 			if (count($tickets) >= 10) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person={$person->getId()}";
 			}
-			$this->template->blocks['person-panel'][] = $block;
+			$this->template->blocks['right'][] = $block;
 		}
 	}
 
@@ -236,13 +236,13 @@ class PeopleController extends Controller
 			array('personA'=>$personA,'personB'=>$personB)
 		);
 
-		$this->template->blocks['merge-panel-one'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personA,'disableButtons'=>true)
 		);
 		$reportedTickets = $personA->getReportedTickets();
 		if (count($reportedTickets)) {
-			$this->template->blocks['merge-panel-one'][] = new Block(
+			$this->template->blocks['left'][] = new Block(
 				'tickets/searchResults.inc',
 				array(
 					'ticketList'=>$personA->getReportedTickets(),
@@ -253,13 +253,13 @@ class PeopleController extends Controller
 			);
 		}
 
-		$this->template->blocks['merge-panel-two'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personB,'disableButtons'=>true)
 		);
 		$reportedTickets = $personB->getReportedTickets();
 		if (count($reportedTickets)) {
-			$this->template->blocks['merge-panel-two'][] = new Block(
+			$this->template->blocks['right'][] = new Block(
 				'tickets/searchResults.inc',
 				array(
 					'ticketList'=>$personB->getReportedTickets(),
