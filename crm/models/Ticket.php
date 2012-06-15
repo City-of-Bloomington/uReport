@@ -198,7 +198,9 @@ class Ticket extends ActiveRecord
 	 */
 	public function getAdditionalFields()
 	{
-		return json_decode(parent::get('additionalFields'));
+		$s = parent::get('additionalFields');
+		if (!$s) { $s = '{}'; }
+		return json_decode($s);
 	}
 	/**
 	 * @param array $array
