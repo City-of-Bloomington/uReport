@@ -19,7 +19,7 @@ class PeopleController extends Controller
 	{
 		// Look for anything that the user searched for
 		$search = array();
-		$fields = array('firstname','lastname','email','organization','department');
+		$fields = array('firstname','lastname','email','organization','department_id');
 		foreach ($fields as $field) {
 			if (isset($_GET[$field]) && $_GET[$field]) {
 				$value = trim($_GET[$field]);

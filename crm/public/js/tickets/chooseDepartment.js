@@ -1,10 +1,10 @@
 "use strict";
 YUI().use('node', 'io', 'json', function (Y) {
-	Y.one('#ticket-panel .chooseDepartmentForm button').setStyle('display','none');
+	Y.one('#chooseDepartmentForm button').setStyle('display','none');
 
 	Y.on('submit', function (e) {
 		e.preventDefault();
-	}, '#ticket-panel .chooseDepartmentForm form');
+	}, '#chooseDepartmentForm form');
 
 	Y.on('change', function (e) {
 		var department_id = e.target.get('value');
@@ -18,7 +18,7 @@ YUI().use('node', 'io', 'json', function (Y) {
 			}
 		});
 
-		url = CRM.BASE_URL + '/people?format=json;department=' + department_id;
+		url = CRM.BASE_URL + '/people?format=json;department_id=' + department_id;
 		Y.io(url, {
 			on: {
 				complete: function (id, o, args) {
@@ -33,7 +33,7 @@ YUI().use('node', 'io', 'json', function (Y) {
 							html += '<option value="' + people[i].id + '" ' + selected + '>' + people[i].name + '</option>';
 						}
 					}
-					Y.one('#assignedPerson').setContent(html);
+					Y.one('#assignedPerson_id').setContent(html);
 				}
 			}
 		});

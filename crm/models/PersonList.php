@@ -9,6 +9,12 @@
 class PersonList extends ZendDbResultIterator
 {
 	private static $defaultSort = array('p.lastname', 'p.firstname');
+	private static $fields = array(
+		'firstname','middlename','lastname',
+		'email','organization',
+		'address','city','state','zip',
+		'department_id','username','authenticationMethod','role'
+	);
 
 	public function __construct($fields=null)
 	{
@@ -49,7 +55,9 @@ class PersonList extends ZendDbResultIterator
 							break;
 
 						default:
-							$this->select->where("p.$key=?", $value);
+							if (in_array($key, self::$fields)) {
+								$this->select->where("p.$key=?", $value);
+							}
 					}
 				}
 			}
