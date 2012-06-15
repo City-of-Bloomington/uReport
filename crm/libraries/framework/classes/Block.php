@@ -47,7 +47,7 @@ class Block extends View
 	 * @param string $outputFormat
 	 * @return string
 	 */
-	public function render($outputFormat='html',Template $template=null)
+	public function render($outputFormat='html', Template $template=null)
 	{
 		$block = "/blocks/$outputFormat/{$this->file}";
 		$this->template = $template;
@@ -63,7 +63,7 @@ class Block extends View
 			return ob_get_clean();
 		}
 
-		throw new Exception('unknownBlock');
+		throw new Exception('unknownBlock/'.$this->file);
 	}
 
 	/**

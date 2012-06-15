@@ -17,15 +17,17 @@ var LOCATION_CHOOSER = {
 	popup: {},
 	setLocation: function (location) {
 		YUI().use('node', 'io', function (Y) {
-			document.getElementById('location').value = location;
+			// Update the hidden input
+			Y.one('#location').set('value', location);
 
-			var locationPanel = Y.one('#location-panel');
-			locationPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
+			// Draw location information into the LocationChooser body
+			var bd = Y.one('#locationChooser .bd');
+			bd.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
-			Y.io(CRM.BASE_URL + '/locations/view?partial=location-panel;disableLinks=1;location=' + location, {
+			Y.io(CRM.BASE_URL + '/locations/view?partial=locations/locationInfo.inc,tickets/ticketList.inc;disableLinks=1;location=' + location, {
 				on: {
 					complete: function (id, o, args) {
-						locationPanel.setContent(o.responseText);
+						bd.setContent(o.responseText);
 						LOCATION_CHOOSER.popup.close();
 					}
 				}

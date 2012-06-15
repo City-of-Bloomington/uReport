@@ -19,7 +19,10 @@
 			<?php echo $this->includeBlocks('left'); ?>
 		</div>
 		<div id="right" class="panel">
-			<?php echo $this->includeBlocks('right'); ?>
+			<?php
+				echo $this->includeBlocks('right');
+				echo $this->includeBlocks();
+			?>
 		</div>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>

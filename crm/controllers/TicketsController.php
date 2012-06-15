@@ -188,51 +188,18 @@ class TicketsController extends Controller
 		//-------------------------------------------------------------------
 		// Location Panel
 		//-------------------------------------------------------------------
-		if ($ticket->getLocation()) {
-			$this->template->blocks['right-top'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
-			);
-			$this->template->blocks['right-top'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Cases Associated with this Location',
-					'disableLinks'=>true
-				)
-			);
-		}
+		$this->template->blocks['right-top'][] = new Block(
+			'tickets/chooseLocation.inc', array('ticket'=>$ticket)
+		);
 		//-------------------------------------------------------------------
 		// Person Panel
 		//-------------------------------------------------------------------
-		if (isset($person)) {
-			$this->template->blocks['right-bottom'][] = new Block(
-				'people/personInfo.inc',
-				array('person'=>$person, 'disableButtons'=>true)
-			);
-			$reportedTickets = new TicketList();
-			$reportedTickets->find(array('reportedByPerson_id'=>$person->getId()), null, 10);
-			if (count($reportedTickets)) {
-				$block = new Block(
-					'tickets/ticketList.inc',
-					array(
-						'ticketList'    => $reportedTickets,
-						'title'         => 'Reported Cases',
-						'disableButtons'=> true,
-						'disableLinks'  => true
-					)
-				);
-				if (count($reportedTickets) >= 10) {
-					$block->moreLink = BASE_URL."/tickets?reportedByPerson_id={$person->getId()}";
-				}
-				$this->template->blocks['right-bottom'][] = $block;
-			}
-		}
+		$this->template->blocks['right-bottom'][] = new Block(
+			'tickets/chooseReportedByPerson.inc', array('issue'=>$issue)
+		);
 		//-------------------------------------------------------------------
 		// Ticket Panel
 		//-------------------------------------------------------------------
-		$this->template->blocks['left'][] = new Block('tickets/changeLocationButton.inc');
-		$this->template->blocks['left'][] = new Block('tickets/changePersonButton.inc');
 		$this->template->blocks['left'][] = new Block(
 			'tickets/addTicketForm.inc',
 			array(

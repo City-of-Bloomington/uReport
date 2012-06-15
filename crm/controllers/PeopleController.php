@@ -17,6 +17,8 @@ class PeopleController extends Controller
 	 */
 	public function index()
 	{
+		$this->template->setFilename('people');
+
 		// Look for anything that the user searched for
 		$search = array();
 		$fields = array('firstname','lastname','email','organization','department_id');

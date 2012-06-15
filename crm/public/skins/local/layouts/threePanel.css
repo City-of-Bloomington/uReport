@@ -1,3 +1,4 @@
 #left { width:380px; float:left; }
-#right-top { margin-left: 400px; max-height:300px; }
-#right-bottom { margin-left: 400px; max-height:300px; }
+#right-top, #right-bottom {
+	margin-left: 400px; height:300px; overflow:auto;
+}
