@@ -27,7 +27,7 @@ var PERSON_CHOOSER = {
 			var bd = Y.one('#reportedByPersonChooser .bd');
 			bd.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
-			Y.io(CRM.BASE_URL + '/people/view?partial=people/personInfo.inc;disableButtons=1;person_id=' + person_id, {
+			Y.io(CRM.BASE_URL + '/people/view?partial=people/personInfo.inc,Reported Cases;disableButtons=1;person_id=' + person_id, {
 				on: {
 					complete: function (id, o, args) {
 						bd.setContent(o.responseText);

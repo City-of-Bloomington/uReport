@@ -134,7 +134,8 @@ class Template extends View
 					// The block they asked for might be inside a panel
 					else {
 						foreach ($value as $block) {
-							if ($block->getFile() == $target) {
+							if ($block->getFile() == $target
+								|| $block->title == $target) {
 								echo $block->render($this->outputFormat,$this);
 								continue;
 							}
