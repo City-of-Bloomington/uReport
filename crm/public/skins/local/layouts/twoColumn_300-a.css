@@ -2,7 +2,6 @@
  * This layout supports sliding the left panel in and out of the side
  * It relies on Javascript. Make sure to include /js/slidingPanel.js
  */
-.panel { }
 #left { width:300px; float:left; }
 #right { margin-left:310px; }
 
