@@ -10,6 +10,9 @@
 	<?php
 		include $dir.'/partials/banner.inc';
 		include $dir.'/partials/menubar.inc';
+
+		$this->addToAsset('scripts',YUI.'/yui/yui-min.js');
+		$this->addToAsset('scripts',BASE_URL.'/js/slidingPanel.js');
 	?>
 	<div id="panel-container">
 		<div id="left" class="panel">

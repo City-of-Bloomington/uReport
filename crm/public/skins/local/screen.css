@@ -156,10 +156,17 @@ button, .button {
 tr.verified { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
 
+
+.collapsible .hd { cursor: pointer; }
+.collapsed .hd { background:#dddddd url('images/plus.png')  95% center no-repeat; }
+.expanded  .hd { background:#dddddd url('images/minus.png') 95% center no-repeat; }
+.collapsed .bd { display:none; }
+.expanded  .bd { display:block; }
+
+
 /* YUI Styles */
 /* Autocomplete styles */
 .yui3-aclist-content { border:1px solid black; background-color:white; }
-.yui3-aclist-item { font-family:sans-serif; }
 .yui3-aclist-item-active { background-color:blue; }
 
 /* Overlay styles */

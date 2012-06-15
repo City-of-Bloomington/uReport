@@ -6,7 +6,8 @@
  * @param SolrObject $this->solrObject
  */
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/search.js');
+#$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/search.js');
+$this->template->addToAsset('scripts',BASE_URI.'/js/collapsible.js');
 if (userIsAllowed('tickets','add')) {
 	// Solr stores ticket_id as 'id'
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
@@ -76,16 +77,18 @@ if (userIsAllowed('tickets','add')) {
 						if ($list) {
 							$displayName = Search::$searchableFields[$key];
 							echo "
-							<div><h3>$displayName</h3>
-								<ul>$list</ul>
+							<div class=\"collapsible\">
+								<h3 class=\"hd\">$displayName</h3>
+								<ul class=\"bd\">$list</ul>
 							</div>
 							";
 						}
 					}
 				}
 			?>
-			<div><h3>Case Date</h3>
-				<table>
+			<div class="collapsible">
+				<h3 class="hd">Case Date</h3>
+				<table class="bd">
 					<tr><td><label for="enteredDate-start">Start:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
 								value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />

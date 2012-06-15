@@ -4,12 +4,15 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+$this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 ?>
 <div>
 	<form method="get">
-		<fieldset id="advanced-search">
-			<div><h3>Category</h3>
-				<ul>
+		<fieldset>
+			<div class="collapsible">
+				<h3 class="hd">Category</h3>
+				<ul class="bd">
 				<?php
 					$list = new CategoryList();
 					$list->find();
@@ -29,8 +32,9 @@
 				?>
 				</ul>
 			</div>
-			<div><h3>Department</h3>
-				<ul>
+			<div class="collapsible">
+				<h3 class="hd">Department</h3>
+				<ul class="bd">
 				<?php
 					$list = new DepartmentList();
 					$list->find();
@@ -42,15 +46,17 @@
 						echo "
 						<li><label>
 								<input name=\"departments[{$d->getId()}]\" type=\"checkbox\" $checked />
-							$name
+								$name
+							</label>
 						</li>
 						";
 					}
 				?>
 				</ul>
 			</div>
-			<div><h3>Case Date</h3>
-				<table>
+			<div class="collapsible">
+				<h3 class="hd">Case Date</h3>
+				<table class="bd">
 					<tr><td><label for="enteredDate-start">Start:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
 								value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />
@@ -62,12 +68,12 @@
 						</td>
 					</tr>
 				</table>
-				<?php
-					$h = $this->template->getHelper('renderInputs');
-					echo $h->renderInputs($_GET, null, array('enteredDate'));
-				?>
-				<button type="submit" class="submit">Submit</button>
 			</div>
+			<?php
+				$h = $this->template->getHelper('renderInputs');
+				echo $h->renderInputs($_GET, null, array('enteredDate'));
+			?>
+			<button type="submit" class="submit">Submit</button>
 		</fieldset>
 	</form>
 </div>
