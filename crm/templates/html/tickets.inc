@@ -19,34 +19,19 @@
 		<div id="ticket-panel" class="panel">
 			<?php echo $this->includeBlocks('ticket-panel'); ?>
 		</div>
-		<div id="action-panel" class="panel">
-			<?php
-				if (!isset($_REQUEST['popup'])) {
-					echo $this->includeBlocks('history-panel');
+		<?php
+			// These panels should only show up for non-popup windows
+			// Also, only draw the divs if there is content for them
+			$panels = array('action-panel', 'issue-panel', 'bottom-left', 'bottom-right');
+			foreach ($panels as $p) {
+				if (!isset($_REQUEST['popup']) && isset($this->blocks[$p])) {
+					echo "<div id=\"$p\" class=\"panel\">";
+					echo $this->includeBlocks($p);
+					echo "</div>";
+
 				}
-			?>
-		</div>
-		<div id="issue-panel" class="panel">
-			<?php
-				if (!isset($_REQUEST['popup'])) {
-					echo $this->includeBlocks('issue-panel');
-				}
-			?>
-		</div>
-		<div id="bottom-left" class="panel">
-			<?php
-				if (!isset($_REQUEST['popup'])) {
-					echo $this->includeBlocks('bottom-left');
-				}
-			?>
-		</div>
-		<div id="bottom-right" class="panel">
-			<?php
-				if (!isset($_REQUEST['popup'])) {
-					echo $this->includeBlocks('bottom-right');
-				}
-			?>
-		</div>
+			}
+		?>
 	</div>
 	<?php
 		include $dir.'/partials/footer.inc';
