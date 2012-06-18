@@ -2,8 +2,8 @@
  * This layout supports sliding the left panel in and out of the side
  * It relies on Javascript. Make sure to include /js/slidingPanel.js
  */
-#left { width:300px; float:left; }
-#right { margin-left:310px; }
+#left { width:300px; float:left; border-top:1px solid #ccc; background-color:#eee; }
+#right { margin-left:310px; border-top:1px solid #ccc; padding:0 1em; background-color:#eee; }
 
 .hideLeft #left { position:absolute; left:-280px; }
 .hideLeft #right { margin-left: 20px; }
@@ -17,3 +17,11 @@
 	background:white url('../images/arrow_left.png') 8px center no-repeat;
 }
 .hideLeft #slideButton { background-image:url('../images/arrow_right.png'); }
+
+#left > div, .searchResults {
+	background-color:white; border:1px solid #ccc; margin:.5em 0; padding:.25em;
+	}
+.searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
+.searchResults table { background-color:#eeeeee; }
+.searchResults th { padding:.5em; border-right:1px solid #cccccc; }
+#left li { margin:.15em; padding:0; }

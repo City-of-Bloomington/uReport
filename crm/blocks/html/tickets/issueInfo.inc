@@ -44,7 +44,7 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
 $type = View::escape($this->issue->getIssueType());
 echo "
-<div class=\"issueInfo\">
+<div class=\"issueInfo twoColumnlist\">
 	<div class=\"issueHeader\">
 		<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
 			<span class=\"issueType\"><a href=\"$url\">$type</a></span>

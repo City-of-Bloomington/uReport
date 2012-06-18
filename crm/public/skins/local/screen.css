@@ -11,8 +11,8 @@ td { padding:.4em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
-ul { margin-left:1em; padding:0; list-style-type:none; }
-li { margin:0; }
+ul { margin:.5em 0 .5em .5em; padding:0; list-style-type:none; }
+li { }
 
 fieldset { padding:.5em 0; }
 legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
@@ -89,6 +89,13 @@ button, .button {
 }
 
 /**
+ *Two Column List
+ */
+
+.twoColumnlist {	-webkit-column-count:2; -moz-column-count:2; column-count:2;
+}
+
+/**
  * Interface Boxes
  */
 .departmentList .department,
@@ -158,11 +165,12 @@ tr.verified { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 
-.collapsible .hd { cursor: pointer; }
+.collapsible .hd { cursor: pointer; padding:5px 10px 5px 3px; margin:10px 5px; border-bottom:1px solid #dddddd; }
 .collapsed .hd { background:#dddddd url('images/plus.png')  95% center no-repeat; }
 .expanded  .hd { background:#dddddd url('images/minus.png') 95% center no-repeat; }
 .collapsed .bd { display:none; }
 .expanded  .bd { display:block; }
+
 
 
 /* YUI Styles */

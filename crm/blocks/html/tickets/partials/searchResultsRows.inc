@@ -85,7 +85,7 @@ foreach ($this->tickets as $ticket) {
 			<span>$location $city $state $zip</span>
 	";
 	if (count($dl)) {
-		echo '<ul>';
+		echo '<ul class="twoColumnlist">';
 		foreach ($dl as $field=>$value) {
 			$dt = $displayableFields[$field];
 			$dd = View::escape($value);

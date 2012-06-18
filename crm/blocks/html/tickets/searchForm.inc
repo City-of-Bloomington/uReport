@@ -105,7 +105,7 @@ if (userIsAllowed('tickets','add')) {
 
 
 		<fieldset><legend>Fields to display</legend>
-			<ul class="fields">
+			<ul class="fields twoColumnlist">
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
