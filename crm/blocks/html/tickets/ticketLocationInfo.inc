@@ -8,25 +8,24 @@
 ?>
 <div class="ticketLocationInfo">
 	<h2>Additional Location Information</h2>
-	<table>
 	<?php
+		$table = '<table>';
 		$locationFields = array('city','state','zip','latitude','longitude');
 		foreach ($locationFields as $field) {
 			$get = 'get'.ucfirst($field);
 			$$field = View::escape($this->ticket->$get());
 			if ($$field) {
-				echo "<tr><th>$field</th><td>{$$field}</td></tr>";
+				$table.= "<tr><th>$field</th><td>{$$field}</td></tr>";
 			}
 		}
 		$additionalFields = $this->ticket->getAdditionalFields();
 		if ($additionalFields) {
 			foreach ($additionalFields as $key=>$value) {
-				echo "<tr><th>$key</th><td>$value</td></tr>";
+				$table.= "<tr><th>$key</th><td>$value</td></tr>";
 			}
 		}
-	?>
-	</table>
-	<?php
+		$table.= '</table>';
+
 		if ($latitude && $longitude) {
 			echo "
 			<div id=\"location_map\"></div>
@@ -40,5 +39,6 @@
 			$this->template->addToAsset('scripts', GOOGLE_MAPS);
 			$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
 		}
+		echo $table;
 	?>
 </div>
