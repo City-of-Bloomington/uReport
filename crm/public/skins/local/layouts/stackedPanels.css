@@ -1,3 +1,4 @@
 .panel { border-bottom:1px solid #ccc; }
-#bottom-left { width:380px; float:left; }
-#bottom-right { margin-left:390px; }
+#bottom-left { width:400px; float:left; }
+#bottom-right { margin-left:405px; }
+.panel > div { margin:1em 0; }

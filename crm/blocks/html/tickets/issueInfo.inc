@@ -44,7 +44,7 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
 $type = View::escape($this->issue->getIssueType());
 echo "
-<div class=\"issueInfo twoColumnlist\">
+<div class=\"issueInfo\">
 	<div class=\"issueHeader\">
 		<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>
 			<span class=\"issueType\"><a href=\"$url\">$type</a></span>
@@ -84,7 +84,7 @@ echo "
 		$contactMethod  = View::escape($this->issue->getContactMethod());
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
-		echo "<ul>";
+		echo "<ul class=\"twoColumnlist\">";
 		if ($enteredBy)      { echo "<li><label>Created By:   </label> $enteredBy     </li>"; }
 		if ($reportedBy)     { echo "<li><label>Reported By:  </label> $reportedBy    </li>"; }
 		if ($contactMethod)  { echo "<li><label>Contacted Via:</label> $contactMethod </li>"; }

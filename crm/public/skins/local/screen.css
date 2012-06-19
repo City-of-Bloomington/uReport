@@ -11,8 +11,8 @@ td { padding:.4em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
 
-ul { margin:.5em 0 .5em .5em; padding:0; list-style-type:none; }
-li { }
+ul { margin:.75em 0 .75em .5em; padding:0; list-style-type:none; }
+li { margin:.25em; }
 
 fieldset { padding:.5em 0; }
 legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
@@ -56,7 +56,6 @@ button, .button {
 
 .locationInfo ul { margin:0; }
 
-.ticketList { margin-bottom:.5em; }
 .ticketList table { border:1px solid #aaa; }
 .ticketList td { border-bottom:1px solid #aaa; }
 
@@ -116,7 +115,7 @@ button, .button {
 }
 
 /* Issue information */
-.issueList { background-color:#eee; }
+#issue-panel { background-color:#eee; }
 .issueHeader { width:100%; display:block; }
 .issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
 .issueList h1 { margin:.25em; }
