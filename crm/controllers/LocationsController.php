@@ -53,10 +53,13 @@ class LocationsController extends Controller
 
 		$this->template->setFilename('locations');
 
-		$this->template->blocks['left'][] = new Block(
-			'locations/locationInfo.inc',
-			array('location'=>$location,'disableButtons'=>isset($_GET['disableButtons']))
-		);
+		$blocks = array('locationInfo', 'addressData', 'people');
+		foreach ($blocks as $b) {
+			$this->template->blocks['left'][] = new Block(
+				"locations/$b.inc",
+				array('location'=>$location, 'disableButtons'=>isset($_GET['disableButtons']));
+			);
+		}
 		if (!isset($_GET['disableLinks']) && userIsAllowed('tickets','add')) {
 			$this->template->blocks['right'][] = new Block(
 				'tickets/addNewForm.inc',

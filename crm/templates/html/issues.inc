@@ -14,24 +14,19 @@
 
 	<div id="panel-container">
 		<div id="content-panel">
-			<?php include FRAMEWORK.'/errorMessages.php'; ?>
-
-			<div id="ticket-panel" class="panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
-			</div>
-			<div id="person-panel" class="panel">
-				<?php echo $this->includeBlocks('person-panel'); ?>
-			</div>
-			<div id="issue-panel" class="panel">
-				<?php echo $this->includeBlocks('issue-panel'); ?>
-			</div>
-			<div id="bottom-left" class="panel">
-				<?php echo $this->includeBlocks('bottom-left'); ?>
-			</div>
-			<div id="bottom-right" class="panel">
-				<?php echo $this->includeBlocks('bottom-right'); ?>
-			</div>
 			<?php
+				include FRAMEWORK.'/errorMessages.php';
+
+				$panels = array(
+					'ticket-panel', 'person-panel', 'issue-panel', 'bottom-left', 'bottom-right'
+				);
+				foreach ($panels as $p) {
+					if (isset($this->blocks[$p])) {
+						echo "<div id=\"$p\" class=\"panel\">";
+						echo $this->includeBlocks($p);
+						echo "</div>";
+					}
+				}
 				echo $this->includeBlocks();
 			?>
 		</div>

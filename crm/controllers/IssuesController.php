@@ -13,6 +13,7 @@ class IssuesController extends Controller
 	{
 		try {
 			$issue = new Issue($_GET['issue_id']);
+			$ticket = $issue->getTicket();
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -25,7 +26,7 @@ class IssuesController extends Controller
 			'tickets/ticketInfo.inc',array('ticket'=>$ticket)
 		);
 
-		$person = $issue->getPersonObject('reportedByPerson');
+		$person = $issue->getReportedByPerson();
 		if ($person) {
 			$this->template->blocks['person-panel'][] = new Block(
 				'people/personInfo.inc',
@@ -109,21 +110,8 @@ class IssuesController extends Controller
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/updateIssueForm.inc', array('issue'=>$issue, 'ticket'=>$ticket)
 		);
-		$this->template->blocks['bottom-left'][] = new Block(
-			'locations/locationInfo.inc',
-			array('location'=>$ticket->getLocation())
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+
+		$this->addLocationInfoBlocks($ticket);
 	}
 
 	/**
@@ -212,6 +200,15 @@ class IssuesController extends Controller
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/responseForm.inc', array('issue'=>$issue)
 		);
+
+		$this->addLocationInfoBlocks($ticket);
+	}
+
+	/**
+	 * @param Ticket $ticket
+	 */
+	private function addLocationInfoBlocks(Ticket $ticket)
+	{
 		if ($ticket->getLocation()) {
 			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',

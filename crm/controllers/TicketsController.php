@@ -71,44 +71,7 @@ class TicketsController extends Controller
 					array('ticket'=>$ticket)
 				);
 			}
-
-			$this->template->blocks['history-panel'][] = new Block(
-				'tickets/history.inc',
-				array('history'=>$ticket->getHistory())
-			);
-
-			$this->template->blocks['issue-panel'][] = new Block(
-				'tickets/issueList.inc',
-				array(
-					'issueList'     => $ticket->getIssues(),
-					'ticket'        => $ticket,
-					'disableButtons'=> $ticket->getStatus()=='closed'
-				)
-			);
-
-			if ($ticket->getLocation()) {
-				$this->template->blocks['bottom-left'][] = new Block(
-					'locations/locationInfo.inc',
-					array('location'=>$ticket->getLocation(),'disableButtons'=>true)
-				);
-				$this->template->blocks['bottom-right'][] = new Block(
-					'tickets/ticketLocationInfo.inc',
-					array('ticket'=>$ticket)
-				);
-
-				$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
-				if (count($ticketList) > 1) {
-					$this->template->blocks['bottom-right'][] = new Block(
-						'tickets/ticketList.inc',
-						array(
-							'ticketList'    => $ticketList,
-							'title'         => 'Other cases for this location',
-							'filterTicket'  => $ticket,
-							'disableButtons'=> true
-						)
-					);
-				}
-			}
+			$this->addStandardInfoBlocks($ticket);
 		}
 		else {
 			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
@@ -289,29 +252,7 @@ class TicketsController extends Controller
 			'tickets/assignTicketForm.inc',
 			array('ticket'=>$ticket,'currentDepartment'=>$currentDepartment)
 		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory(),'disableButton'=>true)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -363,28 +304,8 @@ class TicketsController extends Controller
 			$_REQUEST['return_url'] = BASE_URL.'/tickets/refer?ticket_id='.$ticket->getId();
 			$this->template->blocks['ticket-panel'][] = new Block('people/searchForm.inc');
 		}
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory(),'disableButtons'=>true)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true
-				)
-			);
-		}
+
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -454,29 +375,8 @@ class TicketsController extends Controller
 				array('ticket'=>$ticket)
 			);
 		}
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory(),'disableButtons'=>true)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -507,31 +407,8 @@ class TicketsController extends Controller
 			'locations/findLocationForm.inc',
 			array('includeExternalResults'=>true)
 		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory())
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('issueList'=>$ticket->getIssues(),'ticket'=>$ticket)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
-			if (count($ticketList) > 1) {
-				$this->template->blocks['bottom-right'][] = new Block(
-					'tickets/ticketList.inc',
-					array(
-						'ticketList'=>$ticketList,
-						'title'=>'Other tickets for this location',
-						'filterTicket'=>$ticket
-					)
-				);
-			}
-		}
+
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -560,29 +437,8 @@ class TicketsController extends Controller
 			'tickets/changeCategoryForm.inc',
 			array('ticket'=>$ticket)
 		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory(),'disableButton'=>true)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -619,29 +475,8 @@ class TicketsController extends Controller
 			'tickets/closeTicketForm.inc',
 			array('ticket'=>$ticket)
 		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory(),'disableButtons'=>true)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array('ticket'=>$ticket,'issueList'=>$ticket->getIssues(),'disableButtons'=>true)
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['bottom-left'][] = new Block(
-				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
-			);
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+
+		$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -733,5 +568,52 @@ class TicketsController extends Controller
 		}
 		header("Location: $return_url");
 		exit();
+	}
+
+	/**
+	 * @param Ticket $ticket
+	 */
+	private function addStandardInfoBlocks(Ticket $ticket)
+	{
+		$this->template->blocks['history-panel'][] = new Block(
+			'tickets/history.inc',
+			array('history'=>$ticket->getHistory())
+		);
+
+		$this->template->blocks['issue-panel'][] = new Block(
+			'tickets/issueList.inc',
+			array(
+				'issueList'     => $ticket->getIssues(),
+				'ticket'        => $ticket,
+				'disableButtons'=> $ticket->getStatus()=='closed'
+			)
+		);
+		if ($ticket->getLocation()) {
+			$locationBlocks = array('locationInfo', 'masterAddressData', 'locationPeople');
+			foreach ($locationBlocks as $b) {
+				$this->template->blocks['bottom-left'][] = new Block(
+					"locations/$b.inc",
+					array('location'=>$ticket->getLocation(), 'disableButtons'=>true)
+				);
+			}
+
+			$this->template->blocks['bottom-right'][] = new Block(
+				'tickets/ticketLocationInfo.inc',
+				array('ticket'=>$ticket)
+			);
+
+			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
+			if (count($ticketList) > 1) {
+				$this->template->blocks['bottom-right'][] = new Block(
+					'tickets/ticketList.inc',
+					array(
+						'ticketList'    => $ticketList,
+						'title'         => 'Other cases for this location',
+						'filterTicket'  => $ticket,
+						'disableButtons'=> true
+					)
+				);
+			}
+		}
 	}
 }
