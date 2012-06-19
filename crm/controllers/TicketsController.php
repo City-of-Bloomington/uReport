@@ -604,7 +604,7 @@ class TicketsController extends Controller
 
 			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
 			if (count($ticketList) > 1) {
-				$this->template->blocks['bottom-right'][] = new Block(
+				$this->template->blocks['bottom-left'][] = new Block(
 					'tickets/ticketList.inc',
 					array(
 						'ticketList'    => $ticketList,
