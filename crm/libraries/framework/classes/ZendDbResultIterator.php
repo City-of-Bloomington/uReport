@@ -11,14 +11,9 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	protected $select;
 	protected $result = array();
 
-	protected $paginator = null;
-	protected $itemsPerPage = null;
-	protected $currentPage = 1;
-
-	private $valid = false;
-	private $cacheEnabled = true;
-	private $cache = array();
 	private $key;
+	private $alreadyPopulated = false;
+	private $paginator;
 
 
 	abstract public function find($fields=null,$order='',$limit=null,$groupBy=null);
@@ -26,22 +21,11 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 
 	/**
 	 * Creates an empty collection
-	 *
-	 * Setting itemsPerPage turns on pagination mode
-	 * In pagination mode, this will only load the results for one page
 	 */
-	public function __construct($itemsPerPage=null,$currentPage=null)
+	public function __construct()
 	{
 		$this->zend_db = Database::getConnection();
 		$this->select = new Zend_Db_Select($this->zend_db);
-
-		if ($itemsPerPage) {
-			$this->itemsPerPage = (integer)$itemsPerPage;
-
-			if ($currentPage && $currentPage > 1) {
-				$this->currentPage = $currentPage;
-			}
-		}
 	}
 
 	/**
@@ -51,19 +35,13 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 */
 	protected function populateList()
 	{
-		$this->result = array();
-		if (!$this->itemsPerPage) {
+		if (!$this->paginator) {
 			$this->result = $this->zend_db->fetchAll($this->select);
 		}
 		else {
-			// Only load the results for one page
-			$this->paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($this->select));
-			$this->paginator->setItemCountPerPage($this->itemsPerPage);
-			$this->paginator->setCurrentPageNumber($this->currentPage);
-			foreach ($this->paginator as $row) {
-				$this->result[] = $row;
-			}
+			foreach ($this->paginator as $row) { $this->result[] = $row; }
 		}
+		$this->alreadyPopulated = true;
 	}
 
 	/**
@@ -72,6 +50,20 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	public function getSQL()
 	{
 		return $this->select->__toString();
+	}
+
+	/**
+	 * @param int $itemsPerPage
+	 * @param int $currentPage
+	 */
+	public function setPagination($itemsPerPage, $currentPage)
+	{
+		$this->paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($this->select));
+		$this->paginator->setItemCountPerPage($itemsPerPage);
+		$this->paginator->setCurrentPageNumber($currentPage);
+
+		$this->result = array();
+		$this->alreadyPopulated = false;
 	}
 
 	/**
@@ -88,6 +80,7 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 * @return boolean
 	 */
 	public function offsetExists($offset) {
+		if (!$this->alreadyPopulated) { $this->populateList(); }
 		return array_key_exists($offset,$this->result);
 	}
 	/**
@@ -140,6 +133,7 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 * @return boolean
 	 */
 	public function valid() {
+		if (!$this->alreadyPopulated) { $this->populateList(); }
 		return array_key_exists($this->key,$this->result);
 	}
 	/**
@@ -147,6 +141,7 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 */
 	public function current()
 	{
+		if (!$this->alreadyPopulated) { $this->populateList(); }
 		return $this->loadResult($this->key);
 	}
 	/**
@@ -154,6 +149,7 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 */
 	public function seek($index)
 	{
+		if (!$this->alreadyPopulated) { $this->populateList(); }
 		if (isset($this->result[$index])) {
 			$this->key = $index;
 		}
@@ -176,6 +172,7 @@ abstract class ZendDbResultIterator implements ArrayAccess,SeekableIterator,Coun
 	 */
 	public function count()
 	{
+		if (!$this->alreadyPopulated) { $this->populateList(); }
 		return count($this->result);
 	}
 }

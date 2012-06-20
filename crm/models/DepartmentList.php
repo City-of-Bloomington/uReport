@@ -44,7 +44,6 @@ class DepartmentList extends ZendDbResultIterator
 		if ($groupBy) {
 			$this->select->group($groupBy);
 		}
-		$this->populateList();
 	}
 
 	/**
