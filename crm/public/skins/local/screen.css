@@ -3,7 +3,7 @@ h2 { font-size:123.1%; font-weight:bold;  margin:.15em 0; }
 h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
-p { margin:0 .5em .5em .5em; }
+p { margin:.5em; }
 
 table { margin:0 .5em .5em .5em; }
 th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
@@ -113,6 +113,11 @@ button, .button {
 .clientList h3 a {
 	color:black;
 }
+
+/**
+ * Help text on fields
+*/
+.help { font-size:.9em; color:#666666; }
 
 /* Issue information */
 #issue-panel { background-color:#eee; }

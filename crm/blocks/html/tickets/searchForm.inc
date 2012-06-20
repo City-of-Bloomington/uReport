@@ -51,6 +51,8 @@ if (userIsAllowed('tickets','add')) {
 			<label>Search
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
 			</label>
+			<button type="submit" class="search">Go</button>
+			<p class="help">Only searches a case's description</p>
 		</fieldset>
 		<fieldset id="advanced-search">
 			<?php
