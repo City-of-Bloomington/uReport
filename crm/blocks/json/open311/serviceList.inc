@@ -14,7 +14,7 @@ foreach ($this->categoryList as $category) {
 		'description'=>$category->getDescription(),
 		'metadata'=> count($category->getCustomFields()) ? true : false,
 		'keywords'=>'',
-		'group'=>"{$category->getGroup()}"
+		'group'=>"{$category->getCategoryGroup()}"
 	);
 }
 echo json_encode($services);

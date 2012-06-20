@@ -1,48 +1,51 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
 echo "<service_requests>";
-foreach ($this->ticketList as $ticket) {
-	$service_name = View::escape($ticket->getData('category.name'));
-	$service_code = $ticket->getData('category._id');
+foreach ($this->ticketList as $t) {
+	$c = $t->getCategory();
+	$service_name = $c ? $c->getName() : '';
+	$service_code = $c ? $c->getId()   : '';
 
-	$issue = $ticket->getIssue();
-	$description = View::escape($issue->getDescription());
+	$issue = $t->getIssue();
+	$description = $issue->getDescription();
 
-	$department = View::escape($ticket->getData('assignedPerson.department.name'));
+	$history = $t->getHistory();
+	$h = end($history);
 
-	$h = $ticket->getHistory();
-	$history = end($h);
-
-	$address = View::escape($ticket->getLocation());
-	$zipcode = View::escape($ticket->getZip());
-
-	$media_url = '';
+	$address = View::escape($t->getLocation());
+	$zip = View::escape($t->getZip());
 	$media = $issue->getMedia();
-	if (count($media)) {
-		$m = $media[0];
-		$media_url = $m->getURL();
+	$media_url = count($media) ? $media[0]->getURL() : '';
+
+	$agency_responsible = '';
+	$p = $t->getAssignedPerson();
+	if ($p) {
+		$d = $p->getDepartment();
+		if ($d) {
+			$agency_responsible = View::escape($d->getName());
+		}
 	}
 
 	echo "
 	<request>
-		<service_request_id>{$ticket->getId()}</service_request_id>
-		<status>{$ticket->getStatus()}</status>
+		<service_request_id>{$t->getId()}</service_request_id>
+		<status>{$t->getStatus()}</status>
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
 		<description>$description</description>
-		<agency_responsible>$department</agency_responsible>
-		<requested_datetime>{$ticket->getEnteredDate('c')}</requested_datetime>
-		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
+		<agency_responsible>$agency_responsible</agency_responsible>
+		<requested_datetime>{$t->getEnteredDate('c')}</requested_datetime>
+		<updated_datetime>{$h->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>
-		<address_id>{$ticket->getAddress_id()}</address_id>
-		<zipcode>$zipcode</zipcode>
-		<lat>{$ticket->getLatitude()}</lat>
-		<long>{$ticket->getLongitude()}</long>
+		<address_id>{$t->getAddress_id()}</address_id>
+		<zipcode>$zip</zipcode>
+		<lat>{$t->getLatitude()}</lat>
+		<long>{$t->getLongitude()}</long>
 		<media_url>$media_url</media_url>
 	</request>
 	";

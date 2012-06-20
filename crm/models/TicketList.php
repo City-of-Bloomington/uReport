@@ -56,6 +56,14 @@ class TicketList extends ZendDbResultIterator
 							$this->select->joinLeft(array('i'=>'issues'), 't.id=i.ticket_id', array());
 							$this->select->where("i.$key=?", $value);
 							break;
+						case 'start_date':
+							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
+							$this->select->where("t.enteredDate>=?", array($d));
+							break;
+						case 'end_date':
+							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
+							$this->select->where("t.enteredDate<=?", array($d));
+							break;
 						default:
 							$this->select->where("t.$key=?", $value);
 					}

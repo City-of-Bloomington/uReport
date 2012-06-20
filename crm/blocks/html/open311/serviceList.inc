@@ -24,7 +24,7 @@ echo "
 		foreach ($this->categoryList as $category) {
 			$service_code = "{$category->getId()}";
 			$service_name = View::escape($category->getName());
-			$group = View::escape($category->getGroup());
+			$group = View::escape($category->getCategoryGroup());
 			$description = View::escape($category->getDescription());
 			$metadata = count($category->getCustomFields()) ? 'true' : 'false';
 

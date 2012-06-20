@@ -128,7 +128,7 @@ class Open311Controller extends Controller
 		else {
 			$search = array();
 			if (isset($category) && $category->allowsDisplay($this->person)) {
-				$search['category'] = $category->getId();
+				$search['category_id'] = $category->getId();
 			}
 			if (!empty($_REQUEST['start_date'])) {
 				$search['start_date'] = $_REQUEST['start_date'];
@@ -139,9 +139,9 @@ class Open311Controller extends Controller
 			if (!empty($_REQUEST['status'])) {
 				$search['status'] = $_REQUEST['status'];
 			}
-			$ticketList = new TicketList($search);
-			$ticketList->limit(1000);
-			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$ticketList));
+			$tickets = new TicketList();
+			$tickets->find($search, null, 1000);
+			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$tickets));
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
@@ -12,12 +12,12 @@ echo "
 ";
 	$customFields = $this->category->getCustomFields();
 	if ($customFields) {
-		foreach ($customFields as $i=>$definition) {
+		foreach ($customFields as $i=>$d) {
 			$order = $i+1;
-			$code  = View::escape($definition['name']);
-			$datatype = isset($definition['type']) ? View::escape($definition['type']) : 'string';
-			$description = isset($definition['label']) ? View::escape($definition['label']) : $code;
-			$required = isset($definition['required']) ? $definition['required'] : false;
+			$code  = View::escape($d->name);
+			$datatype    = isset($d->type)     ? View::escape($d->type)  : 'string';
+			$description = isset($d->label)    ? View::escape($d->label) : $code;
+			$required    = isset($d->required) ? $d->required            : false;
 			$required = $required ? "true" : "false";
 			echo "
 			<attribute>

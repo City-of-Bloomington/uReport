@@ -1,13 +1,15 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 $status = strtolower($this->ticket->getStatus());
-$service_name = View::escape($this->ticket->getData('category.name'));
-$service_code = $this->ticket->getData('category._id');
+
+$c = $this->ticket->getCategory();
+$service_name = $c ? View::escape($c->getName()) : '';
+$service_code = $c ? $c->getId() : '';
 
 $issue = $this->ticket->getIssue();
 $description = View::escape($issue->getDescription());
@@ -25,7 +27,7 @@ $image = $media_url ? "<img src=\"$media_url\" />" : '';
 
 echo "
 <h1>$service_name</h1>
-<h2>Case #{$this->ticket->getNumber()}</h2>
+<h2>Case #{$this->ticket->getId()}</h2>
 <p>$description</p>
 
 <table>
