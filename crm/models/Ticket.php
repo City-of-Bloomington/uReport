@@ -126,6 +126,11 @@ class Ticket extends ActiveRecord
 	{
 		foreach ($this->getIssues()  as $i) { $i->delete(); }
 		foreach ($this->getHistory() as $h) { $h->delete(); }
+
+		$search = new Search();
+		$search->delete($this);
+		$search->solrClient->commit();
+
 		parent::delete();
 	}
 
@@ -445,8 +450,8 @@ class Ticket extends ActiveRecord
 			$issue->handleUpdate($post);
 			$this->issues = array($issue);
 
-			if (!$this->getEnteredByPerson_id() && $issue->getReportByPerson_id()) {
-				$this->setEnteredByPerson_id($issue->getReportByPerson_id());
+			if (!$this->getEnteredByPerson_id() && $issue->getReportedByPerson_id()) {
+				$this->setEnteredByPerson_id($issue->getReportedByPerson_id());
 			}
 
 			$this->save();
@@ -457,23 +462,30 @@ class Ticket extends ActiveRecord
 			$history = new TicketHistory();
 			$history->setTicket($this);
 			$history->setAction(new Action('open'));
-			if (isset($_SESSION['USER'])) {
-				$history->setEnteredByPerson($_SESSION['USER']);
+			if ($this->getEnteredByPerson_id()) {
+				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
 			}
 			$history->save();
 
 			$history = new TicketHistory();
 			$history->setTicket($this);
 			$history->setAction(new Action('assignment'));
-			$history->setActionPerson_id($post['assignedPerson_id']);
-			$history->setNotes($post['notes']);
-			if (isset($_SESSION['USER'])) {
-				$history->setEnteredByPerson($_SESSION['USER']);
+			$history->setActionPerson_id($this->getAssignedPerson_id());
+			if (!empty($post['notes'])) {
+				$history->setNotes($post['notes']);
+			}
+			if ($this->getEnteredByPerson_id()) {
+				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
 			}
 			$history->save();
 		}
 		catch (Exception $e) {
 			$zend_db->rollBack();
+
+			$search = new Search();
+			$search->delete($this);
+			$search->commit();
+
 			throw $e;
 		}
 		$zend_db->commit();

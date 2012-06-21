@@ -191,6 +191,18 @@ class Search
 	}
 
 	/**
+	 * Removes a single record from Solr
+	 *
+	 * @param mixed $record
+	 */
+	public function delete($record)
+	{
+		if ($record instanceof Ticket) {
+			$this->solrClient->deleteById('t_'.$record->getId());
+		}
+	}
+
+	/**
 	 * Indexes a whole collection of records in Solr
 	 *
 	 * @param mixed $list

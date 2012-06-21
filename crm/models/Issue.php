@@ -74,7 +74,6 @@ class Issue extends ActiveRecord
 	public function validate($preliminary=false)
 	{
 		if (!$this->getTicket_id())    { throw new Exception('issues/missingTicket'); }
-		if (!$this->getIssueType_id()) { throw new Exception('issues/missingType');   }
 		if (!$this->getDate()) { $this->setDate('now'); }
 
 		if (isset($_SESSION['USER'])) {
