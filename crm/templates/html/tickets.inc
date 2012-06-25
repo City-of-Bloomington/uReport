@@ -21,7 +21,7 @@
 		<?php
 			// These panels should only show up for non-popup windows
 			// Also, only draw the divs if there is content for them
-			$panels = array('action-panel', 'issue-panel', 'bottom-left', 'bottom-right');
+			$panels = array('history-panel', 'issue-panel', 'bottom-left', 'bottom-right');
 			foreach ($panels as $p) {
 				if (!isset($_REQUEST['popup']) && isset($this->blocks[$p])) {
 					echo "<div id=\"$p\" class=\"panel\">";
