@@ -10,7 +10,7 @@
  */
 if (count($this->mediaList)) {
 	echo "
-	<table>
+	<table class=\"mediaList\">
 	";
 	foreach ($this->mediaList as $media) {
 		$deleteButton = '';
