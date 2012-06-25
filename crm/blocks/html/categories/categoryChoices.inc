@@ -1,5 +1,13 @@
 <?php
 /**
+ * Displays the full list of all the categories in the system
+ *
+ * This allows a user to choose a category from the full list.
+ * To use this block, set $return_url to where you want the user
+ * to go after choosing.
+ * Each category will be a link to $return_url containg
+ * the category_id of the chosen category
+ *
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>

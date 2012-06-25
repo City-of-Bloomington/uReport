@@ -30,9 +30,6 @@ class TicketsController extends Controller
 	public function index()
 	{
 		$this->template->setFilename('search');
-		if (userIsAllowed('tickets','add')) {
-			$this->template->blocks['right'][] = new Block('tickets/addNewForm.inc');
-		}
 
 		$search = new Search();
 		$solrObject = $search->query($_GET);
@@ -99,12 +96,6 @@ class TicketsController extends Controller
 				exit();
 			}
 		}
-		else {
-			$this->template->setFilename('search');
-			$this->template->blocks['search-form'][] = new Block('tickets/addNewForm.inc');
-			$_SESSION['errorMessages'][] = new Exception('tickets/missingCategory');
-			return;
-		}
 
 		// Handle any Location choice passed in
 		if (!empty($_GET['location'])) {
@@ -146,29 +137,19 @@ class TicketsController extends Controller
 			}
 		}
 
+		// Display all the forms
 		$this->template->setFilename('ticketCreation');
-		$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		//-------------------------------------------------------------------
-		// Location Panel
-		//-------------------------------------------------------------------
 		$this->template->blocks['right-top'][] = new Block(
 			'tickets/chooseLocation.inc', array('ticket'=>$ticket)
 		);
-		//-------------------------------------------------------------------
-		// Person Panel
-		//-------------------------------------------------------------------
 		$this->template->blocks['right-bottom'][] = new Block(
 			'tickets/chooseReportedByPerson.inc', array('issue'=>$issue)
 		);
-		//-------------------------------------------------------------------
-		// Ticket Panel
-		//-------------------------------------------------------------------
 		$this->template->blocks['left'][] = new Block(
 			'tickets/addTicketForm.inc',
 			array(
 				'ticket'=>$ticket,
 				'issue'=>$issue,
-				'return_url'=>$return_url,
 				'currentDepartment'=>$currentDepartment
 			)
 		);

@@ -10,9 +10,19 @@ if ($this->location) {
 	$url = new URL(BASE_URL.'/locations/view?location='.$this->location);
 	$location = View::escape($this->location);
 
+	$addTicketButton = '';
+	if (!$this->disableButtons && userIsAllowed('tickets', 'add')) {
+		$addTicketButton = "
+		<a href=\"".BASE_URI."/tickets/add?location={$this->location}\" class=\"add button\">
+			Add New Case
+		</a>
+		";
+	}
+
 	echo "
 	<div class=\"locationInfo\">
 		<h2><a href=\"$url\" class=\"location\">$location</a></h2>
+		$addTicketButton
 	</div>
 	";
 }

@@ -12,14 +12,13 @@
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param string $this->title
  */
-$title = $this->title ? View::escape($this->title) : 'New Case';
+$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
 ?>
-<div class="addNewForm">
-	<h1><?php echo $title; ?></h1>
+<div id="chooseCategoryForm">
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets/add">
-		<fieldset>
+		<fieldset><legend>Category</legend>
 			<?php
 				$block = new Block(
 					'tickets/partials/chooseCategoryFields.inc',
@@ -30,7 +29,7 @@ $title = $this->title ? View::escape($this->title) : 'New Case';
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_REQUEST, null, array('category_id'));
 			?>
-			<div><button type="submit" class="add">Add New Case</button></div>
+			<button type="submit" class="edit">Change Category</button>
 		</fieldset>
 	</form>
 </div>

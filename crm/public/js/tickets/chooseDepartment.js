@@ -1,41 +1,40 @@
 "use strict";
 YUI().use('node', 'io', 'json', function (Y) {
-	Y.one('#chooseDepartmentForm button').setStyle('display','none');
-
-	Y.on('submit', function (e) {
-		e.preventDefault();
-	}, '#chooseDepartmentForm form');
-
-	Y.on('change', function (e) {
-		var department_id = e.target.get('value');
-		var department = {};
-		var url = CRM.BASE_URL + '/departments/view?format=json;department_id=' + department_id;
-		Y.io(url, {
+	var loadDepartmentData = function (e) {
+		Y.io(CRM.BASE_URL + '/departments/view?format=json;department_id=' + e.target.get('value'), {
 			on: {
 				complete: function (id, o, args) {
-					department = Y.JSON.parse(o.responseText);
+					var department = Y.JSON.parse(o.responseText);
+					reloadAssignedPersonOptions(department);
 				}
 			}
 		});
-
-		url = CRM.BASE_URL + '/people?format=json;department_id=' + department_id;
+	};
+	var reloadAssignedPersonOptions = function (department) {
+		var url = CRM.BASE_URL + '/people?format=json;department_id=' + department.id;
 		Y.io(url, {
 			on: {
 				complete: function (id, o, args) {
 					var html = '';
+					var assignedPerson_id = Y.one('#assignedPerson_id');
+
 					if (o.responseText) {
 						var people = Y.JSON.parse(o.responseText);
-						var selected = '';
+						var selected;
 						for (var i in people) {
-							if (department.defaultPerson_id) {
-								selected = department.defaultPerson_id == people[i].id ? 'selected="selected"' : '';
-							}
-							html += '<option value="' + people[i].id + '" ' + selected + '>' + people[i].name + '</option>';
+							html += '<option value="' + people[i].id + '">' + people[i].name + '</option>';
 						}
 					}
-					Y.one('#assignedPerson_id').setContent(html);
+					assignedPerson_id.setContent(html);
+					if (department.defaultPerson_id) {
+						assignedPerson_id.set('value', department.defaultPerson_id);
+					}
 				}
 			}
 		});
-	}, '#department_id');
+	};
+
+	Y.one('#chooseDepartmentForm button').setStyle('display','none');
+	Y.on('submit', function (e) { e.preventDefault(); }, '#chooseDepartmentForm form');
+	Y.on('change', loadDepartmentData, '#department_id');
 });

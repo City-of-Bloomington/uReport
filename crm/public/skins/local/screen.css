@@ -69,8 +69,8 @@ button, .button {
 .addNewForm div { margin:.5em 0; }
 .addNewForm h1 { margin:.25em; }
 
-.addTicketForm .ticketFields,
-.addTicketForm .reportedByPerson {
+#addTicketForm .ticketFields,
+#addTicketForm .reportedByPerson {
 	display:none;
 }
 

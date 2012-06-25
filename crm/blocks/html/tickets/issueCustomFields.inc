@@ -1,25 +1,27 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Category $this->category
  * @param Issue $this->issue
- * @param int $this->index
  */
-$category = $this->ticket->getCategory();
+echo "<div id=\"customFields\">";
+$category = $this->category;
 if ($category) {
 	$customFields = $category->getCustomFields();
 	if (count($customFields)) {
 		echo "<table>";
-		foreach ($customFields as $definition) {
-			$name = $definition['name'];
-			$type = isset($definition['type']) ? $definition['type'] : 'string';
-			$label = isset($definition['label']) ? View::escape($definition['label']) : View::escape($name);
-			$value = $this->issue->getData("customFields.$name");
+		foreach ($customFields as $f) {
+			$name = $f->name;
+			$type = isset($f->type) ? $f->type : 'string';
+			$label = isset($f->label) ? View::escape($f->label) : View::escape($name);
 
-			$field_name = "issue[customFields][$definition[name]]";
-			$field_id = "issue-customFields-$definition[name]";
+			$issueData = $this->issue->getCustomFields();
+			$value = isset($issueData->$name) ? $issueData->$name : null;
+
+			$field_name = "issue[customFields][$name]";
+			$field_id = "issue-customFields-$name";
 			switch ($type) {
 				case 'singlevaluelist':
 					$value = View::escape($value);
@@ -28,7 +30,7 @@ if ($category) {
 						<td><select name=\"$field_name\" id=\"$field_id\">
 								<option></option>
 					";
-							foreach ($definition['values'] as $v) {
+							foreach ($f->values as $v) {
 								$v = View::escape($v);
 								$selected = $v==$value ? 'selected="selected"' : '';
 								echo "<option value=\"$v\" $selected>$v</option>";
@@ -47,8 +49,8 @@ if ($category) {
 					<tr><td><label for=\"$field_id\">$label</label></td>
 						<td><select name=\"{$field_name}[]\" id=\"$field_id\" multiple=\"true\" size=\"5\">
 					";
-							foreach ($definition['values'] as $v) {
-								$selected = in_array($v,$value) ? 'selected="selected"' : '';
+							foreach ($f->values as $v) {
+								$selected = in_array($v, $value) ? 'selected="selected"' : '';
 								$v = View::escape($v);
 								echo "<option value=\"$v\" $selected>$v</option>";
 							}
@@ -80,3 +82,4 @@ if ($category) {
 		echo "</table>";
 	}
 }
+echo "</div>";

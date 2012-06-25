@@ -14,14 +14,18 @@
 		}
 	?>
 	<div id="panel-container">
-		<?php include FRAMEWORK.'/errorMessages.php'; ?>
-		<div id="left" class="panel">
-			<?php echo $this->includeBlocks('left'); ?>
-		</div>
-		<div id="right" class="panel">
-			<?php echo $this->includeBlocks('right'); ?>
-		</div>
-		<?php echo $this->includeBlocks(); ?>
+	<?php
+		include FRAMEWORK.'/errorMessages.php';
+		$panels = array('left', 'right');
+		foreach ($panels as $p) {
+			if (isset($this->blocks[$p])) {
+				echo "<div id=\"$p\" class=\"panel\">";
+				echo $this->includeBlocks($p);
+				echo "</div>";
+			}
+		}
+		echo $this->includeBlocks();
+	?>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>
 </body>

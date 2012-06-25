@@ -13,7 +13,6 @@
 			include $dir.'/partials/menubar.inc';
 		}
 	?>
-
 	<div id="panel-container">
 		<?php include FRAMEWORK.'/errorMessages.php'; ?>
 		<div id="ticket-panel" class="panel">
@@ -28,7 +27,6 @@
 					echo "<div id=\"$p\" class=\"panel\">";
 					echo $this->includeBlocks($p);
 					echo "</div>";
-
 				}
 			}
 		?>

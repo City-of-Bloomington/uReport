@@ -7,15 +7,20 @@
  * @param Issue $this->issue
  * @param Department $this->currentDepartment
  */
-$category = $this->ticket->getCategory();
+$category    = $this->ticket->getCategory();
+$category_id = $category ? $category->getId() : '';
+$title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
-<div class="addTicketForm">
-	<h1>New <?php echo View::escape($category->getName()); ?> Case</h1>
-	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
+<div id="addTicketForm">
+	<h2><?php echo View::escape($title); ?></h2>
+	<?php
+		include APPLICATION_HOME.'/blocks/html/tickets/chooseCategoryForm.inc';
+		include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc';
+	?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
 		<fieldset class="ticketFields">
 			<legend>Location Info</legend>
-			<input name="category_id" type="hidden" value="<?php echo $category->getId(); ?>" />
+			<input name="category_id" type="hidden" value="<?php echo $category_id; ?>" />
 			<table>
 				<tr><td><label for="location">Location</label></td>
 					<td><input name="location" id="location"
@@ -53,6 +58,8 @@ $category = $this->ticket->getCategory();
 			<legend>Issue Information</legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+
+				$this->category = $category;
 				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 			?>
 		</fieldset>

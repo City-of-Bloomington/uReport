@@ -6,35 +6,30 @@
  * @param string $this->return_url
  */
 ?>
-<label id="category">
-	Choose a category
-</label>
 <div>
-<select id="category" name="category_id">
-	<?php
-		if ($_SESSION['USER']->getDepartment_id()) {
+	<select id="chosenCategory" name="category_id">
+		<option value=""></option>
+		<?php
 			if (isset($_REQUEST['category_id'])) {
 				try {
-					$category = new Category($_REQUEST['category_id']);
-					$name = View::escape($category->getName());
-					echo "
-					<option value=\"{$category->getId()}\" selected=\"selected\">$name</option>
-					";
+					$c = new Category($_REQUEST['category_id']);
+					$name = View::escape($c->getName());
+					echo "<option value=\"{$c->getId()}\" selected=\"selected\">$name</option>";
 				}
 				catch (Exception $e) {
 					# Just ignore bad categories.  The user will just have to pick another
 				}
 			}
 
-			foreach ($_SESSION['USER']->getDepartment()->getCategories() as $c) {
-				$name = View::escape($c->getName());
-				echo "<option value=\"{$c->getId()}\">$name</option>";
+			if ($_SESSION['USER']->getDepartment_id()) {
+				foreach ($_SESSION['USER']->getDepartment()->getCategories() as $c) {
+					$name = View::escape($c->getName());
+					echo "<option value=\"{$c->getId()}\">$name</option>";
+				}
 			}
-		}
-	?>
-</select>
+		?>
+	</select>
 </div>
-
 <div>
 	<?php
 		$url = new URL(BASE_URL.'/categories/choose');

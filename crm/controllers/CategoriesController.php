@@ -18,6 +18,23 @@ class CategoriesController extends Controller
 		);
 	}
 
+	public function view()
+	{
+		if ($this->template->outputFormat == 'html') {
+			$this->template->setFilename('backend');
+		}
+
+		if (!empty($_REQUEST['category_id'])) {
+			try {
+				$category = new Category($_REQUEST['category_id']);
+				$this->template->blocks[] = new Block('categories/info.inc', array('category'=>$category));
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+	}
+
 	public function update()
 	{
 		// Load the $category for editing

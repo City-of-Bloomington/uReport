@@ -53,7 +53,11 @@
 
 			$html.= "
 			<div class=\"category\">
-				<h4>$name $editButton</h4>
+				<h4><a href=\"".BASE_URI."/categories/view?category_id={$category->getId()}\">
+						$name
+					</a>
+					$editButton
+				</h4>
 				<p>$description</p>
 				<table>
 					<thead>

@@ -84,13 +84,6 @@ class PeopleController extends Controller
 		);
 
 		if ($this->template->outputFormat == 'html') {
-			if (!$disableButtons && userIsAllowed('tickets','add')) {
-				$this->template->blocks['right'][] = new Block(
-					'tickets/addNewForm.inc',
-					array('title'=>'Report New Case')
-				);
-			}
-
 			$this->template->blocks['right'][] = new Block('people/stats.inc',array('person'=>$person));
 
 			$lists = array(

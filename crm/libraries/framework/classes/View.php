@@ -63,27 +63,4 @@ abstract class View
 
 		return $input;
 	}
-
-	/**
-	 * Return the first $n words of the given string
-	 *
-	 * @param string $string Source string
-	 * @param int $numWords Number of words
-	 * @return string
-	 */
-	public static function limitWords($string,$numWords)
-	{
-		$output = '';
-		$words = preg_split('/\s+/',$string);
-		$c = 0;
-		foreach ($words as $word) {
-			$output.= "$word ";
-			$c++;
-			if ($c >= $numWords) {
-				$output.= '...';
-				break;
-			}
-		}
-		return $output;
-	}
 }
