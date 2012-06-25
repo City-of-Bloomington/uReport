@@ -7,8 +7,10 @@
 ?>
 <body>
 	<?php
-		include $dir.'/partials/banner.inc';
-		include $dir.'/partials/menubar.inc';
+		if (!isset($_REQUEST['popup'])) {
+			include $dir.'/partials/banner.inc';
+			include $dir.'/partials/menubar.inc';
+		}
 	?>
 	<div id="panel-container">
 	<?php

@@ -29,7 +29,14 @@ echo "
 	foreach ($this->categoryList as $category) {
 		$name = View::escape($category->getName());
 		$description = View::escape(trim($category->getDescription()));
-		$return_url->category_id = "{$category->getId()}";
+
+		if (isset($_REQUEST['callback'])) {
+			$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
+			$return_url = "javascript:self.opener.$callback({$category->getId()});";
+		}
+		else {
+			$return_url->category_id = $category->getId();
+		}
 		echo "<li><a href=\"$return_url\" title=\"$description\">$name</a></li>\n";
 	}
 echo "

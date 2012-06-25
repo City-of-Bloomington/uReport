@@ -76,7 +76,9 @@ class CategoriesController extends Controller
 	 */
 	public function choose()
 	{
-		$return_url = new URL($_GET['return_url']);
+		$return_url = !empty($_GET['return_url'])
+			? new URL($_GET['return_url'])
+			: new URL(BASE_URL.'/categories/view');
 
 		$categoryList = new CategoryList();
 		$categoryList->find(null,array('name'=>1));

@@ -6,6 +6,7 @@
  * @param Category $this->category
  */
 $c = array(
+	'id'                    => $this->category->getId(),
 	'name'                  => $this->category->getName(),
 	'description'           => $this->category->getDescription(),
 	'categoryGroup_id'      => $this->category->getCategoryGroup_id(),
