@@ -1,18 +1,19 @@
-h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
-h2 { font-size:123.1%; font-weight:bold;  margin:.15em 0; }
-h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
+h1 { font-size:131%; font-weight:bold; margin-bottom:.5em; color:#a60000; }
+h2 { font-size:123.1%; font-weight:bold;  margin-bottom:.25em; }
+h3 { font-size:110%; font-weight:bold; margin-bottom:.25em; }
 h4 { font-size:100%; font-weight:bold; }
 a { text-decoration:none; color:#0000a6; }
-p { margin:.5em; }
+p { margin-bottom:.5em; }
 
-table { margin:0 .5em .5em .5em; }
+table { margin:0 0 .5em 0; }
 th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
 td { padding:.4em; }
 thead th { text-align:left; }
 tbody th { text-align:right; }
+tbody label {display:block; text-align:right; }
 
-ul { margin:.75em 0 .75em .5em; padding:0; list-style-type:none; }
-li { margin:.25em; }
+ul { margin:0 0 .75em .5em; padding:0; list-style-type:none; }
+li { margin-bottom:.5em; }
 
 fieldset { padding:.5em 0; }
 legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
@@ -38,10 +39,10 @@ button, .button {
 .upload { background:url('images/addbutton.png') left center no-repeat; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
-.panel { padding:0.5em; }
+.panel { padding:.75em; }
 
 .actionForm { overflow:auto; }
-.actionForm form { background-color:#eee; margin-bottom:10px; padding:0 4px; border-radius:5px; display:table; }
+.actionForm form { background-color:#eee; padding:0 .5em; margin-bottom:.75em; border-radius:5px; display:table; }
 .actionForm fieldset { float:left; display:table; }
 .actionForm .buttons { clear:left; }
 
@@ -66,8 +67,7 @@ button, .button {
 .addNewForm { float:right; border:2px solid black; background-color:#eeeeee; }
 .addNewForm form { padding:1em; }
 .addNewForm label { position:absolute; left:-9999px; }
-.addNewForm div { margin:.5em 0; }
-.addNewForm h1 { margin:.25em; }
+.addNewForm div { margin-bottom:.5em; }
 
 #addTicketForm .ticketFields,
 #addTicketForm .reportedByPerson {
@@ -123,9 +123,8 @@ button, .button {
 #issue-panel { background-color:#eee; }
 .issueHeader { width:100%; display:block; }
 .issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
-.issueList h1 { margin:.25em; }
 .issueList .issueInfo {
-	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
+	border:1px solid #ccc; margin:.5em 0; padding:.5em; background-color:white;
 }
 .issueInfo .notes { margin-bottom:.5em; clear:left; }
 
