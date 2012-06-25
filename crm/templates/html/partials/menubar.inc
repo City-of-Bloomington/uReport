@@ -10,6 +10,9 @@
 			if (userIsAllowed('tickets', 'add')) {
 				echo "<li><a href=\"".BASE_URI."/tickets/add\">New Case</a></li>";
 			}
+			if (userIsAllowed('reports')) {
+				echo "<li><a href=\"".BASE_URI."/reports\">Reports</a></li>";
+			}
 		?>
 	</ul>
 </div>
