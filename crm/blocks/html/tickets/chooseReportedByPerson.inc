@@ -13,6 +13,7 @@ $url = BASE_URL."/people?return_url=$return_url";
 echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
+		<h3>Reporting Person</h3>
 		<a id=\"findPersonButton\" class=\"edit button\" href=\"$url\">
 			Lookup Person
 		</a>
