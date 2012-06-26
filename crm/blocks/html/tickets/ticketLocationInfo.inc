@@ -21,7 +21,7 @@
 		$additionalFields = $this->ticket->getAdditionalFields();
 		if ($additionalFields) {
 			foreach ($additionalFields as $key=>$value) {
-				$table.= "<li><label>$key:</label> $value</li>";
+				$list.= "<li><label>$key:</label> $value</li>";
 			}
 		}
 		$list.= '</ul>';
