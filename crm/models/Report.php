@@ -27,7 +27,7 @@ class Report
 					p.firstname, p.lastname,
 					c.name,
 					t.resolution_id, r.name
-				order by t.assignedPerson_id, t.category_id, t.status, t.resolution_id";
+				order by p.lastname, p.firstname, c.name, t.status, t.resolution_id";
 
 		self::$zend_db = Database::getConnection();
 		$result = self::$zend_db->fetchAll($sql);
@@ -64,7 +64,7 @@ class Report
 					t.assignedPerson_id, t.status, t.resolution_id,
 					p.firstname, p.lastname,
 					r.name
-				order by c.id, t.assignedPerson_id, t.status desc, t.resolution_id
+				order by c.name, p.lastname, p.firstname, t.status desc, t.resolution_id
 		";
 		self::$zend_db = Database::getConnection();
 		$d = array();
