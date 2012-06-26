@@ -12,7 +12,7 @@ thead th { text-align:left; }
 tbody th { text-align:right; }
 tbody label {display:block; text-align:right; }
 
-ul { margin:0 0 .75em .5em; padding:0; list-style-type:none; }
+ul { margin:0 0 .75em 0; padding:0; list-style-type:none; }
 li { margin-bottom:.5em; }
 
 fieldset { padding:.5em 0; }
@@ -40,6 +40,7 @@ button, .button {
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
 .panel { padding:.75em; }
+.panel > div {margin-bottom:.5em;}
 
 .actionForm { overflow:auto; }
 .actionForm form { background-color:#eee; padding:0 .5em; margin-bottom:.75em; border-radius:5px; display:table; }
@@ -168,7 +169,7 @@ tr.verified { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 
-.collapsible .hd { cursor: pointer; padding:5px 10px 5px 3px; margin:10px 5px; border-bottom:1px solid #dddddd; }
+.collapsible .hd { cursor: pointer; padding:5px 10px 5px 3px; margin:10px 0; border-bottom:1px solid #dddddd; }
 .collapsed .hd { background:#dddddd url('images/plus.png')  95% center no-repeat; }
 .expanded  .hd { background:#dddddd url('images/minus.png') 95% center no-repeat; }
 .collapsed .bd { display:none; }
