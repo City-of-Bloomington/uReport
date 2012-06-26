@@ -10,38 +10,57 @@ $h = $this->template->getHelper('formatDuration');
 ?>
 <div class="searchResultsRows">
 	<h2>Assignments Report</h2>
-	<p>List people who are currently assigned tickets.</p>
-<?php
-foreach ($this->data as $id=>$o) {
-	$first = View::escape($o['person']['firstname']);
-	$last = View::escape($o['person']['lastname']);
-	echo "
-	<div>
-		<h2><a href=\"".BASE_URL."/people/view?person_id=$id\">$first $last</a></h2>
-		<table>
-			<thead><tr><th>Category</th><th>Status</th><th>Count</th><th>Avg Time Until Close</th></thead>
-			<tbody>
-	";
-	foreach ($o['categories'] as $cid=>$c) {
-		foreach (array('open','closed') as $status) {
-			$name = View::escape($c['name']);
-			if (isset($c[$status])) {
-				$avg = $h->formatDuration($c[$status]['seconds']);
-				echo "
-				<tr><th>$name</th>
-					<th>$status</th>
-					<td>{$c[$status]['count']}</td>
-					<td>$avg</td>
-				</tr>
-				";
-			}
+	<p>List people and their assigned tickets.</p>
+	<?php
+		foreach ($this->data as $pid=>$p) {
+			$person = View::escape($p['name']);
+			$open = 0;
+			$closed = 0;
+			echo "
+			<div><h3>$person</h3>
+				<table>
+					<thead>
+						<tr><th></th>
+							<th>Open</th>
+							<th>Closed</th>
+							<th>Resolutions</th>
+						</tr>
+					</thead>
+					<tbody>
+			";
+				foreach ($p['categories'] as $cid=>$c) {
+					$counts = array('open'=>0, 'closed'=>0, 'resolutions'=>array());
+					foreach ($c['data'] as $r) {
+						if ($r['resolution']) {
+							$counts['resolutions'][] = "$r[resolution]: $r[count]";
+						}
+						$counts[$r['status']] += $r['count'];
+						if (in_array($r['status'], array('open','closed'))) {
+							$$r['status'] += $r['count'];
+						}
+					$resolutions = $counts['resolutions']
+						? implode(', ', $counts['resolutions'])
+						: '';
+					}
+					$category = View::escape($c['name']);
+					echo "
+					<tr><th>$category</th>
+						<td>$counts[open]</td>
+						<td>$counts[closed]</td>
+						<td>$resolutions</td>
+					</tr>
+					";
+				}
+			echo "
+					<tr class=\"totals\"><td></td>
+						<td>$open</td>
+						<td>$closed</td>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			";
 		}
-	}
-	echo "
-			</tbody>
-		</table>
-	</div>
-	";
-}
-?>
+	?>
 </div>

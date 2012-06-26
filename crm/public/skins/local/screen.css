@@ -160,11 +160,11 @@ button, .button {
 .top        { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_up.png')   top right    no-repeat; }
 .dxf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
 
-.pageNavigation { margin:.5em; }
-.pageNavigation li { display:inline; margin:.5em; }
+.pageNavigation          { margin:.5em; }
+.pageNavigation li       { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified { background-color:#cfc; }
+tr.verified        { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 
@@ -173,6 +173,8 @@ tr.verified { background-color:#cfc; }
 .expanded    .hd { background:#dddddd url('images/minus.png') 95% center no-repeat; }
 .collapsed   .bd { display:none; }
 .expanded    .bd { display:block; }
+
+.totals { border-top:1px solid black; }
 
 
 
