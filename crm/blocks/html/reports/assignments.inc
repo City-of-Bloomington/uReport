@@ -24,6 +24,7 @@ $h = $this->template->getHelper('formatDuration');
 							<th>Open</th>
 							<th>Closed</th>
 							<th>Resolutions</th>
+							<th>Totals</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -43,19 +44,23 @@ $h = $this->template->getHelper('formatDuration');
 						: '';
 					}
 					$category = View::escape($c['name']);
+					$total = $counts['open'] + $counts['closed'];
 					echo "
 					<tr><th>$category</th>
 						<td>$counts[open]</td>
 						<td>$counts[closed]</td>
 						<td>$resolutions</td>
+						<td>$total</td>
 					</tr>
 					";
 				}
+			$total = $open + $closed;
 			echo "
 					<tr class=\"totals\"><td></td>
 						<td>$open</td>
 						<td>$closed</td>
 						<td></td>
+						<td>$total</td>
 					</tr>
 					</tbody>
 				</table>
