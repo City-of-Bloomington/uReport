@@ -42,7 +42,7 @@ foreach ($this->ticketList as $t) {
 		<requested_datetime>{$t->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$h->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>
-		<address_id>{$t->getAddress_id()}</address_id>
+		<address_id>{$t->getAddressId()}</address_id>
 		<zipcode>$zip</zipcode>
 		<lat>{$t->getLatitude()}</lat>
 		<long>{$t->getLongitude()}</long>

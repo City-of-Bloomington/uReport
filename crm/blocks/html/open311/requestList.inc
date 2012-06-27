@@ -60,7 +60,7 @@ echo "
 				<td>{$t->getEnteredDate('c')}</td>
 				<td>{$latestHistory->getActionDate('c')}</td>
 				<td>$address</td>
-				<td>{$t->getAddress_id()}</td>
+				<td>{$t->getAddressId()}</td>
 				<td>{$zip}</td>
 				<td>{$t->getLatitude()}</td>
 				<td>{$t->getLongitude()}</td>

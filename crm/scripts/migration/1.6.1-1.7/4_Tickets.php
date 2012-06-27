@@ -90,7 +90,8 @@ foreach ($result as $r) {
 			if ($id) { $data[$f.'_id'] = $id; }
 		}
 	}
-	$fields = array('address_id', 'location', 'city', 'state', 'zip', 'status');
+	if (!empty($r['address_id'])) { $data['addressId'] = $r['address_id']; }
+	$fields = array('location', 'city', 'state', 'zip', 'status');
 	foreach ($fields as $f) {
 		if (!empty($r[$f])) {
 			$data[$f] = $r[$f];

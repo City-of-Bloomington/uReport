@@ -33,7 +33,7 @@ class Location
 
 		if ($crm_query) {
 			$zend_db = Database::getConnection();
-			$sql = "select distinct location, address_id, city,
+			$sql = "select distinct location, addressId, city,
 					'database' as source,
 					count(*) as ticketCount
 					from tickets where location like ?";
@@ -57,7 +57,7 @@ class Location
 		}
 		elseif (isset($query['street']) && $query['street']) {
 			foreach (AddressService::searchStreets($query['street']) as $location=>$street_id) {
-				$results[$location]['address_id'] = $street_id;
+				$results[$location]['addressId'] = $street_id;
 				$results[$location]['source'] = 'Master Address';
 			}
 		}

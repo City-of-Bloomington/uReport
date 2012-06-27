@@ -138,7 +138,7 @@ class Ticket extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function getId()         { return parent::get('id');         }
-	public function getAddress_id() { return parent::get('address_id'); }
+	public function getAddressId()  { return parent::get('addressId'); }
 	public function getLatitude()   { return parent::get('latitude');   }
 	public function getLongitude()  { return parent::get('longitude');  }
 	public function getLocation()   { return parent::get('location');   }
@@ -161,13 +161,13 @@ class Ticket extends ActiveRecord
 	public function getReferredPerson()  { return parent::getForeignKeyObject('Person',     'referredPerson_id');  }
 
 
-	public function setAddress_id($s)  { parent::set('address_id', $s); }
-	public function setLatitude  ($s)  { parent::set('latitude',   $s); }
-	public function setLongitude ($s)  { parent::set('longitude',  $s); }
-	public function setLocation  ($s)  { parent::set('location',   $s); }
-	public function setCity      ($s)  { parent::set('city',       $s); }
-	public function setState     ($s)  { parent::set('state',      $s); }
-	public function setZip       ($s)  { parent::set('zip',        $s); }
+	public function setAddressId($s)  { parent::set('addressId', $s); }
+	public function setLatitude ($s)  { parent::set('latitude',  $s); }
+	public function setLongitude($s)  { parent::set('longitude', $s); }
+	public function setLocation ($s)  { parent::set('location',  $s); }
+	public function setCity     ($s)  { parent::set('city',      $s); }
+	public function setState    ($s)  { parent::set('state',     $s); }
+	public function setZip      ($s)  { parent::set('zip',       $s); }
 	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
 	public function setResolution_id     ($id) { parent::setForeignKeyField('Resolution', 'resolution_id',      $id); }
 	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
@@ -382,7 +382,7 @@ class Ticket extends ActiveRecord
 	{
 		// Used to identify fields that can be updated from the AddressService
 		$addressServiceFields = array(
-			'location','address_id','city','state','zip','latitude','longitude'
+			'location','addressId','city','state','zip','latitude','longitude'
 		);
 		foreach ($addressServiceFields as $field) {
 			$set = 'set'.ucfirst($field);

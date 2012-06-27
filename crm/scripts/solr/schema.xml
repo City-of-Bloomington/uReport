@@ -181,7 +181,21 @@
 	<field name="contactMethod_id"    type="int" indexed="true" stored="true"  multiValued="true" />
 	<field name="reportedByPerson_id" type="int" indexed="true" stored="false" multiValued="true" />
 
-	<dynamicField name="*"    type="string" indexed="true" stored="true" />
+   <!-- Sortable string values for *_id fields -->
+   <field name="department"       type="string" indexed="true" stored="false" />
+   <field name="category"         type="string" indexed="true" stored="false" />
+   <field name="client"           type="string" indexed="true" stored="false" />
+   <field name="resolution"       type="string" indexed="true" stored="false" />
+   <field name="enteredByPerson"  type="string" indexed="true" stored="false" />
+   <field name="assignedPerson"   type="string" indexed="true" stored="false" />
+   <field name="referredPerson"   type="string" indexed="true" stored="false" />
+
+   <field name="issueType"        type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="label"            type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="contactMethod"    type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="reportedByPerson" type="string" indexed="true" stored="false" multiValued="true" />
+
+   <dynamicField name="*"    type="string" indexed="true" stored="true" />
 </fields>
 
 <!-- Field to use to determine and enforce document uniqueness.

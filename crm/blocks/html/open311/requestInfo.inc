@@ -49,8 +49,8 @@ echo "
 	<tr><th>Long:</th>
 		<td>{$this->ticket->getLongitude()}</td>
 	</tr>
-	<tr><th>address_id:</th>
-		<td>{$this->ticket->getAddress_id()}</td>
+	<tr><th>AddressId:</th>
+		<td>{$this->ticket->getAddressId()}</td>
 	</tr>
 </table>
 

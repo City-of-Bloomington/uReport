@@ -110,7 +110,7 @@ create table tickets (
 	assignedPerson_id  int         unsigned,
 	referredPerson_id  int         unsigned,
 	enteredDate        timestamp   not null default CURRENT_TIMESTAMP,
-	address_id         int         unsigned,
+	addressId          int         unsigned,
 	latitude           float(17, 14),
 	longitude          float(17, 14),
 	location           varchar(128),

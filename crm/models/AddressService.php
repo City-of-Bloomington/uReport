@@ -139,7 +139,7 @@ class AddressService
 	{
 		$data = array();
 		$data['location'] = "{$address->streetAddress}";
-		$data['address_id'] = "{$address->id}";
+		$data['addressId'] = "{$address->id}";
 		$data['city'] = "{$address->city}";
 		$data['state'] = "{$address->state}";
 		$data['zip'] = "{$address->zip}";

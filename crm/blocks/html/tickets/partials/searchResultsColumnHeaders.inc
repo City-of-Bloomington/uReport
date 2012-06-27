@@ -21,7 +21,7 @@ echo "
 
 		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$displayableFields = TicketList::getDisplayableFields();
-		$sortableFields = Search::getSortableFields('ticket');
+		$sortableFields = Search::$sortableFields['ticket'];
 
 		// Loop through all the fields the user asked to see
 		// The key will be the fieldname and the value will be "On" or 1
@@ -34,6 +34,8 @@ echo "
 
 				$label = $displayableFields[$name];
 
+				// _id fields are sorted using fields without _id in the fieldname
+				if (substr($name, -3) == '_id') { $name = substr($name, 0, -3); }
 				// If this field is being used for sorting,
 				// draw a url that reverses the sort order
 				if (in_array($name, $sortableFields)) {

@@ -48,7 +48,7 @@ echo "
 		<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>
-		<address_id>{$this->ticket->getAddress_id()}</address_id>
+		<address_id>{$this->ticket->getAddressId()}</address_id>
 		<zipcode>$zipcode</zipcode>
 		<lat>{$this->ticket->getLatitude()}</lat>
 		<long>{$this->ticket->getLongitude()}</long>
