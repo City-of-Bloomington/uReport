@@ -12,7 +12,7 @@
 			<input name="issue_id"   type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<input name="attachment" type="file" />
 			<button type="submit" class="submit">Upload</button>
-			<a class="cancel button" href="<?php echo $this->issue->getTicket()->getURL(); ?>">Cancel</a>
+			<a class="cancel" href="<?php echo $this->issue->getTicket()->getURL(); ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>
