@@ -30,6 +30,9 @@
 					}
 				}
 				elseif (isset($_REQUEST['callback'])) {
+					$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+					$this->template->addToAsset('scripts',BASE_URI.'/js/issues/changePerson.js');
+
 					$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
 					$url = "javascript:self.opener.$callback('{$person->getId()}');";
 				}

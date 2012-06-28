@@ -78,12 +78,13 @@ class PeopleController extends Controller
 
 
 		$disableButtons = isset($_REQUEST['disableButtons']) ? (bool)$_REQUEST['disableButtons'] : false;
-		$this->template->blocks['left'][] = new Block(
+		$block = new Block(
 			'people/personInfo.inc',
 			array('person'=>$person,'disableButtons'=>$disableButtons)
 		);
 
 		if ($this->template->outputFormat == 'html') {
+			$this->template->blocks['left'][] = $block;
 			$this->template->blocks['right'][] = new Block('people/stats.inc',array('person'=>$person));
 
 			$lists = array(
@@ -96,6 +97,9 @@ class PeopleController extends Controller
 			foreach ($lists as $listType=>$title) {
 				$this->addTicketList($listType, $title, $person, $disableLinks);
 			}
+		}
+		else {
+			$this->template->blocks[] = $block;
 		}
 	}
 
