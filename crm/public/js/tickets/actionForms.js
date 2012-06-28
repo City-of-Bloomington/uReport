@@ -11,16 +11,25 @@ var ACTION_FORM = {
 		document.location.reload();
 	},
 	handleFormSuccess: {
-		ChangeCategory:	function () { ACTION_FORM.closeAndReload(); },
 		ChangeStatus:	function () { ACTION_FORM.closeAndReload(); },
 		Assign:			function () { ACTION_FORM.closeAndReload(); },
 		Refer:			function () { ACTION_FORM.closeAndReload(); },
-		ChangeLocation: function (location) {
+		ChangeCategory: function (category_id) {
 			YUI().use('io', function (Y) {
-				Y.io(CRM.BASE_URL + '/tickets/changeLocation.php?ticket_id=' + CRM.ticket_id + ';location=' + location, {
+				Y.io(CRM.BASE_URL + '/tickets/changeCategory?ticket_id=' + CRM.ticket_id + ';category_id=' + category_id, {
 					on: {
 						complete: function (id, o, args) {
-							alert(o.responseText);
+							ACTION_FORM.closeAndReload();
+						}
+					}
+				});
+			});
+		},
+		ChangeLocation: function (location) {
+			YUI().use('io', function (Y) {
+				Y.io(CRM.BASE_URL + '/tickets/changeLocation?ticket_id=' + CRM.ticket_id + ';location=' + location, {
+					on: {
+						complete: function (id, o, args) {
 							ACTION_FORM.closeAndReload();
 						}
 					}
