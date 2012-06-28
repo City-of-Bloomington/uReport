@@ -1,13 +1,16 @@
 #!/bin/bash
 # Creates a tarball containing a full snapshot of the data in the site
 #
-# @copyright Copyright 2011 City of Bloomington, Indiana
+# @copyright Copyright 2011-2012 City of Bloomington, Indiana
 # @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 # @author Cliff Ingham <inghamn@bloomington.in.gov>
-MONGODUMP=/usr/local/mongo/bin/mongodump
-MONGO_DB=crm
+MYSQLDUMP=/usr/local/mysql/bin/mysqldump
 BACKUP_DIR=/var/www/backups/crm
 APPLICATION_HOME=/var/www/sites/crm
+
+MYSQL_DBNAME=crm
+MYSQL_USER=username
+MYSQL_PASS=password
 
 # How many days worth of tarballs to keep around
 num_days_to_keep=5
@@ -19,12 +22,13 @@ now=`date +%s`
 today=`date +%F`
 
 cd $BACKUP_DIR
+mkdir $today
 
 # Dump the database
-$MONGODUMP -d $MONGO_DB -o $today
+$MYSQLDUMP -u $MYSQL_USER -p$MYSQL_PASS $MYSQL_DBNAME > $today/$MYSQL_DBNAME.sql
 
 # Copy media uploads into this directory, so they're backed up, too.
-cp -R $APPLICATION_HOME/data/media $today
+cp -R $APPLICATION_HOME/data/media $today/media
 
 # Tarball the Data
 tar czf $today.tar.gz $today

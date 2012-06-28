@@ -9,12 +9,12 @@
 		<p>Backing up a CRM install involves backing up both the database and any media uploaded.</p>
 
 	<h2>Backing up the database</h2>
-		<p>Backing up and restoring a Mongo database is covered in the
-			<a href="http://www.mongodb.org/display/DOCS/Backups">Mongo documentation</a>.
-			You can use <code><a href="http://www.mongodb.org/display/DOCS/Import+Export+Tools#ImportExportTools-mongodump">mongodump</a></code>
+		<p>Backing up and restoring a MySQL database is covered in the
+			<a href="http://dev.mysql.com/doc/refman/5.5/en/backup-and-recovery.html">MySQL documentation</a>.
+			You can use <code><a href="http://dev.mysql.com/doc/refman/5.5/en/using-mysqldump.html">mysqldump</a></code>
 			to create a backup.
 		</p>
-		<p><code>mongodump -d crm</code></p>
+		<p><code>mysqldump -p --opt crm &gt; crm.sql</code></p>
 
 	<h2>Backing up media uploads</h2>
 		<p>Uploaded media is stored in <code>data/media</code>.
@@ -24,7 +24,7 @@
 		</p>
 
 	<h2>Automated Backups</h2>
-		<p>CRM incldues a script suitably for use in CRON that automates a complete backup.
+		<p>CRM includes a shell script that automates a complete backup.
 			You will need to edit <code>scripts/backup.sh</code> with the values for your
 			installation.
 		</p>
@@ -35,10 +35,13 @@
 		<code><pre>
 #!/bin/bash
 # Creates a tarball containing a full snapshot of the data in the site
-MONGODUMP=/usr/local/mongo/bin/mongodump
-MONGO_DB=crm
+MYSQLDUMP=/usr/local/mysql/bin/mysqldump
 BACKUP_DIR=/var/www/backups/crm
 APPLICATION_HOME=/var/www/sites/crm
+
+MYSQL_DBNAME=crm
+MYSQL_USER=username
+MYSQL_PASS=password
 
 # How many days worth of tarballs to keep around
 num_days_to_keep=5
@@ -54,10 +57,10 @@ chmod +x /etc/cron.daily/crm
 
 	<h1>Restore</h1>
 	<h2>Restoring the database</h2>
-		<p>You can use <code><a href="http://www.mongodb.org/display/DOCS/Import+Export+Tools#ImportExportTools-mongorestore">mongorestore</a></code>
+		<p>You can use <code><a href="http://dev.mysql.com/doc/refman/5.5/en/reloading-sql-format-dumps.html">mysql</a></code>
 			to restore data from a dump.
 		</p>
-		<p><code>mongorestore -d crm {dumpdirectory}</code></p>
+		<p><code>mysql -p crm &lt; crm.sql</code></p>
 
 	<h2>Restoring the media uploads</h2>
 		<p>If you've got a tarball of media, you can uncompress it with
