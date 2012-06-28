@@ -43,7 +43,7 @@ if (count($actions)) {
 		</fieldset>
 		<fieldset class="buttons">
 			<button type="submit" class="submit">Submit</button>
-			<button type="reset" class="cancel">Cancel</button>
+			<button type="reset" class="reset">Cancel</button>
 		</fieldset>
 	</form>
 </div>
