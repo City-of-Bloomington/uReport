@@ -66,3 +66,6 @@ foreach ($result as $row) {
 	$zend_db->insert('ticketHistory', $history);
 	echo "$row[id] $row[enteredDate] $history[actionDate]\n";
 }
+
+$q = $zend_db->query('update tickets set latitude=null, longitude=null where latitude=0');
+$q->execute();
