@@ -33,8 +33,7 @@ button, .button {
 .edit, .change  { background:url('images/editbutton.png')   left center no-repeat; }
 .search         { background:url('images/submitbutton.png') left center no-repeat; }
 .submit, .login { background:url('images/submitbutton.png') left center no-repeat; }
-.delete         { background:url('images/deletebutton.png') left center no-repeat; }
-.reset 			{ background:url('images/deletbutton.png')  left center no-repeat; }
+.delete, .reset { background:url('images/deletebutton.png') left center no-repeat; }
 .chooseLocation { background:url('images/addbutton.png')    left center no-repeat; }
 .upload         { background:url('images/addbutton.png')    left center no-repeat; }
 .minusTag       { background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
