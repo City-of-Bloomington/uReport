@@ -2,3 +2,5 @@
 #right-top, #right-bottom {
 	margin-left: 400px; height:300px; overflow:auto;
 }
+#right-top {border-bottom:1px solid #ccc; }
+#addTicketForm { border-right:1px solid #ccc; }

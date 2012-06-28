@@ -4,19 +4,20 @@
 <head>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/reset.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/master/yui/build/cssfonts/fonts-min.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/screen.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/layouts/two-column.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/reset.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/screen.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/twoColumn_300-a.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/globals.css" />
+
 </head>
 <body>
 	<div id="banner">
 		<div id="application_name">
-			<a href="/ureport">uReport</a>
+			<a href="../">uReport</a>
 		</div>
 	</div>
 	<div id="panel-container">
-	<div id="panel-one">
+	<div id="left" class="panel">
 		<div>
 				<h1>Help Topics</h1>
 				<ul>
@@ -31,27 +32,29 @@
 				<a href="http://code.google.com/p/civic-crm/issues/entry">New Issue Form</a>
 			</div>
 		</div>
-		<div id="content-panel">
-			<h2>Actions</h2>
-<p>Actions are the steps a staff member takes to follow up on the request(s) on each case.</p>
-
-<h2>Doing Actions to Cases</h2>
-<p>Actions contain the date the action was performed, the title of the action itself, and a comment section for the details. The person who enters the action into the system is listed as the person who performed the action.</p>
-<p>You can add actions while viewing a case. To add an action, view the case, then choose the action you want to add from the list.</p>
-<p>If you do not see available actions, check the case's status. If a case is closed, no actions are allowed. You can reopen a case to perform more actions on it.</p>
-
-<h2>Available Actions</h2>
-<p>The actions available to you are based on your department. The list of actions available to a department is set up by a system administrator. To change the list of actions available to your department, contact ITS.</p>
-
-<h2>Other Changes</h2>
-<p>Besides the list of actions, there are other things you can change about the case. Other changes are indicated by an edit icon.</p>
-<p>Referrals allows you to refer the case to a person. Separating referrals from assignments allows you to keep a staff liaison attached to the case when it requires work from outside the City.</p>
-<p>Assignments: Cases are required to be assigned to a staff member. You can change the person assigned to the case. This will be recorded in a history log so you can see who was assigned to the case over time.</p>
-<p>Status: You can change the status of a case. If you close the case, you will be asked to specify how it was resolved. Some statuses are standards for everyone. Other statuses are custom per department. Change the list of statuses under My Department.</p>
-
-<h2>Administrators can Create/Edit Actions</h2>
-<p>Administrators of the system are able to add new actions and edit existing actions. This includes the text that is displayed in the history describing the action, and the text used to choose the action.</p>
-<p>The action description is the text shown when displaying the history for a case or issue.</p>
+		<div id="right" class="panel">
+			<div>
+				<h1>Actions</h1>
+				<p>Actions are the steps a staff member takes to follow up on the request(s) on each case.</p>
+				
+				<h2>Doing Actions to Cases</h2>
+				<p>Actions contain the date the action was performed, the title of the action itself, and a comment section for the details. The person who enters the action into the system is listed as the person who performed the action.</p>
+				<p>You can add actions while viewing a case. To add an action, view the case, then choose the action you want to add from the list.</p>
+				<p>If you do not see available actions, check the case's status. If a case is closed, no actions are allowed. You can reopen a case to perform more actions on it.</p>
+				
+				<h2>Available Actions</h2>
+				<p>The actions available to you are based on your department. The list of actions available to a department is set up by a system administrator. To change the list of actions available to your department, contact ITS.</p>
+				
+				<h2>Other Changes</h2>
+				<p>Besides the list of actions, there are other things you can change about the case. Other changes are indicated by an edit icon.</p>
+				<p>Referrals allows you to refer the case to a person. Separating referrals from assignments allows you to keep a staff liaison attached to the case when it requires work from outside the City.</p>
+				<p>Assignments: Cases are required to be assigned to a staff member. You can change the person assigned to the case. This will be recorded in a history log so you can see who was assigned to the case over time.</p>
+				<p>Status: You can change the status of a case. If you close the case, you will be asked to specify how it was resolved. Some statuses are standards for everyone. Other statuses are custom per department. Change the list of statuses under My Department.</p>
+				
+				<h2>Administrators can Create/Edit Actions</h2>
+				<p>Administrators of the system are able to add new actions and edit existing actions. This includes the text that is displayed in the history describing the action, and the text used to choose the action.</p>
+				<p>The action description is the text shown when displaying the history for a case or issue.</p>
+			</div>
 </div>
 	</div>
 </body>

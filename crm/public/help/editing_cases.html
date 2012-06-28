@@ -4,19 +4,18 @@
 <head>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/reset.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/master/yui/build/cssfonts/fonts-min.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/screen.css" />
-	<link rel="stylesheet" type="text/css" href="https://bloomington.in.gov/ureport/skins/local/layouts/two-column.css" />
-</head>
+	<link rel="stylesheet" type="text/css" href="../skins/local/reset.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/screen.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/twoColumn_300-a.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/globals.css" /></head>
 <body>
 	<div id="banner">
 		<div id="application_name">
-			<a href="/ureport">uReport</a>
+			<a href="../">uReport</a>
 		</div>
 	</div>
 	<div id="panel-container">
-	<div id="panel-one">
+	<div id="left" class="panel">
 		<div>
 			<h1>Help Topics</h1>
 			<ul>
@@ -31,20 +30,20 @@
 			<a href="http://code.google.com/p/civic-crm/issues/entry">New Issue Form</a>
 		</div>
 	</div>
-	<div id="content-panel">
-
-<h2>Editing an Exisiting Case</h2>
-<p>Note: A Case must have an open status in order to edit it. If the status is closed, you cannot edit the case. You can reopen the casse in order to make changes.</p>
-<p>When viewing a closed case, the only edit option you will see is the pencil icon next to the case's status. Click on the icon to re-open the case.</p>
-<h4>Edit existing data in the case</h4>
-<img src="images/metadata.jpg" align="right" /><p>All of the editable data for a case is found in the upper lefthand corner of the case's homepage. Each option can be edited by clicking on the pencil icon: <img src="images/edit.png" /></p>
-<h4>Add actions</h4>
-<img src="images/actions.jpg" /><p>Actions are the steps a staff member takes to follow up on the request(s) on each case. <a href="actions.html">Learn more about actions</a></p>
-<h4>Add or edit issues</h4>
-<p>Each issue represents a different report from the public or staff about the case. Even if multiple people report the same problem, only one set of actions is needed to inspect or resolve it. Therefore, multiple reports are combined into one case with one assignee and the same history of actions.</p>
-<p>Within an issue you can edit information about that specific report. Edit the person who reported it, add responses to that person, add images or other attachments supplied by the reportee.</p>
-</div>
- 
+	<div id="right" class="panel">
+		<div>
+		<h1>Editing an Exisiting Case</h1>
+		<p>Note: A Case must have an open status in order to edit it. If the status is closed, you cannot edit the case. You can reopen the casse in order to make changes.</p>
+		<p>When viewing a closed case, the only edit option you will see is the pencil icon next to the case's status. Click on the icon to re-open the case.</p>
+		<h4>Edit existing data in the case</h4>
+		<img src="images/metadata.jpg" align="right" /><p>All of the editable data for a case is found in the upper lefthand corner of the case's homepage. Each option can be edited by clicking on the pencil icon: <img src="images/edit.png" /></p>
+		<h4>Add actions</h4>
+		<img src="images/actions.jpg" /><p>Actions are the steps a staff member takes to follow up on the request(s) on each case. <a href="actions.html">Learn more about actions</a></p>
+		<h4>Add or edit issues</h4>
+		<p>Each issue represents a different report from the public or staff about the case. Even if multiple people report the same problem, only one set of actions is needed to inspect or resolve it. Therefore, multiple reports are combined into one case with one assignee and the same history of actions.</p>
+		<p>Within an issue you can edit information about that specific report. Edit the person who reported it, add responses to that person, add images or other attachments supplied by the reportee.</p>
+		</div>
+	</div>
 	</div>
 </body>
 </html>

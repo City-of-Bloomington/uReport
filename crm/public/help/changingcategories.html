@@ -6,16 +6,17 @@
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<link rel="stylesheet" type="text/css" href="../skins/local/reset.css" />
 	<link rel="stylesheet" type="text/css" href="../skins/local/screen.css" />
-	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/two-column.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/twoColumn_300-a.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/globals.css" />
 </head>
 <body>
 	<div id="banner">
 		<div id="application_name">
-			<a href="/ureport">uReport</a>
+			<a href="../">uReport</a>
 		</div>
 	</div>
 	<div id="panel-container">
-		<div id="panel-one">
+		<div id="left" class="panel">
 			<div>
 				<h1>Help Topics</h1>
 				<ul>
@@ -30,30 +31,32 @@
 				<a href="http://code.google.com/p/civic-crm/issues/entry">New Issue Form</a>
 			</div>
 		</div>
-		<div id="content-panel">
-			<h2>Changing Categories</h2>
-<p>Issues can now how custom fields associated with them based on its category. When adding a new case or issue, you must first choose a category so that uReport knows what fields to ask for.</p>
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/newcase.jpg" />
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/addcase.jpg" />
-
-<p>Once the new case/issue has been added, the custom fields will show up in the issue area.</p>
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/answers.jpg" />
-
-<p><em>You cannot have two categories associated with the same case</em></p>
-
-<p>To see an example of a category with custom cases, try adding a case with the category "graffiti"</p>
-
-<h2>Changing the Category</h2>
-<p>Changing the category of a case that has custom fields will result in new custom fields appearing in the issue area.</p>
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/history_change.jpg" />
-<p>If the new category has the same custom field, the data will be preserved. If it doesn't the data will appear in the history of the issue.</p>
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/same_field.jpg" />
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/customfieldsnotpopulated.jpg" />
-
-<p>Edit the issue to add data to these custom fields</p>
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/editissuebutton.jpg" />
-<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/editissue.jpg" />
-</div>
+		<div id="right" class="panel">
+			<div>
+				<h1>Changing Categories</h1>
+				<p>Issues can now how custom fields associated with them based on its category. When adding a new case or issue, you must first choose a category so that uReport knows what fields to ask for.</p>
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/newcase.jpg" />
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/addcase.jpg" />
+				
+				<p>Once the new case/issue has been added, the custom fields will show up in the issue area.</p>
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/answers.jpg" />
+				
+				<p><em>You cannot have two categories associated with the same case</em></p>
+				
+				<p>To see an example of a category with custom cases, try adding a case with the category "graffiti"</p>
+				
+				<h2>Changing the Category</h2>
+				<p>Changing the category of a case that has custom fields will result in new custom fields appearing in the issue area.</p>
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/history_change.jpg" />
+				<p>If the new category has the same custom field, the data will be preserved. If it doesn't the data will appear in the history of the issue.</p>
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/same_field.jpg" />
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/customfieldsnotpopulated.jpg" />
+				
+				<p>Edit the issue to add data to these custom fields</p>
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/editissuebutton.jpg" />
+				<img src="http://civic-crm.googlecode.com/svn/trunk/crm/docs/images/editissue.jpg" />
+			</div>
+		</div>
 	</div>
 </body>
 </html>
