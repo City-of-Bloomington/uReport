@@ -12,10 +12,10 @@ create table departments (
 
 create table people (
 	id                   int          unsigned not null primary key auto_increment,
-	firstname            varchar(128) not null,
+	firstname            varchar(128),
 	middlename           varchar(128),
-	lastname             varchar(128) not null,
-	email                varchar(255) not null,
+	lastname             varchar(128),
+	email                varchar(255),
 	organization         varchar(128),
 	address              varchar(128),
 	city                 varchar(128),
