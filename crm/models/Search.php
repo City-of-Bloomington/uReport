@@ -129,7 +129,9 @@ class Search
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
-			$query->setStart($page * self::ITEMS_PER_PAGE);
+
+			// Solr rows start at 0, but pages start at 1
+			$query->setStart(($page-1) * self::ITEMS_PER_PAGE);
 		}
 
 		// Sorting
