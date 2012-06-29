@@ -69,9 +69,9 @@ $title = $this->title ? View::escape($this->title) : $title;
 				</tr>
 
 				<tr><td><label for="state">State</label></td>
-					<td><input name="state" id="state" size="2" maxlength="2" value="<?php echo $state; ?>" />
-						<label for="zip">Zip</label>
-						<input name="zip" id="zip" size="5" maxlength="5" value="<?php echo $zip; ?>" />
+					<td><input name="state" id="state" size="2" maxlength="2" value="<?php echo $state; ?>" /></td>
+				<tr><td><label for="zip">Zip</label></td>
+					<td><input name="zip" id="zip" size="5" maxlength="5" value="<?php echo $zip; ?>" />
 					</td>
 				</tr>
 			</table>
