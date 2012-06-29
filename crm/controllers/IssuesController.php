@@ -212,7 +212,7 @@ class IssuesController extends Controller
 		if ($ticket->getLocation()) {
 			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
+				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 			);
 			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
