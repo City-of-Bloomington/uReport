@@ -20,7 +20,7 @@
 .hideLeft #slideButton { background-image:url('../images/arrow_right.png'); }
 
 .panel > div {
-	background-color:white; border:1px solid #ccc; margin:.5em 0; padding:.5em;
+	background-color:white; border:1px solid #ccc; padding:.75em;
 	}
 .searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
 .searchResults table { background-color:#eeeeee; margin-top:.25em; }

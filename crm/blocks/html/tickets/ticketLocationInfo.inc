@@ -8,7 +8,7 @@
 ?>
 <div class="ticketLocationInfo">
 	<?php
-		$list = '	<h2>Additional Location Information</h2>
+		$list = '	<div class="additionalLocationInfo"><h2>Additional Location Information</h2>
 					<ul class="twoColumnlist">';
 		$locationFields = array('city','state','zip','latitude','longitude');
 		foreach ($locationFields as $field) {
@@ -24,7 +24,7 @@
 				$list.= "<li><label>$key:</label> $value</li>";
 			}
 		}
-		$list.= '</ul>';
+		$list.= '</ul></div>';
 
 		if ($latitude && $longitude) {
 			echo "
