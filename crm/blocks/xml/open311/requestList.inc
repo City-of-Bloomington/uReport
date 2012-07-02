@@ -8,7 +8,7 @@
 echo "<service_requests>";
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
-	$service_name = $c ? $c->getName() : '';
+	$service_name = $c ? View::escape($c->getName()) : '';
 	$service_code = $c ? $c->getId()   : '';
 
 	$issue = $t->getIssue();
