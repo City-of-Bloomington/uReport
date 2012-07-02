@@ -52,14 +52,12 @@ class DepartmentsController extends Controller
 			$department = new Department();
 		}
 
-		$return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/departments';
-
 		if (isset($_POST['name'])) {
 			try {
 				$department->handleUpdate($_POST);
 				$department->save();
 
-				header('Location: '.$return_url);
+				header('Location: '.BASE_URL.'/departments/view?department_id='.$department->getId());
 				exit();
 			}
 			catch (Exception $e) {
@@ -69,7 +67,7 @@ class DepartmentsController extends Controller
 
 		$this->template->blocks[] = new Block(
 			'departments/updateDepartmentForm.inc',
-			array('department'=>$department,'return_url'=>$return_url)
+			array('department'=>$department, 'action'=>BASE_URI.'/departments/update')
 		);
 	}
 

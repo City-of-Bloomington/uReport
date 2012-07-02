@@ -4,14 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
- * @param string $this->return_url (optional)
+ * @param string $this->action The URL for posting the form
  */
-$return_url = $this->return_url ? $this->return_url : BASE_URL.'/departments';
 $title = $this->department->getId() ? 'Edit' : 'Add';
 ?>
 <div class="updateDepartmentForm">
 <h1><?php echo $title; ?> Department</h1>
-<form method="post" action="<?php echo BASE_URL; ?>/departments/update">
+<form method="post" action="<?php echo $this->action; ?>">
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>
@@ -107,7 +106,6 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 		</ul>
 	</fieldset>
 	<fieldset>
-		<input name="return_url" type="hidden" value="<?php echo $return_url; ?>" />
 		<button type="submit" class="submit">Submit</button>
 		<a class="cancel" href="<?php echo $return_url; ?>">Cancel</a>
 	</fieldset>

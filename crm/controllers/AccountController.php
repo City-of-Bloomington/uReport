@@ -44,12 +44,12 @@ class AccountController extends Controller
 
 	public function updateMyDepartment()
 	{
-		$return_url = BASE_URI.'/account';
-
-		$_SESSION['USER'] = new Person($_SESSION['USER']->getId());
+		$return_url = BASE_URL.'/account';
 
 		// Load the User's department
+		$_SESSION['USER'] = new Person($_SESSION['USER']->getId());
 		$department = $_SESSION['USER']->getDepartment();
+
 		if (!$department) {
 			$_SESSION['errorMessages'][] = new Exception('departments/unknownDepartment');
 			header('Location: '.$return_url);
@@ -72,7 +72,7 @@ class AccountController extends Controller
 		// Display the form
 		$this->template->blocks[] = new Block(
 			'departments/updateDepartmentForm.inc',
-			array('department'=>$department,'return_url'=>$return_url)
+			array('department'=>$department,'action'=>BASE_URI.'/account/updateMyDepartment')
 		);
 	}
 }
