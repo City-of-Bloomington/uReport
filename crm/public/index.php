@@ -16,7 +16,7 @@ if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 		$_REQUEST['format'] = !empty($matches[2]) ? $matches[2] : 'html';
 	}
 	elseif (preg_match(
-				'#'.BASE_URI.'/open311/v2/(services|requests)(/([0-9]+))?(\.([a-z]+))?#',
+				'#'.BASE_URI.'/open311/v2/(services|requests)(/(\w+))?(\.([a-z]+))?#',
 				$_SERVER['REQUEST_URI'],
 				$matches)) {
 		$action = $matches[1];
