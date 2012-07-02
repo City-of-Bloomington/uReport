@@ -7,7 +7,7 @@
  */
 ?>
 <div>
-	<select id="chosenCategory" name="category_id">
+	<select id="category_id" name="category_id">
 		<option value=""></option>
 		<?php
 			if (isset($_REQUEST['category_id'])) {

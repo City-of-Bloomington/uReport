@@ -484,7 +484,7 @@ class Ticket extends ActiveRecord
 
 			$search = new Search();
 			$search->delete($this);
-			$search->commit();
+			$search->solrClient->commit();
 
 			throw $e;
 		}

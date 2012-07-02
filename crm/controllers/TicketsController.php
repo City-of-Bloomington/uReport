@@ -133,7 +133,12 @@ class TicketsController extends Controller
 				$this->redirectToTicketView($ticket);
 			}
 			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
+				#$_SESSION['errorMessages'][] = $e;
+				print_r($_POST);
+				echo $e->getMessage();
+				print_r($ticket);
+				exit();
+
 			}
 		}
 

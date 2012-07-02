@@ -6,7 +6,7 @@ var CATEGORY_CHOOSER = {
 
 		YUI().use('node', 'io', 'json', function (Y) {
 			var selectHasCategory = false;
-			var chosenCategory = Y.one('#chosenCategory');
+			var chosenCategory = Y.one('#category_id');
 			var options = chosenCategory.get('options');
 			var l = options.length;
 			var url = CRM.BASE_URL + '/categories/view?format=json;category_id=' + category_id;
@@ -46,16 +46,18 @@ var CATEGORY_CHOOSER = {
 	}
 };
 YUI().use('node', 'io', 'json', function (Y) {
+	var chooseCategoryForm = Y.one('#chooseCategoryForm');
+	if (chooseCategoryForm) {
+		chooseCategoryForm.one('button').setStyle('display','none');
 
-	Y.one('#chooseCategoryForm button').setStyle('display','none');
-
-	Y.on('submit', function (e) {
-		e.preventDefault();
-	}, '#chooseCategoryForm form');
+		Y.on('submit', function (e) {
+			e.preventDefault();
+		}, '#chooseCategoryForm form');
+	}
 
 	Y.on('change', function (e) {
 		CATEGORY_CHOOSER.updateCustomFields(e.target.get('value'));
-	}, '#chosenCategory');
+	}, '#category_id');
 
 	Y.on('click', function (e) {
 		CATEGORY_CHOOSER.popup = window.open(

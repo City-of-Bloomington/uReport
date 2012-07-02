@@ -13,14 +13,19 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
 <div id="addTicketForm">
 	<h2><?php echo View::escape($title); ?></h2>
-	<?php
-		include APPLICATION_HOME.'/blocks/html/tickets/chooseCategoryForm.inc';
-		include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc';
-	?>
+	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
+		<fieldset><legend>Category</legend>
+		<?php
+			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+			$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
+			$this->return_url = BASE_URL.'/tickets/add';
+			include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
+		?>
+		</fieldset>
+
 		<fieldset class="ticketFields">
 			<legend>Location Info</legend>
-			<input name="category_id" type="hidden" value="<?php echo $category_id; ?>" />
 			<table>
 				<tr><td><label for="location">Location</label></td>
 					<td><input name="location" id="location"
