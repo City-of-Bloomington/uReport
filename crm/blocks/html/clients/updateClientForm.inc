@@ -7,6 +7,7 @@
  */
 $name = View::escape($this->client->getName());
 $url = $this->client->getURL();
+$api_key = View::escape($this->client->getApi_key());
 $person_id = $this->client->getContactPerson()
 	? $this->client->getContactPerson()->getId()
 	: '';
@@ -26,7 +27,7 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
 				<tr><td><label>API Key</label></td>
-					<td><?php echo $this->client->getApi_key(); ?></td>
+					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
 				</tr>
 			</table>
 		</fieldset>

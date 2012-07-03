@@ -77,8 +77,9 @@ class Client extends ActiveRecord
 	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
 	public function getContactPerson()    { return parent::getForeignKeyObject('Person', 'contactPerson_id'); }
 
-	public function setName($s) { parent::set('name', $s); }
-	public function setURL ($s) { parent::set('url',  $s); }
+	public function setName($s)    { parent::set('name', $s); }
+	public function setURL ($s)    { parent::set('url',  $s); }
+	public function setApi_key($s) { parent::set('api_key', $s); }
 	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person', 'contactPerson_id', $id); }
 	public function setContactPerson(Person $p) { parent::setForeignKeyObject('Person', 'contactPerson_id', $p);  }
 
@@ -90,6 +91,7 @@ class Client extends ActiveRecord
 	 {
 		$this->setName            ($post['name']);
 		$this->setURL             ($post['url']);
+		$this->setApi_key         ($post['api_key']);
 		$this->setContactPerson_id($post['contactPerson_id']);
 	 }
 	//----------------------------------------------------------------
