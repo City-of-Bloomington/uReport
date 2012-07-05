@@ -5,6 +5,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+if (isset($_GET['page']) || isset($_GET['page_size'])) {
+	$page      = !empty($_GET['page'])      ? (int)$_GET['page']      : 0;
+	$page_size = !empty($_GET['page_size']) ? (int)$_GET['page_size'] : 50;
+	$this->ticketList->setPagination($page_size, $page);
+}
+
 $service_requests = array();
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
