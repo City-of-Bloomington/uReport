@@ -166,7 +166,10 @@ class Search
 					}
 				}
 				else {
-					$query->addFilterQuery("$field:$get[$field]");
+					$value = is_numeric($get[$field])
+						? $get[$field]
+						: "\"$get[$field]\"";
+					$query->addFilterQuery("$field:$value");
 				}
 
 			}
