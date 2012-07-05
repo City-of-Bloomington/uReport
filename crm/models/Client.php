@@ -30,8 +30,11 @@ class Client extends ActiveRecord
 				$result = $id;
 			}
 			else {
+				$sql = ActiveRecord::isId($id)
+					? 'select * from clients where id=?'
+					: 'select * from clients where api_key=?';
+
 				$zend_db = Database::getConnection();
-				$sql = 'select * from clients where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 

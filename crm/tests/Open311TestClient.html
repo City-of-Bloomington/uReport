@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>Test Client</title>
+	<style></style>
+</head>
+<body>
+	<h1>Test Client</h1>
+	<h2>http://localhost/crm/open311/v2/requests.xml</h2>
+	<form method="post" action="http://localhost/crm/open311/v2/requests.xml">
+		<fieldset>
+			<table>
+				<tr><th><label for="jurisdiction_id">Jurisdiction</label></th>
+					<td><input name="jurisdiction_id" id="jurisdiction_id" value="bloomington.in.gov" /></td>
+				</tr>
+				<tr><th><label for="api_key">api_key</label></th>
+					<td><input name="api_key" id="api_key" /></td>
+				</tr>
+				<tr><th><label for="service_code">Service Code</label></th>
+					<td><input name="service_code" id="service_code" value="" /></td>
+				</tr>
+			</table>
+			<div><label for="description">Description</label></div>
+			<div><textarea name="description" id="description">Test Report</textarea></div>
+
+			<input type="submit" value="Submit" />
+		</fieldset>
+	</form>
+</body>
+</html>
