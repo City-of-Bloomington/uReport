@@ -28,10 +28,10 @@ echo "
 				<datatype_description></datatype_description>
 				<required>$required</required>
 				<description>$description</description>
-				<values>
 			";
-				if (isset($definition['values'])) {
-					foreach ($definition['values'] as $value) {
+				if (isset($d->values)) {
+					echo '<values>';
+					foreach ($d->values as $value) {
 						$value = View::escape($value);
 						echo "
 						<value>
@@ -40,9 +40,9 @@ echo "
 						</value>
 						";
 					}
+					echo '</values>';
 				}
 			echo "
-				</values>
 			</attribute>
 			";
 		}
