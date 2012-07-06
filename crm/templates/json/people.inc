@@ -5,4 +5,4 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 include FRAMEWORK.'/errorMessages.php';
-echo $this->includeBlocks('person-panel');
+echo $this->includeBlocks();

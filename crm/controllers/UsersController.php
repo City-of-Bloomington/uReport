@@ -9,14 +9,14 @@ class UsersController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 	}
 
 	public function index()
 	{
-		$search = array('username'=>array('$exists'=>true));
-		if (isset($_GET['department_id']) && $_GET['department_id']) {
-			$search['department._id'] = new MongoId($_GET['department_id']);
+		$search = array('user_account'=>true);
+		if (!empty($_GET['department_id'])) {
+			$search['department_id'] = $_GET['department_id'];
 		}
 		$people = new PersonList($search);
 
@@ -43,13 +43,16 @@ class UsersController extends Controller
 		// Handle POST data
 		if (isset($_POST['username'])) {
 			try {
-				$user->set($_POST);
+				$user->handleUpdateUserAccount($_POST);
 				$user->save();
 				header('Location: '.BASE_URL.'/users');
 				exit();
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
+				print_r($e);
+				print_r($user);
+				exit();
 			}
 		}
 

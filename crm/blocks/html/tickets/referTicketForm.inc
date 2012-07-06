@@ -22,9 +22,9 @@
 				}
 			?>
 			<table>
-				<tr><td><label for="referredPerson">Person</label></td>
+				<tr><td><label for="referredPerson_id">Person</label></td>
 					<td><?php echo View::escape($this->person->getFullname()); ?>
-						<input name="referredPerson" id="referredPerson" type="hidden"
+						<input name="referredPerson_id" id="referredPerson_id" type="hidden"
 							value="<?php echo $this->person->getId(); ?>" />
 					</td>
 				</tr>

@@ -27,56 +27,19 @@ class Location
 		if (isset($query['address']) && $query['address']) {
 			$crm_query = $query['address'];
 		}
-		// Don't do a mongo search if they're doing a street search
-		// Mongo will return too many locations to be useful
 		elseif (isset($query['text']) && $query['text']) {
 			$crm_query = $query['text'];
 		}
 
 		if ($crm_query) {
-			$mongo = Database::getConnection();
-
-			$map = new MongoCode("function() {
-				var address_id='',city='';
-				if (this.address_id) {
-					address_id = this.address_id;
-				}
-				if (this.city) {
-					city = this.city;
-				}
-				emit(this.location,{count:1,address_id:address_id,city:city});
-			}");
-
-			$reduce = new MongoCode("function(key,values) {
-				var result = { count:0,address_id:'',city:'' };
-
-				for (var i in values) {
-					result.count += values[i].count;
-				}
-				if (values[i].address_id) {
-					result.address_id = values[i].address_id;
-				}
-				if (values[i].city) {
-					result.city = values[i].city;
-				}
-				return result;
-			}");
-
-			$q = $mongo->command(array(
-				'mapreduce'=>'tickets',
-				'map'=>$map,
-				'reduce'=>$reduce,
-				'query'=>array('location'=>new MongoRegex("/$crm_query/i")),
-				'out'=>array('inline'=>1)
-			));
-
-			foreach ($q['results'] as $location) {
-				$results[$location['_id']] = array(
-					'ticketCount'=>$location['value']['count'],
-					'address_id'=>$location['value']['address_id'],
-					'city'=>$location['value']['city'],
-					'source'=>'mongo'
-				);
+			$zend_db = Database::getConnection();
+			$sql = "select distinct location, addressId, city,
+					'database' as source,
+					count(*) as ticketCount
+					from tickets where location like ?";
+			$q = $zend_db->fetchAll($sql, array("$crm_query%"));
+			foreach ($q as $row) {
+				$results[$row['location']] = $row;
 			}
 
 		}
@@ -94,7 +57,7 @@ class Location
 		}
 		elseif (isset($query['street']) && $query['street']) {
 			foreach (AddressService::searchStreets($query['street']) as $location=>$street_id) {
-				$results[$location]['address_id'] = $street_id;
+				$results[$location]['addressId'] = $street_id;
 				$results[$location]['source'] = 'Master Address';
 			}
 		}

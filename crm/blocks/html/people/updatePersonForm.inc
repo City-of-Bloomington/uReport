@@ -69,9 +69,12 @@ $title = $this->title ? View::escape($this->title) : $title;
 				</tr>
 
 				<tr><td><label for="state">State</label></td>
-					<td><input name="state" id="state" size="2" maxlength="2" />
-						<label for="zip">Zip</label>
-						<input name="zip" id="zip" size="5" maxlength="5" />
+					<td><input name="state" id="state" size="2" maxlength="2" value="<?php echo $state; ?>" />
+					</td>
+				</tr>
+
+				<tr><td><label for="zip">Zip</label></td>
+					<td><input name="zip" id="zip" size="5" maxlength="5" value="<?php echo $zip; ?>" />
 					</td>
 				</tr>
 			</table>
@@ -91,12 +94,10 @@ $title = $this->title ? View::escape($this->title) : $title;
 				}
 
 				$onclick = isset($_REQUEST['callback'])
-					? 'self.close()'
-					: "document.location.href='$return_url';";
+					? 'onclick="self.close();"'
+					: '';
+				echo "<a class=\"cancel\" href=\"$return_url\" $onclick>Cancel</a>";
 			?>
-			<button type="button" class="cancel" onclick="<?php echo $onclick; ?>">
-				Cancel
-			</button>
 		</fieldset>
 	</form>
 </div>

@@ -25,14 +25,14 @@ class AddressService
 	 *		All other form elements will be rendered as a plain text input
 	 */
 	public static $customFieldDescriptions = array(
-		//'neighborhoodAssociation'=>array(
-		//	'description'=>'Neighborhood Association',
-		//	'formElement'=>'select'
-		//),
-		//'township'=>array(
-		//	'description'=>'Township',
-		//	'formElement'=>'select'
-		//)
+		'neighborhoodAssociation'=>array(
+			'description'=>'Neighborhood Association',
+			'formElement'=>'select'
+		),
+		'township'=>array(
+			'description'=>'Township',
+			'formElement'=>'select'
+		)
 	);
 
 	/**
@@ -139,7 +139,7 @@ class AddressService
 	{
 		$data = array();
 		$data['location'] = "{$address->streetAddress}";
-		$data['address_id'] = "{$address->id}";
+		$data['addressId'] = "{$address->id}";
 		$data['city'] = "{$address->city}";
 		$data['state'] = "{$address->state}";
 		$data['zip'] = "{$address->zip}";

@@ -4,8 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Resolution extends MongoRecord
+class Resolution extends ActiveRecord
 {
+	protected $tablename = 'resolutions';
 	/**
 	 * Populates the object with data
 	 *
@@ -25,14 +26,11 @@ class Resolution extends MongoRecord
 				$result = $id;
 			}
 			else {
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
-				}
-				else {
-					$search = array('name'=>(string)$id);
-				}
-				$mongo = Database::getConnection();
-				$result = $mongo->resolutions->findOne($search);
+				$sql = ActiveRecord::isId($id)
+					? 'select * from resolutions where id=?'
+					: 'select * from resolutions where name=?';
+				$zend_db = Database::getConnection();
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -48,36 +46,30 @@ class Resolution extends MongoRecord
 		}
 	}
 
-	/**
-	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
-	 */
 	public function validate()
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->getName()) {
-			throw new Exception('missingRequiredFields');
-		}
+		if (!$this->getName()) { throw new Exception('missingRequiredFields'); }
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-		$mongo = Database::getConnection();
-		$mongo->resolutions->save($this->data,array('safe'=>true));
-	}
+	public function save() { parent::save(); }
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function __toString()     { return parent::get('name');        }
-	public function getId()          { return parent::get('_id');         }
+	public function getId()          { return parent::get('id');          }
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
 
-	public function setName       ($s) { $this->data['name']        = trim($s); }
-	public function setDescription($s) { $this->data['description'] = trim($s); }
+	public function setName       ($s) { parent::set('name',        $s); }
+	public function setDescription($s) { parent::set('description', $s); }
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setName($post['name']);
+		$this->setDescription($post['description']);
+	}
 }

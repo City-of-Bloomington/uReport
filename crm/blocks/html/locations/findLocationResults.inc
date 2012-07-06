@@ -32,7 +32,7 @@ if (count($this->results)) {
 
 		$location = View::escape($location);
 		$city = isset($data['city']) ? ", $data[city]" : '';
-		$class = $data['address_id'] ? 'class="verified"' : '';
+		$class = $data['addressId'] ? 'class="verified"' : '';
 		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
 		echo "
 		<tr $class>

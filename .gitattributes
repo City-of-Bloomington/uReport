@@ -1,4 +1,6 @@
 * text=auto !eol
+crm/assets/buttons.psd -text
+crm/assets/minustag.psd -text
 crm/blocks/html/404.inc -text
 crm/blocks/html/errorMessages/media/badServerPermissions.inc -text
 crm/blocks/html/errorMessages/media/unknownFileType.inc -text
@@ -24,7 +26,6 @@ crm/controllers/Open311Controller.php -text
 crm/controllers/PeopleController.php -text
 crm/controllers/ResolutionsController.php -text
 crm/controllers/TicketsController.php -text
-crm/controllers/TypesController.php -text
 crm/controllers/UsersController.php -text
 crm/docs/AdminGuide/images/freshInstall.png -text
 crm/docs/DeveloperGuide/ConceptArt/images/addcase.jpg -text
@@ -80,6 +81,7 @@ crm/public/skins/local/images/icons/mime/windowsMedia.png -text
 crm/public/skins/local/images/icons/mime/xls.png -text
 crm/public/skins/local/images/icons/mime/zip.png -text
 crm/public/skins/local/images/minus.png -text
+crm/public/skins/local/images/minusTag.png -text
 crm/public/skins/local/images/pencil_button.png -text
 crm/public/skins/local/images/plus.png -text
 crm/public/skins/local/images/plus_button.png -text

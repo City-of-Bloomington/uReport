@@ -6,8 +6,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Client extends MongoRecord
+class Client extends ActiveRecord
 {
+	protected $tablename = 'clients';
+
+	protected $contactPerson;
 	/**
 	 * Populates the object with data
 	 *
@@ -27,9 +30,12 @@ class Client extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-				$search = array('_id'=>new MongoId($id));
-				$result = $mongo->clients->findOne($search);
+				$sql = ActiveRecord::isId($id)
+					? 'select * from clients where id=?'
+					: 'select * from clients where api_key=?';
+
+				$zend_db = Database::getConnection();
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -42,6 +48,7 @@ class Client extends MongoRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->data['api_key'] = uniqid();
 		}
 	}
 
@@ -54,44 +61,41 @@ class Client extends MongoRecord
 		if (!$this->getName() || !$this->getContactPerson()) {
 			throw new Exception('missingRequiredFields');
 		}
+
+		if (!$this->getApi_key()) {
+			$this->data['api_key'] = uniqid();
+		}
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-		$mongo = Database::getConnection();
-		$mongo->clients->save($this->data,array('safe'=>true));
-	}
-
-	public function delete()
-	{
-		$mongo = Database::getConnection();
-		$mongo->clients->remove(array('_id'=>$this->getId()));
-	}
+	public function save()   { parent::save();   }
+	public function delete() { parent::delete(); }
 
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()   { return parent::get('_id');   }
-	public function getName() { return parent::get('name');  }
-	public function getURL()  { return parent::get('url');   }
-	public function getContactPerson() { return parent::getPersonObject('contactPerson'); }
+	public function getId()               { return parent::get('id');               }
+	public function getName()             { return parent::get('name');             }
+	public function getURL()              { return parent::get('url');              }
+	public function getApi_key()          { return parent::get('api_key');          }
+	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
+	public function getContactPerson()    { return parent::getForeignKeyObject('Person', 'contactPerson_id'); }
 
-	public function setName($s) { $this->data['name'] = trim($s); }
-	public function setURL ($s) { $this->data['url']  = trim($s); }
-	public function setContactPerson($person) { parent::setPersonData('contactPerson', $person); }
+	public function setName($s)    { parent::set('name', $s); }
+	public function setURL ($s)    { parent::set('url',  $s); }
+	public function setApi_key($s) { parent::set('api_key', $s); }
+	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person', 'contactPerson_id', $id); }
+	public function setContactPerson(Person $p) { parent::setForeignKeyObject('Person', 'contactPerson_id', $p);  }
+
 
 	/**
 	 * @param array $post
 	 */
-	 public function set($post)
+	 public function handleUpdate($post)
 	 {
-		$this->setName($post['name']);
-		$this->setURL($post['url']);
-		$this->setContactPerson($post['contactPerson_id']);
+		$this->setName            ($post['name']);
+		$this->setURL             ($post['url']);
+		$this->setApi_key         ($post['api_key']);
+		$this->setContactPerson_id($post['contactPerson_id']);
 	 }
 	//----------------------------------------------------------------
 	// Custom Functions

@@ -6,16 +6,17 @@
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<link rel="stylesheet" type="text/css" href="../skins/local/reset.css" />
 	<link rel="stylesheet" type="text/css" href="../skins/local/screen.css" />
-	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/two-column.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/layouts/twoColumn_300-a.css" />
+	<link rel="stylesheet" type="text/css" href="../skins/local/globals.css" />
 </head>
 <body>
 	<div id="banner">
 		<div id="application_name">
-			<a href="/ureport">uReport</a>
+			<a href="../">uReport</a>
 		</div>
 	</div>
 	<div id="panel-container">
-		<div id="panel-one">
+		<div id="left" class="panel">
 			<div>
 				<h1>Help Topics</h1>
 				<ul>
@@ -30,27 +31,26 @@
 				<a href="http://code.google.com/p/civic-crm/issues/entry">New Issue Form</a>
 			</div>
 		</div>
-		<div id="content-panel">
-			<h1>Locations</h1>
-<p>Much of the time the matter being reported about will be based around a particular place. We are only allowing for locations that are found in GIS's list of master streets and addresses. This allows us to do two things:</p>
-
-<ol>
-<li>Make sure we have the most up-to-date information about that location (its neighborhood, changes to the address, property owner, etc).</li>
-<li>Keep a list of everything that has occurred at that location.</li>
-</ol>
-
-
-<p>You can search and select either:</p>
-<ol>
-<li>A specific address</li>
-<li>A verified street in our master street database - for issues expanding past one specific location</li>
-</ol>
-<p>Subunits: The search results will not list subunits unless you ask for a specific subunit. If your intended address is a subunit, include the subunit in the address search box. If a matching subunit is found for that address, it will be included in the search results.</p>
-
-<h2>Searching for a location</h2>
-<p>Since many cases that have been migrated into uReport were not entered using a valid address, users are able to search for locations using any sort of text under the "Descriptive Location" search.</p>
-<p>If you know the location you're searching for contains a specific word, you can search for it here: such as roundabout or alley</p>
-</div>
+		<div id="right" class="panel">
+			<div>
+				<h1>Locations</h1>
+				<p>Much of the time the matter being reported about will be based around a particular place. We are only allowing for locations that are found in GIS's list of master streets and addresses. This allows us to do two things:</p>
+				
+				<ol>
+				<li>Make sure we have the most up-to-date information about that location (its neighborhood, changes to the address, property owner, etc).</li>
+				<li>Keep a list of everything that has occurred at that location.</li>
+				</ol>
+				<p>You can search and select either:</p>
+				<ol>
+				<li>A specific address</li>
+				<li>A verified street in our master street database - for issues expanding past one specific location</li>
+				</ol>
+				<p>Subunits: The search results will not list subunits unless you ask for a specific subunit. If your intended address is a subunit, include the subunit in the address search box. If a matching subunit is found for that address, it will be included in the search results.</p>
+				<h2>Searching for a location</h2>
+				<p>Since many cases that have been migrated into uReport were not entered using a valid address, users are able to search for locations using any sort of text under the "Descriptive Location" search.</p>
+				<p>If you know the location you're searching for contains a specific word, you can search for it here: such as roundabout or alley</p>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

@@ -9,7 +9,7 @@ class ResolutionsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 	}
 
 	public function index()
@@ -42,9 +42,7 @@ class ResolutionsController extends Controller
 
 
 		if (isset($_POST['name'])) {
-			$resolution->setName($_POST['name']);
-			$resolution->setDescription($_POST['description']);
-
+			$resolution->handleUpdate($_POST);
 			try {
 				$resolution->save();
 				header('Location: '.BASE_URL.'/resolutions');

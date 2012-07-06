@@ -1,32 +1,26 @@
-/**
- * Styles for generica html elements
- */
-h1 { font-size:131%; font-weight:bold; margin:.5em 0; color:#a60000; }
-h2 { font-size:123.1%; font-weight:bold;  margin:.15em 0; }
-h3 { font-size:110%; font-weight:bold; margin:.25em 0; }
-h4 { font-size:100%; font-weight:bold; }
-a { text-decoration:none; color:#0000a6; }
-p { margin:0 .5em .5em .5em; }
+h1 { font-size:131%;   font-weight:bold; margin-bottom:.5em; color:#a60000; }
+h2 { font-size:123.1%; font-weight:bold; margin-bottom:.25em; }
+h3 { font-size:110%;   font-weight:bold; margin-bottom:.25em; }
+h4 { font-size:100%;   font-weight:bold; }
+a  { text-decoration:none; color:#0000a6; }
+p  { margin-bottom:.5em; }
 
-table { margin:0 .5em .5em .5em; }
-th { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
-td { padding:.4em; }
-thead th { text-align:left; }
-tbody th { text-align:right; }
+table       { margin:0 0 .5em 0; }
+th          { color:#333; font-weight:bold; font-size:90%; padding:0.25em; }
+td          { padding:.4em; }
+thead th    { text-align:left; }
+tbody th    { text-align:right; }
+tbody label { display:block; text-align:right; }
 
-ul { margin-left:1em; padding:0; }
-li { margin:0; }
+ul { margin:0 0 .75em 0; padding:0; list-style-type:none; }
+li { margin-bottom:.5em; }
 
 fieldset { padding:.5em 0; }
-legend { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
-label { font-weight:bold; }
-form td { vertical-align:top; }
+legend   { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
+label    { font-weight:bold; }
+form td  { vertical-align:top; }
 textarea { width:250px; height:50px; }
 
-
-/**
- * Base styles for buttons and button links
- */
 button, .button {
 	display:inline-block;
 	padding:4px 10px 4px 24px;
@@ -35,107 +29,21 @@ button, .button {
 	color:black;
 }
 
-.add { background:url('images/addbutton.png') left center no-repeat; }
-.edit, .change { background:url('images/editbutton.png') left center no-repeat; }
-.search { background:url('images/submitbutton.png') left center no-repeat; }
+.add            { background:url('images/addbutton.png')    left center no-repeat; }
+.edit, .change  { background:url('images/editbutton.png')   left center no-repeat; }
+.search         { background:url('images/submitbutton.png') left center no-repeat; }
 .submit, .login { background:url('images/submitbutton.png') left center no-repeat; }
-.delete, .cancel { background:url('images/deletebutton.png') left center no-repeat; }
-.chooseLocation { background:url('images/addbutton.png') left center no-repeat; }
-.upload { background:url('images/addbutton.png') left center no-repeat; }
+.delete, .reset { background:url('images/deletebutton.png') left center no-repeat; }
+.chooseLocation { background:url('images/addbutton.png')    left center no-repeat; }
+.upload         { background:url('images/addbutton.png')    left center no-repeat; }
+.minusTag       { background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
-/**
- * Page Layout Styles
- */
-#banner {
-	height:60px;
-	background-color:#003366;
-	background-image: -moz-linear-gradient( rgba(0,0,65,1), rgba(0,0,100,.5), rgba(0,0,65,1));
-	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(0,0,65,1)), color-stop(.5, rgba(0,0,100,.5)), color-stop(1, rgba(0,0,65,1)));
-	margin:0; padding:5px 0;
-	position:relative;
-	color:white;
-}
+.panel       { padding:.75em; }
+.panel > div { margin-bottom:.75em; }
 
-#banner a { color:white; }
-#application_name { width:60%; margin-left:5px; }
-#application_name a { font-weight:bold; font-size:174%; }
-#location_name { width:75%; margin-left:5px;  }
-#utilityBar { float:right; width:50%; text-align:right; }
-#utilityBar li { display:inline; margin-right:1em; color:white; }
-
-#menuBar { margin-bottom:.5em; border-bottom:1px solid #ccc; }
-#menuBar ul { margin:.5em; padding:0; }
-#menuBar li { display:inline; margin-right:1em;}
-#menuBar a { font-size:123.1%; }
-#menuBar a:visited { color:blue; }
-
-#errorMessages { background-color:#fcc; padding:4px; border-radius:10px; }
-#errorMessages h2 {
-	padding-left:20px;
-	background:url('images/emblem-important.png') left center no-repeat;
-}
-
-#footer { padding:.5em; }
-#footer li { display:inline; margin-right:.5em; }
-#footer a { font-weight:bold; color:black; }
-
-#panel-one div {
-	border:2px solid black; margin-bottom:0.5em;
-	overflow:hidden;
-}
-#panel-one div h2 {
-	margin:0; padding:.25em;
-}
-#panel-one div ul { margin:.25em; padding:0; }
-#panel-one a { font-weight:bold; color:black; }
-
-/* Panels need to be full-width and be seperated by a line */
-#issue-panel,
-#location-panel,
-#person-panel,
-#action-panel .actionForm,
-#action-panel .history {
-	border-top:1px solid #cccccc; clear:both; padding:10px 0 0 10px; overflow:auto;
-}
-
-#ticket-panel{
-	clear:both; padding:10px 0 0 10px; overflow:auto;
-}
-
-/* Blocks we want to show up in the left column of a Panel */
-#person-panel .personInfo,
-#person-panel .addNewForm,
-#location-panel .locationInfo,
-.findLocationForm,
-#location-panel .addNewForm,
-#history-panel .actionForm {
-	 width:380px; float:left; padding:3px; clear:left
-}
-
-/* Blocks we want to show up in the right column of a Panel */
-#location-panel .locationList,
-#location-panel .ticketList,
-#location-panel .ticketLocationInfo,
-#location-panel .ticketSelectForMergeForm,
-#person-panel .ticketList,
-#person-panel .stats,
-.findLocationResults,
-.findPeopleResults {
-	margin-left:400px; padding-left:10px; border-left:1px solid #cccccc;
-}
-
-
-#ticketCreation #location-panel,
-#ticketCreation #person-panel {
-	max-height:300px; overflow:auto;
-}
-
-/**
- * Custom Styles for individual screens
- */
-.actionForm { overflow:auto; }
-.actionForm form { background-color:#eee; margin-bottom:10px; padding:0 4px; border-radius:5px; display:table; }
+.actionForm          { overflow:auto; }
+.actionForm form     { background-color:#eee; padding:0 .5em; margin-bottom:.75em; border-radius:5px; display:table; }
 .actionForm fieldset { float:left; display:table; }
 .actionForm .buttons { clear:left; }
 
@@ -148,72 +56,28 @@ button, .button {
 	float:right;
 }
 
-.locationInfo ul { list-style-type:none; margin:0; }
 
-.ticketList { margin-bottom:.5em; }
+.locationInfo ul { margin:0; }
+
 .ticketList table { border:1px solid #aaa; }
-.ticketList td { border-bottom:1px solid #aaa; }
+.ticketList td    { border-bottom:1px solid #aaa; }
 
 .findPeople { width:290px; float:left; }
-#ticket-panel .addTicketForm .ticketFields { display:none; }
-#ticket-panel .addTicketForm .reportedByPerson { display:none; }
-#ticket-panel .addTicketForm .issueFields { float:left; width:480px; }
-#ticket-panel .addTicketForm .assignmentFields { margin-left:490px; }
 
 .categoryChoices ul { column-count:2; -moz-column-count:2; -webkit-column-count:2; }
 
-.mergeForm .target_a { float:left; width:48%; }
-.mergeForm .target_b { float:right; width:48%; }
-.mergeForm .button { position:absolute; left:40%; }
+.addNewForm       { float:right; border:2px solid black; background-color:#eeeeee; }
+.addNewForm form  { padding:1em; }
+.addNewForm label { position:absolute; left:-9999px; }
+.addNewForm div   { margin-bottom:.5em; }
 
-#search-form { border-right:1px solid #ccc; background-color:#eee; }
-#search-form td select { width:200px; overflow:hidden; }
-#search-form td { padding:.25em .25em; }
-#search-form li { list-style-type:none; margin:.15em; padding:0; }
-
-#search-form .fields,
-.searchResultsRows ul,
-.ticketInfo ul,
-.issueInfo ul {
-	list-style-type:none;
-	-webkit-column-count:2; -moz-column-count:2; column-count:2;
-}
-.searchResults { margin-top:1em; }
-.searchResults table { background-color:#eeeeee; }
-.searchResults th { padding:.5em; border-right:1px solid #cccccc; }
-#search-form .addNewForm,
-#search-form .quickSearches,
-#search-form .advancedSearch {
-	background-color:white; border:1px solid #ccc; margin:5px 0; padding:2px;
-}
-#search-form .addNewForm div { margin:10px 0; }
-#advanced-search h3 { padding:5px 10px 5px 3px; border-bottom:1px solid #dddddd; }
-#advanced-search div { margin:10px 5px; }
-.searchResultsRows div { border-top:1px solid #ddd; overflow:auto; padding:4px; }
-
-/* Collapsing and Expanding styles */
-.collapsed h3, .expanded h3 {
-	 cursor:pointer;
-}
-.collapsed h3 { background:#dddddd url('images/plus.png') 95% center no-repeat; }
-.collapsed ul, .collapsed div, .collapsed table {
+#addTicketForm .ticketFields,
+#addTicketForm .reportedByPerson {
 	display:none;
 }
-.expanded h3 { background:#dddddd url('images/minus.png') 95% center  no-repeat; }
-
-#search-form button.toggle {
-	/* Hide the text.  Only show the icon */
-	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:0 0 0 25px;
-	vertical-align:middle; background:white url('images/arrow_left.png') 8px center no-repeat;
-	float:right;
-}
-.slidingPanelHidden #search-form button.toggle {
-	background-image:url('images/arrow_right.png');
-}
 
 
-.tableOfContents li { list-style-type:none; display:inline; margin-right:2em; }
+.tableOfContents li { display:inline; margin-right:2em; }
 
 /**
  * Alternating row background colors
@@ -224,6 +88,12 @@ button, .button {
 .issueInfo li:nth-child(odd) {
 	background:#eee;
 }
+
+/**
+ *Two Column List
+ */
+
+.twoColumnlist { -webkit-column-count:2; -moz-column-count:2; column-count:2; }
 
 /**
  * Interface Boxes
@@ -245,77 +115,91 @@ button, .button {
 	color:black;
 }
 
+/**
+ * Help text on fields
+*/
+.help { font-size:.9em; color:#666666; }
 
 /* Issue information */
-.issueList { background-color:#eee; }
+#issue-panel { background-color:#eee; }
 .issueHeader { width:100%; display:block; }
 .issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
-.issueList h1 { margin:.25em; }
-.issueList .issueInfo {
-	border:1px solid #ccc; margin:.5em; padding:.25em; background-color:white;
+.issueInfo, .updateIssueForm {
+	border:1px solid #ccc; margin:.5em 0; padding:.5em; background-color:white;
 }
 .issueInfo .notes { margin-bottom:.5em; clear:left; }
 
-.mediaList { margin-left:550px; border:1px solid #dddddd; padding:.25em; height:30px; }
-.mediaList legend { width:auto; float:left; line-height:30px; font-size:1em; margin:0 .25em; }
+.mediaList          { margin-left:550px; border:1px solid #dddddd; padding:.25em; height:30px; }
+.mediaList legend   { width:auto; float:left; line-height:30px; font-size:1em; margin:0 .25em; }
 .mediaList fieldset { position:relative; padding:0; display:inline-block; vertical-align:middle; }
 
 
 /* ICONS FOR MIME TYPES */
-.jpg  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
-.png  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
-.gif  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/image.png') no-repeat; }
-.tiff { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
-.pdf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/pdf.png') no-repeat; }
-.doc  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/doc.png') no-repeat; }
-.xls  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/xls.png') no-repeat; }
-.rtf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
-.zip  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/zip.png') no-repeat; }
-.gz   { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/zip.png') no-repeat; }
-.txt  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/page.png') no-repeat; }
-.wmv  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/windowsMedia.png') no-repeat; }
-.mov  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/quicktime.png') no-repeat; }
-.rm   { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/real.png') no-repeat; }
-.ram  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/real.png') no-repeat; }
-.mp3  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/sound.png') no-repeat; }
-.mp4  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/video.png') no-repeat; }
-.wma  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/sound.png') no-repeat; }
-.tar  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/tar.png') no-repeat; }
-.dxf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
-.kml  { height:16px; padding: 0px 0px 10px 22px; background: url('images/mime/kml_feed_small.png') no-repeat; }
-.swf  { height:16px; padding: 0px 0px 10px 22px; background: url('images/icons/mime/flash.gif') no-repeat; }
-.ascending { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_down.png') top right no-repeat; }
-.descending { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_up.png') top right no-repeat; }
-.top { height:12px; padding: 0px 20px 0px 0px; background:url('images/arrow_up.png') top right no-repeat; }
+.jpg        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/image.png')        no-repeat; }
+.png        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/image.png')        no-repeat; }
+.gif        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/image.png')        no-repeat; }
+.tiff       { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/page.png')         no-repeat; }
+.pdf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/pdf.png')          no-repeat; }
+.doc        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/doc.png')          no-repeat; }
+.xls        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/xls.png')          no-repeat; }
+.rtf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/page.png')         no-repeat; }
+.zip        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/zip.png')          no-repeat; }
+.gz         { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/zip.png')          no-repeat; }
+.txt        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/page.png')         no-repeat; }
+.wmv        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/windowsMedia.png') no-repeat; }
+.mov        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/quicktime.png')    no-repeat; }
+.rm         { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/real.png')         no-repeat; }
+.ram        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/real.png')         no-repeat; }
+.mp3        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/sound.png')        no-repeat; }
+.mp4        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/video.png')        no-repeat; }
+.wma        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/sound.png')        no-repeat; }
+.tar        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/tar.png')          no-repeat; }
+.kml        { height:16px; padding: 0px 0px 10px 22px; background:url('images/mime/kml_feed_small.png')     no-repeat; }
+.swf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/flash.gif')        no-repeat; }
+.ascending  { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_down.png') top right    no-repeat; }
+.descending { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_up.png')   top right    no-repeat; }
+.top        { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_up.png')   top right    no-repeat; }
+.dxf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
 
-.pageNavigation { margin:.5em; }
-.pageNavigation li { display:inline; margin:.5em; }
+.pageNavigation          { margin:.5em; }
+.pageNavigation li       { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified { background-color:#cfc; }
+tr.verified        { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
+
+
+.collapsible .hd { cursor: pointer; padding:5px 10px 5px 3px; margin:10px 0; border-bottom:1px solid #dddddd; }
+.collapsed   .hd { background:#dddddd url('images/plus.png')  95% center no-repeat; }
+.expanded    .hd { background:#dddddd url('images/minus.png') 95% center no-repeat; }
+.collapsed   .bd { display:none; }
+.expanded    .bd { display:block; }
+
+.totals { border-top:1px solid black; }
+
+
 
 /* YUI Styles */
 /* Autocomplete styles */
-.yui3-aclist-content { border:1px solid black; background-color:white; }
-.yui3-aclist-item { font-family:sans-serif; }
+.yui3-aclist-content     { border:1px solid black; background-color:white; }
 .yui3-aclist-item-active { background-color:blue; }
 
 /* Overlay styles */
-.yui3-overlay { width:90%; }
-.yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
-.yui3-widget-ft { clear:both; }
+.yui3-overlay          { width:90%; }
+.yui3-overlay-content  { border:1px solid black; background-color:white; padding:10px; }
+.yui3-widget-ft        { clear:both; }
 #find_location_overlay { width:100%; }
 
 /* Drag and Drop */
-.yui3-dd-draggable { cursor:move; }
-.yui3-dd-drop input { background-color:lightGreen; }
-input.yui3-dd-drop-over { background-color:green; }
+.yui3-dd-draggable         { cursor:move; }
+.yui3-dd-drop input        { background-color:lightGreen; }
+input.yui3-dd-drop-over    { background-color:green; }
 .yui3-dd-drop-active-valid { border: 2px solid green; }
 
 #location_map {
-	width:98%; height:300px;
+	width:98%; height:400px;
 	border:2px solid black;
+	margin-bottom:.75em; 
 }
 /* Admin Styles */
 .interfaceBox table .button .edit {

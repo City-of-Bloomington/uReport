@@ -1,70 +1,17 @@
 ---------------------------------------------------------------------
-Requirements
----------------------------------------------------------------------
-framework:
-This scaffolding requires our framework to be on the server somewhere.
-It ships with a working version of framework installed in /libraries.
-In the configuration, you can point the application to another copy
-of the framework, if you like.  If you make changes to the code in
-the /libraries/framework, you might consider sending those changes
-back to us, so we can improve this scaffolding.
-
-ZendFramework:
-Database interaction for this application is done using Zend_Db.  You must
-have downloaded a copy of the ZendFramework for this to work.  In the
-configuration, you will point the application to wherever you've installed
-your copy of the ZendFramework.  The ZendFramework is available under a
-BSD license at:
-http://framework.zend.com/
-
-Apache:
-This application was written assuming you have control over your own web
-server.  If you are on a hosted system, you may need to make changes to
-the code to accomodate your server.
-
-All webserver instructions assume the Apache webserver.  It is certainly
-possible to set this using a different web server. However, we don't have
-any experience with other webservers and cannot provide information on
-their configuration.
-
-All include files have been kept out of the web directory, and a configuration
-file has been included. You will need to make sure that every .php script
-in the HTML directory includes configuration.inc.  If you control your own
-webserver, you can add a <Directory> command to your httpd.conf.
-
-PHP:
-PHP must be compiled with support for:
-	PDO
-	Mongo
-	LDAP
-
-	Actually, you can substitute any database support for MySQL, as our
-framework uses PDO for database interaction.  However, the initial SQL
-schema provided is specific to MySQL.  The schema would need to be modified
-for other databases.
-
-Mongo:
-	The mongo driver usually needs to be installed, as it's a relatively new
-extension for PHP.  Information on installing the Mongo extension is at
-http://us.php.net/manual/en/mongo.installation.php
-
-LDAP:
-	LDAP is only used for doing LDAP authentication for users.
-If you're not going to do any LDAP authentication, you can delete or
-comment out the LDAP stuff.
-
----------------------------------------------------------------------
 Installation
 ---------------------------------------------------------------------
-	We rely on Apache's mod_rewrite to route all traffic to /public/index.php
-If this is the only web application on your apache server, you can just point
-your apache's web directory to the public directory inside the application and
-add the Rewrite rules.
+For full installation instructions, refer to the AdminGuide in /docs/
 
-	For us, we're running multiple applications, and have a seperate entry in
-our Apache config for each one.  This does essentially the same thing.
+---------------------------------------------------------------------
+Quick Install
+---------------------------------------------------------------------
+Assuming you've met all the requirements...
 
-Add to httpd.conf:
+1. Put the application somewhere accessible by Apache
+2. Load the database using /scripts/mysql.sql
+3. Prepare Solr by copying /scripts/solr/schema.xml to Solr's conf
+4. Add application to Apache config and restart Apache
 
 Alias /crm "/path/to/crm/public"
 <Directory "/path/to/crm/public">
@@ -81,12 +28,7 @@ Alias /crm "/path/to/crm/public"
 </Directory>
 
 
-	If you're running in a shared hosting environment, you cannot do Alias or
-Directory commands.  However the public directory can be moved into your web
-directory. To make sure the configuration file gets loaded, create an htaccess
-file in this application's html directory with the php_value line from above.
-
 ---------------------------------------------------------------------
 Configuration
 ---------------------------------------------------------------------
-	Edit configuration.inc with appropriate values for your installation.
+Edit configuration.inc with appropriate values for your installation.

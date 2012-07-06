@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'full-width';
+	$this->layout = 'stackedPanels';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -13,36 +13,23 @@
 			include $dir.'/partials/menubar.inc';
 		}
 	?>
-
 	<div id="panel-container">
-		<div id="content-panel">
-			<?php include FRAMEWORK.'/errorMessages.php'; ?>
-
-			<div id="ticket-panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
-			</div>
-			<div id="action-panel">
-				<?php
-					if (!isset($_REQUEST['popup'])) {
-						echo $this->includeBlocks('history-panel');
-					}
-				?>
-			</div>
-			<div id="issue-panel">
-				<?php
-					if (!isset($_REQUEST['popup'])) {
-						echo $this->includeBlocks('issue-panel');
-					}
-				?>
-			</div>
-			<div id="location-panel">
-				<?php
-					if (!isset($_REQUEST['popup'])) {
-						echo $this->includeBlocks('location-panel');
-					}
-				?>
-			</div>
+		<?php include FRAMEWORK.'/errorMessages.php'; ?>
+		<div id="ticket-panel" class="panel">
+			<?php echo $this->includeBlocks('ticket-panel'); ?>
 		</div>
+		<?php
+			// These panels should only show up for non-popup windows
+			// Also, only draw the divs if there is content for them
+			$panels = array('history-panel', 'issue-panel', 'bottom-left', 'bottom-right');
+			foreach ($panels as $p) {
+				if (!isset($_REQUEST['popup']) && isset($this->blocks[$p])) {
+					echo "<div id=\"$p\" class=\"panel\">";
+					echo $this->includeBlocks($p);
+					echo "</div>";
+				}
+			}
+		?>
 	</div>
 	<?php
 		include $dir.'/partials/footer.inc';

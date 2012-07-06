@@ -13,15 +13,15 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 		<fieldset><legend>Login Info</legend>
 			<input name="person_id" type="hidden" value="<?php echo $this->person->getId(); ?>" />
 			<table>
-				<tr><td><label for="department">Department</label></td>
-					<td><select name="department" id="department">
+				<tr><td><label for="department_id">Department</label></td>
+					<td><select name="department_id" id="department_id">
 							<option></option>
 						<?php
 							$list = new DepartmentList();
 							$list->find();
 							foreach ($list as $department) {
 								$name = View::escape($department->getName());
-								$selected = "{$this->person->getDepartment_id()}"=="{$department->getId()}"
+								$selected = $this->person->getDepartment_id()==$department->getId()
 											? 'selected="selected"'
 											: '';
 								echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
@@ -66,10 +66,7 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URI; ?>/users';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URI; ?>/users">Cancel</a>
 		</fieldset>
 	</form>
 </div>

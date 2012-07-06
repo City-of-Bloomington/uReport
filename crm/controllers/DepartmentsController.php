@@ -10,7 +10,7 @@ class DepartmentsController extends Controller
 	{
 		parent::__construct($template);
 		if ($this->template->outputFormat == 'html') {
-			$this->template->setFilename('two-column');
+			$this->template->setFilename('backend');
 		}
 	}
 
@@ -52,30 +52,12 @@ class DepartmentsController extends Controller
 			$department = new Department();
 		}
 
-		$return_url = isset($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/departments';
-
 		if (isset($_POST['name'])) {
-			$department->setName($_POST['name']);
-			$department->setCustomStatuses($_POST['customStatuses']);
 			try {
-				if ($_POST['defaultPerson']) {
-					$department->setDefaultPerson($_POST['defaultPerson']);
-				}
-				if (isset($_POST['categories'])) {
-					$department->setCategories(array_keys($_POST['categories']));
-				}
-				else {
-					$department->setCategories(array());
-				}
-				if (isset($_POST['actions'])) {
-					$department->setActions(array_keys($_POST['actions']));
-				}
-				else {
-					$department->setActions(array());
-				}
-
+				$department->handleUpdate($_POST);
 				$department->save();
-				header('Location: '.$return_url);
+
+				header('Location: '.BASE_URL.'/departments/view?department_id='.$department->getId());
 				exit();
 			}
 			catch (Exception $e) {
@@ -85,7 +67,7 @@ class DepartmentsController extends Controller
 
 		$this->template->blocks[] = new Block(
 			'departments/updateDepartmentForm.inc',
-			array('department'=>$department,'return_url'=>$return_url)
+			array('department'=>$department, 'action'=>BASE_URI.'/departments/update')
 		);
 	}
 

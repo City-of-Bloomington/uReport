@@ -22,14 +22,15 @@ var PERSON_CHOOSER = {
 	popup: {},
 	setPerson: function (person_id) {
 		YUI().use('node', 'io', function (Y) {
-			var personPanel = Y.one('#person-panel');
-			personPanel.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
+			Y.one('#reportedByPerson_id').set('value', person_id);
 
-			Y.io(CRM.BASE_URL + '/people/view?partial=person-panel;disableButtons=1;person_id=' + person_id, {
+			var bd = Y.one('#reportedByPersonChooser .bd');
+			bd.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
+
+			Y.io(CRM.BASE_URL + '/people/view?partial=people/personInfo.inc,Reported Cases;disableButtons=1;person_id=' + person_id, {
 				on: {
 					complete: function (id, o, args) {
-						personPanel.setContent(o.responseText);
-						document.getElementById('issue-reportedByPerson').value = person_id;
+						bd.setContent(o.responseText);
 						PERSON_CHOOSER.popup.close();
 					}
 				}

@@ -4,8 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Action extends MongoRecord
+class Action extends ActiveRecord
 {
+	protected $tablename = 'actions';
 	public static $types = array('system','department');
 
 	/**
@@ -27,15 +28,11 @@ class Action extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
-
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
-				}
-				else {
-					$search = array('name'=>(string)$id);
-				}
-				$result = $mongo->actions->findOne($search);
+				$zend_db = Database::getConnection();
+				$sql = ActiveRecord::isId($id)
+					? 'select * from actions where id=?'
+					: 'select * from actions where name=?';
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -67,26 +64,19 @@ class Action extends MongoRecord
 		}
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-		$mongo = Database::getConnection();
-		$mongo->actions->save($this->data,array('safe'=>true));
-	}
+	public function save() { parent::save(); }
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()          { return parent::get('_id');         }
+	public function __toString()     { return parent::get('name');        }
+	public function getId()          { return parent::get('id');          }
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
 	public function getType()        { return parent::get('type');        }
 
-	public function setName($s)        { $this->data['name']        = trim($s); }
-	public function setDescription($s) { $this->data['description'] = trim($s); }
+	public function setName($s)        { parent::set('name',        $s); }
+	public function setDescription($s) { parent::set('description', $s); }
 
 	/**
 	 * @param string $string
@@ -94,8 +84,16 @@ class Action extends MongoRecord
 	public function setType($string)
 	{
 		$string = trim($string);
-		if (in_array($string,self::$types)) {
-			$this->data['type'] = $string;
-		}
+		if (in_array($string, self::$types)) { $this->data['type'] = $string; }
+	}
+
+	/**
+	 * @param array $post
+	 */
+	public function handleUpdate($post)
+	{
+		$this->setName($post['name']);
+		$this->setDescription($post['description']);
+		$this->setType($post['type']);
 	}
 }

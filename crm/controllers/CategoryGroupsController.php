@@ -9,7 +9,7 @@ class CategoryGroupsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 	}
 
 	public function index()
@@ -40,7 +40,7 @@ class CategoryGroupsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$group->set($_POST);
+			$group->handleUpdate($_POST);
 			try {
 				$group->save();
 				header('Location: '.BASE_URL.'/categoryGroups');
@@ -63,7 +63,7 @@ class CategoryGroupsController extends Controller
 			foreach ($_POST['categoryGroups'] as $id=>$order) {
 				try {
 					$group = new CategoryGroup($id);
-					$group->setOrder($order);
+					$group->setOrdering($order);
 					$group->save();
 				}
 				catch (Exception $e) {

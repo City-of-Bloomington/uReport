@@ -7,6 +7,7 @@
  */
 $name = View::escape($this->client->getName());
 $url = $this->client->getURL();
+$api_key = View::escape($this->client->getApi_key());
 $person_id = $this->client->getContactPerson()
 	? $this->client->getContactPerson()->getId()
 	: '';
@@ -25,6 +26,9 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 				<tr><td><label for="url">URL</label></td>
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
+				<tr><td><label>API Key</label></td>
+					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
+				</tr>
 			</table>
 		</fieldset>
 		<fieldset><legend>Contact Info</legend>
@@ -38,10 +42,7 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 		</fieldset>
 		<fieldset>
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URL; ?>/clients';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URL; ?>/clients">Cancel</a>
 		</fieldset>
 	</form>
 </div>

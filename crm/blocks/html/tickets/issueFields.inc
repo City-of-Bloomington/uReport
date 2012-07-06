@@ -1,20 +1,23 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
 ?>
 <table>
-	<tr><td><label for="issue[type]" class="required">Type</label></td>
-		<td><select name="issue[type]" id="issue-type">
+	<tr><td><label for="issueType_id" class="required">Type</label></td>
+		<td><select name="issueType_id" id="issueType_id">
 				<?php
-					foreach (Lookups::get('types') as $type) {
-						$selected = ($this->issue->getType()==$type)
+					$list = new IssueTypeList();
+					$list->find();
+					foreach ($list as $type) {
+						$selected = $this->issue->getIssueType_id()==$type->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$type</option>";
+						$name = View::escape($type->getName());
+						echo "<option value=\"{$type->getId()}\" $selected>$type</option>";
 					}
 				?>
 			</select>
@@ -22,7 +25,7 @@
 	</tr>
 
 	<tr class="reportedByPerson">
-		<td><label for="issue-reportedByPerson">Reported By Person</label></td>
+		<td><label for="reportedByPerson_id">Reported By Person</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$id = '';
@@ -33,40 +36,44 @@
 				}
 				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 			?>
-			<input type="hidden" name="issue[reportedByPerson]" id="issue-reportedByPerson"
+			<input type="hidden" name="reportedByPerson_id" id="reportedByPerson_id"
 				value="<?php echo "$id"; ?>" />
-			<span id="issue-reportedByPerson-name"><?php echo $name; ?></span>
+			<span id="reportedByPerson-name"><?php echo $name; ?></span>
 			<a class="edit button" href="<?php echo BASE_URI."/people?return_url=$return_url"; ?>">
 				Change Person
 			</a>
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-contactMethod">Received via</label></td>
-		<td><select name="issue[contactMethod]" id="issue-contactMethod">
+	<tr><td><label for="contactMethod_id">Received via</label></td>
+		<td><select name="contactMethod_id" id="contactMethod_id">
 				<option></option>
 				<?php
-					foreach (Lookups::get('contactMethods') as $method) {
-						$selected = $this->issue->getContactMethod()==$method
+					$contactMethods = new ContactMethodList();
+					$contactMethods->find();
+					foreach ($contactMethods as $method) {
+						$selected = $this->issue->getContactMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$method</option>";
+						$name = View::escape($method->getName());
+						echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
 					}
 				?>
 			</select>
 		</td>
 	</tr>
 
-	<tr><td><label for="issue-responseMethod">Response Method</label></td>
-		<td><select name="issue[responseMethod]" id="issue-responseMethod">
+	<tr><td><label for="responseMethod_id">Response Method</label></td>
+		<td><select name="responseMethod_id" id="responseMethod_id">
 				<option value=""></option>
 				<?php
 					// Use the same drop down as the contact method
-					foreach (Lookups::get('contactMethods') as $method) {
-						$selected = $this->issue->getContactMethod()==$method
+					foreach ($contactMethods as $method) {
+						$selected = $this->issue->getResponseMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						echo "<option $selected>$method</option>";
+						$name = View::escape($method->getName());
+						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
 					}
 				?>
 			</select>
@@ -76,14 +83,17 @@
 	<tr><td><label>Labels</label></td>
 		<td>
 		<?php
-			foreach (Lookups::get('labels') as $label) {
+			$list = new LabelList();
+			$list->find();
+			foreach ($list as $label) {
 				$checked = $this->issue->hasLabel($label)
 					? 'checked="checked"'
 					: '';
+				$name = View::escape($label->getName());
 				echo "
 				<label>
-					<input type=\"checkbox\" name=\"issue[labels][]\" value=\"$label\" $checked />
-					$label
+					<input type=\"checkbox\" name=\"labels[]\" value=\"{$label->getId()}\" $checked />
+					$name
 				</label>
 				";
 			}
@@ -92,9 +102,9 @@
 	</tr>
 </table>
 
-<div><label for="issue-description">Describe the issue</label></div>
+<div><label for="description">Describe the issue</label></div>
 <div>
-	<textarea name="issue[description]" id="issue-description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
+	<textarea name="description" id="description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>
 <?php
 	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');

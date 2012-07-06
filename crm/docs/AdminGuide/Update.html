@@ -40,16 +40,18 @@
 			and apply any scripts that appropriate. If you are updating across multiple versions,
 			be sure to apply each version's update scripts in order.
 		</p>
-		<h3>Mongo scripts</h3>
-			<p>Updates to the mongo database are written in JavaScript and have the .js extension.
-				The easiest way to apply them is by pasting the contents of the script into the
-				<a href="http://www.mongodb.org/display/DOCS/Overview+-+The+MongoDB+Interactive+Shell">mongo shell</a>.
+		<h3>MySQL scripts</h3>
+			<p>Updates to the mysql database are written in SQL and have the .sql extension.
+				The easiest way is the
+				<a href="http://dev.mysql.com/doc/refman/5.5/en/batch-commands.html">mysql</a> client.
 			</p>
+			<p><code>mysql crm &lt; migrations/x.x-x.x/update_stuff.sql</code></p>
 
 		<h3>PHP scripts</h3>
 			<p>More complex updates are written in PHP.  These need to be run on the server
 				using the PHP command line.
 			</p>
+			<p><code>php migrations/x.x-x.x/update_stuff.php</code></p>
 
 </body>
 </html>

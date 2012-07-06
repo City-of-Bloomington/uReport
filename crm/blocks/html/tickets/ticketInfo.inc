@@ -31,12 +31,12 @@ if ($this->ticket->getResolution()) {
 	$status.= ': '.$this->ticket->getResolution();
 }
 
-$assignButton = '';
-$referralButton = '';
-$editStatusButton = '';
-$deleteButton = '';
+$editStatusButton     = '';
+$deleteButton         = '';
 $changeCategoryButton = '';
 $changeLocationButton = '';
+$assignButton         = '';
+$referralButton       = '';
 
 if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 	$editStatusButton = "
@@ -85,42 +85,37 @@ if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 
 }
 
-$id = $this->ticket->getNumber() ? $this->ticket->getNumber() : $this->ticket->getId();
-$category = $this->ticket->getData('category.name') ? View::escape($this->ticket->getData('category.name')) : '';
+$category = $this->ticket->getCategory_id()
+	? View::escape($this->ticket->getCategory()->getName())
+	: '';
 echo "
-<div class=\"ticketInfo\">
-	<h2><a href=\"{$this->ticket->getURL()}\">Case #$id</a> $deleteButton</h2>
+<div class=\"ticketInfo twoColumnlist\">
+	<h2><a href=\"{$this->ticket->getURL()}\">Case #{$this->ticket->getId()}</a> $deleteButton</h2>
 	<ul>
-		<li>
-			<label>Category:</label>
+		<li><label>Category:</label>
 			$category
 			$changeCategoryButton
 		</li>
-		<li>
-			<label>Location:</label>
+		<li><label>Location:</label>
 			$location
 			$changeLocationButton
 		</li>
-		<li>
-			<label>Status:</label>
+		<li><label>Status:</label>
 			$status
 			$editStatusButton
 		</li>
 ";
 if (userIsAllowed('people','view')) {
 	echo "
-		<li>
-			<label>Assigned To:</label>
+		<li><label>Assigned To:</label>
 			$assigned
 			$assignButton
 		</li>
-		<li>
-			<label>Referred To:</label>
+		<li><label>Referred To:</label>
 			$referred
 			$referralButton
 		</li>
-		<li>
-			<label>Created By:</label>
+		<li><label>Created By:</label>
 			$enteredBy
 		</li>
 	";
@@ -136,14 +131,13 @@ if (userIsAllowed('people','view')) {
 		";
 	}
 echo "
-		<li>
-			<label>Date Opened:</label>
+		<li><label>Date Opened:</label>
 			{$this->ticket->getEnteredDate(DATE_FORMAT)}
 		</li>
 	</ul>
 </div>
 <script type=\"text/javascript\">
-	CRM.ticket_id = '{$this->ticket->getId()}';
+	CRM.ticket_id = {$this->ticket->getId()};
 </script>
 ";
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');

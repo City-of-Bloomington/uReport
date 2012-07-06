@@ -9,7 +9,7 @@ class ClientsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 	}
 
 	public function index()
@@ -38,7 +38,7 @@ class ClientsController extends Controller
 		}
 
 		if (isset($_POST['name'])) {
-			$client->set($_POST);
+			$client->handleUpdate($_POST);
 			try {
 				$client->save();
 				header('Location: '.BASE_URL.'/clients');

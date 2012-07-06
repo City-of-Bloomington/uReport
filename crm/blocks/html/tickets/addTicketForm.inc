@@ -7,42 +7,53 @@
  * @param Issue $this->issue
  * @param Department $this->currentDepartment
  */
-$category = $this->ticket->getCategory();
+$category    = $this->ticket->getCategory();
+$category_id = $category ? $category->getId() : '';
+$title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
-<div class="addTicketForm">
-	<h1>New <?php echo View::escape($category->getName()); ?> Case</h1>
+<div id="addTicketForm">
+	<h2><?php echo View::escape($title); ?></h2>
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
+		<fieldset><legend>Category</legend>
+		<?php
+			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+			$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
+			$this->return_url = BASE_URL.'/tickets/add';
+			include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
+		?>
+		</fieldset>
+
 		<fieldset class="ticketFields">
 			<legend>Location Info</legend>
 			<table>
-				<tr><td><label for="ticket-location">Location</label></td>
-					<td><input name="ticket[location]" id="ticket-location"
+				<tr><td><label for="location">Location</label></td>
+					<td><input name="location" id="location"
 							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-city">City</label></td>
-					<td><input name="ticket[city]" id="ticket-city"
+				<tr><td><label for="city">City</label></td>
+					<td><input name="city" id="city"
 							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-state">State</label></td>
-					<td><input name="ticket[state]" id="ticket-state"
+				<tr><td><label for="state">State</label></td>
+					<td><input name="state" id="state"
 							value="<?php echo View::escape($this->ticket->getState()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-zip">Zip</label></td>
-					<td><input name="ticket[zip]" id="ticket-zip"
+				<tr><td><label for="zip">Zip</label></td>
+					<td><input name="zip" id="zip"
 							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-latitude">Latitude</label></td>
-					<td><input name="ticket[latitude]" id="ticket-latitude"
+				<tr><td><label for="latitude">Latitude</label></td>
+					<td><input name="latitude" id="latitude"
 							value="<?php echo $this->ticket->getLatitude(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="ticket-longitude">Longitude</label></td>
-					<td><input name="ticket[longitude]" id="ticket-longitude"
+				<tr><td><label for="longitude">Longitude</label></td>
+					<td><input name="longitude" id="longitude"
 							value="<?php echo $this->ticket->getLongitude(); ?>" />
 					</td>
 				</tr>
@@ -52,6 +63,8 @@ $category = $this->ticket->getCategory();
 			<legend>Issue Information</legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+
+				$this->category = $category;
 				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 			?>
 		</fieldset>
@@ -64,17 +77,8 @@ $category = $this->ticket->getCategory();
 
 
 		<fieldset>
-			<input name="category_id" type="hidden" value="<?php echo $category->getId(); ?>" />
 			<button type="submit" class="submit">Submit</button>
-			<button type="button" class="cancel"
-				onclick="document.location.href='<?php echo BASE_URL; ?>/tickets';">
-				Cancel
-			</button>
+			<a class="cancel" href="<?php echo BASE_URL; ?>/tickets">Cancel</a>
 		</fieldset>
 	</form>
 </div>
-<?php
-	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
-	$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/choosePerson.js');
-?>

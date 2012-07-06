@@ -5,11 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-?>
-<button type="submit" class="submit">Submit</button>
-<?php
-	$onclick = isset($_REQUEST['callback'])
-		? 'self.close();'
-		: "document.location.href='{$this->ticket->getURL()}';";
-?>
-<button type="button" class="cancel" onclick="<?php echo $onclick; ?>">Cancel</button>
+$onclick = isset($_REQUEST['callback'])
+	? 'onclick="self.close();"'
+	: '';
+echo "
+<button type=\"submit\" class=\"submit\">Submit</button>
+<a class=\"cancel\" href=\"{$this->ticket->getURL()}\" $onclick>Cancel</a>
+";

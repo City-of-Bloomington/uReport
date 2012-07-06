@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-$department = new Department($_SESSION['USER']->getData('department._id'));
+$department = $_SESSION['USER']->getDepartment_id()
+	? $_SESSION['USER']->getDepartment()
+	: new Department();
 $actions = $department->getActions();
 if (count($actions)) {
 ?>
@@ -16,13 +18,13 @@ if (count($actions)) {
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="action" class="required">Action</label></td>
-					<td><select name="action" id="action">
+				<tr><td><label for="action_id" class="required">Action</label></td>
+					<td><select name="action_id" id="action_id">
 							<option></option>
 							<?php
-								foreach ($department->getActions() as $action) {
-									$name = View::escape($action['name']);
-									echo "<option>$name</option>";
+								foreach ($actions as $action) {
+									$name = View::escape($action->getName());
+									echo "<option value=\"{$action->getId()}\">$name</option>";
 								}
 							?>
 						</select>
@@ -41,7 +43,7 @@ if (count($actions)) {
 		</fieldset>
 		<fieldset class="buttons">
 			<button type="submit" class="submit">Submit</button>
-			<button type="reset" class="cancel">Cancel</button>
+			<button type="reset" class="reset">Cancel</button>
 		</fieldset>
 	</form>
 </div>

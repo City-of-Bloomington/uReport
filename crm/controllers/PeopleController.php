@@ -17,9 +17,11 @@ class PeopleController extends Controller
 	 */
 	public function index()
 	{
+		$this->template->setFilename('people');
+
 		// Look for anything that the user searched for
 		$search = array();
-		$fields = array('firstname','lastname','email','organization','department');
+		$fields = array('firstname','lastname','email','organization','department_id');
 		foreach ($fields as $field) {
 			if (isset($_GET[$field]) && $_GET[$field]) {
 				$value = trim($_GET[$field]);
@@ -32,17 +34,17 @@ class PeopleController extends Controller
 		// Display the search form and any results
 		if ($this->template->outputFormat == 'html') {
 			$searchForm = new Block('people/searchForm.inc');
-			$this->template->blocks[] = $searchForm;
+			$this->template->blocks['left'][] = $searchForm;
 		}
 
 		if (count($search)) {
 			if (isset($_GET['setOfPeople'])) {
 				switch ($_GET['setOfPeople']) {
 					case 'staff':
-						$search['username'] = array('$exists'=>true);
+						$search['user_account'] = true;
 						break;
 					case 'public':
-						$search['username'] = array('$exists'=>false);
+						$search['user_account'] = false;
 						break;
 				}
 			}
@@ -76,51 +78,59 @@ class PeopleController extends Controller
 
 
 		$disableButtons = isset($_REQUEST['disableButtons']) ? (bool)$_REQUEST['disableButtons'] : false;
-		$this->template->blocks['person-panel'][] = new Block(
+		$block = new Block(
 			'people/personInfo.inc',
 			array('person'=>$person,'disableButtons'=>$disableButtons)
 		);
 
 		if ($this->template->outputFormat == 'html') {
-			if (!$disableButtons && userIsAllowed('tickets','add')) {
-				$this->template->blocks['person-panel'][] = new Block(
-					'tickets/addNewForm.inc',
-					array('title'=>'Report New Case')
-				);
-			}
-
-			$this->template->blocks['person-panel'][] = new Block('people/stats.inc',array('person'=>$person));
+			$this->template->blocks['left'][] = $block;
+			$this->template->blocks['right'][] = new Block('people/stats.inc',array('person'=>$person));
 
 			$lists = array(
 				'reportedBy'=>'Reported Cases',
-				'assigned'=>'Assigned Cases',
-				'referred'=>'Referred Cases',
-				'enteredBy'=>'Entered Cases'
+				'assigned'  =>'Assigned Cases',
+				'referred'  =>'Referred Cases',
+				'enteredBy' =>'Entered Cases'
 			);
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			foreach ($lists as $listType=>$title) {
 				$this->addTicketList($listType, $title, $person, $disableLinks);
 			}
 		}
+		else {
+			$this->template->blocks[] = $block;
+		}
 	}
 
 	/**
 	 * Adds a ticketList about the Person to the template
+	 *
+	 * @param string $listType (enteredBy, assigned, reportedBy, referred)
+	 * @param string $title
+	 * @param Person $person
+	 * @param bool $disableLinks
 	 */
 	private function addTicketList($listType, $title, Person $person, $disableLinks)
 	{
-		$tickets = $person->getTickets($listType);
+		$field = $listType.'Person_id';
+
+		$tickets = new TicketList();
+		$tickets->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
+
 		if (count($tickets)) {
-			$this->template->blocks['person-panel'][] = new Block(
+			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
-					'ticketList'=>$tickets,
-					'title'=>$title,
-					'limit'=>10,
-					'disableLinks'=>$disableLinks,
-					'moreLink'=>BASE_URL."/tickets?{$listType}Person={$person->getId()}"
+					'ticketList'  => $tickets,
+					'title'       => $title,
+					'disableLinks'=> $disableLinks
 				)
 			);
+			if (count($tickets) >= 10) {
+				$block->moreLink = BASE_URL."/tickets?{$listType}Person={$person->getId()}";
+			}
+			$this->template->blocks['right'][] = $block;
 		}
 	}
 
@@ -143,18 +153,8 @@ class PeopleController extends Controller
 		}
 
 		if (isset($_POST['firstname'])) {
-			$fields = array(
-				'firstname','middlename','lastname','email','phoneNumber','organization',
-				'address','city','state','zip'
-			);
-			foreach ($fields as $field) {
-				if (isset($_POST[$field])) {
-					$set = 'set'.ucfirst($field);
-					$person->$set($_POST[$field]);
-				}
-			}
-
 			try {
+				$person->handleUpdate($_POST);
 				$person->save();
 
 				if (isset($_REQUEST['return_url'])) {
@@ -235,13 +235,13 @@ class PeopleController extends Controller
 			array('personA'=>$personA,'personB'=>$personB)
 		);
 
-		$this->template->blocks['merge-panel-one'][] = new Block(
+		$this->template->blocks['left'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personA,'disableButtons'=>true)
 		);
 		$reportedTickets = $personA->getReportedTickets();
 		if (count($reportedTickets)) {
-			$this->template->blocks['merge-panel-one'][] = new Block(
+			$this->template->blocks['left'][] = new Block(
 				'tickets/searchResults.inc',
 				array(
 					'ticketList'=>$personA->getReportedTickets(),
@@ -252,13 +252,13 @@ class PeopleController extends Controller
 			);
 		}
 
-		$this->template->blocks['merge-panel-two'][] = new Block(
+		$this->template->blocks['right'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personB,'disableButtons'=>true)
 		);
 		$reportedTickets = $personB->getReportedTickets();
 		if (count($reportedTickets)) {
-			$this->template->blocks['merge-panel-two'][] = new Block(
+			$this->template->blocks['right'][] = new Block(
 				'tickets/searchResults.inc',
 				array(
 					'ticketList'=>$personB->getReportedTickets(),

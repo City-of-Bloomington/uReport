@@ -4,8 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Category extends MongoRecord
+class Category extends ActiveRecord
 {
+	protected $tablename = 'categories';
+
+	protected $department;
+	protected $categoryGroup;
+
 	/**
 	 * Populates the object with data
 	 *
@@ -25,15 +30,12 @@ class Category extends MongoRecord
 				$result = $id;
 			}
 			else {
-				$mongo = Database::getConnection();
+				$zend_db = Database::getConnection();
+				$sql = ActiveRecord::isId($id)
+					? 'select * from categories where id=?'
+					: 'select * from categories where name=?';
 
-				if (preg_match('/[0-9a-f]{24}/',$id)) {
-					$search = array('_id'=>new MongoId($id));
-				}
-				else {
-					$search = array('name'=>(string)$id);
-				}
-				$result = $mongo->categories->findOne($search);
+				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
 			if ($result) {
@@ -55,91 +57,51 @@ class Category extends MongoRecord
 	 */
 	public function validate()
 	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if(!$this->data['name']) {
-			throw new Exception('missingRequiredFields');
-		}
-
-		if (!$this->getData('group.name')) {
-			throw new Exception('categories/missingGroup');
-		}
+		if (!$this->data['name'])             { throw new Exception('categories/missingName');  }
+		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
 	}
 
-	/**
-	 * Saves this record back to the database
-	 */
-	public function save()
-	{
-		$this->validate();
-		$mongo = Database::getConnection();
-		$mongo->categories->save($this->data,array('safe'=>true));
-
-		$this->updateCategoryInTicketData();
-	}
-
-	public function updateCategoryInTicketData()
-	{
-		$mongo = Database::getConnection();
-		$mongo->tickets->update(
-			array('category._id'=>$this->data['_id']),
-			array('$set'=>array('category'=>$this->data)),
-			array('upsert'=>false,'multiple'=>true,'safe'=>false)
-		);
-	}
+	public function save() { parent::save(); }
 
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
 	public function __toString()                { return parent::get('name');                   }
-	public function getId()                     { return parent::get('_id');                    }
+	public function getId()                     { return parent::get('id');                     }
 	public function getName()                   { return parent::get('name');                   }
+	public function getDepartment_id()          { return parent::get('department_id');          }
+	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
 	public function getDescription()            { return parent::get('description');            }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
+	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
+	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
 
-	public function setName($s)                   { $this->data['name']                   = trim($s); }
-	public function setDescription($s)            { $this->data['description']            = trim($s); }
-	public function setPostingPermissionLevel($s) { $this->data['postingPermissionLevel'] = trim($s); }
-	public function setDisplayPermissionLevel($s) { $this->data['displayPermissionLevel'] = trim($s); }
+	public function setName                  ($s) { parent::set('name',                  $s); }
+	public function setDescription           ($s) { parent::set('description',           $s); }
+	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
+	public function setDisplayPermissionLevel($s) { parent::set('displayPermissionLevel',$s); }
+	public function setDepartment_id   ($id)           { parent::setForeignKeyField( 'Department',    'department_id',    $id); }
+	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( 'CategoryGroup', 'categoryGroup_id', $id); }
+	public function setDepartment   (Department    $o) { parent::setForeignKeyObject('Department',    'department_id',    $o);  }
+	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $o);  }
 
 	/**
 	 * @param array $post
 	 */
-	public function set($post)
+	public function handleUpdate($post)
 	{
-		$this->setName($post['name']);
-		$this->setGroup($post['group']);
-		$this->setDescription($post['description']);
-		$this->setDepartment($post['department']);
+		$this->setName                  ($post['name']);
+		$this->setDescription           ($post['description']);
+		$this->setDepartment_id         ($post['department_id']);
+		$this->setCategoryGroup_id      ($post['categoryGroup_id']);
 		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
 		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
-		$this->setCustomFields($post['custom_fields']);
+		$this->setCustomFields          ($post['custom_fields']);
 	}
-
-	/**
-	 * @return CategoryGroup
-	 */
-	public function getGroup()
-	{
-		if (isset($this->data['group']['_id'])) {
-			return new CategoryGroup($this->data['group']);
-		}
-	}
-
-	/**
-	 * @param string $id
-	 */
-	public function setGroup($id)
-	{
-		if ($id) {
-			$group = new CategoryGroup($id);
-			$this->data['group'] = $group->getData();
-		}
-		else {
-			unset($this->data['group']);
-		}
-	}
-
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
 	/**
 	 * Returns a PHP array representing the description of custom fields
 	 *
@@ -156,10 +118,7 @@ class Category extends MongoRecord
 	 */
 	public function getCustomFields()
 	{
-		if (isset($this->data['customFields'])) {
-			return $this->data['customFields'];
-		}
-		return array();
+		return json_decode(parent::get('customFields'));
 	}
 
 	/**
@@ -183,7 +142,7 @@ class Category extends MongoRecord
 		if ($json) {
 			$customFields = json_decode($json);
 			if (is_array($customFields)) {
-				$this->data['customFields'] = $customFields;
+				$this->data['customFields'] = $json;
 			}
 			else {
 				throw new JSONException(json_last_error());
@@ -194,32 +153,6 @@ class Category extends MongoRecord
 		}
 	}
 
-	/**
-	 * @return Department
-	 */
-	public function getDepartment()
-	{
-		if (isset($this->data['department'])) {
-			return new Department($this->data['department']);
-		}
-	}
-
-	/**
-	 * @param string|Department $department
-	 */
-	public function setDepartment($department)
-	{
-		if (!$department instanceof Department) {
-			$department = new Department($department);
-		}
-		$this->data['department'] = $department->getData();
-	}
-
-
-
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
 	/**
 	 * @param Person $person
 	 * @return bool
@@ -253,19 +186,6 @@ class Category extends MongoRecord
 			);
 		}
 		return true;
-	}
-
-	/**
-	 * Returns the array of distinct values used for Categories in the system
-	 *
-	 * @param string $fieldname
-	 * @return array
-	 */
-	public static function getDistinct($fieldname)
-	{
-		$mongo = Database::getConnection();
-		$result = $mongo->command(array('distinct'=>'categories','key'=>$fieldname));
-		return $result['values'];
 	}
 }
 

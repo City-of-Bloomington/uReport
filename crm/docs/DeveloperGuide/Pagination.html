@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pagination</title>
+	<style></style>
+</head>
+<body>
+	<h1>Pagination</h1>
+	<p>We use the List classes to collect the results from the database.
+	These List classes extend the ZendDbResultIterator which handles actually
+	executing the query.  The ZendDbResultIterator also handles pagination by
+	rewriting the query as necessary.
+	</p>
+	<p>Looking up data typically flows like this:</p>
+<code><pre>
+$list = new SomethingList(array('field'=>'value'));
+foreach ($list as $something) { // $something is a Something object
+    echo $something->getId();
+}
+</pre></code>
+
+	<p>The query isn't actually executed until the first attempt to use
+	the data.  In addition, turning on Pagination will reset the results
+	from query.  This leads to the query executing again on the next use of the data.
+	</p>
+<code><pre>
+$list = new SomethingList();
+$list->find();                  // prepares "select * from something"
+foreach ($list as $something) { // executes "select * from something and loads all results
+    echo $something->getId();
+}
+</pre></code>
+	<p>If we want to do pagination, we can turn it on anytime, but it's most
+	effecient to make sure to turn it on before reading from the List.</p>
+	<h2>Ineffecient</h2>
+<code><pre>
+$list = new SomethingList();
+$list->find();                      // query prepared
+if (count($list)) {                 // query executed and all results loaded into memory
+    $list->setPagination(10, 1);    // results thrown away and query rewritten
+    foreach ($list as $something) { // query executed again and smaller results loaded
+        echo $something->getId();
+    }
+}
+</pre></code>
+	<h2>Effecient</h2>
+<code><pre>
+// Effecient
+$list = new SomethingList();
+$list->find();                      // query prepared
+$list->setPagination(10, 1);        // query rewritten
+if (count($list)) {                 // query executed and 10 results loaded
+    foreach ($list as $something) {
+        echo $something->getId();
+    }
+}
+</pre></code>
+</body>
+</html>

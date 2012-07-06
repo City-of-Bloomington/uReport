@@ -94,15 +94,17 @@ class Open311Controller extends Controller
 		// Handle POST Service Request
 		elseif (isset($_POST['service_code'])) {
 			try {
-				$ticket = Open311Client::createTicket($_POST);
-				$ticket->save();
+				$ticket = new Ticket();
+				$ticket->handleAdd(Open311Client::translatePostArray($_POST));
 
 				// Media can only be attached after the ticket is saved
-				// It uses the ticket_id in the directory structure
+				// It uses the issue_id in the directory structure
 				if (isset($_FILES['media'])) {
+					$issue = $ticket->getIssue();
 					try {
-						$ticket->attachMedia($_FILES['media'],0);
-						$ticket->save();
+						$media = new Media();
+						$media->setIssue($issue);
+						$media->setFile($_FILES['media']);
 					}
 					catch (Exception $e) {
 						// Just ignore any media errors for now
@@ -126,7 +128,7 @@ class Open311Controller extends Controller
 		else {
 			$search = array();
 			if (isset($category) && $category->allowsDisplay($this->person)) {
-				$search['category'] = $category->getId();
+				$search['category_id'] = $category->getId();
 			}
 			if (!empty($_REQUEST['start_date'])) {
 				$search['start_date'] = $_REQUEST['start_date'];
@@ -137,9 +139,9 @@ class Open311Controller extends Controller
 			if (!empty($_REQUEST['status'])) {
 				$search['status'] = $_REQUEST['status'];
 			}
-			$ticketList = new TicketList($search);
-			$ticketList->limit(1000);
-			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$ticketList));
+			$tickets = new TicketList();
+			$tickets->find($search, null, 1000);
+			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$tickets));
 		}
 	}
 }

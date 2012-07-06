@@ -5,8 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-$dept = $_SESSION['USER']->getDepartment();
-if ($dept) {
+$department = $_SESSION['USER']->getDepartment();
+if ($department) {
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
@@ -27,7 +27,6 @@ if ($dept) {
 					<td><select name="status" id="status">
 							<option>open</option>
 							<?php
-								$department = new Department($dept['_id']);
 								$statuses = $department->getCustomStatuses();
 								foreach ($statuses as $status) {
 									$selected = $this->ticket->getStatus()==$status

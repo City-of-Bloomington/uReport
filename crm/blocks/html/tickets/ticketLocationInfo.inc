@@ -7,38 +7,38 @@
 */
 ?>
 <div class="ticketLocationInfo">
-	<h2>Additional Location Information</h2>
-	<table>
 	<?php
-		$additionalFields = array('city','state','zip','latitude','longitude');
-		foreach ($additionalFields as $field) {
+		$list = '	<div class="additionalLocationInfo"><h2>Additional Location Information</h2>
+					<ul class="twoColumnlist">';
+		$locationFields = array('city','state','zip','latitude','longitude');
+		foreach ($locationFields as $field) {
 			$get = 'get'.ucfirst($field);
 			$$field = View::escape($this->ticket->$get());
 			if ($$field) {
-				echo "<tr><th>$field</th><td>{$$field}</td></tr>";
+				$list.= "<li><label>$field: </label>{$$field}</li>";
 			}
 		}
-		foreach (array_keys(AddressService::$customFieldDescriptions) as $field) {
-			$value = View::escape($this->ticket->get($field));
-			if ($value) {
-				echo "<tr><th>$field</th><td>$value</td></tr>";
+		$additionalFields = $this->ticket->getAdditionalFields();
+		if ($additionalFields) {
+			foreach ($additionalFields as $key=>$value) {
+				$list.= "<li><label>$key:</label> $value</li>";
 			}
 		}
-	?>
-	</table>
-	<?php
+		$list.= '</ul></div>';
+
 		if ($latitude && $longitude) {
 			echo "
 			<div id=\"location_map\"></div>
 			<script type=\"text/javascript\">
-				var DEFAULT_LATITUDE = ".DEFAULT_LATITUDE.";
+				var DEFAULT_LATITUDE  = ".DEFAULT_LATITUDE.";
 				var DEFAULT_LONGITUDE = ".DEFAULT_LONGITUDE.";
-				var points = [{latitude:$latitude,longitude:$longitude}];
+				var points = [{latitude:$latitude, longitude:$longitude}];
 			</script>
 			";
-			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-			$this->template->addToAsset('scripts',GOOGLE_MAPS);
-			$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/map.js');
+			$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
+			$this->template->addToAsset('scripts', GOOGLE_MAPS);
+			$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
 		}
+		echo $list;
 	?>
 </div>

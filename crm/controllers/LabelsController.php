@@ -9,19 +9,34 @@ class LabelsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 	}
 
 	public function index()
 	{
-		$this->template->blocks[] = new Block('lookups/labelList.inc');
+		$this->template->blocks[] = new Block('labels/list.inc');
 	}
 
 	public function update()
 	{
-		if (isset($_POST['labels'])) {
+		if (!empty($_REQUEST['label_id'])) {
 			try {
-				Lookups::save('labels',$_POST['labels']);
+				$label = new Label($_REQUEST['label_id']);
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+				header('Location: '.BASE_URL.'/labels');
+				exit();
+			}
+		}
+		else {
+			$label = new Label();
+		}
+
+		if (isset($_POST['name'])) {
+			$label->handleUpdate($_POST);
+			try {
+				$label->save();
 				header('Location: '.BASE_URL.'/labels');
 				exit();
 			}
@@ -30,6 +45,6 @@ class LabelsController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('lookups/updateLabelsForm.inc');
+		$this->template->blocks[] = new Block('labels/updateForm.inc',array('label'=>$label));
 	}
 }

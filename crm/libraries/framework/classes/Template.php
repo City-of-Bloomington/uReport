@@ -14,8 +14,9 @@ class Template extends View
 	private $filename;
 
 	public $outputFormat = 'html';
-	public $blocks = array();
-	private $assets = array();
+	public $blocks   = array();
+	private $assets  = array();
+	private $helpers = array();
 
 	/**
 	 * @param string $filename
@@ -133,7 +134,8 @@ class Template extends View
 					// The block they asked for might be inside a panel
 					else {
 						foreach ($value as $block) {
-							if ($block->getFile() == $target) {
+							if ($block->getFile() == $target
+								|| $block->title == $target) {
 								echo $block->render($this->outputFormat,$this);
 								continue;
 							}
@@ -167,5 +169,18 @@ class Template extends View
 		if (!in_array($data,$this->assets[$name])) {
 			$this->assets[$name][] = $data;
 		}
+	}
+
+	/**
+	 * Loads and returns a helper object
+	 */
+	public function getHelper($functionName)
+	{
+		if (!array_key_exists($functionName, $this->helpers)) {
+			$class = ucfirst($functionName);
+			require_once APPLICATION_HOME."/templates/{$this->outputFormat}/helpers/$class.php";
+			$this->helpers[$functionName] = new $class();
+		}
+		return $this->helpers[$functionName];
 	}
 }

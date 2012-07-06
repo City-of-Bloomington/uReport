@@ -12,8 +12,8 @@ class IssuesController extends Controller
 	public function index()
 	{
 		try {
-			$ticket = new Ticket($_GET['ticket_id']);
-			$issues = $ticket->getIssues();
+			$issue = new Issue($_GET['issue_id']);
+			$ticket = $issue->getTicket();
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -21,20 +21,12 @@ class IssuesController extends Controller
 			exit();
 		}
 
-		if (!isset($issues[$_GET['index']])) {
-			$_SESSION['errorMessages'][] = new Exception('tickets/unknownIssue');
-			header('Location: '.$ticket->getURL());
-			exit();
-		}
-
-		$issue = $issues[$_GET['index']];
-
 		$this->template->setFilename('issues');
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/ticketInfo.inc',array('ticket'=>$ticket)
 		);
 
-		$person = $issue->getPersonObject('reportedByPerson');
+		$person = $issue->getReportedByPerson();
 		if ($person) {
 			$this->template->blocks['person-panel'][] = new Block(
 				'people/personInfo.inc',
@@ -42,8 +34,7 @@ class IssuesController extends Controller
 			);
 		}
 		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueInfo.inc',
-			array('ticket'=>$ticket,'issue'=>$issue,'index'=>$_GET['index'])
+			'tickets/issueInfo.inc', array('issue'=>$issue)
 		);
 	}
 
@@ -54,9 +45,9 @@ class IssuesController extends Controller
 	 * at a different url.  Once the user has chosen a new person, they will
 	 * return here, passing in the person_id they have chosen
 	 *
-	 * @param REQUEST ticket_id
-	 * @param REQUEST index The index number of the issue
-	 * @param REQUEST person_id The new person to apply to the issue
+	 * @param REQUEST issue_id   Existing issues are edited by passing in an Issue
+	 * @param REQUEST ticket_id  New issues are created by passing in a Ticket
+	 * @param REQUEST person_id  The new reportedByPerson
 	 */
 	public function update()
 	{
@@ -64,15 +55,19 @@ class IssuesController extends Controller
 		// Load all the data that's passed in
 		//-------------------------------------------------------------------
 		try {
-			$ticket = new Ticket($_REQUEST['ticket_id']);
-			$issues = $ticket->getIssues();
-			if (isset($_REQUEST['index']) && array_key_exists($_REQUEST['index'],$issues)) {
-				$issue = $issues[$_REQUEST['index']];
-				$index = (int)$_REQUEST['index'];
+			// To edit existing issues, pass in the issue_id
+			if (!empty($_REQUEST['issue_id'])) {
+				$issue = new Issue($_REQUEST['issue_id']);
+				$ticket = $issue->getTicket();
 			}
+			// To add new issues, pass in the Ticket to add the issue to
 			else {
-				$issue = new Issue();
-				$index = null;
+				if (!empty($_REQUEST['ticket_id'])) {
+					$ticket = new Ticket($_REQUEST['ticket_id']);
+					$issue = new Issue();
+					$issue->setTicket($ticket);
+				}
+				else { throw new Exception('tickets/unknownTicket'); }
 			}
 		}
 		catch (Exception $e) {
@@ -82,18 +77,16 @@ class IssuesController extends Controller
 		}
 
 		if (isset($_REQUEST['person_id'])) {
-			$issue->setReportedByPerson($_REQUEST['person_id']);
+			$issue->setReportedByPerson_id($_REQUEST['person_id']);
 		}
 
 		//-------------------------------------------------------------------
 		// Handle any stuff the user posts
 		//-------------------------------------------------------------------
-		if (isset($_POST['issue'])) {
-			$issue->set($_POST['issue']);
-			$ticket->updateIssues($issue,$index);
-
+		if (isset($_POST['issueType_id'])) {
+			$issue->handleUpdate($_POST);
 			try {
-				$ticket->save();
+				$issue->save();
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
@@ -115,36 +108,21 @@ class IssuesController extends Controller
 			array('history'=>$ticket->getHistory())
 		);
 		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/updateIssueForm.inc',
-			array('ticket'=>$ticket,'index'=>$index,'issue'=>$issue)
+			'tickets/updateIssueForm.inc', array('issue'=>$issue, 'ticket'=>$ticket)
 		);
-		$this->template->blocks['location-panel'][] = new Block(
-			'locations/locationInfo.inc',
-			array('location'=>$ticket->getLocation())
-		);
-		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
-				)
-			);
-		}
+
+		$this->addLocationInfoBlocks($ticket);
 	}
 
 	/**
-	 * @param GET ticket_id
-	 * @param GET index The index of the issue inside the ticket
+	 * @param GET issue_id
 	 */
 	public function delete()
 	{
-		// Load the ticket
+		// Load the issue
 		try {
-			$ticket = new Ticket($_REQUEST['ticket_id']);
-			$issues = $ticket->getIssues();
+			$issue = new Issue($_REQUEST['issue_id']);
+			$ticket = $issue->getTicket();
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -152,24 +130,18 @@ class IssuesController extends Controller
 			exit();
 		}
 
-		if (!isset($issues[$_GET['index']])) {
-			$_SESSION['errorMessages'][] = new Exception('tickets/unknownIssue');
-			header('Location: '.$ticket->getURL());
-			exit();
-		}
-		$issue = $issues[$_GET['index']];
-
 		// Once they've confirmed, go ahead and do the delete
 		if (isset($_REQUEST['confirm'])) {
 			try {
-				$ticket->removeIssue($_GET['index']);
-				$ticket->save();
+				$ticket = $issue->getTicket();
+				$issue->delete();
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.$this->return_url);
+				#header('Location: '.$this->return_url);
+				print_r($e);
 				exit();
 			}
 		}
@@ -177,45 +149,36 @@ class IssuesController extends Controller
 		// Display the confirmation form
 		$this->template->blocks[] = new Block(
 			'confirmForm.inc',
-			array('title'=>'Confirm Delete','return_url'=>$ticket->getURL())
+			array('title'=>'Confirm Delete', 'return_url'=>$ticket->getURL())
 		);
 		$this->template->blocks[] = new Block(
 			'tickets/issueInfo.inc',
-			array('ticket'=>$ticket,'issue'=>$issue,'index'=>$_GET['index'],'disableButtons'=>true)
+			array('issue'=>$issue, 'disableButtons'=>true)
 		);
 	}
 
 	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST index The index of the issue
+	 * @param REQUEST issue_id
 	 */
 	public function respond()
 	{
-		// Load the ticket
+		// Load the issue
 		try {
-			$ticket = new Ticket($_REQUEST['ticket_id']);
-			$index = (int)$_REQUEST['index'];
-			$issue = $ticket->getIssue($index);
-			if (!$issue) {
-				throw new Exception('unknownIssue');
-			}
+			$issue = new Issue($_REQUEST['issue_id']);
+			$ticket = $issue->getTicket();
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL);
+			header('Location: '.BASE_URL.'/tickets');
 			exit();
 		}
 
 		// Handle what the user posts
-		if (isset($_POST['contactMethod'])) {
-			$response = new Response();
-			$response->setPerson($_SESSION['USER']);
-			$response->setContactMethod($_POST['contactMethod']);
-			$response->setNotes($_POST['notes']);
-
+		if (isset($_POST['contactMethod_id'])) {
+			$r = new Response();
+			$r->handleUpdate($_POST);
 			try {
-				$ticket->addResponse($index,$response);
-				$ticket->save();
+				$r->save();
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
@@ -235,15 +198,23 @@ class IssuesController extends Controller
 			array('history'=>$ticket->getHistory())
 		);
 		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/responseForm.inc',
-			array('ticket'=>$ticket,'index'=>$index)
+			'tickets/responseForm.inc', array('issue'=>$issue)
 		);
+
+		$this->addLocationInfoBlocks($ticket);
+	}
+
+	/**
+	 * @param Ticket $ticket
+	 */
+	private function addLocationInfoBlocks(Ticket $ticket)
+	{
 		if ($ticket->getLocation()) {
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-left'][] = new Block(
 				'locations/locationInfo.inc',
-				array('location'=>$ticket->getLocation())
+				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 			);
-			$this->template->blocks['location-panel'][] = new Block(
+			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),

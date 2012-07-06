@@ -11,11 +11,28 @@ class CategoriesController extends Controller
 		$categoryList = new CategoryList();
 		$categoryList->find();
 
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block(
 			'categories/categoryList.inc',
 			array('categoryList'=>$categoryList)
 		);
+	}
+
+	public function view()
+	{
+		if ($this->template->outputFormat == 'html') {
+			$this->template->setFilename('backend');
+		}
+
+		if (!empty($_REQUEST['category_id'])) {
+			try {
+				$category = new Category($_REQUEST['category_id']);
+				$this->template->blocks[] = new Block('categories/info.inc', array('category'=>$category));
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
 	}
 
 	public function update()
@@ -38,7 +55,7 @@ class CategoriesController extends Controller
 
 		if (isset($_POST['name'])) {
 			try {
-				$category->set($_POST);
+				$category->handleUpdate($_POST);
 				$category->save();
 				header('Location: '.BASE_URL.'/categories');
 				exit();
@@ -48,7 +65,7 @@ class CategoriesController extends Controller
 			}
 		}
 
-		$this->template->setFilename('two-column');
+		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc',array('category'=>$category));
 	}
 
@@ -59,7 +76,9 @@ class CategoriesController extends Controller
 	 */
 	public function choose()
 	{
-		$return_url = new URL($_GET['return_url']);
+		$return_url = !empty($_GET['return_url'])
+			? new URL($_GET['return_url'])
+			: new URL(BASE_URL.'/categories/view');
 
 		$categoryList = new CategoryList();
 		$categoryList->find(null,array('name'=>1));

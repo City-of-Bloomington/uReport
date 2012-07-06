@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'full-width';
+	$this->layout = 'stackedPanels';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -14,21 +14,19 @@
 
 	<div id="panel-container">
 		<div id="content-panel">
-			<?php include FRAMEWORK.'/errorMessages.php'; ?>
-
-			<div id="ticket-panel">
-				<?php echo $this->includeBlocks('ticket-panel'); ?>
-			</div>
-			<div id="person-panel">
-				<?php echo $this->includeBlocks('person-panel'); ?>
-			</div>
-			<div id="issue-panel">
-				<?php echo $this->includeBlocks('issue-panel'); ?>
-			</div>
-			<div id="location-panel">
-				<?php echo $this->includeBlocks('location-panel'); ?>
-			</div>
 			<?php
+				include FRAMEWORK.'/errorMessages.php';
+
+				$panels = array(
+					'ticket-panel', 'person-panel', 'issue-panel', 'bottom-left', 'bottom-right'
+				);
+				foreach ($panels as $p) {
+					if (isset($this->blocks[$p])) {
+						echo "<div id=\"$p\" class=\"panel\">";
+						echo $this->includeBlocks($p);
+						echo "</div>";
+					}
+				}
 				echo $this->includeBlocks();
 			?>
 		</div>

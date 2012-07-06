@@ -7,8 +7,8 @@ var ISSUE_PERSON_CHANGER = {
 				on: {
 					complete: function (id, o, args) {
 						var person = Y.JSON.parse(o.responseText);
-						Y.one('#issue-reportedByPerson').set('value', person.id);
-						Y.one('#issue-reportedByPerson-name').setContent(person.fullname);
+						Y.one('#reportedByPerson_id').set('value', person.id);
+						Y.one('#reportedByPerson-name').setContent(person.fullname);
 						ISSUE_PERSON_CHANGER.popup.close();
 					}
 				}

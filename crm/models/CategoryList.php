@@ -2,11 +2,11 @@
 /**
  * A collection class for Category objects
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class CategoryList extends MongoResultIterator
+class CategoryList extends ZendDbResultIterator
 {
 	/**
 	 * @param array $fields
@@ -14,6 +14,10 @@ class CategoryList extends MongoResultIterator
 	public function __construct($fields=null)
 	{
 		parent::__construct();
+
+		$this->select->from(array('c'=>'categories'), 'c.*');
+		$this->select->joinLeft(array('g'=>'categoryGroups'),'c.categoryGroup_id=g.id', array());
+
 		if (is_array($fields)) {
 			$this->find($fields);
 		}
@@ -23,11 +27,12 @@ class CategoryList extends MongoResultIterator
 	 * Populates the collection, using strict matching of the requested fields
 	 *
 	 * @param array $fields
-	 * @param array $order
+	 * @param string|array $order Multi-column sort should be given as an array
+	 * @param int $limit
+	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order=array('group.order'=>1,'group.name'=>1,'name'=>1))
+	public function find($fields=null,$order=array('g.ordering','g.name','c.name'),$limit=null,$groupBy=null)
 	{
-		$search = array();
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
@@ -36,15 +41,12 @@ class CategoryList extends MongoResultIterator
 						if ($value instanceof Person) {
 							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$search['$or'] = array(
-									array('postingPermissionLevel'=>'public'),
-									array('postingPermissionLevel'=>'anonymous')
-								);
+								$this->select->where("c.postingPermissionLevel in ('public','anonymous')");
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$search['postingPermissionLevel'] = 'anonymous';
+							$this->select->where('c.postingPermissionLevel=?','anonymous');
 						}
 						break;
 
@@ -53,47 +55,40 @@ class CategoryList extends MongoResultIterator
 						if ($value instanceof Person) {
 							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$search['$or'] = array(
-									array('displayPermissionLevel'=>'public'),
-									array('displayPermissionLevel'=>'anonymous')
-								);
+								$this->select->where("c.displayPermissionLevel in ('public','anonymous')");
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$search['displayPermissionLevel'] = 'anonymous';
+							$this->select->where('c.displayPermissionLevel=?','anonymous');
 						}
+						break;
+					case 'department_id':
+						$this->select->joinLeft(array('d'=>'department_categories'),'c.id=d.category_id', array());
+						$this->select->where('d.department_id=?', $value);
 						break;
 
 					default:
 						if ($value) {
-							$search[$key] = $value;
+							$this->select->where("c.$key=?",array($value));
 						}
 				}
 			}
 		}
 		// Only get categories this user is allowed to see or post to
 		if (!isset($_SESSION['USER'])) {
-			$search['$or'] = array(
-				array('postingPermissionLevel'=>'anonymous'),
-				array('displayPermissionLevel'=>'anonymous')
-			);
+			$this->select->where("c.postingPermissionLevel='anonymous' or c.displayPermissionLevel='anonymous'");
 		}
 		elseif ($_SESSION['USER']->getRole()!='Staff' && $_SESSION['USER']->getRole()!='Administrator') {
-			$search['$or'] = array(
-				array('postingPermissionLevel'=>array('$in'=>array('public','anonymous'))),
-				array('displayPermissionLevel'=>array('$in'=>array('public','anonymous')))
-			);
+			$this->select->where("c.postingPermissionLevel in ('public','anonymous') or c.displayPermissionLevel in ('public','anonymous')");
 		}
 
-		if (count($search)) {
-			$this->cursor = $this->mongo->categories->find($search);
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
 		}
-		else {
-			$this->cursor = $this->mongo->categories->find();
-		}
-		if ($order) {
-			$this->cursor->sort($order);
+		if ($groupBy) {
+			$this->select->group($groupBy);
 		}
 	}
 
@@ -103,9 +98,9 @@ class CategoryList extends MongoResultIterator
 	 * @param int $key The index of the result row to load
 	 * @return Category
 	 */
-	public function loadResult($data)
+	public function loadResult($key)
 	{
-		return new Category($data);
+		return new Category($this->result[$key]);
 	}
 
 	/**

@@ -2,11 +2,11 @@
 /**
  * A collection class for Client objects
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class ClientList extends MongoResultIterator
+class ClientList extends ZendDbResultIterator
 {
 	/**
 	 * @param array $fields
@@ -20,43 +20,39 @@ class ClientList extends MongoResultIterator
 	}
 
 	/**
-	 * Populates the collection, using strict matching of the requested fields
+	 * Populates the collection
 	 *
 	 * @param array $fields
-	 * @param array $order
+	 * @param string|array $order Multi-column sort should be given as an array
+	 * @param int $limit
+	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order=array('name'=>1))
+	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
 	{
-		$search = array();
+		$this->select->from('clients');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$search[$key] = (string)$value;
+					$this->select->where("$key=?", $value);
 				}
 			}
 		}
-		if (count($search)) {
-			$this->cursor = $this->mongo->clients->find($search);
+		$this->select->order($order);
+		if ($limit) {
+			$this->select->limit($limit);
 		}
-		else {
-			$this->cursor = $this->mongo->clients->find();
-		}
-		if ($order) {
-			$this->cursor->sort($order);
+		if ($groupBy) {
+			$this->select->group($groupBy);
 		}
 	}
 
 	/**
-	 * Hydrates all the Client objects from a database result set
+	 * Loads a single object for the row returned from ZendDbResultIterator
 	 *
-	 * This is a callback function, called from ZendDbResultIterator.  It is
-	 * called once per row of the result.
-	 *
-	 * @param int $key The index of the result row to load
-	 * @return Client
+	 * @param array $key
 	 */
-	public function loadResult($data)
+	protected function loadResult($key)
 	{
-		return new Client($data);
+		return new Client($this->result[$key]);
 	}
 }

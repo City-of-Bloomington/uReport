@@ -1,18 +1,18 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+$c = $this->ticket->getCategory();
+$service_name = $c ? View::escape($c->getName()) : '';
+$service_code = $c ? $c->getId() : '';
+
 $status = strtolower($this->ticket->getStatus());
-$service_name = View::escape($this->ticket->getData('category.name'));
-$service_code = $this->ticket->getData('category._id');
 
 $issue = $this->ticket->getIssue();
 $description = View::escape($issue->getDescription());
-
-$department = View::escape($this->ticket->getData('assignedPerson.department.name'));
 
 $h = $this->ticket->getHistory();
 $history = end($h);
@@ -27,6 +27,15 @@ if (count($media)) {
 	$media_url = $m->getURL();
 }
 
+$agency_responsible = '';
+$p = $this->ticket->getAssignedPerson();
+if ($p) {
+	$d = $p->getDepartment();
+	if ($d) {
+		$agency_responsible = View::escape($d->getName());
+	}
+}
+
 echo "
 <service_requests>
 	<request>
@@ -35,11 +44,11 @@ echo "
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
 		<description>$description</description>
-		<agency_responsible>$department</agency_responsible>
+		<agency_responsible>$agency_responsible</agency_responsible>
 		<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
 		<address>$address</address>
-		<address_id>{$this->ticket->getAddress_id()}</address_id>
+		<address_id>{$this->ticket->getAddressId()}</address_id>
 		<zipcode>$zipcode</zipcode>
 		<lat>{$this->ticket->getLatitude()}</lat>
 		<long>{$this->ticket->getLongitude()}</long>

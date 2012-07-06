@@ -40,14 +40,14 @@ if (userIsAllowed('people','update') && !$this->disableButtons) {
 }
 
 
-$name = View::escape($this->person->getFullname());
-$phone = View::escape($this->person->getPhoneNumber());
-$email = View::escape($this->person->getEmail());
+$name         = View::escape($this->person->getFullname());
+$phone        = View::escape($this->person->getPhoneNumber());
+$email        = View::escape($this->person->getEmail());
 $organization = View::escape($this->person->getOrganization());
-$address = View::escape($this->person->getAddress());
-$city = View::escape($this->person->getCity());
-$state = View::escape($this->person->getState());
-$zip = View::escape($this->person->getZip());
+$address      = View::escape($this->person->getAddress());
+$city         = View::escape($this->person->getCity());
+$state        = View::escape($this->person->getState());
+$zip          = View::escape($this->person->getZip());
 echo "
 <div class=\"personInfo\">
 	<h1>$name $editButton</h1>

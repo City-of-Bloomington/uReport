@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = 'full-width';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>
@@ -11,15 +10,11 @@
 		include $dir.'/partials/banner.inc';
 		include $dir.'/partials/menubar.inc';
 	?>
-
 	<div id="panel-container">
-		<div id="content-panel">
-			<?php
-				include FRAMEWORK.'/errorMessages.php';
-
-				echo $this->includeBlocks();
-			?>
-		</div>
+	<?php
+		include FRAMEWORK.'/errorMessages.php';
+		echo $this->includeBlocks();
+	?>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>
 </body>

@@ -23,7 +23,9 @@
 		</thead>
 		<tbody>
 		<?php
-			foreach (ActionList::getActions() as $action) {
+			$list = new ActionList();
+			$list->find();
+			foreach ($list as $action) {
 				$editButton = '';
 				if (userIsAllowed('actions','update')) {
 					$editButton = "

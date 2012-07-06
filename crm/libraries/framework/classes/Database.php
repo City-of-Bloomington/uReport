@@ -2,7 +2,7 @@
 /**
  * Singleton for the Database connection
  *
- * @copyright 2006-2011 City of Bloomington, Indiana
+ * @copyright 2006-2009 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -20,20 +20,20 @@ class Database
 			self::$connection=null;
 		}
 		if (!self::$connection) {
-			$parameters = array('connect'=>true);
-			if (defined('DB_USER')) {
-				$parameters['username'] = DB_USER;
-				$parameters['password'] = DB_PASS;
-			}
 			try {
-				self::$connection = new Mongo(DB_ADAPTER.'://'.DB_HOST);
+				$parameters = array('host'    =>DB_HOST,
+									'username'=>DB_USER,
+									'password'=>DB_PASS,
+									'dbname'  =>DB_NAME,
+									'options' =>array(Zend_Db::AUTO_QUOTE_IDENTIFIERS=>false));
+				self::$connection = Zend_Db::factory(DB_ADAPTER,$parameters);
+				self::$connection->getConnection();
 			}
 			catch (Exception $e) {
 				die($e->getMessage());
 			}
 		}
-		$db = DB_NAME;
-		return self::$connection->$db;
+		return self::$connection;
 	}
 
 	/**
@@ -53,8 +53,7 @@ class Database
 			case 'oci8':
 				return 'oracle';
 				break;
-			default:
-				return strtolower(DB_ADAPTER);
 		}
+
 	}
 }
