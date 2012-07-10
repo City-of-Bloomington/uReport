@@ -271,7 +271,11 @@ class Person extends ActiveRecord
 	public function getPhones()
 	{
 		if (!count($this->phones) && $this->getId()) {
-			$this->phones = new PhoneList(array('person_id'=>$this->getId()));
+			$zend_db = Database::getConnection();
+			$result = $zend_db->fetchAll('select * from phones where person_id=?', $this->getId());
+			foreach ($result as $r) {
+				$this->phones[] = new Phone($r);
+			}
 		}
 		return $this->phones;
 	}
