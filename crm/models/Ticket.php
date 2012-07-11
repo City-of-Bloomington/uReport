@@ -350,6 +350,11 @@ class Ticket extends ActiveRecord
 				throw $e;
 			}
 			$zend_db->commit();
+
+			$search = new Search();
+			$search->delete($ticket);
+			$search->add($this);
+			$search->solrClient->commit();
 		}
 	}
 
