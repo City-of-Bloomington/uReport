@@ -7,7 +7,7 @@
 	<h1>Test Client</h1>
 	<h2>http://localhost/crm/open311/v2/requests.xml</h2>
 	<form method="post" action="http://localhost/crm/open311/v2/requests.xml">
-		<fieldset>
+		<fieldset><legend>Ticket Info</legend>
 			<table>
 				<tr><th><label for="jurisdiction_id">Jurisdiction</label></th>
 					<td><input name="jurisdiction_id" id="jurisdiction_id" value="bloomington.in.gov" /></td>
@@ -22,6 +22,24 @@
 			<div><label for="description">Description</label></div>
 			<div><textarea name="description" id="description">Test Report</textarea></div>
 
+		</fieldset>
+		<fieldset><legend>Personal Info</legend>
+			<table>
+				<tr><th><label for="first_name">first_name</label></th>
+					<td><input name="first_name" id="first_name" /></td>
+				</tr>
+				<tr><th><label for="last_name">last_name</label></th>
+					<td><input name="last_name" id="last_name" /></td>
+				</tr>
+				<tr><th><label for="phone">phone</label></th>
+					<td><input name="phone" id="phone" /></td>
+				</tr>
+				<tr><th><label for="device_id">device_id</label></th>
+					<td><input name="device_id" id="device_id" /></td>
+				</tr>
+			</table>
+		</fieldset>
+		<fieldset>
 			<input type="submit" value="Submit" />
 		</fieldset>
 	</form>

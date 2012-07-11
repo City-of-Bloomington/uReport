@@ -68,7 +68,7 @@ class Open311Client
 			if (count($list) == 1) { $person = $list[0]; }
 			else {
 				$p = array();
-				foreach ($personFields as $key=>$field) {
+				foreach ($fields as $key=>$field) {
 					if (!empty($post[$key])) { $p[$field] = $post[$key]; }
 				}
 				if (count($p)) {
