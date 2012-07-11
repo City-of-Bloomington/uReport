@@ -94,6 +94,10 @@ class Person extends ActiveRecord
 			if ($this->hasTickets()) {
 				throw new Exception('people/personStillHasTickets');
 			}
+
+			$zend_db = Database::getConnection();
+			$zend_db->delete('phones', 'person_id='.$this->getId());
+
 			parent::delete();
 		}
 	}
