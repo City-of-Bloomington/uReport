@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <?php
-	$this->layout = '50_50';
+	$this->layout = '50-50';
 	$dir = dirname(__FILE__);
 	include $dir.'/partials/header.inc';
 ?>

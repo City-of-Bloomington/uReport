@@ -76,6 +76,10 @@ button, .button {
 	display:none;
 }
 
+.mergeForm            { width:100%; }
+.mergeForm fieldset   { overflow:auto; text-align:center; }
+.mergeForm .target_a,
+.mergeForm .target_b  { width:48%; float:left; }
 
 .tableOfContents li { display:inline; margin-right:2em; }
 
@@ -199,7 +203,7 @@ input.yui3-dd-drop-over    { background-color:green; }
 #location_map {
 	width:98%; height:400px;
 	border:2px solid black;
-	margin-bottom:.75em; 
+	margin-bottom:.75em;
 }
 /* Admin Styles */
 .interfaceBox table .button .edit {
