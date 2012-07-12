@@ -49,8 +49,8 @@ $ZEND_ACL->allow(null,
 
 // Staff permission
 $ZEND_ACL->allow('Staff',array('account','tickets','people','issues','media','reports'));
-$ZEND_ACL->allow('Staff','departments',array('index','view','choose'));
-$ZEND_ACL->allow('Staff','categories','choose');
+$ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
+$ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
 
 
 // Administrator is allowed access to everything
