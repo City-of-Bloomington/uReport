@@ -94,6 +94,10 @@ abstract class ActiveRecord
 	 * Dates should be in something strtotime() understands
 	 * http://www.php.net/manual/en/function.strtotime.php
 	 *
+	 * If we cannot parse the date using strtotime formats,
+	 * we'll try to parse it according to the DATE_FORMAT.
+	 * DATE_FORMAT must be set in configuration.inc
+	 *
 	 * @param string $dateField
 	 * @param string $date
 	 */
@@ -101,8 +105,16 @@ abstract class ActiveRecord
 	{
 		$date = trim($date);
 		if ($date) {
-			$date = new DateTime($date);
-			$this->data[$dateField] = $date->format(self::MYSQL_DATE_FORMAT);
+			try {
+				$d = new DateTime($date);
+			}
+			catch (Exception $e) {
+				$d = DateTime::createFromFormat(DATE_FORMAT, $date);
+				if (!$d) {
+					throw new Exception('unknownDateFormat');
+				}
+			}
+			$this->data[$dateField] = $d->format(self::MYSQL_DATE_FORMAT);
 		}
 		else {
 			$this->data[$dateField] = null;

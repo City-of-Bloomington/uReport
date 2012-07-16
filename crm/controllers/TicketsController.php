@@ -297,8 +297,8 @@ class TicketsController extends Controller
 		$ticket = $this->loadTicket($_POST['ticket_id']);
 
 		$history = new TicketHistory();
-		$history->handleUpdate($_POST);
 		try {
+			$history->handleUpdate($_POST);
 			$history->save();
 		}
 		catch (Exception $e) {
