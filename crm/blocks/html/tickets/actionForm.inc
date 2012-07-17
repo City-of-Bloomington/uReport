@@ -30,7 +30,10 @@ if (count($actions)) {
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="actionDate">Date</label></td>
+				<tr><td><label for="actionDate">Date</label>
+				<p class="help"><?php
+	echo str_replace(array('Y','m','d'), array('yyyy','mm','dd'), DATE_FORMAT);
+?></p></td>
 					<td><input name="actionDate" id="actionDate"
 							value="<?php echo date(DATE_FORMAT); ?>" />
 					</td>
