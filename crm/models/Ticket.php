@@ -483,6 +483,7 @@ class Ticket extends ActiveRecord
 				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
 			}
 			$history->save();
+			$history->sendNotification($this);
 		}
 		catch (Exception $e) {
 			$zend_db->rollBack();
