@@ -6,9 +6,11 @@
  */
 class Report
 {
-	private static $zend_db;
 	private static $select;
 
+	/**
+	 * @return array
+	 */
 	public static function assignments($get)
 	{
 		$where = self::handleSearchParameters($get);
@@ -29,8 +31,8 @@ class Report
 					t.resolution_id, r.name
 				order by p.lastname, p.firstname, c.name, t.status, t.resolution_id";
 
-		self::$zend_db = Database::getConnection();
-		$result = self::$zend_db->fetchAll($sql);
+		$zend_db = Database::getConnection();
+		$result = $zend_db->fetchAll($sql);
 		$d = array();
 		foreach ($result as $r) {
 			$pid = $r['assignedPerson_id'];
@@ -47,6 +49,9 @@ class Report
 		return $d;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function categories($get)
 	{
 		$where = self::handleSearchParameters($get);
@@ -66,9 +71,9 @@ class Report
 					r.name
 				order by c.name, p.lastname, p.firstname, t.status desc, t.resolution_id
 		";
-		self::$zend_db = Database::getConnection();
+		$zend_db = Database::getConnection();
 		$d = array();
-		$result = self::$zend_db->fetchAll($sql);
+		$result = $zend_db->fetchAll($sql);
 		foreach ($result as $r) {
 			$cid = $r['category_id'];
 			$pid = $r['assignedPerson_id'];
@@ -123,4 +128,99 @@ class Report
 			return "where $options";
 		}
 	}
+
+	public static function currentOpenTickets()
+	{
+		$sql = "select t.category_id, c.name as category, sum(status='open') as open
+				from tickets t
+				join categories c on t.category_id=c.id
+				group by t.category_id
+				having open>0
+				order by open";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
+	/**
+	 * Returns the tickets opened in the past 24 hours
+	 *
+	 * @return array
+	 */
+	public static function openedTickets()
+	{
+		$sql = "select t.category_id, c.name as category, sum(status='open') as open
+				from tickets t
+				join categories c on t.category_id=c.id
+				where t.enteredDate > (now() - interval 1 day)
+				group by t.category_id
+				having open>0
+				order by open";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
+	/**
+	 * Returns the tickets closed in the past 24 hours
+	 *
+	 * @return array
+	 */
+	public static function closedTickets()
+	{
+		$sql = "select t.category_id, c.name as category, sum(status='closed') as closed
+				from tickets t
+				join categories c on t.category_id=c.id
+				join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				where h.actionDate > (now() - interval 1 day)
+				group by t.category_id
+				order by closed";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
+	public static function openTicketsCount($start, $end)
+	{
+		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
+		$e = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($end));
+		$sql = "select date_format(t.enteredDate, '%Y-%m-%d') as date, count(*) as open
+				from tickets t
+				where '$s'<=t.enteredDate and t.enteredDate<='$e'
+				group by date
+				order by date";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
+	public static function closedTicketsCount($start, $end)
+	{
+		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
+		$e = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($end));
+		$sql = "select date_format(h.actionDate, '%Y-%m-%d') as date, count(*) as closed
+				from tickets t
+				join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				where '$s'<=h.actionDate and h.actionDate<='$e'
+				group by date
+				order by date";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
+	public static function categoryActivity()
+	{
+		$sql = "select c.name,
+					sum(h.action_id is null) as currentopen,
+					sum((now() - interval 1 day) <= t.enteredDate) as openedday,
+					sum((now() - interval 1 week) <= t.enteredDate) as openedweek,
+					sum((now() - interval 1 month) <= t.enteredDate) as openedmonth,
+					sum((now() - interval 1 day) <= h.actionDate) as closedday,
+					sum((now() - interval 1 week) <= h.actionDate) as closedweek,
+					sum((now() - interval 1 month) <= h.actionDate) as closedmonth
+				from tickets t
+				join categories c on t.category_id=c.id
+				left join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				group by t.category_id
+				order by c.name";
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchAll($sql);
+	}
+
 }

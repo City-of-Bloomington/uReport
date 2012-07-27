@@ -16,6 +16,9 @@ class ReportsController extends Controller
 
 	public function index()
 	{
+		$this->template->blocks['right'][] = new Block(
+			'reports/activity.inc'
+		);
 	}
 
 	public function assignments()

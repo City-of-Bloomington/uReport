@@ -1,4 +1,5 @@
 <head>
+	<meta charset="utf-8" />
 	<link rel="stylesheet" type="text/css" href="<?php echo YUI; ?>/cssreset/cssreset-min.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo YUI; ?>/cssfonts/fonts-min.css" />
 	<?php

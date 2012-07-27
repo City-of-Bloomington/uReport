@@ -219,6 +219,7 @@ create table responses (
 	contactMethod_id int       unsigned,
 	notes            text,
 	person_id        int       unsigned,
+	foreign key (issue_id)         references issues        (id),
 	foreign key (contactMethod_id) references contactMethods(id),
 	foreign key (person_id)        references people        (id)
 );
