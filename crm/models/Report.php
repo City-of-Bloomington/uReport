@@ -7,12 +7,24 @@
 class Report
 {
 	private static $select;
+	private static $closedAction;
+
+	/**
+	 * @return int
+	 */
+	public static function closedId()
+	{
+		if (!self::$closedAction) { self::$closedAction = new Action('close'); }
+		return self::$closedAction->getId();
+	}
 
 	/**
 	 * @return array
 	 */
 	public static function assignments($get)
 	{
+		$closed = self::closedId();
+
 		$where = self::handleSearchParameters($get);
 		$sql = "select t.assignedPerson_id, t.status, t.category_id,
 					p.firstname, p.lastname,
@@ -23,7 +35,7 @@ class Report
 				     join people        p on t.assignedPerson_id=p.id
 				left join categories    c on t.category_id=c.id
 				left join resolutions   r on t.resolution_id=r.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				$where
 				group by t.assignedPerson_id, t.status, t.category_id,
 					p.firstname, p.lastname,
@@ -54,6 +66,7 @@ class Report
 	 */
 	public static function categories($get)
 	{
+		$closed = self::closedId();
 		$where = self::handleSearchParameters($get);
 		$sql = "select c.id as category_id, c.name as category,
 					t.assignedPerson_id, t.status, t.resolution_id,
@@ -63,7 +76,7 @@ class Report
 				     join tickets       t on c.id=t.category_id
 				     join people        p on t.assignedPerson_id=p.id
 				left join resolutions   r on t.resolution_id=r.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				$where
 				group by c.id, c.name,
 					t.assignedPerson_id, t.status, t.resolution_id,
@@ -166,10 +179,11 @@ class Report
 	 */
 	public static function closedTickets()
 	{
+		$closed = self::closedId();
 		$sql = "select t.category_id, c.name as category, sum(status='closed') as closed
 				from tickets t
 				join categories c on t.category_id=c.id
-				join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				where h.actionDate > (now() - interval 1 day)
 				group by t.category_id
 				order by closed";
@@ -192,11 +206,12 @@ class Report
 
 	public static function closedTicketsCount($start, $end)
 	{
+		$closed = self::closedId();
 		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
 		$e = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($end));
 		$sql = "select date_format(h.actionDate, '%Y-%m-%d') as date, count(*) as closed
 				from tickets t
-				join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				where '$s'<=h.actionDate and h.actionDate<='$e'
 				group by date
 				order by date";
@@ -206,21 +221,22 @@ class Report
 
 	public static function categoryActivity()
 	{
+		$closed = self::closedId();
 		$sql = "select c.name,
-					sum(h.action_id is null) as currentopen,
-					sum((now() - interval 1 day) <= t.enteredDate) as openedday,
-					sum((now() - interval 1 week) <= t.enteredDate) as openedweek,
+					sum(t.status='open') as currentopen,
+					sum((now() - interval 1 day  ) <= t.enteredDate) as openedday,
+					sum((now() - interval 1 week ) <= t.enteredDate) as openedweek,
 					sum((now() - interval 1 month) <= t.enteredDate) as openedmonth,
-					sum((now() - interval 1 day) <= h.actionDate) as closedday,
-					sum((now() - interval 1 week) <= h.actionDate) as closedweek,
-					sum((now() - interval 1 month) <= h.actionDate) as closedmonth
+					sum((now() - interval 1 day  ) <= h.actionDate ) as closedday,
+					sum((now() - interval 1 week ) <= h.actionDate ) as closedweek,
+					sum((now() - interval 1 month) <= h.actionDate ) as closedmonth,
+					floor(avg(datediff(ifnull(h.actionDate, now()),t.enteredDate))) as days
 				from tickets t
 				join categories c on t.category_id=c.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=7
+				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				group by t.category_id
-				order by c.name";
+				order by currentopen desc";
 		$zend_db = Database::getConnection();
 		return $zend_db->fetchAll($sql);
 	}
-
 }

@@ -96,7 +96,7 @@ $ACTIVITY_DATA = array(
 		</div>
 	</div>
 	<div id="activityThisWeek" class="chartData">
-		<h3>Activity the past two weeks</h3>
+		<h3>Activity the past month</h3>
 		<div class="chart"></div>
 		<table>
 			<thead>
@@ -105,7 +105,7 @@ $ACTIVITY_DATA = array(
 			<tbody>
 			<?php
 				$d = array();
-				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-2 week'));
+				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 month'));
 				$end   = date(ActiveRecord::MYSQL_DATE_FORMAT);
 				$data = Report::openTicketsCount($start, $end);
 				foreach ($data as $r) {
@@ -126,7 +126,7 @@ $ACTIVITY_DATA = array(
 			</thead>
 			<tbody>
 			<?php
-				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 week'));
+				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 month'));
 				$end   = date(ActiveRecord::MYSQL_DATE_FORMAT);
 				$data = Report::closedTicketsCount($start, $end);
 				foreach ($data as $r) {
@@ -150,16 +150,21 @@ $ACTIVITY_DATA = array(
 	</div>
 </div>
 <div id="categoryActivity" class="yui3-skin-sam">
+	<p>* Average Days spent open is calculated as how long tickets stayed open during the entire
+		history of the data.
+	</p>
 	<div class="datatable"></div>
 	<table class="original">
 		<thead>
 			<tr><th></th>
 				<th>Open</th>
+				<th>Avg Days*</th>
 				<th colspan="3">Opened</th>
 				<th colspan="3">Closed</th>
 			</tr>
 			<tr><th></th>
 				<th>now</th>
+				<th>open</th>
 				<th>day</th>
 				<th>week</th>
 				<th>month</th>
@@ -174,7 +179,7 @@ $ACTIVITY_DATA = array(
 			foreach ($data as $r) {
 				$name = View::escape($r['name']);
 				$fields = array(
-					'currentopen',
+					'currentopen','days',
 					'openedday', 'openedweek', 'openedmonth',
 					'closedday', 'closedweek', 'closedmonth'
 				);
@@ -183,6 +188,7 @@ $ACTIVITY_DATA = array(
 				}
 				echo "
 				<tr><th>$name</th>
+					<th>$days</th>
 					<td>$currentopen</td>
 					<td>$openedday</td>
 					<td>$openedweek</td>
@@ -192,8 +198,12 @@ $ACTIVITY_DATA = array(
 					<td>$closedmonth</td>
 				</tr>
 				";
+				// Do all the data formatting in PHP, rather than
+				// relying on JavaScript to do the formatting.
 				foreach ($r as $i=>$v) {
-					if ($i != 'name') { $r[$i] = (int)$v; }
+					if ($i != 'name') {
+						$r[$i] = (int)$v;
+					}
 				}
 				$ACTIVITY_DATA['categoryActivity'][] = $r;
 			}

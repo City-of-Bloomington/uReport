@@ -21,7 +21,8 @@ YUI().use('node', 'charts', 'charts-legend', 'datatable', function (Y) {
 	var categoryActivity = new Y.DataTable({
 		columns: [
 			{ key: 'name', label: 'Category', sortable:true },
-			{ label: 'Open', children: [ {key: 'currentopen', label: 'now', sortable:true  } ] },
+			{ label: 'Open', children: [ { key: 'currentopen', label: 'now', sortable:true  } ] },
+			{ label: 'Avg Days*', children: [ { key: 'days', label: 'open', sortable:true } ] },
 			{ label: 'Opened in the last...', children: [
 				{ key:'openedday',   label:'day',   sortable:true  },
 				{ key:'openedweek',  label:'week',  sortable:true  },
