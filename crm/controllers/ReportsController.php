@@ -19,6 +19,8 @@ class ReportsController extends Controller
 		$this->template->blocks['right'][] = new Block(
 			'reports/activity.inc'
 		);
+		// Turn off the searchForm
+		unset($this->template->blocks['left'][1]);
 	}
 
 	public function assignments()

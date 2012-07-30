@@ -8,6 +8,7 @@
 <div>
 	<h2>Reports</h2>
 	<ul><li><a href="<?php echo BASE_URI; ?>/reports/assignments">Assignments</a></li>
-		<li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories  </a></li>
+		<li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories</a></li>
+		<li><a href="<?php echo BASE_URI; ?>/reports">Activity</a></li>
 	</ul>
 </div>
