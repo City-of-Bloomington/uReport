@@ -80,9 +80,6 @@ class Issue extends ActiveRecord
 			if (!$this->getEnteredByPerson_id()) {
 				$this->setEnteredByPerson($_SESSION['USER']);
 			}
-			if (!$this->getReportedByPerson_id()) {
-				$this->setReportedByPerson($_SESSION['USER']);
-			}
 		}
 
 	}
