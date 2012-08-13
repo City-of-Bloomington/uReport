@@ -20,8 +20,8 @@ if ($category) {
 			$issueData = $this->issue->getCustomFields();
 			$value = isset($issueData->$name) ? $issueData->$name : null;
 
-			$field_name = "issue[customFields][$name]";
-			$field_id = "issue-customFields-$name";
+			$field_name = "customFields[$name]";
+			$field_id   = "customFields-$name";
 			switch ($type) {
 				case 'singlevaluelist':
 					$value = View::escape($value);
