@@ -20,7 +20,7 @@ class Open311Client
 	public static function translatePostArray($post)
 	{
 		// Make sure we have a valid api_key
-		if (!empty($post['api_key'])) { $client = new Client($post['api_key']); }
+		if (!empty($post['api_key'])) { $client = Client::loadByApiKey($post['api_key']); }
 		else { throw new Exception('clients/unknownClient'); }
 
 		$p = array('client_id'=>$client->getId());

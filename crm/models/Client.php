@@ -11,6 +11,19 @@ class Client extends ActiveRecord
 	protected $tablename = 'clients';
 
 	protected $contactPerson;
+
+	public static function loadByApiKey($api_key)
+	{
+		$zend_db = Database::getConnection();
+		$row = $zend_db->fetchRow('select * from clients where api_key=?', array($api_key));
+		if (count($row)) {
+			return new Client($row);
+		}
+		else {
+			throw new Exception('clients/unknownClient');
+		}
+	}
+
 	/**
 	 * Populates the object with data
 	 *
@@ -30,9 +43,7 @@ class Client extends ActiveRecord
 				$result = $id;
 			}
 			else {
-				$sql = ActiveRecord::isId($id)
-					? 'select * from clients where id=?'
-					: 'select * from clients where api_key=?';
+				$sql = 'select * from clients where id=?';
 
 				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql, array($id));
