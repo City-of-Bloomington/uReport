@@ -74,10 +74,11 @@ function customErrorHandler ($errno, $errstr, $errfile, $errline)
 			curl_setopt($skidder,CURLOPT_POST,true);
 			curl_setopt($skidder,CURLOPT_HEADER,true);
 			curl_setopt($skidder,CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($skidder,CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($skidder,
 						CURLOPT_POSTFIELDS,
 						array('application_id'=>SKIDDER_APPLICATION_ID,
-							  'script'=>$_SERVER['SCRIPT_NAME'],
+							  'script'=>$script,
 							  'type'=>$errstr,
 							  'message'=>$message));
 			curl_exec($skidder);
@@ -130,6 +131,7 @@ function customExceptionHandler($exception)
 				 "From: apache@$_SERVER[SERVER_NAME]");
 		}
 		if (in_array('SKIDDER',$ERROR_REPORTING)) {
+			$script = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'];
 			$message = "Error on line {$exception->getLine()} of file {$exception->getFile()}:\n{$exception->getMessage()}\n";
 			$message.= print_r(debug_backtrace(),true);
 
@@ -137,10 +139,11 @@ function customExceptionHandler($exception)
 			curl_setopt($skidder,CURLOPT_POST,true);
 			curl_setopt($skidder,CURLOPT_HEADER,true);
 			curl_setopt($skidder,CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($skidder,CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($skidder,
 						CURLOPT_POSTFIELDS,
 						array('application_id'=>SKIDDER_APPLICATION_ID,
-							  'script'=>$_SERVER['REQUEST_URI'],
+							  'script'=>$script,
 							  'type'=>'Uncaught Exception',
 							  'message'=>$message));
 			curl_exec($skidder);
