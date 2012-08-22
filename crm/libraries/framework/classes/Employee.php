@@ -7,7 +7,7 @@
  * with your own LDAP server, you will probably need to customize
  * the fields used in this class.
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -94,13 +94,23 @@ class Employee implements ExternalIdentity
 	/**
 	 * @return string
 	 */
-	public function getUsername()	{ return $this->entry['uid'][0]; }
-	public function getFirstname()	{ return $this->entry['givenname'][0]; }
-	public function getLastname()	{ return $this->entry['sn'][0]; }
-	public function getEmail()		{ return $this->entry['mail'][0]; }
-	public function getPhone()		{ return $this->entry['telephonenumber'][0]; }
-	public function getAddress()	{ return $this->entry['postaladdress'][0]; }
-	public function getCity()		{ return $this->entry['l'][0]; }
-	public function getState()		{ return $this->entry['st'][0]; }
-	public function getZip()		{ return $this->entry['postalcode'][0]; }
+	public function getUsername()	{ return $this->get('uid'); }
+	public function getFirstname()	{ return $this->get('givenname'); }
+	public function getLastname()	{ return $this->get('sn'); }
+	public function getEmail()		{ return $this->get('mail'); }
+	public function getPhone()		{ return $this->get('telephonenumber'); }
+	public function getAddress()	{ return $this->get('postaladdress'); }
+	public function getCity()		{ return $this->get('l'); }
+	public function getState()		{ return $this->get('st'); }
+	public function getZip()		{ return $this->get('postalcode'); }
+
+	/**
+	 * Returns the first scalar value from the entry's field
+	 *
+	 * @param string $field
+	 * @return string
+	 */
+	private function get($field) {
+		return isset($this->entry[$field][0]) ? $this->entry[$field][0] : '';
+	}
 }
