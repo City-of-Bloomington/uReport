@@ -87,6 +87,11 @@ class PersonList extends ZendDbResultIterator
 		elseif (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
+					case 'user_account':
+						$value
+							? $this->select->where('username is not null')
+							: $this->select->where('username is null');
+						break;
 					case 'phoneNumber':
 						$this->select->where('phone.number like ?', $value);
 						break;
