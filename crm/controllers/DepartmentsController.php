@@ -67,7 +67,11 @@ class DepartmentsController extends Controller
 
 		$this->template->blocks[] = new Block(
 			'departments/updateDepartmentForm.inc',
-			array('department'=>$department, 'action'=>BASE_URI.'/departments/update')
+			array(
+				'department'=>$department,
+				'action'=>BASE_URI.'/departments/update',
+				'return_url'=>BASE_URI.'/departments'
+			)
 		);
 	}
 

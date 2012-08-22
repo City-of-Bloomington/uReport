@@ -72,7 +72,11 @@ class AccountController extends Controller
 		// Display the form
 		$this->template->blocks[] = new Block(
 			'departments/updateDepartmentForm.inc',
-			array('department'=>$department,'action'=>BASE_URI.'/account/updateMyDepartment')
+			array(
+				'department'=>$department,
+				'action'=>BASE_URI.'/account/updateMyDepartment',
+				'return_url'=>BASE_URI.'/account'
+			)
 		);
 	}
 }

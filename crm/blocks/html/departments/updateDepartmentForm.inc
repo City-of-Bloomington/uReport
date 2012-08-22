@@ -5,8 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
  * @param string $this->action The URL for posting the form
+ * @param string $this->return_url
  */
 $title = $this->department->getId() ? 'Edit' : 'Add';
+$return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
 <div class="updateDepartmentForm">
 <h1><?php echo $title; ?> Department</h1>
