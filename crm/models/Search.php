@@ -196,7 +196,7 @@ class Search
 	public static function hydrateDocs(SolrObject $o)
 	{
 		$models = array();
-		if (isset($o->response->docs) && $o->response->numFound) {
+		if (isset($o->response->docs) && $o->response->docs) {
 			foreach ($o->response->docs as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
@@ -204,6 +204,9 @@ class Search
 						break;
 				}
 			}
+		}
+		else {
+			header('HTTP/1.1 404 Not Found', true, 404);
 		}
 		return $models;
 	}
