@@ -25,6 +25,7 @@ class Database
 									'username'=>DB_USER,
 									'password'=>DB_PASS,
 									'dbname'  =>DB_NAME,
+									'charset' =>'utf8',
 									'options' =>array(Zend_Db::AUTO_QUOTE_IDENTIFIERS=>false));
 				self::$connection = Zend_Db::factory(DB_ADAPTER,$parameters);
 				self::$connection->getConnection();
