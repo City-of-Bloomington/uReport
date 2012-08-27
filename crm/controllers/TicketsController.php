@@ -294,17 +294,23 @@ class TicketsController extends Controller
 	 */
 	public function recordAction()
 	{
-		$ticket = $this->loadTicket($_POST['ticket_id']);
+		if (!empty($_POST['ticket_id'])) {
+			$ticket = $this->loadTicket($_POST['ticket_id']);
 
-		$history = new TicketHistory();
-		try {
-			$history->handleUpdate($_POST);
-			$history->save();
+			$history = new TicketHistory();
+			try {
+				$history->handleUpdate($_POST);
+				$history->save();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+			$this->redirectToTicketView($ticket);
 		}
-		catch (Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
+		else {
+			header('Location: '.BASE_URL.'/tickets');
+			exit();
 		}
-		$this->redirectToTicketView($ticket);
 	}
 
 	/**
