@@ -108,7 +108,7 @@ class Person extends ActiveRecord
 	public function deleteUserAccount()
 	{
 		$userAccountFields = array(
-			'username', 'password', 'authenticationMethod', 'roles', 'department_id'
+			'username', 'password', 'authenticationMethod', 'role', 'department_id'
 		);
 		foreach ($userAccountFields as $f) {
 			$this->data[$f] = null;
