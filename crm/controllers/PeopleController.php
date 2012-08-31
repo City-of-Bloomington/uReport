@@ -128,7 +128,7 @@ class PeopleController extends Controller
 				)
 			);
 			if (count($tickets) >= 10) {
-				$block->moreLink = BASE_URL."/tickets?{$listType}Person={$person->getId()}";
+				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
 			$this->template->blocks['right'][] = $block;
 		}
