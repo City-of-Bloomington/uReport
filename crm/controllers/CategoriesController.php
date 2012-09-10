@@ -81,7 +81,7 @@ class CategoriesController extends Controller
 			: new URL(BASE_URL.'/categories/view');
 
 		$categoryList = new CategoryList();
-		$categoryList->find(null,array('name'=>1));
+		$categoryList->find(null,'c.name');
 
 		$this->template->blocks[] = new Block(
 			'categories/categoryChoices.inc',
