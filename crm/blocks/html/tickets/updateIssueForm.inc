@@ -16,6 +16,8 @@ $title = is_null($this->issue->getId()) ? 'Add Issue' : 'Edit Issue';
 			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+
+				$this->category = $this->ticket->getCategory();
 				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
 			?>
 			<button type="submit" class="submit">Submit</button>
