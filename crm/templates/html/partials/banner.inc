@@ -10,7 +10,10 @@
 				<li><a href=\"".BASE_URI."/account\">My Account</a></li>
 				<li><a href=\"".BASE_URI."/login/logout\">Logout</a></li>
 				<li>Signed in as $name</li>
-				<li><a href=\"".BASE_URI."/help\">Help</a></li>
+				<li><a href=\"https://github.com/City-of-Bloomington/uReport/wiki/User-Guide\">
+						Help
+					</a>
+				</li>
 				";
 			}
 			else {
