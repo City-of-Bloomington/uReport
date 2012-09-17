@@ -1,0 +1,1 @@
+This is where we configure PHP to store the session files for this application
