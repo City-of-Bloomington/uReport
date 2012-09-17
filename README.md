@@ -29,8 +29,8 @@ for those fixes are still saved in the old, Google Code project.
 
 Unreleased fixes
 ----------------
-http://code.google.com/p/civic-crm/issues/list?can=7
-https://github.com/City-of-Bloomington/uReport/issues?milestone=1&page=1&state=closed
+* http://code.google.com/p/civic-crm/issues/list?can=7
+* https://github.com/City-of-Bloomington/uReport/issues?milestone=1&page=1&state=closed
 
 New in 1.7.2
 ------------
