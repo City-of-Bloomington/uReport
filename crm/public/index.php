@@ -30,7 +30,7 @@ if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 // Check for default routes
 elseif (preg_match('#'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?#',$_SERVER['REQUEST_URI'],$matches)) {
 	$resource = isset($matches[2]) ? $matches[2] : 'index';
-	$action = isset($matches[4]) ? $matches[4] : 'index';
+	$action   = isset($matches[4]) ? $matches[4] : 'index';
 }
 
 // Create the Template
@@ -38,7 +38,7 @@ $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
 $template = new Template('default', $format);
 
 // Execute the Controller::action()
-if (isset($resource) && isset($action)) {
+if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	$role = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';
 	if ($ZEND_ACL->isAllowed($role, $resource, $action)) {
 		$controller = ucfirst($resource).'Controller';
