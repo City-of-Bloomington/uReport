@@ -1,14 +1,14 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$lastModified = '2012-03-09T14:17-05';
+$lastModified = '2012-09-18T15:37-05';
 $discovery = array(
 	'changeset'=>$lastModified,
 	'contact'=>'You can email for assistance '.ADMINISTRATOR_EMAIL,
-	'key_service'=>'You can request a key by emailing '.ADMINISTRATOR_EMAIL,
+	'key_service'=>'You can request a key at '.OPEN311_KEY_SERVICE,
 	'endpoints'=>array(
 		array(
 			'specification'=>'http://wiki.open311.org/GeoReport_v2',

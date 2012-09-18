@@ -86,6 +86,8 @@ define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
  */
 define('OPEN311_JURISDICTION','localhost');
 
+define('OPEN311_KEY_SERVICE', 'http://localhost/open311-api-key-request');
+
 /**
  * Date format
  * All dates displayed will use this format

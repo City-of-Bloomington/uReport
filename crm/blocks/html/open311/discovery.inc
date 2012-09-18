@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$lastModified = '2012-03-09T14:17-05';
+$lastModified = '2012-09-18T15:37-05';
 ?>
 <h1>Service Discovery</h1>
 <table>
@@ -15,7 +15,11 @@ $lastModified = '2012-03-09T14:17-05';
 		<td>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></td>
 	</tr>
 	<tr><th>key_service</th>
-		<td>You can request a key by emailing <?php echo ADMINISTRATOR_EMAIL; ?></td>
+		<td>You can request a key at
+		<?php
+			echo '<a href="'.OPEN311_KEY_SERVICE.'">'.OPEN311_KEY_SERVICE.'</a>';
+		?>
+		</td>
 	</tr>
 </table>
 <h2>Endpoints</h2>
