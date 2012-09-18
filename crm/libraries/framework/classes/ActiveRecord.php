@@ -67,7 +67,7 @@ abstract class ActiveRecord
 	 *
 	 * Format is specified using PHP's date() syntax
 	 * http://www.php.net/manual/en/function.date.php
-	 * If no format is given, the MongoDate object is returned
+	 * If no format is given, the database's raw data is returned
 	 *
 	 * @param string $field
 	 * @param string $format
@@ -122,8 +122,8 @@ abstract class ActiveRecord
 	/**
 	 * Loads and returns an object for a foreign key _id field
 	 *
-	 * Will cache the object in a private variable to avoid multiple database lookups.
-	 * Make sure to declare a private variable matching the class
+	 * Will cache the object in a protected variable to avoid multiple database
+	 * lookups. Make sure to declare a protected variable matching the class
 	 *
 	 * @param string $class
 	 * @param string $field
