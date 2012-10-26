@@ -33,10 +33,11 @@ class Location
 
 		if ($crm_query) {
 			$zend_db = Database::getConnection();
-			$sql = "select distinct location, addressId, city,
+			$sql = "select location, addressId, city,
 					'database' as source,
 					count(*) as ticketCount
-					from tickets where location like ?";
+					from tickets where location like ?
+					group by location, addressId, city";
 			$q = $zend_db->fetchAll($sql, array("$crm_query%"));
 			foreach ($q as $row) {
 				$results[$row['location']] = $row;
