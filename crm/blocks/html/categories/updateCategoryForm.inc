@@ -15,10 +15,6 @@ foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
 }
-
-$custom_fields = isset($_POST['custom_fields'])
-	? View::escape($_POST['custom_fields'])
-	: json_encode($this->category->getCustomFields());
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo BASE_URL; ?>/categories/update">
@@ -94,6 +90,21 @@ $custom_fields = isset($_POST['custom_fields'])
 			</select>
 		</div>
 		<div>
+			<?php
+				// There may not be any custom fields for this category.
+				// We do not want to display "null" in this case, just
+				// leave the textarea empty.
+				$custom_fields = '';
+				if (isset($_POST['custom_fields'])) {
+					$custom_fields = View::escape($_POST['custom_fields']);
+				}
+				else {
+					$fields = $this->category->getCustomFields();
+					if ($fields) {
+						$custom_fields = json_encode($fields);
+					}
+				}
+			?>
 			<div><label for="custom_fields">Custom Fields</label></div>
 			<textarea name="custom_fields" id="custom_fields" rows="30" cols="50"><?php echo $custom_fields; ?></textarea>
 			<div><p>Custom fields are defined in JSON.

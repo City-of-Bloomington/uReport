@@ -145,7 +145,10 @@ class Category extends ActiveRecord
 				$this->data['customFields'] = $json;
 			}
 			else {
-				throw new JSONException(json_last_error());
+				$message = json_last_error();
+				if ($message != JSON_ERROR_NONE) {
+					throw new JSONException($message);
+				}
 			}
 		}
 		else {
