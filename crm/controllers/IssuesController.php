@@ -26,13 +26,16 @@ class IssuesController extends Controller
 			'tickets/ticketInfo.inc',array('ticket'=>$ticket)
 		);
 
-		$person = $issue->getReportedByPerson();
-		if ($person) {
-			$this->template->blocks['person-panel'][] = new Block(
-				'people/personInfo.inc',
-				array('person'=>$person,'disableButtons'=>true)
-			);
+		if (userIsAllowed('people', 'view')) {
+			$person = $issue->getReportedByPerson();
+			if ($person) {
+				$this->template->blocks['person-panel'][] = new Block(
+					'people/personInfo.inc',
+					array('person'=>$person,'disableButtons'=>true)
+				);
+			}
 		}
+
 		$this->template->blocks['issue-panel'][] = new Block(
 			'tickets/issueInfo.inc', array('issue'=>$issue)
 		);
