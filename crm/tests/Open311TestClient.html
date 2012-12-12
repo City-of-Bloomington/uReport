@@ -1,27 +1,76 @@
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!--
+/**
+ * @copyright 2012 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+-->
 <head>
-	<title>Test Client</title>
-	<style></style>
+	<meta charset="utf-8" />
+	<title>Open311 Test Client</title>
+	<style type="text/css">
+		#location_map {
+			width:100%; height:500px;
+			border:2px solid black;
+		}
+		/* YUI styles */
+		.yui3-overlay { width:90%; }
+		.yui3-overlay-content { border:1px solid black; background-color:white; padding:10px; }
+		.yui3-widget-ft { clear:both; }
+	</style>
 </head>
 <body>
-	<h1>Test Client</h1>
-	<h2>http://localhost/crm/open311/v2/requests.xml</h2>
-	<form method="post" action="http://localhost/crm/open311/v2/requests.xml">
-		<fieldset><legend>Ticket Info</legend>
+	<h1>Open311 Test Client</h1>
+	<form id="postServiceRequestForm" method="post" onsubmit="postServiceRequest();" target="_blank">
+		<fieldset><legend>Endpoint Info</legend>
 			<table>
+				<tr><th><label for="baseUrl">Endpoint URL</label></th>
+					<td><input name="baseUrl" id="baseUrl" value="http://localhost/crm/open311/v2" /></td>
+				</tr>
 				<tr><th><label for="jurisdiction_id">Jurisdiction</label></th>
 					<td><input name="jurisdiction_id" id="jurisdiction_id" value="bloomington.in.gov" /></td>
 				</tr>
 				<tr><th><label for="api_key">api_key</label></th>
 					<td><input name="api_key" id="api_key" /></td>
 				</tr>
+				<tr><th><label for="format">format</label></th>
+					<td><select name="format" id="format">
+							<option>json</option>
+							<option>xml</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button type="button" onclick="getServiceList();">GET Service List</button>
+		</fieldset>
+
+		<fieldset><legend>Service Request</legend>
+			<table>
 				<tr><th><label for="service_code">Service Code</label></th>
 					<td><input name="service_code" id="service_code" value="" /></td>
 				</tr>
 			</table>
 			<div><label for="description">Description</label></div>
 			<div><textarea name="description" id="description">Test Report</textarea></div>
+		</fieldset>
 
+		<fieldset><legend>Location</legend>
+			<button id="openMapButton" class="chooseLocation">Choose Location</button>
+			<table>
+				<tr><th><label for="address_string">address_string</label></th>
+					<td><input name="address_string" id="address_string" /></td>
+				</tr>
+				<tr><th><label for="lat">lat</label></th>
+					<td><input name="lat" id="lat" /></td>
+				</tr>
+				<tr><th><label for="long">long</label></th>
+					<td><input name="long" id="long" /></td>
+				</tr>
+			</table>
+			<div id="map_overlay"></div>
 		</fieldset>
 		<fieldset><legend>Personal Info</legend>
 			<table>
@@ -34,8 +83,8 @@
 				<tr><th><label for="phone">phone</label></th>
 					<td><input name="phone" id="phone" /></td>
 				</tr>
-				<tr><th><label for="device_id">device_id</label></th>
-					<td><input name="device_id" id="device_id" /></td>
+				<tr><th><label for="email">email</label></th>
+					<td><input name="email" id="email" /></td>
 				</tr>
 			</table>
 		</fieldset>
@@ -43,5 +92,85 @@
 			<input type="submit" value="Submit" />
 		</fieldset>
 	</form>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+function postServiceRequest(e) {
+	var url = document.getElementById('baseUrl').value;
+	var select = document.getElementById('format');
+	var format = select.options[select.selectedIndex].value;
+	document.getElementById('postServiceRequestForm').action = url + '/requests.' + format;
+}
+
+function getServiceList() {
+	var url             = document.getElementById('baseUrl').value;
+	var jurisdiction_id = document.getElementById('jurisdiction_id').value;
+	var api_key         = document.getElementById('api_key').value;
+	if (jurisdiction_id) {
+		url = url + '?jurisdiction_id=' + jurisdiction_id;
+	}
+	if (api_key) {
+		url = url + '&api_key=' + api_key;
+	}
+
+	window.open(url);
+}
+YUI().use('node','overlay','json',function(Y) {
+	var overlay = new Y.Overlay({
+		srcNode:'#map_overlay',
+		xy: [20,60],
+		bodyContent: '<div id="location_map"></div>',
+		footerContent:'<button type="button" id="useThisLocation" class="add">Use this location</button><a class="cancel">Cancel</a>',
+	});
+	overlay.render();
+	overlay.hide();
+	Y.on('click',Y.bind(overlay.hide, overlay),'#map_overlay a.cancel');
+	Y.on('click',function(e) {
+		e.preventDefault();
+		overlay.show();
+		var geocoder = new google.maps.Geocoder();
+		var map = new google.maps.Map(document.getElementById('location_map'), {
+			zoom: 17,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				map.setCenter(new google.maps.LatLng(
+					position.coords.latitude,position.coords.longitude
+				));
+			});
+		}
+		var crosshairs = new google.maps.Marker({
+			map: map,
+			icon:'https://bloomington.in.gov/open311-proxy/js/cross-hairs.png'
+		});
+		crosshairs.bindTo('position',map,'center');
+
+		Y.on('click',function(e) {
+			document.getElementById('lat').value = map.getCenter().lat();
+			document.getElementById('long').value = map.getCenter().lng();
+			geocoder.geocode({latLng:map.getCenter()}, function(results, status) {
+				var newLocation = '';
+				if (status == google.maps.GeocoderStatus.OK) {
+					if (results[0]) {
+						for (var i=0; i<results[0].address_components.length; i++) {
+							switch (results[0].address_components[i].types[0]) {
+								case 'street_number':
+									newLocation = results[0].address_components[i].long_name + ' ';
+									break;
+								case 'route':
+									newLocation += results[0].address_components[i].long_name;
+									break;
+							}
+							document.getElementById('address_string').value = newLocation;
+						}
+					}
+				}
+			});
+			overlay.hide();
+		},'#useThisLocation');
+	},'#openMapButton');
+});
+</script>
 </body>
 </html>
