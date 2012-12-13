@@ -106,8 +106,11 @@ function getServiceList() {
 	var url             = document.getElementById('baseUrl').value;
 	var jurisdiction_id = document.getElementById('jurisdiction_id').value;
 	var api_key         = document.getElementById('api_key').value;
+	var select          = document.getElementById('format');
+	var format = select.options[select.selectedIndex].value;
+
 	if (jurisdiction_id) {
-		url = url + '?jurisdiction_id=' + jurisdiction_id;
+		url = url + '/services.' + format + '?jurisdiction_id=' + jurisdiction_id;
 	}
 	if (api_key) {
 		url = url + '&api_key=' + api_key;
