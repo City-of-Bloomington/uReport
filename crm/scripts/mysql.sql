@@ -147,6 +147,10 @@ create table contactMethods (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
 );
+insert into contactMethods set name='Email';
+insert into contactMethods set name='Phone';
+insert into contactMethods set name='Web Form';
+insert into contactMethods set name='Other';
 
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
