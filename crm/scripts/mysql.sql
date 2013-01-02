@@ -152,6 +152,12 @@ create table issueTypes (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
 );
+insert into issueTypes set name='Comment';
+insert into issueTypes set name='Complaint';
+insert into issueTypes set name='Question';
+insert into issueTypes set name='Report';
+insert into issueTypes set name='Request';
+insert into issueTypes set name='Violation';
 
 create table labels (
 	id int unsigned not null primary key auto_increment,
