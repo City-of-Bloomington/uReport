@@ -11,7 +11,6 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo BASE_URL; ?>/users/update">
 		<fieldset><legend>Login Info</legend>
-			<input name="person_id" type="hidden" value="<?php echo $this->person->getId(); ?>" />
 			<table>
 				<tr><td><label for="department_id">Department</label></td>
 					<td><select name="department_id" id="department_id">
@@ -65,6 +64,16 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 					</td>
 				</tr>
 			</table>
+
+			<p>If you are using Employee authentication, the rest of this information
+				will be filled in automatically from the directory.  Otherwise, you must
+				provide at least a first and last name.
+			</p>
+		</fieldset>
+
+		<?php include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc'; ?>
+
+		<fieldset><legend>Submit</legend>
 			<button type="submit" class="submit">Submit</button>
 			<a class="cancel" href="<?php echo BASE_URI; ?>/users">Cancel</a>
 		</fieldset>

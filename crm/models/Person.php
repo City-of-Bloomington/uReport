@@ -185,8 +185,9 @@ class Person extends ActiveRecord
 	 */
 	public function handleUpdateUserAccount($post)
 	{
-		$fields = array('firstname','lastname','email','department_id',
-						'username','authenticationMethod','role');
+		$this->handleUpdate($post);
+
+		$fields = array('department_id','username','authenticationMethod','role');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);

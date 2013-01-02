@@ -50,9 +50,6 @@ class UsersController extends Controller
 			}
 			catch (Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
-				print_r($e);
-				print_r($user);
-				exit();
 			}
 		}
 
@@ -67,7 +64,7 @@ class UsersController extends Controller
 	}
 
 	/**
-	 * Delets a Person's user account information
+	 * Deletes a Person's user account information
 	 */
 	public function delete()
 	{
