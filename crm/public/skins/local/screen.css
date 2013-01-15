@@ -39,7 +39,7 @@ button, .button {
 .minusTag       { background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
-.panel       { padding:.75em; }
+.panel       { padding:.75em; overflow:auto; }
 .panel > div { margin-bottom:.75em; }
 
 .actionForm          { overflow:auto; }
