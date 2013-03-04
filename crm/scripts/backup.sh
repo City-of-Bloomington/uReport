@@ -9,8 +9,6 @@ BACKUP_DIR=/var/www/backups/crm
 APPLICATION_HOME=/var/www/sites/crm
 
 MYSQL_DBNAME=crm
-MYSQL_USER=username
-MYSQL_PASS=password
 
 # How many days worth of tarballs to keep around
 num_days_to_keep=5
@@ -25,7 +23,7 @@ cd $BACKUP_DIR
 mkdir $today
 
 # Dump the database
-$MYSQLDUMP -u $MYSQL_USER -p$MYSQL_PASS $MYSQL_DBNAME > $today/$MYSQL_DBNAME.sql
+$MYSQLDUMP --defaults-extra-file=$APPLICATION_HOME/scripts/backup.cnf $MYSQL_DBNAME > $today/$MYSQL_DBNAME.sql
 
 # Copy media uploads into this directory, so they're backed up, too.
 cp -R $APPLICATION_HOME/data/media $today/media
