@@ -20,6 +20,16 @@ class ClientsController extends Controller
 		$this->template->blocks[] = new Block('clients/clientList.inc',array('clientList'=>$clients));
 	}
 
+	/**
+	 * Handles client editing
+	 *
+	 * Choosing a person involves going through a whole person finding process
+	 * at a different url.  Once the user has chosen a new person, they will
+	 * return here, passing in the person_id they have chosen
+	 *
+	 * @param REQUEST client_id   Existing issues are edited by passing in an Issue
+	 * @param REQUEST person_id  The new contactPerson
+	 */
 	public function update()
 	{
 		// Load the $client for editing
@@ -37,6 +47,11 @@ class ClientsController extends Controller
 			$client = new Client();
 		}
 
+		if (isset($_REQUEST['person_id'])) {
+			$client->setContactPerson_id($_REQUEST['person_id']);
+		}
+
+		// Handle stuff the user POSTS
 		if (isset($_POST['name'])) {
 			$client->handleUpdate($_POST);
 			try {

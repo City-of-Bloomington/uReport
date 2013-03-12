@@ -28,20 +28,9 @@
 		<td><label for="reportedByPerson_id">Reported By Person</label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
-				$id = '';
-				$name = '';
-				if ($reportedByPerson) {
-					$id = $reportedByPerson->getId();
-					$name = View::escape($reportedByPerson->getFullname());
-				}
-				$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+				$helper = $this->template->getHelper('personChooser');
+				echo $helper->personChooser('reportedByPerson', $reportedByPerson);
 			?>
-			<input type="hidden" name="reportedByPerson_id" id="reportedByPerson_id"
-				value="<?php echo "$id"; ?>" />
-			<span id="reportedByPerson-name"><?php echo $name; ?></span>
-			<a class="edit button" href="<?php echo BASE_URI."/people?return_url=$return_url"; ?>">
-				Change Person
-			</a>
 		</td>
 	</tr>
 

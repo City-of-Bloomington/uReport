@@ -1,12 +1,17 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class FormatDuration
 {
-	public function __construct() { }
+	private $template;
+
+	public function __construct(Template $template)
+	{
+		$this->template = $template;
+	}
 
 	public function formatDuration($durationInSeconds) {
 		$duration = '';

@@ -8,9 +8,6 @@
 $name = View::escape($this->client->getName());
 $url = $this->client->getURL();
 $api_key = View::escape($this->client->getApi_key());
-$person_id = $this->client->getContactPerson()
-	? $this->client->getContactPerson()->getId()
-	: '';
 
 $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 ?>
@@ -33,9 +30,12 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 		</fieldset>
 		<fieldset><legend>Contact Info</legend>
 			<table>
-				<tr><td><label for="contactPerson_id">Person ID</label></td>
-					<td><input name="contactPerson_id" id="contactPerson_id"
-							value="<?php echo $person_id; ?>" />
+				<tr><td><label for="contactPerson_id">Contact Person</label></td>
+					<td><?php
+							$contactPerson = $this->client->getContactPerson();
+							$helper = $this->template->getHelper('personChooser');
+							echo $helper->personChooser('contactPerson', $contactPerson);
+						?>
 					</td>
 				</tr>
 			</table>

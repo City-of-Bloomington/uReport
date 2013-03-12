@@ -6,7 +6,12 @@
  */
 class RenderInputs
 {
-	public function __construct() { }
+	private $template;
+
+	public function __construct(Template $template)
+	{
+		$this->template = $template;
+	}
 
 	/**
 	 * Converts an array into hidden inputs for a form

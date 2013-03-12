@@ -18,6 +18,9 @@ class PeopleController extends Controller
 	public function index()
 	{
 		$this->template->setFilename('people');
+		if (isset($_REQUEST['callback'])) {
+			$this->template->title = 'Choose Person';
+		}
 
 		// Look for anything that the user searched for
 		$search = array();

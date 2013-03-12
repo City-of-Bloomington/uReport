@@ -179,7 +179,7 @@ class Template extends View
 		if (!array_key_exists($functionName, $this->helpers)) {
 			$class = ucfirst($functionName);
 			require_once APPLICATION_HOME."/templates/{$this->outputFormat}/helpers/$class.php";
-			$this->helpers[$functionName] = new $class();
+			$this->helpers[$functionName] = new $class($this);
 		}
 		return $this->helpers[$functionName];
 	}
