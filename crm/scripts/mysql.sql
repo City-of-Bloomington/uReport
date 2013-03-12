@@ -93,15 +93,6 @@ create table department_categories (
 	foreign key (category_id)   references categories (id)
 );
 
-create table clients (
-	id               int          unsigned not null primary key auto_increment,
-	name             varchar(128) not null,
-	url              varchar(255),
-	api_key          varchar(50)  not null,
-	contactPerson_id int          unsigned not null,
-	foreign key (contactPerson_id) references people(id)
-);
-
 create table tickets (
 	id                 int         unsigned not null primary key auto_increment,
 	category_id        int         unsigned,
@@ -232,4 +223,15 @@ create table responses (
 	foreign key (issue_id)         references issues        (id),
 	foreign key (contactMethod_id) references contactMethods(id),
 	foreign key (person_id)        references people        (id)
+);
+
+create table clients (
+	id               int          unsigned not null primary key auto_increment,
+	name             varchar(128) not null,
+	url              varchar(255),
+	api_key          varchar(50)  not null,
+	contactPerson_id int          unsigned not null,
+	contactMethod_id int          unsigned not null,
+	foreign key (contactPerson_id) references people(id),
+	foreign key (contactMethod_id) references contactMethods(id)
 );

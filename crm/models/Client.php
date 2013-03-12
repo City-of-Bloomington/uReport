@@ -11,6 +11,7 @@ class Client extends ActiveRecord
 	protected $tablename = 'clients';
 
 	protected $contactPerson;
+	protected $contactMethod;
 
 	public static function loadByApiKey($api_key)
 	{
@@ -93,13 +94,17 @@ class Client extends ActiveRecord
 	public function getURL()              { return parent::get('url');              }
 	public function getApi_key()          { return parent::get('api_key');          }
 	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
-	public function getContactPerson()    { return parent::getForeignKeyObject('Person', 'contactPerson_id'); }
+	public function getContactMethod_id() { return parent::get('contactMethod_id'); }
+	public function getContactPerson()    { return parent::getForeignKeyObject('Person',        'contactPerson_id'); }
+	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id'); }
 
 	public function setName($s)    { parent::set('name', $s); }
 	public function setURL ($s)    { parent::set('url',  $s); }
 	public function setApi_key($s) { parent::set('api_key', $s); }
-	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person', 'contactPerson_id', $id); }
-	public function setContactPerson(Person $p) { parent::setForeignKeyObject('Person', 'contactPerson_id', $p);  }
+	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person',        'contactPerson_id', $id); }
+	public function setContactMethod_id($id)    { parent::setForeignKeyField( 'ContactMethod', 'contactMethod_id', $id); }
+	public function setContactPerson(Person        $o) { parent::setForeignKeyObject('Person',        'contactPerson_id', $o);  }
+	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id', $o);  }
 
 
 	/**
@@ -111,6 +116,7 @@ class Client extends ActiveRecord
 		$this->setURL             ($post['url']);
 		$this->setApi_key         ($post['api_key']);
 		$this->setContactPerson_id($post['contactPerson_id']);
+		$this->setContactMethod_id($post['contactMethod_id']);
 	 }
 	//----------------------------------------------------------------
 	// Custom Functions

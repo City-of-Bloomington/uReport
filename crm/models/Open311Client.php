@@ -7,24 +7,37 @@
 class Open311Client
 {
 	/**
-	 * Translates Open311 fieldnames for a POST into CRM fieldnames
+	 * Translates an Open311 POST into a CRM POST
 	 *
 	 * A valid Client api_key is required in the POST
+	 *
+	 * http://wiki.open311.org/GeoReport_v2#POST_Service_Request
+	 * Open311 POST Service Request: defines what key/values should
+	 * be posted when adding a service request.
+	 * However, we're just going to take the Open311 POST and
+	 * hand it off to Ticket::handleAdd().  So, we have to
+	 * translate all the Open311 POST parameters into the
+	 * POST parameters that Ticket::handleAdd() expects.
 	 *
 	 * Media should not need any special handling here,
 	 * since both CRM and Open311 use "media" as the fieldname
 	 *
-	 * @param array $post The raw POST from the client
-	 * @return array
+	 * @param array $open311Post The raw POST from the client
+	 * @return array A POST for Ticket::handleAdd()
 	 */
-	public static function translatePostArray($post)
+	public static function translatePostArray($open311Post)
 	{
 		// Make sure we have a valid api_key
-		if (!empty($post['api_key'])) { $client = Client::loadByApiKey($post['api_key']); }
+		if (!empty($open311Post['api_key'])) { $client = Client::loadByApiKey($open311Post['api_key']); }
 		else { throw new Exception('clients/unknownClient'); }
 
-		$p = array('client_id'=>$client->getId());
+		$ticketPost = array(
+			'client_id'       => $client->getId(),
+			'contactMethod_id'=> $client->getContactMethod_id()
+		);
 
+		// The lookup table for keyname translations
+		// 'open311Post_key'=>'ticketPost_key'
 		$fields = array(
 			// Ticket Fields
 			'service_code'  =>'category_id',
@@ -36,12 +49,16 @@ class Open311Client
 			'attribute'     =>'customFields'
 		);
 		foreach ($fields as $open311Field=>$crmField) {
-			if (!empty($post[$open311Field])) { $p[$crmField] = $post[$open311Field]; }
+			if (!empty($open311Post[$open311Field])) {
+				$ticketPost[$crmField] = $open311Post[$open311Field];
+			}
 		}
-		$person = self::findPerson($post);
-		if ($person) { $p['reportedByPerson_id'] = $person->getId(); }
+		$person = self::findPerson($open311Post);
+		if ($person) {
+			$ticketPost['reportedByPerson_id'] = $person->getId();
+		}
 
-		return $p;
+		return $ticketPost;
 	}
 
 	/**

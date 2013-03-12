@@ -26,6 +26,22 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 				<tr><td><label>API Key</label></td>
 					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
 				</tr>
+				<tr><td><label>Contact Method</label></td>
+					<td><select name="contactMethod_id" id="contactMethod_id">
+						<?php
+							$contactMethods = new ContactMethodList();
+							$contactMethods->find();
+							foreach ($contactMethods as $method) {
+								$selected = $this->client->getContactMethod_id()==$method->getId()
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($method->getName());
+								echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
+							}
+						?>
+						</select>
+					</td>
+				</tr>
 			</table>
 		</fieldset>
 		<fieldset><legend>Contact Info</legend>
