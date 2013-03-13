@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -61,7 +61,10 @@ class Category extends ActiveRecord
 		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
 	}
 
-	public function save() { parent::save(); }
+	public function save() {
+		$this->setLastModified(date(DATE_FORMAT));
+		parent::save();
+	}
 
 	//----------------------------------------------------------------
 	// Getters and Setters
@@ -76,6 +79,7 @@ class Category extends ActiveRecord
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
 	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
+	public function getLastModified($format=null, DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
@@ -85,6 +89,7 @@ class Category extends ActiveRecord
 	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( 'CategoryGroup', 'categoryGroup_id', $id); }
 	public function setDepartment   (Department    $o) { parent::setForeignKeyObject('Department',    'department_id',    $o);  }
 	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $o);  }
+	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
 
 	/**
 	 * @param array $post
@@ -190,6 +195,29 @@ class Category extends ActiveRecord
 		}
 		return true;
 	}
+
+	/**
+	 * Returns the most recent lastModified date from all categories
+	 *
+	 * @param string $format
+	 * @param DateTimeZone $timezone
+	 * @return string
+	 */
+	public static function getGlobalLastModifiedDate($format=null, DateTimeZone $timezone=null)
+	{
+		$zend_db = Database::getConnection();
+		$d = $zend_db->fetchOne('select max(lastModified) from categories');
+
+		if ($format) {
+			$date = new DateTime($d);
+			if ($timezone) { $date->setTimezone($timezone); }
+			return $date->format($format);
+		}
+		else {
+			return $d;
+		}
+	}
+
 }
 
 class JSONException extends Exception

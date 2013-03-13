@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$lastModified = '2012-09-18T15:37-05';
+$lastModified = Category::getGlobalLastModifiedDate('c');
 ?>
 <h1>Service Discovery</h1>
 <table>

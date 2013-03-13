@@ -73,6 +73,7 @@ create table categories (
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	postingPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	customFields           text,
+	lastModified           timestamp    not null default CURRENT_TIMESTAMP,
 	foreign key (department_id)    references departments   (id),
 	foreign key (categoryGroup_id) references categoryGroups(id)
 );
