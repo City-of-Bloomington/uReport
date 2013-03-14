@@ -15,6 +15,12 @@ in our [Issue Tracker](https://github.com/City-of-Bloomington/uReport/issues).
 If you want to contribute to the project, join us on our
 [Google Group](https://groups.google.com/forum/?fromgroups#!forum/ureport)
 
+Upcoming Changes in 1.8
+----------------
+The 1.8 release is officially being worked on.  The master branch *should* always stable, if you want to live with the latest code as it's committed.  Otherwise, you can wait for the official 1.8 release which will (hopefully) be tested a bit more and actually *be* stable.
+
+The 1.8 release will involve a data migration.  There are numerous changes to the backend MySQL and Solr schemas.  The MySQL database will need to be modified, the new Solr schema put into place, and the Solr index re-indexed.  Code for the migration is in /scripts/migration/1.7-1.8.  The migration code will be continually updated as features are committed.  So, if you've run it once, you might check the scripts for new changes periodically.
+
 
 New in 1.7.3
 ----------------
