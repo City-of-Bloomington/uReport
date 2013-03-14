@@ -27,7 +27,7 @@
 			$list->find();
 			foreach ($list as $action) {
 				$editButton = '';
-				if (userIsAllowed('actions','update')) {
+				if (userIsAllowed('actions','update') && $action->getType()!='system') {
 					$editButton = "
 					<a class=\"edit button\"
 						href=\"".BASE_URL."/actions/update?action_id={$action->getId()}\">

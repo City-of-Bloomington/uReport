@@ -19,9 +19,11 @@ YUI().use('node', 'io', 'json', function (Y) {
 					var assignedPerson_id = Y.one('#assignedPerson_id');
 
 					if (o.responseText) {
-						var people = Y.JSON.parse(o.responseText);
-						var selected;
-						for (var i in people) {
+						var people = Y.JSON.parse(o.responseText),
+							selected,
+							i, len;
+						len = people.length;
+						for (i=0; i<len; i++) {
 							html += '<option value="' + people[i].id + '">' + people[i].name + '</option>';
 						}
 					}

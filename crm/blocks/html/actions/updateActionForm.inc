@@ -33,20 +33,6 @@ $description = View::escape($this->action->getDescription());
 				<tr><td><label for="description" class="required">Description</label></td>
 					<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
 				</tr>
-
-				<tr><td><label for="type" class="required">Type</label></td>
-					<td><select name="type" id="type">
-						<?php
-							foreach (Action::$types as $type) {
-								$selected = $this->action->getType()==$type
-									? 'selected="selected"'
-									: '';
-								echo "<option $selected>$type</option>";
-							}
-						?>
-						</select>
-					</td>
-				</tr>
 			</table>
 			<button type="submit" class="submit">Submit</button>
 			<a class="cancel" href="<?php echo BASE_URL; ?>/actions">Cancel</a>

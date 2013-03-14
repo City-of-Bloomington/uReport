@@ -1,12 +1,12 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Resolution extends ActiveRecord
+class Substatus extends ActiveRecord
 {
-	protected $tablename = 'resolutions';
+	protected $tablename = 'substatus';
 	/**
 	 * Populates the object with data
 	 *
@@ -27,8 +27,8 @@ class Resolution extends ActiveRecord
 			}
 			else {
 				$sql = ActiveRecord::isId($id)
-					? 'select * from resolutions where id=?'
-					: 'select * from resolutions where name=?';
+					? 'select * from substatus where id=?'
+					: 'select * from substatus where name=?';
 				$zend_db = Database::getConnection();
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
@@ -37,18 +37,20 @@ class Resolution extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('resolutions/unknownResolution');
+				throw new Exception('substatus/unknownSubstatus');
 			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setStatus('open');
 		}
 	}
 
 	public function validate()
 	{
 		if (!$this->getName()) { throw new Exception('missingRequiredFields'); }
+		if (!$this->getStatus()) { $this->setStatus('open'); }
 	}
 
 	public function save() { parent::save(); }
@@ -60,9 +62,11 @@ class Resolution extends ActiveRecord
 	public function getId()          { return parent::get('id');          }
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
+	public function getStatus()      { return parent::get('status');      }
 
 	public function setName       ($s) { parent::set('name',        $s); }
 	public function setDescription($s) { parent::set('description', $s); }
+	public function setStatus     ($s) { parent::set('status',      $s); }
 
 	/**
 	 * @param array $post
@@ -71,5 +75,6 @@ class Resolution extends ActiveRecord
 	{
 		$this->setName($post['name']);
 		$this->setDescription($post['description']);
+		$this->setStatus($post['status']);
 	}
 }

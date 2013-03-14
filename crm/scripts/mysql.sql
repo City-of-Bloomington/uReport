@@ -5,7 +5,6 @@ set foreign_key_checks=0;
 create table departments (
 	id               int          unsigned not null primary key auto_increment,
 	name             varchar(128) not null,
-	customStatuses   varchar(255),
 	defaultPerson_id int          unsigned,
 	foreign key (defaultPerson_id) references people(id)
 );
@@ -38,14 +37,15 @@ create table phones (
 	foreign key (person_id) references people(id)
 );
 
-create table resolutions (
+create table substatus (
 	id          int          unsigned not null primary key auto_increment,
 	name        varchar(25)  not null,
 	description varchar(128) not null
+	status      enum('open', 'closed') not null default 'open'
 );
-insert resolutions (name, description) values('Resolved', 'This ticket has been taken care of');
-insert resolutions (name, description) values('Duplicate','This ticket is a duplicate of another ticket');
-insert resolutions (name, description) values('Bogus',    'This ticket is not actually a problem or has already been taken care of');
+insert substatus (status, name, description) values('closed', 'Resolved', 'This ticket has been taken care of');
+insert substatus (status, name, description) values('closed', 'Duplicate','This ticket is a duplicate of another ticket');
+insert substatus (status, name, description) values('closed', 'Bogus',    'This ticket is not actually a problem or has already been taken care of');
 
 create table actions (
 	id          int          unsigned not null primary key auto_increment,
@@ -55,7 +55,7 @@ create table actions (
 );
 insert actions (name,type,description) values('open',      'system','Opened by {actionPerson}');
 insert actions (name,type,description) values('assignment','system','{enteredByPerson} assigned this case to {actionPerson}');
-insert actions (name,type,description) values('close',     'system','Closed by {actionPerson}');
+insert actions (name,type,description) values('closed',    'system','Closed by {actionPerson}');
 insert actions (name,type,description) values('referral',  'system','{enteredByPerson} referred this case to {actionPerson}');
 
 create table categoryGroups (
@@ -110,14 +110,14 @@ create table tickets (
 	state              varchar(128),
 	zip                varchar(40),
 	status             varchar(20) not null default 'open',
-	resolution_id      int         unsigned,
+	substatus_id       int         unsigned,
 	additionalFields   varchar(255),
 	foreign key (category_id)        references categories (id),
 	foreign key (client_id)          references clients    (id),
 	foreign key (enteredByPerson_id) references people     (id),
 	foreign key (assignedPerson_id)  references people     (id),
 	foreign key (referredPerson_id)  references people     (id),
-	foreign key (resolution_id)      references resolutions(id)
+	foreign key (substatus_id)       references substatus  (id)
 );
 
 create table ticketHistory (

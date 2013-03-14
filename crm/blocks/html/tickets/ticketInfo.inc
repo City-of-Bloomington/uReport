@@ -27,8 +27,8 @@ if (userIsAllowed('people','view')) {
 }
 
 $status = $this->ticket->getStatus();
-if ($this->ticket->getResolution()) {
-	$status.= ': '.$this->ticket->getResolution();
+if ($this->ticket->getSubstatus()) {
+	$status.= ': '.$this->ticket->getSubstatus();
 }
 
 $editStatusButton     = '';

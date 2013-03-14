@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
@@ -42,22 +42,6 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 				</td>
 			</tr>
 		</table>
-	</fieldset>
-	<fieldset><legend>Custom Statuses</legend>
-		<p>Enter the statuses you want for the department, each separated by commas</p>
-		<div>
-		<?php
-			$statuses = array();
-			foreach ($this->department->getCustomStatuses() as $status) {
-				$statuses[] = View::escape($status);
-			}
-			$statuses = implode(',',$statuses);
-			echo "
-			<input name=\"customStatuses\" id=\"customStatuses\"
-				value=\"$statuses\" />
-			";
-		?>
-		</div>
 	</fieldset>
 	<fieldset class="actions">
 		<legend>Actions</legend>

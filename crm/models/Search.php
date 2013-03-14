@@ -27,7 +27,7 @@ class Search
 		'category_id'     => 'Category',
 		'client_id'       => 'Client',
 		'status'          => 'Status',
-		'resolution_id'   => 'Resolution',
+		'substatus_id'    => 'Substatus',
 		'addressId'       => 'Adress ID',
 		'location'        => 'Location',
 		'city'            => 'City',
@@ -270,7 +270,7 @@ class Search
 				'id', 'category_id', 'client_id',
 				'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
 				'addressId', 'location', 'city', 'state', 'zip',
-				'status', 'resolution_id'
+				'status', 'substatus_id'
 			);
 			foreach ($fields as $f) {
 				$get = 'get'.ucfirst($f);

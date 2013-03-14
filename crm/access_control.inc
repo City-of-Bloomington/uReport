@@ -28,7 +28,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('categories'));
 $ZEND_ACL->add(new Zend_Acl_Resource('categoryGroups'));
 $ZEND_ACL->add(new Zend_Acl_Resource('labels'));
 $ZEND_ACL->add(new Zend_Acl_Resource('issueTypes'));
-$ZEND_ACL->add(new Zend_Acl_Resource('resolutions'));
+$ZEND_ACL->add(new Zend_Acl_Resource('substatus'));
 $ZEND_ACL->add(new Zend_Acl_Resource('contactMethods'));
 $ZEND_ACL->add(new Zend_Acl_Resource('neighborhoodAssociations'));
 
@@ -51,6 +51,7 @@ $ZEND_ACL->allow(null,
 $ZEND_ACL->allow('Staff',array('account','tickets','people','issues','media','reports'));
 $ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
+$ZEND_ACL->allow('Staff','substatus',  array('index'));
 
 
 // Administrator is allowed access to everything

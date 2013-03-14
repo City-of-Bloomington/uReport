@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -25,20 +25,40 @@ if ($department) {
 			<table>
 				<tr><td><label for="status">Status</label></td>
 					<td><select name="status" id="status">
-							<option>open</option>
-							<?php
-								$statuses = $department->getCustomStatuses();
-								foreach ($statuses as $status) {
-									$selected = $this->ticket->getStatus()==$status
-										? 'selected="selected"'
-										: '';
-									$status = View::escape($status);
-									echo "<option $selected>$status</option>";
-								}
-							?>
+						<?php
+							foreach (array('open', 'closed') as $status) {
+								$selected = ($this->ticket->getStatus()==$status)
+									? 'selected="selected"'
+									: '';
+								echo "<option $selected>$status</option>";
+							}
+						?>
 						</select>
 					</td>
 				</tr>
+
+				<tr><td><label for="substatus_id">Substatus</label></td>
+					<td><select name="substatus_id" id="substatus_id">
+						<?php
+							// Open tickets do not require substatus
+							// Closed tickets must have a substatus
+							if ($this->ticket->getStatus()=='open') {
+								echo '<option value=""></option>';
+							}
+
+							$list = new SubstatusList(array('status'=>$this->ticket->getStatus()));
+							foreach ($list as $substatus) {
+								$selected = $this->ticket->getSubstatus_id()==$substatus->getId()
+									? 'selected="selected"'
+									: '';
+								$name = View::escape($substatus->getName());
+								echo "<option value=\"{$substatus->getId()}\" $selected>$name</option>";
+							}
+						?>
+						</select>
+					</td>
+				</tr>
+
 				<tr><td><label id="notes">Comment</label></td>
 					<td><textarea id="notes" name="notes"></textarea></td>
 				</tr>
@@ -50,4 +70,6 @@ if ($department) {
 	</form>
 </div>
 <?php
+	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
+	$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseStatus.js');
 }

@@ -8,8 +8,7 @@
 $department = array(
 	'id'              =>$this->department->getId(),
 	'name'            =>$this->department->getName(),
-	'defaultPerson_id'=>$this->department->getDefaultPerson_id(),
-	'customStatuses'  =>$this->department->getCustomStatuses()
+	'defaultPerson_id'=>$this->department->getDefaultPerson_id()
 );
 $categories = array();
 foreach ($this->department->getCategories() as $id=>$c) {

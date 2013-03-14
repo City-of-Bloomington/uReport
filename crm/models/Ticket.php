@@ -8,7 +8,7 @@ class Ticket extends ActiveRecord
 {
 	protected $tablename = 'tickets';
 
-	protected $resolution;
+	protected $substatus;
 	protected $category;
 	protected $client;
 	protected $enteredByPerson;
@@ -84,9 +84,16 @@ class Ticket extends ActiveRecord
 		}
 
 		// The rest of these fields can be populated, if they're not provided
-
-		if (!$this->data['status']) {
-			$this->data['status'] = 'open';
+		if (!$this->getStatus()) { $this->setStatus('open'); }
+		if ($this->getSubstatus_id()) {
+			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
+				throw new Exception('tickets/statusMismatch');
+			}
+		}
+		else {
+			if ($this->getStatus()=='closed') {
+				throw new Exception('tickets/missingResolution');
+			}
 		}
 
 		if (!$this->data['enteredDate']) {
@@ -147,13 +154,13 @@ class Ticket extends ActiveRecord
 	public function getZip()        { return parent::get('zip');        }
 	public function getStatus()     { return parent::get('status');     }
 	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
-	public function getResolution_id()      { return parent::get('resolution_id');      }
+	public function getSubstatus_id()       { return parent::get('substatus_id');      }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getAssignedPerson_id()  { return parent::get('assignedPerson_id');  }
 	public function getReferredPerson_id()  { return parent::get('referredPerson_id');  }
-	public function getResolution()      { return parent::getForeignKeyObject('Resolution', 'resolution_id');      }
+	public function getSubstatus()       { return parent::getForeignKeyObject('Substatus',  'substatus_id');       }
 	public function getCategory()        { return parent::getForeignKeyObject('Category',   'category_id');        }
 	public function getClient()          { return parent::getForeignKeyObject('Client',     'client_id');          }
 	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person',     'enteredByPerson_id'); }
@@ -169,13 +176,13 @@ class Ticket extends ActiveRecord
 	public function setState    ($s)  { parent::set('state',     $s); }
 	public function setZip      ($s)  { parent::set('zip',       $s); }
 	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
-	public function setResolution_id     ($id) { parent::setForeignKeyField('Resolution', 'resolution_id',      $id); }
+	public function setSubstatus_id      ($id) { parent::setForeignKeyField('Substatus',  'substatus_id',       $id); }
 	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
 	public function setClient_id         ($id) { parent::setForeignKeyField('Client',     'client_id',          $id); }
 	public function setEnteredByPerson_id($id) { parent::setForeignKeyField('Person',     'enteredByPerson_id', $id); }
 	public function setAssignedPerson_id ($id) { parent::setForeignKeyField('Person',     'assignedPerson_id',  $id); }
 	public function setReferredPerson_id ($id) { parent::setForeignKeyField('Person',     'referredPerson_id',  $id); }
-	public function setResolution     (Resolution $o) { parent::setForeignKeyObject('Person',   'resolution_id',      $o); }
+	public function setSubstatus      (Substatus  $o) { parent::setForeignKeyObject('Substatus','substatus_id',       $o); }
 	public function setCategory       (Category   $o) { parent::setForeignKeyObject('Category', 'category_id',        $o); }
 	public function setClient         (Client     $o) { parent::setForeignKeyObject('Client',   'client_id',          $o); }
 	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject('Person',   'enteredByPerson_id', $o); }
@@ -183,18 +190,34 @@ class Ticket extends ActiveRecord
 	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject('Person',   'referredPerson_id',  $o); }
 
 	/**
-	 * Sets the status and clears resolution, if necessary
+	 * Update the status and substatus
 	 *
-	 * Setting status to anything other than closed will clear any previously set resolution
+	 * The new status will delete the current substatus if
+	 * the current substatus is not valid for the new status
 	 *
 	 * @param string $string
+	 * @param int $substatus_id
 	 */
-	public function setStatus($string)
+	public function setStatus($status, $substatus_id=null)
 	{
-		$this->data['status'] = trim($string);
-		if ($this->data['status'] != 'closed') {
-			$this->data['resolution_id'] = null;
-			$this->resolution            = null;
+		parent::set('status', $status);
+
+		if ($substatus_id) {
+			try {
+				$substatus = new Substatus($substatus_id);
+				if ($substatus->getStatus() == $this->getStatus()) {
+					$this->setSubstatus($substatus);
+				}
+			}
+			catch (Exception $e) {
+				// Invalid substatus will just ignored
+			}
+		}
+
+		if ($this->getSubstatus_id()) {
+			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
+				$this->setSubstatus_id(null);
+			}
 		}
 	}
 

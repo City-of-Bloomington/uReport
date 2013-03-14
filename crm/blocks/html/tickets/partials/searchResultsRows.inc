@@ -12,7 +12,7 @@ foreach ($this->tickets as $ticket) {
 	$displayableFields = TicketList::getDisplayableFields();
 	$additionalFields = $ticket->getAdditionalFields();
 	// Create empty variables needed for the final markup
-	foreach (array( 'status', 'resolution_id',
+	foreach (array( 'status', 'substatus_id',
 					'location', 'city', 'state', 'zip',
 					'category_id', 'description') as $k) {
 		$$k = '';
@@ -36,7 +36,7 @@ foreach ($this->tickets as $ticket) {
 					$$field = $ticket->$get() ? View::escape($ticket->$get()) : '';
 					break;
 
-				case 'resolution_id':
+				case 'substatus_id':
 				case 'category_id':
 					$g = 'get'.ucfirst(substr($field, 0, -3));
 					$o = $ticket->$g();
@@ -79,7 +79,7 @@ foreach ($this->tickets as $ticket) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id={$ticket->getId()}\">
-					Case # {$ticket->getId()} $category_id $status $resolution_id
+					Case # {$ticket->getId()} $category_id $status $substatus_id
 				</a>
 			</h3>
 			<span>$location $city $state $zip</span>

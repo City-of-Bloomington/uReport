@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class ResolutionList extends ZendDbResultIterator
+class SubstatusList extends ZendDbResultIterator
 {
 	public function __construct($fields=null)
 	{
@@ -22,7 +22,7 @@ class ResolutionList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='name',$limit=null,$groupBy=null)
 	{
-		$this->select->from('resolutions');
+		$this->select->from('substatus');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
@@ -46,6 +46,6 @@ class ResolutionList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new Resolution($this->result[$key]);
+		return new Substatus($this->result[$key]);
 	}
 }

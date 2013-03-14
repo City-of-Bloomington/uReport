@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param DepartmentList $this->departmentList
@@ -12,8 +12,7 @@ foreach ($this->departmentList as $department) {
 		'name'            => $department->getName(),
 		'defaultPerson_id'=> $department->getDefaultPerson_id(),
 		'categories'      => $department->getCategories(),
-		'actions'         => $department->getActions(),
-		'customStatuses'  => $department->getCustomStatuses()
+		'actions'         => $department->getActions()
 	);
 }
 echo json_encode($departments);

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->department
@@ -43,12 +43,6 @@ foreach ($this->department->getActions() as $action) {
 }
 $actions = implode(', ',$actions);
 
-$statuses = array();
-foreach ($this->department->getCustomStatuses() as $status) {
-	$statuses[] = View::escape($status);
-}
-$statuses = implode(', ',$statuses);
-
 echo "
 <div class=\"department\">
 	<h3><a href=\"".BASE_URL."/departments/view?department_id={$this->department->getId()}\">
@@ -60,7 +54,6 @@ echo "
 		<tr><th>Default Person</th><td>$defaultPerson</td></tr>
 		<tr><th>Categories</th><td>$categories</td></tr>
 		<tr><th>Actions</th><td>$actions</td></tr>
-		<tr><th>Statuses</th><td>$statuses</td></tr>
 	</table>
 </div>
 ";

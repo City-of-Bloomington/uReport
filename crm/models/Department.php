@@ -105,7 +105,6 @@ class Department extends ActiveRecord
 	public function handleUpdate($post)
 	{
 		$this->setName($post['name']);
-		$this->setCustomStatuses($post['customStatuses']);
 		if ($_POST['defaultPerson_id']) {
 			$this->setDefaultPerson_id($post['defaultPerson_id']);
 		}
@@ -122,29 +121,6 @@ class Department extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return array
-	 */
-	public function getCustomStatuses()
-	{
-		return explode(', ', parent::get('customStatuses'));
-	}
-
-	/*
-	 *@param string $string
-	 */
-	public function setCustomStatuses($string)
-	{
-		$customStatuses = array();
-		foreach (explode(',',$string) as $status) {
-			$status = trim($status);
-			if ($status) {
-				$customStatuses[] = $status;
-			}
-		}
-		$this->data['customStatuses'] = implode(',', $customStatuses);
-	}
-
 	/**
 	 * Returns an array of Category objects, indexed by Id
 	 * @return array

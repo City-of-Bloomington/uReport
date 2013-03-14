@@ -321,12 +321,9 @@ class TicketsController extends Controller
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		if (isset($_POST['status'])) {
-			if ($_POST['status'] == 'closed') {
-				header('Location: '.BASE_URL."/tickets/close?ticket_id={$ticket->getId()}");
-				exit();
-			}
 			try {
-				$ticket->setStatus($_POST['status']);
+				$substatus_id = !empty($_POST['substatus_id']) ? $_POST['substatus_id'] : null;
+				$ticket->setStatus($_POST['status'], $substatus_id);
 				$ticket->save();
 
 				try {
@@ -356,12 +353,6 @@ class TicketsController extends Controller
 			'tickets/changeStatusForm.inc',
 			array('ticket'=>$ticket)
 		);
-		if ($ticket->getStatus() != 'closed') {
-			$this->template->blocks['ticket-panel'][] = new Block(
-				'tickets/closeTicketForm.inc',
-				array('ticket'=>$ticket)
-			);
-		}
 
 		$this->addStandardInfoBlocks($ticket);
 	}
@@ -422,44 +413,6 @@ class TicketsController extends Controller
 		$this->template->title = 'Change Category';
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/changeCategoryForm.inc',
-			array('ticket'=>$ticket)
-		);
-
-		$this->addStandardInfoBlocks($ticket);
-	}
-
-	/**
-	 * @param REQUEST ticket_id
-	 * @param POST resolution
-	 */
-	public function close()
-	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
-
-		if (isset($_POST['resolution_id'])) {
-			try {
-				$ticket->setResolution_id($_POST['resolution_id']);
-				$ticket->setStatus('closed');
-				$ticket->save();
-
-				// add a record to ticket history
-				$history = new TicketHistory();
-				$history->setTicket($ticket);
-				$history->setAction(new Action('close'));
-				$history->setNotes($_POST['notes']);
-				$history->save();
-
-				$this->redirectToTicketView($ticket);
-			}
-			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		// Display the view
-		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/closeTicketForm.inc',
 			array('ticket'=>$ticket)
 		);
 
