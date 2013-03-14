@@ -44,14 +44,6 @@ class TicketList extends ZendDbResultIterator
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {
-						case 'status':
-							if ($value == 'notClosed') {
-								$this->select->where("t.status!='closed'");
-							}
-							else {
-								$this->select->where("t.status=?", $value);
-							}
-							break;
 						case 'reportedByPerson_id':
 							$this->select->joinLeft(array('i'=>'issues'), 't.id=i.ticket_id', array());
 							$this->select->where("i.$key=?", $value);

@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
-$assigned = count($this->person->getTickets('assigned',  array('status'=>'notClosed')));
-$reported = count($this->person->getTickets('reportedBy',array('status'=>'notClosed')));
-$referred = count($this->person->getTickets('referred',  array('status'=>'notClosed')));
+$assigned = count($this->person->getTickets('assigned',  array('status'=>'open')));
+$reported = count($this->person->getTickets('reportedBy',array('status'=>'open')));
+$referred = count($this->person->getTickets('referred',  array('status'=>'open')));
 echo "
 <div class=\"stats\">
 	<table>

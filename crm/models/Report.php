@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -14,7 +14,7 @@ class Report
 	 */
 	public static function closedId()
 	{
-		if (!self::$closedAction) { self::$closedAction = new Action('close'); }
+		if (!self::$closedAction) { self::$closedAction = new Action('closed'); }
 		return self::$closedAction->getId();
 	}
 
