@@ -11,6 +11,8 @@ class Category extends ActiveRecord
 	protected $department;
 	protected $categoryGroup;
 
+	public static $SLA_UNITS = array('minute', 'hour', 'day', 'week', 'month');
+
 	/**
 	 * Populates the object with data
 	 *
@@ -59,6 +61,15 @@ class Category extends ActiveRecord
 	{
 		if (!$this->data['name'])             { throw new Exception('categories/missingName');  }
 		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
+
+		// An SLA requires both the expression part and the units part
+		$slaExpression = $this->getSlaExpression();
+		$slaUnits      = $this->getSlaUnits();
+		if ($slaExpression || $slaUnits) {
+			if (!($slaExpression && $slaUnits)) {
+				throw new Exception('categories/invalidSLA');
+			}
+		}
 	}
 
 	public function save() {
@@ -77,6 +88,8 @@ class Category extends ActiveRecord
 	public function getDescription()            { return parent::get('description');            }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
+	public function getSlaExpression()          { return parent::get('slaExpression');          }
+	public function getSlaUnits()               { return parent::get('slaUnits');               }
 	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
 	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
 	public function getLastModified($format=null, DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
@@ -90,6 +103,15 @@ class Category extends ActiveRecord
 	public function setDepartment   (Department    $o) { parent::setForeignKeyObject('Department',    'department_id',    $o);  }
 	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $o);  }
 	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
+	public function setSlaExpression($i) { parent::set('slaExpression',(int)$i); }
+	public function setSlaUnits($s) {
+		if (in_array($s, self::$SLA_UNITS)) {
+			parent::set('slaUnits',$s);
+		}
+		else {
+			parent::set('slaUnits', null);
+		}
+	}
 
 	/**
 	 * @param array $post
@@ -103,6 +125,8 @@ class Category extends ActiveRecord
 		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
 		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
 		$this->setCustomFields          ($post['custom_fields']);
+		$this->setSlaExpression         ($post['slaExpression']);
+		$this->setSlaUnits              ($post['slaUnits']);
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -218,6 +242,13 @@ class Category extends ActiveRecord
 		}
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getSLA()
+	{
+		return trim("{$this->getSlaExpression()} {$this->getSlaUnits()}");
+	}
 }
 
 class JSONException extends Exception

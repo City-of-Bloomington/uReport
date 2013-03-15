@@ -40,3 +40,9 @@ where t.status not in ('open', 'closed');
 update tickets set status='open' where status not in ('open','closed');
 
 alter table departments drop customStatuses;
+
+------------------------------------------------
+-- SLA Agreements
+------------------------------------------------
+alter table categories add slaExpression int unsigned;
+alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month');

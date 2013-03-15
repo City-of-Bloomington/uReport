@@ -86,10 +86,11 @@ button, .button {
 /**
  * Alternating row background colors
  */
-.ticketList tbody tr:nth-child(even),
+.ticketList        tbody tr:nth-child(even),
+.slaForm           tbody tr:nth-child(even),
 .clientRequestForm tbody tr:nth-child(odd),
 .ticketInfo li:nth-child(odd),
-.issueInfo li:nth-child(odd) {
+.issueInfo  li:nth-child(odd) {
 	background:#eee;
 }
 

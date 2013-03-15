@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
@@ -40,98 +40,125 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
+			<tr><td><label for="description">Description</label></td>
+				<td><textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
+				</td>
+			</tr>
 		</table>
-		<div>
-			<div><label for="description">Description</label></div>
-			<textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
-		</div>
-		<div>
-			<div><label for="department_id">Default Department Assignment</label></div>
-			<select name="department_id" id="department_id">
-			<?php
-				$list = new DepartmentList();
-				$list->find();
-				foreach ($list as $department) {
-					$selected = $department->getId()==$department_id
-						? 'selected="selected"'
-						: '';
-					$name = View::escape($department->getName());
-					echo "<option value=\"{$department->getId()}\" $selected >$name</option>";
+	</fieldset>
+	<fieldset><legend>SLA (Service Level Agreement)</legend>
+		<p>This department agrees to handle new tickets for this category within
+			the amount of time specified.
+		</p>
+		<table>
+			<tr><td><label for="department_id">Department</label></td>
+				<td><select name="department_id" id="department_id">
+					<?php
+						$list = new DepartmentList();
+						$list->find();
+						foreach ($list as $department) {
+							$selected = $department->getId()==$department_id
+								? 'selected="selected"'
+								: '';
+							$name = View::escape($department->getName());
+							echo "<option value=\"{$department->getId()}\" $selected >$name</option>";
+						}
+					?>
+					</select>
+				</td>
+			</tr>
+			<tr><td><label for="slaExpression">Time</label></td>
+				<td><input name="slaExpression" id="slaExpression" size="2" maxlength="2"
+						value="<?php echo $this->category->getSlaExpression(); ?>" />
+					<select name="slaUnits" id="slaUnits">
+						<option value=""></option>
+						<?php
+							foreach (Category::$SLA_UNITS as $unit) {
+								$selected = $this->category->getSlaUnits()==$unit
+									? 'selected="selected"'
+									: '';
+								echo "<option $selected>$unit</option>";
+							}
+						?>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset><legend>Permissions required</legend>
+		<table>
+			<tr><td><label for="postingPermissionLevel">Posting Cases</label></td>
+				<td><select name="postingPermissionLevel" id="postingPermissionLevel">
+						<option value="staff" <?php if ($postingPermissionLevel=='staff') echo 'selected="selected"'; ?> >
+							Authenticated Staff
+						</option>
+						<option value="public" <?php if ($postingPermissionLevel=='public') echo 'selected="selected"'; ?> >
+							Authenticated Public
+						</option>
+						<option value="anonymous" <?php if ($postingPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
+							Anonymous
+						</option>
+					</select>
+				</td>
+			</tr>
+			<tr><td><label for="displayPermissionLevel">Displaying Cases</label></td>
+				<td><select name="displayPermissionLevel" id="displayPermissionLevel">
+						<option value="staff" <?php if ($displayPermissionLevel=='staff') echo 'selected="selected"'; ?> >
+							Authenticated Staff
+						</option>
+						<option value="public" <?php if ($displayPermissionLevel=='public') echo 'selected="selected"'; ?> >
+							Authenticated Public
+						</option>
+						<option value="anonymous" <?php if ($displayPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
+							Anonymous
+						</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset><legend>Custom Fields</legend>
+		<?php
+			// There may not be any custom fields for this category.
+			// We do not want to display "null" in this case, just
+			// leave the textarea empty.
+			$custom_fields = '';
+			if (isset($_POST['custom_fields'])) {
+				$custom_fields = View::escape($_POST['custom_fields']);
+			}
+			else {
+				$fields = $this->category->getCustomFields();
+				if ($fields) {
+					$custom_fields = json_encode($fields);
 				}
-			?>
-			</select>
-		</div>
-		<div>
-			<div><label for="postingPermissionLevel">Permission Level for Posting Cases</label></div>
-			<select name="postingPermissionLevel" id="postingPermissionLevel">
-				<option value="staff" <?php if ($postingPermissionLevel=='staff') echo 'selected="selected"'; ?> >
-					Authenticated Staff
-				</option>
-				<option value="public" <?php if ($postingPermissionLevel=='public') echo 'selected="selected"'; ?> >
-					Authenticated Public
-				</option>
-				<option value="anonymous" <?php if ($postingPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
-					Anonymous
-				</option>
-			</select>
-		</div>
-		<div>
-			<div><label for="displayPermissionLevel">Permission Level for Displaying Cases</label></div>
-			<select name="displayPermissionLevel" id="displayPermissionLevel">
-				<option value="staff" <?php if ($displayPermissionLevel=='staff') echo 'selected="selected"'; ?> >
-					Authenticated Staff
-				</option>
-				<option value="public" <?php if ($displayPermissionLevel=='public') echo 'selected="selected"'; ?> >
-					Authenticated Public
-				</option>
-				<option value="anonymous" <?php if ($displayPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
-					Anonymous
-				</option>
-			</select>
-		</div>
-		<div>
-			<?php
-				// There may not be any custom fields for this category.
-				// We do not want to display "null" in this case, just
-				// leave the textarea empty.
-				$custom_fields = '';
-				if (isset($_POST['custom_fields'])) {
-					$custom_fields = View::escape($_POST['custom_fields']);
-				}
-				else {
-					$fields = $this->category->getCustomFields();
-					if ($fields) {
-						$custom_fields = json_encode($fields);
-					}
-				}
-			?>
-			<div><label for="custom_fields">Custom Fields</label></div>
-			<textarea name="custom_fields" id="custom_fields" rows="30" cols="50"><?php echo $custom_fields; ?></textarea>
-			<div><p>Custom fields are defined in JSON.
-					Each field can have a name, label, type and values.
-					Each field requires at least a name.
-				</p>
-				<h3>Type</h3>
-				<p>The currently supported types are taken from the Open311 spec.
-					<a href="http://wiki.open311.org/GeoReport_v2#GET_Service_Definition">
-						http://wiki.open311.org/GeoReport_v2#GET_Service_Definition
-					</a>
-				</p>
-				<ul><li>string: A string of characters without line breaks. Represented in an HTML from using an &lt;input&gt; tag</li>
-					<!--<li>number: A numeric value. Represented in an HTML from using an &lt;input&gt; tag</li> -->
-					<!--<li>datetime: The input generated must be able to transform into a valid ISO 8601 date. Represented in an HTML from using &lt;input&gt; tags</li> -->
-					<li>text:  A string of characters that may contain line breaks. Represented in an HTML from using an &lt;textarea&gt; tag</li>
-					<li>singlevaluelist:  A set of predefined values (specified in this response) where only one value may be selected. Represented in an HTML from using the &lt;select&gt; and &lt;option&gt; tags</li>
-					<li>multivaluelist:  A set of predefined values (specified in this response) where several values may be selected. Represented in an HTML from using the &lt;select multiple="multiple"&gt; and &lt;option&gt; tags</li>
-				</ul>
-				<p>
-					If the type is not provided, or an unknown type is used, it will be treated as "string".
-				</p>
-				<h3>Values</h3>
-				<p>Values are the list of predefined options for singlevaluelist and multivaluelist.
-					Values are required if type is set to singlevaluelist or multivaluelist.
-				</p>
-				<h3>Example</h3>
+			}
+		?>
+		<textarea name="custom_fields" id="custom_fields" rows="30" cols="50"><?php echo $custom_fields; ?></textarea>
+		<div><p>Custom fields are defined in JSON.
+				Each field can have a name, label, type and values.
+				Each field requires at least a name.
+			</p>
+			<h3>Type</h3>
+			<p>The currently supported types are taken from the Open311 spec.
+				<a href="http://wiki.open311.org/GeoReport_v2#GET_Service_Definition">
+					http://wiki.open311.org/GeoReport_v2#GET_Service_Definition
+				</a>
+			</p>
+			<ul><li>string: A string of characters without line breaks. Represented in an HTML from using an &lt;input&gt; tag</li>
+				<!--<li>number: A numeric value. Represented in an HTML from using an &lt;input&gt; tag</li> -->
+				<!--<li>datetime: The input generated must be able to transform into a valid ISO 8601 date. Represented in an HTML from using &lt;input&gt; tags</li> -->
+				<li>text:  A string of characters that may contain line breaks. Represented in an HTML from using an &lt;textarea&gt; tag</li>
+				<li>singlevaluelist:  A set of predefined values (specified in this response) where only one value may be selected. Represented in an HTML from using the &lt;select&gt; and &lt;option&gt; tags</li>
+				<li>multivaluelist:  A set of predefined values (specified in this response) where several values may be selected. Represented in an HTML from using the &lt;select multiple="multiple"&gt; and &lt;option&gt; tags</li>
+			</ul>
+			<p>
+				If the type is not provided, or an unknown type is used, it will be treated as "string".
+			</p>
+			<h3>Values</h3>
+			<p>Values are the list of predefined options for singlevaluelist and multivaluelist.
+				Values are required if type is set to singlevaluelist or multivaluelist.
+			</p>
+			<h3>Example</h3>
 				<code><pre>[
 	{"name":"one","label":"Default"},
 	{"name":"two","label":"Single Value List","type":"singlevaluelist","values":["a","b","c"]},
@@ -139,8 +166,9 @@ foreach ($fields as $field) {
 	{"name":"four","label":"Text Box","type":"text"}
 ]
 				</pre></code>
-			</div>
 		</div>
+	</fieldset>
+	<fieldset><legend>Submit</legend>
 		<button type="submit" class="submit">Submit</button>
 		<a class="cancel" href="<?php echo BASE_URL; ?>/categories">Cancel</a>
 	</fieldset>

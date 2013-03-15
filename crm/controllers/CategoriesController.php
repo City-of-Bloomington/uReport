@@ -88,4 +88,33 @@ class CategoriesController extends Controller
 			array('categoryList'=>$categoryList,'return_url'=>$return_url)
 		);
 	}
+
+	/**
+	 * A form for updating the SLA times for all categories at once
+	 */
+	public function sla()
+	{
+		$this->template->setFilename('backend');
+
+		if (isset($_POST['categories'])) {
+			try {
+				foreach ($_POST['categories'] as $id=>$post) {
+					$category = new Category($id);
+					$category->setSlaExpression($post['slaExpression']);
+					$category->setSlaUnits($post['slaUnits']);
+					$category->save();
+				}
+				header('Location: '.BASE_URL.'/categories');
+				exit();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		$list = new CategoryList();
+		$list->find();
+
+		$this->template->blocks[] = new Block('categories/slaForm.inc', array('categoryList'=>$list));
+	}
 }

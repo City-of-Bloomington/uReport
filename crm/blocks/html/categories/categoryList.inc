@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
@@ -62,6 +62,7 @@
 				<table>
 					<thead>
 						<tr><th>Department</th>
+							<th>SLA</th>
 							<th>Posting</th>
 							<th>Display</th>
 						</tr>
@@ -69,6 +70,7 @@
 					<tbody>
 						<tr>
 							<td>$department</td>
+							<td>{$category->getSLA()}</td>
 							<td>$postPermission</td>
 							<td>$displayPermission</td>
 						</tr>
