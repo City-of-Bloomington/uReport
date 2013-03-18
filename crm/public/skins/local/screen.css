@@ -46,7 +46,6 @@ button, .button {
 .actionForm fieldset { float:left; display:table; }
 .actionForm .buttons { clear:left; }
 
-.ticketInfo li { width:280px; }
 .ticketInfo ul .button,
 .personInfo table .button {
 	/* Hide the text.  Only show the icon */
