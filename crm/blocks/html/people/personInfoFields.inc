@@ -39,7 +39,7 @@ foreach ($fields as $field) {
 		</tr>
 		<?php
 			// Email and Phone are only valid for new records
-			if (!$this->getId()) {
+			if (!$this->person->getId()) {
 				$email = !empty($_POST['email']) ? View::escape($_POST['email']) : '';
 				$phone = !empty($_POST['phone']) ? View::escape($_POST['phone']) : '';
 				echo "

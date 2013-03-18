@@ -115,7 +115,7 @@ echo "
 		</tr>
 		";
 	}
-	if ($phoneButtons) {
+	if ($editButton) {
 		echo "
 		<tr><td colspan=\"3\">
 				<a class=\"add button\"

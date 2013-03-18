@@ -100,6 +100,13 @@ class Open311Client
 						$person->handleUpdate($p);
 						$person->save();
 
+						if (!empty($post['email'])) {
+							$email = new Email();
+							$email->setPerson($person);
+							$email->setEmail($post['email']);
+							$email->save();
+						}
+
 						if (!empty($post['phone']) || !empty($post['device_id'])) {
 							$phone = new Phone();
 							$phone->setPerson($person);

@@ -161,7 +161,7 @@ class PeopleController extends Controller
 
 		if (isset($_POST['firstname'])) {
 			try {
-				$newRecord = $person->getId() ? true : false;
+				$newRecord = $person->getId() ? false : true;
 
 				$person->handleUpdate($_POST);
 				$person->save();
