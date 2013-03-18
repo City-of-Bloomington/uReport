@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2012 City of Bloomington, Indiana
+ * @copyright 2009-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -9,8 +9,6 @@ class Person extends ActiveRecord
 	protected $tablename = 'people';
 
 	protected $department;
-	protected $phones = array();
-	protected $phonesUpdated = false;
 
 	/**
 	 * Populates the object with data
@@ -36,7 +34,9 @@ class Person extends ActiveRecord
 					$sql = 'select * from people where id=?';
 				}
 				elseif (false !== strpos($id,'@')) {
-					$sql = 'select * from people where email=?';
+					$sql = "select p.* from people p
+							left join peopleEmails e on p.id=e.person_id
+							where email=?";
 				}
 				else {
 					$sql = 'select * from people where username=?';
@@ -78,14 +78,6 @@ class Person extends ActiveRecord
 	public function save()
 	{
 		parent::save();
-		if ($this->phonesUpdated) {
-			foreach ($this->phones as $phone) {
-				if (!$phone->getPerson_id()) {
-					$phone->setPerson($this);
-				}
-				$phone->save();
-			}
-		}
 	}
 
 	public function delete()
@@ -96,7 +88,8 @@ class Person extends ActiveRecord
 			}
 
 			$zend_db = Database::getConnection();
-			$zend_db->delete('phones', 'person_id='.$this->getId());
+			$zend_db->delete('peoplePhones', 'person_id='.$this->getId());
+			$zend_db->delete('peopleEmails', 'person_id='.$this->getId());
 
 			parent::delete();
 		}
@@ -124,7 +117,6 @@ class Person extends ActiveRecord
 	public function getFirstname()     { return parent::get('firstname');    }
 	public function getMiddlename()    { return parent::get('middlename');   }
 	public function getLastname()      { return parent::get('lastname');     }
-	public function getEmail()         { return parent::get('email');        }
 	public function getOrganization()  { return parent::get('organization'); }
 	public function getAddress()       { return parent::get('address');      }
 	public function getCity()          { return parent::get('city');         }
@@ -134,7 +126,6 @@ class Person extends ActiveRecord
 	public function setFirstname   ($s) { parent::set('firstname',    $s); }
 	public function setMiddlename  ($s) { parent::set('middlename',   $s); }
 	public function setLastname    ($s) { parent::set('lastname',     $s); }
-	public function setEmail       ($s) { parent::set('email',        $s); }
 	public function setOrganization($s) { parent::set('organization', $s); }
 	public function setAddress     ($s) { parent::set('address',      $s); }
 	public function setCity        ($s) { parent::set('city',         $s); }
@@ -163,12 +154,14 @@ class Person extends ActiveRecord
 	}
 
 	/**
+	 * Updates fields that are not associated with authentication
+	 *
 	 * @param array $post
 	 */
 	public function handleUpdate($post)
 	{
 		$fields = array(
-			'firstname', 'middlename', 'lastname', 'email', 'organization',
+			'firstname', 'middlename', 'lastname', 'organization',
 			'address', 'city', 'state', 'zip'
 		);
 		foreach ($fields as $field) {
@@ -180,6 +173,8 @@ class Person extends ActiveRecord
 	}
 
 	/**
+	 * Updates only the fields associated with authentication
+	 *
 	 * @param array $post
 	 */
 	public function handleUpdateUserAccount($post)
@@ -276,6 +271,14 @@ class Person extends ActiveRecord
 	{
 		if ($this->getId()) {
 			return new PhoneList(array('person_id'=>$this->getId()));
+		}
+		return array();
+	}
+
+	public function getEmails()
+	{
+		if ($this->getId()) {
+			return new EmailList(array('person_id'=>$this->getId()));
 		}
 		return array();
 	}
@@ -394,13 +397,17 @@ class Person extends ActiveRecord
 	 */
 	public static function getDistinct($fieldname, $query=null)
 	{
-		$validFields = array('firstname', 'lastname', 'email', 'organization');
 		$fieldname = trim($fieldname);
+		$zend_db = Database::getConnection();
+
+		$validFields = array('firstname', 'lastname', 'organization');
 		if (in_array($fieldname, $validFields)) {
-			$zend_db = Database::getConnection();
 			$sql = "select distinct $fieldname from people where $fieldname like ?";
-			return $zend_db->fetchCol($sql, array("$query%"));
 		}
+		elseif ($fieldname == 'email') {
+			$sql = "select distinct email from peopleEmails where email like ?";
+		}
+		return $zend_db->fetchCol($sql, array("$query%"));
 	}
 
 	/**
@@ -414,12 +421,6 @@ class Person extends ActiveRecord
 		if (!$this->getLastname() && $identity->getLastname()) {
 			$this->setLastname($identity->getLastname());
 		}
-		if (!$this->getEmail() && $identity->getEmail()) {
-			$this->setEmail($identity->getEmail());
-		}
-		if (!$this->getPhoneNumber() && $identity->getPhone()) {
-			$this->setPhoneNumber($identity->getPhone());
-		}
 		if (!$this->getAddress() && $identity->getAddress()) {
 			$this->setAddress($identity->getAddress());
 		}
@@ -431,6 +432,25 @@ class Person extends ActiveRecord
 		}
 		if (!$this->getZip() && $identity->getZip()) {
 			$this->setZip($identity->getZip());
+		}
+
+		// We're going to be adding email and phone records for this person.
+		// We have to save the person record before we can do the foreign keys.
+		if (!$this->getId()) { $this->save(); }
+
+		$list = $this->getEmails();
+		if (!count($list) && $identity->getEmail()) {
+			$email = new Email();
+			$email->setPerson($this);
+			$email->setEmail($identity->getEmail());
+			$email->save();
+		}
+		$list = $this->getPhones();
+		if (!count($list) && $identity->getPhone()) {
+			$phone = new Phone();
+			$phone->setPerson($this);
+			$phone->setNumber($identity->getPhone());
+			$phone->save();
 		}
 	}
 }

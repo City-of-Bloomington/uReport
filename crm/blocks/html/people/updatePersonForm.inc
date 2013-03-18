@@ -19,7 +19,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 
 			// When adding a person, go ahead and ask for the first phone number
 			if (!$this->person->getId()) {
-				include APPLICATION_HOME.'/blocks/html/phones/fields.inc';
+				include APPLICATION_HOME.'/blocks/html/people/phoneFields.inc';
 			}
 		?>
 

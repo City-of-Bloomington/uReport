@@ -6,7 +6,7 @@
  * @param Phone $this->phone
  */
 ?>
-<fieldset>
+<fieldset><legend>Phone Number</legend>
 	<label>
 		Label
 		<select name="label" id="label">

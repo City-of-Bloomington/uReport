@@ -7,7 +7,6 @@
 */
 $username     = View::escape($this->person->getUsername());
 $name         = View::escape($this->person->getFullname());
-$email        = View::escape($this->person->getEmail());
 $organization = View::escape($this->person->getOrganization());
 $address      = View::escape($this->person->getAddress());
 $city         = View::escape($this->person->getCity());
@@ -18,12 +17,20 @@ echo "
 	<fullname>$name</fullname>
 	<organization>$organization</organization>
 	<username>$username</username>
-	<email>$email</email>
 	<address>$address</address>
 	<city>$city</city>
 	<state>$state</state>
 	<zip>$zip</zip>
 ";
+$list = $this->person->getEmail();
+if (count($list)) {
+	echo "<emails>";
+	foreach ($list as $email) {
+		$n = View::escape($email->getEmail());
+		echo "<email>$n</email>";
+	}
+	echo "</emails>";
+}
 $list = $this->person->getPhones();
 if (count($list)) {
 	echo "<phones>";

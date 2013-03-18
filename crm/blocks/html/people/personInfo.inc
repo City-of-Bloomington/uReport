@@ -41,7 +41,6 @@ if (userIsAllowed('people','update') && !$this->disableButtons) {
 
 
 $name         = View::escape($this->person->getFullname());
-$email        = View::escape($this->person->getEmail());
 $organization = View::escape($this->person->getOrganization());
 $address      = View::escape($this->person->getAddress());
 $city         = View::escape($this->person->getCity());
@@ -53,13 +52,46 @@ echo "
 	<h2>$organization</h2>
 	<div>$username</div>
 	<table>
-		<tr><th>email</th><td>$email</td></tr>
 		<tr><th>address</th>
 			<td><div>$address</div>
 				<div>$city $state $zip</div>
 			</td>
 		</tr>
 ";
+	$emailButtons = '';
+	foreach ($this->person->getEmails() as $e) {
+		$label = View::escape($e->getLabel());
+		$email = View::escape($e->getEmail());
+		if ($editButton) {
+			$emailButtons = "
+			<a class=\"edit button\"
+				href=\"".BASE_URI."/people/updateEmail?email_id={$e->getId()}\">
+				Edit Email
+			</a>
+			<a class=\"delete button\"
+				href=\"".BASE_URI."/people/deleteEmail?email_id={$e->getId()}\">
+				Delete Email
+			</a>
+			";
+		}
+		echo "
+		<tr><th>$label</th>
+			<td>$email</td>
+			<td>$emailButtons</td>
+		</tr>
+		";
+	}
+	if ($editButton) {
+		echo "
+		<tr><td colspan=\"3\">
+				<a class=\"add button\"
+					href=\"".BASE_URI."/people/updateEmail?person_id={$this->person->getId()}\">
+					Add Email
+				</a>
+			</td>
+		</tr>
+		";
+	}
 	$phoneButtons = '';
 	foreach ($this->person->getPhones() as $p) {
 		$label  = View::escape($p->getLabel());
@@ -67,11 +99,11 @@ echo "
 		if ($editButton) {
 			$phoneButtons = "
 			<a class=\"edit button\"
-				href=\"".BASE_URI."/phones/update?phone_id={$p->getId()}\">
+				href=\"".BASE_URI."/people/updatePhone?phone_id={$p->getId()}\">
 				Edit Phone
 			</a>
 			<a class=\"delete button\"
-				href=\"".BASE_URI."/phones/delete?phone_id={$p->getId()}\">
+				href=\"".BASE_URI."/people/deletePhone?phone_id={$p->getId()}\">
 				Delete Phone
 			</a>
 			";
@@ -83,20 +115,19 @@ echo "
 		</tr>
 		";
 	}
-	echo "
-	</table>
-	";
 	if ($phoneButtons) {
 		echo "
-		<div>
-			<a class=\"add button\"
-				href=\"".BASE_URI."/phones/update?person_id={$this->person->getId()}\">
-				Add Phone
-			</a>
-		</div>
+		<tr><td colspan=\"3\">
+				<a class=\"add button\"
+					href=\"".BASE_URI."/people/updatePhone?person_id={$this->person->getId()}\">
+					Add Phone
+				</a>
+			</td>
+		</tr>
 		";
 	}
-echo "
+	echo "
+	</table>
 	<div>$deleteButton</div>
 </div>
 ";

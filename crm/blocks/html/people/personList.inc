@@ -43,6 +43,18 @@
 				$address      = View::escape($person->getAddress());
 				$organization = View::escape($person->getOrganization());
 
+				$emailList = '';
+				$emails = $person->getEmails();
+				if (count($emails)) {
+					$list = '<ul>';
+					foreach ($emails as $e) {
+						$email = View::escape($e->getEmail());
+						$list.= "<li>$email</li>";
+					}
+					$list.= '</ul>';
+					$emailList = $list;
+				}
+
 				$phoneList = '';
 				$phones = $person->getPhones();
 				if (count($phones)) {
@@ -56,7 +68,7 @@
 				}
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>
-					<td>{$person->getEmail()}</td>
+					<td>$emailList</td>
 					<td>$address</td>
 					<td>$phoneList</td>
 				</tr>

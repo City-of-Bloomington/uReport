@@ -6,6 +6,13 @@
  */
 class PeopleController extends Controller
 {
+	private function redirectToErrorUrl(Exception $e)
+	{
+		$_SESSION['errorMessages'][] = $e;
+		header('Location: '.BASE_URL.'/people');
+		exit();
+	}
+
 	/**
 	 * Find and choose people
 	 *
@@ -66,16 +73,13 @@ class PeopleController extends Controller
 	{
 		$this->template->setFilename('people');
 		if (!isset($_GET['person_id'])) {
-			header('Location: '.BASE_URL.'/people');
-			exit();
+			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
 		}
 		try {
 			$person = new Person($_GET['person_id']);
 		}
 		catch (Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL.'/people');
-			exit();
+			$this->redirectToErrorUrl($e);
 		}
 		$this->template->title = $person->getFullname();
 
@@ -162,11 +166,19 @@ class PeopleController extends Controller
 				$person->handleUpdate($_POST);
 				$person->save();
 
-				if ($newRecord && !empty($_POST['number'])) {
-					$phone = new Phone();
-					$phone->handleUpdate($_POST);
-					$phone->setPerson($person);
-					$phone->save();
+				if ($newRecord) {
+					if (!empty($_POST['email'])) {
+						$email = new Email();
+						$email->setPerson($person);
+						$email->setEmail($_POST['email']);
+						$email->save();
+					}
+					if (!empty($_POST['phone'])) {
+						$phone = new Phone();
+						$phone->setPerson($person);
+						$phone->setNumber($_POST['phone']);
+						$phone->save();
+					}
 				}
 
 				if (isset($_REQUEST['return_url'])) {
@@ -204,6 +216,118 @@ class PeopleController extends Controller
 		}
 		header('Location: '.BASE_URL.'/people');
 		exit();
+	}
+
+	public function updateEmail()
+	{
+		if (isset($_REQUEST['email_id'])) {
+			try {
+				$email = new Email($_REQUEST['email_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$email = new Email();
+		}
+
+		if (!empty($_REQUEST['person_id'])) {
+			try {
+				$email->setPerson_id($_REQUEST['person_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+
+		if (!$email->getPerson_id()) {
+			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+		}
+
+
+		if (isset($_POST['email'])) {
+			try {
+				$email->handleUpdate($_POST);
+				$email->save();
+				header('Location: '.$email->getPerson()->getUrl());
+				exit();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		$this->template->blocks[] = new Block('people/updateEmailForm.inc', array('email'=>$email));
+	}
+
+	public function deleteEmail()
+	{
+		if (isset($_REQUEST['email_id'])) {
+			try {
+				$email = new Email($_REQUEST['email_id']);
+				$person = $email->getPerson();
+				$email->delete();
+				header('Location: '.$person->getURL());
+				exit();
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$this->redirectToErrorUrl(new Exception('emails/unknownEmail'));
+		}
+	}
+
+	public function updatePhone()
+	{
+		if (isset($_REQUEST['phone_id'])) {
+			try {
+				$phone = new Phone($_REQUEST['phone_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$phone = new Phone();
+		}
+
+		if (!empty($_REQUEST['person_id'])) {
+			try {
+				$phone->setPerson_id($_REQUEST['person_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+
+		if (!$phone->getPerson_id()) {
+			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+		}
+
+
+		if (isset($_POST['number'])) {
+			try {
+				$phone->handleUpdate($_POST);
+				$phone->save();
+				header('Location: '.$phone->getPerson()->getUrl());
+				exit();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		$this->template->blocks[] = new Block('people/updatePhoneForm.inc', array('phone'=>$phone));
+	}
+
+	public function deletePhone()
+	{
+		if (isset($_REQUEST['phone_id'])) {
+			try {
+				$phone = new Phone($_REQUEST['phone_id']);
+				$person = $phone->getPerson();
+				$phone->delete();
+				header('Location: '.$person->getURL());
+				exit();
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$this->redirectToErrorUrl(new Exception('phones/unknownPhone'));
+		}
 	}
 
 	/**

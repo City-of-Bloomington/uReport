@@ -47,7 +47,8 @@ button, .button {
 .actionForm .buttons { clear:left; }
 
 .ticketInfo ul .button,
-.personInfo table .button {
+.personInfo table .edit,
+.personInfo table .delete {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
 	width:0; padding:0 0 0 25px;

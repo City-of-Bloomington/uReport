@@ -9,14 +9,20 @@ $person = array(
 	'id'          => $this->person->getId(),
 	'username'    => $this->person->getUsername(),
 	'fullname'    => $this->person->getFullname(),
-	'email'       => $this->person->getEmail(),
 	'organization'=> $this->person->getOrganization(),
 	'address'     => $this->person->getAddress(),
 	'city'        => $this->person->getCity(),
 	'state'       => $this->person->getState(),
 	'zip'         => $this->person->getZip()
 );
-$list = $person->getPhones();
+$list = $this->person->getEmails();
+if (count($list)) {
+	$person['emails'] = array();
+	foreach ($list as $email) {
+		$person['emails'][] = $email->getEmail();
+	}
+}
+$list = $this->person->getPhones();
 if (count($list)) {
 	$person['phones'] = array();
 	foreach ($list as $phone) {

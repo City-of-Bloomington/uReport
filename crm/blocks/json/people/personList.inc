@@ -11,9 +11,15 @@ foreach ($this->personList as $person) {
 		'id'          => $person->getId(),
 		'username'    => $person->getUsername(),
 		'name'        => $person->getFullname(),
-		'organization'=> $person->getOrganization(),
-		'email'       => $person->getEmail(),
+		'organization'=> $person->getOrganization()
 	);
+	$list = $person->getEmails();
+	if (count($list)) {
+		$p['emails'] = array();
+		foreach ($list as $email) {
+			$p['emails'][] = $email->getEmail();
+		}
+	}
 	$list = $person->getPhones();
 	if (count($list)) {
 		$p['phones'] = array();

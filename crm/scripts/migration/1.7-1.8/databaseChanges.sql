@@ -53,3 +53,17 @@ alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month
 alter table phones add label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other';
 update phones set label='Other';
 rename table phones to peoplePhones;
+
+------------------------------------------------
+-- Email split out into a separate table
+------------------------------------------------
+create table peopleEmails (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	email     varchar(255) not null,
+	label enum('Home','Work','Other') not null default 'Other',
+	foreign key (person_id) references people(id)
+);
+update people set email=null where email='';
+insert into peopleEmails (person_id, email) select id,email from people where email is not null;
+alter table people drop email;

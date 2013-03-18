@@ -44,6 +44,10 @@ class PersonList extends ZendDbResultIterator
 								? $this->select->where('username is not null')
 								: $this->select->where('username is null');
 							break;
+						case 'email':
+							$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
+							$this->select->where('email.email=?', $value);
+							break;
 
 						case 'phoneNumber':
 							$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
@@ -79,9 +83,10 @@ class PersonList extends ZendDbResultIterator
 		$search = array();
 		if (isset($fields['query'])) {
 			$value = trim($fields['query']).'%';
+			$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
 			$this->select->where ('p.firstname like ?', $value)
 						->orWhere('p.lastname like ?',  $value)
-						->orWhere('p.email like ?',     $value)
+						->orWhere('email.email like ?', $value)
 						->orWhere('p.username like ?',  $value);
 		}
 		elseif (count($fields)) {
@@ -92,14 +97,22 @@ class PersonList extends ZendDbResultIterator
 							? $this->select->where('username is not null')
 							: $this->select->where('username is null');
 						break;
-					case 'phoneNumber':
-						$this->select->where('phone.number like ?', $value);
+					case 'email':
+						$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
+						$this->select->where('email.email like ?', "$value%");
 						break;
+					case 'phoneNumber':
 					case 'phoneDeviceId':
-						$this->select->where('phone.deviceId like ?', $value);
+						$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
+						if ($key == 'phoneNumber') {
+							$this->select->where('phone.number like ?', "$value%");
+						}
+						if ($key == 'phoneDeviceId') {
+							$this->select->where('phone.deviceId like ?', "$value%");
+						}
 						break;
 					case 'department_id':
-						$this->select->where('p.department_id=?', $value);
+						$this->select->where('p.department_id=?', "$value%");
 						break;
 					default:
 						$this->select->where("p.$key like ?", "$value%");

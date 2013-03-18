@@ -6,8 +6,8 @@
  * @param Phone $this->phone
  */
 ?>
-<form method="post" action="<?php echo BASE_URI; ?>/phones/update">
-	<?php include APPLICATION_HOME.'/blocks/html/phones/fields.inc'; ?>
+<form method="post" action="<?php echo BASE_URI; ?>/people/updatePhone">
+	<?php include APPLICATION_HOME.'/blocks/html/people/phoneFields.inc'; ?>
 	<fieldset>
 		<?php
 			if ($this->phone->getId()) {
