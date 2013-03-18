@@ -9,7 +9,6 @@ $person = array(
 	'id'          => $this->person->getId(),
 	'username'    => $this->person->getUsername(),
 	'fullname'    => $this->person->getFullname(),
-	'phone'       => $this->person->getPhoneNumber(),
 	'email'       => $this->person->getEmail(),
 	'organization'=> $this->person->getOrganization(),
 	'address'     => $this->person->getAddress(),
@@ -17,4 +16,11 @@ $person = array(
 	'state'       => $this->person->getState(),
 	'zip'         => $this->person->getZip()
 );
+$list = $person->getPhones();
+if (count($list)) {
+	$person['phones'] = array();
+	foreach ($list as $phone) {
+		$person['phones'][] = $phone->getNumber();
+	}
+}
 echo json_encode($person);

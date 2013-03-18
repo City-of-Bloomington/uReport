@@ -52,3 +52,4 @@ alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month
 ------------------------------------------------
 alter table phones add label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other';
 update phones set label='Other';
+rename table phones to peoplePhones;

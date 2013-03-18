@@ -6,7 +6,7 @@
  */
 class Phone extends ActiveRecord
 {
-	protected $tablename = 'phones';
+	protected $tablename = 'peoplePhones';
 
 	public static $LABELS = array('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other');
 	/**
@@ -29,7 +29,7 @@ class Phone extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from phones where id=?';
+				$sql = 'select * from peoplePhones where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 

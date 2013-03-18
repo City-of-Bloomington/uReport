@@ -29,7 +29,7 @@ create table people (
 );
 set foreign_key_checks=1;
 
-create table phones (
+create table peoplePhones (
 	id        int          unsigned not null primary key auto_increment,
 	person_id int          unsigned not null,
 	number    varchar(20),

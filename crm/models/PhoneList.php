@@ -22,7 +22,7 @@ class PhoneList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('phones');
+		$this->select->from('peoplePhones');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
