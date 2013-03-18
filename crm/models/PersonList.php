@@ -21,7 +21,6 @@ class PersonList extends ZendDbResultIterator
 		parent::__construct();
 
 		$this->select->from(array('p'=>'people'), 'p.*');
-		$this->select->joinLeft(array('phone'=>'phones'), 'p.id=phone.person_id', array());
 
 		if (is_array($fields)) { $this->find($fields); }
 	}
@@ -47,6 +46,7 @@ class PersonList extends ZendDbResultIterator
 							break;
 
 						case 'phoneNumber':
+							$this->select->joinLeft(array('phone'=>'phones'), 'p.id=phone.person_id', array());
 							$this->select->where('phone.number=?', $value);
 							break;
 

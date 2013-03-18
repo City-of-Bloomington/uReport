@@ -46,3 +46,9 @@ alter table departments drop customStatuses;
 ------------------------------------------------
 alter table categories add slaExpression int unsigned;
 alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month');
+
+------------------------------------------------
+-- Phones
+------------------------------------------------
+alter table phones add label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other';
+update phones set label='Other';

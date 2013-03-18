@@ -169,7 +169,6 @@ class Person extends ActiveRecord
 	{
 		$fields = array(
 			'firstname', 'middlename', 'lastname', 'email', 'organization',
-			'phoneNumber', 'phoneDeviceId',
 			'address', 'city', 'state', 'zip'
 		);
 		foreach ($fields as $field) {
@@ -275,56 +274,10 @@ class Person extends ActiveRecord
 	 */
 	public function getPhones()
 	{
-		if (!count($this->phones) && $this->getId()) {
-			$zend_db = Database::getConnection();
-			$result = $zend_db->fetchAll('select * from phones where person_id=?', $this->getId());
-			foreach ($result as $r) {
-				$this->phones[] = new Phone($r);
-			}
+		if ($this->getId()) {
+			return new PhoneList(array('person_id'=>$this->getId()));
 		}
-		return $this->phones;
-	}
-
-	/**
-	 * Makes sure there is at least one phone loaded
-	 *
-	 * All the forms on the system currently expect only one phone
-	 * We are in a transition to storing many phones per person.
-	 * There are several instances where we treat the person as if
-	 * they only have one phone, though.
-	 * For instance, Open311 only supports one phone per person
-	 * For these getters/setters we are treating the first phone record
-	 * as their only phone.
-	 */
-	private function loadFirstPhoneForEditing()
-	{
-		$this->phonesUpdated = true;
-		$this->getPhones();
-
-		if (!isset($this->phones[0])) {
-			$this->phones[0] = new Phone();
-			$this->phones[0]->setPerson($this);
-		}
-	}
-	public function getPhoneNumber()
-	{
-		$phones = $this->getPhones();
-		if (count($phones)) { return $phones[0]->getNumber(); }
-	}
-	public function getPhoneDeviceId()
-	{
-		$phones = $this->getPhones();
-		if (count($phones)) { return $phones[0]->getDeviceId(); }
-	}
-	public function setPhoneNumber($number)
-	{
-		$this->loadFirstPhoneForEditing();
-		$this->phones[0]->setNumber($number);
-	}
-	public function setPhoneDeviceId($id)
-	{
-		$this->loadFirstPhoneForEditing();
-		$this->phones[0]->setDeviceId($id);
+		return array();
 	}
 
 

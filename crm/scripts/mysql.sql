@@ -34,6 +34,7 @@ create table phones (
 	person_id int          unsigned not null,
 	number    varchar(20),
 	deviceId  varchar(128),
+	label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other',
 	foreign key (person_id) references people(id)
 );
 

@@ -157,8 +157,17 @@ class PeopleController extends Controller
 
 		if (isset($_POST['firstname'])) {
 			try {
+				$newRecord = $person->getId() ? true : false;
+
 				$person->handleUpdate($_POST);
 				$person->save();
+
+				if ($newRecord && !empty($_POST['number'])) {
+					$phone = new Phone();
+					$phone->handleUpdate($_POST);
+					$phone->setPerson($person);
+					$phone->save();
+				}
 
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = new URL($_REQUEST['return_url']);
