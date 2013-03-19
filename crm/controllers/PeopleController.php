@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -102,7 +102,7 @@ class PeopleController extends Controller
 			);
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			foreach ($lists as $listType=>$title) {
-				$this->addTicketList($listType, $title, $person, $disableLinks);
+				$this->addTicketList('right', $listType, $title, $person, $disableLinks);
 			}
 		}
 		else {
@@ -113,12 +113,13 @@ class PeopleController extends Controller
 	/**
 	 * Adds a ticketList about the Person to the template
 	 *
+	 * @param string $panel
 	 * @param string $listType (enteredBy, assigned, reportedBy, referred)
 	 * @param string $title
 	 * @param Person $person
 	 * @param bool $disableLinks
 	 */
-	private function addTicketList($listType, $title, Person $person, $disableLinks)
+	private function addTicketList($panel, $listType, $title, Person $person, $disableLinks=false, $disableButtons=false)
 	{
 		$field = $listType.'Person_id';
 
@@ -129,15 +130,16 @@ class PeopleController extends Controller
 			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
-					'ticketList'  => $tickets,
-					'title'       => $title,
-					'disableLinks'=> $disableLinks
+					'ticketList'    => $tickets,
+					'title'         => $title,
+					'disableLinks'  => $disableLinks,
+					'disableButtons'=> $disableButtons
 				)
 			);
 			if (count($tickets) >= 10) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
-			$this->template->blocks['right'][] = $block;
+			$this->template->blocks[$panel][] = $block;
 		}
 	}
 
@@ -303,13 +305,13 @@ class PeopleController extends Controller
 
 
 	/**
-	 * Moves all tickets from one person to another
+	 * Moves all linked information from one person to another
 	 */
 	public function merge()
 	{
 		try {
-			$personA = new Person($_GET['person_id_a']);
-			$personB = new Person($_GET['person_id_b']);
+			$personA = new Person($_REQUEST['person_id_a']);
+			$personB = new Person($_REQUEST['person_id_b']);
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -347,34 +349,28 @@ class PeopleController extends Controller
 			'people/personInfo.inc',
 			array('person'=>$personA,'disableButtons'=>true)
 		);
-		$reportedTickets = $personA->getReportedTickets();
-		if (count($reportedTickets)) {
-			$this->template->blocks['left'][] = new Block(
-				'tickets/searchResults.inc',
-				array(
-					'ticketList'=>$personA->getReportedTickets(),
-					'title'=>'Tickets With Issues Reported By '.$personA->getFullname(),
-					'disableButtons'=>true,
-					'disableComments'=>true
-				)
-			);
+		$lists = array(
+			'reportedBy'=>'Reported Cases',
+			'assigned'  =>'Assigned Cases',
+			'referred'  =>'Referred Cases',
+			'enteredBy' =>'Entered Cases'
+		);
+		foreach ($lists as $listType=>$title) {
+			$this->addTicketList('left', $listType, $title, $personA, true, true);
 		}
 
 		$this->template->blocks['right'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personB,'disableButtons'=>true)
 		);
-		$reportedTickets = $personB->getReportedTickets();
-		if (count($reportedTickets)) {
-			$this->template->blocks['right'][] = new Block(
-				'tickets/searchResults.inc',
-				array(
-					'ticketList'=>$personB->getReportedTickets(),
-					'title'=>'Tickets With Issues Reported By '.$personB->getFullname(),
-					'disableButtons'=>true,
-					'disableComments'=>true
-				)
-			);
+		$lists = array(
+			'reportedBy'=>'Reported Cases',
+			'assigned'  =>'Assigned Cases',
+			'referred'  =>'Referred Cases',
+			'enteredBy' =>'Entered Cases'
+		);
+		foreach ($lists as $listType=>$title) {
+			$this->addTicketList('right', $listType, $title, $personB, true, true);
 		}
 	}
 

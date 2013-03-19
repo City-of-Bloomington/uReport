@@ -27,11 +27,19 @@ class PersonList extends ZendDbResultIterator
 
 	private function prepareJoins($fields)
 	{
-		if (in_array('email', $fields)) {
+		$keys = array_keys($fields);
+		if (in_array('email', $keys)) {
 			$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
 		}
-		if (in_array(array('phoneNumber', 'phoneDeviceId'), $fields)) {
+		if (   in_array('phoneNumber',   $keys)
+			|| in_array('phoneDeviceId', $keys)) {
 			$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
+		}
+		if (in_array('address',  $keys)
+			|| in_array('city',  $keys)
+			|| in_array('state', $keys)
+			|| in_array('zip',   $keys)) {
+			$this->select->joinLeft(array('address'=>'peopleAddresses'), 'p.id=address.person_id', array());
 		}
 	}
 
@@ -66,6 +74,13 @@ class PersonList extends ZendDbResultIterator
 
 						case 'phoneDeviceId':
 							$this->select->where('phone.deviceId=?', $value);
+							break;
+
+						case 'address':
+						case 'city':
+						case 'state':
+						case 'zip':
+							$this->select->where("address.$key=?", $value);
 							break;
 
 						default:
@@ -124,6 +139,13 @@ class PersonList extends ZendDbResultIterator
 
 					case 'department_id':
 						$this->select->where('p.department_id=?', "$value%");
+						break;
+
+					case 'address':
+					case 'city':
+					case 'state':
+					case 'zip':
+						$this->select->where("address.$key like ?", "$value%");
 						break;
 
 					default:

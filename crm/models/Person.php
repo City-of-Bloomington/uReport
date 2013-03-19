@@ -450,4 +450,77 @@ class Person extends ActiveRecord
 			$address->save();
 		}
 	}
+
+	/**
+	 * Transfers all data from a person, then deletes that person
+	 *
+	 * This person will end up containing all information from both people
+	 * I took care to make sure to update the search index as well
+	 * as the database.
+	 *
+	 * @param Person $person
+	 */
+	public function mergeFrom(Person $person)
+	{
+		if ($this->getId() && $person->getId()) {
+			if($this->getId() == $person->getId()){
+				// can not merge same person throw exception
+				throw new Exception('mergerNotAllowed');
+			}
+
+			$zend_db = Database::getConnection();
+			// Look up all the tickets we're about to modify
+			// We need to remember them so we can update the search
+			// index after we've updated the database
+			$id = (int)$person->getId();
+			$sql = "select distinct t.id from tickets t
+					left join ticketHistory th on t.id=th.ticket_id
+					left join issues         i on t.id= i.ticket_id
+					left join issueHistory  ih on i.id=ih.issue_id
+					left join media          m on i.id= m.issue_id
+					left join responses      r on i.id= r.issue_id
+					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.referredPerson_id=$id)
+					   or (th.enteredByPerson_id=$id or th.actionPerson_id=$id)
+					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
+					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
+					   or m.person_id=$id or r.person_id=$id";
+			$ticketIds = $zend_db->fetchCol($sql);
+
+			$zend_db->beginTransaction();
+			try {
+				// These are all the database fields that hit the Solr index
+				$zend_db->update('responses',    array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
+				$zend_db->update('media',        array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
+				$zend_db->update('issueHistory', array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('issueHistory', array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
+				$zend_db->update('issues',       array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('issues',       array('reportedByPerson_id'=> $this->getId()),'reportedByPerson_id='.$person->getId());
+				$zend_db->update('ticketHistory',array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('ticketHistory',array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array(  'assignedPerson_id'=> $this->getId()),  'assignedPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array(  'referredPerson_id'=> $this->getId()),  'referredPerson_id='.$person->getId());
+
+				// Fields that don't hit the Solr index
+				$zend_db->update('clients',         array('contactPerson_id'=> $this->getId()), 'contactPerson_id='.$person->getId());
+				$zend_db->update('departments',     array('defaultPerson_id'=> $this->getId()), 'defaultPerson_id='.$person->getId());
+				$zend_db->update('peopleAddresses', array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+				$zend_db->update('peoplePhones',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+				$zend_db->update('peopleEmails',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+
+				$zend_db->delete('people','id='.$person->getId());
+			}
+			catch (Exception $e) {
+				$zend_db->rollBack();
+				throw($e);
+			}
+			$zend_db->commit();
+
+			foreach ($ticketIds as $id) {
+				$search = new Search();
+				$ticket = new Ticket($id);
+				$search->add($ticket);
+			}
+		}
+	}
 }

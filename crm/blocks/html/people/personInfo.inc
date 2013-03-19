@@ -48,33 +48,12 @@ echo "
 	<div>$username</div>
 	<table>
 ";
-function linkedItemEditDeleteButtons($item, $object)
-{
-	$class = ucfirst($item);
-	$b = "
-	<a class=\"edit button\"
-		href=\"".BASE_URI."/people/update{$class}?{$item}_id={$object->getId()}\">
-		Edit $class
-	</a>
-	<a class=\"delete button\"
-		href=\"".BASE_URI."/people/delete{$class}?{$item}_id={$object->getId()}\">
-		Delete $class
-	</a>
-	";
-}
+	$buttonHelper = $this->template->getHelper('commonEditDeleteButtons');
+
 	$addressButtons = '';
 	foreach ($this->person->getAddresses() as $a) {
 		if ($editButton) {
-			$addressButtons = "
-			<a class=\"edit button\"
-				href=\"".BASE_URI."/people/updateAddress?address_id={$a->getId()}\">
-				Edit Email
-			</a>
-			<a class=\"delete button\"
-				href=\"".BASE_URI."/people/deleteAddress?address_id={$a->getId()}\">
-				Delete Email
-			</a>
-			";
+			$addressButtons = $buttonHelper->commonEditDeleteButtons('people', 'Address', $a);
 		}
 		$label   = View::escape($a->getLabel());
 		$address = View::escape($a->getAddress());
@@ -105,16 +84,7 @@ function linkedItemEditDeleteButtons($item, $object)
 	$emailButtons = '';
 	foreach ($this->person->getEmails() as $e) {
 		if ($editButton) {
-			$emailButtons = "
-			<a class=\"edit button\"
-				href=\"".BASE_URI."/people/updateEmail?email_id={$e->getId()}\">
-				Edit Email
-			</a>
-			<a class=\"delete button\"
-				href=\"".BASE_URI."/people/deleteEmail?email_id={$e->getId()}\">
-				Delete Email
-			</a>
-			";
+			$emailButtons = $buttonHelper->commonEditDeleteButtons('people', 'email', $e);
 		}
 		$label = View::escape($e->getLabel());
 		$email = View::escape($e->getEmail());
@@ -139,16 +109,7 @@ function linkedItemEditDeleteButtons($item, $object)
 	$phoneButtons = '';
 	foreach ($this->person->getPhones() as $p) {
 		if ($editButton) {
-			$phoneButtons = "
-			<a class=\"edit button\"
-				href=\"".BASE_URI."/people/updatePhone?phone_id={$p->getId()}\">
-				Edit Phone
-			</a>
-			<a class=\"delete button\"
-				href=\"".BASE_URI."/people/deletePhone?phone_id={$p->getId()}\">
-				Delete Phone
-			</a>
-			";
+			$phoneButtons = $buttonHelper->commonEditDeleteButtons('people', 'phone', $p);
 		}
 		$label  = View::escape($p->getLabel());
 		$number = View::escape($p->getNumber());
