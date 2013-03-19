@@ -21,9 +21,26 @@ class PersonList extends ZendDbResultIterator
 		parent::__construct();
 
 		$this->select->from(array('p'=>'people'), 'p.*');
-		$this->select->joinLeft(array('phone'=>'phones'), 'p.id=phone.person_id', array());
 
 		if (is_array($fields)) { $this->find($fields); }
+	}
+
+	private function prepareJoins($fields)
+	{
+		$keys = array_keys($fields);
+		if (in_array('email', $keys)) {
+			$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
+		}
+		if (   in_array('phoneNumber',   $keys)
+			|| in_array('phoneDeviceId', $keys)) {
+			$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
+		}
+		if (in_array('address',  $keys)
+			|| in_array('city',  $keys)
+			|| in_array('state', $keys)
+			|| in_array('zip',   $keys)) {
+			$this->select->joinLeft(array('address'=>'peopleAddresses'), 'p.id=address.person_id', array());
+		}
 	}
 
 	/**
@@ -37,6 +54,8 @@ class PersonList extends ZendDbResultIterator
 	public function find($fields=null, $order=null, $limit=null, $groupBy=null)
 	{
 		if (count($fields)) {
+			$this->prepareJoins($fields);
+
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {
@@ -45,6 +64,9 @@ class PersonList extends ZendDbResultIterator
 								? $this->select->where('username is not null')
 								: $this->select->where('username is null');
 							break;
+						case 'email':
+							$this->select->where('email.email=?', $value);
+							break;
 
 						case 'phoneNumber':
 							$this->select->where('phone.number=?', $value);
@@ -52,6 +74,13 @@ class PersonList extends ZendDbResultIterator
 
 						case 'phoneDeviceId':
 							$this->select->where('phone.deviceId=?', $value);
+							break;
+
+						case 'address':
+						case 'city':
+						case 'state':
+						case 'zip':
+							$this->select->where("address.$key=?", $value);
 							break;
 
 						default:
@@ -79,12 +108,15 @@ class PersonList extends ZendDbResultIterator
 		$search = array();
 		if (isset($fields['query'])) {
 			$value = trim($fields['query']).'%';
+			$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
 			$this->select->where ('p.firstname like ?', $value)
 						->orWhere('p.lastname like ?',  $value)
-						->orWhere('p.email like ?',     $value)
+						->orWhere('email.email like ?', $value)
 						->orWhere('p.username like ?',  $value);
 		}
 		elseif (count($fields)) {
+			$this->prepareJoins($fields);
+
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
 					case 'user_account':
@@ -92,23 +124,41 @@ class PersonList extends ZendDbResultIterator
 							? $this->select->where('username is not null')
 							: $this->select->where('username is null');
 						break;
+
+					case 'email':
+						$this->select->where('email.email like ?', "$value%");
+						break;
+
 					case 'phoneNumber':
-						$this->select->where('phone.number like ?', $value);
+						$this->select->where('phone.number like ?', "$value%");
 						break;
+
 					case 'phoneDeviceId':
-						$this->select->where('phone.deviceId like ?', $value);
+						$this->select->where('phone.deviceId like ?', "$value%");
 						break;
+
 					case 'department_id':
-						$this->select->where('p.department_id=?', $value);
+						$this->select->where('p.department_id=?', "$value%");
 						break;
+
+					case 'address':
+					case 'city':
+					case 'state':
+					case 'zip':
+						$this->select->where("address.$key like ?", "$value%");
+						break;
+
 					default:
-						$this->select->where("p.$key like ?", "$value%");
+						if (in_array($key, self::$fields)) {
+							$this->select->where("p.$key like ?", "$value%");
+						}
 				}
 			}
 		}
 
 		$this->runSearch($order, $limit, $groupBy);
 	}
+
 
 	private function runSearch($order=null, $limit=null, $groupBy=null)
 	{

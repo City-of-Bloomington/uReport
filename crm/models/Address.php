@@ -4,12 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Phone extends ActiveRecord
+class Address extends ActiveRecord
 {
-	protected $tablename = 'peoplePhones';
-	protected $person;
+	protected $tablename = 'peopleAddresses';
+	public static $LABELS = array('Home', 'Business', 'Rental');
 
-	public static $LABELS = array('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other');
 	/**
 	 * Populates the object with data
 	 *
@@ -30,7 +29,7 @@ class Phone extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from peoplePhones where id=?';
+				$sql = 'select * from peopleAddresses where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
@@ -38,20 +37,21 @@ class Phone extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('phones/unknownPhone');
+				throw new Exception('addresses/unknownAddress');
 			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->setLabel('Other');
+			$this->setLabel('Home');
 		}
 	}
 
 	public function validate()
 	{
-		if (!$this->getLabel()) { $this->setLabel('Other'); }
-		if (!$this->getPerson_id()) { throw new Exception('phones/missingPerson'); }
+		if (!$this->getAddress()) { throw new Exception('addresses/missingRequiredFields'); }
+		if (!$this->getPerson_id()) { throw new Exception('addresses/missingPerson'); }
+		if (!$this->getLabel()) { $this->setLabel('Home'); }
 	}
 
 	public function save()   { parent::save();   }
@@ -60,14 +60,18 @@ class Phone extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()       { return parent::get('id');       }
-	public function getNumber()   { return parent::get('number');   }
-	public function getDeviceId() { return parent::get('deviceId'); }
-	public function getLabel()    { return parent::get('label');    }
+	public function getId()      { return parent::get('id');      }
+	public function getAddress() { return parent::get('address'); }
+	public function getCity()    { return parent::get('city');    }
+	public function getState()   { return parent::get('state');   }
+	public function getZip()     { return parent::get('zip');     }
+	public function getLabel()   { return parent::get('label');   }
 
-	public function setNumber  ($s) { parent::set('number',   $s); }
-	public function setDeviceId($s) { parent::set('deviceId', $s); }
-	public function setLabel   ($s) { parent::set('label',    $s); }
+	public function setAddress($s) { parent::set('address', $s); }
+	public function setCity   ($s) { parent::set('city',    $s); }
+	public function setState  ($s) { parent::set('state',   $s); }
+	public function setZip    ($s) { parent::set('zip',     $s); }
+	public function setLabel  ($s) { parent::set('label',   $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
 	public function getPerson()    { return parent::getForeignKeyObject('Person', 'person_id');      }
@@ -76,11 +80,11 @@ class Phone extends ActiveRecord
 
 	public function handleUpdate($post)
 	{
-		$fields = array('number', 'deviceId', 'label', 'person_id');
-		foreach ($fields as $f) {
-			if (isset($post[$f])) {
-				$set = 'set'.ucfirst($f);
-				$this->$set($post[$f]);
+		$fields = array('label', 'address', 'city', 'state', 'zip', 'person_id');
+		foreach ($fields as $key) {
+			if (isset($post[$key])) {
+				$set = 'set'.ucfirst($key);
+				$this->$set($post[$key]);
 			}
 		}
 	}

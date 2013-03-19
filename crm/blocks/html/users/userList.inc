@@ -48,7 +48,6 @@
 
 				$username = View::escape($user->getUsername());
 				$name = View::escape("{$user->getFirstname()} {$user->getLastname()}");
-				$email = View::escape($user->getEmail());
 
 				$department = $user->getDepartment();
 				$departmentName = $department ? View::escape($department->getName()) : '';

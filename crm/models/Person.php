@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2012 City of Bloomington, Indiana
+ * @copyright 2009-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -9,8 +9,6 @@ class Person extends ActiveRecord
 	protected $tablename = 'people';
 
 	protected $department;
-	protected $phones = array();
-	protected $phonesUpdated = false;
 
 	/**
 	 * Populates the object with data
@@ -36,7 +34,9 @@ class Person extends ActiveRecord
 					$sql = 'select * from people where id=?';
 				}
 				elseif (false !== strpos($id,'@')) {
-					$sql = 'select * from people where email=?';
+					$sql = "select p.* from people p
+							left join peopleEmails e on p.id=e.person_id
+							where email=?";
 				}
 				else {
 					$sql = 'select * from people where username=?';
@@ -78,14 +78,6 @@ class Person extends ActiveRecord
 	public function save()
 	{
 		parent::save();
-		if ($this->phonesUpdated) {
-			foreach ($this->phones as $phone) {
-				if (!$phone->getPerson_id()) {
-					$phone->setPerson($this);
-				}
-				$phone->save();
-			}
-		}
 	}
 
 	public function delete()
@@ -96,7 +88,8 @@ class Person extends ActiveRecord
 			}
 
 			$zend_db = Database::getConnection();
-			$zend_db->delete('phones', 'person_id='.$this->getId());
+			$zend_db->delete('peoplePhones', 'person_id='.$this->getId());
+			$zend_db->delete('peopleEmails', 'person_id='.$this->getId());
 
 			parent::delete();
 		}
@@ -124,22 +117,12 @@ class Person extends ActiveRecord
 	public function getFirstname()     { return parent::get('firstname');    }
 	public function getMiddlename()    { return parent::get('middlename');   }
 	public function getLastname()      { return parent::get('lastname');     }
-	public function getEmail()         { return parent::get('email');        }
 	public function getOrganization()  { return parent::get('organization'); }
-	public function getAddress()       { return parent::get('address');      }
-	public function getCity()          { return parent::get('city');         }
-	public function getState()         { return parent::get('state');        }
-	public function getZip()           { return parent::get('zip');          }
 
 	public function setFirstname   ($s) { parent::set('firstname',    $s); }
 	public function setMiddlename  ($s) { parent::set('middlename',   $s); }
 	public function setLastname    ($s) { parent::set('lastname',     $s); }
-	public function setEmail       ($s) { parent::set('email',        $s); }
 	public function setOrganization($s) { parent::set('organization', $s); }
-	public function setAddress     ($s) { parent::set('address',      $s); }
-	public function setCity        ($s) { parent::set('city',         $s); }
-	public function setState       ($s) { parent::set('state',        $s); }
-	public function setZip         ($s) { parent::set('zip',          $s); }
 
 	public function getDepartment_id()    { return parent::get('department_id'); }
 	public function getDepartment()       { return parent::getForeignKeyObject('Department', 'department_id');      }
@@ -163,14 +146,14 @@ class Person extends ActiveRecord
 	}
 
 	/**
+	 * Updates fields that are not associated with authentication
+	 *
 	 * @param array $post
 	 */
 	public function handleUpdate($post)
 	{
 		$fields = array(
-			'firstname', 'middlename', 'lastname', 'email', 'organization',
-			'phoneNumber', 'phoneDeviceId',
-			'address', 'city', 'state', 'zip'
+			'firstname', 'middlename', 'lastname', 'organization'
 		);
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
@@ -181,6 +164,8 @@ class Person extends ActiveRecord
 	}
 
 	/**
+	 * Updates only the fields associated with authentication
+	 *
 	 * @param array $post
 	 */
 	public function handleUpdateUserAccount($post)
@@ -275,56 +260,26 @@ class Person extends ActiveRecord
 	 */
 	public function getPhones()
 	{
-		if (!count($this->phones) && $this->getId()) {
-			$zend_db = Database::getConnection();
-			$result = $zend_db->fetchAll('select * from phones where person_id=?', $this->getId());
-			foreach ($result as $r) {
-				$this->phones[] = new Phone($r);
-			}
+		if ($this->getId()) {
+			return new PhoneList(array('person_id'=>$this->getId()));
 		}
-		return $this->phones;
+		return array();
 	}
 
-	/**
-	 * Makes sure there is at least one phone loaded
-	 *
-	 * All the forms on the system currently expect only one phone
-	 * We are in a transition to storing many phones per person.
-	 * There are several instances where we treat the person as if
-	 * they only have one phone, though.
-	 * For instance, Open311 only supports one phone per person
-	 * For these getters/setters we are treating the first phone record
-	 * as their only phone.
-	 */
-	private function loadFirstPhoneForEditing()
+	public function getEmails()
 	{
-		$this->phonesUpdated = true;
-		$this->getPhones();
-
-		if (!isset($this->phones[0])) {
-			$this->phones[0] = new Phone();
-			$this->phones[0]->setPerson($this);
+		if ($this->getId()) {
+			return new EmailList(array('person_id'=>$this->getId()));
 		}
+		return array();
 	}
-	public function getPhoneNumber()
+
+	public function getAddresses()
 	{
-		$phones = $this->getPhones();
-		if (count($phones)) { return $phones[0]->getNumber(); }
-	}
-	public function getPhoneDeviceId()
-	{
-		$phones = $this->getPhones();
-		if (count($phones)) { return $phones[0]->getDeviceId(); }
-	}
-	public function setPhoneNumber($number)
-	{
-		$this->loadFirstPhoneForEditing();
-		$this->phones[0]->setNumber($number);
-	}
-	public function setPhoneDeviceId($id)
-	{
-		$this->loadFirstPhoneForEditing();
-		$this->phones[0]->setDeviceId($id);
+		if ($this->getId()) {
+			return new AddressList(array('person_id'=>$this->getId()));
+		}
+		return array();
 	}
 
 
@@ -441,13 +396,17 @@ class Person extends ActiveRecord
 	 */
 	public static function getDistinct($fieldname, $query=null)
 	{
-		$validFields = array('firstname', 'lastname', 'email', 'organization');
 		$fieldname = trim($fieldname);
+		$zend_db = Database::getConnection();
+
+		$validFields = array('firstname', 'lastname', 'organization');
 		if (in_array($fieldname, $validFields)) {
-			$zend_db = Database::getConnection();
 			$sql = "select distinct $fieldname from people where $fieldname like ?";
-			return $zend_db->fetchCol($sql, array("$query%"));
 		}
+		elseif ($fieldname == 'email') {
+			$sql = "select distinct email from peopleEmails where email like ?";
+		}
+		return $zend_db->fetchCol($sql, array("$query%"));
 	}
 
 	/**
@@ -461,23 +420,107 @@ class Person extends ActiveRecord
 		if (!$this->getLastname() && $identity->getLastname()) {
 			$this->setLastname($identity->getLastname());
 		}
-		if (!$this->getEmail() && $identity->getEmail()) {
-			$this->setEmail($identity->getEmail());
+
+		// We're going to be adding email and phone records for this person.
+		// We have to save the person record before we can do the foreign keys.
+		if (!$this->getId()) { $this->save(); }
+
+		$list = $this->getEmails();
+		if (!count($list) && $identity->getEmail()) {
+			$email = new Email();
+			$email->setPerson($this);
+			$email->setEmail($identity->getEmail());
+			$email->save();
 		}
-		if (!$this->getPhoneNumber() && $identity->getPhone()) {
-			$this->setPhoneNumber($identity->getPhone());
+		$list = $this->getPhones();
+		if (!count($list) && $identity->getPhone()) {
+			$phone = new Phone();
+			$phone->setPerson($this);
+			$phone->setNumber($identity->getPhone());
+			$phone->save();
 		}
-		if (!$this->getAddress() && $identity->getAddress()) {
-			$this->setAddress($identity->getAddress());
+		$list = $this->getAddresses();
+		if (!count($list) && $identity->getAddress()) {
+			$address = new Address();
+			$address->setPerson($this);
+			$address->setAddress($identity->getAddress());
+			$address->setCity   ($identity->getCity());
+			$address->setState  ($identity->getState());
+			$address->setZip    ($identity->setZip());
+			$address->save();
 		}
-		if (!$this->getCity() && $identity->getCity()) {
-			$this->setCity($identity->getCity());
-		}
-		if (!$this->getState() && $identity->getState()) {
-			$this->setState($identity->getState());
-		}
-		if (!$this->getZip() && $identity->getZip()) {
-			$this->setZip($identity->getZip());
+	}
+
+	/**
+	 * Transfers all data from a person, then deletes that person
+	 *
+	 * This person will end up containing all information from both people
+	 * I took care to make sure to update the search index as well
+	 * as the database.
+	 *
+	 * @param Person $person
+	 */
+	public function mergeFrom(Person $person)
+	{
+		if ($this->getId() && $person->getId()) {
+			if($this->getId() == $person->getId()){
+				// can not merge same person throw exception
+				throw new Exception('mergerNotAllowed');
+			}
+
+			$zend_db = Database::getConnection();
+			// Look up all the tickets we're about to modify
+			// We need to remember them so we can update the search
+			// index after we've updated the database
+			$id = (int)$person->getId();
+			$sql = "select distinct t.id from tickets t
+					left join ticketHistory th on t.id=th.ticket_id
+					left join issues         i on t.id= i.ticket_id
+					left join issueHistory  ih on i.id=ih.issue_id
+					left join media          m on i.id= m.issue_id
+					left join responses      r on i.id= r.issue_id
+					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.referredPerson_id=$id)
+					   or (th.enteredByPerson_id=$id or th.actionPerson_id=$id)
+					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
+					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
+					   or m.person_id=$id or r.person_id=$id";
+			$ticketIds = $zend_db->fetchCol($sql);
+
+			$zend_db->beginTransaction();
+			try {
+				// These are all the database fields that hit the Solr index
+				$zend_db->update('responses',    array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
+				$zend_db->update('media',        array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
+				$zend_db->update('issueHistory', array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('issueHistory', array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
+				$zend_db->update('issues',       array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('issues',       array('reportedByPerson_id'=> $this->getId()),'reportedByPerson_id='.$person->getId());
+				$zend_db->update('ticketHistory',array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('ticketHistory',array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array(  'assignedPerson_id'=> $this->getId()),  'assignedPerson_id='.$person->getId());
+				$zend_db->update('tickets',      array(  'referredPerson_id'=> $this->getId()),  'referredPerson_id='.$person->getId());
+
+				// Fields that don't hit the Solr index
+				$zend_db->update('clients',         array('contactPerson_id'=> $this->getId()), 'contactPerson_id='.$person->getId());
+				$zend_db->update('departments',     array('defaultPerson_id'=> $this->getId()), 'defaultPerson_id='.$person->getId());
+				$zend_db->update('peopleAddresses', array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+				$zend_db->update('peoplePhones',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+				$zend_db->update('peopleEmails',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+
+				$zend_db->delete('people','id='.$person->getId());
+			}
+			catch (Exception $e) {
+				$zend_db->rollBack();
+				throw($e);
+			}
+			$zend_db->commit();
+
+			foreach ($ticketIds as $id) {
+				$search = new Search();
+				$ticket = new Ticket($id);
+				$search->add($ticket);
+			}
 		}
 	}
 }

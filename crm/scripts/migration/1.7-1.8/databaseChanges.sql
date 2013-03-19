@@ -46,3 +46,42 @@ alter table departments drop customStatuses;
 ------------------------------------------------
 alter table categories add slaExpression int unsigned;
 alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month');
+
+------------------------------------------------
+-- Phones
+------------------------------------------------
+alter table phones add label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other';
+update phones set label='Other';
+rename table phones to peoplePhones;
+
+------------------------------------------------
+-- Email split out into a separate table
+------------------------------------------------
+create table peopleEmails (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	email     varchar(255) not null,
+	label enum('Home','Work','Other') not null default 'Other',
+	foreign key (person_id) references people(id)
+);
+update people set email=null where email='';
+insert into peopleEmails (person_id, email) select id,email from people where email is not null;
+alter table people drop email;
+
+------------------------------------------------
+-- People's addresses
+------------------------------------------------
+create table peopleAddresses (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	address   varchar(128) not null,
+	city      varchar(128),
+	state     varchar(128),
+	zip       varchar(20),
+	label enum('Home', 'Business', 'Rental') not null default 'Home',
+	foreign key (person_id) references people(id)
+);
+update people set address=null where address='';
+insert into peopleAddresses (person_id,address,city,state,zip)
+	select id,address,city,state,zip from people where address is not null;
+alter table people drop address;

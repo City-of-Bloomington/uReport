@@ -1,20 +1,19 @@
 <?php
 /**
- * @copyright 2009-2012 City of Bloomington, Indiana
+ * @copyright 2009-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  */
 ?>
-<div class="interfaceBox">
-	<h1>People</h1>
+<div class="personList interfaceBox">
+	<h2>People</h2>
 	<table>
 		<thead>
 			<tr><th>Name</th>
 				<th>Email</th>
 				<th>Address</th>
 				<th>Phone</th>
-				<th>Organization</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,15 +40,48 @@
 				}
 
 				$name         = View::escape($person->getFullname());
-				$address      = View::escape($person->getAddress());
-				$phone        = View::escape($person->getPhoneNumber());
 				$organization = View::escape($person->getOrganization());
+
+				$emailList = '';
+				$emails = $person->getEmails();
+				if (count($emails)) {
+					$list = '<ul>';
+					foreach ($emails as $e) {
+						$email = View::escape($e->getEmail());
+						$list.= "<li>$email</li>";
+					}
+					$list.= '</ul>';
+					$emailList = $list;
+				}
+
+				$addressList = '';
+				$addresses = $person->getAddresses();
+				if (count($addresses)) {
+					$list = '<ul>';
+					foreach ($addresses as $a) {
+						$address = View::escape($a->getAddress());
+						$list.= "<li>$address</li>";
+					}
+					$list.= '</ul>';
+					$addressList = $list;
+				}
+
+				$phoneList = '';
+				$phones = $person->getPhones();
+				if (count($phones)) {
+					$list = '<ul>';
+					foreach ($phones as $p) {
+						$number = View::escape($p->getNumber());
+						$list.= "<li>$number</li>";
+					}
+					$list.= '</ul>';
+					$phoneList = $list;
+				}
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>
-					<td><a href=\"$url\">{$person->getEmail()}</a></td>
-					<td><a href=\"$url\">$address</a></td>
-					<td><a href=\"$url\">$phone</a></td>
-					<td><a href=\"$url\">$organization</a></td>
+					<td>$emailList</td>
+					<td>$addressList</td>
+					<td>$phoneList</td>
 				</tr>
 				";
 			}

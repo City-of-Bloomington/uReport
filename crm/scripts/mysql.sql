@@ -1,4 +1,4 @@
--- @copyright 2006-2012 City of Bloomington, Indiana
+-- @copyright 2006-2013 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 -- @author Cliff Ingham <inghamn@bloomington.in.gov>
 set foreign_key_checks=0;
@@ -14,7 +14,6 @@ create table people (
 	firstname            varchar(128),
 	middlename           varchar(128),
 	lastname             varchar(128),
-	email                varchar(255),
 	organization         varchar(128),
 	address              varchar(128),
 	city                 varchar(128),
@@ -29,11 +28,31 @@ create table people (
 );
 set foreign_key_checks=1;
 
-create table phones (
+create table peopleEmails (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	email     varchar(255) not null,
+	label enum('Home','Work','Other') not null default 'Other',
+	foreign key (person_id) references people(id)
+);
+
+create table peoplePhones (
 	id        int          unsigned not null primary key auto_increment,
 	person_id int          unsigned not null,
 	number    varchar(20),
 	deviceId  varchar(128),
+	label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other',
+	foreign key (person_id) references people(id)
+);
+
+create table peopleAddresses (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	address   varchar(128) not null,
+	city      varchar(128),
+	state     varchar(128),
+	zip       varchar(20),
+	label enum('Home', 'Business', 'Rental') not null default 'Home',
 	foreign key (person_id) references people(id)
 );
 

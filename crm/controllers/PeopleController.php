@@ -1,11 +1,18 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 class PeopleController extends Controller
 {
+	private function redirectToErrorUrl(Exception $e)
+	{
+		$_SESSION['errorMessages'][] = $e;
+		header('Location: '.BASE_URL.'/people');
+		exit();
+	}
+
 	/**
 	 * Find and choose people
 	 *
@@ -66,16 +73,13 @@ class PeopleController extends Controller
 	{
 		$this->template->setFilename('people');
 		if (!isset($_GET['person_id'])) {
-			header('Location: '.BASE_URL.'/people');
-			exit();
+			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
 		}
 		try {
 			$person = new Person($_GET['person_id']);
 		}
 		catch (Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL.'/people');
-			exit();
+			$this->redirectToErrorUrl($e);
 		}
 		$this->template->title = $person->getFullname();
 
@@ -98,7 +102,7 @@ class PeopleController extends Controller
 			);
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			foreach ($lists as $listType=>$title) {
-				$this->addTicketList($listType, $title, $person, $disableLinks);
+				$this->addTicketList('right', $listType, $title, $person, $disableLinks);
 			}
 		}
 		else {
@@ -109,12 +113,13 @@ class PeopleController extends Controller
 	/**
 	 * Adds a ticketList about the Person to the template
 	 *
+	 * @param string $panel
 	 * @param string $listType (enteredBy, assigned, reportedBy, referred)
 	 * @param string $title
 	 * @param Person $person
 	 * @param bool $disableLinks
 	 */
-	private function addTicketList($listType, $title, Person $person, $disableLinks)
+	private function addTicketList($panel, $listType, $title, Person $person, $disableLinks=false, $disableButtons=false)
 	{
 		$field = $listType.'Person_id';
 
@@ -125,15 +130,16 @@ class PeopleController extends Controller
 			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
-					'ticketList'  => $tickets,
-					'title'       => $title,
-					'disableLinks'=> $disableLinks
+					'ticketList'    => $tickets,
+					'title'         => $title,
+					'disableLinks'  => $disableLinks,
+					'disableButtons'=> $disableButtons
 				)
 			);
 			if (count($tickets) >= 10) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
-			$this->template->blocks['right'][] = $block;
+			$this->template->blocks[$panel][] = $block;
 		}
 	}
 
@@ -157,8 +163,25 @@ class PeopleController extends Controller
 
 		if (isset($_POST['firstname'])) {
 			try {
+				$newRecord = $person->getId() ? false : true;
+
 				$person->handleUpdate($_POST);
 				$person->save();
+
+				if ($newRecord) {
+					if (!empty($_POST['email'])) {
+						$email = new Email();
+						$email->setPerson($person);
+						$email->setEmail($_POST['email']);
+						$email->save();
+					}
+					if (!empty($_POST['phone'])) {
+						$phone = new Phone();
+						$phone->setPerson($person);
+						$phone->setNumber($_POST['phone']);
+						$phone->save();
+					}
+				}
 
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = new URL($_REQUEST['return_url']);
@@ -198,13 +221,97 @@ class PeopleController extends Controller
 	}
 
 	/**
-	 * Moves all tickets from one person to another
+	 * Helper functino for handling foreign key object deletions
+	 *
+	 * Email, Phone, and Address are all handled exactly the same way.
+	 *
+	 * @param string $item
+	 */
+	private function deleteLinkedItem($item)
+	{
+		$class = ucfirst($item);
+
+		if (isset($_REQUEST[$item.'_id'])) {
+			try {
+				$o = new $class($_REQUEST[$item.'_id']);
+				$person = $o->getPerson();
+				$o->delete();
+				header('Location: '.$person->getURL());
+				exit();
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$this->redirectToErrorUrl(new Exception("people/unknown$class"));
+		}
+	}
+	public function deleteEmail()   { $this->deleteLinkedItem('email');   }
+	public function deletePhone()   { $this->deleteLinkedItem('phone');   }
+	public function deleteAddress() { $this->deleteLinkedItem('address'); }
+
+	/**
+	 * Helper function for handling foreign key object updates
+	 *
+	 * Email, Phone, and Address are all handled exactly the same way.
+	 *
+	 * @param string $item
+	 * @param string $requiredField The field to look for in the POST which
+	 *								determines whether this item has been posted
+	 */
+	private function updateLinkedItem($item, $requiredField)
+	{
+		$this->template->setFilename('people');
+		$class = ucfirst($item);
+
+		if (isset($_REQUEST[$item.'_id'])) {
+			try {
+				$object = new $class($_REQUEST[$item.'_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$object = new $class();
+		}
+
+		if (!empty($_REQUEST['person_id'])) {
+			try {
+				$object->setPerson_id($_REQUEST['person_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+
+		if (!$object->getPerson_id()) {
+			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+		}
+
+
+		if (isset($_POST[$requiredField])) {
+			try {
+				$object->handleUpdate($_POST);
+				$object->save();
+				header('Location: '.$object->getPerson()->getUrl());
+				exit();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		$this->template->blocks['left'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
+	}
+	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
+	public function updatePhone()   { $this->updateLinkedItem('phone',   'number');  }
+	public function updateAddress() { $this->updateLinkedItem('address', 'address'); }
+
+
+	/**
+	 * Moves all linked information from one person to another
 	 */
 	public function merge()
 	{
 		try {
-			$personA = new Person($_GET['person_id_a']);
-			$personB = new Person($_GET['person_id_b']);
+			$personA = new Person($_REQUEST['person_id_a']);
+			$personB = new Person($_REQUEST['person_id_b']);
 		}
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
@@ -242,34 +349,28 @@ class PeopleController extends Controller
 			'people/personInfo.inc',
 			array('person'=>$personA,'disableButtons'=>true)
 		);
-		$reportedTickets = $personA->getReportedTickets();
-		if (count($reportedTickets)) {
-			$this->template->blocks['left'][] = new Block(
-				'tickets/searchResults.inc',
-				array(
-					'ticketList'=>$personA->getReportedTickets(),
-					'title'=>'Tickets With Issues Reported By '.$personA->getFullname(),
-					'disableButtons'=>true,
-					'disableComments'=>true
-				)
-			);
+		$lists = array(
+			'reportedBy'=>'Reported Cases',
+			'assigned'  =>'Assigned Cases',
+			'referred'  =>'Referred Cases',
+			'enteredBy' =>'Entered Cases'
+		);
+		foreach ($lists as $listType=>$title) {
+			$this->addTicketList('left', $listType, $title, $personA, true, true);
 		}
 
 		$this->template->blocks['right'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personB,'disableButtons'=>true)
 		);
-		$reportedTickets = $personB->getReportedTickets();
-		if (count($reportedTickets)) {
-			$this->template->blocks['right'][] = new Block(
-				'tickets/searchResults.inc',
-				array(
-					'ticketList'=>$personB->getReportedTickets(),
-					'title'=>'Tickets With Issues Reported By '.$personB->getFullname(),
-					'disableButtons'=>true,
-					'disableComments'=>true
-				)
-			);
+		$lists = array(
+			'reportedBy'=>'Reported Cases',
+			'assigned'  =>'Assigned Cases',
+			'referred'  =>'Referred Cases',
+			'enteredBy' =>'Entered Cases'
+		);
+		foreach ($lists as $listType=>$title) {
+			$this->addTicketList('right', $listType, $title, $personB, true, true);
 		}
 	}
 

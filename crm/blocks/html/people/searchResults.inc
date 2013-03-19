@@ -17,9 +17,11 @@
 			echo '<p>No results found</p>';
 		}
 		if (!$this->disableButtons && userIsAllowed('people','add')) {
-			$url = new URL(BASE_URL.'/people/update');
+			include APPLICATION_HOME.'/blocks/html/people/personSelectForMerge.inc';
+
 
 			// Preserve any extra parameters passed in
+			$url = new URL(BASE_URL.'/people/update');
 			$fields = array('firstname','lastname','email','organization','setOfPeople');
 			foreach ($_REQUEST as $key=>$value) {
 				if (!in_array($key,$fields)) {

@@ -6,7 +6,7 @@
  * @param Person $this->person
  */
 $fields = array(
-	'firstname','middlename','lastname','email','phoneNumber','organization'
+	'firstname','middlename','lastname','organization'
 );
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
@@ -37,18 +37,19 @@ foreach ($fields as $field) {
 		<tr><td><label for="lastname" class="required">Lastname</label></td>
 			<td><input name="lastname" id="lastname" value="<?php echo $lastname; ?>" /></td>
 		</tr>
-
-		<tr><td><label for="email">Email</label></td>
-			<td><input name="email" id="email" value="<?php echo $email; ?>" /></td>
-		</tr>
-
-		<tr><td><label for="phoneNumber">Phone</label></td>
-			<td><input name="phoneNumber" id="phoneNumber" value="<?php echo $phoneNumber; ?>" /></td>
-		</tr>
-
+		<?php
+			// Email and Phone are only valid for new records
+			if (!$this->person->getId()) {
+				$email = !empty($_POST['email']) ? View::escape($_POST['email']) : '';
+				$phone = !empty($_POST['phone']) ? View::escape($_POST['phone']) : '';
+				echo "
+				<tr><td><label for=\"email\">Email</label></td><td><input name=\"email\" id=\"email\" value=\"$email\" /></td></tr>
+				<tr><td><label for=\"phone\">Phone</label></td><td><input name=\"phone\" id=\"phone\" value=\"$phone\" /></td></tr>
+				";
+			}
+		?>
 		<tr><td><label for="organization">Organization</label></td>
 			<td><input name="organization" id="organization" value="<?php echo $organization; ?>" /></td>
 		</tr>
 	</table>
 </fieldset>
-

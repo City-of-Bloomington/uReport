@@ -62,7 +62,8 @@ class Open311Client
 	}
 
 	/**
-	 * Try to find this person in the database
+	 * Try to find this person in the database.
+	 * If we cannot find them, create a new person record.
 	 *
 	 * @return Person
 	 */
@@ -70,6 +71,8 @@ class Open311Client
 	{
 		$search = array();
 
+		// Translates Open311 parameters into PersonList search parameters
+		// open311 => personList
 		$fields = array(
 			'first_name'=> 'firstname',
 			'last_name' => 'lastname',
@@ -80,9 +83,12 @@ class Open311Client
 		foreach ($fields as $open311Field=>$crmField) {
 			if (!empty($post[$open311Field])) { $search[$crmField] = $post[$open311Field]; }
 		}
+		// If the user provided any personal info, do a person search
 		if (count($search)) {
 			$list = new PersonList($search);
+			// When we find one and only one record, use the record we found
 			if (count($list) == 1) { $person = $list[0]; }
+			// Otherwise, create a new person record
 			else {
 				$p = array();
 				foreach ($fields as $key=>$field) {
@@ -93,6 +99,21 @@ class Open311Client
 					try {
 						$person->handleUpdate($p);
 						$person->save();
+
+						if (!empty($post['email'])) {
+							$email = new Email();
+							$email->setPerson($person);
+							$email->setEmail($post['email']);
+							$email->save();
+						}
+
+						if (!empty($post['phone']) || !empty($post['device_id'])) {
+							$phone = new Phone();
+							$phone->setPerson($person);
+							if (!empty($post['phone'    ])) { $phone->setNumber  ($post['phone'    ]); }
+							if (!empty($post['device_id'])) { $phone->setDeviceId($post['device_id']); }
+							$phone->save();
+						}
 					}
 					catch (Exception $e) { unset($person); }
 				}

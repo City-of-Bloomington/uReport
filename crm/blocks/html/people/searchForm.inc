@@ -9,7 +9,7 @@ if (!isset($_GET['setOfPeople'])) {
 	$_GET['setOfPeople'] = 'all';
 }
 ?>
-<div class="findPeople yui3-skin-sam">
+<div class="findPeople">
 	<h2><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h2>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>

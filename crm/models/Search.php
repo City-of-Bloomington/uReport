@@ -254,10 +254,28 @@ class Search
 	 */
 	private function createDocument($record)
 	{
+		// These are the fields from the tickets table that we're indexing
+		//
+		// Note: enteredDate, latitude, longitude are indexed as well, even
+		// though they are not in this list.
+		// They are just handled slightly differently from the generic fields listed
+		$ticketFields = array(
+			'id', 'category_id', 'client_id',
+			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
+			'addressId', 'location', 'city', 'state', 'zip',
+			'status', 'substatus_id'
+			// enteredDate, latitude, longitude
+		);
+		// These are the fields from the issues table that we're indexing
+		$issueFields = array(
+			'contactMethod_id', 'issueType_id', 'reportedByPerson_id'
+		);
+
 		if ($record instanceof Ticket) {
 			$document = new SolrInputDocument();
 			$document->addField('recordKey', "t_{$record->getId()}");
 			$document->addField('recordType', 'ticket');
+
 			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), DateTimeZone::UTC);
 			if ($record->getLatLong()) {
 				$document->addField('coordinates', $record->getLatLong());
@@ -266,13 +284,8 @@ class Search
 				$document->addField('displayPermissionLevel', $record->getCategory()->getDisplayPermissionLevel());
 			}
 
-			$fields = array(
-				'id', 'category_id', 'client_id',
-				'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
-				'addressId', 'location', 'city', 'state', 'zip',
-				'status', 'substatus_id'
-			);
-			foreach ($fields as $f) {
+			// Ticket information indexing
+			foreach ($ticketFields as $f) {
 				$get = 'get'.ucfirst($f);
 				if ($record->$get()) {
 					$document->addField($f, $record->$get());
@@ -287,9 +300,7 @@ class Search
 				$document->addField('department', $this->sortableString($person, 'department_id'));
 			}
 
-			$issueFields = array(
-				'contactMethod_id', 'issueType_id', 'reportedByPerson_id'
-			);
+			// Issue information indexing
 			$description = '';
 			foreach ($record->getIssues() as $issue) {
 				$description.= $issue->getDescription();
@@ -309,6 +320,7 @@ class Search
 				$document->addField('description', $description);
 			}
 
+			// Index extra fields provided by the AddressService
 			$additionalFields = $record->getAdditionalFields();
 			if ($additionalFields) {
 				foreach ($additionalFields as $key=>$value) {

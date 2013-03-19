@@ -12,7 +12,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 		<p>Add two cases by dragging one of the rows or typing in the IDs to compare cases and move data between them.</p>
 		<div>
 			<span class="yui3-dd-drop"><input name="ticket_id_a" id="ticket_id_a" /></span>
-			<span class="yui3-dd-drop"><input name="ticket_id_b" id="ticket_id_b" /><span class="yui3-dd-drop">
+			<span class="yui3-dd-drop"><input name="ticket_id_b" id="ticket_id_b" /></span>
 			<button type="submit" class="submit">Merge</button>
 		</div>
 	</fieldset>

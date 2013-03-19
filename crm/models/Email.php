@@ -4,12 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class Phone extends ActiveRecord
+class Email extends ActiveRecord
 {
-	protected $tablename = 'peoplePhones';
+	protected $tablename = 'peopleEmails';
 	protected $person;
 
-	public static $LABELS = array('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other');
+	public static $LABELS = array('Work','Home','Other');
+
 	/**
 	 * Populates the object with data
 	 *
@@ -30,7 +31,7 @@ class Phone extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from peoplePhones where id=?';
+				$sql = 'select * from peopleEmails where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
@@ -38,7 +39,7 @@ class Phone extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('phones/unknownPhone');
+				throw new Exception('emails/unknownEmail');
 			}
 		}
 		else {
@@ -60,14 +61,12 @@ class Phone extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()       { return parent::get('id');       }
-	public function getNumber()   { return parent::get('number');   }
-	public function getDeviceId() { return parent::get('deviceId'); }
-	public function getLabel()    { return parent::get('label');    }
+	public function getId()    { return parent::get('id');    }
+	public function getEmail() { return parent::get('email'); }
+	public function getLabel() { return parent::get('label'); }
 
-	public function setNumber  ($s) { parent::set('number',   $s); }
-	public function setDeviceId($s) { parent::set('deviceId', $s); }
-	public function setLabel   ($s) { parent::set('label',    $s); }
+	public function setEmail($s) { parent::set('email', $s); }
+	public function setLabel($s) { parent::set('label', $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
 	public function getPerson()    { return parent::getForeignKeyObject('Person', 'person_id');      }
@@ -76,7 +75,7 @@ class Phone extends ActiveRecord
 
 	public function handleUpdate($post)
 	{
-		$fields = array('number', 'deviceId', 'label', 'person_id');
+		$fields = array('email', 'label', 'person_id');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);

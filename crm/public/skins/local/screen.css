@@ -29,13 +29,12 @@ button, .button {
 	color:black;
 }
 
-.add            { background:url('images/addbutton.png')    left center no-repeat; }
+.add, .upload,
+.chooseLocation { background:url('images/addbutton.png')    left center no-repeat; }
 .edit, .change  { background:url('images/editbutton.png')   left center no-repeat; }
-.search         { background:url('images/submitbutton.png') left center no-repeat; }
+.search, .save,
 .submit, .login { background:url('images/submitbutton.png') left center no-repeat; }
 .delete, .reset { background:url('images/deletebutton.png') left center no-repeat; }
-.chooseLocation { background:url('images/addbutton.png')    left center no-repeat; }
-.upload         { background:url('images/addbutton.png')    left center no-repeat; }
 .minusTag       { background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
@@ -47,15 +46,19 @@ button, .button {
 .actionForm fieldset { float:left; display:table; }
 .actionForm .buttons { clear:left; }
 
-.ticketInfo li { width:280px; }
-.ticketInfo ul .button {
+.ticketInfo ul .button,
+.personInfo table .edit,
+.personInfo table .delete {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
 	width:0; padding:0 0 0 25px;
-	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
+	vertical-align:middle; border:none;
+	background-repeat:no-repeat; background-position:right center;
 	float:right;
 }
-
+.ticketInfo ul    .edit,
+.personInfo table .edit   { background-image:url('images/edit.png'); }
+.personInfo table .delete { background-image:url('images/delete.png'); }
 
 .locationInfo ul { margin:0; }
 
@@ -87,6 +90,7 @@ button, .button {
  * Alternating row background colors
  */
 .ticketList        tbody tr:nth-child(even),
+.personList        tbody tr:nth-child(even),
 .slaForm           tbody tr:nth-child(even),
 .clientRequestForm tbody tr:nth-child(odd),
 .ticketInfo li:nth-child(odd),
@@ -205,12 +209,4 @@ input.yui3-dd-drop-over    { background-color:green; }
 	width:98%; height:400px;
 	border:2px solid black;
 	margin-bottom:.75em;
-}
-/* Admin Styles */
-.interfaceBox table .button .edit {
-/* Hide the text.  Only show the icon */
-	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:0 0 0 25px;
-	vertical-align:middle; background:url('images/edit.png') right center no-repeat; border:none;
-	float:right;
 }

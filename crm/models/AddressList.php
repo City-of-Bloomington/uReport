@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class PhoneList extends ZendDbResultIterator
+class AddressList extends ZendDbResultIterator
 {
 	public function __construct($fields=null)
 	{
@@ -22,7 +22,7 @@ class PhoneList extends ZendDbResultIterator
 	 */
 	public function find($fields=null,$order='id',$limit=null,$groupBy=null)
 	{
-		$this->select->from('peoplePhones');
+		$this->select->from('peopleAddresses');
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
@@ -46,6 +46,6 @@ class PhoneList extends ZendDbResultIterator
 	 */
 	protected function loadResult($key)
 	{
-		return new Phone($this->result[$key]);
+		return new Address($this->result[$key]);
 	}
 }
