@@ -40,7 +40,6 @@
 				}
 
 				$name         = View::escape($person->getFullname());
-				$address      = View::escape($person->getAddress());
 				$organization = View::escape($person->getOrganization());
 
 				$emailList = '';
@@ -53,6 +52,18 @@
 					}
 					$list.= '</ul>';
 					$emailList = $list;
+				}
+
+				$addressList = '';
+				$addresses = $person->getAddresses();
+				if (count($addresses)) {
+					$list = '<ul>';
+					foreach ($addresses as $a) {
+						$address = View::escape($a->getAddress());
+						$list.= "<li>$address</li>";
+					}
+					$list.= '</ul>';
+					$addressList = $list;
 				}
 
 				$phoneList = '';
@@ -69,7 +80,7 @@
 				echo "
 				<tr><td><a href=\"$url\">$name</a></td>
 					<td>$emailList</td>
-					<td>$address</td>
+					<td>$addressList</td>
 					<td>$phoneList</td>
 				</tr>
 				";

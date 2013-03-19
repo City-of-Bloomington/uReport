@@ -25,6 +25,16 @@ class PersonList extends ZendDbResultIterator
 		if (is_array($fields)) { $this->find($fields); }
 	}
 
+	private function prepareJoins($fields)
+	{
+		if (in_array('email', $fields)) {
+			$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
+		}
+		if (in_array(array('phoneNumber', 'phoneDeviceId'), $fields)) {
+			$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
+		}
+	}
+
 	/**
 	 * Populates the collection, using strict matching of the requested fields
 	 *
@@ -36,6 +46,8 @@ class PersonList extends ZendDbResultIterator
 	public function find($fields=null, $order=null, $limit=null, $groupBy=null)
 	{
 		if (count($fields)) {
+			$this->prepareJoins($fields);
+
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {
@@ -45,12 +57,10 @@ class PersonList extends ZendDbResultIterator
 								: $this->select->where('username is null');
 							break;
 						case 'email':
-							$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
 							$this->select->where('email.email=?', $value);
 							break;
 
 						case 'phoneNumber':
-							$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
 							$this->select->where('phone.number=?', $value);
 							break;
 
@@ -90,6 +100,8 @@ class PersonList extends ZendDbResultIterator
 						->orWhere('p.username like ?',  $value);
 		}
 		elseif (count($fields)) {
+			$this->prepareJoins($fields);
+
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
 					case 'user_account':
@@ -97,31 +109,34 @@ class PersonList extends ZendDbResultIterator
 							? $this->select->where('username is not null')
 							: $this->select->where('username is null');
 						break;
+
 					case 'email':
-						$this->select->joinLeft(array('email'=>'peopleEmails'), 'p.id=email.person_id',array());
 						$this->select->where('email.email like ?', "$value%");
 						break;
+
 					case 'phoneNumber':
-					case 'phoneDeviceId':
-						$this->select->joinLeft(array('phone'=>'peoplePhones'), 'p.id=phone.person_id', array());
-						if ($key == 'phoneNumber') {
-							$this->select->where('phone.number like ?', "$value%");
-						}
-						if ($key == 'phoneDeviceId') {
-							$this->select->where('phone.deviceId like ?', "$value%");
-						}
+						$this->select->where('phone.number like ?', "$value%");
 						break;
+
+					case 'phoneDeviceId':
+						$this->select->where('phone.deviceId like ?', "$value%");
+						break;
+
 					case 'department_id':
 						$this->select->where('p.department_id=?', "$value%");
 						break;
+
 					default:
-						$this->select->where("p.$key like ?", "$value%");
+						if (in_array($key, self::$fields)) {
+							$this->select->where("p.$key like ?", "$value%");
+						}
 				}
 			}
 		}
 
 		$this->runSearch($order, $limit, $groupBy);
 	}
+
 
 	private function runSearch($order=null, $limit=null, $groupBy=null)
 	{

@@ -218,35 +218,76 @@ class PeopleController extends Controller
 		exit();
 	}
 
-	public function updateEmail()
+	/**
+	 * Helper functino for handling foreign key object deletions
+	 *
+	 * Email, Phone, and Address are all handled exactly the same way.
+	 *
+	 * @param string $item
+	 */
+	private function deleteLinkedItem($item)
 	{
-		if (isset($_REQUEST['email_id'])) {
+		$class = ucfirst($item);
+
+		if (isset($_REQUEST[$item.'_id'])) {
 			try {
-				$email = new Email($_REQUEST['email_id']);
+				$o = new $class($_REQUEST[$item.'_id']);
+				$person = $o->getPerson();
+				$o->delete();
+				header('Location: '.$person->getURL());
+				exit();
 			}
 			catch (Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 		else {
-			$email = new Email();
+			$this->redirectToErrorUrl(new Exception("people/unknown$class"));
+		}
+	}
+	public function deleteEmail()   { $this->deleteLinkedItem('email');   }
+	public function deletePhone()   { $this->deleteLinkedItem('phone');   }
+	public function deleteAddress() { $this->deleteLinkedItem('address'); }
+
+	/**
+	 * Helper function for handling foreign key object updates
+	 *
+	 * Email, Phone, and Address are all handled exactly the same way.
+	 *
+	 * @param string $item
+	 * @param string $requiredField The field to look for in the POST which
+	 *								determines whether this item has been posted
+	 */
+	private function updateLinkedItem($item, $requiredField)
+	{
+		$this->template->setFilename('people');
+		$class = ucfirst($item);
+
+		if (isset($_REQUEST[$item.'_id'])) {
+			try {
+				$object = new $class($_REQUEST[$item.'_id']);
+			}
+			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+		}
+		else {
+			$object = new $class();
 		}
 
 		if (!empty($_REQUEST['person_id'])) {
 			try {
-				$email->setPerson_id($_REQUEST['person_id']);
+				$object->setPerson_id($_REQUEST['person_id']);
 			}
 			catch (Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 
-		if (!$email->getPerson_id()) {
+		if (!$object->getPerson_id()) {
 			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
 		}
 
 
-		if (isset($_POST['email'])) {
+		if (isset($_POST[$requiredField])) {
 			try {
-				$email->handleUpdate($_POST);
-				$email->save();
-				header('Location: '.$email->getPerson()->getUrl());
+				$object->handleUpdate($_POST);
+				$object->save();
+				header('Location: '.$object->getPerson()->getUrl());
 				exit();
 			}
 			catch (Exception $e) {
@@ -254,81 +295,12 @@ class PeopleController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('people/updateEmailForm.inc', array('email'=>$email));
+		$this->template->blocks['left'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
 	}
+	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
+	public function updatePhone()   { $this->updateLinkedItem('phone',   'number');  }
+	public function updateAddress() { $this->updateLinkedItem('address', 'address'); }
 
-	public function deleteEmail()
-	{
-		if (isset($_REQUEST['email_id'])) {
-			try {
-				$email = new Email($_REQUEST['email_id']);
-				$person = $email->getPerson();
-				$email->delete();
-				header('Location: '.$person->getURL());
-				exit();
-			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
-		}
-		else {
-			$this->redirectToErrorUrl(new Exception('emails/unknownEmail'));
-		}
-	}
-
-	public function updatePhone()
-	{
-		if (isset($_REQUEST['phone_id'])) {
-			try {
-				$phone = new Phone($_REQUEST['phone_id']);
-			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
-		}
-		else {
-			$phone = new Phone();
-		}
-
-		if (!empty($_REQUEST['person_id'])) {
-			try {
-				$phone->setPerson_id($_REQUEST['person_id']);
-			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
-		}
-
-		if (!$phone->getPerson_id()) {
-			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
-		}
-
-
-		if (isset($_POST['number'])) {
-			try {
-				$phone->handleUpdate($_POST);
-				$phone->save();
-				header('Location: '.$phone->getPerson()->getUrl());
-				exit();
-			}
-			catch (Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		$this->template->blocks[] = new Block('people/updatePhoneForm.inc', array('phone'=>$phone));
-	}
-
-	public function deletePhone()
-	{
-		if (isset($_REQUEST['phone_id'])) {
-			try {
-				$phone = new Phone($_REQUEST['phone_id']);
-				$person = $phone->getPerson();
-				$phone->delete();
-				header('Location: '.$person->getURL());
-				exit();
-			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
-		}
-		else {
-			$this->redirectToErrorUrl(new Exception('phones/unknownPhone'));
-		}
-	}
 
 	/**
 	 * Moves all tickets from one person to another

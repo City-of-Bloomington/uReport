@@ -45,6 +45,17 @@ create table peoplePhones (
 	foreign key (person_id) references people(id)
 );
 
+create table peopleAddresses (
+	id        int unsigned not null primary key auto_increment,
+	person_id int unsigned not null,
+	address   varchar(128) not null,
+	city      varchar(128),
+	state     varchar(128),
+	zip       varchar(20),
+	label enum('Home', 'Business', 'Rental') not null default 'Home',
+	foreign key (person_id) references people(id)
+);
+
 create table substatus (
 	id          int          unsigned not null primary key auto_increment,
 	name        varchar(25)  not null,

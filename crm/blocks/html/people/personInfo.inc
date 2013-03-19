@@ -17,7 +17,6 @@ if (userIsAllowed('people','view')) {
 		</a>
 		";
 	}
-
 }
 
 $editButton   = '';
@@ -42,26 +41,69 @@ if (userIsAllowed('people','update') && !$this->disableButtons) {
 
 $name         = View::escape($this->person->getFullname());
 $organization = View::escape($this->person->getOrganization());
-$address      = View::escape($this->person->getAddress());
-$city         = View::escape($this->person->getCity());
-$state        = View::escape($this->person->getState());
-$zip          = View::escape($this->person->getZip());
 echo "
 <div class=\"personInfo\">
 	<h1>$name $editButton</h1>
 	<h2>$organization</h2>
 	<div>$username</div>
 	<table>
-		<tr><th>address</th>
+";
+function linkedItemEditDeleteButtons($item, $object)
+{
+	$class = ucfirst($item);
+	$b = "
+	<a class=\"edit button\"
+		href=\"".BASE_URI."/people/update{$class}?{$item}_id={$object->getId()}\">
+		Edit $class
+	</a>
+	<a class=\"delete button\"
+		href=\"".BASE_URI."/people/delete{$class}?{$item}_id={$object->getId()}\">
+		Delete $class
+	</a>
+	";
+}
+	$addressButtons = '';
+	foreach ($this->person->getAddresses() as $a) {
+		if ($editButton) {
+			$addressButtons = "
+			<a class=\"edit button\"
+				href=\"".BASE_URI."/people/updateAddress?address_id={$a->getId()}\">
+				Edit Email
+			</a>
+			<a class=\"delete button\"
+				href=\"".BASE_URI."/people/deleteAddress?address_id={$a->getId()}\">
+				Delete Email
+			</a>
+			";
+		}
+		$label   = View::escape($a->getLabel());
+		$address = View::escape($a->getAddress());
+		$city    = View::escape($a->getCity());
+		$state   = View::escape($a->getState());
+		$zip     = View::escape($a->getZip());
+		echo "
+		<tr><th>$label</th>
 			<td><div>$address</div>
 				<div>$city $state $zip</div>
 			</td>
+			<td>$addressButtons</td>
 		</tr>
-";
+		";
+	}
+	if ($editButton) {
+		echo "
+		<tr><td colspan=\"3\">
+				<a class=\"add button\"
+					href=\"".BASE_URI."/people/updateAddress?person_id={$this->person->getId()}\">
+					Add Address
+				</a>
+			</td>
+		</tr>
+		";
+	}
+
 	$emailButtons = '';
 	foreach ($this->person->getEmails() as $e) {
-		$label = View::escape($e->getLabel());
-		$email = View::escape($e->getEmail());
 		if ($editButton) {
 			$emailButtons = "
 			<a class=\"edit button\"
@@ -74,6 +116,8 @@ echo "
 			</a>
 			";
 		}
+		$label = View::escape($e->getLabel());
+		$email = View::escape($e->getEmail());
 		echo "
 		<tr><th>$label</th>
 			<td>$email</td>
@@ -94,8 +138,6 @@ echo "
 	}
 	$phoneButtons = '';
 	foreach ($this->person->getPhones() as $p) {
-		$label  = View::escape($p->getLabel());
-		$number = View::escape($p->getNumber());
 		if ($editButton) {
 			$phoneButtons = "
 			<a class=\"edit button\"
@@ -108,6 +150,8 @@ echo "
 			</a>
 			";
 		}
+		$label  = View::escape($p->getLabel());
+		$number = View::escape($p->getNumber());
 		echo "
 		<tr><th>$label</th>
 			<td>$number</td>

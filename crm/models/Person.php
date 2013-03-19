@@ -118,19 +118,11 @@ class Person extends ActiveRecord
 	public function getMiddlename()    { return parent::get('middlename');   }
 	public function getLastname()      { return parent::get('lastname');     }
 	public function getOrganization()  { return parent::get('organization'); }
-	public function getAddress()       { return parent::get('address');      }
-	public function getCity()          { return parent::get('city');         }
-	public function getState()         { return parent::get('state');        }
-	public function getZip()           { return parent::get('zip');          }
 
 	public function setFirstname   ($s) { parent::set('firstname',    $s); }
 	public function setMiddlename  ($s) { parent::set('middlename',   $s); }
 	public function setLastname    ($s) { parent::set('lastname',     $s); }
 	public function setOrganization($s) { parent::set('organization', $s); }
-	public function setAddress     ($s) { parent::set('address',      $s); }
-	public function setCity        ($s) { parent::set('city',         $s); }
-	public function setState       ($s) { parent::set('state',        $s); }
-	public function setZip         ($s) { parent::set('zip',          $s); }
 
 	public function getDepartment_id()    { return parent::get('department_id'); }
 	public function getDepartment()       { return parent::getForeignKeyObject('Department', 'department_id');      }
@@ -161,8 +153,7 @@ class Person extends ActiveRecord
 	public function handleUpdate($post)
 	{
 		$fields = array(
-			'firstname', 'middlename', 'lastname', 'organization',
-			'address', 'city', 'state', 'zip'
+			'firstname', 'middlename', 'lastname', 'organization'
 		);
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
@@ -279,6 +270,14 @@ class Person extends ActiveRecord
 	{
 		if ($this->getId()) {
 			return new EmailList(array('person_id'=>$this->getId()));
+		}
+		return array();
+	}
+
+	public function getAddresses()
+	{
+		if ($this->getId()) {
+			return new AddressList(array('person_id'=>$this->getId()));
 		}
 		return array();
 	}
@@ -421,18 +420,6 @@ class Person extends ActiveRecord
 		if (!$this->getLastname() && $identity->getLastname()) {
 			$this->setLastname($identity->getLastname());
 		}
-		if (!$this->getAddress() && $identity->getAddress()) {
-			$this->setAddress($identity->getAddress());
-		}
-		if (!$this->getCity() && $identity->getCity()) {
-			$this->setCity($identity->getCity());
-		}
-		if (!$this->getState() && $identity->getState()) {
-			$this->setState($identity->getState());
-		}
-		if (!$this->getZip() && $identity->getZip()) {
-			$this->setZip($identity->getZip());
-		}
 
 		// We're going to be adding email and phone records for this person.
 		// We have to save the person record before we can do the foreign keys.
@@ -451,6 +438,16 @@ class Person extends ActiveRecord
 			$phone->setPerson($this);
 			$phone->setNumber($identity->getPhone());
 			$phone->save();
+		}
+		$list = $this->getAddresses();
+		if (!count($list) && $identity->getAddress()) {
+			$address = new Address();
+			$address->setPerson($this);
+			$address->setAddress($identity->getAddress());
+			$address->setCity   ($identity->getCity());
+			$address->setState  ($identity->getState());
+			$address->setZip    ($identity->setZip());
+			$address->save();
 		}
 	}
 }

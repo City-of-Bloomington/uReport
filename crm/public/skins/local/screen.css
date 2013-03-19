@@ -60,7 +60,6 @@ button, .button {
 .personInfo table .edit   { background-image:url('images/edit.png'); }
 .personInfo table .delete { background-image:url('images/delete.png'); }
 
-
 .locationInfo ul { margin:0; }
 
 .ticketList table { border:1px solid #aaa; }
