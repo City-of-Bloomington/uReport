@@ -134,6 +134,12 @@ echo "
 		<li><label>Date Opened:</label>
 			{$this->ticket->getEnteredDate(DATE_FORMAT)}
 		</li>
+		<li><label>Date Closed:</label>
+			{$this->ticket->getClosedDate(DATE_FORMAT)}
+		</li>
+		<li><label>Last Modified:</label>
+			{$this->ticket->getLastModified(DATE_FORMAT)}
+		</li>
 	</ul>
 </div>
 <script type=\"text/javascript\">

@@ -84,3 +84,20 @@ update people set address=null where address='';
 insert into peopleAddresses (person_id,address,city,state,zip)
 	select id,address,city,state,zip from people where address is not null;
 alter table people drop address;
+
+------------------------------------------------
+-- Ticket modified and close dates
+------------------------------------------------
+alter table tickets modify enteredDate timestamp not null default 0;
+
+alter table tickets add lastModified timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
+update tickets t set t.lastModified=(
+	select max(h.enteredDate) from ticketHistory h
+	where t.id=h.ticket_id
+);
+
+alter table tickets add closedDate timestamp null;
+update tickets t set t.closedDate=(
+	select max(h.enteredDate) from ticketHistory h,actions a
+	where t.id=h.ticket_id and h.action_id=a.id and a.name='closed'
+);

@@ -122,6 +122,7 @@ class Ticket extends ActiveRecord
 
 	public function save()
 	{
+		$this->setLastModified(date(DATE_FORMAT));
 		parent::save();
 
 		$search = new Search();
@@ -153,7 +154,9 @@ class Ticket extends ActiveRecord
 	public function getState()      { return parent::get('state');      }
 	public function getZip()        { return parent::get('zip');        }
 	public function getStatus()     { return parent::get('status');     }
-	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
+	public function getEnteredDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
+	public function getLastModified($f=null, DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
+	public function getClosedDate  ($f=null, DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
 	public function getSubstatus_id()       { return parent::get('substatus_id');      }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
@@ -175,7 +178,9 @@ class Ticket extends ActiveRecord
 	public function setCity     ($s)  { parent::set('city',      $s); }
 	public function setState    ($s)  { parent::set('state',     $s); }
 	public function setZip      ($s)  { parent::set('zip',       $s); }
-	public function setEnteredDate($date) { parent::setDateData('enteredDate', $date); }
+	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
+	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
+	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
 	public function setSubstatus_id      ($id) { parent::setForeignKeyField('Substatus',  'substatus_id',       $id); }
 	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
 	public function setClient_id         ($id) { parent::setForeignKeyField('Client',     'client_id',          $id); }
@@ -200,6 +205,9 @@ class Ticket extends ActiveRecord
 	 */
 	public function setStatus($status, $substatus_id=null)
 	{
+		$oldStatus      = $this->getStatus();
+		$oldSubStatusId = $this->getSubstatus_id();
+
 		parent::set('status', $status);
 
 		if ($substatus_id) {
@@ -217,6 +225,14 @@ class Ticket extends ActiveRecord
 		if ($this->getSubstatus_id()) {
 			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
 				$this->setSubstatus_id(null);
+			}
+		}
+
+		// See if we need to update the closedDate
+		$newStatus = $this->getStatus();
+		if ($newStatus == 'closed') {
+			if ($newStatus != $oldStatus || $this->getSubstatus_id() != $oldSubStatusId) {
+				$this->setClosedDate(date(DATE_FORMAT));
 			}
 		}
 	}
