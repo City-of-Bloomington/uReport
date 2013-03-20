@@ -44,8 +44,7 @@ alter table departments drop customStatuses;
 ------------------------------------------------
 -- SLA Agreements
 ------------------------------------------------
-alter table categories add slaExpression int unsigned;
-alter table categories add slaUnits enum('minute', 'hour', 'day', 'week', 'month');
+alter table categories add slaDays int unsigned;
 
 ------------------------------------------------
 -- Phones

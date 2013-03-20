@@ -67,20 +67,9 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="slaExpression">Time</label></td>
-				<td><input name="slaExpression" id="slaExpression" size="2" maxlength="2"
-						value="<?php echo $this->category->getSlaExpression(); ?>" />
-					<select name="slaUnits" id="slaUnits">
-						<option value=""></option>
-						<?php
-							foreach (Category::$SLA_UNITS as $unit) {
-								$selected = $this->category->getSlaUnits()==$unit
-									? 'selected="selected"'
-									: '';
-								echo "<option $selected>$unit</option>";
-							}
-						?>
-					</select>
+			<tr><td><label for="slaDays">Days</label></td>
+				<td><input name="slaDays" id="slaDays" size="2" maxlength="2"
+						value="<?php echo $this->category->getSlaDays(); ?>" />
 				</td>
 			</tr>
 		</table>

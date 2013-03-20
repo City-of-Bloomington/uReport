@@ -62,7 +62,7 @@
 				<table>
 					<thead>
 						<tr><th>Department</th>
-							<th>SLA</th>
+							<th>SLA Days</th>
 							<th>Posting</th>
 							<th>Display</th>
 						</tr>
@@ -70,7 +70,7 @@
 					<tbody>
 						<tr>
 							<td>$department</td>
-							<td>{$category->getSLA()}</td>
+							<td>{$category->getSlaDays()}</td>
 							<td>$postPermission</td>
 							<td>$displayPermission</td>
 						</tr>

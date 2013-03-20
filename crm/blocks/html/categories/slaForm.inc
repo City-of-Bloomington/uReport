@@ -14,7 +14,7 @@
 		<fieldset><legend>Categories</legend>
 			<table>
 				<thead>
-					<tr><th>Category</th><th>Department</th><th>SLA Time</th></tr>
+					<tr><th>Category</th><th>Department</th><th>SLA Days</th></tr>
 				</thead>
 				<tbody>
 				<?php
@@ -30,20 +30,9 @@
 							<td><input type=\"hidden\"
 									name=\"{$field}[id]\"
 									value=\"{$category->getId()}\" />
-								<input name=\"{$field}[slaExpression]\"
+								<input name=\"{$field}[slaDays]\"
 									size=\"2\" maxlength=\"2\"
-									value=\"{$category->getSlaExpression()}\" />
-								<select name=\"{$field}[slaUnits]\">
-									<option></option>
-						";
-									foreach (Category::$SLA_UNITS as $unit) {
-										$selected = $category->getSlaUnits()==$unit
-											? 'selected="selected"'
-											: '';
-										echo "<option $selected>$unit</option>";
-									}
-						echo "
-								</select>
+									value=\"{$category->getSlaDays()}\" />
 							</td>
 						</tr>
 						";
