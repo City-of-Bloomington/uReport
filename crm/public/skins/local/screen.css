@@ -186,7 +186,9 @@ tr.verified        { background-color:#cfc; }
 
 .totals { border-top:1px solid black; }
 
-
+/* SLA Status */
+.onTrack { color:green; }
+.pastDue { color:red; }
 
 /* YUI Styles */
 /* Autocomplete styles */

@@ -118,6 +118,7 @@ class TicketList extends ZendDbResultIterator
 			'state'             => 'State',
 			'zip'               => 'Zip',
 			'description'       => 'Description',
+			'slaPercentage'     => 'SLA'
 		);
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
 			$fields[$key] = $value['description'];

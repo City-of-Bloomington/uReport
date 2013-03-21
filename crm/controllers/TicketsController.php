@@ -61,7 +61,10 @@ class TicketsController extends Controller
 				'tickets/ticketInfo.inc',
 				array('ticket'=>$ticket)
 			);
-
+			$this->template->blocks['ticket-panel'][] = new Block(
+				'tickets/slaStatus.inc',
+				array('ticket'=>$ticket)
+			);
 			if (userIsAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
 				$this->template->blocks['history-panel'][] = new Block(
 					'tickets/actionForm.inc',

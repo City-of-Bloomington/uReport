@@ -547,4 +547,32 @@ class Ticket extends ActiveRecord
 		$category = $this->getCategory_id() ? $this->getCategory() : new Category();
 		return $category->allowsDisplay($person);
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getSlaDays()
+	{
+		$category = $this->getCategory();
+		if ($category) {
+			return $category->getSlaDays();
+		}
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSlaPercentage()
+	{
+		$days = $this->getSlaDays();
+		if ($days) {
+			$dateEntered = new DateTime($this->getEnteredDate());
+			$targetDate = $this->getStatus()=='open'
+				? new DateTime()
+				: new DateTime($this->getClosedDate());
+			$diff = $targetDate->diff($dateEntered);
+			$daysPassed = $diff->format('%a');
+			return round($daysPassed/$days*100);
+		}
+	}
 }

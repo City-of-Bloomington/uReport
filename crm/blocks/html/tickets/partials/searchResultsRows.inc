@@ -49,7 +49,7 @@ foreach ($this->tickets as $ticket) {
 					$get = 'get'.ucfirst(substr($field, 0, -3));
 					$person = $ticket->$get();
 					if ($person) {
-						$dl[$field] = $person->getFullname();
+						$dl[$field] = View::escape($person->getFullname());
 					}
 					break;
 
@@ -60,7 +60,7 @@ foreach ($this->tickets as $ticket) {
 
 				case 'department_id':
 					$department = $ticket->getDepartment();
-					$dl[$field] = $department ? $department->getName() : '';
+					$dl[$field] = $department ? View::escape($department->getName()) : '';
 					break;
 
 				case 'latitude':
@@ -68,10 +68,18 @@ foreach ($this->tickets as $ticket) {
 					$dl[$field] = $ticket->$get();
 					break;
 
+				case 'slaPercentage':
+					$sla = $ticket->$get();
+					if ($sla) {
+						$class = $sla > 100 ? 'pastDue' : 'onTrack';
+						$dl[$field] = "<span class=\"$class\">$sla%</span>";
+					}
+					break;
+
 				default:
 					// Anything else should be a custom field for the ticket
 					if (isset($additionalFields->$field)) {
-						$dl[$field] = $additionalFields->$field;
+						$dl[$field] = View::escape($additionalFields->$field);
 					}
 			}
 		}
@@ -88,7 +96,7 @@ foreach ($this->tickets as $ticket) {
 		echo '<ul class="twoColumnlist">';
 		foreach ($dl as $field=>$value) {
 			$dt = $displayableFields[$field];
-			$dd = View::escape($value);
+			$dd = $value;
 			echo "<li><label>$dt:</label> $dd</li>\n";
 		}
 		echo '</ul>';
