@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->data
@@ -28,25 +28,25 @@ $h = $this->template->getHelper('formatDuration');
 						<tr><th></th>
 							<th>Open</th>
 							<th>Closed</th>
-							<th>Resolutions</th>
+							<th>Substatus</th>
 							<th>Totals</th>
 						</tr>
 					</thead>
 					<tbody>
 			";
 				foreach ($c['people'] as $pid=>$p) {
-					$counts = array('open'=>0, 'closed'=>0, 'resolutions'=>array());
+					$counts = array('open'=>0, 'closed'=>0, 'substatus'=>array());
 					foreach ($p['data'] as $r) {
-						if ($r['resolution']) {
-							$counts['resolutions'][] = "$r[resolution]: $r[count]";
+						if ($r['substatus']) {
+							$counts['substatus'][] = "$r[substatus]: $r[count]";
 						}
 						$counts[$r['status']] += $r['count'];
 						if (in_array($r['status'], array('open','closed'))) {
 							$$r['status'] += $r['count'];
 						}
 					}
-					$resolutions = $counts['resolutions']
-						? implode(', ', $counts['resolutions'])
+					$substatus = $counts['substatus']
+						? implode(', ', $counts['substatus'])
 						: '';
 					$person = View::escape($p['name']);
 					$total = $counts['open'] + $counts['closed'];
@@ -54,7 +54,7 @@ $h = $this->template->getHelper('formatDuration');
 					<tr><th>$person</th>
 						<td>$counts[open]</td>
 						<td>$counts[closed]</td>
-						<td>$resolutions</td>
+						<td>$substatus</td>
 						<td>$total</td>
 					</tr>
 					";

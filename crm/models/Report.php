@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -29,19 +29,18 @@ class Report
 		$sql = "select t.assignedPerson_id, t.status, t.category_id,
 					p.firstname, p.lastname,
 					c.name as category,
-					t.resolution_id, r.name as resolution,
+					t.substatus_id, s.name as substatus,
 					count(*) as count
 				from tickets t
-				     join people        p on t.assignedPerson_id=p.id
+					 join people        p on t.assignedPerson_id=p.id
 				left join categories    c on t.category_id=c.id
-				left join resolutions   r on t.resolution_id=r.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
+				left join substatus     s on t.substatus_id=s.id
 				$where
 				group by t.assignedPerson_id, t.status, t.category_id,
 					p.firstname, p.lastname,
 					c.name,
-					t.resolution_id, r.name
-				order by p.lastname, p.firstname, c.name, t.status, t.resolution_id";
+					t.substatus_id, s.name
+				order by p.lastname, p.firstname, c.name, t.status, t.substatus_id";
 
 		$zend_db = Database::getConnection();
 		$result = $zend_db->fetchAll($sql);
@@ -69,21 +68,19 @@ class Report
 		$closed = self::closedId();
 		$where = self::handleSearchParameters($get);
 		$sql = "select c.id as category_id, c.name as category,
-					t.assignedPerson_id, t.status, t.resolution_id,
-					p.firstname, p.lastname, r.name as resolution,
+					t.assignedPerson_id, t.status, t.substatus_id,
+					p.firstname, p.lastname, s.name as substatus,
 					count(*) as count
-				from categories         c
-				     join tickets       t on c.id=t.category_id
-				     join people        p on t.assignedPerson_id=p.id
-				left join resolutions   r on t.resolution_id=r.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
+				from categories     c
+					 join tickets   t on c.id=t.category_id
+					 join people    p on t.assignedPerson_id=p.id
+				left join substatus s on t.substatus_id=s.id
 				$where
 				group by c.id, c.name,
-					t.assignedPerson_id, t.status, t.resolution_id,
+					t.assignedPerson_id, t.status, t.substatus_id,
 					p.firstname, p.lastname,
-					r.name
-				order by c.name, p.lastname, p.firstname, t.status desc, t.resolution_id
-		";
+					s.name
+				order by c.name, p.lastname, p.firstname, t.status desc, t.substatus_id";
 		$zend_db = Database::getConnection();
 		$d = array();
 		$result = $zend_db->fetchAll($sql);
@@ -183,8 +180,7 @@ class Report
 		$sql = "select t.category_id, c.name as category, sum(status='closed') as closed
 				from tickets t
 				join categories c on t.category_id=c.id
-				join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
-				where h.actionDate > (now() - interval 1 day)
+				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
 				order by closed";
 		$zend_db = Database::getConnection();
@@ -209,10 +205,9 @@ class Report
 		$closed = self::closedId();
 		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
 		$e = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($end));
-		$sql = "select date_format(h.actionDate, '%Y-%m-%d') as date, count(*) as closed
+		$sql = "select date_format(t.closedDate, '%Y-%m-%d') as date, count(*) as closed
 				from tickets t
-				join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
-				where '$s'<=h.actionDate and h.actionDate<='$e'
+				where '$s'<=t.closedDate and t.closedDate<='$e'
 				group by date
 				order by date";
 		$zend_db = Database::getConnection();
@@ -227,13 +222,12 @@ class Report
 					sum((now() - interval 1 day  ) <= t.enteredDate) as openedday,
 					sum((now() - interval 1 week ) <= t.enteredDate) as openedweek,
 					sum((now() - interval 1 month) <= t.enteredDate) as openedmonth,
-					sum((now() - interval 1 day  ) <= h.actionDate ) as closedday,
-					sum((now() - interval 1 week ) <= h.actionDate ) as closedweek,
-					sum((now() - interval 1 month) <= h.actionDate ) as closedmonth,
-					floor(avg(datediff(ifnull(h.actionDate, now()),t.enteredDate))) as days
+					sum((now() - interval 1 day  ) <= t.closedDate ) as closedday,
+					sum((now() - interval 1 week ) <= t.closedDate ) as closedweek,
+					sum((now() - interval 1 month) <= t.closedDate ) as closedmonth,
+					floor(avg(datediff(ifnull(t.closedDate, now()),t.enteredDate))) as days
 				from tickets t
 				join categories c on t.category_id=c.id
-				left join ticketHistory h on t.id=h.ticket_id and h.action_id=$closed
 				group by t.category_id
 				order by currentopen desc";
 		$zend_db = Database::getConnection();
