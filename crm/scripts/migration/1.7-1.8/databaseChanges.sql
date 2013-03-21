@@ -28,6 +28,7 @@ update actions set name='closed' where name='close';
 -- Look for the constraint name for the resolution_id FOREIGN KEY
 alter table tickets drop foreign key tickets_ibfk_6;
 alter table tickets change resolution_id substatus_id int unsigned;
+alter table tickets add foreign key (substatus_id) references substatus(id);
 
 -- Migrate customStatuses that have been used on tickets
 insert into substatus (name, status, description)
@@ -92,12 +93,12 @@ alter table tickets modify enteredDate timestamp not null default 0;
 
 alter table tickets add lastModified timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
 update tickets t set t.lastModified=(
-	select max(h.enteredDate) from ticketHistory h
+	select max(h.actionDate) from ticketHistory h
 	where t.id=h.ticket_id
 );
 
 alter table tickets add closedDate timestamp null;
 update tickets t set t.closedDate=(
-	select max(h.enteredDate) from ticketHistory h,actions a
+	select max(h.actionDate) from ticketHistory h,actions a
 	where t.id=h.ticket_id and h.action_id=a.id and a.name='closed'
 );
