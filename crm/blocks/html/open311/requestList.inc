@@ -11,6 +11,8 @@ echo "
 <div class=\"requestList\">
 	<h1>Requests</h1>
 ";
+	// Pagination pages are one-based and will treat page=0
+	// as exactly the same as page=1
 	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 	$this->ticketList->setPagination(50, $page);
 	if (count($this->ticketList)) {

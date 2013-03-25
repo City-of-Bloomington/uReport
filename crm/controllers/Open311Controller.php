@@ -139,8 +139,22 @@ class Open311Controller extends Controller
 			if (!empty($_REQUEST['status'])) {
 				$search['status'] = $_REQUEST['status'];
 			}
+
+			$pageSize = 1000;
+			if (!empty($_REQUEST['page_size'])) {
+				$p = (int)$_REQUEST['page_size'];
+				if ($p) { $pageSize = $p; }
+			}
+			// Pagination pages are one-based and will treat page=0
+			// as exactly the same as page=1
+			$page = 0;
+			if (!empty($_REQUEST['page'])) {
+				$p = (int)$_REQUEST['page'];
+				if ($p) { $page = $p; }
+			}
 			$tickets = new TicketList();
-			$tickets->find($search, null, 1000);
+			$tickets->find($search);
+			$tickets->setPagination($pageSize, $page);
 			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$tickets));
 		}
 	}
