@@ -130,15 +130,11 @@ class Open311Controller extends Controller
 			if (isset($category) && $category->allowsDisplay($this->person)) {
 				$search['category_id'] = $category->getId();
 			}
-			if (!empty($_REQUEST['start_date'])) {
-				$search['start_date'] = $_REQUEST['start_date'];
-			}
-			if (!empty($_REQUEST['end_date'])) {
-				$search['end_date'] = $_REQUEST['end_date'];
-			}
-			if (!empty($_REQUEST['status'])) {
-				$search['status'] = $_REQUEST['status'];
-			}
+			if (!empty($_REQUEST['start_date']))     { $search['start_date']          = $_REQUEST['start_date'];     }
+			if (!empty($_REQUEST['end_date']))       { $search['end_date']            = $_REQUEST['end_date'];       }
+			if (!empty($_REQUEST['status']))         { $search['status']              = $_REQUEST['status'];         }
+			if (!empty($_REQUEST['updated_before'])) { $search['lastModified_before'] = $_REQUEST['updated_before']; }
+			if (!empty($_REQUEST['updated_after']))  { $search['lastModified_after']  = $_REQUEST['updated_after'];  }
 
 			$pageSize = 1000;
 			if (!empty($_REQUEST['page_size'])) {

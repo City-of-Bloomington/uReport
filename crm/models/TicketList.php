@@ -56,6 +56,14 @@ class TicketList extends ZendDbResultIterator
 							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
 							$this->select->where("t.enteredDate<=?", array($d));
 							break;
+						case 'lastModified_before':
+							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
+							$this->select->where('t.lastModified<=?', array($d));
+							break;
+						case 'lastModified_after':
+							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
+							$this->select->where('t.lastModified>=?', array($d));
+							break;
 						default:
 							$this->select->where("t.$key=?", $value);
 					}
