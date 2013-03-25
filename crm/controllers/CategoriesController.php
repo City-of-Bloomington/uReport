@@ -100,7 +100,7 @@ class CategoriesController extends Controller
 			try {
 				foreach ($_POST['categories'] as $id=>$post) {
 					$category = new Category($id);
-					$category->setSlaExpression($post['slaDays']);
+					$category->setSlaDays($post['slaDays']);
 					$category->save();
 				}
 				header('Location: '.BASE_URL.'/categories');
