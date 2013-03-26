@@ -21,6 +21,48 @@ The 1.8 release is officially being worked on.  The master branch *should* alway
 
 The 1.8 release will involve a data migration.  There are numerous changes to the backend MySQL and Solr schemas.  The MySQL database will need to be modified, the new Solr schema put into place, and the Solr index re-indexed.  Code for the migration is in /scripts/migration/1.7-1.8.  The migration code will be continually updated as features are committed.  So, if you've run it once, you might check the scripts for new changes periodically.
 
+After you grab the latest version of the code, it's in
+`/scripts/migration/1.7-1.8`
+
+There's an SQL script, and a new schema file for Solr.
+
+The SQL script contains a bunch of SQL commands to run.  You might be
+able to run them all at once just by sending the file to mysql
+```bash
+mysql -p crm < databaseChanges.sql
+```
+
+If you want to be on the safe side, you might open the
+databaseChanges.sql file and read through it.  The only thing I can
+think that might need to be checked would be on the "tickets" table.
+I'm removing a foreign key and just want to make sure the foreign key
+that's being removed is for the resolution_id.  Most likely, the code is
+fine as written, though.  You can do a "show create table" to look at
+the foreign keys and confirm that the foreign key we're removing is the
+resolution_id.
+
+```sql
+show create table tickets\G
+```
+
+You could also copy and paste the commands into a mysql client, if you
+prefer.
+
+Once you've applied all the database changes, you'll need to update your
+Solr index.  You'll need to replace your existing schema.xml with the
+new one.  Then, you'll need to delete the data in your core and restart
+Tomcat.
+
+Once Tomcat restarts, you should be able to go back to
+/uReport/scripts/solr
+In there is a php script for re-indexing the Solr search engine. You
+should be able to run that from the command line on your server.
+```bash
+cd ureport/scripts/solr
+php indexSearch.php
+```
+
+For us, with 100,000 records, the search indexing takes about 10 minutes.
 
 New in 1.7.3
 ----------------
