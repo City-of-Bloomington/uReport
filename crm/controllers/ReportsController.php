@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -36,6 +36,13 @@ class ReportsController extends Controller
 		$data = Report::categories($_GET);
 		$this->template->blocks['right'][] = new Block(
 			'reports/categories.inc', array('data'=>$data)
+		);
+	}
+
+	public function sla()
+	{
+		$this->template->blocks['right'][] = new Block(
+			'reports/sla.inc'
 		);
 	}
 }

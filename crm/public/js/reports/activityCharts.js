@@ -1,5 +1,10 @@
 "use strict";
-YUI().use('node', 'charts', 'charts-legend', 'datatable', function (Y) {
+/**
+ * @copyright 2012-2013 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ */
+YUI().use('node', 'charts', 'charts-legend', 'datatable', 'stylesheet', function (Y) {
 	var activityThisWeek = new Y.Chart({
 		legend: {
 			position: "right"
@@ -20,9 +25,10 @@ YUI().use('node', 'charts', 'charts-legend', 'datatable', function (Y) {
 	});
 	var categoryActivity = new Y.DataTable({
 		columns: [
-			{ key: 'name', label: 'Category', sortable:true },
-			{ label: 'Open', children: [ { key: 'currentopen', label: 'now', sortable:true  } ] },
-			{ label: 'Avg Days*', children: [ { key: 'days', label: 'open', sortable:true } ] },
+			{ key: 'name',    label: 'Category', sortable:true },
+			{ key: 'slaDays', label: 'SLA',      sortable:true },
+			{ label: 'Open',      children:[{ key: 'currentopen', label: 'now',  sortable:true }]},
+			{ label: 'Avg Days*', children:[{ key: 'days',        label: 'open', sortable:true }]},
 			{ label: 'Opened in the last...', children: [
 				{ key:'openedday',   label:'day',   sortable:true  },
 				{ key:'openedweek',  label:'week',  sortable:true  },
@@ -52,4 +58,5 @@ YUI().use('node', 'charts', 'charts-legend', 'datatable', function (Y) {
 	pie('currentOpenTickets', ACTIVITY_DATA.currentOpenTickets);
 	pie('ticketsOpenedToday', ACTIVITY_DATA.ticketsOpenedToday);
 	pie('ticketsClosedToday', ACTIVITY_DATA.ticketsClosedToday);
+	var style = new Y.StyleSheet(".chartData table { display:none; }");
 });

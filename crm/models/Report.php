@@ -100,6 +100,33 @@ class Report
 	}
 
 	/**
+	 * Creates a comma-separated list of numbers from a request parameter
+	 *
+	 * The report form includes checkboxes for choosing categories and
+	 * departments to include in the report.  The form posts these inputs
+	 * as an array, using the ID as the index.  When a user checks on of
+	 * them, the id will be added to the associated $_REQUEST array
+	 * $_REQUEST['categories'][$id] = "On"
+	 * $_REQUEST['departments'][$id] = "On"
+	 *
+	 * Checkboxes that are unchecked will not exist in the request parameters,
+	 * so you should never see one set to "Off".  They're either "On" or
+	 * they're just not there.
+	 *
+	 * For the SQL select string, we need to convert all the ID numbers into
+	 * a safe, comma-separated string of ID numbers.
+	 *
+	 * @param $requestParam
+	 * @return string
+	 */
+	private static function implodeIds($requestParam)
+	{
+		$ids = array();
+		foreach (array_keys($requestParam) as $i) { $ids[] = (int)$i; }
+		return implode(',', $ids);
+	}
+
+	/**
 	 * WARNING:
 	 * Be very careful here, we're handling SQL as raw strings for
 	 * both maintainability and performance reasons.
@@ -122,15 +149,11 @@ class Report
 			$options[] = "(t.enteredDate<='$end' and ifnull(h.actionDate, now())>='$start')";
 		}
 		if (!empty($get['departments'])) {
-			$ids = array();
-			foreach (array_keys($get['departments']) as $i) { $ids[] = (int)$i; }
-			$ids = implode(',', $ids);
+			$ids = self::implodeIds($get['departments']);
 			$options[] = "p.department_id in ($ids)";
 		}
 		if (!empty($get['categories'])) {
-			$ids = array();
-			foreach (array_keys($get['categories']) as $i) { $ids[] = (int)$i; }
-			$ids = implode(',', $ids);
+			$ids = self::implodeIds($get['categories']);
 			$options[] = "t.category_id in ($ids)";
 		}
 		if ($options) {
@@ -187,6 +210,15 @@ class Report
 		return $zend_db->fetchAll($sql);
 	}
 
+	/**
+	 * Returns tickets that were created during a date range
+	 *
+	 * Dates should be strings that are parseable by strtotime
+	 *
+	 * @param string $start
+	 * @param string $end
+	 * @return array
+	 */
 	public static function openTicketsCount($start, $end)
 	{
 		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
@@ -200,6 +232,15 @@ class Report
 		return $zend_db->fetchAll($sql);
 	}
 
+	/**
+	 * Returns tickets that were closed during the provided date range
+	 *
+	 * Dates should be strings that are parseable by strtotime
+	 *
+	 * @param string $start
+	 * @param string $end
+	 * @return array ('date'=>xx, 'closed'=>xx)
+	 */
 	public static function closedTicketsCount($start, $end)
 	{
 		$closed = self::closedId();
@@ -217,7 +258,7 @@ class Report
 	public static function categoryActivity()
 	{
 		$closed = self::closedId();
-		$sql = "select c.name,
+		$sql = "select c.name,c.slaDays,
 					sum(t.status='open') as currentopen,
 					sum((now() - interval 1 day  ) <= t.enteredDate) as openedday,
 					sum((now() - interval 1 week ) <= t.enteredDate) as openedweek,
@@ -232,5 +273,78 @@ class Report
 				order by currentopen desc";
 		$zend_db = Database::getConnection();
 		return $zend_db->fetchAll($sql);
+	}
+
+
+	/**
+	 * The number of tickets that were open on the date provided
+	 *
+	 * Dates should be strings in MySQL Date Format
+	 *
+	 * @param int $timestamp
+	 * @param array $get The raw GET request
+	 * @return int
+	 */
+	public static function outstandingTicketCount($date, $get)
+	{
+		$sql = "select count(t.id) as count
+				from tickets t
+				left join people p on t.assignedPerson_id=p.id
+				where t.enteredDate<=? and (?<=t.closedDate or t.closedDate is null)";
+
+		if (!empty($get['categories'])) {
+			$ids = self::implodeIds($get['categories']);
+			$sql.= " and t.category_id in ($ids)";
+		}
+		if (!empty($get['departments'])) {
+			$ids = self::implodeIds($get['departments']);
+			$sql.= " and p.department_id in ($ids)";
+		}
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchOne($sql, array($date, $date));
+	}
+
+	/**
+	 * Returns the average SLA percentage for tickets closed on the given date
+	 *
+	 * Dates should be strings in MySQL Date Format
+	 *
+	 * @param string $date
+	 * @param array $get The raw GET request
+	 * @return int
+	 */
+	public static function closedTicketsSlaPercentage($date, $get)
+	{
+		$sql = "select round(floor(avg(datediff(t.closedDate,t.enteredDate))) / slaDays * 100) as slaPercentage
+				from tickets t
+				join categories c on t.category_id=c.id
+				left join people p on t.assignedPerson_id=p.id
+				where slaDays is not null
+				  and ?<=closedDate and closedDate<=adddate(?, interval 1 day)";
+		if (!empty($get['categories'])) {
+			$ids = self::implodeIds($get['categories']);
+			$sql.= " and t.category_id in ($ids)";
+		}
+		if (!empty($get['departments'])) {
+			$ids = self::implodeIds($get['departments']);
+			$sql.= " and p.department_id in ($ids)";
+		}
+		$zend_db = Database::getConnection();
+		return $zend_db->fetchOne($sql, array($date, $date));
+	}
+
+	/**
+	 * @param timestamp $start
+	 * @param timestamp $end
+	 * @return array
+	 */
+	public static function generateDateArray($start, $end)
+	{
+		$dates = array();
+		while ($start <= $end) {
+			$dates[] = date('Y-m-d', $start);
+			$start = strtotime('+1 day', $start);
+		}
+		return $dates;
 	}
 }

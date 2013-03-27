@@ -14,7 +14,6 @@ $ACTIVITY_DATA = array(
 );
 ?>
 <style type="text/css">
-	.chartData table { display:none; }
 	.chart { width:100%; height:200px; }
 	#pieCharts { overflow:auto; }
 
@@ -179,7 +178,7 @@ $ACTIVITY_DATA = array(
 			foreach ($data as $r) {
 				$name = View::escape($r['name']);
 				$fields = array(
-					'currentopen','days',
+					'slaDays','currentopen','days',
 					'openedday', 'openedweek', 'openedmonth',
 					'closedday', 'closedweek', 'closedmonth'
 				);
@@ -188,6 +187,7 @@ $ACTIVITY_DATA = array(
 				}
 				echo "
 				<tr><th>$name</th>
+					<th>$slaDays</th>
 					<th>$days</th>
 					<td>$currentopen</td>
 					<td>$openedday</td>
