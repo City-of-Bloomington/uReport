@@ -56,10 +56,30 @@ create table peopleAddresses (
 	foreign key (person_id) references people(id)
 );
 
+create table contactMethods (
+	id int unsigned not null primary key auto_increment,
+	name varchar(128) not null
+);
+insert into contactMethods set name='Email';
+insert into contactMethods set name='Phone';
+insert into contactMethods set name='Web Form';
+insert into contactMethods set name='Other';
+
+create table clients (
+	id               int          unsigned not null primary key auto_increment,
+	name             varchar(128) not null,
+	url              varchar(255),
+	api_key          varchar(50)  not null,
+	contactPerson_id int          unsigned not null,
+	contactMethod_id int          unsigned not null,
+	foreign key (contactPerson_id) references people(id),
+	foreign key (contactMethod_id) references contactMethods(id)
+);
+
 create table substatus (
 	id          int          unsigned not null primary key auto_increment,
 	name        varchar(25)  not null,
-	description varchar(128) not null
+	description varchar(128) not null,
 	status      enum('open', 'closed') not null default 'open'
 );
 insert substatus (status, name, description) values('closed', 'Resolved', 'This ticket has been taken care of');
@@ -157,15 +177,6 @@ create table ticketHistory (
 	foreign key (action_id)          references actions(id)
 );
 
-create table contactMethods (
-	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null
-);
-insert into contactMethods set name='Email';
-insert into contactMethods set name='Phone';
-insert into contactMethods set name='Web Form';
-insert into contactMethods set name='Other';
-
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
@@ -246,15 +257,4 @@ create table responses (
 	foreign key (issue_id)         references issues        (id),
 	foreign key (contactMethod_id) references contactMethods(id),
 	foreign key (person_id)        references people        (id)
-);
-
-create table clients (
-	id               int          unsigned not null primary key auto_increment,
-	name             varchar(128) not null,
-	url              varchar(255),
-	api_key          varchar(50)  not null,
-	contactPerson_id int          unsigned not null,
-	contactMethod_id int          unsigned not null,
-	foreign key (contactPerson_id) references people(id),
-	foreign key (contactMethod_id) references contactMethods(id)
 );
