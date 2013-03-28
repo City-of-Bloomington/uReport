@@ -88,8 +88,9 @@ class Person extends ActiveRecord
 			}
 
 			$zend_db = Database::getConnection();
-			$zend_db->delete('peoplePhones', 'person_id='.$this->getId());
-			$zend_db->delete('peopleEmails', 'person_id='.$this->getId());
+			$zend_db->delete('peopleAddresses', 'person_id='.$this->getId());
+			$zend_db->delete('peoplePhones',    'person_id='.$this->getId());
+			$zend_db->delete('peopleEmails',    'person_id='.$this->getId());
 
 			parent::delete();
 		}
