@@ -274,6 +274,18 @@ class Person extends ActiveRecord
 		}
 		return array();
 	}
+	
+	/**
+	 * Temporary Fix for notifications
+	 */
+	public function getEmail()
+	{
+		$emails = $this->getEmails();
+		if (count($emails)) {
+			return $emails[0];
+		}
+		return "";
+	}
 
 	public function getAddresses()
 	{
