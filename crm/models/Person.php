@@ -282,7 +282,8 @@ class Person extends ActiveRecord
 	{
 		$emails = $this->getEmails();
 		if (count($emails)) {
-			return $emails[0];
+			$e = $emails[0];
+			return $e->getEmail();
 		}
 		return "";
 	}
