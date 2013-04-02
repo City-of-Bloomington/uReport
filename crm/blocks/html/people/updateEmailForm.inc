@@ -7,22 +7,39 @@
  */
 ?>
 <div class="updateEmailForm">
-	<form method="post" action="<?php echo BASE_URI; ?>/people/updateEmail">
+	<form method="post">
 		<fieldset><legend>Email Address</legend>
-			<label>
-				Label
-				<select name="label" id="label">
-				<?php
-					foreach (Email::$LABELS as $label) {
-						$selected = $this->email->getLabel()== $label
-							? 'selected="selected"'
-							: '';
-						echo "<option $selected>$label</option>";
-					}
-				?>
-				</select>
-			</label>
-			<input name="email" value="<?php echo View::escape($this->email->getEmail()); ?>" />
+			<table>
+				<tr><td><label>Label
+							<select name="label" id="label">
+							<?php
+								foreach (Email::$LABELS as $label) {
+									$selected = $this->email->getLabel()== $label
+										? 'selected="selected"'
+										: '';
+									echo "<option $selected>$label</option>";
+								}
+							?>
+							</select>
+						</label>
+					</td>
+					<td><input name="email" value="<?php echo View::escape($this->email); ?>" /></td>
+				</tr>
+				<tr><td><label   for="usedForNotifications">Used for notifications</label></td>
+					<td><select name="usedForNotifications"
+								id="usedForNotifications">
+						<?php
+							foreach (array('No', 'Yes') as $i=>$text) {
+								$selected = $this->email->isUsedForNotifications()==$i
+									? 'selected="selected"'
+									: '';
+								echo "<option value=\"$i\" $selected>$text</option>";
+							}
+						?>
+						</select>
+					</td>
+				</tr>
+			</table>
 		</fieldset>
 		<fieldset>
 			<?php
@@ -32,9 +49,13 @@
 				else {
 					echo "<input type=\"hidden\" name=\"person_id\" value=\"{$this->email->getPerson_id()}\" />";
 				}
+
+				$cancelUrl = $this->template->controller == 'AccountController'
+					? BASE_URI.'/account'
+					: $this->email->getPerson()->getUrl();
 			?>
 			<button type="submit" class="save">Save</button>
-			<a class="cancel" href="<?php echo $this->email->getPerson()->getURL(); ?>">Cancel</a>
+			<a class="cancel" href="<?php echo $cancelUrl ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

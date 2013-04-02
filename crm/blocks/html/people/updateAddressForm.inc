@@ -14,7 +14,7 @@ foreach ($fields as $field) {
 }
 ?>
 <div class="updateAddressForm">
-	<form method="post" action="<?php echo BASE_URI; ?>/people/updateAddress">
+	<form method="post">
 		<fieldset><legend>Address</legend>
 			<table>
 				<tr><td><label for="label">Label</label></td>
@@ -57,9 +57,12 @@ foreach ($fields as $field) {
 				else {
 					echo "<input type=\"hidden\" name=\"person_id\" value=\"{$this->address->getPerson_id()}\" />";
 				}
+				$cancelUrl = $this->template->controller == 'AccountController'
+					? BASE_URI.'/account'
+					: $this->address->getPerson()->getUrl();
 			?>
 			<button type="submit" class="save">Save</button>
-			<a class="cancel" href="<?php echo $this->address->getPerson()->getURL(); ?>">Cancel</a>
+			<a class="cancel" href="<?php echo $cancelUrl ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

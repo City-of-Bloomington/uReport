@@ -13,5 +13,6 @@ abstract class Controller
 	public function __construct(Template $template)
 	{
 		$this->template = $template;
+		$this->template->controller = get_class($this);
 	}
 }

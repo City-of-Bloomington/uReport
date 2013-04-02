@@ -26,7 +26,14 @@ class EmailList extends ZendDbResultIterator
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
-					$this->select->where("$key=?", $value);
+					switch ($key) {
+						case 'usedForNotifications':
+							$this->select->where("$key=?", $value ? 1 : 0);
+							break;
+
+						default:
+							$this->select->where("$key=?", $value);
+					}
 				}
 			}
 		}

@@ -15,7 +15,6 @@ $title = $this->title ? View::escape($this->title) : $title;
 
 		<?php
 			include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc';
-			include APPLICATION_HOME.'/blocks/html/people/addressFields.inc';
 		?>
 
 		<fieldset><legend>Submit</legend>

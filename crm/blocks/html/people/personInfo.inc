@@ -6,6 +6,21 @@
  * @param Person $this->person
  * @param bool $this->disableButtons
  */
+// This screen is also used when a person views their own account.
+// When a person is viewing their own account, the URLs need to point
+// to the "account" versions of updating things.
+// For the account URLs, you should never include a person_id parameter.
+// The account controller only modifies with the $_SESSION[USER]
+if ($this->template->controller == 'AccountController') {
+	$resource = 'account';
+	$person_param = '';
+}
+else {
+	$resource = 'people';
+	$person_param = '?person_id='.$this->person->getId();
+}
+
+
 $username = '';
 if (userIsAllowed('people','view')) {
 	$username = $this->person->getUsername();
@@ -19,19 +34,20 @@ if (userIsAllowed('people','view')) {
 	}
 }
 
+
 $editButton   = '';
 $deleteButton = '';
-if (userIsAllowed('people','update') && !$this->disableButtons) {
+if (userIsAllowed($resource,'update') && !$this->disableButtons) {
 	$editButton = "
 	<a class=\"edit button\"
-		href=\"".BASE_URI."/people/update?person_id={$this->person->getId()}\">
+		href=\"".BASE_URI."/$resource/update$person_param\">
 		Edit
 	</a>
 	";
 	if (!$this->person->hasTickets()) {
 		$deleteButton = "
 		<a class=\"delete button\"
-			href=\"".BASE_URI."/people/delete?person_id={$this->person->getId()}\">
+			href=\"".BASE_URI."/$resource/delete$person_param\">
 			Delete Person
 		</a>
 		";
@@ -53,7 +69,7 @@ echo "
 	$addressButtons = '';
 	foreach ($this->person->getAddresses() as $a) {
 		if ($editButton) {
-			$addressButtons = $buttonHelper->commonEditDeleteButtons('people', 'Address', $a);
+			$addressButtons = $buttonHelper->commonEditDeleteButtons($resource, 'address', $a);
 		}
 		$label   = View::escape($a->getLabel());
 		$address = View::escape($a->getAddress());
@@ -73,7 +89,7 @@ echo "
 		echo "
 		<tr><td colspan=\"3\">
 				<a class=\"add button\"
-					href=\"".BASE_URI."/people/updateAddress?person_id={$this->person->getId()}\">
+					href=\"".BASE_URI."/$resource/updateAddress$person_param\">
 					Add Address
 				</a>
 			</td>
@@ -84,7 +100,7 @@ echo "
 	$emailButtons = '';
 	foreach ($this->person->getEmails() as $e) {
 		if ($editButton) {
-			$emailButtons = $buttonHelper->commonEditDeleteButtons('people', 'email', $e);
+			$emailButtons = $buttonHelper->commonEditDeleteButtons($resource, 'email', $e);
 		}
 		$label = View::escape($e->getLabel());
 		$email = View::escape($e->getEmail());
@@ -99,7 +115,7 @@ echo "
 		echo "
 		<tr><td colspan=\"3\">
 				<a class=\"add button\"
-					href=\"".BASE_URI."/people/updateEmail?person_id={$this->person->getId()}\">
+					href=\"".BASE_URI."/$resource/updateEmail$person_param\">
 					Add Email
 				</a>
 			</td>
@@ -109,7 +125,7 @@ echo "
 	$phoneButtons = '';
 	foreach ($this->person->getPhones() as $p) {
 		if ($editButton) {
-			$phoneButtons = $buttonHelper->commonEditDeleteButtons('people', 'phone', $p);
+			$phoneButtons = $buttonHelper->commonEditDeleteButtons($resource, 'phone', $p);
 		}
 		$label  = View::escape($p->getLabel());
 		$number = View::escape($p->getNumber());
@@ -124,7 +140,7 @@ echo "
 		echo "
 		<tr><td colspan=\"3\">
 				<a class=\"add button\"
-					href=\"".BASE_URI."/people/updatePhone?person_id={$this->person->getId()}\">
+					href=\"".BASE_URI."/$resource/updatePhone$person_param\">
 					Add Phone
 				</a>
 			</td>

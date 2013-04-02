@@ -255,9 +255,7 @@ class Person extends ActiveRecord
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
-	 * Returns an array of Phones indexed by Id
-	 *
-	 * @return array
+	 * @return PhoneList
 	 */
 	public function getPhones()
 	{
@@ -267,6 +265,9 @@ class Person extends ActiveRecord
 		return array();
 	}
 
+	/**
+	 * @return EmailList
+	 */
 	public function getEmails()
 	{
 		if ($this->getId()) {
@@ -288,6 +289,17 @@ class Person extends ActiveRecord
 		return "";
 	}
 
+	/**
+	 * @return EmailList
+	 */
+	public function getNotificationEmails()
+	{
+		return new EmailList(array('person_id'=>$this->getId(), 'usedForNotifications'=>1));
+	}
+
+	/**
+	 * @return AddressList
+	 */
 	public function getAddresses()
 	{
 		if ($this->getId()) {
@@ -381,20 +393,32 @@ class Person extends ActiveRecord
 	public function sendNotification($message, $subject=null, Person $personFrom=null)
 	{
 		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
-			if (!$personFrom) {
-				$personFrom = new Person();
-				$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
-				$personFrom->setEmail("$name@$_SERVER[SERVER_NAME]");
-			}
 			if (!$subject) {
 				$subject = APPLICATION_NAME.' Notification';
 			}
-			$mail = new Zend_Mail();
-			$mail->addTo($this->getEmail(),$this->getFullname());
-			$mail->setFrom($personFrom->getEmail(),$personFrom->getFullname());
-			$mail->setSubject($subject);
-			$mail->setBodyText($message);
-			$mail->send();
+
+			if ($personFrom) {
+				$emails = $personFrom->getNotificationEmails();
+				if (count($emails)) {
+					$fromEmail    = $emails[0];
+					$fromFullname = $personFrom->getFullname();
+				}
+			}
+			if (!isset($fromEmail)) {
+				$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
+				$fromEmail    = "$name@$_SERVER[SERVER_NAME]";
+				$fromFullname = APPLICATION_NAME;
+
+			}
+
+			foreach ($this->getNotificationEmails() as $email) {
+				$mail = new Zend_Mail();
+				$mail->addTo($email->getEmail(),$this->getFullname());
+				$mail->setFrom($fromEmail,$fromFullname);
+				$mail->setSubject($subject);
+				$mail->setBodyText($message);
+				$mail->send();
+			}
 		}
 	}
 

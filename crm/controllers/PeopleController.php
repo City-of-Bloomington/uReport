@@ -221,7 +221,7 @@ class PeopleController extends Controller
 	}
 
 	/**
-	 * Helper functino for handling foreign key object deletions
+	 * Helper function for handling foreign key object deletions
 	 *
 	 * Email, Phone, and Address are all handled exactly the same way.
 	 *
@@ -297,7 +297,8 @@ class PeopleController extends Controller
 			}
 		}
 
-		$this->template->blocks['left'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
+		$this->template->blocks['left'][] = new Block('people/personInfo.inc',array('person'=>$object->getPerson(), 'disableButtons'=>true));
+		$this->template->blocks['right'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
 	}
 	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
 	public function updatePhone()   { $this->updateLinkedItem('phone',   'number');  }

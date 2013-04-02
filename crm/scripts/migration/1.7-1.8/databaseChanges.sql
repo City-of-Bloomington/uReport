@@ -62,6 +62,7 @@ create table peopleEmails (
 	person_id int unsigned not null,
 	email     varchar(255) not null,
 	label enum('Home','Work','Other') not null default 'Other',
+	usedForNotifications tinyint(1) unsigned not null default 0,
 	foreign key (person_id) references people(id)
 );
 update people set email=null where email='';

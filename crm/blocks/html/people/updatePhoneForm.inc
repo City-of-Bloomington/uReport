@@ -7,7 +7,7 @@
  */
 ?>
 <div class="updatePhoneForm">
-	<form method="post" action="<?php echo BASE_URI; ?>/people/updatePhone">
+	<form method="post">
 		<?php include APPLICATION_HOME.'/blocks/html/people/phoneFields.inc'; ?>
 		<fieldset>
 			<?php
@@ -17,9 +17,12 @@
 				else {
 					echo "<input type=\"hidden\" name=\"person_id\" value=\"{$this->phone->getPerson_id()}\" />";
 				}
+				$cancelUrl = $this->template->controller == 'AccountController'
+					? BASE_URI.'/account'
+					: $this->phone->getPerson()->getUrl();
 			?>
 			<button type="submit" class="save">Save</button>
-			<a class="cancel" href="<?php echo $this->phone->getPerson()->getURL(); ?>">Cancel</a>
+			<a class="cancel" href="<?php echo $cancelUrl; ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

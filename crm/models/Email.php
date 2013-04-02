@@ -53,10 +53,41 @@ class Email extends ActiveRecord
 	{
 		if (!$this->getLabel()) { $this->setLabel('Other'); }
 		if (!$this->getPerson_id()) { throw new Exception('phones/missingPerson'); }
+
+		// Make sure there's at least one email used for notifications
+		$notificationEmails = $this->getPerson()->getNotificationEmails();
+		if (!count($notificationEmails)) { $this->setUsedForNotifications(true); }
+		if  (count($notificationEmails) == 1) {
+			$e = $notificationEmails[0];
+			if ($e->getId()==$this->getId()) { $this->setUsedForNotifications(true); }
+		}
+
+		// Required for the MySQL null default handler to be used
+		if (!$this->isUsedForNotifications()) {
+			unset($this->data['usedForNotifications']);
+		}
 	}
 
 	public function save()   { parent::save();   }
-	public function delete() { parent::delete(); }
+	public function delete()
+	{
+		$person = $this->getPerson();
+
+		parent::delete();
+
+		// If we delete the only email used for notifications,
+		// we need to mark one of the other email addresses.
+		$notificationEmails = new EmailList(array('person_id'=>$person->getId(), 'usedForNotifications'=>1));
+		if (!count($notificationEmails)) {
+			$list = $person->getEmails();
+			if (count($list)) {
+				$e = $list[0];
+				$e->setUsedForNotifications(true);
+				$e->save();
+			}
+		}
+
+	}
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
@@ -73,9 +104,12 @@ class Email extends ActiveRecord
 	public function setPerson_id($id)     { parent::setForeignKeyField ('Person', 'person_id', $id); }
 	public function setPerson(Person $p)  { parent::setForeignKeyObject('Person', 'person_id', $p);  }
 
+	public function getUsedForNotifications() { return parent::get('usedForNotifications') ? true : false; }
+	public function setUsedForNotifications($b)      { parent::set('usedForNotifications', $b ? 1 : 0); }
+
 	public function handleUpdate($post)
 	{
-		$fields = array('email', 'label', 'person_id');
+		$fields = array('email', 'label', 'person_id', 'usedForNotifications');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);
@@ -83,4 +117,16 @@ class Email extends ActiveRecord
 			}
 		}
 	}
+
+	//----------------------------------------------------------------
+	// Custom Functions
+	//----------------------------------------------------------------
+	public function __toString() { return "{$this->getEmail()}"; }
+
+	/**
+	 * Alias for ::getUsedForNotifications
+	 *
+	 * @return bool
+	 */
+	public function isUsedForNotifications() { return $this->getUsedForNotifications(); }
 }

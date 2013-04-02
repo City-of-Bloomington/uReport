@@ -7,6 +7,7 @@
 class Address extends ActiveRecord
 {
 	protected $tablename = 'peopleAddresses';
+	protected $person;
 	public static $LABELS = array('Home', 'Business', 'Rental');
 
 	/**
