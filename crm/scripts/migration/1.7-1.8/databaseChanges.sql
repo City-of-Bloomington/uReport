@@ -66,8 +66,9 @@ create table peopleEmails (
 	foreign key (person_id) references people(id)
 );
 update people set email=null where email='';
-insert into peopleEmails (person_id, email) select id,email from people where email is not null;
+insert into peopleEmails (person_id, email, usedForNotifications) select id,email,1 from people where email is not null;
 alter table people drop email;
+
 
 ------------------------------------------------
 -- People's addresses
