@@ -101,8 +101,15 @@ class PeopleController extends Controller
 				'enteredBy' =>'Entered Cases'
 			);
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
+			$count = 0;
 			foreach ($lists as $listType=>$title) {
-				$this->addTicketList('right', $listType, $title, $person, $disableLinks);
+				$count += $this->addTicketList('right', $listType, $title, $person, $disableLinks);
+			}
+
+			if (userIsAllowed('tickets','merge') && !isset($_GET['disableLinks']) && $count>1) {
+				$this->template->blocks['right'][] = new Block(
+					'tickets/ticketSelectForMergeForm.inc'
+				);
 			}
 		}
 		else {
@@ -118,6 +125,8 @@ class PeopleController extends Controller
 	 * @param string $title
 	 * @param Person $person
 	 * @param bool $disableLinks
+	 *
+	 * @return int The number of tickets displayed in the list
 	 */
 	private function addTicketList($panel, $listType, $title, Person $person, $disableLinks=false, $disableButtons=false)
 	{
@@ -126,7 +135,8 @@ class PeopleController extends Controller
 		$tickets = new TicketList();
 		$tickets->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
 
-		if (count($tickets)) {
+		$count = count($tickets);
+		if ($count) {
 			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
@@ -141,6 +151,7 @@ class PeopleController extends Controller
 			}
 			$this->template->blocks[$panel][] = $block;
 		}
+		return $count;
 	}
 
 	public function update()
