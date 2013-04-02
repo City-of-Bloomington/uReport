@@ -37,7 +37,6 @@ var PERSON_CHOOSER = {
 			Y.io(CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id, {
 				on: {
 					complete: function (id, o, args) {
-						alert(o.responseText);
 						var person = Y.JSON.parse(o.responseText);
 						var idElement   = '#' + PERSON_CHOOSER.fieldname + '_id';
 						var nameElement = '#' + PERSON_CHOOSER.fieldname + '-name';

@@ -7,4 +7,4 @@
  */
 header('Content-type: text/xml; charset=utf-8');
 include FRAMEWORK.'/errorMessages.php';
-echo $this->includeBlocks('person-panel');
+echo $this->includeBlocks();

@@ -61,14 +61,12 @@ class IssuesController extends Controller
 			// To edit existing issues, pass in the issue_id
 			if (!empty($_REQUEST['issue_id'])) {
 				$issue = new Issue($_REQUEST['issue_id']);
-				$ticket = $issue->getTicket();
 			}
 			// To add new issues, pass in the Ticket to add the issue to
 			else {
 				if (!empty($_REQUEST['ticket_id'])) {
-					$ticket = new Ticket($_REQUEST['ticket_id']);
 					$issue = new Issue();
-					$issue->setTicket($ticket);
+					$issue->setTicket_id($_REQUEST['ticket_id']);
 				}
 				else { throw new Exception('tickets/unknownTicket'); }
 			}
@@ -90,6 +88,12 @@ class IssuesController extends Controller
 			$issue->handleUpdate($_POST);
 			try {
 				$issue->save();
+
+				// Update the search index
+				// Make sure the ticket uses the latest issue information
+				$ticket = new Ticket($issue->getTicket_id());
+				$ticket->updateSearchIndex();
+
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
@@ -101,6 +105,8 @@ class IssuesController extends Controller
 		//-------------------------------------------------------------------
 		// Display the view
 		//-------------------------------------------------------------------
+		$ticket = $issue->getTicket();
+
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'tickets/ticketInfo.inc',

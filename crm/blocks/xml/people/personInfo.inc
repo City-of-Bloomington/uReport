@@ -8,21 +8,13 @@
 $username     = View::escape($this->person->getUsername());
 $name         = View::escape($this->person->getFullname());
 $organization = View::escape($this->person->getOrganization());
-$address      = View::escape($this->person->getAddress());
-$city         = View::escape($this->person->getCity());
-$state        = View::escape($this->person->getState());
-$zip          = View::escape($this->person->getZip());
 echo "
 <person id=\"{$this->person->getId()}\">
 	<fullname>$name</fullname>
 	<organization>$organization</organization>
 	<username>$username</username>
-	<address>$address</address>
-	<city>$city</city>
-	<state>$state</state>
-	<zip>$zip</zip>
 ";
-$list = $this->person->getEmail();
+$list = $this->person->getEmails();
 if (count($list)) {
 	echo "<emails>";
 	foreach ($list as $email) {
@@ -39,6 +31,18 @@ if (count($list)) {
 		echo "<phone>$n</phone>";
 	}
 	echo "</phones>";
+}
+$list = $this->person->getAddresses();
+if (count($list)) {
+	echo "<addresses>";
+	foreach ($list as $a) {
+		foreach(array('address','city','state','zip') as $field) {
+			$get = 'get'.ucfirst($field);
+			$value = View::escape($a->$get());
+			echo "<$field>$value</$field>";
+		}
+	}
+	echo "</addresses>";
 }
 echo "
 </person>

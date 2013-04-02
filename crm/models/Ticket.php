@@ -120,14 +120,18 @@ class Ticket extends ActiveRecord
 
 	}
 
+	public function updateSearchIndex()
+	{
+		$search = new Search();
+		$search->add($this);
+		$search->solrClient->commit();
+	}
+
 	public function save()
 	{
 		$this->setLastModified(date(DATE_FORMAT));
 		parent::save();
-
-		$search = new Search();
-		$search->add($this);
-		$search->solrClient->commit();
+		$this->updateSearchIndex();
 	}
 
 	public function delete()
