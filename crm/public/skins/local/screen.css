@@ -60,6 +60,8 @@ button, .button {
 .personInfo table .edit   { background-image:url('images/edit.png'); }
 .personInfo table .delete { background-image:url('images/delete.png'); }
 
+.personInfo table { margin-bottom:1.5em; }
+
 .locationInfo ul { margin:0; }
 
 .ticketList table { border:1px solid #aaa; }
@@ -174,7 +176,8 @@ button, .button {
 .pageNavigation li       { display:inline; margin:.5em; }
 .pageNavigation .current { border:2px solid green; }
 
-tr.verified        { background-color:#cfc; }
+tr.verified,
+tr.usedForNotifications { background-color:#cfc; }
 .ticketList .add a { height:2em; font-size:93%; }
 
 

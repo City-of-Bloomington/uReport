@@ -57,16 +57,39 @@ if (userIsAllowed($resource,'update') && !$this->disableButtons) {
 
 $name         = View::escape($this->person->getFullname());
 $organization = View::escape($this->person->getOrganization());
+if ($organization) {
+	$organization = "
+		<tr><th>Organization</th>
+			<td>$organization</td>
+		</tr>
+	";
+}
+if ($username) {
+	$username = "
+		<tr><th>Username</th>
+			<td>$username</td>
+		</tr>
+	";
+}
 echo "
 <div class=\"personInfo\">
 	<h1>$name $editButton</h1>
-	<h2>$organization</h2>
-	<div>$username</div>
-	<table>
 ";
+	if ($organization || $username) {
+		echo "
+		<table>
+			$organization
+			$username
+		</table>
+		";
+	}
 	$buttonHelper = $this->template->getHelper('commonEditDeleteButtons');
 
 	$addressButtons = '';
+	echo "
+	<h3>Addresses</h3>
+	<table>
+	";
 	foreach ($this->person->getAddresses() as $a) {
 		if ($editButton) {
 			$addressButtons = $buttonHelper->commonEditDeleteButtons($resource, 'address', $a);
@@ -97,6 +120,13 @@ echo "
 		";
 	}
 
+	echo "
+	</table>
+
+	<h3>Email Addresses</h3>
+	<table>
+	";
+
 	$emailButtons = '';
 	foreach ($this->person->getEmails() as $e) {
 		if ($editButton) {
@@ -104,8 +134,10 @@ echo "
 		}
 		$label = View::escape($e->getLabel());
 		$email = View::escape($e->getEmail());
+		$class = $e->isUsedForNotifications() ? 'class="usedForNotifications"' : '';
 		echo "
-		<tr><th>$label</th>
+		<tr $class>
+			<th>$label</th>
 			<td>$email</td>
 			<td>$emailButtons</td>
 		</tr>
@@ -122,6 +154,13 @@ echo "
 		</tr>
 		";
 	}
+
+	echo "
+	</table>
+
+	<h3>Phone Numbers</h3>
+	<table>
+	";
 	$phoneButtons = '';
 	foreach ($this->person->getPhones() as $p) {
 		if ($editButton) {
@@ -151,4 +190,9 @@ echo "
 	</table>
 	<div>$deleteButton</div>
 </div>
+<table>
+	<tr class=\"usedForNotifications\">
+		<td>Used for notifications</td>
+	</tr>
+</table>
 ";
