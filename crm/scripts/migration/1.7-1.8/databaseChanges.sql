@@ -1,6 +1,6 @@
-------------------------------------------------
+-- ----------------------------------------------
 -- Clients need to specify contactMethod_id
-------------------------------------------------
+-- ----------------------------------------------
 alter table clients add contactMethod_id int unsigned not null;
 update clients set contactMethod_id=(
 	select ifnull((select id from contactMethods where name='Other'), 1)
@@ -8,15 +8,15 @@ update clients set contactMethod_id=(
 alter table clients add foreign key (contactMethod_id) references contactMethods(id);
 
 
-------------------------------------------------
+-- ----------------------------------------------
 -- Categories must track lastModified date
-------------------------------------------------
+-- ----------------------------------------------
 alter table categories add lastModified timestamp not null default CURRENT_TIMESTAMP;
 update categories set lastModified=now();
 
-------------------------------------------------
+-- ----------------------------------------------
 -- Custom statuses and resolutions should become substatus
-------------------------------------------------
+-- ----------------------------------------------
 -- First we need to deal with all the current resolutions
 alter table resolutions add status enum('open', 'closed') not null default 'open';
 rename table resolutions to substatus;
@@ -42,21 +42,21 @@ update tickets set status='open' where status not in ('open','closed');
 
 alter table departments drop customStatuses;
 
-------------------------------------------------
+-- ----------------------------------------------
 -- SLA Agreements
-------------------------------------------------
+-- ----------------------------------------------
 alter table categories add slaDays int unsigned;
 
-------------------------------------------------
+-- ----------------------------------------------
 -- Phones
-------------------------------------------------
+-- ----------------------------------------------
 alter table phones add label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other';
 update phones set label='Other';
 rename table phones to peoplePhones;
 
-------------------------------------------------
+-- ----------------------------------------------
 -- Email split out into a separate table
-------------------------------------------------
+-- ----------------------------------------------
 create table peopleEmails (
 	id        int unsigned not null primary key auto_increment,
 	person_id int unsigned not null,
@@ -70,9 +70,9 @@ insert into peopleEmails (person_id, email, usedForNotifications) select id,emai
 alter table people drop email;
 
 
-------------------------------------------------
+-- ----------------------------------------------
 -- People's addresses
-------------------------------------------------
+-- ----------------------------------------------
 create table peopleAddresses (
 	id        int unsigned not null primary key auto_increment,
 	person_id int unsigned not null,
@@ -88,9 +88,9 @@ insert into peopleAddresses (person_id,address,city,state,zip)
 	select id,address,city,state,zip from people where address is not null;
 alter table people drop address;
 
-------------------------------------------------
+-- ----------------------------------------------
 -- Ticket modified and close dates
-------------------------------------------------
+-- ----------------------------------------------
 alter table tickets modify enteredDate timestamp not null default 0;
 
 alter table tickets add lastModified timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
