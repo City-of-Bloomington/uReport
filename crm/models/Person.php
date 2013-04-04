@@ -377,7 +377,7 @@ class Person extends ActiveRecord
 	 * @param string $subject
 	 * @param Person $personFrom
 	 */
-	public function sendNotification($message, $subject=null, Person $personFrom=null)
+	public function sendNotification($message, $subject=null, Person $personFrom=null, $html=null)
 	{
 		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
 			if (!$subject) {
@@ -392,18 +392,33 @@ class Person extends ActiveRecord
 				}
 			}
 			if (!isset($fromEmail)) {
-				$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
-				$fromEmail    = "$name@$_SERVER[SERVER_NAME]";
-				$fromFullname = APPLICATION_NAME;
+				if (isset($_SERVER['SERVER_NAME'])) {
+					$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
+					$fromEmail    = "$name@$_SERVER[SERVER_NAME]";
+					$fromFullname = APPLICATION_NAME;
+				}
+				else {
+					$fromFullname = APPLICATION_NAME;
+					preg_match('#//([^/]+)#', BASE_URL, $matches);
+					$server = $matches[1];
+					$fromEmail    = "$fromFullname@$server";
+				}
 
 			}
 
+			$message  = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
+			if (isset($html)) {
+				$html = mb_convert_encoding($html,    'ISO-8859-1', 'UTF-8');
+			}
 			foreach ($this->getNotificationEmails() as $email) {
 				$mail = new Zend_Mail();
 				$mail->addTo($email->getEmail(),$this->getFullname());
 				$mail->setFrom($fromEmail,$fromFullname);
 				$mail->setSubject($subject);
 				$mail->setBodyText($message);
+				if ($html) {
+					$mail->setBodyHtml($html);
+				}
 				$mail->send();
 			}
 		}

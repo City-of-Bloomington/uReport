@@ -16,9 +16,10 @@
 	<table>
 		<thead>
 			<tr><th>Status</th>
-				<th>Location</th>
 				<th>Entered Date</th>
+				<th>SLA</th>
 				<th>Category</th>
+				<th>Location</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -32,6 +33,14 @@
 				$status      = View::escape($ticket->getStatus());
 				$location    = View::escape($ticket->getLocation());
 				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
+				$sla         = $ticket->getSlaPercentage();
+				if ($sla) {
+					$class = $sla<=100 ? 'onTrack' : 'pastDue';
+					$sla = "<span class=\"$class\">$sla%</span>";
+				}
+				else {
+					$sla = '';
+				}
 
 				$category = $ticket->getCategory_id()
 					? View::escape($ticket->getCategory()->getName())
@@ -45,9 +54,10 @@
 				}
 				echo "
 				<tr><td>$status</td>
-					<td>$location</td>
 					<td>$enteredDate</td>
+					<td>$sla</td>
 					<td>$category</td>
+					<td>$location</td>
 					<td>
 				";
 					if (!$this->disableButtons

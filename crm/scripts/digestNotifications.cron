@@ -1,0 +1,3 @@
+# Add this script to your CRON system to send digestNotifications
+# For our website, we run this script Weekly, on Mondays at 6:00am.
+0 6 * * 1 apache /var/www/sites/crm/scripts/digestNotifications.php

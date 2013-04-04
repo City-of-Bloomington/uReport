@@ -7,6 +7,7 @@
 ?>
 <div><h2>My Account</h2>
 	<ul><li><a href="<?php echo BASE_URL; ?>/account">Personal Info</a></li>
+		<li><a href="<?php echo $_SESSION['USER']->getURL(); ?>">My Profile</a></li>
 		<?php
 			if ($_SESSION['USER']->getDepartment_id()) {
 				echo "
