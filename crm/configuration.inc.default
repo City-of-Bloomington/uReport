@@ -75,8 +75,19 @@ define('DEFAULT_STATE','IN');
  * This should probably be the center of your city
  * If you can, it's best to adjust these values in your php.ini
  */
-define('DEFAULT_LATITUDE',ini_get('date.default_latitude'));
+define('DEFAULT_LATITUDE', ini_get('date.default_latitude'));
 define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
+/**
+ * Bounding box for valid locations
+ *
+ * Comment these out if you do not want this validation.
+ * Tickets will be rejected if they have coordinates that
+ * do not fall inside the defined bounding box.
+ */
+//define('MIN_LATITUDE',   39.069187);
+//define('MAX_LATITUDE',   39.99915);
+//define('MIN_LONGITUDE', -86.641575);
+//define('MAX_LONGITUDE', -86.440543);
 
 /**
  * This is a unique string identifying your jurisdiction to the

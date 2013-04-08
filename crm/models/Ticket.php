@@ -72,15 +72,26 @@ class Ticket extends ActiveRecord
 			throw new Exception('tickets/missingCategory');
 		}
 
-		// We need at least a location (address or lat/long) or a description
-		// an empty ticket does us no good
 		$issue = $this->getIssue();
 		if (!$issue) {
 			throw new Exception('tickets/missingIssue');
 		}
+
+		// We need at least a location (address or lat/long) or a description
+		// an empty ticket does us no good
+		$lat  = $this->getLatitude();
+		$long = $this->getLongitude();
 		if (!$issue->getDescription() && !$this->getLocation()
-			&& !($this->getLatitude() && $this->getLongitude()) ) {
+			&& !($lat && $long()) ) {
 			throw new Exception('missingRequiredFields');
+		}
+		if (($this->getLatitude() && $this->getLongitude())
+			&& (   defined('MIN_LATITUDE')  && defined('MAX_LATITUDE')
+				&& defined('MIN_LONGITUDE') && defined('MAX_LONGITUDE'))) {
+			if (!(   MIN_LATITUDE <=$lat  && $lat <=MAX_LATITUDE
+				  && MIN_LONGITUDE<=$long && $long<=MAX_LONGITUDE)) {
+				throw new Exception('tickets/locationOutOfBounds');
+			}
 		}
 
 		// The rest of these fields can be populated, if they're not provided
