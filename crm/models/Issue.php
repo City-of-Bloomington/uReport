@@ -4,7 +4,7 @@
  *
  * Issues are part of Ticket records
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -257,6 +257,22 @@ class Issue extends ActiveRecord
 	public function getMedia()
 	{
 		return new MediaList(array('issue_id'=>$this->getId()));
+	}
+
+	/**
+	 * Returns the profile picture for this issue
+	 *
+	 * Currently the profile picture is the first image that was uploaded
+	 *
+	 * @return Media
+	 */
+	public function getProfileImage()
+	{
+		foreach ($this->getMedia() as $media) {
+			if ($media->getMedia_type() == 'image') {
+				return $media;
+			}
+		}
 	}
 
 	/**
