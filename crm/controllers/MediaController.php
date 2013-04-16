@@ -81,4 +81,26 @@ class MediaController extends Controller
 			array('issue'=>$issue, 'disableButtons'=>1)
 		);
 	}
+
+	/**
+	 * Create and cache a resized image file
+	 *
+	 * @param REQUEST media_id
+	 * @param REQUEST size
+	 */
+	public function resize()
+	{
+		$this->template->setFilename('media');
+		try {
+			$media = new Media($_REQUEST['media_id']);
+			$size = !empty($_REQUEST['size']) ? (int)$_REQUEST['size'] : null;
+			$this->template->blocks[] = new Block(
+				'media/image.inc',
+				array('media'=>$media, 'size'=>$size)
+			);
+		}
+		catch (Exception $e) {
+			header('HTTP/1.1 404 Not Found', true, 404);
+		}
+	}
 }

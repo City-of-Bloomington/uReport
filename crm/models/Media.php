@@ -228,9 +228,12 @@ class Media extends ActiveRecord
 	 *
 	 * @return string
 	 */
-	public function getURL()
+	public function getURL($size=null)
 	{
-		return BASE_URL."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
+		$url = BASE_URI."/media/{$this->getDirectory()}";
+		if (!empty($size)) { $url.= "/$size"; }
+		$url.= "/{$this->getInternalFilename()}";
+		return $url;
 	}
 
 	/**

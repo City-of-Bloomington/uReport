@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -26,6 +26,16 @@ if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 		}
 		$_REQUEST['format'] = !empty($matches[5]) ? $matches[5] : 'html';
 	}
+}
+// Check for Media thumbnail requests
+elseif (preg_match(
+			'#'.BASE_URI.'/media/\d{4}/\d{1,2}/\d{1,2}/(\d+)/(\d+)\.[a-z]+#',
+			$_SERVER['REQUEST_URI'],
+			$matches)) {
+			$resource = 'media';
+			$action   = 'resize';
+			$_REQUEST['size']     = $matches[1];
+			$_REQUEST['media_id'] = $matches[2];
 }
 // Check for default routes
 elseif (preg_match('#'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?#',$_SERVER['REQUEST_URI'],$matches)) {

@@ -177,6 +177,12 @@ $DIRECTORY_CONFIG = array(
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
+/**
+ * Image handling library
+ * Set the path to the ImageMagick binaries
+ */
+define('IMAGEMAGICK','/usr/bin');
+
 //-------------------------------------------------------------------
 // Bootstrap code
 // No editing is usually needed after this point
