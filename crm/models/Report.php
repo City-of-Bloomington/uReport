@@ -146,7 +146,7 @@ class Report
 			$end = !empty($get['enteredDate']['end'])
 				? date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($get['enteredDate']['end']))
 				: date(ActiveRecord::MYSQL_DATE_FORMAT);
-			$options[] = "(t.enteredDate<='$end' and ifnull(h.actionDate, now())>='$start')";
+			$options[] = "(t.enteredDate<='$end' and ifnull(t.closedDate, now())>='$start')";
 		}
 		if (!empty($get['departments'])) {
 			$ids = self::implodeIds($get['departments']);
