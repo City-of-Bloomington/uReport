@@ -9,7 +9,6 @@
 $editButton     = '';
 $deleteButton   = '';
 $responseButton = '';
-$uploadButton   = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
@@ -32,14 +31,6 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 		</a>
 		";
 	}
-	if (userIsAllowed('media','upload')) {
-		$uploadButton = "
-		<a class=\"upload button\"
-			href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
-			Upload Attachment
-		</a>
-		";
-	}
 }
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
 $type = View::escape($this->issue->getIssueType());
@@ -52,7 +43,6 @@ echo "
 				$editButton
 				$responseButton
 				$deleteButton
-				$uploadButton
 			</span>
 		</h2>
 	</div>
@@ -110,7 +100,7 @@ echo "
 
 	$this->mediaList = $this->issue->getMedia();
 	if (count($this->mediaList)) {
-		include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
+		include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
