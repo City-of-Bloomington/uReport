@@ -10,7 +10,7 @@
 	<h2>Categories
 		<?php
 			if (userIsAllowed('categories','update')) {
-				echo '<a class="add button" href="'.BASE_URI.'/categories/update">Add</a>';
+				echo '<a class="btn" href="'.BASE_URI.'/categories/update"><span class="icon-plus"></span> Add</a>';
 			}
 		?>
 	</h2>
@@ -37,8 +37,9 @@
 			$editButton = '';
 			if (userIsAllowed('categories','update')) {
 				$editButton = "
-				<a class=\"edit button\"
+				<a class=\"btn\"
 					href=\"".BASE_URI."/categories/update?category_id={$category->getId()}\">
+					<span class=\"icon-pencil\"></span>
 					Edit
 				</a>
 				";

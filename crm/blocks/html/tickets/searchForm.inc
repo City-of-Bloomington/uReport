@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SolrObject $this->solrObject
@@ -17,7 +17,7 @@ if (userIsAllowed('tickets','add')) {
 		<form method=\"get\" action=\"".BASE_URL."/tickets\">
 			<fieldset>
 				<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
-				<button type=\"submit\" class=\"search\">Go</button>
+				<button type=\"submit\"><span class=\"icon-search\"></span> Go</button>
 			</fieldset>
 		</form>
 		<ul><li><a href=\"".BASE_URL."/tickets?status=open\">
@@ -51,7 +51,7 @@ if (userIsAllowed('tickets','add')) {
 			<label>Search
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit" class="search">Go</button>
+			<button type="submit"><span class="icon-search"></span> Go</button>
 			<p class="help">Only searches a case's description</p>
 		</fieldset>
 		<fieldset id="advanced-search">
@@ -137,7 +137,7 @@ if (userIsAllowed('tickets','add')) {
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit" class="search">Search</button>
+			<button type="submit"><span class="icon-search"></span> Search</button>
 		</fieldset>
 	</form>
 </div>

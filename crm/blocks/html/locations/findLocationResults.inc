@@ -77,7 +77,7 @@ else {
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\" class=\"submit\">Submit</button>
+				<button type=\"submit\"><span class=\"icon-plus\"></span> Submit</button>
 			</fieldset>
 		</form>
 		";

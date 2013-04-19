@@ -26,8 +26,9 @@ if (userIsAllowed('people','view')) {
 	$username = $this->person->getUsername();
 	if (!$username && userIsAllowed('users','add') && !$this->disableButtons) {
 		$username = "
-		<a class=\"add button\"
+		<a class=\"btn\"
 			href=\"".BASE_URI."/users/update?person_id={$this->person->getId()}\">
+			<span class=\"icon-plus\"></span>
 			Create Account
 		</a>
 		";
@@ -39,15 +40,17 @@ $editButton   = '';
 $deleteButton = '';
 if (userIsAllowed($resource,'update') && !$this->disableButtons) {
 	$editButton = "
-	<a class=\"edit button\"
+	<a class=\"btn\"
 		href=\"".BASE_URI."/$resource/update$person_param\">
+		<span class=\"icon-pencil\"></span>
 		Edit
 	</a>
 	";
 	if (!$this->person->hasTickets()) {
 		$deleteButton = "
-		<a class=\"delete button\"
+		<a class=\"btn\"
 			href=\"".BASE_URI."/$resource/delete$person_param\">
+			<span class=\"icon-remove\"></span>
 			Delete Person
 		</a>
 		";
@@ -111,8 +114,9 @@ echo "
 	if ($editButton) {
 		echo "
 		<tr><td colspan=\"3\">
-				<a class=\"add button\"
+				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updateAddress$person_param\">
+					<span class=\"icon-plus\"></span>
 					Add Address
 				</a>
 			</td>
@@ -146,8 +150,9 @@ echo "
 	if ($editButton) {
 		echo "
 		<tr><td colspan=\"3\">
-				<a class=\"add button\"
+				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updateEmail$person_param\">
+					<span class=\"icon-plus\"></span>
 					Add Email
 				</a>
 			</td>
@@ -178,8 +183,9 @@ echo "
 	if ($editButton) {
 		echo "
 		<tr><td colspan=\"3\">
-				<a class=\"add button\"
+				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updatePhone$person_param\">
+					<span class=\"icon-plus\"></span>
 					Add Phone
 				</a>
 			</td>

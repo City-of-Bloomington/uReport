@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -13,7 +13,8 @@ $url = BASE_URL."/locations?return_url=$return_url";
 echo "
 <div id=\"locationChooser\">
 	<div class=\"hd\">
-		<a id=\"findAddressButton\" class=\"edit button\" href=\"$url\">
+		<a id=\"findAddressButton\" class=\"btn\" href=\"$url\">
+			<span class=\"icon-globe\"></span>
 			Lookup Location
 		</a>
 	</div>

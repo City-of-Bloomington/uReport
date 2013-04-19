@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -18,7 +18,7 @@ if (count($actions)) {
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="action_id" class="required">Action</label></td>
+				<tr><td><label for="action_id" class="required">Action <span class="icon-asterisk"></span></label></td>
 					<td><select name="action_id" id="action_id">
 							<option></option>
 							<?php
@@ -45,8 +45,8 @@ if (count($actions)) {
 			<div><textarea name="notes" id="notes"></textarea></div>
 		</fieldset>
 		<fieldset class="buttons">
-			<button type="submit" class="submit">Submit</button>
-			<button type="reset" class="reset">Cancel</button>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<button type="reset"><span class="icon-remove"></span> Cancel</button>
 		</fieldset>
 	</form>
 </div>

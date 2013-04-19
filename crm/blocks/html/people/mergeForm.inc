@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->personA
@@ -20,7 +20,7 @@
 				<input name="targetPerson" id="targetPerson_b" type="radio" value="b" />
 				<input name="person_id_b" type="hidden" value="<?php echo $this->personB->getId(); ?>" />
 			</div>
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
 		</fieldset>
 	</form>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
@@ -28,7 +28,7 @@
 					$url->$key = $value;
 				}
 			}
-			echo "<a class=\"add button\" href=\"$url\">Add a Person</a>";
+			echo "<a class=\"btn\" href=\"$url\"><span class=\"icon-plus\"></span> Add a Person</a>";
 		}
 	?>
 </div>

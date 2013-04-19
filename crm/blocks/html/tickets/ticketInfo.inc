@@ -40,44 +40,44 @@ $referralButton       = '';
 
 if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 	$editStatusButton = "
-	<a class=\"edit button\"
-		href=\"".BASE_URL."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
-		Change Status
+	<a class=\"icon-pencil\"
+		href=\"".BASE_URI."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
+		<span class=\"hidden-label\">Change Status</span>
 	</a>
 	";
 	$deleteButton = "
-	<a class=\"delete button\"
-		href=\"".BASE_URL."/tickets/delete?ticket_id={$this->ticket->getId()}\">
-		Delete Case
+	<a class=\"icon-remove\"
+		href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
+		<span class=\"hidden-label\">Delete Case</span>
 	</a>
 	";
 
 	if ($this->ticket->getStatus()!='closed') {
 		$changeCategoryButton = "
-		<a class=\"edit button\"
-			href=\"".BASE_URL."/tickets/changeCategory?ticket_id={$this->ticket->getId()}\">
-			Change Category
+		<a class=\"icon-pencil\"
+			href=\"".BASE_URI."/tickets/changeCategory?ticket_id={$this->ticket->getId()}\">
+			<span class=\"hidden-label\">Change Category</span>
 		</a>
 		";
 		$changeLocationButton = "
-		<a class=\"edit button\"
-			href=\"".BASE_URL."/tickets/changeLocation?ticket_id={$this->ticket->getId()}\">
-			Change Location
+		<a class=\"icon-pencil\"
+			href=\"".BASE_URI."/tickets/changeLocation?ticket_id={$this->ticket->getId()}\">
+			<span class=\"hidden-label\">Change Location</span>
 		</a>
 		";
 		if (userIsAllowed('people','view')) {
 			$assignButton = "
-			<a class=\"edit button\"
-				href=\"".BASE_URL."/tickets/assign?ticket_id={$this->ticket->getId()}\">
-				Assign
+			<a class=\"icon-pencil\"
+				href=\"".BASE_URI."/tickets/assign?ticket_id={$this->ticket->getId()}\">
+				<span class=\"hidden-label\">Assign</span>
 			</a>
 			";
 
 			$return_url = $this->ticket->getURL();
 			$referralButton = "
-			<a class=\"edit button\"
-				href=\"".BASE_URL."/tickets/refer?ticket_id={$this->ticket->getId()}\">
-				Refer
+			<a class=\"icon-pencil\"
+				href=\"".BASE_URI."/tickets/refer?ticket_id={$this->ticket->getId()}\">
+				<span class=\"hidden-label\">Refer</span>
 			</a>
 			";
 		}

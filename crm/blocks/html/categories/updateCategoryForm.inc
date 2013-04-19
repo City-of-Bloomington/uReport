@@ -16,12 +16,12 @@ foreach ($fields as $field) {
 	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
 }
 ?>
-<h1><?php echo $title; ?></h1>
+<h2><?php echo $title; ?></h2>
 <form method="post" action="<?php echo BASE_URL; ?>/categories/update">
 	<fieldset><legend>Category</legend>
 		<input name="category_id" type="hidden" value="<?php echo $this->category->getId(); ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Name</label></td>
+			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 			<tr><td><label for="categoryGroup_id">Group</label></td>
@@ -158,7 +158,10 @@ foreach ($fields as $field) {
 		</div>
 	</fieldset>
 	<fieldset><legend>Submit</legend>
-		<button type="submit" class="submit">Submit</button>
-		<a class="cancel" href="<?php echo BASE_URL; ?>/categories">Cancel</a>
+		<button type="submit"><span class="icon-save"></span> Save</button>
+		<a class="btn" href="<?php echo BASE_URL; ?>/categories">
+			<span class="icon-remove"></span>
+			Cancel
+		</a>
 	</fieldset>
 </form>

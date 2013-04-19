@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->currentDepartment
@@ -28,7 +28,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 							?>
 						</select>
 					</td>
-					<td><button type="submit" class="submit">Switch Department</button></td>
+					<td><button type="submit"><span class="icon-ok"></span> Switch Department</button></td>
 				</tr>
 			</table>
 			<?php

@@ -20,22 +20,28 @@ legend   { font-weight:bold; font-size:110%; width:100%; color:#a60000; }
 label    { font-weight:bold; }
 form td  { vertical-align:top; }
 textarea { width:250px; height:50px; }
+.required { color:red; }
 
-button, .button {
-	display:inline-block;
-	padding:4px 10px 4px 24px;
-	border:1px solid #cccccc;
-	font-size:12px; font-weight:normal;
-	color:black;
+
+button, .btn {
+	font-size:12px; color:black;
+	padding:4px;
+	margin-right:.5ex;
+	border:1px solid #ccc;
+	background-image:url('images/buttonBackground.png');
+	background-position:left center repeat-x;
+}
+.hidden-label { font-size:0; height:1px; overflow:hidden; }
+.icon-remove { color:red;   }
+.icon-pencil { color:blue;  }
+.icon-plus   { color:green; }
+.icon-ok     { color:green; }
+.icon-save   { color:green; }
+
+.ticketInfo ul [class^="icon-"] {
+	float:right;
 }
 
-.add, .upload,
-.chooseLocation { background:url('images/addbutton.png')    left center no-repeat; }
-.edit, .change  { background:url('images/editbutton.png')   left center no-repeat; }
-.search, .save,
-.submit, .login { background:url('images/submitbutton.png') left center no-repeat; }
-.delete, .reset { background:url('images/deletebutton.png') left center no-repeat; }
-.minusTag       { background:white url('images/minusTag.png') 4px center no-repeat; padding:4px 4px 4px 20px; }
 .changePersonButton, .changeLocationButton { margin:.5em 0; }
 
 .panel       { padding:.75em; overflow:auto; }
@@ -45,23 +51,6 @@ button, .button {
 .actionForm form     { background-color:#eee; padding:0 .5em; margin-bottom:.75em; border-radius:5px; display:table; }
 .actionForm fieldset { float:left; display:table; }
 .actionForm .buttons { clear:left; }
-
-.ticketInfo ul .button,
-.personInfo table .edit,
-.personInfo table .delete,
-.mediaList .delete, .thumbnail .delete {
-	/* Hide the text.  Only show the icon */
-	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:0 0 0 25px;
-	vertical-align:middle; border:none;
-	background-repeat:no-repeat; background-position:right center;
-	float:right;
-}
-.ticketInfo ul    .edit,
-.personInfo table .edit   { background-image:url('images/edit.png'); }
-.personInfo table .delete { background-image:url('images/delete.png'); }
-.mediaList        .delete { background-image:url('images/delete.png'); }
-.thumbnail        .delete { background-image:url('images/delete.png'); float:none; }
 
 .personInfo table { margin-bottom:1.5em; }
 
@@ -173,9 +162,6 @@ button, .button {
 .tar        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/tar.png')          no-repeat; }
 .kml        { height:16px; padding: 0px 0px 10px 22px; background:url('images/mime/kml_feed_small.png')     no-repeat; }
 .swf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/flash.gif')        no-repeat; }
-.ascending  { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_down.png') top right    no-repeat; }
-.descending { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_up.png')   top right    no-repeat; }
-.top        { height:12px; padding: 0px 20px 0px 0px;  background:url('images/arrow_up.png')   top right    no-repeat; }
 .dxf        { height:16px; padding: 0px 0px 10px 22px; background:url('images/icons/mime/dwg-autocad-drawing.ico') no-repeat; }
 
 .pageNavigation          { margin:.5em; }
@@ -221,3 +207,34 @@ input.yui3-dd-drop-over    { background-color:green; }
 	border:2px solid black;
 	margin-bottom:.75em;
 }
+
+#banner {
+	height:60px;
+	background-color:#003366;
+	background-image: -moz-linear-gradient( rgba(0,0,65,1), rgba(0,0,100,.5), rgba(0,0,65,1));
+	background-image: -webkit-gradient(linear, center top, center bottom, color-stop(0, rgba(0,0,65,1)), color-stop(.5, rgba(0,0,100,.5)), color-stop(1, rgba(0,0,65,1)));
+	margin:0; padding:5px 0;
+	position:relative;
+	color:white;
+}
+
+#banner a { color:white; }
+#application_name { width:60%; margin-left:5px; }
+#application_name a { font-weight:bold; font-size:174%; }
+#location_name { width:75%; margin-left:5px;  }
+#utilityBar { float:right; width:50%; text-align:right; }
+#utilityBar li { display:inline; margin-right:1em; color:white; }
+
+#menuBar { margin-bottom:.5em; border-bottom:1px solid #ccc; }
+#menuBar ul { margin:.5em; padding:0; }
+#menuBar li { display:inline; margin-right:1em;}
+#menuBar a { font-size:123.1%; }
+#menuBar a:visited { color:blue; }
+
+#panel-container { overflow:auto; }
+
+#errorMessages { background-color:#fcc; padding:4px; border-radius:10px; }
+
+#footer { padding:.5em; }
+#footer li { display:inline; margin-right:.5em; }
+#footer a { font-weight:bold; color:black; }

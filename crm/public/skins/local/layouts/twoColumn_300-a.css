@@ -10,14 +10,9 @@
 .hideLeft #right { margin-left: 20px; }
 
 #slideButton {
-	/* Hide the text.  Only show the icon */
-	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
-	width:0; padding:0 0 0 25px;
 	vertical-align:middle;
 	float:right;
-	background:white url('../images/arrow_left.png') 8px center no-repeat;
 }
-.hideLeft #slideButton { background-image:url('../images/arrow_right.png'); }
 
 .panel > div {
 	background-color:white; border:1px solid #ccc; padding:.75em;

@@ -72,7 +72,7 @@ echo "
 
 			$ticketData.= "
 			</table>
-			<a href=\"$_SERVER[REQUEST_URI]#banner\" class=\"top\">Back to Top</a>
+			<a href=\"$_SERVER[REQUEST_URI]#banner\"><span class=\"icon-angle-up\"></span> Back to Top</a>
 			";
 		}
 	}

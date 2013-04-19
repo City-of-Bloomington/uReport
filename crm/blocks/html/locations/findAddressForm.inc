@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -20,7 +20,7 @@ $address = isset($_GET['location']['address']) ? View::escape($_GET['location'][
 					}
 				}
 			?>
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit"><span class="icon-search"></span> Search</button>
 		</fieldset>
 	</form>
 </div>

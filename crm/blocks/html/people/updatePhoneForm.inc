@@ -21,8 +21,11 @@
 					? BASE_URI.'/account'
 					: $this->phone->getPerson()->getUrl();
 			?>
-			<button type="submit" class="save">Save</button>
-			<a class="cancel" href="<?php echo $cancelUrl; ?>">Cancel</a>
+			<button type="submit"><span class="icon-save"></span> Save</button>
+			<a class="btn" href="<?php echo $cancelUrl; ?>">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

@@ -77,8 +77,11 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 
 
 		<fieldset>
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo BASE_URL; ?>/tickets">Cancel</a>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<a class="btn" href="<?php echo BASE_URL; ?>/tickets">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

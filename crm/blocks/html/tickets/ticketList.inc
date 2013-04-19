@@ -74,7 +74,7 @@
 								// Just ignore invalid people
 							}
 						}
-						echo "<a class=\"add button\" href=\"$url\">Add Issue</a>";
+						echo "<a class=\"btn\" href=\"$url\"><span class=\"icon-plus\"></span> Add Issue</a>";
 					}
 				echo "
 					</td>
@@ -86,7 +86,13 @@
 	</table>
 	<?php
 		if ($this->moreLink) {
-			echo "<div><a href=\"{$this->moreLink}\">More &gt;&gt;</a></div>";
+			echo "
+			<div>
+				<a href=\"{$this->moreLink}\">
+					More <span class=\"icon-double-angle-right\"></span>
+				</a>
+			</div>
+			";
 		}
 	?>
 </div>
