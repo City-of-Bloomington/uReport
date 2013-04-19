@@ -20,14 +20,17 @@ if (userIsAllowed('media','upload')) {
 	<?php
 		$profileImage = $this->issue->getProfileImage();
 		if ($profileImage) {
+			$thumbnail = new Block('media/thumbnail.inc', array('media'=>$profileImage));
 			echo "
-			<div class=\"profileImage\">
-				<a href=\"{$profileImage->getURL()}\">
-					<img src=\"{$profileImage->getURL(150)}\" />
+			<div>
+				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->issue->getTicket_id()}\">
+					See all thumbnails
 				</a>
 			</div>
 			";
+			echo $thumbnail->render('html', $this->template);
 		}
+		$this->mediaList = $this->issue->getMedia();
 		include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
 	?>
 </div>

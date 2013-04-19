@@ -182,6 +182,7 @@ $DIRECTORY_CONFIG = array(
  * Set the path to the ImageMagick binaries
  */
 define('IMAGEMAGICK','/usr/bin');
+define('THUMBNAIL_SIZE', 150);
 
 //-------------------------------------------------------------------
 // Bootstrap code

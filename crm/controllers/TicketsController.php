@@ -79,6 +79,25 @@ class TicketsController extends Controller
 	}
 
 	/**
+	 * Displays thumbnails for all image media attached to issues
+	 *
+	 * @param GET ticket_id
+	 */
+	public function thumbnails()
+	{
+		$ticket = $this->loadTicket($_GET['ticket_id']);
+		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+			$this->template->blocks[] = new Block(
+				'tickets/thumbnails.inc',
+				array('ticket'=>$ticket)
+			);
+		}
+		else {
+			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+		}
+	}
+
+	/**
 	 *
 	 */
 	public function add()

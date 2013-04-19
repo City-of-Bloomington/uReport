@@ -139,12 +139,15 @@ button, .button {
 .issueHeader .date, .issueHeader .issueType { padding:0 10px 0 0; }
 .issueInfo, .updateIssueForm {
 	border:1px solid #ccc; margin:.5em 0; padding:.5em; background-color:white;
+	overflow:auto;
 }
 .issueInfo .notes { margin-bottom:.5em; clear:left; }
 
 .issueAttachments { overflow:auto; }
-.profileImage { float:left; width:180px; }
-.mediaList    { float:left; }
+.thumbnail { float:left; width:180px; }
+.mediaList { float:left; }
+.thumbnail div { text-align:center; }
+.thumbnail .date { font-weight:bold; }
 
 
 /* ICONS FOR MIME TYPES */

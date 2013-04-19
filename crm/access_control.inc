@@ -45,7 +45,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('reports'));
 $ZEND_ACL->allow(null,array('callback','login','open311'));
 $ZEND_ACL->allow(null,
 				array('index','tickets','issues','locations'),
-				array('index','view'));
+				array('index','view', 'thumbnails'));
 
 // Staff permission
 // Staff has full permission to these tables
