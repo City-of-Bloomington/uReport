@@ -49,7 +49,7 @@ button, .button {
 .ticketInfo ul .button,
 .personInfo table .edit,
 .personInfo table .delete,
-.mediaList .delete {
+.mediaList .delete, .thumbnail .delete {
 	/* Hide the text.  Only show the icon */
 	display:inline-block; text-indent:-999px; overflow:hidden; /* Get rid of the text */
 	width:0; padding:0 0 0 25px;
@@ -61,6 +61,7 @@ button, .button {
 .personInfo table .edit   { background-image:url('images/edit.png'); }
 .personInfo table .delete { background-image:url('images/delete.png'); }
 .mediaList        .delete { background-image:url('images/delete.png'); }
+.thumbnail        .delete { background-image:url('images/delete.png'); float:none; }
 
 .personInfo table { margin-bottom:1.5em; }
 
