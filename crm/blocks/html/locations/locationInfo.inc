@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
@@ -13,7 +13,8 @@ if ($this->location) {
 	$addTicketButton = '';
 	if (!$this->disableButtons && userIsAllowed('tickets', 'add')) {
 		$addTicketButton = "
-		<a href=\"".BASE_URI."/tickets/add?location={$this->location}\" class=\"add button\">
+		<a class=\"btn\" href=\"".BASE_URI."/tickets/add?location={$this->location}\">
+			<span class=\"icon-plus\"></span>
 			Add New Case
 		</a>
 		";

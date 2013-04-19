@@ -18,7 +18,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 		?>
 
 		<fieldset><legend>Submit</legend>
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit"><span class="icon-save"></span> Save</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = urlencode($_REQUEST['return_url']);
@@ -33,7 +33,12 @@ $title = $this->title ? View::escape($this->title) : $title;
 				$onclick = isset($_REQUEST['callback'])
 					? 'onclick="self.close();"'
 					: '';
-				echo "<a class=\"cancel\" href=\"$return_url\" $onclick>Cancel</a>";
+				echo "
+				<a class=\"btn\" href=\"$return_url\" $onclick>
+					<span class=\"icon-remove\"></span>
+					Cancel
+				</a>
+				";
 			?>
 		</fieldset>
 	</form>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Label $this->contactMethod
@@ -19,8 +19,11 @@ $name = View::escape($this->contactMethod->getName());
 				</tr>
 			</table>
 
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo BASE_URI; ?>/contactMethods">Cancel</a>
+			<button type="submit"><span class="icon-save"></span> Save</button>
+			<a class="btn" href="<?php echo BASE_URI; ?>/contactMethods">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

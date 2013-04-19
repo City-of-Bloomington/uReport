@@ -9,7 +9,7 @@
 	<h2>Contact Methods
 		<?php
 			if (userIsAllowed('contactMethods','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/contactMethods/update">Add</a>';
+				echo '<a class="btn" href="'.BASE_URL.'/contactMethods/update"><span class="icon-plus"></span> Add</a>';
 			}
 		?>
 	</h2>
@@ -25,8 +25,9 @@
  		foreach ($list as $method) {
 			if (userIsAllowed('contactMethods','update')) {
 				$editButton = "
-				<a class=\"edit button\"
+				<a class=\"btn\"
 					href=\"".BASE_URL."/contactMethods/update?contactMethod_id={$method->getId()}\">
+					<span class=\"icon-pencil\"></span>
 					Edit
 				</a>
 				";

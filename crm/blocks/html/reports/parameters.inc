@@ -18,7 +18,8 @@ $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 			$s = !empty($_GET['enteredDate']['start']) ? $_GET['enteredDate']['start'] : '*';
 			$e = !empty($_GET['enteredDate']['end'])   ? $_GET['enteredDate']['end']   : '*';
 			echo "
-			<a class=\"minusTag button\" href=\"$deleteURL\">
+			<a class=\"btn\" href=\"$deleteURL\">
+				<span class=\"icon-remove\"></span>
 				$s to $e
 			</a>
 			";
@@ -30,7 +31,12 @@ $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['departments'][$id]);
 					$name = View::escape($d->getName());
-					echo "<a class=\"minusTag button\" href=\"$deleteURL\">$name</a>";
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$name
+					</a>
+					";
 				}
 				catch (Exception $e) {
 				}
@@ -43,7 +49,12 @@ $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['categories'][$id]);
 					$name = View::escape($c->getName());
-					echo "<a class=\"minusTag button\" href=\"$deleteURL\">$name</a>";
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$name
+					</a>
+					";
 				}
 				catch (Exception $e) {
 				}

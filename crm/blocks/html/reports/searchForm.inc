@@ -73,7 +73,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('enteredDate'));
 			?>
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
 		</fieldset>
 	</form>
 </div>

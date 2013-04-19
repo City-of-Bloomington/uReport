@@ -56,11 +56,12 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit" class="search">Search</button>
+			<button type="submit"><span class="icon-search"></span> Search</button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
-					<button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
+					<button type=\"button\" onclick=\"self.close();\">
+						<span class=\"icon-remove\"></span>
 						Cancel
 					</button>
 					";

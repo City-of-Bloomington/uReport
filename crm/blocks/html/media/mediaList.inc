@@ -12,8 +12,8 @@ if (count($this->mediaList)) {
 		$deleteButton = '';
 		if (!$this->disableButtons) {
 			$deleteButton = "
-			<a class=\"delete button\" href=\"".BASE_URI."/media/delete?media_id={$media->getId()}\">
-				Delete Attachment
+			<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$media->getId()}\">
+				<span class=\"hidden-label\">Delete Attachment</span>
 			</a>
 			";
 		}

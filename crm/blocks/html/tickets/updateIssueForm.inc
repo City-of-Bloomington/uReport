@@ -19,9 +19,9 @@ $title = is_null($this->issue->getId()) ? 'Add Issue' : 'Edit Issue';
 
 				$this->category = $this->ticket->getCategory();
 				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
+
+				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
 			?>
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo $this->ticket->getURL(); ?>">Cancel</a>
 		</fieldset>
 	</form>
 </div>

@@ -41,8 +41,11 @@
 				</tbody>
 			</table>
 
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo BASE_URI; ?>/categories">Cancel</cancel>
+			<button type="submit"><span class="icon-save"></span> Save</button>
+			<a class="btn" href="<?php echo BASE_URI; ?>/categories">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

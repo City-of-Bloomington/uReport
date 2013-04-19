@@ -5,23 +5,29 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubstatusList $this->substatusList
  */
+$helper = $this->template->getHelper('button');
 ?>
 <div class="substatusList">
-	<h1><?php
+	<h2><?php
 			if (userIsAllowed('substatus','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/substatus/update">Add</a>';
+				echo "
+				<a class=\"btn\" href=\"".BASE_URI."/substatus/update\">
+					<span class=\"icon-plus\"></span>
+					Add
+				</a>
+				";
 			}
 		?>
 		Substatus
-	</h1>
+	</h2>
 	<table>
 		<?php
 			foreach ($this->substatusList as $substatus) {
 				$editButton = '';
 				if (userIsAllowed('substatus','update')) {
 					$editButton = "
-					<a class=\"edit button\"
-						href=\"".BASE_URL."/substatus/update?substatus_id={$substatus->getId()}\">
+					<a class=\"btn\" href=\"".BASE_URI."/substatus/update?substatus_id={$substatus->getId()}\">
+						<span class=\"icon-pencil\"></span>
 						Edit
 					</a>
 					";

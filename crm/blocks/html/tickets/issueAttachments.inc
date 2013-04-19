@@ -8,8 +8,9 @@
 $uploadButton = '';
 if (userIsAllowed('media','upload')) {
 	$uploadButton = "
-	<a class=\"upload button\"
+	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
+		<span class=\"icon-upload\"></span>
 		Upload Attachment
 	</a>
 	";

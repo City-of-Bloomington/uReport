@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2012 City of Bloomington, Indiana
+ * @copyright 2006-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
@@ -74,8 +74,11 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 		<?php include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc'; ?>
 
 		<fieldset><legend>Submit</legend>
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo BASE_URI; ?>/users">Cancel</a>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<a class="btn" href="<?php echo BASE_URI; ?>/users">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

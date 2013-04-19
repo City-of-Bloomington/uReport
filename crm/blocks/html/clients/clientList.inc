@@ -10,7 +10,7 @@
 	<h2>Clients
 		<?php
 			if (userIsAllowed('clients','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/clients/update">Add</a>';
+				echo '<a class="btn" href="'.BASE_URL.'/clients/update"><span class="icon-plus"></span> Add</a>';
 			}
 		?>
 	</h2>
@@ -23,14 +23,16 @@
 			$deleteButton = '';
 			if (userIsAllowed('clients','update')) {
 				$editButton = "
-				<a class=\"edit button\"
+				<a class=\"btn\"
 					href=\"".BASE_URL."/clients/update?client_id={$client->getId()}\">
+					<span class=\"icon-pencil\"></span>
 					Edit
 				</a>
 				";
 				$deleteButton = "
-				<a class=\"delete button\"
+				<a class=\"btn\"
 					href=\"".BASE_URL."/clients/delete?client_id={$client->getId()}\">
+					<span class=\"icon-remove\"></span>
 					Delete
 				</a>
 				";

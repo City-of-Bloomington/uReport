@@ -11,8 +11,9 @@
 $addButton = '';
 if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
 	$addButton = "
-	<a class=\"add button\"
+	<a class=\"btn\"
 		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()}\">
+		<span class=\"icon-plus\"></span>
 		Add Issue
 	</a>
 	";

@@ -2,7 +2,7 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SolrObject $this->solrObject
@@ -45,7 +45,8 @@ if (!empty($_GET['query'])
 				$displayName = Search::$searchableFields[$key];
 				$displayValue = Search::getDisplayName('ticket', $key, $value);
 				echo "
-				<a class=\"minusTag button\" href=\"$deleteURL\">
+				<a class=\"btn\" href=\"$deleteURL\">
+					<span class=\"icon-remove\"></span>
 					$displayName: $displayValue
 				</a>
 				";

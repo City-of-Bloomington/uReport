@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Client $this->client
@@ -57,8 +57,11 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 			</table>
 		</fieldset>
 		<fieldset>
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo BASE_URL; ?>/clients">Cancel</a>
+			<button type="submit"><span class="icon-save"></span> Save</button>
+			<a class="btn" href="<?php echo BASE_URL; ?>/clients">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

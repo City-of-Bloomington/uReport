@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
@@ -31,8 +31,11 @@
 			</table>
 			<div><label for="notes">Notes</label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
-			<button type="submit" class="submit">Submit</button>
-			<a class="cancel" href="<?php echo $this->issue->getTicket()->getURL(); ?>">Cancel</a>
+			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<a class="btn" href="<?php echo $this->issue->getTicket()->getURL(); ?>">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -9,7 +9,7 @@
 	<h2>Labels
 		<?php
 			if (userIsAllowed('labels','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/labels/update">Add</a>';
+				echo '<a class="btn" href="'.BASE_URL.'/labels/update"><span class="icon-plus"></span> Add</a>';
 			}
 		?>
 	</h2>
@@ -21,8 +21,9 @@
  		foreach ($list as $label) {
 			if (userIsAllowed('labels','update')) {
 				$editButton = "
-				<a class=\"edit button\"
+				<a class=\"btn\"
 					href=\"".BASE_URL."/labels/update?label_id={$label->getId()}\">
+					<span class=\"icon-pencil\"></span>
 					Edit
 				</a>
 				";
