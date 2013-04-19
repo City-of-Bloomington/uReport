@@ -5,7 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubstatusList $this->substatusList
  */
-$helper = $this->template->getHelper('button');
 ?>
 <div class="substatusList">
 	<h2><?php
