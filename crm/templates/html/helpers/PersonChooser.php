@@ -49,9 +49,10 @@ class PersonChooser
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}_id\" id=\"{$fieldname}_id\" value=\"$id\" />
 		<span id=\"{$fieldname}-name\">$name</span>
-		<a class=\"edit button\"
+		<a class=\"btn\"
 			href=\"$personChooser\"
 			onclick=\"PERSON_CHOOSER.open('$fieldname');return false;\">
+			<span class=\"icon-user\"></span>
 			Change Person
 		</a>
 		";

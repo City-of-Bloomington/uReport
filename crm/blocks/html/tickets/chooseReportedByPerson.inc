@@ -14,7 +14,8 @@ echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
 		<h3>Reporting Person</h3>
-		<a id=\"findPersonButton\" class=\"edit button\" href=\"$url\">
+		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
+			<span class=\"icon-user\"></span>
 			Lookup Person
 		</a>
 	</div>

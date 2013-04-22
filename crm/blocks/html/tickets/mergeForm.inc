@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticketA
@@ -20,7 +20,7 @@
 				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
 				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
 			</div>
-			<button type="submit" class="submit">Merge</button>
+			<button type="submit"><span class="icon-ok"></span> Merge</button>
 		</fieldset>
 	</form>
 </div>

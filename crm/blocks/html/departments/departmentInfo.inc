@@ -9,16 +9,18 @@ $editButton = '';
 $deleteButton = '';
 if (userIsAllowed('departments','update')) {
 	$editButton = "
-	<a class=\"edit button\"
+	<a class=\"btn\"
 		href=\"".BASE_URL."/departments/update?department_id={$this->department->getId()}\">
+		<span class=\"icon-pencil\"></span>
 		Edit
 	</a>
 	";
 	// Departments should only be deleted when there's no people in them
 	if (!count($this->department->getPeople())) {
 		$deleteButton = "
-		<a class=\"delete button\"
+		<a class=\"btn\"
 			href=\"".BASE_URL."/departments/delete?department_id={$this->department->getId()}\">
+			<span class=\"icon-remove\"></span>
 			Delete
 		</a>
 		";

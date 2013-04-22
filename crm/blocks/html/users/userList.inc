@@ -1,19 +1,19 @@
 <?php
 /**
- * @copyright 2007-2012 City of Bloomington, Indiana
+ * @copyright 2007-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->userList
  */
 ?>
 <div class="interfaceBox">
-	<h1><?php
+	<h2><?php
 			if (userIsAllowed('users','add')) {
-				echo '<a class="add button" href="'.BASE_URI.'/users/update">Add User Account</a>';
+				echo '<a class="btn" href="'.BASE_URI.'/users/update"><span class="icon-plus"></span> Add User Account</a>';
 			}
 		?>
 		User Accounts
-	</h1>
+	</h2>
 	<table>
 		<thead>
 			<tr>
@@ -33,15 +33,15 @@
 				$deleteButton = '';
 				if (userIsAllowed('users','update')) {
 					$editButton = "
-					<a class=\"edit button\"
+					<a class=\"icon-pencil\"
 						href=\"".BASE_URI."/users/update?person_id={$user->getId()}\">
-						Edit Account
+						<span class=\"hidden-label\">Edit Account</span>
 					</a>
 					";
 					$deleteButton = "
-					<a class=\"delete button\"
+					<a class=\"icon-remove\"
 						href=\"".BASE_URI."/users/delete?person_id={$user->getId()}\">
-						Delete Account
+						<span class=\"hidden-label\">Delete Account</span>
 					</a>
 					";
 				}

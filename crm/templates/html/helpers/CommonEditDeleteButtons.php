@@ -22,13 +22,13 @@ class CommonEditDeleteButtons
 	{
 		$class = ucfirst($item);
 		$buttons = "
-		<a class=\"edit button\"
+		<a class=\"icon-pencil\"
 			href=\"".BASE_URI."/{$controller}/update{$class}?{$item}_id={$object->getId()}\">
-			Edit $class
+			<span class=\"hidden-label\">Edit $class</span>
 		</a>
-		<a class=\"delete button\"
+		<a class=\"icon-remove\"
 			href=\"".BASE_URI."/{$controller}/delete{$class}?{$item}_id={$object->getId()}\">
-			Delete $class
+			<span class=\"hidden-label\">Delete $class</span>
 		</a>
 		";
 		return $buttons;

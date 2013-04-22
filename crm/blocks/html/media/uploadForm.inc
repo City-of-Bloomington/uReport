@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
@@ -11,8 +11,11 @@
 		<fieldset><legend>Upload an attachment</legend>
 			<input name="issue_id"   type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<input name="attachment" type="file" />
-			<button type="submit" class="submit">Upload</button>
-			<a class="cancel" href="<?php echo $this->issue->getTicket()->getURL(); ?>">Cancel</a>
+			<button type="submit"><span class="icon-upload"></span> Upload</button>
+			<a class="btn" href="<?php echo $this->issue->getTicket()->getURL(); ?>">
+				<span class="icon-remove"></span>
+				Cancel
+			</a>
 		</fieldset>
 	</form>
 </div>

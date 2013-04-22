@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
 ?>
 <table>
-	<tr><td><label for="issueType_id" class="required">Type</label></td>
+	<tr><td><label for="issueType_id" class="required">Type <span class="icon-asterisk"></span></label></td>
 		<td><select name="issueType_id" id="issueType_id">
 				<?php
 					$list = new IssueTypeList();

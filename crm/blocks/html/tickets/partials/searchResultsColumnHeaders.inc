@@ -43,13 +43,13 @@ echo "
 								  && $currentSort['order'] == SolrQuery::ORDER_ASC)
 						? array($name=>SolrQuery::ORDER_DESC)
 						: array($name=>SolrQuery::ORDER_ASC);
-					$class = '';
+					$icon = '';
 					if ($name == $currentSort['field']) {
-						$class = $currentSort['order'] == SolrQuery::ORDER_ASC
-							? 'class="ascending"'
-							: 'class="descending"';
+						$icon = $currentSort['order'] == SolrQuery::ORDER_ASC
+							? '<span class="icon-angle-down"></span>'
+							: '<span class="icon-angle-up"></span>';
 					}
-					echo "<th><a href=\"$url\" $class>$label</a></th>";
+					echo "<th><a href=\"$url\">$label $icon</th>";
 				}
 			}
 		}

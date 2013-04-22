@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroupList $this->categoryGroupList
@@ -11,10 +11,12 @@
 		<?php
 			if (userIsAllowed('categoryGroups','update')) {
 				echo "
-				<a class=\"add button\" href=\"".BASE_URI."/categoryGroups/update\">
+				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/update\">
+					<span class=\"icon-plus\"></span>
 					Add
 				</a>
-				<a class=\"reorder button\" href=\"".BASE_URI."/categoryGroups/reorder\">
+				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/reorder\">
+					<span class=\"icon-reorder\"></span>
 					Reorder
 				</a>
 				";
@@ -30,14 +32,16 @@
 				$deleteButton = '';
 				if (userIsAllowed('categoryGroups','update')) {
 					$editButton = "
-					<a class=\"edit button\"
+					<a class=\"btn\"
 						href=\"".BASE_URI."/categoryGroups/update?categoryGroup_id={$group->getId()}\">
+						<span class=\"icon-pencil\"></span>
 						Edit
 					</a>
 					";
 					$deleteButton = "
-					<a class=\"delete button\"
+					<a class=\"btn\"
 						href=\"".BASE_URI."/categoryGroups/delete?categoryGroup_id={$group->getId()}\">
+						<span class=\"icon-remove\"></span>
 						Delete
 					</a>
 					";

@@ -11,12 +11,12 @@ $title = $this->department->getId() ? 'Edit' : 'Add';
 $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
 <div class="updateDepartmentForm">
-<h1><?php echo $title; ?> Department</h1>
+<h2><?php echo $title; ?> Department</h2>
 <form method="post" action="<?php echo $this->action; ?>">
 	<fieldset><legend>Department Info</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Name</label></td>
+			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
 				<td><input name="name" id="name"
 						value="<?php echo View::escape($this->department->getName()); ?>" />
 				</td>
@@ -92,8 +92,11 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</ul>
 	</fieldset>
 	<fieldset>
-		<button type="submit" class="submit">Submit</button>
-		<a class="cancel" href="<?php echo $return_url; ?>">Cancel</a>
+		<button type="submit"><span class="icon-save"></span> Save</button>
+		<a class="btn" href="<?php echo $return_url; ?>">
+			<span class="icon-remove"></span>
+			Cancel
+		</a>
 	</fieldset>
 </form>
 </div>

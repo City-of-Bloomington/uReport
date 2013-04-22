@@ -1,18 +1,18 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
 <div class="interfaceBox">
-	<h1><?php
+	<h2><?php
 			if (userIsAllowed('actions','update')) {
-				echo '<a class="add button" href="'.BASE_URL.'/actions/update">Add</a>';
+				echo '<a class="btn" href="'.BASE_URL.'/actions/update"><span class="icon-plus"></span> Add</a>';
 			}
 		?>
 		Actions
-	</h1>
+	</h2>
 	<table>
 		<thead>
 			<tr><th></th>
@@ -29,8 +29,9 @@
 				$editButton = '';
 				if (userIsAllowed('actions','update') && $action->getType()!='system') {
 					$editButton = "
-					<a class=\"edit button\"
+					<a class=\"btn\"
 						href=\"".BASE_URL."/actions/update?action_id={$action->getId()}\">
+						<span class=\"icon-pencil\"></span>
 						Edit
 					</a>
 					";

@@ -14,7 +14,7 @@ $description = View::escape($this->substatus->getDescription());
 	<fieldset><legend>Substatus Info</legend>
 		<input name="substatus_id" type="hidden" value="<?php echo "{$this->substatus->getId()}"; ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Status</label></td>
+			<tr><td><label for="name" class="required">Status <span class="icon-asterisk"></span></label></td>
 				<td><select id="status" name="status">
 					<?php
 						foreach (array('open', 'closed') as $status) {
@@ -28,7 +28,7 @@ $description = View::escape($this->substatus->getDescription());
 				</td>
 			</tr>
 
-			<tr><td><label for="name" class="required">Name</label></td>
+			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 
@@ -37,7 +37,7 @@ $description = View::escape($this->substatus->getDescription());
 			</tr>
 
 		</table>
-		<button type="submit" class="submit">Submit</button>
-		<a class="cancel" href="<?php echo BASE_URL; ?>/substatus">Cancel</a>
+		<button type="submit"><span class="icon-ok"></span> Submit</button>
+		<a class="btn" href="<?php echo BASE_URL; ?>/substatus"><span class="icon-remove"></span> Cancel</a>
 	</fieldset>
 </form>

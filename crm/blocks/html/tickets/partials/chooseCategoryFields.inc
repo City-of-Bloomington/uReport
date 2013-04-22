@@ -40,6 +40,11 @@
 			}
 		}
 		$url->return_url = $this->return_url;
-		echo "<a href=\"$url\" id=\"moreCategoriesLink\">More categories</a>";
+		echo "
+		<a href=\"$url\" id=\"moreCategoriesLink\">
+			More categories
+			<span class=\"icon-double-angle-right\"></span>
+		</a>
+		";
 	?>
 </div>

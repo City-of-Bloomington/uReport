@@ -9,7 +9,7 @@
  * defined.  We need to preserve any predefined fields that we can pre-select
  * on the add ticket form.
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -29,7 +29,7 @@ $this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_REQUEST, null, array('category_id'));
 			?>
-			<button type="submit" class="edit">Change Category</button>
+			<button type="submit"><span class="icon-pencil"></span> Change Category</button>
 		</fieldset>
 	</form>
 </div>
