@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------
 Installation
 ---------------------------------------------------------------------
-For full installation instructions, refer to the AdminGuide in /docs/
+For full installation instructions, refer to the AdminGuide Wiki
+https://github.com/City-of-Bloomington/uReport/wiki/Admin-Guide
 
 ---------------------------------------------------------------------
 Quick Install
