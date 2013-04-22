@@ -5,9 +5,20 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->responses
  */
+$responseButton = '';
+if (!$this->disableButtons && userIsAllowed('issues','update')) {
+	if ($this->issue->getReportedByPerson()) {
+			$responseButton = "
+			<a class=\"add button\"
+				href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
+				Add Response
+			</a>
+			";
+		}
+}
 ?>
 <div class="responseList">
-	<h3>Responses</h3>
+	<h2>Responses <?php echo $responseButton; ?></h2>
 	<table>
 		<thead>
 			<tr><th>Date</th>

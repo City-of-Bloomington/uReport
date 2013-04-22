@@ -9,18 +9,6 @@
 ?>
 <div class="history">
 	<h1>History</h1>
-	<table>
-		<thead>
-			<tr><th>Date</th>
-				<th>Action</th>
-				<?php
-					if (!$this->disableComments) {
-						echo '<th>Comments</th>';
-					}
-				?>
-			</tr>
-		</thead>
-		<tbody>
 		<?php
 			foreach ($this->history as $event) {
 				$action = View::escape($event->getAction());
@@ -32,8 +20,9 @@
 					$description = $action;
 				}
 				echo "
-				<tr><td>{$event->getActionDate(DATE_FORMAT)}</td>
-					<td>$description</td>
+				<div class=\"historyItem\">
+				<h4>{$event->getActionDate(DATE_FORMAT)} $description</h4>
+				</tr>
 				";
 					if (!$this->disableComments) {
 						if ($event->getAction()=='categoryChange') {
@@ -53,11 +42,10 @@
 						else {
 							$notes = View::escape($event->getNotes());
 						}
-						echo "<td>$notes</td>";
+						echo "<p> $notes</p>";
 					}
-				echo "
-				</tr>
-				";
+					
+					echo "</div>";
 			}
 		?>
 		</tbody>

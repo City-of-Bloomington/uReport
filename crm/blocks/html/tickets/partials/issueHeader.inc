@@ -8,7 +8,7 @@
  */
 $editButton     = '';
 $deleteButton   = '';
-$responseButton = '';
+
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"edit button\"
@@ -22,15 +22,6 @@ if (!$this->disableButtons && userIsAllowed('issues','update')) {
 		Delete Issue
 	</a>
 	";
-
-	if ($this->issue->getReportedByPerson()) {
-		$responseButton = "
-		<a class=\"add button\"
-			href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
-			Add Response
-		</a>
-		";
-	}
 }
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
 $type = View::escape($this->issue->getIssueType());
@@ -40,7 +31,6 @@ echo "
 		<span class=\"issueType\"><a href=\"$url\">$type</a></span>
 		<span class=\"issueActions\">
 			$editButton
-			$responseButton
 			$deleteButton
 		</span>
 	</h2>
