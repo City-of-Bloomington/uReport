@@ -46,9 +46,10 @@ if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 	</a>
 	";
 	$deleteButton = "
-	<a class=\"icon-remove\"
+	<a class=\"btn\"
 		href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
-		<span class=\"hidden-label\">Delete Case</span>
+		<span class=\"icon-remove\"></span>
+		Delete Case
 	</a>
 	";
 
