@@ -9,8 +9,10 @@ $responseButton = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	if ($this->issue->getReportedByPerson()) {
 			$responseButton = "
-			<a class=\"add button\"
+			<a class=\"btn\"
 				href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
+				<span class=\"icon-plus\">
+				</span>
 				Add Response
 			</a>
 			";
