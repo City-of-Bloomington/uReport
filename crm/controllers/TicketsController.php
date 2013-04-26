@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -346,21 +346,25 @@ class TicketsController extends Controller
 			try {
 				$substatus_id = !empty($_POST['substatus_id']) ? $_POST['substatus_id'] : null;
 				$ticket->setStatus($_POST['status'], $substatus_id);
+
+				// add a record to ticket history
+				$action = new Action($_POST['status']);
+				
+				$history = new TicketHistory();
+				$history->setTicket($ticket);
+				$history->setAction($action);
+				$history->setNotes($_POST['notes']);
+				
+				if (defined('CLOSING_COMMENT_REQUIRED_LENGTH')) {
+					if ($action->getName() == 'closed') {
+						if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
+							throw new Exception('tickets/missingClosingComment');
+						}
+					}
+				}
+				
+				$history->save();
 				$ticket->save();
-
-				try {
-					$action = new Action($_POST['status']);
-
-					// add a record to ticket history
-					$history = new TicketHistory();
-					$history->setTicket($ticket);
-					$history->setAction($action);
-					$history->setNotes($_POST['notes']);
-					$history->save();
-				}
-				catch (Exception $e) {
-					// If the status doesn't have an action, don't record a history entry
-				}
 
 				$this->redirectToTicketView($ticket);
 			}

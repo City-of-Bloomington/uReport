@@ -1,0 +1,1 @@
+<p>You must provide a comment explaining what happened with the case and why you are closing it.</p>

@@ -13,7 +13,7 @@ tbody th    { text-align:right; }
 tbody label { display:block; text-align:right; }
 
 ul { margin:0 0 .75em 0; padding:0; list-style-type:none; }
-li { margin-bottom:.5em; }
+li { padding:.25em; }
 
 fieldset { padding:.5em 0; }
 legend   { font-weight:bold; font-size:110%; width:100%; color:#a60000; }

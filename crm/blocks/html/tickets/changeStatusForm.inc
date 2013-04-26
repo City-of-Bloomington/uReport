@@ -59,7 +59,7 @@ if ($department) {
 					</td>
 				</tr>
 
-				<tr><td><label id="notes">Comment</label></td>
+				<tr><td><label id="notes" class="required">Comment <span class="icon-asterisk"></span></label></td>
 					<td><textarea id="notes" name="notes"></textarea></td>
 				</tr>
 			</table>
