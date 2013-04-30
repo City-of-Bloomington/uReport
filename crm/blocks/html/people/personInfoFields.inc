@@ -30,7 +30,7 @@ foreach ($fields as $field) {
 			<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
 		</tr>
 
-		<tr><td><label for="middlename">Middlename <span class="icon-asterisk"></span></label></td>
+		<tr><td><label for="middlename">Middlename</label></td>
 			<td><input name="middlename" id="middlename" value="<?php echo $middlename; ?>" /></td>
 		</tr>
 
