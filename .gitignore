@@ -1,4 +1,4 @@
-crm/configuration.inc
+configuration.inc
 crm/data/media/*
 crm/data/sessions/*
 crm/scripts/backup.cnf
