@@ -65,9 +65,7 @@
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
 		$this->responses = $this->issue->getResponses();
-		if (count($this->responses)) {
-			include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
-		}
+		include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
 	}
 
 	$this->history = $this->issue->getHistory();
