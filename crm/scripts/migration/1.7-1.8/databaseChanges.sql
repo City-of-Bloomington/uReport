@@ -104,3 +104,8 @@ update tickets t set t.closedDate=(
 	select max(h.actionDate) from ticketHistory h,actions a
 	where t.id=h.ticket_id and h.action_id=a.id and a.name='closed'
 );
+
+-- ----------------------------------------------
+-- Create an action for Issue editing
+-- ----------------------------------------------
+insert actions (name,type,description) values('update', 'system','Updated by {enteredByPerson}');

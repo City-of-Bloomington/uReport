@@ -88,6 +88,13 @@ class IssuesController extends Controller
 			$issue->handleUpdate($_POST);
 			try {
 				$issue->save();
+				
+				$action = new Action('update');
+				
+				$history = new IssueHistory();
+				$history->setIssue($issue);
+				$history->setAction($action);
+				$history->save();
 
 				// Update the search index
 				// Make sure the ticket uses the latest issue information

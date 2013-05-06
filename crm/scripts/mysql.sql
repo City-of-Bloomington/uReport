@@ -97,6 +97,7 @@ insert actions (name,type,description) values('open',      'system','Opened by {
 insert actions (name,type,description) values('assignment','system','{enteredByPerson} assigned this case to {actionPerson}');
 insert actions (name,type,description) values('closed',    'system','Closed by {actionPerson}');
 insert actions (name,type,description) values('referral',  'system','{enteredByPerson} referred this case to {actionPerson}');
+insert actions (name,type,description) values('update',    'system','Updated by {enteredByPerson}');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
