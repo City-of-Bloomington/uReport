@@ -41,6 +41,9 @@ class PersonList extends ZendDbResultIterator
 			|| in_array('zip',   $keys)) {
 			$this->select->joinLeft(array('address'=>'peopleAddresses'), 'p.id=address.person_id', array());
 		}
+		if (in_array('reportedTicket_id', $keys)) {
+			$this->select->joinLeft(array('i'=>'issues'), 'p.id=i.reportedByPerson_id', array());
+		}
 	}
 
 	/**
@@ -81,6 +84,10 @@ class PersonList extends ZendDbResultIterator
 						case 'state':
 						case 'zip':
 							$this->select->where("address.$key=?", $value);
+							break;
+							
+						case 'reportedTicket_id':
+							$this->select->where('i.ticket_id=?', $value);
 							break;
 
 						default:
@@ -146,6 +153,10 @@ class PersonList extends ZendDbResultIterator
 					case 'state':
 					case 'zip':
 						$this->select->where("address.$key like ?", "$value%");
+						break;
+					
+					case 'reportedTicket_id':
+						$this->select->where('i.reportedByPerson_id=?', $value);
 						break;
 
 					default:

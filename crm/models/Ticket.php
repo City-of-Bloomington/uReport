@@ -590,4 +590,14 @@ class Ticket extends ActiveRecord
 			return round($daysPassed/$days*100);
 		}
 	}
+	
+	/**
+	 * @return PeopleList
+	 */
+	public function getReportedByPeople()
+	{
+		if ($this->getId()) {
+			return new PeopleList(array('reportedTicket_id'=>$this->getId()));
+		}
+	}
 }

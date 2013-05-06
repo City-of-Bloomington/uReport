@@ -5,8 +5,6 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-$department = $_SESSION['USER']->getDepartment();
-if ($department) {
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
@@ -72,4 +70,3 @@ if ($department) {
 <?php
 	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 	$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseStatus.js');
-}

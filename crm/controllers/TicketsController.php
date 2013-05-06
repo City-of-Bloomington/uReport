@@ -376,8 +376,10 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/changeStatusForm.inc',
-			array('ticket'=>$ticket)
+			'tickets/changeStatusForm.inc', array('ticket'=>$ticket)
+		);
+		$this->template->blocks['ticket-panel'][] = new Block(
+			'tickets/responseReminder.inc', array('ticket'=>$ticket)
 		);
 
 		$this->addStandardInfoBlocks($ticket);

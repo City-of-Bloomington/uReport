@@ -49,6 +49,9 @@ button, .btn {
 .panel       { padding:.75em; overflow:auto; }
 .panel > div { margin-bottom:.75em; }
 
+.changeStatusForm { float:left; width:400px; }
+.responseReminder { float:left; width:300px; }
+
 .actionForm          { float:right; width:40%; }
 .actionForm form     { background-color:#eee; padding:0 .5em; margin-bottom:.75em; border-radius:5px; display:table; }
 .actionForm fieldset { float:left; display:table; }
