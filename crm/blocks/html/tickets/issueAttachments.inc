@@ -4,9 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
+ * @param boolean $this->disableButtons
  */
 $uploadButton = '';
-if (userIsAllowed('media','upload')) {
+if (!$this->disableButtons && userIsAllowed('media','upload')) {
 	$uploadButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
