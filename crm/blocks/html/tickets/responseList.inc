@@ -6,17 +6,16 @@
  * @param array $this->responses
  */
 $responseButton = '';
-if (!$this->disableButtons && userIsAllowed('issues','update')) {
-	if ($this->issue->getReportedByPerson()) {
-			$responseButton = "
-			<a class=\"btn\"
-				href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
-				<span class=\"icon-plus\">
-				</span>
-				Add Response
-			</a>
-			";
-		}
+if (userIsAllowed('issues','update')
+	&& $this->issue->getReportedByPerson()) {
+	$responseButton = "
+	<a class=\"btn\"
+		href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
+		<span class=\"icon-plus\">
+		</span>
+		Add Response
+	</a>
+	";
 }
 ?>
 <div class="responseList">
