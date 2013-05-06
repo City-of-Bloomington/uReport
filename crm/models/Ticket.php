@@ -597,7 +597,7 @@ class Ticket extends ActiveRecord
 	public function getReportedByPeople()
 	{
 		if ($this->getId()) {
-			return new PeopleList(array('reportedTicket_id'=>$this->getId()));
+			return new PersonList(array('reportedTicket_id'=>$this->getId()));
 		}
 	}
 }

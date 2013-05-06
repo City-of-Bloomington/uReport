@@ -7,7 +7,7 @@
  */
 ?>
 <div id="errorMessages">
-	<h2><span class="icon-exclamation-sign"></span> Sorry</h2>
+	<h2><span class="icon-exclamation-sign"></span> Alert</h2>
 	<?php
 		foreach ($this->errorMessages as $e) {
 			$error = $e->getMessage();

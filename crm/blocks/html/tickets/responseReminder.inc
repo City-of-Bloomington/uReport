@@ -22,8 +22,10 @@ if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
 		<h2>Contact List</h2>
-		<p>Don't forget to contact these people to let them know what's going on.
-			And then, don't forget to log the response on the issue.
+		<p> 
+			When a case is closed it is your responsibility to contact 
+			constituents who reported this issue to the City.  Log those
+			contacts in the reports sections below.
 		</p>
 		<table>
 			$rows

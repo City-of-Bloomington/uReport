@@ -1,1 +1,5 @@
-<p>You must provide a comment explaining what happened with the case and why you are closing it.</p>
+<p>
+	The Mayor's Office requires that the resolution be documented when a case is 
+	closed.  This message should be understandable by anyone reading it, and explain 
+	how the case was resolved and how constituents were informed.
+</p>

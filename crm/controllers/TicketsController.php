@@ -360,6 +360,12 @@ class TicketsController extends Controller
 						if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
 							throw new Exception('tickets/missingClosingComment');
 						}
+						
+						// Display an alert, reminding them to respond to any citizens
+						$citizens = $ticket->getReportedByPeople();
+						if (count($citizens)) {
+							$_SESSION['errorMessages'][] = new Exception('tickets/closingResponseReminder');
+						}
 					}
 				}
 				
