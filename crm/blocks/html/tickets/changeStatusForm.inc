@@ -62,6 +62,7 @@
 				</tr>
 			</table>
 			<?php
+				include APPLICATION_HOME.'/blocks/html/errorMessages/tickets/missingClosingComment.inc';
 				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
 			?>
 		</fieldset>
