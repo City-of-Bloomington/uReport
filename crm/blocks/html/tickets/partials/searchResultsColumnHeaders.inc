@@ -14,9 +14,9 @@ echo "
 		if (isset($_GET['sort'])) {
 			$keys = array_keys($_GET['sort']);
 			$currentSort['field'] = $keys[0];
-			$currentSort['order'] = ($_GET['sort'][$keys[0]] == SolrQuery::ORDER_ASC)
-				? SolrQuery::ORDER_ASC
-				: SolrQuery::ORDER_DESC;
+			$currentSort['order'] = ($_GET['sort'][$keys[0]] == 'asc')
+				? 'asc'
+				: 'desc';
 		}
 
 		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
@@ -40,14 +40,14 @@ echo "
 				// draw a url that reverses the sort order
 				if (in_array($name, $sortableFields)) {
 					$url->sort = ($currentSort['field'] == $name
-								  && $currentSort['order'] == SolrQuery::ORDER_ASC)
-						? array($name=>SolrQuery::ORDER_DESC)
-						: array($name=>SolrQuery::ORDER_ASC);
+								  && $currentSort['order'] == 'asc')
+						? array($name=>'desc')
+						: array($name=>'asc');
 					$icon = '';
 					if ($name == $currentSort['field']) {
-						$icon = $currentSort['order'] == SolrQuery::ORDER_ASC
-							? '<span class="icon-angle-down"></span>'
-							: '<span class="icon-angle-up"></span>';
+						$icon = $currentSort['order'] == 'desc'
+							? '<span class="icon-angle-up"></span>'
+							: '<span class="icon-angle-down"></span>';
 					}
 					echo "<th><a href=\"$url\">$label $icon</th>";
 				}
