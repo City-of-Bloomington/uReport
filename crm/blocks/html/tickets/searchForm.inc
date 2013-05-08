@@ -3,7 +3,7 @@
  * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param SolrObject $this->solrObject
+ * @param Apache_Solr_Response $this->solrObject
  */
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 #$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/search.js');
@@ -63,7 +63,7 @@ if (userIsAllowed('tickets','add')) {
 
 					foreach (Search::$facetFields['ticket'] as $key) {
 						$list = '';
-						foreach ($facetFields[$key] as $value=>$count) {
+						foreach ($facetFields->$key as $value=>$count) {
 							if ($count) {
 								$url = clone $currentURL;
 								$url->$key = $value;

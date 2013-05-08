@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+require_once SOLR_PHP_CLIENT.'/Apache/Solr/Service.php';
 class Search
 {
 	public $solrClient;
-	public static $defaultSort = array('field'=>'enteredDate', 'order'=>SolrQuery::ORDER_DESC);
+	public static $defaultSort = array('field'=>'enteredDate', 'order'=>'desc');
 
 	const ITEMS_PER_PAGE = 10;
 	const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
@@ -84,11 +85,11 @@ class Search
 	 */
 	public function __construct()
 	{
-		$this->solrClient = new SolrClient(array(
-			'hostname'=> SOLR_SERVER_HOSTNAME,
-			'port'    => SOLR_SERVER_PORT,
-			'path'    => SOLR_SERVER_PATH
-		));
+		$this->solrClient = new Apache_Solr_Service(
+			SOLR_SERVER_HOSTNAME,
+			SOLR_SERVER_PORT,
+			SOLR_SERVER_PATH
+		);
 
 		// Add facets for the AddressService custom fields
 		foreach (AddressService::$customFieldDescriptions as $key=>$desc) {
@@ -120,18 +121,23 @@ class Search
 	public function query($get, $recordType=null)
 	{
 		$query = !empty($get['query'])
-			? new SolrQuery("{!df=description}$get[query]")
-			: new SolrQuery('*:*');
-		if ($recordType) { $query->addFilterQuery("recordType:$recordType"); }
+			? "{!df=description}$get[query]"
+			: '*:*';
+		$additionalParameters = array();
+		$fq = array();
+		
+		
+		if ($recordType) { $fq[] = "recordType:$recordType"; }
 
 		// Pagination
-		$query->setRows(self::ITEMS_PER_PAGE);
+		$rows = self::ITEMS_PER_PAGE;
+		$start = 0;
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
 
 			// Solr rows start at 0, but pages start at 1
-			$query->setStart(($page-1) * self::ITEMS_PER_PAGE);
+			$start = ($page-1) * self::ITEMS_PER_PAGE;
 		}
 
 		// Sorting
@@ -139,17 +145,15 @@ class Search
 		if (isset($get['sort'])) {
 			$keys = array_keys($_GET['sort']);
 			$sort['field'] = $keys[0];
-			$sort['order'] = ($_GET['sort'][$keys[0]] == SolrQuery::ORDER_ASC)
-				? SolrQuery::ORDER_ASC
-				: SolrQuery::ORDER_DESC;
+			$sort['order'] = ($_GET['sort'][$keys[0]] == 'asc')
+				? 'asc'
+				: 'desc';
 		}
-		$query->addSortField($sort['field'], $sort['order']);
+		$additionalParameters['sort'] = trim("$sort[field] $sort[order]");
 
 		// Facets
-		$query->setFacet(true);
-		foreach (self::$facetFields['ticket'] as $field) {
-			$query->addFacetField($field);
-		}
+		$additionalParameters['facet'] = 'true';
+		$additionalParameters['facet.field'] = self::$facetFields['ticket'];
 
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
@@ -162,14 +166,14 @@ class Search
 						$end = !empty($get[$field]['end'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
 							: '*';
-						$query->addFilterQuery("$field:[$start TO $end]");
+						$fq[] = "$field:[$start TO $end]";
 					}
 				}
 				else {
 					$value = is_numeric($get[$field])
 						? $get[$field]
 						: "\"$get[$field]\"";
-					$query->addFilterQuery("$field:$value");
+					$fq[] = "$field:$value";
 				}
 
 			}
@@ -182,18 +186,20 @@ class Search
 			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
 				$permissions.= ' OR public';
 			}
-			$query->addFilterQuery("displayPermissionLevel:$permissions");
+			$fq[] = "displayPermissionLevel:$permissions";
 		}
-
-		$solrResponse = $this->solrClient->query($query);
-		return $solrResponse->getResponse();
+		
+		if (count($fq)) { $additionalParameters['fq'] = $fq; }
+		
+		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
+		return $solrResponse;
 	}
 
 	/**
-	 * @param SolrObject $object
+	 * @param Apache_Solr_Response $object
 	 * @return array An array of CRM models based on the search results
 	 */
-	public static function hydrateDocs(SolrObject $o)
+	public static function hydrateDocs(Apache_Solr_Response $o)
 	{
 		$models = array();
 		if (isset($o->response->docs) && $o->response->docs) {
@@ -250,7 +256,7 @@ class Search
 	 * Prepares a Solr Document with the correct fields for the record type
 	 *
 	 * @param mixed $record
-	 * @return SolrInputDocument
+	 * @return Apache_Solr_Document
 	 */
 	private function createDocument($record)
 	{
@@ -272,7 +278,7 @@ class Search
 		);
 
 		if ($record instanceof Ticket) {
-			$document = new SolrInputDocument();
+			$document = new Apache_Solr_Document();
 			$document->addField('recordKey', "t_{$record->getId()}");
 			$document->addField('recordType', 'ticket');
 

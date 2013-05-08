@@ -5,7 +5,7 @@
  * @copyright 2011-2012 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param SolrObject $this->solrObject
+ * @param Apache_Solr_Response $this->solrObject
  */
 $tickets = Search::hydrateDocs($this->solrObject);
 if (count($tickets)) {
