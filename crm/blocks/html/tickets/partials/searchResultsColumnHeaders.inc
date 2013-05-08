@@ -46,8 +46,8 @@ echo "
 					$icon = '';
 					if ($name == $currentSort['field']) {
 						$icon = $currentSort['order'] == 'desc'
-							? '<span class="icon-angle-up"></span>'
-							: '<span class="icon-angle-down"></span>';
+							? '<span class="icon-angle-down"></span>'
+							: '<span class="icon-angle-up"></span>';
 					}
 					echo "<th><a href=\"$url\">$label $icon</th>";
 				}
