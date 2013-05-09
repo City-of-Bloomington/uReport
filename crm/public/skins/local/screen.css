@@ -138,7 +138,9 @@ button, .btn {
 }
 .issueInfo .notes, .issueInfo .issueAttachments, .issueInfo .responseList { margin-bottom:.5em; }
 
-.issueAttachments { overflow:auto; }
+.issueInfo .twoColumnlist, .issueInfo .notes { width:50%; }
+
+.issueAttachments { overflow:auto; width:48%; float:right; }
 .thumbnail { float:left; width:180px; }
 .mediaList { float:left; }
 .thumbnail div { text-align:center; }

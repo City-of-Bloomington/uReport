@@ -8,6 +8,7 @@
  * @param bool  $this->disableButtons
  */
 	include APPLICATION_HOME.'/blocks/html/tickets/partials/issueHeader.inc';
+	include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
 
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')) {
@@ -59,8 +60,6 @@
 		$description = View::escape($this->issue->getDescription());
 		if ($description) { echo "<div class=\"notes\"><h2>Details:</h2>$description</div>"; }
 	}
-
-	include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
 
 	// Don't display any personal information from the issue unless the user is authenticated
 	if (userIsAllowed('people','view')
