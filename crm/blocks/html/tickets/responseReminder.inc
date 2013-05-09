@@ -22,10 +22,10 @@ if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
 		<h2>Contact List</h2>
-		<p> 
-			When a case is closed it is your responsibility to contact 
+		<p>
+			When a case is closed it is your responsibility to contact
 			constituents who reported this issue to the City.  Log those
-			contacts in the reports sections below.
+			contacts in the responses below.
 		</p>
 		<table>
 			$rows
