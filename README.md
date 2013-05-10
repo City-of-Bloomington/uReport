@@ -15,6 +15,19 @@ in our [Issue Tracker](https://github.com/City-of-Bloomington/uReport/issues).
 If you want to contribute to the project, join us on our
 [Google Group](https://groups.google.com/forum/?fromgroups#!forum/ureport)
 
+New in 1.8.1
+----------------
+* Media bugfixes
+https://github.com/City-of-Bloomington/uReport/issues?milestone=3&state=closed
+
+I changed the naming scheme for storing media files on the server hard drive.
+There's a database migration in `/scripts/migrations`.  But before you run that, you'll need to clear the media thumbnail cache to remove all the old filenames.  There's new script for this in `/scripts/media`.
+
+* Run `/scripts/media/clearThumbnailCache.php`
+* Run `/scripts/migration/1.8-1.8.1/databaseChanges.sql`
+* Run `/scripts/migration/1.8-1.8.1/updateMediaFilenames.php`
+* Make sure apache still has permission to write into the media directory
+
 New in 1.8
 ----------------
 * Support for Solr 4.0
