@@ -46,6 +46,7 @@ $ZEND_ACL->allow(null,array('callback','login','open311'));
 $ZEND_ACL->allow(null,
 				array('index','tickets','issues','locations'),
 				array('index','view', 'thumbnails'));
+$ZEND_ACL->allow(null, 'media', 'resize');
 
 // Staff permission
 // Staff has full permission to these tables
