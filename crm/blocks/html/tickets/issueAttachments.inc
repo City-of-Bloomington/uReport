@@ -16,10 +16,12 @@ if (!$this->disableButtons && userIsAllowed('media','upload')) {
 	</a>
 	";
 }
-?>
-<div class="issueAttachments">
-	<h2>Attachments <?php echo $uploadButton; ?></h2>
-	<?php
+$this->mediaList = $this->issue->getMedia();
+if ($uploadButton || count($this->mediaList)) {
+	echo "
+	<div class=\"issueAttachments\">
+		<h2>Attachments $uploadButton</h2>
+	";
 		$profileImage = $this->issue->getProfileImage();
 		if ($profileImage) {
 			$thumbnail = new Block('media/thumbnail.inc', array('media'=>$profileImage));
@@ -32,7 +34,6 @@ if (!$this->disableButtons && userIsAllowed('media','upload')) {
 			";
 			echo $thumbnail->render('html', $this->template);
 		}
-		$this->mediaList = $this->issue->getMedia();
 		include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
-	?>
-</div>
+	echo "</div>";
+}
