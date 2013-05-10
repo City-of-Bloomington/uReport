@@ -54,9 +54,12 @@ class MediaController extends Controller
 				$media = new Media();
 				$media->setIssue($issue);
 				$media->setFile($_FILES['attachment']);
-				// Setting the file calls ->save() internally
+				$media->save();
 			}
 			catch (Exception $e) {
+				// Clean out any file that might have been saved
+				$media->delete();
+
 				$_SESSION['errorMessages'][] = $e;
 			}
 

@@ -144,7 +144,7 @@ class Media extends ActiveRecord
 	 */
 	public function setFile($file)
 	{
-		# Handle passing in either a $_FILES array or just a path to a file
+		// Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
 		$filename = is_array($file) ? basename($file['name']) : basename($file);
 		if (!$tempFile) {
@@ -160,10 +160,12 @@ class Media extends ActiveRecord
 		if (array_key_exists(strtolower($extension),Media::$extensions)) {
 			$this->data['mime_type']  = Media::$extensions[$extension]['mime_type'];
 			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
+
 		}
 		else {
 			throw new Exception('media/unknownFileType');
 		}
+
 
 		// Move the file where it's supposed to go
 		$directory = $this->getDirectory();
@@ -199,19 +201,20 @@ class Media extends ActiveRecord
 	 * Returns the file name used on the server
 	 *
 	 * We do not use the filename the user chose when saving the files.
-	 * We've got a chicken-or-egg problem here.  We want to use the id
-	 * as the filename, but the id doesn't exist until the info's been saved
-	 * to the database.
-	 *
-	 * If we don't have an id yet, try and save to the database first.
-	 * If that fails, we most likely don't have enough required info yet
+	 * We generate a unique filename the first time the filename is needed.
+	 * This filename will be saved in the database whenever this media is
+	 * finally saved.
 	 *
 	 * @return string
 	 */
 	public function getInternalFilename()
 	{
-		if (!$this->getId()) { $this->save(); }
-		return "{$this->getId()}.{$this->getExtension()}";
+		$filename = parent::get('internalFilename');
+		if (!$filename) {
+			$filename = uniqid().'.'.$this->getExtension();
+			parent::set('internalFilename', $filename);
+		}
+		return $filename;
 	}
 
 	/**

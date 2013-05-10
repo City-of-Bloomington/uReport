@@ -241,6 +241,7 @@ create table media (
 	id         int          unsigned not null primary key auto_increment,
 	issue_id   int          unsigned not null,
 	filename   varchar(128) not null,
+	internalFilename varchar(50) not null,
 	mime_type  varchar(128),
 	media_type varchar(50),
 	uploaded   timestamp    not null default CURRENT_TIMESTAMP,
