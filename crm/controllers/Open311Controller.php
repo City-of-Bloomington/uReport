@@ -105,6 +105,7 @@ class Open311Controller extends Controller
 						$media = new Media();
 						$media->setIssue($issue);
 						$media->setFile($_FILES['media']);
+						$media->save();
 					}
 					catch (Exception $e) {
 						// Just ignore any media errors for now
