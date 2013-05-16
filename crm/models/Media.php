@@ -64,7 +64,12 @@ class Media extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = 'select * from media where id=?';
+				if (ActiveRecord::isId($id)) {
+					$sql = 'select * from media where id=?';
+				}
+				else {
+					$sql = 'select * from media where internalFilename=?';
+				}
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
 
