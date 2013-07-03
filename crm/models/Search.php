@@ -125,19 +125,19 @@ class Search
 			: '*:*';
 		$additionalParameters = array();
 		$fq = array();
-		
-		
+
+
 		if ($recordType) { $fq[] = "recordType:$recordType"; }
 
 		// Pagination
 		$rows = self::ITEMS_PER_PAGE;
-		$start = 0;
+		$startingPage = 0;
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
 
 			// Solr rows start at 0, but pages start at 1
-			$start = ($page-1) * self::ITEMS_PER_PAGE;
+			$startingPage = ($page-1) * self::ITEMS_PER_PAGE;
 		}
 
 		// Sorting
@@ -160,13 +160,13 @@ class Search
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
-						$start = !empty($get[$field]['start'])
+						$startDate = !empty($get[$field]['start'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
 							: '*';
-						$end = !empty($get[$field]['end'])
+						$endDate = !empty($get[$field]['end'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
 							: '*';
-						$fq[] = "$field:[$start TO $end]";
+						$fq[] = "$field:[$startDate TO $endDate]";
 					}
 				}
 				else {
@@ -188,10 +188,10 @@ class Search
 			}
 			$fq[] = "displayPermissionLevel:$permissions";
 		}
-		
+
 		if (count($fq)) { $additionalParameters['fq'] = $fq; }
-		
-		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
+
+		$solrResponse = $this->solrClient->search($query, $startingPage, $rows, $additionalParameters);
 		return $solrResponse;
 	}
 
