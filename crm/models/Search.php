@@ -118,7 +118,7 @@ class Search
 	 * @param string $recordType
 	 * @return SolrObject
 	 */
-	public function query($get, $recordType=null)
+	public function query(&$get, $recordType=null)
 	{
 		$query = !empty($get['query'])
 			? "{!df=description}$get[query]"
@@ -157,6 +157,10 @@ class Search
 
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
+			if (substr($field, -3) == '_id') {
+				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
+			}
+
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
@@ -175,7 +179,6 @@ class Search
 						: "\"$get[$field]\"";
 					$fq[] = "$field:$value";
 				}
-
 			}
 		}
 
