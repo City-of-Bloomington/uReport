@@ -36,7 +36,8 @@ if (!empty($_GET['query'])
 			$key = $matches[1];
 			$value = $matches[2];
 			// Users should not change the permission level they're searching as
-			if ($key != 'displayPermissionLevel') {
+			// Quan added 'coordinates' condition on July 22th, 2013
+			if ($key != 'displayPermissionLevel' && $key != 'coordinates') {
 				$deleteURL = clone $currentURL;
 				if (isset($deleteURL->$key)) {
 					unset($deleteURL->$key);
@@ -57,4 +58,27 @@ if (!empty($_GET['query'])
 	echo "
 	</div>
 	";
+	//start editing by Quan
+	if(!isset($_GET['resultFormat'])) {
+		if($currentURL->parameters) {
+			echo "
+			<a href=\"".$currentURL.";resultFormat=text\"> Show results in text </a>
+			<a href=\"".$currentURL.";resultFormat=map\"> Show results in map </a>
+			";
+		}
+		else {
+			echo "
+			<a href=\"".$currentURL."?resultFormat=text\"> Show results in text </a>
+			<a href=\"".$currentURL."?resultFormat=map\"> Show results in map </a>
+			";
+		}
+	}
+	else {
+		$tempURL = clone $currentURL;
+		$tempURL->resultFormat = 'text';
+		echo "<a href=\"".$tempURL."\"> Show results in text </a>";
+		$tempURL->resultFormat = 'map';
+		echo "<a href=\"".$tempURL."\"> Show results in map </a>";
+	}
+	//end editing by Quan
 }

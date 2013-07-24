@@ -42,6 +42,7 @@ class TicketsController extends Controller
 			'tickets/searchParameters.inc',
 			array('solrObject'=>$solrObject)
 		);
+
 		$this->template->blocks['right'][] = new Block(
 			'tickets/searchResults.inc',
 			array('solrObject'=>$solrObject)

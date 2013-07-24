@@ -14,17 +14,26 @@ if (count($tickets)) {
 	<div class=\"searchResults\">
 	<h1>Search Results</h1>
 	<div># Cases in Current Search: $c</div>
-	<table>
 	";
+	
+	// Show sorting options
+	echo "<table>";
 	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('tickets'=>$tickets));
 	echo $header->render('html', $this->template);
 	echo "</table>";
-
-	$row = new Block('tickets/partials/searchResultsRows.inc', array('tickets'=>$tickets));
-	echo $row->render('html', $this->template);
-	echo "
-	</div>
-	";
+	
+	// Start editing by Quan
+	if(!isset($_GET['resultFormat']) || $_GET['resultFormat'] == 'text') {
+		$row = new Block('tickets/partials/searchResultsRows.inc', array('tickets'=>$tickets));
+		echo $row->render('html', $this->template);
+	}
+	else if($_GET['resultFormat'] == 'map') {
+		$map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
+		echo $map->render('html', $this->template);
+	}
+	// End editing by Quan
+	
+	echo "</div>";
 }
 else {
 	echo "<div class=\"searchResults\"><h2>No Cases Found</h2></div>";

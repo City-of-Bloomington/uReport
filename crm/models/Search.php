@@ -123,9 +123,9 @@ class Search
 		$query = !empty($get['query'])
 			? "{!df=description}$get[query]"
 			: '*:*';
+		
 		$additionalParameters = array();
 		$fq = array();
-		
 		
 		if ($recordType) { $fq[] = "recordType:$recordType"; }
 
@@ -139,8 +139,7 @@ class Search
 			// Solr rows start at 0, but pages start at 1
 			$start = ($page-1) * self::ITEMS_PER_PAGE;
 		}
-
-		// Sorting
+		
 		$sort = self::$defaultSort;
 		if (isset($get['sort'])) {
 			$keys = array_keys($_GET['sort']);
@@ -149,6 +148,7 @@ class Search
 				? 'asc'
 				: 'desc';
 		}
+		
 		$additionalParameters['sort'] = trim("$sort[field] $sort[order]");
 
 		// Facets
@@ -175,7 +175,6 @@ class Search
 						: "\"$get[$field]\"";
 					$fq[] = "$field:$value";
 				}
-
 			}
 		}
 
@@ -189,8 +188,15 @@ class Search
 			$fq[] = "displayPermissionLevel:$permissions";
 		}
 		
-		if (count($fq)) { $additionalParameters['fq'] = $fq; }
+		// Start editing by Quan, July 22th, 2013
+		// If results are shown in map, only search the results fall into the default bounding box.
+		if($get['resultFormat'] == 'map') {
+			$fq[] = "coordinates:[39.16327243690854,-86.55626810861207 TO 39.17658093347435,-86.51734389138795]";
+		}
+		// End editing by Quan July 22th, 2013
 		
+		if (count($fq)) { $additionalParameters['fq'] = $fq; }
+
 		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
 		return $solrResponse;
 	}
