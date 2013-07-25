@@ -179,6 +179,13 @@ $DIRECTORY_CONFIG = array(
 //define('CAS_URI','cas');
 
 /**
+ * PHP command line executable
+ *
+ * Needed to run background workers
+ */
+define('PHP', '/usr/local/bin/php');
+
+/**
  * Image handling library
  * Set the path to the ImageMagick binaries
  */
