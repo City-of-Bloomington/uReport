@@ -25,9 +25,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 			Y.io(solrQueryString, {
 				on: {
 					complete: function (id, o, args) {
-						
 						var response = Y.JSON.parse(o.responseText);
 						var tickets = response['response']['docs'];
+						var numFound = response['response']['numFound'];
+						alert(numFound);
 						showMarkers(tickets);
 					}
 				}
@@ -36,6 +37,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	});
 	
 	function parseSolrParams(SOLR_PARAMS, bounds) {
+		console.log(SOLR_PARAMS);
 		var solrQueryString = '';
 		var minLat = bounds['ba']['b'];
 		var minLng = bounds['fa']['b'];
@@ -46,13 +48,19 @@ google.maps.event.addDomListener(window, 'load', function() {
 		var param_q = SOLR_PARAMS['q'];
 		var param_fq = SOLR_PARAMS['fq'];
 		solrQueryString += queryHeader+'sort='+param_sort+'&q='+param_q;
-		// Replace the last fq with new bounding box.
-		for(var i=0;i<param_fq.length-1;i++) {
-			solrQueryString += '&fq='+param_fq[i];
+		if(param_fq instanceof Array) {
+			for(var i=0;i<param_fq.length;i++) {
+				if(param_fq[i].substr(0,12) != 'coordinates:')
+					solrQueryString += '&fq='+param_fq[i];
+			}
+		}
+		else {
+			solrQueryString += '&fq='+param_fq;
 		}
 		solrQueryString += '&fq=coordinates:['+minLat+','+minLng+' TO '+maxLat+','+maxLng+']';
 		solrQueryString += '&wt='+SOLR_PARAMS['wt']+'&json.nl='+SOLR_PARAMS['json.nl'];
 		solrQueryString += '&start=0&rows=100';
+		
 		return solrQueryString;
 	}
 	

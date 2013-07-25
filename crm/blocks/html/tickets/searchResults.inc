@@ -39,11 +39,15 @@ else {
 	echo "<div class=\"searchResults\"><h2>No Cases Found</h2></div>";
 }
 
-// Solr rows start at 0, but pages start at 1
-$currentPage = round($this->solrObject->response->start/Search::ITEMS_PER_PAGE) + 1;
+// Quan added if statement on July 25, 2013
+// Pagination in map block is meaningless.
+if($_GET['resultFormat'] != 'map') {
+	// Solr rows start at 0, but pages start at 1
+	$currentPage = round($this->solrObject->response->start/Search::ITEMS_PER_PAGE) + 1;
 
-$paginator = new Zend_Paginator(new SolrPaginatorAdapter($this->solrObject));
-$paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);
-$paginator->setCurrentPageNumber($currentPage);
-$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
-echo $block->render('html', $this->template);
+	$paginator = new Zend_Paginator(new SolrPaginatorAdapter($this->solrObject));
+	$paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);
+	$paginator->setCurrentPageNumber($currentPage);
+	$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
+	echo $block->render('html', $this->template);
+}

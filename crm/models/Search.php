@@ -187,14 +187,7 @@ class Search
 			}
 			$fq[] = "displayPermissionLevel:$permissions";
 		}
-		
-		// Start editing by Quan, July 22th, 2013
-		// If results are shown in map, only search the results fall into the default bounding box.
-		if($get['resultFormat'] == 'map') {
-			$fq[] = "coordinates:[39.16327243690854,-86.55626810861207 TO 39.17658093347435,-86.51734389138795]";
-		}
-		// End editing by Quan July 22th, 2013
-		
+
 		if (count($fq)) { $additionalParameters['fq'] = $fq; }
 
 		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
