@@ -15,11 +15,16 @@ google.maps.event.addDomListener(window, 'load', function() {
 	});
 	// Array to store the markers that will be shown
 	var allMarkers = [];
+	// Tools in solving markers overlapping problem
+	var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true});
 	
-	google.maps.event.addListener(map, 'idle', function() {
+	google.maps.event.addListener(map, 'idle', refreshMap);
+	var refresh = document.getElementById('refresh');
+    google.maps.event.addDomListener(refresh, 'click', refreshMap);
 	
+	function refreshMap() {
 		var bounds = map.getBounds();
-		var solrQueryString = parseSolrParams(SOLR_PARAMS, bounds);
+		var solrQueryString = generateSolrQuery(SOLR_PARAMS, bounds);
 		
 		YUI().use('io', 'json-parse', function (Y) {
 			Y.io(solrQueryString, {
@@ -28,16 +33,16 @@ google.maps.event.addDomListener(window, 'load', function() {
 						var response = Y.JSON.parse(o.responseText);
 						var tickets = response['response']['docs'];
 						var numFound = response['response']['numFound'];
-						alert(numFound);
+						document.getElementById("reginal_cases").innerHTML = '# Cases in Current Region: ' + numFound;
 						showMarkers(tickets);
 					}
 				}
 			});
 		});
-	});
+	}
 	
-	function parseSolrParams(SOLR_PARAMS, bounds) {
-		console.log(SOLR_PARAMS);
+	function generateSolrQuery(SOLR_PARAMS, bounds) {
+
 		var solrQueryString = '';
 		var minLat = bounds['ba']['b'];
 		var minLng = bounds['fa']['b'];
@@ -59,7 +64,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 		}
 		solrQueryString += '&fq=coordinates:['+minLat+','+minLng+' TO '+maxLat+','+maxLng+']';
 		solrQueryString += '&wt='+SOLR_PARAMS['wt']+'&json.nl='+SOLR_PARAMS['json.nl'];
-		solrQueryString += '&start=0&rows=100';
+		var rows = parseInt(document.getElementById('rows').value, 10);
+		solrQueryString += '&start=0&rows=' + rows;
 		
 		return solrQueryString;
 	}
@@ -67,11 +73,9 @@ google.maps.event.addDomListener(window, 'load', function() {
 	function showMarkers(tickets) {
 		// clear all the previous markers and shrink the allMarkers array to the size of tickets.
 		for(var i=0;i<allMarkers.length;i++) {
-			if(i < tickets.length)
-				allMarkers[i].setMap(null);
-			else
-				allMarkers.pop();
+			allMarkers[i].setMap(null);
 		}
+		allMarkers = [];
 		for(var i=0;i<tickets.length;i++) {
 			var coordinates = tickets[i]['coordinates'];
 			var latlng = coordinates.split(",");
@@ -82,7 +86,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 				title: i+""
 			});
 		}
-		//var mc = new MarkerClusterer(map, allMarkers);
+		// Solve markers overlapping problem
+		for (var i = 0; i < allMarkers.length; i ++) {
+			oms.addMarker(allMarkers[i]);
+		}
 	}
 
 });
