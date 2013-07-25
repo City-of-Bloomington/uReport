@@ -157,7 +157,7 @@ class Search
 
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
-			if (substr($field, -3) == '_id') {
+			if (substr($field, -3) == '_id' && isset($get[$field])) {
 				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
 			}
 
@@ -209,7 +209,12 @@ class Search
 			foreach ($o->response->docs as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
-						$models[] = new Ticket($doc->id);
+						// Check to make sure the ticket permits viewing
+						// The search engine could be out of sync with the database record
+						$t = new Ticket($doc->id);
+						if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+							$models[] = new Ticket($doc->id);
+						}
 						break;
 				}
 			}
