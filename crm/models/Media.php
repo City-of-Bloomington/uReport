@@ -241,6 +241,9 @@ class Media extends ActiveRecord
 		$url = BASE_URI."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }
 		$url.= "/{$this->getInternalFilename()}";
+		if ($size) {
+			$url = preg_replace('/[^.]+$/', 'png', $url);
+		}
 		return $url;
 	}
 
