@@ -68,7 +68,12 @@ class Media extends ActiveRecord
 					$sql = 'select * from media where id=?';
 				}
 				else {
-					$sql = 'select * from media where internalFilename=?';
+					// Media internalFilenames include the original file extensions
+					// However, the filename being requested may be for a generated thumbnail
+					// We need to chop off the extension and do a wildcard search
+					$filename = preg_replace('/[^.]+$/','',$id);
+					$id = "$filename%";
+					$sql = 'select * from media where internalFilename like ?';
 				}
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
