@@ -141,3 +141,13 @@ if (userIsAllowed('tickets','add')) {
 		</fieldset>
 	</form>
 </div>
+<div>
+	<p>
+		Disclaimer: uReport is provided for and driven by the community. uReport
+		content may be posted by third parties unaffiliated with the City. The City
+		makes no warranty as to the accuracy and completeness of third party
+		content and takes no responsibility and disclaims all liability for third
+		party content. Reports submitted by the community are addressed on the
+		basis of priority and available resources.
+	</p>
+</div>
