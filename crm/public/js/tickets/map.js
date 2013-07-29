@@ -17,6 +17,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	var allMarkers = [];
 	// Tools in solving markers overlapping problem
 	var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true});
+	var iw = new google.maps.InfoWindow();
 	
 	google.maps.event.addListener(map, 'idle', refreshMap);
 	var refresh = document.getElementById('refresh');
@@ -25,7 +26,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	function refreshMap() {
 		var bounds = map.getBounds();
 		var solrQueryString = generateSolrQuery(SOLR_PARAMS, bounds);
-		
+		// Correspond with Solr Server
 		YUI().use('io', 'json-parse', function (Y) {
 			Y.io(solrQueryString, {
 				on: {
@@ -42,7 +43,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	}
 	
 	function generateSolrQuery(SOLR_PARAMS, bounds) {
-
+		
 		var solrQueryString = '';
 		var minLat = bounds['ba']['b'];
 		var minLng = bounds['fa']['b'];
@@ -60,7 +61,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 			}
 		}
 		else {
-			solrQueryString += '&fq='+param_fq;
+			if(param_fq.substr(0,12) != 'coordinates:')
+				solrQueryString += '&fq='+param_fq;
 		}
 		solrQueryString += '&fq=coordinates:['+minLat+','+minLng+' TO '+maxLat+','+maxLng+']';
 		solrQueryString += '&wt='+SOLR_PARAMS['wt']+'&json.nl='+SOLR_PARAMS['json.nl'];
@@ -72,6 +74,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	
 	function showMarkers(tickets) {
 		// clear all the previous markers and shrink the allMarkers array to the size of tickets.
+		console.log(tickets);
 		for(var i=0;i<allMarkers.length;i++) {
 			allMarkers[i].setMap(null);
 		}
@@ -85,7 +88,15 @@ google.maps.event.addDomListener(window, 'load', function() {
 				map: map,
 				title: i+""
 			});
+			allMarkers[i].desc = tickets[i].description;
 		}
+		oms.addListener('click', function(marker, event) {
+			iw.setContent(marker.desc);
+			iw.open(map, marker);
+		});
+		oms.addListener('spiderfy', function(markers) {
+			iw.close();
+		});
 		// Solve markers overlapping problem
 		for (var i = 0; i < allMarkers.length; i ++) {
 			oms.addMarker(allMarkers[i]);
