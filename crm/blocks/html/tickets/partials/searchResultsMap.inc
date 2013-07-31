@@ -27,9 +27,9 @@ echo "
 </div>
 <div id=\"location_map\"></div>
 <script type=\"text/javascript\">
-	var SOLR_PARAMS = ".json_encode($this->solrObject->responseHeader->params).";
 	var DEFAULT_LATITUDE  = ".DEFAULT_LATITUDE.";
 	var DEFAULT_LONGITUDE = ".DEFAULT_LONGITUDE.";
+	var SOLR_PARAMS = ".json_encode($this->solrObject->responseHeader->params).";
 	var SOLR_SERVER_HOSTNAME = '".SOLR_SERVER_HOSTNAME."';
 	var SOLR_SERVER_PATH = '".SOLR_SERVER_PATH."';
 </script>
@@ -37,6 +37,6 @@ echo "
 
 $this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
-$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
+$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/searchResultsMap.js');
 $this->template->addToAsset('scripts', BASE_URL.'/js/oms.min.js');
 
