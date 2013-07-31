@@ -143,6 +143,7 @@ class Open311Controller extends Controller
 			if (!empty($_REQUEST['status']))         { $search['status']              = $_REQUEST['status'];         }
 			if (!empty($_REQUEST['updated_before'])) { $search['lastModified_before'] = $_REQUEST['updated_before']; }
 			if (!empty($_REQUEST['updated_after']))  { $search['lastModified_after']  = $_REQUEST['updated_after'];  }
+			if (!empty($_REQUEST['bbox']))           { $search['bbox']                = $_REQUEST['bbox'];           }
 
 			$pageSize = 1000;
 			if (!empty($_REQUEST['page_size'])) {
