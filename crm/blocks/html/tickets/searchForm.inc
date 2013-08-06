@@ -13,7 +13,7 @@ if (userIsAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h1>Quick Links</h1>
+		<h2>Quick Links</h2>
 		<form method=\"get\" action=\"".BASE_URL."/tickets\">
 			<fieldset>
 				<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
@@ -40,12 +40,23 @@ if (userIsAllowed('tickets','add')) {
 		}
 	echo "
 		</ul>
+	";
+	$bookmarks = new Block(
+		'bookmarks/list.inc',
+		['bookmarks' => new BookmarkList([
+			'person_id'=>$_SESSION['USER']->getId(),
+			'type'=>'search'
+		])]
+	);
+	echo $bookmarks->render('html', $this->template);
+
+	echo "
 	</div>
 	";
 }
 ?>
 <div>
-	<h1>Search</h1>
+	<h2>Search</h2>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 		<fieldset>
 			<label>Search

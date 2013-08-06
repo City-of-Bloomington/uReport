@@ -2,13 +2,25 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 ?>
 <div class="searchParameters">
+	<?php
+		echo '<div>';
+		if (   !empty($_GET['enteredDate'])
+			|| !empty($_GET['departments'])
+			|| !empty($_GET['categories'])) {
+			if (userIsAllowed('bookmarks', 'update')) {
+				$bookmarkForm = new Block('bookmarks/updateForm.inc',['type'=>'report']);
+				echo $bookmarkForm->render('html', $this->template);
+			}
+		}
+		echo '</div>';
+	?>
 	<span>
 	<?php
 		if (!empty($_GET['enteredDate']['start']) || !empty($_GET['enteredDate']['end'])) {

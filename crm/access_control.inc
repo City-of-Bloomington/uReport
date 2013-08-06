@@ -40,6 +40,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('media'));
 $ZEND_ACL->add(new Zend_Acl_Resource('open311'));
 $ZEND_ACL->add(new Zend_Acl_Resource('clients'));
 $ZEND_ACL->add(new Zend_Acl_Resource('reports'));
+$ZEND_ACL->add(new Zend_Acl_Resource('bookmarks'));
 
 // Permissions for non-authenticated web browsing
 $ZEND_ACL->allow(null,array('callback','login','open311'));
@@ -51,7 +52,7 @@ $ZEND_ACL->allow(null, 'media', 'resize');
 // Staff permission
 // Staff has full permission to these tables
 $ZEND_ACL->allow('Staff',array(
-	'account','tickets','people','issues','media','reports'
+	'account','tickets','people','issues','media','reports','bookmarks'
 ));
 // Staff has limited permission to these tables
 $ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));

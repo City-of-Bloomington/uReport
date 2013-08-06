@@ -21,6 +21,12 @@ if (!empty($_GET['query'])
 	<div class=\"searchParameters\">
 		<h2>$q</h2>
 	";
+
+	if (userIsAllowed('bookmarks', 'update')) {
+		$bookmarkForm = new Block('bookmarks/updateForm.inc',['type'=>'search']);
+		echo $bookmarkForm->render('html', $this->template);
+	}
+
 	if (count($fq)) {
 		echo "
 		<p>Your current search parameters.
