@@ -21,12 +21,15 @@ google.maps.event.addDomListener(window, 'load', function() {
 		iw = new google.maps.InfoWindow(),
 		// Refresh button to refresh the map
 		refresh = document.getElementById('refresh'),
-		generateSolrQuery = function (SOLR_PARAMS, bounds) {
-			var solrQueryString = '',
-				minLat 			= bounds.ba.b,
+		generateBBox = function (bounds) {
+			var minLat 			= bounds.ba.b,
 				minLng 			= bounds.fa.b,
 				maxLat 			= bounds.ba.d,
-				maxLng 			= bounds.fa.d,
+				maxLng 			= bounds.fa.d;
+			return '[' + minLat + ',' + minLng + ' TO ' + maxLat + ',' + maxLng + ']';
+		},
+		generateSolrQuery = function (SOLR_PARAMS, bbox) {
+			var solrQueryString = '',
 				queryHeader 	= 'http://'+SOLR_SERVER_HOSTNAME+SOLR_SERVER_PATH+'/select?',
 				param_sort 		= SOLR_PARAMS.sort,
 				param_q 		= SOLR_PARAMS.q,
@@ -47,7 +50,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 					solrQueryString += '&fq=' + param_fq;
 				}
 			}
-			solrQueryString += '&fq=coordinates:[' + minLat + ',' + minLng + ' TO ' + maxLat + ',' + maxLng + ']';
+			solrQueryString += '&fq=coordinates:' + bbox;
 			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
 			solrQueryString += '&start=0&rows=' + rows;
 
@@ -55,7 +58,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 		},
 		refreshMap = function () {
 			var bounds 			= map.getBounds(),
-				solrQueryString = generateSolrQuery(SOLR_PARAMS, bounds);
+				bbox 			= generateBBox(bounds),
+				solrQueryString = generateSolrQuery(SOLR_PARAMS, bbox),
+				textResultHref,
+				mapResultHref;
 
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
@@ -105,6 +111,14 @@ google.maps.event.addDomListener(window, 'load', function() {
 					}
 				});
 			});
+			
+			textResultHref = document.getElementById("text-result").href;
+			mapResultHref = document.getElementById("map-result").href;
+			textResultHref = URL.replaceParam(textResultHref, 'coordinates', bbox);
+			mapResultHref = URL.replaceParam(mapResultHref, 'coordinates', bbox);
+			document.getElementById("text-result").href = textResultHref;
+			document.getElementById("map-result").href = mapResultHref;
+			
 		};
 		
 	google.maps.event.addListener(map, 'idle', refreshMap);

@@ -62,23 +62,23 @@ if (!empty($_GET['query'])
 	if(!isset($_GET['resultFormat'])) {
 		if($currentURL->parameters) {
 			echo "
-			<a href=\"".$currentURL.";resultFormat=text\"> Show results in text </a>
-			<a href=\"".$currentURL.";resultFormat=map\"> Show results in map </a>
+			<a id='text-result' href=\"".$currentURL.";resultFormat=text\"> Show results in text </a>
+			<a id='map-result' href=\"".$currentURL.";resultFormat=map\"> Show results in map </a>
 			";
 		}
 		else {
 			echo "
-			<a href=\"".$currentURL."?resultFormat=text\"> Show results in text </a>
-			<a href=\"".$currentURL."?resultFormat=map\"> Show results in map </a>
+			<a id='text-result' href=\"".$currentURL."?resultFormat=text\"> Show results in text </a>
+			<a id='map-result' href=\"".$currentURL."?resultFormat=map\"> Show results in map </a>
 			";
 		}
 	}
 	else {
 		$tempURL = clone $currentURL;
 		$tempURL->resultFormat = 'text';
-		echo "<a href=\"".$tempURL."\"> Show results in text </a>";
+		echo "<a id='text-result' href=\"".$tempURL."\"> Show results in text </a>";
 		$tempURL->resultFormat = 'map';
-		echo "<a href=\"".$tempURL."\"> Show results in map </a>";
+		echo "<a id='map-result' href=\"".$tempURL."\"> Show results in map </a>";
 	}
 	//end editing by Quan
 }
