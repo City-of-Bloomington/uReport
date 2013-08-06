@@ -9,6 +9,19 @@
 // $this->solrObject->responseHeader->params contains all the information in current URL.
 // Use the json_encode() to convert php variable to javascript variable.
 
+$centerLatitude;
+$centerLongitude;
+if(isset($_GET['bbox'])) {
+	list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $_GET['bbox']);
+	$centerLatitude = ((float)$minLat + (float)$maxLat) / 2;
+	$centerLongitude = ((float)$minLng + (float)$maxLng) / 2;
+}
+else {
+	$centerLatitude = DEFAULT_LATITUDE;
+	$centerLongitude = DEFAULT_LONGITUDE;
+}
+$zoom = isset($_GET['zoom']) ? $_GET['zoom'] : 15;
+
 echo "
 <div id=\"reginal_cases\"></div>
 <div id=\"inline_actions\">
@@ -27,8 +40,9 @@ echo "
 </div>
 <div id=\"location_map\"></div>
 <script type=\"text/javascript\">
-	var DEFAULT_LATITUDE  = ".DEFAULT_LATITUDE.";
-	var DEFAULT_LONGITUDE = ".DEFAULT_LONGITUDE.";
+	var CENTER_LATITUDE  = ".$centerLatitude.";
+	var CENTER_LONGITUDE = ".$centerLongitude.";
+	var ZOOM = ".$zoom.";
 	var SOLR_PARAMS = ".json_encode($this->solrObject->responseHeader->params).";
 	var SOLR_SERVER_HOSTNAME = '".SOLR_SERVER_HOSTNAME."';
 	var SOLR_SERVER_PATH = '".SOLR_SERVER_PATH."';

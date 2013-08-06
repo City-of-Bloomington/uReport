@@ -7,10 +7,11 @@
 'use strict';
 
 google.maps.event.addDomListener(window, 'load', function() {
-	var defaultCenter = new google.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
+		var initCenter = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
+		zoomLevel = ZOOM,
 		map = new google.maps.Map(document.getElementById('location_map'), {
-			zoom: 15,
-			center: defaultCenter,
+			zoom: zoomLevel,
+			center: initCenter,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		}),
 		// Array to store the markers that will be shown
@@ -21,14 +22,23 @@ google.maps.event.addDomListener(window, 'load', function() {
 		iw = new google.maps.InfoWindow(),
 		// Refresh button to refresh the map
 		refresh = document.getElementById('refresh'),
-		generateBBox = function (bounds) {
+		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
+		generateCoordinates = function (bounds) {
 			var minLat 			= bounds.ba.b,
 				minLng 			= bounds.fa.b,
 				maxLat 			= bounds.ba.d,
 				maxLng 			= bounds.fa.d;
 			return '[' + minLat + ',' + minLng + ' TO ' + maxLat + ',' + maxLng + ']';
 		},
-		generateSolrQuery = function (SOLR_PARAMS, bbox) {
+		// bbox format: xx.xxxxxx,xx.xxxxxx,xx.xxxxxx,xx.xxxxxx
+		generateBBox = function (bounds) {
+			var minLat 			= bounds.ba.b,
+				minLng 			= bounds.fa.b,
+				maxLat 			= bounds.ba.d,
+				maxLng 			= bounds.fa.d;
+			return minLat + ',' + minLng + ',' + maxLat + ',' + maxLng;
+		},
+		generateSolrQuery = function (SOLR_PARAMS, coordinates) {
 			var solrQueryString = '',
 				queryHeader 	= 'http://'+SOLR_SERVER_HOSTNAME+SOLR_SERVER_PATH+'/select?',
 				param_sort 		= SOLR_PARAMS.sort,
@@ -50,19 +60,20 @@ google.maps.event.addDomListener(window, 'load', function() {
 					solrQueryString += '&fq=' + param_fq;
 				}
 			}
-			solrQueryString += '&fq=coordinates:' + bbox;
+			solrQueryString += '&fq=coordinates:' + coordinates;
 			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
 			solrQueryString += '&start=0&rows=' + rows;
-
+			
 			return solrQueryString;
 		},
 		refreshMap = function () {
 			var bounds 			= map.getBounds(),
-				bbox 			= generateBBox(bounds),
-				solrQueryString = generateSolrQuery(SOLR_PARAMS, bbox),
+				bbox			= generateBBox(bounds),
+				coordinates 	= generateCoordinates(bounds),
+				solrQueryString = generateSolrQuery(SOLR_PARAMS, coordinates),
 				textResultHref,
 				mapResultHref;
-
+			
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrQueryString, {
@@ -112,10 +123,14 @@ google.maps.event.addDomListener(window, 'load', function() {
 				});
 			});
 			
+			zoomLevel = map.getZoom();
+			
 			textResultHref = document.getElementById("text-result").href;
 			mapResultHref = document.getElementById("map-result").href;
-			textResultHref = URL.replaceParam(textResultHref, 'coordinates', bbox);
-			mapResultHref = URL.replaceParam(mapResultHref, 'coordinates', bbox);
+			textResultHref = URL.replaceParam(textResultHref, 'bbox', bbox);
+			textResultHref = URL.replaceParam(textResultHref, 'zoom', zoomLevel);
+			mapResultHref = URL.replaceParam(mapResultHref, 'bbox', bbox);
+			mapResultHref = URL.replaceParam(mapResultHref, 'zoom', zoomLevel);
 			document.getElementById("text-result").href = textResultHref;
 			document.getElementById("map-result").href = mapResultHref;
 			

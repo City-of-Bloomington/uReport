@@ -37,7 +37,8 @@ class Search
 		'issueType_id'    => 'Issue Type',
 		'label_id'        => 'Label',
 		'contactMethod_id'=> 'Received Via',
-		'enteredDate'     => 'Case Date'
+		'enteredDate'     => 'Case Date',
+		'bbox'            => 'Bounding Box'  // Added by Quan on Aug 5, 2013
 	);
 
 	/**
@@ -168,6 +169,14 @@ class Search
 							: '*';
 						$fq[] = "$field:[$start TO $end]";
 					}
+				}
+				// Added else if statement by Quan on Aug 5, 2013
+				// coordinates is a not a numeric value but does not need to be quoted.
+				else if (false !== strpos($field, 'bbox')) {
+					$key = 'coordinates';
+					list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $get[$field]);
+					$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
+					$fq[] = "$key:$value";
 				}
 				else {
 					$value = is_numeric($get[$field])
