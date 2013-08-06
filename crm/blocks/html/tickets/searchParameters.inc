@@ -23,7 +23,7 @@ if (!empty($_GET['query'])
 	";
 
 	if (userIsAllowed('bookmarks', 'update')) {
-		$bookmarkForm = new Block('bookmarks/updateForm.inc',['type'=>'search']);
+		$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'search'));
 		echo $bookmarkForm->render('html', $this->template);
 	}
 

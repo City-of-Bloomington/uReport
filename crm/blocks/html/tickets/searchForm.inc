@@ -43,10 +43,12 @@ if (userIsAllowed('tickets','add')) {
 	";
 	$bookmarks = new Block(
 		'bookmarks/list.inc',
-		['bookmarks' => new BookmarkList([
-			'person_id'=>$_SESSION['USER']->getId(),
-			'type'=>'search'
-		])]
+		array(
+			'bookmarks' => new BookmarkList(array(
+				'person_id'=>$_SESSION['USER']->getId(),
+				'type'=>'search'
+			))
+		)
 	);
 	echo $bookmarks->render('html', $this->template);
 

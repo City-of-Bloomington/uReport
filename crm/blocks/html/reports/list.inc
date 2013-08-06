@@ -15,12 +15,13 @@
 	<?php
 		$bookmarks = new Block(
 			'bookmarks/list.inc',
-			[	'bookmarks' => new BookmarkList([
+			array(
+				'bookmarks' => new BookmarkList(array(
 					'person_id'=>$_SESSION['USER']->getId(),
 					'type'=>'report'
-				]),
+				)),
 				'title'=>'Saved Reports'
-			]
+			)
 		);
 		echo $bookmarks->render('html', $this->template);
 	?>

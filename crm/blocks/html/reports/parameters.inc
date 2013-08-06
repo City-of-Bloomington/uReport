@@ -15,7 +15,7 @@ $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 			|| !empty($_GET['departments'])
 			|| !empty($_GET['categories'])) {
 			if (userIsAllowed('bookmarks', 'update')) {
-				$bookmarkForm = new Block('bookmarks/updateForm.inc',['type'=>'report']);
+				$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'report'));
 				echo $bookmarkForm->render('html', $this->template);
 			}
 		}
