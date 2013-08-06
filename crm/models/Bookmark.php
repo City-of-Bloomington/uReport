@@ -104,7 +104,7 @@ class Bookmark extends ActiveRecord
 	 */
 	public function getFullUrl()
 	{
-		$protocol = $_SERVER['PORT']==443 ? 'https://' : 'http://';
+		$protocol = $_SERVER['SERVER_PORT']==443 ? 'https://' : 'http://';
 		return $protocol.$_SERVER['SERVER_NAME'].$this->getRequestUri();
 	}
 }

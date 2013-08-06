@@ -8,8 +8,8 @@ class BookmarksController extends Controller
 {
 	public function index()
 	{
-		$list = new BookmarkList(['person_id'=>$_SESSION['USER']->getId()]);
-		$this->template->blocks[] = new Block('bookmarks/list.inc', ['bookmarks'=>$list]);
+		$list = new BookmarkList(array('person_id'=>$_SESSION['USER']->getId()));
+		$this->template->blocks[] = new Block('bookmarks/list.inc', array('bookmarks'=>$list));
 	}
 
 	public function update()
@@ -42,7 +42,7 @@ class BookmarksController extends Controller
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		$this->template->blocks[] = new Block('bookmarks/updateForm.inc', ['bookmark'=>$bookmark]);
+		$this->template->blocks[] = new Block('bookmarks/updateForm.inc', array('bookmark'=>$bookmark));
 	}
 
 	public function delete()
@@ -54,7 +54,7 @@ class BookmarksController extends Controller
 		catch (Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 		}
-		
+
 		$return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL.'/bookmarks';
 		header("Location: $return_url");
 		exit();
