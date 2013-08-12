@@ -21,6 +21,7 @@ else {
 	$centerLongitude = DEFAULT_LONGITUDE;
 }
 $zoom = isset($_GET['zoom']) ? $_GET['zoom'] : 15;
+$topResultNum = isset($_GET['topResultNum']) ? $_GET['topResultNum'] : 100;
 
 echo "
 <div id=\"inline_actions\">
@@ -29,7 +30,7 @@ echo "
 			<option value=\"10\">10</option>
 			<option value=\"20\">20</option>
 			<option value=\"50\">50</option>
-			<option value=\"100\">100</option>
+			<option selected=\"selected\" value=\"100\">100</option>
 			<option value=\"200\">200</option>
 			<option value=\"500\">500</option>
 			<option value=\"1000\">1000</option>
@@ -42,6 +43,7 @@ echo "
 	var CENTER_LATITUDE  = ".$centerLatitude.";
 	var CENTER_LONGITUDE = ".$centerLongitude.";
 	var ZOOM = ".$zoom.";
+	var TOP_RESULT_NUM = ".$topResultNum.";
 	var SOLR_PARAMS = ".json_encode($this->solrObject->responseHeader->params).";
 	var SOLR_SERVER_HOSTNAME = '".SOLR_SERVER_HOSTNAME."';
 	var SOLR_SERVER_PATH = '".SOLR_SERVER_PATH."';

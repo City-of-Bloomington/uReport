@@ -7,7 +7,7 @@
 'use strict';
 
 google.maps.event.addDomListener(window, 'load', function() {
-		var initCenter = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
+	var initCenter = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
 		zoomLevel = ZOOM,
 		map = new google.maps.Map(document.getElementById('location_map'), {
 			zoom: zoomLevel,
@@ -22,6 +22,18 @@ google.maps.event.addDomListener(window, 'load', function() {
 		iw = new google.maps.InfoWindow(),
 		// Refresh button to refresh the map
 		refresh = document.getElementById('refresh'),
+		// Update "Show Top Results:" options with the URL parameter "topResultNum"
+		updateTopResultNum = function () {
+			var val = TOP_RESULT_NUM,
+				sel = document.getElementById('rows'),
+				i, j;
+    		for(i, j = 0; i = sel.options[j]; j++) {
+        		if(i.value == val) {
+            		sel.selectedIndex = j;
+            		break;
+        		}
+    		}
+		},
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		generateCoordinates = function (bounds) {
 			var minLat 			= bounds.ba.b,
@@ -71,6 +83,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 				bbox			= generateBBox(bounds),
 				coordinates 	= generateCoordinates(bounds),
 				solrQueryString = generateSolrQuery(SOLR_PARAMS, coordinates),
+				topResultNum	= parseInt(document.getElementById('rows').value, 10),
 				textResultHref,
 				mapResultHref;
 			
@@ -127,6 +140,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 					var href = node.get('href');
 					href = URL.replaceParam(href, 'bbox', bbox);
 					href = URL.replaceParam(href, 'zoom', zoomLevel);
+					href = URL.replaceParam(href, 'topResultNum', topResultNum);
 					node.set('href', href);
 				};
 				
@@ -138,6 +152,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 			
 		};
 		
+	updateTopResultNum();
 	google.maps.event.addListener(map, 'idle', refreshMap);
 	google.maps.event.addDomListener(refresh, 'click', refreshMap);
 });
