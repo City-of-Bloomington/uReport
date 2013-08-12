@@ -41,7 +41,15 @@ if (count($tickets)) {
 	echo "</div>";
 }
 else {
-	echo "<div class=\"searchResults\"><h2>No Cases Found</h2></div>";
+	if($_GET['resultFormat'] != 'map') {
+		echo "<div class=\"searchResults\"><h2>No Cases Found</h2></div>";
+	}
+	else {
+		echo "<div class=\"searchResults\">";
+		$map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
+		echo $map->render('html', $this->template);
+		echo "</div>";
+	}
 }
 
 // Quan added if statement on July 25, 2013
