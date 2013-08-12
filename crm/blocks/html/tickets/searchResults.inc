@@ -13,14 +13,19 @@ if (count($tickets)) {
 	echo "
 	<div class=\"searchResults\">
 	<h1>Search Results</h1>
-	<div># Cases in Current Search: $c</div>
 	";
 	
-	// Show sorting options
-	echo "<table>";
-	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('tickets'=>$tickets));
-	echo $header->render('html', $this->template);
-	echo "</table>";
+	if($_GET['resultFormat'] != 'map') {
+		echo "
+		<div># Cases in Current Search: $c</div>
+		";
+	
+		// Show sorting options
+		echo "<table>";
+		$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('tickets'=>$tickets));
+		echo $header->render('html', $this->template);
+		echo "</table>";
+	}
 	
 	// Start editing by Quan
 	if(!isset($_GET['resultFormat']) || $_GET['resultFormat'] == 'text') {

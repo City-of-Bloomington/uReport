@@ -81,7 +81,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 						complete: function (id, o, args) {
 							var response 	= Y.JSON.parse(o.responseText),
 								tickets 	= response.response.docs,
-								numFound 	= response.response.numFound,
 								showMarkers = function (tickets) {
 									// clear all the previous markers and shrink the allMarkers array to the size of tickets.
 									var i = 0,
@@ -117,22 +116,25 @@ google.maps.event.addDomListener(window, 'load', function() {
 									}
 								};
 							showMarkers(tickets);
-							document.getElementById("reginal_cases").innerHTML = '# Cases in Current Region: ' + numFound;
 						}
 					}
 				});
 			});
-			
 			zoomLevel = map.getZoom();
 			
-			textResultHref = document.getElementById("text-result").href;
-			mapResultHref = document.getElementById("map-result").href;
-			textResultHref = URL.replaceParam(textResultHref, 'bbox', bbox);
-			textResultHref = URL.replaceParam(textResultHref, 'zoom', zoomLevel);
-			mapResultHref = URL.replaceParam(mapResultHref, 'bbox', bbox);
-			mapResultHref = URL.replaceParam(mapResultHref, 'zoom', zoomLevel);
-			document.getElementById("text-result").href = textResultHref;
-			document.getElementById("map-result").href = mapResultHref;
+			YUI().use('node', function(Y) {
+				var updateBBox = function (node) {
+					var href = node.get('href');
+					href = URL.replaceParam(href, 'bbox', bbox);
+					href = URL.replaceParam(href, 'zoom', zoomLevel);
+					node.set('href', href);
+				};
+				
+				updateBBox(Y.one('#text-result'));
+				updateBBox(Y.one('#map-result'));
+				Y.all('.searchParameters .btn').each(updateBBox);
+				Y.all('#advanced-search a').each(updateBBox);
+			});
 			
 		};
 		

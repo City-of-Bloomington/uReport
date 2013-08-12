@@ -36,21 +36,35 @@ if (!empty($_GET['query'])
 			$key = $matches[1];
 			$value = $matches[2];
 			// Users should not change the permission level they're searching as
-			// Quan added 'coordinates' condition on July 22th, 2013
-			if ($key != 'displayPermissionLevel' && $key != 'coordinates') {
+			if ($key != 'displayPermissionLevel') {
 				$deleteURL = clone $currentURL;
-				if (isset($deleteURL->$key)) {
-					unset($deleteURL->$key);
+				
+				if($key === 'coordinates') {
+					$key = 'bbox';
+					if (isset($deleteURL->$key)) {
+						unset($deleteURL->$key);
+					}
+					$displayName = Search::$searchableFields[$key];
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$displayName
+					</a>
+					";
 				}
-
-				$displayName = Search::$searchableFields[$key];
-				$displayValue = Search::getDisplayName('ticket', $key, $value);
-				echo "
-				<a class=\"btn\" href=\"$deleteURL\">
-					<span class=\"icon-remove\"></span>
-					$displayName: $displayValue
-				</a>
-				";
+				else {
+					if (isset($deleteURL->$key)) {
+						unset($deleteURL->$key);
+					}
+					$displayName = Search::$searchableFields[$key];
+					$displayValue = Search::getDisplayName('ticket', $key, $value);
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$displayName: $displayValue
+					</a>
+					";
+				}
 			}
 		}
 		echo "</span>";
@@ -62,23 +76,23 @@ if (!empty($_GET['query'])
 	if(!isset($_GET['resultFormat'])) {
 		if($currentURL->parameters) {
 			echo "
-			<a id='text-result' href=\"".$currentURL.";resultFormat=text\"> Show results in text </a>
-			<a id='map-result' href=\"".$currentURL.";resultFormat=map\"> Show results in map </a>
+			<a id='text-result' class='btn' href=\"".$currentURL.";resultFormat=text\"> <span class=\"icon-list-ul\"></span> Text Results </a>
+			<a id='map-result' class='btn' href=\"".$currentURL.";resultFormat=map\"> <span class=\"icon-map-marker\"></span> Map Results </a>
 			";
 		}
 		else {
 			echo "
-			<a id='text-result' href=\"".$currentURL."?resultFormat=text\"> Show results in text </a>
-			<a id='map-result' href=\"".$currentURL."?resultFormat=map\"> Show results in map </a>
+			<a id='text-result' class='btn' href=\"".$currentURL."?resultFormat=text\"> <span class=\"icon-list-ul\"></span> Text Results </a>
+			<a id='map-result' class='btn' href=\"".$currentURL."?resultFormat=map\"> <span class=\"icon-map-marker\"></span> Map Results </a>
 			";
 		}
 	}
 	else {
 		$tempURL = clone $currentURL;
 		$tempURL->resultFormat = 'text';
-		echo "<a id='text-result' href=\"".$tempURL."\"> Show results in text </a>";
+		echo "<a id='text-result' class='btn' href=\"".$tempURL."\"> <span class=\"icon-list-ul\"></span> Text Results </a>";
 		$tempURL->resultFormat = 'map';
-		echo "<a id='map-result' href=\"".$tempURL."\"> Show results in map </a>";
+		echo "<a id='map-result' class='btn' href=\"".$tempURL."\"> <span class=\"icon-map-marker\"></span> Map Results </a>";
 	}
 	//end editing by Quan
 }

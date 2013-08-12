@@ -23,9 +23,8 @@ else {
 $zoom = isset($_GET['zoom']) ? $_GET['zoom'] : 15;
 
 echo "
-<div id=\"reginal_cases\"></div>
 <div id=\"inline_actions\">
-	<span> show top results:
+	<span> Show Top Results:
 		<select id=\"rows\">
 			<option value=\"10\">10</option>
 			<option value=\"20\">20</option>
