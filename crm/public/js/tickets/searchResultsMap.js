@@ -36,18 +36,18 @@ google.maps.event.addDomListener(window, 'load', function() {
 		},
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		generateCoordinates = function (bounds) {
-			var minLat 			= bounds.ba.b,
-				minLng 			= bounds.fa.b,
-				maxLat 			= bounds.ba.d,
-				maxLng 			= bounds.fa.d;
+			var minLat 			= bounds.ea.b,
+				minLng 			= bounds.ia.b,
+				maxLat 			= bounds.ea.d,
+				maxLng 			= bounds.ia.d;
 			return '[' + minLat + ',' + minLng + ' TO ' + maxLat + ',' + maxLng + ']';
 		},
 		// bbox format: xx.xxxxxx,xx.xxxxxx,xx.xxxxxx,xx.xxxxxx
 		generateBBox = function (bounds) {
-			var minLat 			= bounds.ba.b,
-				minLng 			= bounds.fa.b,
-				maxLat 			= bounds.ba.d,
-				maxLng 			= bounds.fa.d;
+			var minLat 			= bounds.ea.b,
+				minLng 			= bounds.ia.b,
+				maxLat 			= bounds.ea.d,
+				maxLng 			= bounds.ia.d;
 			return minLat + ',' + minLng + ',' + maxLat + ',' + maxLng;
 		},
 		generateSolrQuery = function (SOLR_PARAMS, coordinates) {
@@ -86,7 +86,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 				topResultNum	= parseInt(document.getElementById('rows').value, 10),
 				textResultHref,
 				mapResultHref;
-			
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrQueryString, {
