@@ -42,8 +42,8 @@ if ($this->location) {
 
 		if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
 			$location = urlencode($this->location);
-			$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-			$xml = new SimpleXMLElement($url,null,true);
+			$url = new URL(RENTAL_SERVICE."?streetAddress=$location&type=xml");
+			$xml = simplxml_load_string(URL::get($url));
 			$owners = $xml->xpath("//Owner");
 			if (count($owners)) {
 				echo '<owners>';

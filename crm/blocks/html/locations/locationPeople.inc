@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
@@ -26,7 +26,7 @@ if (userIsAllowed('people','view')) {
 	if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
 		$location = urlencode($this->location);
 		$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-		$xml = new SimpleXMLElement($url,null,true);
+		$xml = simplexml_load_string(URL::get($url));
 		$owners = $xml->xpath("//Owner");
 		if (count($owners)) {
 			echo '<h3>Owners</h3><ul>';
