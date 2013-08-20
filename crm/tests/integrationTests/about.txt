@@ -1,0 +1,2 @@
+These tests are for verifying that our external web service depencies are wired up and working.
+

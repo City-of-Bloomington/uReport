@@ -30,13 +30,12 @@ class URL
 	{
 		$request = curl_init($url);
 		curl_setopt($request, CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
 
 		if (substr($url, 0, 5) == 'https://') {
 			curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
 			curl_setopt($request, CURLOPT_SSLVERSION, 3);
 		}
-		echo curl_error($request);
 		return curl_exec($request);
 	}
 
