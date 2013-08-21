@@ -23,15 +23,13 @@ if (userIsAllowed('people','view')) {
 		echo "</ul>";
 	}
 
-	if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
-		$location = urlencode($this->location);
-		$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-		$xml = simplexml_load_string(URL::get($url));
-		$owners = $xml->xpath("//Owner");
+	if (defined('RENTAL_SERVICE')) {
+		$owners = RentalService::getOwnerNames($this->location);
 		if (count($owners)) {
 			echo '<h3>Owners</h3><ul>';
-			foreach ($owners as $owner) {
-				echo "<li>{$owner->Name}</li>";
+			foreach ($owners as $name) {
+				$name = View::escape($name);
+				echo "<li>$name</li>";
 			}
 			echo '</ul>';
 		}
