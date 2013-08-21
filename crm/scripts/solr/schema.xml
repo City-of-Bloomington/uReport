@@ -172,6 +172,16 @@
 	<field name="enteredByPerson_id"  type="int" indexed="true" stored="false" />
 	<field name="assignedPerson_id"   type="int" indexed="true" stored="false" />
 	<field name="referredPerson_id"   type="int" indexed="true" stored="false" />
+	
+	<!-- GeoHash Fields -->
+	<field name="geohash_lv1"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv2"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv3"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv4"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv5"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv6"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv7"	type="string"	indexed="true"	stored="true" />
+	<field name="geohash_lv8"	type="string"	indexed="true"	stored="true" />
 
 	<!-- Issue Related Fields
 		Since tickets have multiple issues, all these need to be multiValued
