@@ -9,16 +9,19 @@
  * Any link or action that can be considered selecting a person should
  * use the callback function, instead of it's normal href.
  *
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 var LOCATION_CHOOSER = {
 	popup: {},
-	setLocation: function (location) {
+	setLocation: function (location, latitude, longitude) {
 		YUI().use('node', 'io', function (Y) {
-			// Update the hidden input
+			// Update the hidden inputs
+			// Clear out any previous lat/long
 			Y.one('#location').set('value', location);
+			if (latitude)  { Y.one('#latitude') .set('value', latitude);  }
+			if (longitude) { Y.one('#longitude').set('value', longitude); }
 
 			// Draw location information into the LocationChooser body
 			var bd = Y.one('#locationChooser .bd');
@@ -42,6 +45,9 @@ YUI().use('node', function (Y) {
 			'popup',
 			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);
+		// Make sure to pass the setLocation function to the popup window, so
+		// that window can callback when the user chooses a place on the map.
+		LOCATION_CHOOSER.popup.setLocation = LOCATION_CHOOSER.setLocation;
 		e.preventDefault();
 	}, '#findAddressButton');
 });
