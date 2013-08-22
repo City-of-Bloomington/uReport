@@ -327,8 +327,8 @@ class Ticket extends ActiveRecord
 	public function getIssue($index=0)
 	{
 		$list = $this->getIssues();
-		if (isset($list[0])) {
-			return $list[0];
+		if (isset($list[$index])) {
+			return $list[$index];
 		}
 	}
 
@@ -473,12 +473,11 @@ class Ticket extends ActiveRecord
 			}
 		}
 
-
 		// If they gave us an address, and we don't have any additional info,
 		// try and get the data from Master Address
 		if ($this->getLocation()
-			&& !($this->getLocation() || $this->getLongitude()
-				|| $this->getCity() || $this->getState() || $this->getZip())) {
+			&& (!$this->getLatitude() || !$this->getLongitude()
+				|| !$this->getCity() || !$this->getState() || !$this->getZip())) {
 			$data = AddressService::getLocationData($this->getLocation());
 			if ($data) {
 				$this->setAddressServiceData($data);
@@ -590,7 +589,7 @@ class Ticket extends ActiveRecord
 			return round($daysPassed/$days*100);
 		}
 	}
-	
+
 	/**
 	 * @return PeopleList
 	 */

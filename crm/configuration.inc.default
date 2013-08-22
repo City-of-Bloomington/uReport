@@ -201,7 +201,7 @@ define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
 /**
  * Enable autoloading for the PHP libraries
  */
-ini_set('include_path','.'.PATH_SEPARATOR.ZEND);
+ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.ZEND);
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();
 
