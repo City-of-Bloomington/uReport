@@ -74,7 +74,10 @@ class Image extends Media
 	 */
 	public function clearCache()
 	{
-		foreach(glob("{$this->getDirectory()}/*/{$this->getId()}.*") as $file) {
+		$uniqid = preg_replace('/[^.]+$/', '', $this->getInternalFilename());
+		$pattern = APPLICATION_HOME."/data/media/{$this->getDirectory()}/*/$uniqid*";
+		
+		foreach(glob($pattern) as $file) {
 			unlink($file);
 		}
 	}

@@ -105,6 +105,7 @@ class Media extends ActiveRecord
 		if (!$this->data['filename'])   { throw new Exception('media/missingFilename');  }
 		if (!$this->data['mime_type'])  { throw new Exception('media/missingMimeType');  }
 		if (!$this->data['media_type']) { throw new Exception('media/missingMediaType'); }
+		if (!$this->data['issue_id'])   { throw new Exception('media/missingIssue_id');  }
 	}
 
 	public function save() { parent::save(); }
@@ -243,7 +244,7 @@ class Media extends ActiveRecord
 	 */
 	public function getURL($size=null)
 	{
-		$url = BASE_URI."/media/{$this->getDirectory()}";
+		$url = BASE_URL."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }
 		$url.= "/{$this->getInternalFilename()}";
 		if ($size) {

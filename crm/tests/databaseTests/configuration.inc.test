@@ -1,0 +1,221 @@
+<?php
+/**
+ * Displayed in the banner
+ */
+define('APPLICATION_NAME','test');
+define('LOCATION_NAME','City of Bloomington, Mark Kruzan, Mayor');
+
+/**
+ * Database Setup
+ * Refer to the PDO documentation for DSN sytnax for your database type
+ * http://www.php.net/manual/en/pdo.drivers.php
+ */
+define('DB_ADAPTER','Pdo_Mysql');
+define('DB_HOST','localhost');
+define('DB_NAME',APPLICATION_NAME);
+define('DB_USER',APPLICATION_NAME);
+define('DB_PASS','test');
+
+/**
+ * Where on the filesystem this application is installed
+ */
+define('APPLICATION_HOME','/var/www/sites/application_name');
+
+/**
+ * The URL to get to this site
+ * Do NOT use a trailing slash
+ */
+define('BASE_URL','http://localhost/crm');
+define('BASE_URI','/crm');
+
+/**
+ * Where on the filesystem the internal framework is installed.
+ */
+define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
+
+/**
+ * This needs to point to the library directory inside your
+ * installation of the ZendFramework
+ * http://framework.zend.com
+ */
+define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+
+/**
+ * Point to the Solr server
+ */
+define('SOLR_SERVER_HOSTNAME', 'rogue.bloomington.in.gov');
+define('SOLR_SERVER_PORT', 8080);
+define('SOLR_SERVER_PATH', '/solr/test');
+
+/**
+ * JavaScript Libraries
+ */
+define('YUI','http://yui.yahooapis.com/3.9.0/build');
+define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=false');
+
+/**
+ * Addresses can be validated against a master address web service
+ */
+//define('ADDRESS_SERVICE','http://localhost/master_address');
+
+/**
+ * Rental addresses have additional information we can look up
+ * Owner information is being provided from this service
+ */
+//define('RENTAL_SERVICE','http://localhost/rentpro/RentService');
+
+/**
+ * Some default values for Tickets in the system
+ */
+define('DEFAULT_CITY','Bloomington');
+define('DEFAULT_STATE','IN');
+
+/**
+ * Default coordinates for map center
+ * This should probably be the center of your city
+ * If you can, it's best to adjust these values in your php.ini
+ */
+define('DEFAULT_LATITUDE', ini_get('date.default_latitude'));
+define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
+/**
+ * Bounding box for valid locations
+ *
+ * Comment these out if you do not want this validation.
+ * Tickets will be rejected if they have coordinates that
+ * do not fall inside the defined bounding box.
+ */
+define('MIN_LATITUDE',   39.069187);
+define('MAX_LATITUDE',   39.99915);
+define('MIN_LONGITUDE', -86.641575);
+define('MAX_LONGITUDE', -86.440543);
+
+/**
+ * This is a unique string identifying your jurisdiction to the
+ * rest of the Open311 community.
+ *
+ * Open311 servers typically use their domain name as their jurisdiction
+ */
+define('OPEN311_JURISDICTION','localhost');
+
+define('OPEN311_KEY_SERVICE', 'http://localhost/open311-api-key-request');
+
+/**
+ * Date format
+ * All dates displayed will use this format
+ */
+define('DATE_FORMAT','Y-m-d');
+
+/**
+ * Used when there's an error on the site.  The Framework will
+ * print out a nice error message, encouraging users to report any problems
+ * See: FRAMEWORK/globalFunctions.inc
+ */
+define('ADMINISTRATOR_NAME','Site Admin');
+define('ADMINISTRATOR_EMAIL','admin@servername.com');
+
+/**
+ * Controls whether the system sends email notifications to people
+ */
+#define('NOTIFICATIONS_ENABLED',true);
+
+/**
+ * Set how we want to handle errors
+ * PHP_DEFAULT - do whatever's configured in php.ini
+ *
+ * If you do not define error handling to PHP_DEFAULT
+ * the custom error handlers kick in.  All of the custom error display
+ * frunctions are in FRAMEWORK/globalFunctions.inc.  The custom error
+ * function decide what to do based on $ERROR_REPORING array values
+ *
+ * PRETTY_PRINT - Display a message in the browser
+ * EMAIL_ADMIN - email the Administrator
+ * EMAIL_USER - email the logged in user
+ * SKIDDER - post errors to a Skidder server (see config below)
+*/
+define('ERROR_REPORTING','PHP_DEFAULT');
+//define('ERROR_REPORTING','CUSTOM');
+//$ERROR_REPORTING = array('PRETTY_PRINT','SKIDDER');
+
+/**
+ * Skidder is a web service for error notifications.  Error reporting supports
+ * posting errors to a Skidder server.  You must register for an application_id
+ * on the skidder server you want to post errors to.
+ */
+//define('SKIDDER_URL','http://localhost/skidder/home.php');
+//define('SKIDDER_APPLICATION_ID',);
+
+/**
+ * Directory Configuration
+ *
+ * This supports doing user authentication from multiple external
+ * directories, such as LDAP or ADS. This is required since city staff
+ * are in a seperate LDAP directory from public user accounts.
+ * Classes that implement ExternalIdentity should have an entry here.
+ *
+ * See: ExternalIdentity
+ */
+$DIRECTORY_CONFIG = array(
+//	'Employee'=>array(
+//		'DIRECTORY_SERVER'=>'ldaps://example.org:636',
+//		'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
+//		'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
+//		'DIRECTORY_USER_BINDING'=>'{username}@example.org',
+//		'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
+//		'DIRECTORY_ADMIN_PASS'=>'password'
+//	)
+);
+
+/**
+ * CAS authentication http://www.jasig.org/cas
+ *
+ * https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * phpCAS is a PHP library for handling the calls to the CAS service
+ * It is the official library, part of the Jasig CAS project
+ */
+//define('CAS','/var/www/libraries/phpCAS');
+//define('CAS_SERVER','cas.somewhere.org');
+//define('CAS_URI','cas');
+
+/**
+ * Image handling library
+ * Set the path to the ImageMagick binaries
+ */
+define('IMAGEMAGICK','/usr/bin');
+define('THUMBNAIL_SIZE', 150);
+
+define('CLOSING_COMMENT_REQUIRED_LENGTH', 25);
+
+//-------------------------------------------------------------------
+// Bootstrap code
+// No editing is usually needed after this point
+//-------------------------------------------------------------------
+/**
+ * Enable autoloading for the PHP libraries
+ */
+ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.ZEND);
+require_once 'Zend/Loader/Autoloader.php';
+Zend_Loader_Autoloader::getInstance();
+
+include FRAMEWORK.'/globalFunctions.php';
+spl_autoload_register('autoload');
+
+/**
+ * Session Startup
+ * Don't start a session for CLI usage.
+ * We only want sessions when PHP code is executed from the webserver
+ */
+if (!defined('STDIN')) {
+	ini_set('session.save_path',APPLICATION_HOME.'/data/sessions');
+	session_start();
+}
+
+/**
+ * Load the Zend_Acl
+ */
+include APPLICATION_HOME.'/access_control.inc';
+
+/**
+ * Grab a timestamp for calculating process time
+ */
+$startTime = microtime(1);
