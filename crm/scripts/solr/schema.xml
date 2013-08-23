@@ -68,6 +68,8 @@
 -->
 	<fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
 
+	<fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+
 	<!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
 	<fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
@@ -118,6 +120,7 @@
 
 	<!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
 	<fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
 </types>
 
 
@@ -174,6 +177,8 @@
 	<field name="referredPerson_id"   type="int" indexed="true" stored="false" />
 	
 	<!-- GeoHash Fields -->
+	<field name="latitude"		type="float"	indexed="true"	stored="true" />
+	<field name="longitude"		type="float"	indexed="true"	stored="true" />
 	<field name="geohash_lv1"	type="string"	indexed="true"	stored="true" />
 	<field name="geohash_lv2"	type="string"	indexed="true"	stored="true" />
 	<field name="geohash_lv3"	type="string"	indexed="true"	stored="true" />

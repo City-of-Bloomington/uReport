@@ -345,15 +345,19 @@ class Search
 			}
 			
 			// GeoHash indexing, get geohash prefix from length 1 to 8
-			$latitude = $record->getLatitude();
-			$longitude = $record->getLongitude();
-			$geohash = new GeoHash();
-			$geohash->setLatitude($latitude);
-			$geohash->setLongitude($longitude);
-			$hashcode = $geohash->getHash();
-			for($i = 1; $i <= 8; $i++) {
-				$prefix = substr($hashcode, 0, $i);
-				$document->addField('geohash_lv'.$i, $prefix);
+			if ($record->getLatitude() && $record->getLongitude()) {
+				$latitude = $record->getLatitude();
+				$longitude = $record->getLongitude();
+				$document->addField('latitude', $latitude);
+				$document->addField('longitude', $longitude);
+				$geohash = new GeoHash();
+				$geohash->setLatitude($latitude);
+				$geohash->setLongitude($longitude);
+				$hashcode = $geohash->getHash();
+				for($i = 1; $i <= 8; $i++) {
+					$prefix = substr($hashcode, 0, $i);
+					$document->addField('geohash_lv'.$i, $prefix);
+				}
 			}
 
 			return $document;

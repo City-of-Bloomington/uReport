@@ -20,20 +20,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 		oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true}),
 		// InfoWindow to show tickets' description
 		iw = new google.maps.InfoWindow(),
-		// Refresh button to refresh the map
-		refresh = document.getElementById('refresh'),
-		// Update "Show Top Results:" options with the URL parameter "topResultNum"
-		updateTopResultNum = function () {
-			var val = TOP_RESULT_NUM,
-				sel = document.getElementById('rows'),
-				i, j;
-    		for(i, j = 0; i = sel.options[j]; j++) {
-        		if(i.value == val) {
-            		sel.selectedIndex = j;
-            		break;
-        		}
-    		}
-		},
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		generateCoordinates = function (bounds) {
 			var minLat 			= bounds.ea.b,
@@ -150,8 +136,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 			});
 			
 		};
-		
-	updateTopResultNum();
+
 	google.maps.event.addListener(map, 'idle', refreshMap);
-	google.maps.event.addDomListener(refresh, 'click', refreshMap);
 });
