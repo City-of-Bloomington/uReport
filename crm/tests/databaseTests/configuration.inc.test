@@ -2,7 +2,7 @@
 /**
  * Displayed in the banner
  */
-define('APPLICATION_NAME','CRM');
+define('APPLICATION_NAME','test');
 define('LOCATION_NAME','City of Bloomington, Mark Kruzan, Mayor');
 
 /**
@@ -14,7 +14,7 @@ define('DB_ADAPTER','Pdo_Mysql');
 define('DB_HOST','localhost');
 define('DB_NAME',APPLICATION_NAME);
 define('DB_USER',APPLICATION_NAME);
-define('DB_PASS','password');
+define('DB_PASS','test');
 
 /**
  * Where on the filesystem this application is installed
@@ -45,8 +45,7 @@ define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
  */
 define('SOLR_SERVER_HOSTNAME', 'rogue.bloomington.in.gov');
 define('SOLR_SERVER_PORT', 8080);
-define('SOLR_SERVER_PATH', '/solr/crm');
-define('SOLR_PHP_CLIENT', APPLICATION_HOME.'/libraries/solr-php-client');
+define('SOLR_SERVER_PATH', '/solr/test');
 
 /**
  * JavaScript Libraries
@@ -85,10 +84,10 @@ define('DEFAULT_LONGITUDE',ini_get('date.default_longitude'));
  * Tickets will be rejected if they have coordinates that
  * do not fall inside the defined bounding box.
  */
-//define('MIN_LATITUDE',   39.069187);
-//define('MAX_LATITUDE',   39.99915);
-//define('MIN_LONGITUDE', -86.641575);
-//define('MAX_LONGITUDE', -86.440543);
+define('MIN_LATITUDE',   39.069187);
+define('MAX_LATITUDE',   39.99915);
+define('MIN_LONGITUDE', -86.641575);
+define('MAX_LONGITUDE', -86.440543);
 
 /**
  * This is a unique string identifying your jurisdiction to the
@@ -117,7 +116,7 @@ define('ADMINISTRATOR_EMAIL','admin@servername.com');
 /**
  * Controls whether the system sends email notifications to people
  */
-define('NOTIFICATIONS_ENABLED',true);
+#define('NOTIFICATIONS_ENABLED',true);
 
 /**
  * Set how we want to handle errors
@@ -179,20 +178,13 @@ $DIRECTORY_CONFIG = array(
 //define('CAS_URI','cas');
 
 /**
- * PHP command line executable
- *
- * Needed to run background workers
- */
-define('PHP', '/usr/local/bin/php');
-
-/**
  * Image handling library
  * Set the path to the ImageMagick binaries
  */
 define('IMAGEMAGICK','/usr/bin');
 define('THUMBNAIL_SIZE', 150);
 
-define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
+define('CLOSING_COMMENT_REQUIRED_LENGTH', 25);
 
 //-------------------------------------------------------------------
 // Bootstrap code

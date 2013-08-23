@@ -11,6 +11,8 @@ class Category extends ActiveRecord
 	protected $department;
 	protected $categoryGroup;
 
+	private $displayPermissionLevelHasChanged = false;
+
 	/**
 	 * Populates the object with data
 	 *
@@ -64,6 +66,12 @@ class Category extends ActiveRecord
 	public function save() {
 		$this->setLastModified(date(DATE_FORMAT));
 		parent::save();
+
+		if ($this->displayPermissionLevelHasChanged) {
+			// Spawn a background process to reindex the search engine
+			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.$this->getId();
+			shell_exec("nohup $cmd > /dev/null 2>&1 &");
+		}
 	}
 
 	//----------------------------------------------------------------
@@ -85,7 +93,16 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
-	public function setDisplayPermissionLevel($s) { parent::set('displayPermissionLevel',$s); }
+	public function setDisplayPermissionLevel($s) {
+		if ($this->getId()) {
+			$s = trim($s);
+			if (   $this->getDisplayPermissionLevel()
+				&& $this->getDisplayPermissionLevel() != $s) {
+				$this->displayPermissionLevelHasChanged = true;
+			}
+		}
+		parent::set('displayPermissionLevel',$s);
+	}
 	public function setSlaDays               ($i) { parent::set('slaDays',          (int)$i); }
 	public function setDepartment_id   ($id)           { parent::setForeignKeyField( 'Department',    'department_id',    $id); }
 	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( 'CategoryGroup', 'categoryGroup_id', $id); }

@@ -13,7 +13,7 @@ if (userIsAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h1>Quick Links</h1>
+		<h2>Quick Links</h2>
 		<form method=\"get\" action=\"".BASE_URL."/tickets\">
 			<fieldset>
 				<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
@@ -40,12 +40,25 @@ if (userIsAllowed('tickets','add')) {
 		}
 	echo "
 		</ul>
+	";
+	$bookmarks = new Block(
+		'bookmarks/list.inc',
+		array(
+			'bookmarks' => new BookmarkList(array(
+				'person_id'=>$_SESSION['USER']->getId(),
+				'type'=>'search'
+			))
+		)
+	);
+	echo $bookmarks->render('html', $this->template);
+
+	echo "
 	</div>
 	";
 }
 ?>
 <div>
-	<h1>Search</h1>
+	<h2>Search</h2>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 		<fieldset>
 			<label>Search
@@ -140,4 +153,14 @@ if (userIsAllowed('tickets','add')) {
 			<button type="submit"><span class="icon-search"></span> Search</button>
 		</fieldset>
 	</form>
+</div>
+<div>
+	<p>
+		Disclaimer: uReport is provided for and driven by the community. uReport
+		content may be posted by third parties unaffiliated with the City. The City
+		makes no warranty as to the accuracy and completeness of third party
+		content and takes no responsibility and disclaims all liability for third
+		party content. Reports submitted by the community are addressed on the
+		basis of priority and available resources.
+	</p>
 </div>

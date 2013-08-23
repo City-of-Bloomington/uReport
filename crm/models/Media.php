@@ -68,7 +68,12 @@ class Media extends ActiveRecord
 					$sql = 'select * from media where id=?';
 				}
 				else {
-					$sql = 'select * from media where internalFilename=?';
+					// Media internalFilenames include the original file extensions
+					// However, the filename being requested may be for a generated thumbnail
+					// We need to chop off the extension and do a wildcard search
+					$filename = preg_replace('/[^.]+$/','',$id);
+					$id = "$filename%";
+					$sql = 'select * from media where internalFilename like ?';
 				}
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
@@ -100,6 +105,7 @@ class Media extends ActiveRecord
 		if (!$this->data['filename'])   { throw new Exception('media/missingFilename');  }
 		if (!$this->data['mime_type'])  { throw new Exception('media/missingMimeType');  }
 		if (!$this->data['media_type']) { throw new Exception('media/missingMediaType'); }
+		if (!$this->data['issue_id'])   { throw new Exception('media/missingIssue_id');  }
 	}
 
 	public function save() { parent::save(); }
@@ -238,9 +244,12 @@ class Media extends ActiveRecord
 	 */
 	public function getURL($size=null)
 	{
-		$url = BASE_URI."/media/{$this->getDirectory()}";
+		$url = BASE_URL."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }
 		$url.= "/{$this->getInternalFilename()}";
+		if ($size) {
+			$url = preg_replace('/[^.]+$/', 'png', $url);
+		}
 		return $url;
 	}
 

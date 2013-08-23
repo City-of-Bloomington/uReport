@@ -1,0 +1,1 @@
+This is where workers write their active log.  Once a worker is finished it should delete it's file.

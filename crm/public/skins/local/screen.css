@@ -63,6 +63,10 @@ button, .btn {
 
 .locationInfo ul { margin:0; }
 
+.searchParameters h2 { display:inline; }
+#bookmark-updateForm { display:inline-table; background-color:#ddd; padding:0 6px; border-radius:6px; }
+#bookmark-updateForm input { width:15ex; }
+
 .ticketList table { border:1px solid #aaa; }
 .ticketList td    { border-bottom:1px solid #aaa; }
 

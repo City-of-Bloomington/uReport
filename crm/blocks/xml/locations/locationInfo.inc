@@ -40,15 +40,13 @@ if ($this->location) {
 			echo '</people>';
 		}
 
-		if (defined('ADDRESS_SERVICE') && defined('RENTAL_SERVICE')) {
-			$location = urlencode($this->location);
-			$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-			$xml = new SimpleXMLElement($url,null,true);
-			$owners = $xml->xpath("//Owner");
+		if (defined('RENTAL_SERVICE')) {
+			$owners = RentalService::getOwnerNames($this->location);
 			if (count($owners)) {
 				echo '<owners>';
-				foreach ($owners as $owner) {
-					echo "<owner>{$owner->Name}</owner>";
+				foreach ($owners as $name) {
+					$name = View::escape($name);
+					echo "<owner>$name</owner>";
 				}
 				echo '</owners>';
 			}

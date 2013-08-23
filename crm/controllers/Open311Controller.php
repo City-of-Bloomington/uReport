@@ -128,14 +128,22 @@ class Open311Controller extends Controller
 		// Do a search for requests
 		else {
 			$search = array();
-			if (isset($category) && $category->allowsDisplay($this->person)) {
-				$search['category_id'] = $category->getId();
+			if (isset($category)) {
+				if ($category->allowsDisplay($this->person)) {
+					$search['category_id'] = $category->getId();
+				}
+				else {
+					header('HTTP/1.0 404 Not Found', true, 404);
+					$_SESSION['errorMessages'][] = new Exception('categories/unknownCategory');
+					return;
+				}
 			}
 			if (!empty($_REQUEST['start_date']))     { $search['start_date']          = $_REQUEST['start_date'];     }
 			if (!empty($_REQUEST['end_date']))       { $search['end_date']            = $_REQUEST['end_date'];       }
 			if (!empty($_REQUEST['status']))         { $search['status']              = $_REQUEST['status'];         }
 			if (!empty($_REQUEST['updated_before'])) { $search['lastModified_before'] = $_REQUEST['updated_before']; }
 			if (!empty($_REQUEST['updated_after']))  { $search['lastModified_after']  = $_REQUEST['updated_after'];  }
+			if (!empty($_REQUEST['bbox']))           { $search['bbox']                = $_REQUEST['bbox'];           }
 
 			$pageSize = 1000;
 			if (!empty($_REQUEST['page_size'])) {

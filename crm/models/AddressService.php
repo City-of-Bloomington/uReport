@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -65,7 +65,7 @@ class AddressService
 			$url->format = 'xml';
 			$url->query = $location;
 
-			$xml = new SimpleXMLElement($url,null,true);
+			$xml = simplexml_load_string(URL::get($url));
 			if (count($xml)==1) {
 				$data = self::extractAddressData($xml->address,$parsedAddress);
 			}
@@ -86,7 +86,7 @@ class AddressService
 			$url->format = 'xml';
 			$url->query = $query;
 
-			$xml = new SimpleXMLElement($url,null,true);
+			$xml = simplexml_load_string(URL::get($url));
 			foreach ($xml as $address) {
 				$data = self::extractAddressData($address,self::parseAddress($query));
 				$results[$data['location']] = $data;
@@ -108,7 +108,7 @@ class AddressService
 			$url->format = 'xml';
 			$url->query = $query;
 
-			$xml = new SimpleXMLElement($url,null,true);
+			$xml = simplexml_load_string(URL::get($url));
 			foreach ($xml as $street) {
 				$results["$street[name]"] = "$street[id]";
 			}
@@ -126,7 +126,7 @@ class AddressService
 			$url = new URL(ADDRESS_SERVICE.'/addresses/parse.php');
 			$url->format = 'xml';
 			$url->address = $address;
-			return new SimpleXMLElement($url,null,true);
+			return simplexml_load_string(URL::get($url));
 		}
 	}
 

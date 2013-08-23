@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="tickets">
+	<row>
+		<field name="id">1</field>
+		<field name="category_id" xsi:nil="true" />
+		<field name="client_id" xsi:nil="true" />
+		<field name="enteredByPerson_id" xsi:nil="true" />
+		<field name="assignedPerson_id" xsi:nil="true" />
+		<field name="referredPerson_id" xsi:nil="true" />
+		<field name="enteredDate">2013-08-22 18:32:18</field>
+		<field name="lastModified">2013-08-22 18:32:18</field>
+		<field name="addressId" xsi:nil="true" />
+		<field name="latitude" xsi:nil="true" />
+		<field name="longitude" xsi:nil="true" />
+		<field name="location" xsi:nil="true" />
+		<field name="city" xsi:nil="true" />
+		<field name="state" xsi:nil="true" />
+		<field name="zip" xsi:nil="true" />
+		<field name="status">open</field>
+		<field name="closedDate" xsi:nil="true" />
+		<field name="substatus_id" xsi:nil="true" />
+		<field name="additionalFields" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="issues">
+	<row>
+		<field name="id">1</field>
+		<field name="ticket_id">1</field>
+		<field name="contactMethod_id" xsi:nil="true" />
+		<field name="responseMethod_id" xsi:nil="true" />
+		<field name="issueType_id" xsi:nil="true" />
+		<field name="enteredByPerson_id" xsi:nil="true" />
+		<field name="reportedByPerson_id" xsi:nil="true" />
+		<field name="date">2013-08-22 18:32:36</field>
+		<field name="description" xsi:nil="true" />
+		<field name="customFields" xsi:nil="true" />
+	</row>
+	</table_data>
+</database>
+</mysqldump>

@@ -25,7 +25,7 @@ Alias /crm "/path/to/crm/public"
     RewriteBase /crm
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule .? /crm/index.php [NC,L]
+	RewriteRule .? /crm/index.php [NC,L]
 </Directory>
 
 

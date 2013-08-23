@@ -36,6 +36,9 @@ class LocationsController extends Controller
 				$this->template->blocks[] = $results;
 			}
 		}
+		else {
+			$this->template->blocks['right'][] = new Block('locations/mapChooser.inc');
+		}
 	}
 
 	/**

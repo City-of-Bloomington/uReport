@@ -64,6 +64,21 @@ class TicketList extends ZendDbResultIterator
 							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
 							$this->select->where('t.lastModified>=?', array($d));
 							break;
+						case 'bbox':
+							$bbox = explode(',', $value);
+							if (count($bbox) == 4) {
+								$minLat  = (float)$bbox[0];
+								$minLong = (float)$bbox[1];
+								$maxLat  = (float)$bbox[2];
+								$maxLong = (float)$bbox[3];
+								$this->select->where('t.latitude is not null and t.longitude is not null');
+								$this->select->where('t.latitude  > ?', $minLat);
+								$this->select->where('t.longitude > ?', $minLong);
+								$this->select->where('t.latitude  < ?', $maxLat);
+								$this->select->where('t.longitude < ?', $maxLong);
+							}
+
+							break;
 						default:
 							$this->select->where("t.$key=?", $value);
 					}

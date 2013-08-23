@@ -7,7 +7,7 @@
  * $url->somevar = $somevar;
  * echo $url->getURL();
  *
- * @copyright 2006-2009 City of Bloomington, Indiana.
+ * @copyright 2006-2013 City of Bloomington, Indiana.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -19,6 +19,25 @@ class URL
 	private $anchor;
 
 	public $parameters = array();
+
+	/**
+	 * Performs an HTTP GET and returns response string
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	public static function get($url)
+	{
+		$request = curl_init($url);
+		curl_setopt($request, CURLOPT_RETURNTRANSFER,true);
+		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
+
+		if (substr($url, 0, 5) == 'https://') {
+			curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($request, CURLOPT_SSLVERSION, 3);
+		}
+		return curl_exec($request);
+	}
 
 	public function __construct($script)
 	{
