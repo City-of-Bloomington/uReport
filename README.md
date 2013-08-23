@@ -6,12 +6,12 @@ existing environments.
 
 System Requirements
 ----------------------
-[PHP 5.3.3](http://php.net) or later
-[Zend Framework 1](http://framework.zend.com/)
-[Apache](http://httpd.apache.org)
-[MySQL](http://dev.mysql.com)
-[Tomcat](http://tomcat.apache.org)
-[Solr](http://lucene.apache.org/solr)
+* [PHP 5.3.3](http://php.net) or later
+* [Zend Framework 1](http://framework.zend.com/)
+* [Apache](http://httpd.apache.org)
+* [MySQL](http://dev.mysql.com)
+* [Tomcat](http://tomcat.apache.org)
+* [Solr](http://lucene.apache.org/solr)
 
 Questions and Feedback
 ----------------------
