@@ -37,6 +37,7 @@ echo "
 $this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
 $this->template->addToAsset('scripts', BASE_URL.'/js/urlParsing.js');
+$this->template->addToAsset('scripts', BASE_URL.'/js/geoHash.js');
 $this->template->addToAsset('scripts', BASE_URL.'/js/tickets/searchResultsMap.js');
 $this->template->addToAsset('scripts', BASE_URL.'/js/oms.min.js');
 

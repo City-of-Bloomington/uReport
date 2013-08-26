@@ -7,12 +7,10 @@
 'use strict';
 
 var URL = {
-
 	replaceParam: function (href, key, value) {
 		var regex;
 		
 		regex = new RegExp("(" + key + "=)\.\*?(;|$)");
-		
 		if(regex.test(href)) {
 			href = href.replace(regex, '$1' + value + '$2');
 		}
@@ -27,5 +25,4 @@ var URL = {
 		
 		return href;
 	}
-
 };

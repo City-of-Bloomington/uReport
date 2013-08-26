@@ -22,30 +22,30 @@ google.maps.event.addDomListener(window, 'load', function() {
 		iw = new google.maps.InfoWindow(),
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		generateCoordinates = function (bounds) {
-			var minLat 			= bounds.ea.b,
-				minLng 			= bounds.ia.b,
-				maxLat 			= bounds.ea.d,
-				maxLng 			= bounds.ia.d;
+			var minLat 			= bounds.getSouthWest().lat(),
+				minLng 			= bounds.getSouthWest().lng(),
+				maxLat 			= bounds.getNorthEast().lat(),
+				maxLng 			= bounds.getNorthEast().lng();
 			return '[' + minLat + ',' + minLng + ' TO ' + maxLat + ',' + maxLng + ']';
 		},
 		// bbox format: xx.xxxxxx,xx.xxxxxx,xx.xxxxxx,xx.xxxxxx
 		generateBBox = function (bounds) {
-			var minLat 			= bounds.ea.b,
-				minLng 			= bounds.ia.b,
-				maxLat 			= bounds.ea.d,
-				maxLng 			= bounds.ia.d;
+			var minLat 			= bounds.getSouthWest().lat(),
+				minLng 			= bounds.getSouthWest().lng(),
+				maxLat 			= bounds.getNorthEast().lat(),
+				maxLng 			= bounds.getNorthEast().lng();
 			return minLat + ',' + minLng + ',' + maxLat + ',' + maxLng;
 		},
-		generateSolrQuery = function (SOLR_PARAMS, coordinates) {
+		getSolrStats = function (SOLR_PARAMS, coordinates, geohashLevel) {
 			var solrQueryString = '',
 				queryHeader 	= 'http://'+SOLR_SERVER_HOSTNAME+SOLR_SERVER_PATH+'/select?',
 				param_sort 		= SOLR_PARAMS.sort,
 				param_q 		= SOLR_PARAMS.q,
 				param_fq 		= SOLR_PARAMS.fq,
-				i 				= 0,
-				rows 			= parseInt(document.getElementById('rows').value, 10);
+				i	 			= 0;
 				
 			solrQueryString += queryHeader + 'sort=' + param_sort + '&q=' + param_q;
+			solrQueryString += '&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=geohash_lv' + geohashLevel;
 			if(param_fq instanceof Array) {
 				for(i = 0; i < param_fq.length; i += 1) {
 					if(param_fq[i].substr(0,12) !== 'coordinates:') {
@@ -60,72 +60,38 @@ google.maps.event.addDomListener(window, 'load', function() {
 			}
 			solrQueryString += '&fq=coordinates:' + coordinates;
 			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
-			solrQueryString += '&start=0&rows=' + rows;
+			solrQueryString += '&start=0&rows=0';
 			
 			return solrQueryString;
 		},
 		refreshMap = function () {
-			var bounds 			= map.getBounds(),
+			var zoomLevel 		= map.getZoom(),
+				bounds 			= map.getBounds(),
 				bbox			= generateBBox(bounds),
 				coordinates 	= generateCoordinates(bounds),
-				solrQueryString = generateSolrQuery(SOLR_PARAMS, coordinates),
-				topResultNum	= parseInt(document.getElementById('rows').value, 10),
+				geohashLevel	= GEOHASH.getGeohashLevel(zoomLevel),
+				solrStatsQuery	= getSolrStats(SOLR_PARAMS, coordinates, geohashLevel),
 				textResultHref,
 				mapResultHref;
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
-				Y.io(solrQueryString, {
+				Y.io(solrStatsQuery, {
 					on: {
 						complete: function (id, o, args) {
 							var response 	= Y.JSON.parse(o.responseText),
-								tickets 	= response.response.docs,
-								showMarkers = function (tickets) {
-									// clear all the previous markers and shrink the allMarkers array to the size of tickets.
-									var i = 0,
-										coordinates,
-										latlng,
-										markerLatLng;
-									
-									for(i = 0; i < allMarkers.length; i += 1) {
-										allMarkers[i].setMap(null);
-									}
-									allMarkers = [];
-									for(i = 0; i < tickets.length; i += 1) {
-										coordinates = tickets[i].coordinates;
-										latlng = coordinates.split(",");
-										markerLatLng = new google.maps.LatLng(latlng[0],latlng[1]);
-										allMarkers[i] = new google.maps.Marker({
-											position: markerLatLng,
-											map: map,
-											title: i.toString()
-										});
-										allMarkers[i].desc = tickets[i].description;
-									}
-									oms.addListener('click', function(marker, event) {
-										iw.setContent(marker.desc);
-										iw.open(map, marker);
-									});
-									oms.addListener('spiderfy', function(markers) {
-										iw.close();
-									});
-									// Solve markers overlapping problem
-									for (i = 0; i < allMarkers.length; i += 1) {
-										oms.addMarker(allMarkers[i]);
-									}
-								};
-							showMarkers(tickets);
+								tickets 	= response.response.docs;
+							console.log(response);
 						}
 					}
 				});
 			});
-			zoomLevel = map.getZoom();
+			
 			
 			YUI().use('node', function(Y) {
 				var updateBBox = function (node) {
 					var href = node.get('href');
 					href = URL.replaceParam(href, 'bbox', bbox);
 					href = URL.replaceParam(href, 'zoom', zoomLevel);
-					href = URL.replaceParam(href, 'topResultNum', topResultNum);
 					node.set('href', href);
 				};
 				
