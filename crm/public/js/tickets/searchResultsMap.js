@@ -16,6 +16,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 		}),
 		// Array to store the markers that will be shown
 		allMarkers = [],
+		allClusters = [],
 		// Tool in solving markers overlapping problem
 		oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true}),
 		// InfoWindow to show tickets' description
@@ -72,20 +73,43 @@ google.maps.event.addDomListener(window, 'load', function() {
 				geohashLevel	= GEOHASH.getGeohashLevel(zoomLevel),
 				solrStatsQuery	= getSolrStats(SOLR_PARAMS, coordinates, geohashLevel),
 				textResultHref,
-				mapResultHref;
+				mapResultHref,
+				i;
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrStatsQuery, {
 					on: {
 						complete: function (id, o, args) {
 							var response 	= Y.JSON.parse(o.responseText),
-								tickets 	= response.response.docs;
-							console.log(response);
+								latStats 	= response.stats.stats_fields.latitude.facets['geohash_lv'+geohashLevel],
+								lngStats 	= response.stats.stats_fields.longitude.facets['geohash_lv'+geohashLevel],
+								geoHashCode,
+								centroidLat,
+								centroidLng,
+								count,
+								clusterLatLng,
+								i;
+							for(i = 0; i < allClusters.length; i += 1) {
+								allClusters[i].setMap(null);
+							}
+							allClusters = [];
+							i = 0;
+							for(geoHashCode in latStats) {
+								centroidLat = latStats[geoHashCode].mean;
+								centroidLng = lngStats[geoHashCode].mean;
+								count = latStats[geoHashCode].count;
+								clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
+								allClusters[i] = new google.maps.Marker({
+									position: clusterLatLng,
+									map: map,
+									title: count.toString()
+								});
+								i += 1;
+							}
 						}
 					}
 				});
 			});
-			
 			
 			YUI().use('node', function(Y) {
 				var updateBBox = function (node) {
