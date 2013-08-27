@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="departments">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Information Services</field>
+		<field name="defaultPerson_id" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="name">Test Department</field>
+		<field name="defaultPerson_id" xsi:nil="true" />
+	</row>
+</table_data>
+	<table_data name="categories">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Test Category</field>
+		<field name="description" xsi:nil="true" />
+		<field name="department_id">1</field>
+		<field name="categoryGroup_id" xsi:nil="true" />
+		<field name="displayPermissionLevel">staff</field>
+		<field name="postingPermissionLevel">staff</field>
+		<field name="customFields" xsi:nil="true" />
+		<field name="lastModified">2013-08-26 19:21:09</field>
+		<field name="slaDays" xsi:nil="true" />
+	</row>
+	</table_data>
+</database>
+</mysqldump>

@@ -15,8 +15,8 @@ if (userIsAllowed('departments','update')) {
 		Edit
 	</a>
 	";
-	// Departments should only be deleted when there's no people in them
-	if (!count($this->department->getPeople())) {
+	// Make sure this would not violate any foreign keys
+	if ($this->department->isSafeToDelete()) {
 		$deleteButton = "
 		<a class=\"btn\"
 			href=\"".BASE_URL."/departments/delete?department_id={$this->department->getId()}\">

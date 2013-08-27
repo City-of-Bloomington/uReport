@@ -74,18 +74,11 @@ class Department extends ActiveRecord
 
 	public function delete()
 	{
-		if ($this->getId()) {
-			$list = new CategoryList(array('department_id'=>$this->getId()));
-
-			if (count($list) || count($this->getCategories())) {
-				throw new Exception('departments/stillHasCategories');
-			}
-			elseif (count($this->getPeople())) {
-				throw new Exception('departments/stillHasPeople');
-			}
-			else {
-				parent::delete();
-			}
+		if ($this->isSafeToDelete()) {
+			parent::delete();
+		}
+		else {
+			throw new Exception('departments/foreignKeyViolation');
 		}
 	}
 
@@ -271,15 +264,23 @@ class Department extends ActiveRecord
 	 */
 	public function isSafeToDelete()
 	{
-		$list = new CategoryList();
-		$list->find();
-		foreach ($list as $cat) { echo "{$cat->getName()}\n"; }
-		
-		$list = new CategoryList(array('department_id'=>$this->getId()));
-		foreach ($list as $cat) { echo "{$cat->getName()}\n"; }
-		if (count($list)) { echo count($list)."\n"; return false; }
-		if (count($this->getCategories())) { return false; }
-		if (count($this->getPeople())) { return false; }
+		if (!$this->getId()) { return false; }
+
+		// Because getCategories and getPeople filter out
+		// categories and people that the user is not permitted to see,
+		// we cannot use those functions for this test.
+		// We need to absolutely know if there is any foreign key
+		// violation before we delete.
+		$zend_db = Database::getConnection();
+		$c = $zend_db->fetchOne('select count(*) from categories where department_id=?', $this->getId());
+		if ($c) { return false; }
+
+		$c = $zend_db->fetchOne('select count(*) from department_categories where department_id=?', $this->getId());
+		if ($c) { return false; }
+
+		$c = $zend_db->fetchOne('select count(*) from people where department_id=?', $this->getId());
+		if ($c) { return false; }
+
 		return true;
 	}
 }
