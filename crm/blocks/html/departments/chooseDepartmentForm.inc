@@ -7,6 +7,7 @@
  */
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
+
 ?>
 <div id="chooseDepartmentForm">
 	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
@@ -19,10 +20,11 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 								$list = new DepartmentList();
 								$list->find();
 								foreach ($list as $department) {
-									$name = View::escape($department->getName());
-									$selected = "{$department->getId()}"=="{$this->currentDepartment->getId()}"
+									$id = $this->currentDepartment ? $this->currentDepartment->getId() : null;
+									$selected = "{$department->getId()}"==$id
 										? 'selected="selected"'
 										: '';
+									$name = View::escape($department->getName());
 									echo "<option value=\"{$department->getId()}\" $selected>$name</option>";
 								}
 							?>

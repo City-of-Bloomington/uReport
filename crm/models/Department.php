@@ -75,7 +75,12 @@ class Department extends ActiveRecord
 	public function delete()
 	{
 		if ($this->getId()) {
-			if (count($this->getPeople())) {
+			$list = new CategoryList(array('department_id'=>$this->getId()));
+
+			if (count($list) || count($this->getCategories())) {
+				throw new Exception('departments/stillHasCategories');
+			}
+			elseif (count($this->getPeople())) {
 				throw new Exception('departments/stillHasPeople');
 			}
 			else {
@@ -259,5 +264,22 @@ class Department extends ActiveRecord
 		if ($this->getId()) {
 			return new PersonList(array('department_id'=>$this->getId()));
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSafeToDelete()
+	{
+		$list = new CategoryList();
+		$list->find();
+		foreach ($list as $cat) { echo "{$cat->getName()}\n"; }
+		
+		$list = new CategoryList(array('department_id'=>$this->getId()));
+		foreach ($list as $cat) { echo "{$cat->getName()}\n"; }
+		if (count($list)) { echo count($list)."\n"; return false; }
+		if (count($this->getCategories())) { return false; }
+		if (count($this->getPeople())) { return false; }
+		return true;
 	}
 }

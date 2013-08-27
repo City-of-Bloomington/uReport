@@ -51,7 +51,7 @@ foreach ($fields as $field) {
 			the amount of time specified.
 		</p>
 		<table>
-			<tr><td><label for="department_id">Department</label></td>
+			<tr><td><label for="department_id" class="required">Department</label></td>
 				<td><select name="department_id" id="department_id">
 					<?php
 						$list = new DepartmentList();
