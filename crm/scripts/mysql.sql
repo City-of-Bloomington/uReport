@@ -8,6 +8,7 @@ create table departments (
 	defaultPerson_id int          unsigned,
 	foreign key (defaultPerson_id) references people(id)
 );
+insert departments set name='Information Services';
 
 create table people (
 	id                   int          unsigned not null primary key auto_increment,
@@ -104,6 +105,9 @@ create table categoryGroups (
 	name     varchar(50) not null,
 	ordering tinyint     unsigned
 );
+insert categoryGroups set name='Streets';
+insert categoryGroups set name='Sanitation';
+insert categoryGroups set name='Other';
 
 create table categories (
 	id                     int          unsigned not null primary key auto_increment,
