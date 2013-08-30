@@ -160,19 +160,20 @@ class Ticket extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('id');         }
-	public function getAddressId()  { return parent::get('addressId'); }
-	public function getLatitude()   { return parent::get('latitude');   }
-	public function getLongitude()  { return parent::get('longitude');  }
-	public function getLocation()   { return parent::get('location');   }
-	public function getCity()       { return parent::get('city');       }
-	public function getState()      { return parent::get('state');      }
-	public function getZip()        { return parent::get('zip');        }
-	public function getStatus()     { return parent::get('status');     }
+	public function getId()           { return parent::get('id');         }
+	public function getAddressId()    { return parent::get('addressId');  }
+	public function getLatitude()     { return parent::get('latitude');   }
+	public function getLongitude()    { return parent::get('longitude');  }
+	public function getLocation()     { return parent::get('location');   }
+	public function getCity()         { return parent::get('city');       }
+	public function getState()        { return parent::get('state');      }
+	public function getZip()          { return parent::get('zip');        }
+	public function getStatus()       { return parent::get('status');     }
+	public function getClusterId($lv) { return parent::get('cluster_id_lv'.$lv); }
 	public function getEnteredDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
 	public function getLastModified($f=null, DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
 	public function getClosedDate  ($f=null, DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
-	public function getSubstatus_id()       { return parent::get('substatus_id');      }
+	public function getSubstatus_id()       { return parent::get('substatus_id');       }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
@@ -193,6 +194,7 @@ class Ticket extends ActiveRecord
 	public function setCity     ($s)  { parent::set('city',      $s); }
 	public function setState    ($s)  { parent::set('state',     $s); }
 	public function setZip      ($s)  { parent::set('zip',       $s); }
+	public function setClusterId($lv, $cid) { parent::set('cluster_id_lv'.$lv, $cid); }
 	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
 	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
 	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
@@ -209,6 +211,70 @@ class Ticket extends ActiveRecord
 	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject('Person',   'assignedPerson_id',  $o); }
 	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject('Person',   'referredPerson_id',  $o); }
 
+	
+	public function getReadyClusterId($level) {
+		$sql = "SELECT MAX(cluster_id_lv$level) AS max FROM {$this->tablename}";
+		$zend_db = Database::getConnection();
+		$query = $zend_db->query($sql);
+		$row = $query->fetch();
+		return ($row['max'] === NULL) ? 1 : $row['max'] + 1;
+	}
+	
+	public function assignClusterIdLv($level) {
+		$id   = $this->getId();
+		$lat  = $this->getLatitude();
+		$lng  = $this->getLongitude();
+		$dist = 0.01 * pow(2, $level * 2);
+		$sql  = "
+		SELECT 
+			t.cluster_id_lv$level, 
+			(SELECT AVG(latitude) FROM tickets i where i.cluster_id_lv$level = t.cluster_id_lv$level) as mean_lat,
+			(SELECT AVG(longitude) FROM tickets i where i.cluster_id_lv$level = t.cluster_id_lv$level) as mean_lng,
+			(
+				SELECT
+				(ACOS(SIN(RADIANS(mean_lat)) * SIN(RADIANS($lat))
+				 + COS(RADIANS(mean_lat)) * COS(RADIANS($lat))
+				 * COS(RADIANS(mean_lng - $lng))) * 6371.0)
+			) as distance
+		FROM tickets t
+		WHERE 
+			t.cluster_id_lv$level IS NOT NULL AND 
+			(ACOS(SIN(RADIANS(latitude)) * SIN(RADIANS($lat))
+			 + COS(RADIANS(latitude)) * COS(RADIANS($lat))
+			 * COS(RADIANS(longitude - $lng))) * 6371.0) < $dist 
+		GROUP BY t.cluster_id_lv$level
+		HAVING distance < $dist
+		LIMIT 1;
+		";
+		$zend_db = Database::getConnection();
+		$query = $zend_db->query($sql);
+		$row = $query->fetch();
+		if ($row) {
+			$closestClusterId = $row['cluster_id_lv'.$level];
+			$zend_db->query("
+			UPDATE {$this->tablename}
+			SET cluster_id_lv$level = $closestClusterId
+			WHERE id = $id
+			");
+		}
+		else {
+			$readyClusterId = $this->getReadyClusterId($level);
+			$zend_db->query("
+			UPDATE {$this->tablename}
+			SET cluster_id_lv$level = $readyClusterId
+			WHERE id = $id
+			");
+		}
+	}
+	
+	public function assignClusterIds() {
+		for($level = 0; $level <= 6; $level ++) {
+			if(!$this->getClusterId($level)) {
+				$this->assignClusterIdLv($level);
+			}
+		}
+	}
+	
 	/**
 	 * Update the status and substatus
 	 *
