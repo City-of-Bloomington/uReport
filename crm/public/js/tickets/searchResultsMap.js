@@ -75,6 +75,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 				textResultHref,
 				mapResultHref,
 				i;
+			
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrStatsQuery, {
