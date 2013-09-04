@@ -344,12 +344,13 @@ class Search
 				}
 			}
 			
-			// GeoHash indexing, get geohash prefix from length 1 to 8
 			if ($record->getLatitude() && $record->getLongitude()) {
 				$latitude = $record->getLatitude();
 				$longitude = $record->getLongitude();
 				$document->addField('latitude', $latitude);
 				$document->addField('longitude', $longitude);
+				
+				// GeoHash indexing, get geohash prefix from length 1 to 8
 				$geohash = new GeoHash();
 				$geohash->setLatitude($latitude);
 				$geohash->setLongitude($longitude);
@@ -357,6 +358,11 @@ class Search
 				for($i = 1; $i <= 8; $i++) {
 					$prefix = substr($hashcode, 0, $i);
 					$document->addField('geohash_lv'.$i, $prefix);
+				}
+				
+				// ClusterId indexing, get cluster ID from level 0 to 6
+				for($i = 0; $i <= 6; $i++) {
+					$document->addField('cluster_id_lv'.$i, $record->getClusterId($i));
 				}
 			}
 
