@@ -9,7 +9,9 @@ include '../../configuration.inc';
 $zend_db = Database::getConnection();
 
 for($i = 0;$i <= 6; $i++) {
-	$zend_db->query("update tickets set cluster_id_lv$i=NULL");
+	$sql = "update tickets set cluster_id_lv$i=NULL";
+	echo "$sql\n";
+	$zend_db->query($sql);
 }
 
 $prevID = 0;
@@ -17,18 +19,23 @@ $count = 1;
 while(true) {
 	$sql = "
 	SELECT * FROM tickets
-	WHERE
-		latitude IS NOT NULL AND
-		longitude IS NOT NULL AND
-		id > $prevID
+	WHERE latitude  IS NOT NULL
+	  and longitude IS NOT NULL
+	  and id > $prevID
 	LIMIT 1
 	";
 	$query = $zend_db->query($sql);
 	$row = $query->fetch();
 	if($row) {
 		$ticket = new Ticket($row);
+		$ticket->setRecalculateClusters(true);
+		try {
+			$ticket->save();
+		}
+		catch (Exception $e) {
+			die($e->getMessage());
+		}
 		echo "Count: $count, TicketID: {$ticket->getId()}\n";
-		$ticket->assignClusterIds();
 		$prevID = $ticket->getId();
 		$count ++;
 	}
