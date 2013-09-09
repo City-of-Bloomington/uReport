@@ -129,10 +129,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 				coordinates 	= generateCoordinates(bounds),
 				clusterLevel	= getClusterLevel(zoomLevel),
 				solrStatsQuery,
-				solrIndivQuery,
-				textResultHref,
-				mapResultHref,
-				i;
+				solrIndivQuery;
 			
 			// Correspond with Solr Server
 			solrStatsQuery = getSolrStats(SOLR_PARAMS, coordinates, clusterLevel);
