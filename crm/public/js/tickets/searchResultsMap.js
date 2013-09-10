@@ -22,8 +22,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 		smallClusters = [],
 		// Tool in solving markers overlapping problem
 		oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true}),
-		// InfoWindow to show tickets' description
-		iw = new google.maps.InfoWindow(),
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		// The coordinates should be larger than bbox so that it can handle the clusters around corners.
 		generateCoordinates = function (bounds) {
@@ -130,13 +128,11 @@ google.maps.event.addDomListener(window, 'load', function() {
 				bbox			= generateBBox(bounds),
 				coordinates 	= generateCoordinates(bounds),
 				clusterLevel	= getClusterLevel(zoomLevel),
-				solrStatsQuery	= getSolrStats(SOLR_PARAMS, coordinates, clusterLevel),
-				solrIndivQuery,
-				textResultHref,
-				mapResultHref,
-				i;
+				solrStatsQuery,
+				solrIndivQuery;
 			
 			// Correspond with Solr Server
+			solrStatsQuery = getSolrStats(SOLR_PARAMS, coordinates, clusterLevel);
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrStatsQuery, {
 					on: {
@@ -147,11 +143,12 @@ google.maps.event.addDomListener(window, 'load', function() {
 								clusterId,
 								centroidLat,
 								centroidLng,
-								count,
 								clusterLatLng,
+								count,
 								i,
 								largeClusterIndex,
 								smallClusterIndex;
+								
 							for(i = 0; i < largeClusters.length; i += 1) {
 								largeClusters[i].setMap(null);
 							}
@@ -162,8 +159,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 							for(clusterId in latStats) {
 								centroidLat = latStats[clusterId].mean;
 								centroidLng = lngStats[clusterId].mean;
-								count = latStats[clusterId].count;
 								clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
+								count = latStats[clusterId].count;
 								if(count >= 5) {
 									largeClusters[largeClusterIndex] = new MarkerCluster(map, clusterLatLng, count);
 									largeClusterIndex += 1;
@@ -173,6 +170,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 									smallClusterIndex += 1;
 								}
 							}
+							for(i = 0; i < indivMarkers.length; i += 1) {
+								indivMarkers[i].setMap(null);
+							}
+							indivMarkers = [];
 							if(smallClusters.length > 0) {
 								solrIndivQuery = getSolrIndiv(SOLR_PARAMS, coordinates, clusterLevel, smallClusters);
 								YUI().use('io', 'json-parse', function (Y) {
@@ -185,10 +186,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 													latlng,
 													markerLatLng,
 													i;
-												for(i = 0; i < indivMarkers.length; i += 1) {
-													indivMarkers[i].setMap(null);
-												}
-												indivMarkers = [];
+												
 												for(i = 0; i < tickets.length; i += 1) {
 													coordinates = tickets[i].coordinates;
 													latlng = coordinates.split(",");
@@ -198,7 +196,9 @@ google.maps.event.addDomListener(window, 'load', function() {
 														map: map,
 														title: tickets[i].id.toString()
 													});
-													//indivMarkers[i].desc = tickets[i].description;
+												}
+												for (i = 0; i < indivMarkers.length; i += 1) {
+													oms.addMarker(indivMarkers[i]);
 												}
 											}
 										}
