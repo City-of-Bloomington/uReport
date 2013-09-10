@@ -16,7 +16,7 @@ class CategoryTest extends DatabaseTestCase
 		return $this->createMySQLXMLDataSet(__DIR__.'/categoryTestData.xml');
 	}
 
-	public function testSaveAndDelete()
+	public function testSave()
 	{
 		$name = 'Test Category';
 
