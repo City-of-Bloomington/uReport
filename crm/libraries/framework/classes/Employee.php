@@ -72,7 +72,8 @@ class Employee implements ExternalIdentity
 	{
 		if (!self::$connection) {
 			if (self::$connection = ldap_connect($this->config['DIRECTORY_SERVER'])) {
-				ldap_set_option(self::$connection,LDAP_OPT_PROTOCOL_VERSION,3);
+				ldap_set_option(self::$connection, LDAP_OPT_PROTOCOL_VERSION,3);
+				ldap_set_option(self::$connection, LDAP_OPT_REFERRALS, 0);
 				if (!empty($this->config['DIRECTORY_ADMIN_BINDING'])) {
 					if (!ldap_bind(
 							self::$connection,
@@ -97,7 +98,7 @@ class Employee implements ExternalIdentity
 	/**
 	 * @return string
 	 */
-	public function getUsername()	{ return $this->get('uid'); }
+	public function getUsername()	{ return $this->get('cn'); }
 	public function getFirstname()	{ return $this->get('givenname'); }
 	public function getLastname()	{ return $this->get('sn'); }
 	public function getEmail()		{ return $this->get('mail'); }

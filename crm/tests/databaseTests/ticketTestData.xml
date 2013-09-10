@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="people">
+	<row>
+		<field name="id">1</field>
+		<field name="firstname">Test</field>
+		<field name="middlename" xsi:nil="true" />
+		<field name="lastname">Person</field>
+		<field name="organization" xsi:nil="true" />
+		<field name="address" xsi:nil="true" />
+		<field name="city" xsi:nil="true" />
+		<field name="state" xsi:nil="true" />
+		<field name="zip" xsi:nil="true" />
+		<field name="department_id">1</field>
+		<field name="username" xsi:nil="true" />
+		<field name="password" xsi:nil="true" />
+		<field name="authenticationMethod" xsi:nil="true" />
+		<field name="role" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="departments">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Test Department</field>
+		<field name="defaultPerson_id">1</field>
+	</row>
+	</table_data>
+	<table_data name="categoryGroups">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Test Group</field>
+		<field name="ordering" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="categories">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Test Category</field>
+		<field name="description" xsi:nil="true" />
+		<field name="department_id">1</field>
+		<field name="categoryGroup_id">1</field>
+		<field name="displayPermissionLevel">staff</field>
+		<field name="postingPermissionLevel">staff</field>
+		<field name="customFields" xsi:nil="true" />
+		<field name="lastModified">2013-09-10 23:45:27</field>
+		<field name="slaDays" xsi:nil="true" />
+	</row>
+	</table_data>
+</database>
+</mysqldump>

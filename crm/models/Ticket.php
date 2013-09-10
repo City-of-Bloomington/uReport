@@ -82,7 +82,7 @@ class Ticket extends ActiveRecord
 		// an empty ticket does us no good
 		$lat  = $this->getLatitude();
 		$long = $this->getLongitude();
-		if (!$issue->getDescription() && !$this->getLocation() && !($lat && $long) ) {
+		if (!$issue->getDescription() && !$this->getLocation() && !($lat && $long)) {
 			throw new Exception('missingRequiredFields');
 		}
 		if (($this->getLatitude() && $this->getLongitude())

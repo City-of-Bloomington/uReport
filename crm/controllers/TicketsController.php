@@ -134,6 +134,7 @@ class TicketsController extends Controller
 		// Handle any Department choice passed in
 		// Choosing a department here will cause the assignment form
 		// to pre-select that department's defaultPerson
+		$currentDepartment = null;
 		if (isset($_GET['department_id'])) {
 			try {
 				$currentDepartment = new Department($_GET['department_id']);
@@ -146,7 +147,10 @@ class TicketsController extends Controller
 		// the ticket to the current User, and use the current user's department
 		if (!isset($currentDepartment)) {
 			$ticket->setAssignedPerson($_SESSION['USER']);
-			$currentDepartment = $_SESSION['USER']->getDepartment();
+
+			if ($_SESSION['USER']->getDepartment()) {
+				$currentDepartment = $_SESSION['USER']->getDepartment();
+			}
 		}
 
 		// Process the ticket form when it's posted
@@ -350,18 +354,18 @@ class TicketsController extends Controller
 
 				// add a record to ticket history
 				$action = new Action($_POST['status']);
-				
+
 				$history = new TicketHistory();
 				$history->setTicket($ticket);
 				$history->setAction($action);
 				$history->setNotes($_POST['notes']);
-				
+
 				if (defined('CLOSING_COMMENT_REQUIRED_LENGTH')) {
 					if ($action->getName() == 'closed') {
 						if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
 							throw new Exception('tickets/missingClosingComment');
 						}
-						
+
 						// Display an alert, reminding them to respond to any citizens
 						$citizens = $ticket->getReportedByPeople();
 						if (count($citizens)) {
@@ -369,7 +373,7 @@ class TicketsController extends Controller
 						}
 					}
 				}
-				
+
 				$history->save();
 				$ticket->save();
 
