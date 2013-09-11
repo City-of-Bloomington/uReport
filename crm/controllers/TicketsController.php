@@ -43,8 +43,11 @@ class TicketsController extends Controller
 			array('solrObject'=>$solrObject)
 		);
 
+		$resultBlock = (isset($_GET['resultFormat']) && $_GET['resultFormat']=='map')
+			? 'searchResultsMap.inc'
+			: 'searchResults.inc';
 		$this->template->blocks['right'][] = new Block(
-			'tickets/searchResults.inc',
+			"tickets/$resultBlock",
 			array('solrObject'=>$solrObject)
 		);
 	}
