@@ -9,36 +9,35 @@
 // $this->solrObject->responseHeader->params contains all the information in current URL.
 // Use the json_encode() to convert php variable to javascript variable.
 
-$centerLatitude;
-$centerLongitude;
+$centerLatitude  = DEFAULT_LATITUDE;
+$centerLongitude = DEFAULT_LONGITUDE;
 if(isset($_GET['bbox'])) {
 	list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $_GET['bbox']);
-	$centerLatitude = ((float)$minLat + (float)$maxLat) / 2;
+	$centerLatitude  = ((float)$minLat + (float)$maxLat) / 2;
 	$centerLongitude = ((float)$minLng + (float)$maxLng) / 2;
 }
-else {
-	$centerLatitude = DEFAULT_LATITUDE;
-	$centerLongitude = DEFAULT_LONGITUDE;
-}
-$zoom = isset($_GET['zoom']) ? $_GET['zoom'] : 15;
+$zoom = isset($_GET['zoom']) ? (int)$_GET['zoom'] : 15;
+
+$solr_params = isset($this->solrObject->responseHeader->params)
+	?    json_encode($this->solrObject->responseHeader->params)
+	: '{}';
+
 
 echo "
 <div id=\"location_map\"></div>
 <script type=\"text/javascript\">
-	var CENTER_LATITUDE  = ".$centerLatitude.";
-	var CENTER_LONGITUDE = ".$centerLongitude.";
-	var ZOOM = ".$zoom.";
-	var SOLR_PARAMS = ".json_encode($this->solrObject->responseHeader->params).";
+	var CENTER_LATITUDE  = $centerLatitude;
+	var CENTER_LONGITUDE = $centerLongitude;
+	var ZOOM = $zoom;
+	var SOLR_PARAMS = $solr_params;
 	var SOLR_SERVER_HOSTNAME = '".SOLR_SERVER_HOSTNAME."';
-	var SOLR_SERVER_PATH = '".SOLR_SERVER_PATH."';
+	var SOLR_SERVER_PATH     = '".SOLR_SERVER_PATH    ."';
 </script>
 ";
 
 $this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
-$this->template->addToAsset('scripts', BASE_URL.'/js/urlParsing.js');
-//$this->template->addToAsset('scripts', BASE_URL.'/js/geoHash.js');
-$this->template->addToAsset('scripts', BASE_URL.'/js/markerCluster.js');
-$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/searchResultsMap.js');
-$this->template->addToAsset('scripts', BASE_URL.'/js/oms.min.js');
-
+$this->template->addToAsset('scripts', BASE_URI.'/js/urlParsing.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/markerCluster.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/searchResultsMap.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/oms.min.js');

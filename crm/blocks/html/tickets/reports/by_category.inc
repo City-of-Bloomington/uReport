@@ -56,7 +56,6 @@ echo "
 			// Buffer the results so we can display them after the tableOfContents
 			$ticketData.= "
 			<h2 id=\"$id\">$categoryName</h2>
-			<table>
 			";
 			$header = new Block(
 				'tickets/partials/searchResultsColumnHeaders.inc',
@@ -71,7 +70,6 @@ echo "
 			$ticketData.= $body->render('html',$this->template);
 
 			$ticketData.= "
-			</table>
 			<a href=\"$_SERVER[REQUEST_URI]#banner\"><span class=\"icon-angle-up\"></span> Back to Top</a>
 			";
 		}

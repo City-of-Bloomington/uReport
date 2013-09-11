@@ -6,6 +6,7 @@
  * @param array $this->tickets
  */
 echo "
+<table>
 <thead>
 	<tr><td>Sort by:</td>
 ";
@@ -22,7 +23,7 @@ echo "
 		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$displayableFields = TicketList::getDisplayableFields();
 		$sortableFields = Search::$sortableFields['ticket'];
-		
+
 		// Loop through all the fields the user asked to see
 		// The key will be the fieldname and the value will be "On" or 1
 		// or whatever the browser gives to checkboxes when you post a form.
@@ -58,4 +59,5 @@ echo "
 echo "
 	</tr>
 </thead>
+</table>
 ";

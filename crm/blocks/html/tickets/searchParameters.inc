@@ -44,7 +44,7 @@ if (!empty($_GET['query'])
 			// Users should not change the permission level they're searching as
 			if ($key != 'displayPermissionLevel') {
 				$deleteURL = clone $currentURL;
-				
+
 				if($key === 'coordinates') {
 					$key = 'bbox';
 					if (isset($deleteURL->$key)) {
@@ -78,27 +78,25 @@ if (!empty($_GET['query'])
 	echo "
 	</div>
 	";
-	//start editing by Quan
-	if(!isset($_GET['resultFormat'])) {
-		if($currentURL->parameters) {
-			echo "
-			<a id='text-result' class='btn' href=\"".$currentURL.";resultFormat=text\"> <span class=\"icon-list-ul\"></span> Text Results </a>
-			<a id='map-result' class='btn' href=\"".$currentURL.";resultFormat=map\"> <span class=\"icon-map-marker\"></span> Map Results </a>
-			";
-		}
-		else {
-			echo "
-			<a id='text-result' class='btn' href=\"".$currentURL."?resultFormat=text\"> <span class=\"icon-list-ul\"></span> Text Results </a>
-			<a id='map-result' class='btn' href=\"".$currentURL."?resultFormat=map\"> <span class=\"icon-map-marker\"></span> Map Results </a>
-			";
-		}
-	}
-	else {
-		$tempURL = clone $currentURL;
-		$tempURL->resultFormat = 'text';
-		echo "<a id='text-result' class='btn' href=\"".$tempURL."\"> <span class=\"icon-list-ul\"></span> Text Results </a>";
-		$tempURL->resultFormat = 'map';
-		echo "<a id='map-result' class='btn' href=\"".$tempURL."\"> <span class=\"icon-map-marker\"></span> Map Results </a>";
-	}
-	//end editing by Quan
 }
+echo "<div>";
+	$url = clone $currentURL;
+	$resultFormat = (isset($_GET['resultFormat']) && $_GET['resultFormat']=='map')
+		? 'map'
+		: 'text';
+
+	unset($url->resultFormat);
+	echo "
+	<a id=\"text-result\" class=\"btn\" href=\"$url\">
+		<span class=\"icon-list-ul\"></span>
+		Text Results
+	</a>
+	";
+	$url->resultFormat = 'map';
+	echo "
+	<a id=\"map-result\" class=\"btn\" href=\"$url\">
+		<span class=\"icon-map-marker\"></span>
+		Map Results
+	</a>
+	";
+echo "</div>";
