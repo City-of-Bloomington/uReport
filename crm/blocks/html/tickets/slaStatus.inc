@@ -13,29 +13,13 @@ if ($days) {
 	$diff = $targetDate->diff($dateEntered);
 	$daysPassed = $diff->format('%a');
 	$class = $daysPassed >= $days ? 'pastDue' : 'onTrack';
-	$percentage = round($daysPassed/$days*100);
-	if ($this->ticket->getStatus() == 'open') {
-		$percentageText = $percentage > 100 ? "overdue" : "should have been completed by now";
-		echo "
-		<div class=\"slaStatus $class\">
-			<p>
-			This ticket is supposed to be handled in $days days.
-			$daysPassed days have already passed.
-			$percentage% $percentageText.
-			</p>
-		</div>
-		";
-	}
-	else {
-		$percentageText = $percentage > 100 ? "overdue" : "of the expected time";
-		echo "
-		<div class=\"slaStatus $class\">
-			<p>
-			This ticket was supposed to be handled in $days days.
-			$daysPassed days passed before it was closed.
-			Completion was $percentage% $percentageText.
-			</p>
-		</div>
-		";
-	}
+	echo "
+	<div class=\"slaStatus $class\">
+		<p>
+		Most tickets of this type should be closed within $days days,
+		although some cases may be longer.
+		$daysPassed days have already passed.
+		</p>
+	</div>
+	";
 }
