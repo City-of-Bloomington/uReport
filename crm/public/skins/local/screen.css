@@ -33,12 +33,14 @@ button, .btn {
 	background-image:url('images/buttonBackground.png');
 	background-position:left center repeat-x;
 }
-.hidden-label { font-size:0; height:1px; overflow:hidden; }
-.icon-remove { color:red;   }
-.icon-pencil { color:blue;  }
-.icon-plus   { color:green; }
-.icon-ok     { color:green; }
-.icon-save   { color:green; }
+.hidden-label 		{ font-size:0; height:1px; overflow:hidden; }
+.icon-remove 		{ color:red;   }
+.icon-pencil 		{ color:blue;  }
+.icon-plus   		{ color:green; }
+.icon-ok     		{ color:green; }
+.icon-save   		{ color:green; }
+.icon-map-marker 	{ color:blue; }
+.icon-list-ul		{ color:blue; }
 
 .ticketInfo ul [class^="icon-"] {
 	float:right;

@@ -1195,7 +1195,7 @@ class Apache_Solr_Service
 		$params['rows'] = $limit;
 
 		$queryString = $this->_generateQueryString($params);
-
+		
 		if ($method == self::METHOD_GET)
 		{
 			return $this->_sendRawGet($this->_searchUrl . $this->_queryDelimiter . $queryString);

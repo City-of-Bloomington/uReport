@@ -21,11 +21,11 @@ include '../configuration.inc';
 $person = new Person();
 
 // Fill these out as needed
-$person->setFirstname('Admin');
-$person->setLastname('Person');
-$person->setUsername('administrator');
+$person->setFirstname('Quan');
+$person->setLastname('Zhang');
+$person->setUsername('Admin');
 $person->setAuthenticationMethod('local');
-$person->setPassword('');
+$person->setPassword('1234');
 
 // You most likely want Administrator
 $person->setRole('Administrator');
@@ -34,5 +34,5 @@ $person->save();
 // Don't forget to create an email address
 $email = new Email();
 $email->setPerson($person);
-$email->setEmail('admin@localhost');
+$email->setEmail('zhangqua@indiana.edu');
 $email->save();

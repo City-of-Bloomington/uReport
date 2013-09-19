@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -16,6 +16,7 @@ class Ticket extends ActiveRecord
 	protected $referredPerson;
 
 	private $issues;
+	private $needToUpdateClusters = false;
 
 	/**
 	 * Populates the object with data
@@ -141,6 +142,7 @@ class Ticket extends ActiveRecord
 	{
 		$this->setLastModified(date(DATE_FORMAT));
 		parent::save();
+		if ($this->needToUpdateClusters) { GeoCluster::updateTicketClusters($this); }
 		$this->updateSearchIndex();
 	}
 
@@ -159,19 +161,17 @@ class Ticket extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('id');         }
-	public function getAddressId()  { return parent::get('addressId'); }
-	public function getLatitude()   { return parent::get('latitude');   }
-	public function getLongitude()  { return parent::get('longitude');  }
-	public function getLocation()   { return parent::get('location');   }
-	public function getCity()       { return parent::get('city');       }
-	public function getState()      { return parent::get('state');      }
-	public function getZip()        { return parent::get('zip');        }
-	public function getStatus()     { return parent::get('status');     }
+	public function getId()           { return parent::get('id');         }
+	public function getAddressId()    { return parent::get('addressId');  }
+	public function getLocation()     { return parent::get('location');   }
+	public function getCity()         { return parent::get('city');       }
+	public function getState()        { return parent::get('state');      }
+	public function getZip()          { return parent::get('zip');        }
+	public function getStatus()       { return parent::get('status');     }
 	public function getEnteredDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
 	public function getLastModified($f=null, DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
 	public function getClosedDate  ($f=null, DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
-	public function getSubstatus_id()       { return parent::get('substatus_id');      }
+	public function getSubstatus_id()       { return parent::get('substatus_id');       }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
@@ -184,10 +184,11 @@ class Ticket extends ActiveRecord
 	public function getAssignedPerson()  { return parent::getForeignKeyObject('Person',     'assignedPerson_id');  }
 	public function getReferredPerson()  { return parent::getForeignKeyObject('Person',     'referredPerson_id');  }
 
+	public function getLatitude()     { return parent::get('latitude');   }
+	public function getLongitude()    { return parent::get('longitude');  }
+
 
 	public function setAddressId($s)  { parent::set('addressId', $s); }
-	public function setLatitude ($s)  { parent::set('latitude',  $s); }
-	public function setLongitude($s)  { parent::set('longitude', $s); }
 	public function setLocation ($s)  { parent::set('location',  $s); }
 	public function setCity     ($s)  { parent::set('city',      $s); }
 	public function setState    ($s)  { parent::set('state',     $s); }
@@ -207,6 +208,20 @@ class Ticket extends ActiveRecord
 	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject('Person',   'enteredByPerson_id', $o); }
 	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject('Person',   'assignedPerson_id',  $o); }
 	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject('Person',   'referredPerson_id',  $o); }
+
+	public function setLatitude ($s)  {
+		if (!empty($s) && $this->getLatitude() != (float)$s) {
+			$this->needToUpdateClusters = true;
+		}
+		parent::set('latitude',  $s);
+	}
+
+	public function setLongitude($s)  {
+		if (!empty($s) && $this->getLongitude() != (float)$s) {
+			$this->needToUpdateClusters = true;
+		}
+		parent::set('longitude', $s);
+	}
 
 	/**
 	 * Update the status and substatus
@@ -271,6 +286,10 @@ class Ticket extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom functions
 	//----------------------------------------------------------------
+	public function willUpdateClustersOnSave()
+	{
+		return $this->needToUpdateClusters;
+	}
 
 	/**
 	 * Returns the department of the person this ticket is assigned to.
@@ -295,6 +314,26 @@ class Ticket extends ActiveRecord
 		if ($this->getLatitude() && $this->getLongitude()) {
 			return "{$this->getLatitude()},{$this->getLongitude()}";
 		}
+	}
+
+	/**
+	 * Returns an array of cluster_ids as key=>value
+	 *
+	 * @param int $level
+	 * @return array
+	 */
+	public function getClusterIds()
+	{
+		$zend_db = Database::getConnection();
+
+		// We may want to redefine cluster_ids in the future
+		// Just select all the fields that are in the table, and
+		// we'll remove the ticket_id field.
+		// All the rest of the fields should be cluster_ids
+		$row = $zend_db->fetchRow("select * from ticket_geodata where ticket_id=?", $this->getId());
+		unset($row['ticket_id']);
+
+		return $row;
 	}
 
 	/**

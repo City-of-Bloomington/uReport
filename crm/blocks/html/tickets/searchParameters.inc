@@ -44,18 +44,33 @@ if (!empty($_GET['query'])
 			// Users should not change the permission level they're searching as
 			if ($key != 'displayPermissionLevel') {
 				$deleteURL = clone $currentURL;
-				if (isset($deleteURL->$key)) {
-					unset($deleteURL->$key);
-				}
 
-				$displayName = Search::$searchableFields[$key];
-				$displayValue = Search::getDisplayName('ticket', $key, $value);
-				echo "
-				<a class=\"btn\" href=\"$deleteURL\">
-					<span class=\"icon-remove\"></span>
-					$displayName: $displayValue
-				</a>
-				";
+				if($key === 'coordinates') {
+					$key = 'bbox';
+					if (isset($deleteURL->$key)) {
+						unset($deleteURL->$key);
+					}
+					$displayName = Search::$searchableFields[$key];
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$displayName
+					</a>
+					";
+				}
+				else {
+					if (isset($deleteURL->$key)) {
+						unset($deleteURL->$key);
+					}
+					$displayName = Search::$searchableFields[$key];
+					$displayValue = Search::getDisplayName('ticket', $key, $value);
+					echo "
+					<a class=\"btn\" href=\"$deleteURL\">
+						<span class=\"icon-remove\"></span>
+						$displayName: $displayValue
+					</a>
+					";
+				}
 			}
 		}
 		echo "</span>";
@@ -64,3 +79,24 @@ if (!empty($_GET['query'])
 	</div>
 	";
 }
+echo "<div>";
+	$url = clone $currentURL;
+	$resultFormat = (isset($_GET['resultFormat']) && $_GET['resultFormat']=='map')
+		? 'map'
+		: 'text';
+
+	unset($url->resultFormat);
+	echo "
+	<a id=\"text-result\" class=\"btn\" href=\"$url\">
+		<span class=\"icon-list-ul\"></span>
+		Text Results
+	</a>
+	";
+	$url->resultFormat = 'map';
+	echo "
+	<a id=\"map-result\" class=\"btn\" href=\"$url\">
+		<span class=\"icon-map-marker\"></span>
+		Map Results
+	</a>
+	";
+echo "</div>";

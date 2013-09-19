@@ -68,6 +68,8 @@
 -->
 	<fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
 
+	<fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+
 	<!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
 	<fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
@@ -175,6 +177,17 @@
 	<field name="enteredByPerson_id"  type="int" indexed="true" stored="false" />
 	<field name="assignedPerson_id"   type="int" indexed="true" stored="false" />
 	<field name="referredPerson_id"   type="int" indexed="true" stored="false" />
+
+	<!-- GeoHash Fields -->
+	<field name="latitude"		type="float" indexed="true"	stored="true" />
+	<field name="longitude"		type="float" indexed="true"	stored="true" />
+	<field name="cluster_id_0"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_1"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_2"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_3"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_4"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_5"  type="int"   indexed="true" stored="true" />
+	<field name="cluster_id_6"  type="int"   indexed="true" stored="true" />
 
 	<!-- Issue Related Fields
 		Since tickets have multiple issues, all these need to be multiValued

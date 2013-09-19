@@ -13,7 +13,7 @@ class MediaTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/mediaTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/mediaTestData.xml');
 	}
 
 

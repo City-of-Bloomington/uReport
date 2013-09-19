@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->tickets
+ * @param Apache_Solr_Response $this->solrObject
  */
+$tickets = Search::hydrateDocs($this->solrObject);
 echo '<div class="searchResultsRows">';
-foreach ($this->tickets as $ticket) {
+foreach ($tickets as $ticket) {
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
 	$displayableFields = TicketList::getDisplayableFields();

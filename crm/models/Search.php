@@ -37,7 +37,8 @@ class Search
 		'issueType_id'    => 'Issue Type',
 		'label_id'        => 'Label',
 		'contactMethod_id'=> 'Received Via',
-		'enteredDate'     => 'Case Date'
+		'enteredDate'     => 'Case Date',
+		'bbox'            => 'Bounding Box'  // Added by Quan on Aug 5, 2013
 	);
 
 	/**
@@ -114,34 +115,54 @@ class Search
 	}
 
 	/**
+	 * @return array
+	 */
+	public static function getDefaultFilterQuery()
+	{
+		$fq = array();
+
+		// User permissions
+		if (!isset($_SESSION['USER'])
+			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
+			$permissions = 'anonymous';
+			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
+				$permissions.= ' OR public';
+			}
+			$fq[] = "displayPermissionLevel:$permissions";
+		}
+		return $fq;
+	}
+
+	/**
 	 * @param array $_GET
 	 * @param string $recordType
 	 * @return SolrObject
 	 */
-	public function query(&$get, $recordType=null)
+	public function query($get, $recordType=null)
 	{
+		// Start with all the default query values
 		$query = !empty($get['query'])
 			? "{!df=description}$get[query]"
 			: '*:*';
-		$additionalParameters = array();
-		$fq = array();
+		$sort = self::$defaultSort;
+		$fq   = self::getDefaultFilterQuery();
 
+		$additionalParameters = array();
 
 		if ($recordType) { $fq[] = "recordType:$recordType"; }
 
 		// Pagination
 		$rows = self::ITEMS_PER_PAGE;
-		$startingPage = 0;
+		$start = 0;
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
 
 			// Solr rows start at 0, but pages start at 1
-			$startingPage = ($page-1) * self::ITEMS_PER_PAGE;
+			$start = ($page-1) * self::ITEMS_PER_PAGE;
 		}
 
 		// Sorting
-		$sort = self::$defaultSort;
 		if (isset($get['sort'])) {
 			$keys = array_keys($_GET['sort']);
 			$sort['field'] = $keys[0];
@@ -157,21 +178,25 @@ class Search
 
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
-			if (substr($field, -3) == '_id' && isset($get[$field])) {
-				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
-			}
-
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
-						$startDate = !empty($get[$field]['start'])
+						$start = !empty($get[$field]['start'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
 							: '*';
-						$endDate = !empty($get[$field]['end'])
+						$end = !empty($get[$field]['end'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
 							: '*';
-						$fq[] = "$field:[$startDate TO $endDate]";
+						$fq[] = "$field:[$start TO $end]";
 					}
+				}
+				// Added else if statement by Quan on Aug 5, 2013
+				// coordinates is a not a numeric value but does not need to be quoted.
+				else if (false !== strpos($field, 'bbox')) {
+					$key = 'coordinates';
+					list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $get[$field]);
+					$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
+					$fq[] = "$key:$value";
 				}
 				else {
 					$value = is_numeric($get[$field])
@@ -182,19 +207,9 @@ class Search
 			}
 		}
 
-		// User permissions
-		if (!isset($_SESSION['USER'])
-			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
-			$permissions = 'anonymous';
-			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
-				$permissions.= ' OR public';
-			}
-			$fq[] = "displayPermissionLevel:$permissions";
-		}
-
 		if (count($fq)) { $additionalParameters['fq'] = $fq; }
 
-		$solrResponse = $this->solrClient->search($query, $startingPage, $rows, $additionalParameters);
+		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
 		return $solrResponse;
 	}
 
@@ -209,12 +224,7 @@ class Search
 			foreach ($o->response->docs as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
-						// Check to make sure the ticket permits viewing
-						// The search engine could be out of sync with the database record
-						$t = new Ticket($doc->id);
-						if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
-							$models[] = new Ticket($doc->id);
-						}
+						$models[] = new Ticket($doc->id);
 						break;
 				}
 			}
@@ -341,6 +351,17 @@ class Search
 					if ($value) {
 						$document->addField($key, $value);
 					}
+				}
+			}
+
+			if ($record->getLatitude() && $record->getLongitude()) {
+				$latitude  = $record->getLatitude();
+				$longitude = $record->getLongitude();
+				$document->addField('latitude' , $latitude );
+				$document->addField('longitude', $longitude);
+
+				foreach ($record->getClusterIds() as $key=>$value) {
+					$document->addField($key, $value);
 				}
 			}
 
