@@ -52,25 +52,27 @@ google.maps.event.addDomListener(window, 'load', function() {
 				param_q 		= SOLR_PARAMS.q,
 				param_fq 		= SOLR_PARAMS.fq,
 				i	 			= 0;
-				
+
 			solrQueryString += queryHeader + 'sort=' + param_sort + '&q=' + param_q;
-			solrQueryString += '&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_lv' + clusterLevel;
-			if(param_fq instanceof Array) {
-				for(i = 0; i < param_fq.length; i += 1) {
-					if(param_fq[i].substr(0,12) !== 'coordinates:') {
-						solrQueryString += '&fq=' + param_fq[i];
+			solrQueryString += '&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_' + clusterLevel;
+			if (param_fq) {
+				if (param_fq instanceof Array) {
+					for ( i = 0; i < param_fq.length; i += 1) {
+						if (param_fq[i].substr(0,12) !== 'coordinates:') {
+							solrQueryString += '&fq=' + param_fq[i];
+						}
 					}
 				}
-			}
-			else {
-				if(param_fq.substr(0,12) !== 'coordinates:') {
-					solrQueryString += '&fq=' + param_fq;
+				else {
+					if (param_fq.substr(0,12) !== 'coordinates:') {
+						solrQueryString += '&fq=' + param_fq;
+					}
 				}
 			}
 			solrQueryString += '&fq=coordinates:' + coordinates;
 			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
 			solrQueryString += '&start=0&rows=0';
-			
+
 			return solrQueryString;
 		},
 		generateClusterIdString = function (smallClusters) {
@@ -93,7 +95,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 				param_q 		= SOLR_PARAMS.q,
 				param_fq 		= SOLR_PARAMS.fq,
 				i	 			= 0;
-				
+
 			solrQueryString += queryHeader + 'sort=' + param_sort + '&q=' + param_q;
 			if(param_fq instanceof Array) {
 				for(i = 0; i < param_fq.length; i += 1) {
@@ -107,11 +109,11 @@ google.maps.event.addDomListener(window, 'load', function() {
 					solrQueryString += '&fq=' + param_fq;
 				}
 			}
-			solrQueryString += '&fq=cluster_id_lv' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')';
+			solrQueryString += '&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')';
 			solrQueryString += '&fq=coordinates:' + coordinates;
 			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
 			solrQueryString += '&start=0&rows=1000';
-			
+
 			return solrQueryString;
 		},
 		getClusterLevel = function (zoomLevel) {
@@ -130,16 +132,17 @@ google.maps.event.addDomListener(window, 'load', function() {
 				clusterLevel	= getClusterLevel(zoomLevel),
 				solrStatsQuery,
 				solrIndivQuery;
-			
+
 			// Correspond with Solr Server
 			solrStatsQuery = getSolrStats(SOLR_PARAMS, coordinates, clusterLevel);
 			YUI().use('io', 'json-parse', function (Y) {
 				Y.io(solrStatsQuery, {
 					on: {
 						complete: function (id, o, args) {
+							alert(solrStatsQuery + ' = ' + o.responseText);
 							var response 	= Y.JSON.parse(o.responseText),
-								latStats 	= response.stats.stats_fields.latitude.facets['cluster_id_lv'+clusterLevel],
-								lngStats 	= response.stats.stats_fields.longitude.facets['cluster_id_lv'+clusterLevel],
+								latStats 	= response.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
+								lngStats 	= response.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],
 								clusterId,
 								centroidLat,
 								centroidLng,
@@ -148,7 +151,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 								i,
 								largeClusterIndex,
 								smallClusterIndex;
-								
+
 							for(i = 0; i < largeClusters.length; i += 1) {
 								largeClusters[i].setMap(null);
 							}
@@ -186,7 +189,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 													latlng,
 													markerLatLng,
 													i;
-												
+
 												for(i = 0; i < tickets.length; i += 1) {
 													coordinates = tickets[i].coordinates;
 													latlng = coordinates.split(",");
@@ -217,13 +220,13 @@ google.maps.event.addDomListener(window, 'load', function() {
 					href = URL.replaceParam(href, 'zoom', zoomLevel);
 					node.set('href', href);
 				};
-				
+
 				updateBBox(Y.one('#text-result'));
 				updateBBox(Y.one('#map-result'));
 				Y.all('.searchParameters .btn').each(updateBBox);
 				Y.all('#advanced-search a').each(updateBBox);
 			});
-			
+
 		};
 
 	google.maps.event.addListener(map, 'idle', refreshMap);

@@ -115,19 +115,40 @@ class Search
 	}
 
 	/**
+	 * @return array
+	 */
+	public static function getDefaultFilterQuery()
+	{
+		$fq = array();
+
+		// User permissions
+		if (!isset($_SESSION['USER'])
+			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
+			$permissions = 'anonymous';
+			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
+				$permissions.= ' OR public';
+			}
+			$fq[] = "displayPermissionLevel:$permissions";
+		}
+		return $fq;
+	}
+
+	/**
 	 * @param array $_GET
 	 * @param string $recordType
 	 * @return SolrObject
 	 */
 	public function query($get, $recordType=null)
 	{
+		// Start with all the default query values
 		$query = !empty($get['query'])
 			? "{!df=description}$get[query]"
 			: '*:*';
-		
+		$sort = self::$defaultSort;
+		$fq   = self::getDefaultFilterQuery();
+
 		$additionalParameters = array();
-		$fq = array();
-		
+
 		if ($recordType) { $fq[] = "recordType:$recordType"; }
 
 		// Pagination
@@ -140,8 +161,8 @@ class Search
 			// Solr rows start at 0, but pages start at 1
 			$start = ($page-1) * self::ITEMS_PER_PAGE;
 		}
-		
-		$sort = self::$defaultSort;
+
+		// Sorting
 		if (isset($get['sort'])) {
 			$keys = array_keys($_GET['sort']);
 			$sort['field'] = $keys[0];
@@ -149,7 +170,6 @@ class Search
 				? 'asc'
 				: 'desc';
 		}
-		
 		$additionalParameters['sort'] = trim("$sort[field] $sort[order]");
 
 		// Facets
@@ -185,16 +205,6 @@ class Search
 					$fq[] = "$field:$value";
 				}
 			}
-		}
-
-		// User permissions
-		if (!isset($_SESSION['USER'])
-			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
-			$permissions = 'anonymous';
-			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
-				$permissions.= ' OR public';
-			}
-			$fq[] = "displayPermissionLevel:$permissions";
 		}
 
 		if (count($fq)) { $additionalParameters['fq'] = $fq; }
@@ -343,26 +353,15 @@ class Search
 					}
 				}
 			}
-			
+
 			if ($record->getLatitude() && $record->getLongitude()) {
-				$latitude = $record->getLatitude();
+				$latitude  = $record->getLatitude();
 				$longitude = $record->getLongitude();
-				$document->addField('latitude', $latitude);
+				$document->addField('latitude' , $latitude );
 				$document->addField('longitude', $longitude);
-				
-				// GeoHash indexing, get geohash prefix from length 1 to 8
-				$geohash = new GeoHash();
-				$geohash->setLatitude($latitude);
-				$geohash->setLongitude($longitude);
-				$hashcode = $geohash->getHash();
-				for($i = 1; $i <= 8; $i++) {
-					$prefix = substr($hashcode, 0, $i);
-					$document->addField('geohash_lv'.$i, $prefix);
-				}
-				
-				// ClusterId indexing, get cluster ID from level 0 to 6
-				for($i = 0; $i <= 6; $i++) {
-					$document->addField('cluster_id_lv'.$i, $record->getClusterId($i));
+
+				foreach ($record->getClusterIds() as $key=>$value) {
+					$document->addField($key, $value);
 				}
 			}
 

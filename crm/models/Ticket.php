@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -141,13 +141,8 @@ class Ticket extends ActiveRecord
 	public function save()
 	{
 		$this->setLastModified(date(DATE_FORMAT));
-		if ($this->needToUpdateClusters) {
-			for ($i=0; $i<=6; $i++) {
-				$this->setClusterId($i, null);
-			}
-			$this->assignClusterIds();
-		}
 		parent::save();
+		if ($this->needToUpdateClusters) { GeoCluster::updateTicketClusters($this); }
 		$this->updateSearchIndex();
 	}
 
@@ -191,7 +186,6 @@ class Ticket extends ActiveRecord
 
 	public function getLatitude()     { return parent::get('latitude');   }
 	public function getLongitude()    { return parent::get('longitude');  }
-	public function getClusterId($lv) { return parent::get('cluster_id_lv'.$lv); }
 
 
 	public function setAddressId($s)  { parent::set('addressId', $s); }
@@ -217,84 +211,16 @@ class Ticket extends ActiveRecord
 
 	public function setLatitude ($s)  {
 		if (!empty($s) && $this->getLatitude() != (float)$s) {
-			$needToUpdateClusters = true;
+			$this->needToUpdateClusters = true;
 		}
 		parent::set('latitude',  $s);
 	}
+
 	public function setLongitude($s)  {
 		if (!empty($s) && $this->getLongitude() != (float)$s) {
-			$needToUpdateClusters = true;
+			$this->needToUpdateClusters = true;
 		}
 		parent::set('longitude', $s);
-	}
-	/**
-	 * @param int $lvl
-	 * @param string $cid
-	 */
-	public function setClusterId($lv, $cid) { parent::set('cluster_id_lv'.$lv, $cid); }
-	/**
-	 * @param bool $b
-	 */
-	public function setRecalculateClusters($b) { $this->needToUpdateClusters = $b ? true: false; }
-
-
-	public function getReadyClusterId($level) {
-		$sql = "SELECT MAX(cluster_id_lv$level) AS max FROM {$this->tablename}";
-		$zend_db = Database::getConnection();
-		$query = $zend_db->query($sql);
-		$row = $query->fetch();
-		return ($row['max'] === NULL) ? 1 : $row['max'] + 1;
-	}
-
-	public function assignClusterIdLv($level) {
-		$id   = $this->getId();
-		$lat  = $this->getLatitude();
-		$lng  = $this->getLongitude();
-		$dist = 0.01 * pow(2, $level * 2);
-		$sql  = "
-		SELECT
-			t.cluster_id_lv$level,
-			(SELECT round(AVG(latitude),  14) FROM tickets i where i.cluster_id_lv$level = t.cluster_id_lv$level) as mean_lat,
-			(SELECT round(AVG(longitude), 14) FROM tickets i where i.cluster_id_lv$level = t.cluster_id_lv$level) as mean_lng,
-			(
-				SELECT
-				(ACOS(SIN(RADIANS(mean_lat)) * SIN(RADIANS($lat))
-				 + COS(RADIANS(mean_lat))    * COS(RADIANS($lat))
-				 * COS(RADIANS(mean_lng - $lng))) * 6371.0)
-			) as distance
-		FROM tickets t
-		WHERE
-			t.cluster_id_lv$level IS NOT NULL AND
-			(ACOS(SIN(RADIANS(latitude)) * SIN(RADIANS($lat))
-			 + COS(RADIANS(latitude))    * COS(RADIANS($lat))
-			 * COS(RADIANS(longitude - $lng))) * 6371.0) < $dist
-		GROUP BY t.cluster_id_lv$level
-		order by distance
-		LIMIT 1
-		";
-
-		$zend_db = Database::getConnection();
-		$query = $zend_db->query($sql);
-		$row = $query->fetch();
-		if ($row) {
-			$closestClusterId = $row['cluster_id_lv'.$level];
-			$this->setClusterId($level, $closestClusterId);
-		}
-		else {
-			$readyClusterId = $this->getReadyClusterId($level);
-			$this->setClusterId($level, $readyClusterId);
-		}
-	}
-
-	/**
-	 *
-	 */
-	public function assignClusterIds() {
-		for($level = 0; $level <= 6; $level ++) {
-			if(!$this->getClusterId($level)) {
-				$this->assignClusterIdLv($level);
-			}
-		}
 	}
 
 	/**
@@ -360,6 +286,10 @@ class Ticket extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom functions
 	//----------------------------------------------------------------
+	public function willUpdateClustersOnSave()
+	{
+		return $this->needToUpdateClusters;
+	}
 
 	/**
 	 * Returns the department of the person this ticket is assigned to.
@@ -384,6 +314,26 @@ class Ticket extends ActiveRecord
 		if ($this->getLatitude() && $this->getLongitude()) {
 			return "{$this->getLatitude()},{$this->getLongitude()}";
 		}
+	}
+
+	/**
+	 * Returns an array of cluster_ids as key=>value
+	 *
+	 * @param int $level
+	 * @return array
+	 */
+	public function getClusterIds()
+	{
+		$zend_db = Database::getConnection();
+
+		// We may want to redefine cluster_ids in the future
+		// Just select all the fields that are in the table, and
+		// we'll remove the ticket_id field.
+		// All the rest of the fields should be cluster_ids
+		$row = $zend_db->fetchRow("select * from ticket_geodata where ticket_id=?", $this->getId());
+		unset($row['ticket_id']);
+
+		return $row;
 	}
 
 	/**

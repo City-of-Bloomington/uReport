@@ -5,7 +5,6 @@
  * @author Quan Zhang <quanzhang@acm.org>
  * @param Apache_Solr_Response $this->solrObject
  */
-
 // $this->solrObject->responseHeader->params contains all the information in current URL.
 // Use the json_encode() to convert php variable to javascript variable.
 

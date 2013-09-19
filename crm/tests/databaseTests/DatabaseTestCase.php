@@ -30,7 +30,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 {
 	private static $pdo = null;
 	private $conn = null;
-	
+
 	public function getConnection()
 	{
 		if (!$this->conn) {
@@ -46,12 +46,12 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 		}
 		return $this->conn;
 	}
-	
+
 	public function getSetUpOperation()
 	{
 		$cascadeTruncates = TRUE; //if you want cascading truncates, false otherwise
 								  //if unsure choose false
-		
+
 		return new PHPUnit_Extensions_Database_Operation_Composite(array(
 			new CustomTruncate($cascadeTruncates),
 			new CustomInsert()

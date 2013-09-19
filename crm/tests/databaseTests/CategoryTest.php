@@ -13,7 +13,7 @@ class CategoryTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/categoryTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/categoryTestData.xml');
 	}
 
 	public function testSave()

@@ -15,7 +15,7 @@ class TicketTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/ticketTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/ticketTestData.xml');
 	}
 
 	public function testAdd()
@@ -46,5 +46,27 @@ class TicketTest extends DatabaseTestCase
 		$this->assertGreaterThan(0, $id);
 		$this->assertEquals($ticket->getLatitude() , $this->testLatitude );
 		$this->assertEquals($ticket->getLongitude(), $this->testLongitude);
+
+		$zend_db = Database::getConnection();
+		$row = $zend_db->fetchRow('select * from ticket_geodata where ticket_id=?', $id);
+		for ($i=0; $i<=6; $i++) {
+			$this->assertGreaterThan(0, $row["cluster_id_$i"]);
+		}
+	}
+
+	public function testLatLngShouldNotAllowZeros()
+	{
+		$ticket = new Ticket();
+		$ticket->handleAdd(array(
+			'description'=> 'Testing',
+			'category_id'=> $this->testCategoryId,
+			'latitude'   => 0,
+			'longitude'  => 0
+		));
+		$id = $ticket->getId();
+		$zend_db = Database::getConnection();
+		$row = $zend_db->fetchRow('select latitude,longitude from tickets where id=?', $id);
+		$this->assertNull($row['latitude' ]);
+		$this->assertNull($row['longitude']);
 	}
 }

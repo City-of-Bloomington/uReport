@@ -11,12 +11,8 @@
 $c = $this->solrObject->response->numFound;
 if ($c) {
 	echo "<h2>Search Results</h2>";
-	$map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
-	echo $map->render('html', $this->template);
 }
-else {
-	$map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
-	echo $map->render('html', $this->template);
-}
+$map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
+echo $map->render('html', $this->template);
 ?>
 </div>

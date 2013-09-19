@@ -28,4 +28,22 @@ class TicketTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->data['state'],    $ticket->getState());
 		$this->assertEquals($this->data['zip'],      $ticket->getZip());
 	}
+
+	public function testChangingWillUpdateClusters()
+	{
+		$ticket = new Ticket();
+		$this->assertFalse($ticket->willUpdateClustersOnSave());
+		$ticket->setLatitude(39.123);
+		$this->assertTrue($ticket->willUpdateClustersOnSave());
+	}
+
+	public function testLatLngShouldNotAllowZeros()
+	{
+		$ticket = new Ticket();
+		$ticket->setLatitude (0);
+		$ticket->setLongitude(0);
+
+		$this->assertNull($ticket->getLatitude ());
+		$this->assertNull($ticket->getLongitude());
+	}
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="geoclusters">
+	</table_data>
+	<table_data name="ticket_geodata">
+	</table_data>
+	<table_data name="tickets">
+	<row>
+		<field name="id">1</field>
+		<field name="category_id" xsi:nil="true" />
+		<field name="client_id" xsi:nil="true" />
+		<field name="enteredByPerson_id" xsi:nil="true" />
+		<field name="assignedPerson_id" xsi:nil="true" />
+		<field name="referredPerson_id" xsi:nil="true" />
+		<field name="enteredDate">2013-09-12 14:52:18</field>
+		<field name="lastModified">2013-09-12 14:52:18</field>
+		<field name="addressId" xsi:nil="true" />
+		<field name="latitude">39.16673278808594</field>
+		<field name="longitude">-86.54229736328125</field>
+		<field name="location" xsi:nil="true" />
+		<field name="city" xsi:nil="true" />
+		<field name="state" xsi:nil="true" />
+		<field name="zip" xsi:nil="true" />
+		<field name="status">open</field>
+		<field name="closedDate" xsi:nil="true" />
+		<field name="substatus_id" xsi:nil="true" />
+		<field name="additionalFields" xsi:nil="true" />
+	</row>
+	</table_data>
+</database>
+</mysqldump>

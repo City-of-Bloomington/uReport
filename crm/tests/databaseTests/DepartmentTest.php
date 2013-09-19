@@ -14,7 +14,7 @@ class DepartmentTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/departmentTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/departmentTestData.xml');
 	}
 
 	public function testIsSafeToDelete()

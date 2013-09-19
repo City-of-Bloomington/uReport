@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param array $this->tickets
+ * @param Apache_Solr_Response $this->solrObject
  */
 echo "
 <table>
 <thead>
 	<tr><td>Sort by:</td>
 ";
-	if (count($this->tickets)) {
+	$c = $this->solrObject->response->numFound;
+	if ($c) {
 		$currentSort = Search::$defaultSort;
 		if (isset($_GET['sort'])) {
 			$keys = array_keys($_GET['sort']);

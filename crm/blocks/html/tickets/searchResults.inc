@@ -8,17 +8,15 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
-$tickets = Search::hydrateDocs($this->solrObject);
-if (count($tickets)) {
-	$c = $this->solrObject->response->numFound;
-
+$c = $this->solrObject->response->numFound;
+if ($c) {
 	echo "<h2>Search Results</h2><div># Cases in Current Search: $c</div>";
-	
-	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('tickets'=>$tickets));
-	echo $header->render('html', $this->template);
 
-	$row = new Block('tickets/partials/searchResultsRows.inc', array('tickets'=>$tickets));
-	echo $row->render('html', $this->template);
+	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('solrObject'=>$this->solrObject));
+	$rows   = new Block('tickets/partials/searchResultsRows.inc',          array('solrObject'=>$this->solrObject));
+
+	echo $header->render('html', $this->template);
+	echo $rows  ->render('html', $this->template);
 }
 else {
 	echo "<h2>No Cases Found</h2>";
