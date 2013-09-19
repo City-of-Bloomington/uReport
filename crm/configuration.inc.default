@@ -38,7 +38,7 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
  * installation of the ZendFramework
  * http://framework.zend.com
  */
-define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+define('ZEND',APPLICATION_HOME.'/libraries/zf1/library');
 
 /**
  * Point to the Solr server
@@ -51,7 +51,7 @@ define('SOLR_PHP_CLIENT', APPLICATION_HOME.'/libraries/solr-php-client');
 /**
  * JavaScript Libraries
  */
-define('YUI','http://yui.yahooapis.com/3.9.0/build');
+define('YUI', BASE_URI.'/js/vendor/yui3/build');
 define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=false');
 
 /**
@@ -174,7 +174,7 @@ $DIRECTORY_CONFIG = array(
  * phpCAS is a PHP library for handling the calls to the CAS service
  * It is the official library, part of the Jasig CAS project
  */
-//define('CAS','/var/www/libraries/phpCAS');
+//define('CAS', APPLICATION_HOME.'/libraries/phpCAS');
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 

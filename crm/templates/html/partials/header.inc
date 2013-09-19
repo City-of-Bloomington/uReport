@@ -1,7 +1,7 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" type="text/css" href="<?php echo YUI; ?>/cssreset/cssreset-min.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo YUI; ?>/cssfonts/fonts-min.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo YUI; ?>/cssfonts/cssfonts-min.css" />
 	<?php
 		if ($this->layout) {
 			echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".BASE_URI."/skins/local/layouts/{$this->layout}.css\" />";
