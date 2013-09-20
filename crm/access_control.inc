@@ -52,9 +52,10 @@ $ZEND_ACL->allow(null, 'media', 'resize');
 // Staff permission
 // Staff has full permission to these tables
 $ZEND_ACL->allow('Staff',array(
-	'account','tickets','people','issues','media','reports','bookmarks'
+	'account','people','issues','media','reports','bookmarks'
 ));
 // Staff has limited permission to these tables
+$ZEND_ACL->allow('Staff','tickets',    array('index', 'view', 'add', 'update', 'merge', 'delete'));
 $ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','substatus',  array('index'));

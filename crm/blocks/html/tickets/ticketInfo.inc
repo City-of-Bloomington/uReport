@@ -45,13 +45,15 @@ if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 		<span class=\"hidden-label\">Change Status</span>
 	</a>
 	";
-	$deleteButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
-		<span class=\"icon-remove\"></span>
-		Delete Case
-	</a>
-	";
+	if (userIsAllowed('tickets', 'delete')) {
+		$deleteButton = "
+		<a class=\"btn\"
+			href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
+			<span class=\"icon-remove\"></span>
+			Delete Case
+		</a>
+		";
+	}
 
 	if ($this->ticket->getStatus()!='closed') {
 		$changeCategoryButton = "
