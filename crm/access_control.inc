@@ -55,10 +55,13 @@ $ZEND_ACL->allow('Staff',array(
 	'account','people','issues','media','reports','bookmarks'
 ));
 // Staff has limited permission to these tables
-$ZEND_ACL->allow('Staff','tickets',    array('index', 'view', 'add', 'update', 'merge', 'delete'));
 $ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','substatus',  array('index'));
+$ZEND_ACL->allow('Staff','tickets', array(
+	'add', 'update', 'merge', 'delete','assign', 'refer',
+	'changeCategory', 'changeLocation', 'changeStatus'
+));
 
 
 // Administrator is allowed access to everything
