@@ -7,7 +7,11 @@
  */
 ?>
 <table>
-	<tr><td><label for="issueType_id" class="required">Type <span class="icon-asterisk"></span></label></td>
+	<tr><td><label for="issueType_id" class="required">
+				<?php echo $this->translate('labels.type'); ?>
+				<span class="icon-asterisk"></span>
+			</label>
+		</td>
 		<td><select name="issueType_id" id="issueType_id">
 				<?php
 					$list = new IssueTypeList();
@@ -25,7 +29,7 @@
 	</tr>
 
 	<tr class="reportedByPerson">
-		<td><label for="reportedByPerson_id">Reported By Person</label></td>
+		<td><label for="reportedByPerson_id"><?php echo $this->translate('labels.reportedByPerson'); ?></label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$helper = $this->template->getHelper('personChooser');
@@ -34,7 +38,10 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="contactMethod_id">Received via</label></td>
+	<tr><td><label for="contactMethod_id">
+			<?php echo $this->translate(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
+			</label>
+		</td>
 		<td><select name="contactMethod_id" id="contactMethod_id">
 				<option></option>
 				<?php
@@ -52,7 +59,7 @@
 		</td>
 	</tr>
 
-	<tr><td><label for="responseMethod_id">Response Method</label></td>
+	<tr><td><label for="responseMethod_id"><?php echo $this->translate('labels.responseMethod'); ?></label></td>
 		<td><select name="responseMethod_id" id="responseMethod_id">
 				<option value=""></option>
 				<?php
@@ -69,7 +76,7 @@
 		</td>
 	</tr>
 
-	<tr><td><label>Labels</label></td>
+	<tr><td><label><?php echo $this->translate(array('labels.label', 'labels.labels', 2)); ?></label></td>
 		<td>
 		<?php
 			$list = new LabelList();
@@ -91,7 +98,7 @@
 	</tr>
 </table>
 
-<div><label for="description">Describe the issue</label></div>
+<div><label for="description"><?php echo $this->translate('labels.description'); ?></label></div>
 <div>
 	<textarea name="description" id="description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
 </div>

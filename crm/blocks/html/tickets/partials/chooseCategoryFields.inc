@@ -42,7 +42,7 @@
 		$url->return_url = $this->return_url;
 		echo "
 		<a href=\"$url\" id=\"moreCategoriesLink\">
-			More categories
+			{$this->translate('labels.more_categories')}
 			<span class=\"icon-double-angle-right\"></span>
 		</a>
 		";

@@ -13,27 +13,30 @@ if (userIsAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h2>Quick Links</h2>
-		<form method=\"get\" action=\"".BASE_URL."/tickets\">
+		<h2>{$this->translate('labels.quick_links')}</h2>
+		<form method=\"get\" action=\"".BASE_URI."/tickets\">
 			<fieldset>
-				<label>Case # <input name=\"id\" value=\"$id\" size=\"6\" /></label>
+				<label>
+					{$this->translate(array('labels.ticket', 'labels.tickets', 1))}
+					# <input name=\"id\" value=\"$id\" size=\"6\" />
+				</label>
 				<button type=\"submit\"><span class=\"icon-search\"></span> Go</button>
 			</fieldset>
 		</form>
-		<ul><li><a href=\"".BASE_URL."/tickets?status=open\">
-					Open Cases
+		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
+					{$this->translate('labels.tickets_open')}
 				</a>
 			</li>
-			<li><a href=\"".BASE_URL."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
-					My Cases
+			<li><a href=\"".BASE_URI."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
+					{$this->translate('labels.tickets_my')}
 				</a>
 			</li>
 		";
 		if ($_SESSION['USER']->getDepartment_id()) {
 			$d = $_SESSION['USER']->getDepartment();
 			echo "
-			<li><a href=\"".BASE_URL."/tickets?status=open;department_id={$d->getId()}\">
-					My Department's Cases
+			<li><a href=\"".BASE_URI."/tickets?status=open;department_id={$d->getId()}\">
+					{$this->translate('labels.tickets_my_department')}
 				</a>
 			</li>
 			";
@@ -58,14 +61,14 @@ if (userIsAllowed('tickets','add')) {
 }
 ?>
 <div>
-	<h2>Search</h2>
+	<h2><?php echo $this->translate('labels.search'); ?></h2>
 	<form method="get" action="<?php echo BASE_URI; ?>/tickets">
 		<fieldset>
-			<label>Search
+			<label><?php echo $this->translate('labels.search'); ?>
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit"><span class="icon-search"></span> Go</button>
-			<p class="help">Only searches a case's description</p>
+			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.go'); ?></button>
+			<p class="help"><?php echo $this->translate('messages.ticket_search_query_description'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
 			<?php
@@ -102,14 +105,14 @@ if (userIsAllowed('tickets','add')) {
 				}
 			?>
 			<div class="collapsible">
-				<h3 class="hd">Case Date</h3>
+				<h3 class="hd"><?php echo $this->translate('labels.enteredDate'); ?></h3>
 				<table class="bd">
-					<tr><td><label for="enteredDate-start">Start:</label></td>
+					<tr><td><label for="enteredDate-start"><?php echo $this->translate('labels.start'); ?>:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
 								value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />
 						</td>
 					</tr>
-					<tr><td><label for="enteredDate-end">End:</label></td>
+					<tr><td><label for="enteredDate-end"><?php echo $this->translate('labels.end'); ?>:</label></td>
 						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
 								value="<?php echo !empty($_GET['enteredDate']['end']) ? View::escape($_GET['enteredDate']['end']) : ''; ?>" />
 						</td>
@@ -119,7 +122,7 @@ if (userIsAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend>Fields to display</legend>
+		<fieldset><legend><?php echo $this->translate('labels.display_fields'); ?></legend>
 			<ul class="fields twoColumnlist">
 			<?php
 				// Default columns to display
@@ -145,22 +148,15 @@ if (userIsAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend>Submit</legend>
+		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit"><span class="icon-search"></span> Search</button>
+			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.search'); ?></button>
 		</fieldset>
 	</form>
 </div>
 <div>
-	<p>
-		Disclaimer: uReport is provided for and driven by the community. uReport
-		content may be posted by third parties unaffiliated with the City. The City
-		makes no warranty as to the accuracy and completeness of third party
-		content and takes no responsibility and disclaims all liability for third
-		party content. Reports submitted by the community are addressed on the
-		basis of priority and available resources.
-	</p>
+	<p><?php echo $this->translate('text.disclaimer'); ?></p>
 </div>

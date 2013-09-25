@@ -8,9 +8,9 @@
 ?>
 <div class="updateEmailForm">
 	<form method="post">
-		<fieldset><legend>Email Address</legend>
+		<fieldset><legend><?php echo $this->translate(array('labels.email', 'labels.emails', 1)); ?></legend>
 			<table>
-				<tr><td><label>Label
+				<tr><td><label><?php echo $this->translate(array('labels.label', 'labels.labels', 1)); ?>
 							<select name="label" id="label">
 							<?php
 								foreach (Email::$LABELS as $label) {
@@ -25,9 +25,8 @@
 					</td>
 					<td><input name="email" value="<?php echo View::escape($this->email); ?>" /></td>
 				</tr>
-				<tr><td><label   for="usedForNotifications">Used for notifications</label></td>
-					<td><select name="usedForNotifications"
-								id="usedForNotifications">
+				<tr><td><label for="usedForNotifications"><?php echo $this->translate('messages.usedForNotifications'); ?></label></td>
+					<td><select name="usedForNotifications" id="usedForNotifications">
 						<?php
 							foreach (array('No', 'Yes') as $i=>$text) {
 								$selected = $this->email->isUsedForNotifications()==$i
@@ -53,12 +52,10 @@
 				$cancelUrl = $this->template->controller == 'AccountController'
 					? BASE_URI.'/account'
 					: $this->email->getPerson()->getUrl();
+
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons($cancelUrl);
 			?>
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo $cancelUrl ?>">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
 		</fieldset>
 	</form>
 </div>

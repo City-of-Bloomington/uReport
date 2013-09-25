@@ -8,12 +8,12 @@ $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 ?>
 <form method="get" action="<?php echo BASE_URI; ?>/tickets/merge" class="ticketSelectForMergeForm">
-	<fieldset><legend>Merge Two Cases</legend>
-		<p>Add two cases by dragging one of the rows or typing in the IDs to compare cases and move data between them.</p>
+	<fieldset><legend><?php echo $this->translate('labels.merge_tickets'); ?></legend>
+		<p><?php echo $this->translate('messages.merge_tickets_description'); ?></p>
 		<div>
 			<span class="yui3-dd-drop"><input name="ticket_id_a" id="ticket_id_a" /></span>
 			<span class="yui3-dd-drop"><input name="ticket_id_b" id="ticket_id_b" /></span>
-			<button type="submit"><span class="icon-ok"></span> Merge</button>
+			<button type="submit"><span class="icon-ok"></span> <?php echo $this->translate('labels.merge'); ?></button>
 		</div>
 	</fieldset>
 </form>

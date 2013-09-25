@@ -12,7 +12,7 @@ if (!$this->disableButtons && userIsAllowed('media','upload')) {
 	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
 		<span class=\"icon-upload-alt\"></span>
-		Upload Attachment
+		{$this->translate('labels.upload_media')}
 	</a>
 	";
 }
@@ -20,7 +20,7 @@ $this->mediaList = $this->issue->getMedia();
 if ($uploadButton || count($this->mediaList)) {
 	echo "
 	<div class=\"issueAttachments\">
-		<h2>Attachments $uploadButton</h2>
+		<h2>{$this->translate(array('labels.media', 'labels.medias', 2))} $uploadButton</h2>
 	";
 		$profileImage = $this->issue->getProfileImage();
 		if ($profileImage) {
@@ -28,7 +28,7 @@ if ($uploadButton || count($this->mediaList)) {
 			echo "
 			<div>
 				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->issue->getTicket_id()}\">
-					See all thumbnails
+					{$this->translate('labels.see_all_thumbnails')}
 				</a>
 			</div>
 			";

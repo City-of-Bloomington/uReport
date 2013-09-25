@@ -7,13 +7,13 @@
  */
 ?>
 <div class="personList interfaceBox">
-	<h2>People</h2>
+	<h2><?php echo $this->translate(array('labels.person', 'labels.people', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th>Name</th>
-				<th>Email</th>
-				<th>Address</th>
-				<th>Phone</th>
+			<tr><th><?php echo $this->translate('labels.name'); ?></th>
+				<th><?php echo $this->translate(array('labels.email'  , 'labels.emails'   , 1)); ?></th>
+				<th><?php echo $this->translate(array('labels.address', 'labels.addresses', 1)); ?></th>
+				<th><?php echo $this->translate(array('labels.phone'  , 'labels.phones'   , 1)); ?></th>
 			</tr>
 		</thead>
 		<tbody>

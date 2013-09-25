@@ -7,10 +7,13 @@
  */
 ?>
 <div class="categoryList">
-	<h2>Categories
-		<?php
+	<h2><?php
+			echo $this->translate(array('labels.category', 'labels.categories', 2));
 			if (userIsAllowed('categories','update')) {
-				echo '<a class="btn" href="'.BASE_URI.'/categories/update"><span class="icon-plus"></span> Add</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/categories/update',
+					$this->translate('labels.add')
+				);
 			}
 		?>
 	</h2>
@@ -36,13 +39,10 @@
 
 			$editButton = '';
 			if (userIsAllowed('categories','update')) {
-				$editButton = "
-				<a class=\"btn\"
-					href=\"".BASE_URI."/categories/update?category_id={$category->getId()}\">
-					<span class=\"icon-pencil\"></span>
-					Edit
-				</a>
-				";
+				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+					BASE_URI.'/categories/update?category_id='.$category->getId(),
+					$this->translate('labels.edit')
+				);
 			}
 			$name              = View::escape($category->getName());
 			$postPermission    = View::escape($category->getPostingPermissionLevel());
@@ -62,10 +62,12 @@
 				<p>$description</p>
 				<table>
 					<thead>
-						<tr><th>Department</th>
-							<th>SLA Days</th>
-							<th>Posting</th>
-							<th>Display</th>
+						<tr><th>{$this->translate(array('labels.department', 'labels.departments', 1))}</th>
+							<th>{$this->translate('labels.sla')}
+								{$this->translate(array('labels.day', 'labels.days', 2))}
+							</th>
+							<th>{$this->translate('labels.postingPermissionLevel')}</th>
+							<th>{$this->translate('labels.displayPermissionLevel')}</th>
 						</tr>
 					</thead>
 					<tbody>

@@ -8,7 +8,7 @@
 echo "
 <table>
 <thead>
-	<tr><td>Sort by:</td>
+	<tr><td>{$this->translate('labels.sort_by')}:</td>
 ";
 	$c = $this->solrObject->response->numFound;
 	if ($c) {

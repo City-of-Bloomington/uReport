@@ -11,8 +11,12 @@ $type = View::escape($this->type);
 	<fieldset>
 		<input type="hidden" name="type" value="<?php echo $type; ?>" />
 		<input type="hidden" name="requestUri" value="<?php echo $_SERVER['REQUEST_URI']; ?>" />
-		<label>Save <?php echo $type; ?> as:<input name="name" /></label>
-		<button type="submit"><span class="icon-save"></span> Save</button>
-		<button type="reset"><span class="icon-remove"></span> Cancel</button>
+		<label>
+			<?php
+				echo sprintf($this->translate('labels.save_as'), $type);
+			?>:<input name="name" />
+		</label>
+		<button type="submit"><span class="icon-save">  </span> <?php echo $this->translate('labels.save'  ); ?></button>
+		<button type="reset"> <span class="icon-remove"></span> <?php echo $this->translate('labels.cancel'); ?></button>
 	</fieldset>
 </form>

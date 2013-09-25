@@ -8,7 +8,10 @@
 <div class="interfaceBox">
 	<h2><?php
 			if (userIsAllowed('actions','update')) {
-				echo '<a class="btn" href="'.BASE_URL.'/actions/update"><span class="icon-plus"></span> Add</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/actions/update',
+					$this->translate('labels.add')
+				);
 			}
 		?>
 		Actions
@@ -16,9 +19,9 @@
 	<table>
 		<thead>
 			<tr><th></th>
-				<th>Action</th>
-				<th>Description</th>
-				<th>Type</th>
+				<th><?php echo $this->translate(array('labels.action', 'labels.actions', 1)); ?></th>
+				<th><?php echo $this->translate('labels.description'); ?></th>
+				<th><?php echo $this->translate('labels.type'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -28,13 +31,10 @@
 			foreach ($list as $action) {
 				$editButton = '';
 				if (userIsAllowed('actions','update') && $action->getType()!='system') {
-					$editButton = "
-					<a class=\"btn\"
-						href=\"".BASE_URL."/actions/update?action_id={$action->getId()}\">
-						<span class=\"icon-pencil\"></span>
-						Edit
-					</a>
-					";
+					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+						BASE_URI.'/actions/update?action_id='.$action->getId(),
+						$this->translate('labels.edit')
+					);
 				}
 				$name = View::escape($action->getName());
 				$description = View::escape($action->getDescription());

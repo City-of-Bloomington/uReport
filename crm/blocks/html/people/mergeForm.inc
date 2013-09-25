@@ -13,14 +13,25 @@
 			<div class="target_a">
 				<input name="targetPerson" id="targetPerson_a" type="radio" value="a" checked="checked" />
 				<input name="person_id_a" type="hidden" value="<?php echo $this->personA->getId(); ?>" />
-				<label for="targetPerson_a">Merge Into Person #<?php echo $this->personA->getId(); ?></label>
+				<label for="targetPerson_a">
+				<?php
+					echo $this->translate('labels.merge_into_person').' #'.$this->personA->getId();
+				?>
+				</label>
 			</div>
 			<div class="target_b">
-				<label for="targetPerson_b">Merge Into Person #<?php echo $this->personB->getId(); ?></label>
+				<label for="targetPerson_b">
+				<?php
+					echo $this->translate('labels.merge_into_person').' #'.$this->personB->getId();
+				?>
+				</label>
 				<input name="targetPerson" id="targetPerson_b" type="radio" value="b" />
 				<input name="person_id_b" type="hidden" value="<?php echo $this->personB->getId(); ?>" />
 			</div>
-			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<button type="submit">
+				<span class="icon-ok"></span>
+				<?php echo $this->translate('labels.submit'); ?>
+			</button>
 		</fieldset>
 	</form>
 </div>

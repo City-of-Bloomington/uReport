@@ -1,29 +1,24 @@
 <div id="banner">
 	<ul id="utilityBar">
 		<?php
+			$li = '<li><a href="%s">%s</a></li>';
+
 			if (userIsAllowed('users')) {
-				echo "<li><a href=\"".BASE_URI."/admin\">Admin</a></li>";
+				echo sprintf($li, BASE_URI.'/admin', $this->translate('labels.admin'));
 			}
 			if (isset($_SESSION['USER'])) {
-				$name = View::escape("{$_SESSION['USER']->getFirstname()} {$_SESSION['USER']->getLastname()}");
-				echo "
-				<li><a href=\"".BASE_URI."/account\">My Account</a></li>
-				<li><a href=\"".BASE_URI."/login/logout\">Logout</a></li>
-				<li>Signed in as $name</li>
-				<li><a href=\"https://github.com/City-of-Bloomington/uReport/wiki/User-Guide\">
-						Help
-					</a>
-				</li>
-				";
+				echo sprintf($li, BASE_URI.'/account', $this->translate('labels.my_account'));
+				echo sprintf($li, BASE_URI.'/login/logout', $this->translate('labels.logout'));
+
+				$name = View::escape($_SESSION['USER']->getFullname());
+				echo sprintf('<li>'.sprintf($this->translate('messages.signed_in_as'), $name).'</li>');
+				echo sprintf($li,
+					'https://github.com/City-of-Bloomington/uReport/wiki/User-Guide',
+					$this->translate('labels.help'));
 			}
 			else {
 				$return_url = View::escape($_SERVER['REQUEST_URI']);
-				echo "
-				<li><a href=\"".BASE_URI."/login?return_url=$return_url\">
-						Login
-					</a>
-				</li>
-				";
+				echo sprintf($li, BASE_URI.'/login?return_url='.$return_url, $this->translate('labels.login'));
 			}
 		?>
 	</ul>

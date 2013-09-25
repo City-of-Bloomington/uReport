@@ -17,8 +17,11 @@ $title = $this->title ? View::escape($this->title) : $title;
 			include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc';
 		?>
 
-		<fieldset><legend>Submit</legend>
-			<button type="submit"><span class="icon-save"></span> Save</button>
+		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
+			<button type="submit">
+				<span class="icon-save"></span>
+				<?php echo $this->translate('labels.save'); ?>
+			</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = urlencode($_REQUEST['return_url']);
@@ -36,7 +39,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 				echo "
 				<a class=\"btn\" href=\"$return_url\" $onclick>
 					<span class=\"icon-remove\"></span>
-					Cancel
+					{$this->translate('labels.cancel')}
 				</a>
 				";
 			?>

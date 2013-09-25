@@ -6,12 +6,16 @@
  */
 ?>
 <div class="categoryGroupReportForm">
-	<h2>Reorder Groups</h2>
+	<h2><?php
+			echo $this->translate('labels.reorder').' '.
+				 $this->translate(array('labels.categoryGroup', 'labels.categoryGroups', 2));
+		?>
+	</h2>
 	<form method="post" action="<?php echo BASE_URI; ?>/categoryGroups/reorder">
 		<table>
 			<thead>
-				<tr><th>Name</th>
-					<th>Order</th>
+				<tr><th><?php echo $this->translate('labels.name' ); ?></th>
+					<th><?php echo $this->translate('labels.order'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,10 +37,9 @@
 			?>
 			</tbody>
 		</table>
-		<button type="submit"><span class="icon-save"></span> Save</button>
-		<a class="btn" href="<?php echo BASE_URI; ?>/categoryGroups">
-			<span class="icon-remove"></span>
-			Cancel
-		</a>
+		<?php
+			$helper = $this->template->getHelper('saveAndCancelButtons');
+			echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
+		?>
 	</form>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
@@ -26,15 +26,15 @@ echo "
 		<tr><th>Default Department</th>
 			<td>$department</td>
 		</tr>
-		<tr><th>Display Permission Level</th>
+		<tr><th>{$this->translate('labels.displayPermissionLevel')}</th>
 			<td>{$this->category->getDisplayPermissionLevel()}</td>
 		</tr>
-		<tr><th>Posting Permission Level</th>
+		<tr><th>{$this->translate('labels.postingPermissionLevel')}</th>
 			<td>{$this->category->getPostingPermissionLevel()}</td>
 		</tr>
 	</table>
 	<form method=\"get\">
-		<fieldset><legend>Custom Fields</legend>
+		<fieldset><legend>{$this->translate('labels.custom_fields')}</legend>
 ";
 			$this->issue = new Issue();
 			include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';

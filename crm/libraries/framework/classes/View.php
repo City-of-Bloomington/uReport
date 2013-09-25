@@ -7,8 +7,21 @@
 abstract class View
 {
 	protected $vars = array();
+	private static $zend_translate;
 
 	abstract public function render();
+
+	public function __construct()
+	{
+		if (!self::$zend_translate) {
+			self::$zend_translate = new Zend_Translate(array(
+				'adapter' => 'gettext',
+				'content' => APPLICATION_HOME.'/language',
+				'locale'  => LOCALE,
+				'scan'    => Zend_Translate::LOCALE_FILENAME
+			));
+		}
+	}
 
 	/**
 	 * Magic Method for setting object properties
@@ -62,5 +75,22 @@ abstract class View
 		}
 
 		return $input;
+	}
+
+	/**
+	 * Returns the gettext translation of msgid
+	 *
+	 * For entries in the PO that are plurals, you must pass msgid as an array
+	 * $this->translate(array('msgid', 'msgid_plural', $num))
+	 *
+	 * Zend_Translate will use the correct plural version based on the number
+	 * you provide.
+	 *
+	 * @param mixed $msgid String or Array
+	 * @return string
+	 */
+	public function translate($msgid)
+	{
+		return self::$zend_translate->_($msgid);
 	}
 }

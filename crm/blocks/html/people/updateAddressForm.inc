@@ -15,9 +15,9 @@ foreach ($fields as $field) {
 ?>
 <div class="updateAddressForm">
 	<form method="post">
-		<fieldset><legend>Address</legend>
+		<fieldset><legend><?php echo $this->translate(array('labels.address', 'labels.addresses', 1)); ?></legend>
 			<table>
-				<tr><td><label for="label">Label</label></td>
+				<tr><td><label for="label"><?php echo $this->translate(array('labels.label', 'labels.labels', 1)); ?></label></td>
 					<td><select name="label" id="label">
 						<?php
 							foreach (Address::$LABELS as $label) {
@@ -30,20 +30,20 @@ foreach ($fields as $field) {
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="address">Address</label></td>
+				<tr><td><label for="address"><?php echo $this->translate(array('labels.address', 'labels.addresses', 1)); ?></label></td>
 					<td><input name="address" id="address" value="<?php echo $address; ?>" /></td>
 				</tr>
 
-				<tr><td><label for="city">City</label></td>
+				<tr><td><label for="city"><?php echo $this->translate('labels.city'); ?></label></td>
 					<td><input name="city" id="city" value="<?php echo $city; ?>" /></td>
 				</tr>
 
-				<tr><td><label for="state">State</label></td>
+				<tr><td><label for="state"><?php echo $this->translate('labels.state'); ?></label></td>
 					<td><input name="state" id="state" size="2" maxlength="2" value="<?php echo $state; ?>" />
 					</td>
 				</tr>
 
-				<tr><td><label for="zip">Zip</label></td>
+				<tr><td><label for="zip"><?php echo $this->translate('labels.zip'); ?></label></td>
 					<td><input name="zip" id="zip" size="5" maxlength="5" value="<?php echo $zip; ?>" />
 					</td>
 				</tr>
@@ -60,12 +60,10 @@ foreach ($fields as $field) {
 				$cancelUrl = $this->template->controller == 'AccountController'
 					? BASE_URI.'/account'
 					: $this->address->getPerson()->getUrl();
+
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons($cancelUrl);
 			?>
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo $cancelUrl ?>">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
 		</fieldset>
 	</form>
 </div>

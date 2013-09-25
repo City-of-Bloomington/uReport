@@ -12,14 +12,8 @@ if ($days) {
 	$targetDate = $status=='open' ? new DateTime() : new DateTime($this->ticket->getClosedDate());
 	$diff = $targetDate->diff($dateEntered);
 	$daysPassed = $diff->format('%a');
+
 	$class = $daysPassed >= $days ? 'pastDue' : 'onTrack';
-	echo "
-	<div class=\"slaStatus $class\">
-		<p>
-		Most tickets of this type should be closed within $days days,
-		although some cases may be longer.
-		$daysPassed days have already passed.
-		</p>
-	</div>
-	";
+	$notice = sprintf($this->translate('text.sla_status_notice'), $days, $daysPassed);
+	echo "<div class=\"slaStatus $class\"><p>$notice</p></div>";
 }

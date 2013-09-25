@@ -7,12 +7,15 @@
  */
 ?>
 <div class="responseForm">
-	<h1>Record a response</h1>
+	<h2><?php echo $this->translate('labels.add_response'); ?></h2>
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend>How did you respond to the person?</legend>
+		<fieldset><legend><?php echo $this->translate('messages.how_did_you_respond'); ?></legend>
 			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<table>
-				<tr><td><label for="contactMethod_id">Contact Method</label></td>
+				<tr><td><label for="contactMethod_id">
+						<?php echo $this->translate(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
+						</label>
+					</td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
 						<?php
 							$list = new ContactMethodList();
@@ -29,13 +32,12 @@
 					</td>
 				</tr>
 			</table>
-			<div><label for="notes">Notes</label></div>
+			<div><label for="notes"><?php echo $this->translate(array('labels.comment', 'labels.comments', 2)); ?></label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
-			<button type="submit"><span class="icon-ok"></span> Submit</button>
-			<a class="btn" href="<?php echo $this->issue->getTicket()->getURL(); ?>">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons($this->issue->getTicket()->getURL());
+			?>
 		</fieldset>
 	</form>
 </div>

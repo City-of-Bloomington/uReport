@@ -11,9 +11,9 @@ $referred = count($this->person->getTickets('referred',  array('status'=>'open')
 echo "
 <div class=\"stats\">
 	<table>
-		<tr><th>Currently assigned cases  </th><td>$assigned</td></tr>
-		<tr><th>Outstanding reported cases</th><td>$reported</td></tr>
-		<tr><th>Current referred cases    </th><td>$referred</td></tr>
+		<tr><th>{$this->translate('labels.tickets_open_assigned')}</th><td>$assigned</td></tr>
+		<tr><th>{$this->translate('labels.tickets_open_reported')}</th><td>$reported</td></tr>
+		<tr><th>{$this->translate('labels.tickets_open_referred')}</th><td>$referred</td></tr>
 	</table>
 </div>
 ";

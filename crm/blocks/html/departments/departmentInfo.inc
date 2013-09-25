@@ -10,18 +10,18 @@ $deleteButton = '';
 if (userIsAllowed('departments','update')) {
 	$editButton = "
 	<a class=\"btn\"
-		href=\"".BASE_URL."/departments/update?department_id={$this->department->getId()}\">
+		href=\"".BASE_URI."/departments/update?department_id={$this->department->getId()}\">
 		<span class=\"icon-pencil\"></span>
-		Edit
+		{$this->translate('labels.edit')}
 	</a>
 	";
 	// Make sure this would not violate any foreign keys
 	if ($this->department->isSafeToDelete()) {
 		$deleteButton = "
 		<a class=\"btn\"
-			href=\"".BASE_URL."/departments/delete?department_id={$this->department->getId()}\">
+			href=\"".BASE_URI."/departments/delete?department_id={$this->department->getId()}\">
 			<span class=\"icon-remove\"></span>
-			Delete
+			{$this->translate('labels.delete')}
 		</a>
 		";
 	}
@@ -47,15 +47,18 @@ $actions = implode(', ',$actions);
 
 echo "
 <div class=\"department\">
-	<h3><a href=\"".BASE_URL."/departments/view?department_id={$this->department->getId()}\">
+	<h3><a href=\"".BASE_URI."/departments/view?department_id={$this->department->getId()}\">
 			$name
 		</a>
 		$editButton $deleteButton
 	</h3>
 	<table>
-		<tr><th>Default Person</th><td>$defaultPerson</td></tr>
-		<tr><th>Categories</th><td>$categories</td></tr>
-		<tr><th>Actions</th><td>$actions</td></tr>
+		<tr><th>{$this->translate('labels.defaultPerson')}</th>
+			<td>$defaultPerson</td></tr>
+		<tr><th>{$this->translate(array('labels.category', 'labels.categories', 2))}</th>
+			<td>$categories</td></tr>
+		<tr><th>{$this->translate(array('labels.action', 'labels.actions', 2))}</th>
+			<td>$actions</td></tr>
 	</table>
 </div>
 ";

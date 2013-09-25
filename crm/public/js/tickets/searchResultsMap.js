@@ -3,7 +3,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Quan Zhang <quanzhang@acm.org>
  */
-
 'use strict';
 
 google.maps.event.addDomListener(window, 'load', function() {
@@ -139,7 +138,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 				Y.io(solrStatsQuery, {
 					on: {
 						complete: function (id, o, args) {
-							alert(solrStatsQuery + ' = ' + o.responseText);
 							var response 	= Y.JSON.parse(o.responseText),
 								latStats 	= response.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
 								lngStats 	= response.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],

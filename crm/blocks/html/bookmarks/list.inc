@@ -5,7 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param BookmarkList $this->bookmarks
  */
-$title = !empty($this->title) ? View::escape($this->title) : 'Saved Searchs';
+$title = !empty($this->title)
+	? View::escape($this->title)
+	: $this->translate(array('labels.bookmark', 'labels.bookmarks', 2));
 if (count($this->bookmarks)) {
 	echo "
 	<div class=\"bookmarkList\">
@@ -18,7 +20,7 @@ if (count($this->bookmarks)) {
 			<li><a href=\"{$bookmark->getRequestUri()}\">$name</a>
 				<a class=\"icon-remove\"
 					href=\"".BASE_URI."/bookmarks/delete?bookmark_id={$bookmark->getId()};return_url=$_SERVER[REQUEST_URI]\">
-					<span class=\"hidden-label\">Delete</span>
+					<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
 				</a>
 			</li>
 			";

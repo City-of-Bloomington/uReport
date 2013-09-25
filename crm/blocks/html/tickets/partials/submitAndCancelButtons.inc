@@ -9,6 +9,12 @@ $onclick = isset($_REQUEST['callback'])
 	? 'onclick="self.close();"'
 	: '';
 echo "
-<button type=\"submit\"><span class=\"icon-ok\"></span> Submit</button>
-<a class=\"btn\" href=\"{$this->ticket->getURL()}\" $onclick><span class=\"icon-remove\"></span> Cancel</a>
+<button type=\"submit\">
+	<span class=\"icon-ok\"></span>
+	{$this->translate('labels.submit')}
+</button>
+<a class=\"btn\" href=\"{$this->ticket->getURL()}\" $onclick>
+	<span class=\"icon-remove\"></span>
+	{$this->translate('labels.cancel')}
+</a>
 ";

@@ -7,14 +7,19 @@
  */
 ?>
 <div class="slaForm">
-	<h2>Service Level Agreement</h2>
-	<p>These departments agree to handle new tickets within the time specificed.</p>
+	<h2><?php echo $this->translate('labels.service_level_agreement'); ?></h2>
+	<p><?php echo $this->translate('text.service_level_agreement_description'); ?></p>
 
-	<form method="post" action="<?php echo BASE_URL; ?>/categories/sla">
-		<fieldset><legend>Categories</legend>
+	<form method="post" action="<?php echo BASE_URI; ?>/categories/sla">
+		<fieldset><legend><?php echo $this->translate(array('labels.category','labels.categories', 2)); ?></legend>
 			<table>
 				<thead>
-					<tr><th>Category</th><th>Department</th><th>SLA Days</th></tr>
+					<tr><th><?php echo $this->translate(array('labels.category', 'labels.categories', 1)); ?></th>
+						<th><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></th>
+						<th><?php echo $this->translate('labels.sla'); ?>
+							<?php echo $this->translate(array('labels.day', 'labels.days', 2)); ?>
+						</th>
+					</tr>
 				</thead>
 				<tbody>
 				<?php
@@ -41,10 +46,10 @@
 				</tbody>
 			</table>
 
-			<button type="submit"><span class="icon-save"></span> Save</button>
+			<button type="submit"><span class="icon-save"></span> <?php echo $this->translate('labels.save'); ?></button>
 			<a class="btn" href="<?php echo BASE_URI; ?>/categories">
 				<span class="icon-remove"></span>
-				Cancel
+				<?php echo $this->translate('labels.cancel'); ?>
 			</a>
 		</fieldset>
 	</form>

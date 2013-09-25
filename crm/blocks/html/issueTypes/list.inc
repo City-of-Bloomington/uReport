@@ -6,10 +6,13 @@
  */
 ?>
 <div>
-	<h2>Issue Types
-		<?php
+	<h2><?php
+			echo $this->translate(array('labels.issueType', 'labels.issueTypes', 2));
 			if (userIsAllowed('issueTypes','update')) {
-				echo '<a class="btn" href="'.BASE_URL.'/issueTypes/update"><span class="icon-plus"></span> Add</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/issueTypes/update',
+					$this->translate('labels.add')
+				);
 			}
 		?>
 	</h2>
@@ -21,9 +24,9 @@
 			if (userIsAllowed('issueTypes','update')) {
 				$editButton = "
 				<a class=\"btn\"
-					href=\"".BASE_URL."/issueTypes/update?issueType_id={$type->getId()}\">
+					href=\"".BASE_URI."/issueTypes/update?issueType_id={$type->getId()}\">
 					<span class=\"icon-pencil\"></span>
-					Edit
+					{$this->translate('labels.edit')}
 				</a>
 				";
 			}

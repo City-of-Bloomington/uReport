@@ -8,13 +8,16 @@
 ?>
 <div class="uploadForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/media/upload" enctype="multipart/form-data">
-		<fieldset><legend>Upload an attachment</legend>
+		<fieldset><legend><?php echo $this->translate('labels.upload_media'); ?></legend>
 			<input name="issue_id"   type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<input name="attachment" type="file" />
-			<button type="submit"><span class="icon-upload"></span> Upload</button>
+			<button type="submit">
+				<span class="icon-upload"></span>
+				<?php echo $this->translate('labels.upload'); ?>
+			</button>
 			<a class="btn" href="<?php echo $this->issue->getTicket()->getURL(); ?>">
 				<span class="icon-remove"></span>
-				Cancel
+				<?php echo $this->translate('labels.cancel'); ?>
 			</a>
 		</fieldset>
 	</form>

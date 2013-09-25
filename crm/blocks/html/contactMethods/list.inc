@@ -1,36 +1,32 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
 <div>
-	<h2>Contact Methods
-		<?php
+	<h2><?php
+			echo $this->translate(array('labels.contactMethod','labels.contactMethods',2));
 			if (userIsAllowed('contactMethods','update')) {
-				echo '<a class="btn" href="'.BASE_URL.'/contactMethods/update"><span class="icon-plus"></span> Add</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/contactMethods/update',
+					$this->translate('labels.add')
+				);
 			}
 		?>
 	</h2>
-	<p>
-		These are the available contact methods for the system.
-		They are used both for how the citizen contacted the city and
-		for how the citizen would like to be contacted.
-	</p>
+	<p><?php echo $this->translate('text.contactMethods_description'); ?></p>
 	<ul>
 	<?php
 		$list = new ContactMethodList();
 		$list->find();
  		foreach ($list as $method) {
 			if (userIsAllowed('contactMethods','update')) {
-				$editButton = "
-				<a class=\"btn\"
-					href=\"".BASE_URL."/contactMethods/update?contactMethod_id={$method->getId()}\">
-					<span class=\"icon-pencil\"></span>
-					Edit
-				</a>
-				";
+				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+					BASE_URI.'/contactMethods/update?contactMethod_id='.$method->getId(),
+					$this->translate('labels.edit')
+				);
 			}
 			$name = View::escape($method->getName());
 			echo "<li>$editButton $name</li>";

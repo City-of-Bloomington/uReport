@@ -20,12 +20,10 @@
 				$cancelUrl = $this->template->controller == 'AccountController'
 					? BASE_URI.'/account'
 					: $this->phone->getPerson()->getUrl();
+
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons($cancelUrl);
 			?>
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo $cancelUrl; ?>">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
 		</fieldset>
 	</form>
 </div>

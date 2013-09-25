@@ -6,9 +6,9 @@
  * @param Phone $this->phone
  */
 ?>
-<fieldset><legend>Phone Number</legend>
+<fieldset><legend><?php echo $this->translate(array('labels.phone', 'labels.phones', 1)); ?></legend>
 	<label>
-		Label
+		<?php echo $this->translate(array('labels.label', 'labels.label', 1)); ?>
 		<select name="label" id="label">
 		<?php
 			foreach (Phone::$LABELS as $label) {

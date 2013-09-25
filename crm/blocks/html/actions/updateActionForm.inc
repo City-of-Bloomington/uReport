@@ -4,21 +4,22 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$title = $this->action->getId() ? 'Edit Action' : 'Add Action';
+$title = $this->action->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.action', 'labels.actions', 1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.action', 'labels.actions', 1));
 
 $name = View::escape($this->action->getName());
 $description = View::escape($this->action->getDescription());
 ?>
 <div class="updateActionForm">
 	<h2><?php echo $title; ?></h2>
-	<h3>Description variables</h3>
-	<p>You can call for data by using these strings inside the description</p>
+	<p><?php echo $this->translate('text.actions_description'); ?></p>
 	<table>
 		<tr><th>{enteredByPerson}</th>
-			<td>The person who entered the action</td>
+			<td><?php echo $this->translate('text.actions_enteredByPerson'); ?></td>
 		</tr>
 		<tr><th>{actionPerson}</th>
-			<td>The person the action is about</td>
+			<td><?php echo $this->translate('text.actions_actionPerson'); ?></td>
 		</tr>
 	</table>
 	<form method="post" action="<?php echo BASE_URL; ?>/actions/update">
@@ -27,7 +28,7 @@ $description = View::escape($this->action->getDescription());
 			<table>
 
 				<tr><td><label for="name" class="required">
-							Name
+							<?php echo $this->translate('labels.name'); ?>
 							<span class="icon-asterisk"></span>
 						</label>
 					</td>
@@ -35,18 +36,17 @@ $description = View::escape($this->action->getDescription());
 				</tr>
 
 				<tr><td><label for="description" class="required">
-							Description
+							<?php echo $this->translate('labels.description'); ?>
 							<span class="icon-asterisk"></span>
 						</label>
 					</td>
 					<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
 				</tr>
 			</table>
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo BASE_URL; ?>/actions">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/actions');
+			?>
 		</fieldset>
 	</form>
 </div>

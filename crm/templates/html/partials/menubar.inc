@@ -1,17 +1,14 @@
 <div id="menuBar">
 	<ul><?php
-			echo "
-			<li><a href=\"".BASE_URI."/tickets\">Cases</a></li>
-			<li><a href=\"".BASE_URI."/locations\">Locations</a></li>
-			";
-			if (userIsAllowed('people')) {
-				echo "<li><a href=\"".BASE_URI."/people\">People</a></li>";
-			}
+			$li = '<li><a href="%s">%s</a></li>';
+			echo sprintf($li, BASE_URI.'/tickets'  , $this->translate(array('labels.ticket'  ,'labels.tickets'  ,2)));
+			echo sprintf($li, BASE_URI.'/locations', $this->translate(array('labels.location','labels.locations',2)));
+			echo sprintf($li, BASE_URI.'/people'   , $this->translate(array('labels.person'  ,'labels.people'   ,2)));
 			if (userIsAllowed('tickets', 'add')) {
-				echo "<li><a href=\"".BASE_URI."/tickets/add\">New Case</a></li>";
+				echo sprintf($li, BASE_URI.'/tickets/add', $this->translate('labels.add_new_ticket'));
 			}
 			if (userIsAllowed('reports')) {
-				echo "<li><a href=\"".BASE_URI."/reports\">Reports</a></li>";
+				echo sprintf($li, BASE_URI.'/reports', $this->translate(array('labels.report', 'labels.reports', 2)));
 			}
 		?>
 	</ul>

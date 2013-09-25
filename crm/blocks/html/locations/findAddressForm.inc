@@ -8,7 +8,7 @@ $address = isset($_GET['location']['address']) ? View::escape($_GET['location'][
 ?>
 <div class="findAddressForm">
 	<form method="get" action="<?php echo BASE_URL; ?>/locations">
-		<fieldset><legend>Find a specific address</legend>
+		<fieldset><legend><?php echo $this->translate('labels.find_address'); ?></legend>
 			<input name="location[address]" id="location-address" value="<?php echo $address; ?>" />
 			<?php
 				// Preserve any extra parameters passed in
@@ -20,7 +20,10 @@ $address = isset($_GET['location']['address']) ? View::escape($_GET['location'][
 					}
 				}
 			?>
-			<button type="submit"><span class="icon-search"></span> Search</button>
+			<button type="submit">
+				<span class="icon-search"></span>
+				<?php echo $this->translate('labels.search'); ?>
+			</button>
 		</fieldset>
 	</form>
 </div>

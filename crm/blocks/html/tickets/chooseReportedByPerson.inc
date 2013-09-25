@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
@@ -13,10 +13,10 @@ $url = BASE_URL."/people?return_url=$return_url";
 echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
-		<h3>Reporting Person</h3>
+		<h3>{$this->translate('labels.reportedByPerson')}</h3>
 		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
 			<span class=\"icon-user\"></span>
-			Lookup Person
+			{$this->translate('labels.find_person')}
 		</a>
 	</div>
 	<div class=\"bd\">
@@ -37,7 +37,7 @@ echo "
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'    => $reportedTickets,
-					'title'         => 'Reported Cases',
+					'title'         => $this->translate('labels.tickets_reported'),
 					'disableButtons'=> true,
 					'disableLinks'  => true
 				)

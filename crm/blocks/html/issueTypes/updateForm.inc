@@ -6,24 +6,25 @@
  * @param IssueType $this->issueType
  */
 $name = View::escape($this->issueType->getName());
+$title = $this->issueType->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.issueType', 'labels.issueTypes', 1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.issueType', 'labels.issueTypes', 1));
 ?>
 <div>
-	<h2><?php echo $this->issueType->getId() ? 'Edit' : 'Add'; ?> Issue Type</h2>
+	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo BASE_URI; ?>/issueTypes/update">
 		<input type="hidden" name="issueType_id" value="<?php echo $this->issueType->getId(); ?>" />
 
 		<fieldset>
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/issueTypes">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/issueTypes');
+			?>
 		</fieldset>
 	</form>
 </div>

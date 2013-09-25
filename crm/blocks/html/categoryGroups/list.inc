@@ -7,24 +7,30 @@
  */
 ?>
 <div class="categoryGroupList">
-	<h2>Groups
-		<?php
+	<h2><?php
+			echo $this->translate(array('labels.categoryGroup', 'labels.categoryGroups', 2));
 			if (userIsAllowed('categoryGroups','update')) {
 				echo "
 				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/update\">
 					<span class=\"icon-plus\"></span>
-					Add
+					{$this->translate('labels.add')}
 				</a>
 				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/reorder\">
 					<span class=\"icon-reorder\"></span>
-					Reorder
+					{$this->translate('labels.reorder')}
 				</a>
 				";
 			}
 		?>
 	</h2>
 	<table>
-		<thead><tr><th></th><th>Name</th><th>Order</th><th></th></tr></thead>
+		<thead>
+			<tr><th></th>
+				<th><?php echo $this->translate('labels.name' ); ?></th>
+				<th><?php echo $this->translate('labels.order'); ?></th>
+				<th></th>
+			</tr>
+		</thead>
 		<tbody>
 		<?php
 			foreach ($this->categoryGroupList as $group) {
@@ -35,14 +41,14 @@
 					<a class=\"btn\"
 						href=\"".BASE_URI."/categoryGroups/update?categoryGroup_id={$group->getId()}\">
 						<span class=\"icon-pencil\"></span>
-						Edit
+						{$this->translate('labels.edit')}
 					</a>
 					";
 					$deleteButton = "
 					<a class=\"btn\"
 						href=\"".BASE_URI."/categoryGroups/delete?categoryGroup_id={$group->getId()}\">
 						<span class=\"icon-remove\"></span>
-						Delete
+						{$this->translate('labels.delete')}
 					</a>
 					";
 				}

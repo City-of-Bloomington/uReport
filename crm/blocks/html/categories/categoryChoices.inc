@@ -8,7 +8,7 @@
  * Each category will be a link to $return_url containg
  * the category_id of the chosen category
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
@@ -16,7 +16,7 @@
  */
 echo "
 <div class=\"categoryChoices\">
-	<h2>Choose a category</h2>
+	<h2>{$this->translate('messages.choose_category')}</h2>
 	<ul>
 ";
 	$return_url = $this->return_url;

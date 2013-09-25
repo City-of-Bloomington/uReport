@@ -10,7 +10,10 @@
  */
 $c = $this->solrObject->response->numFound;
 if ($c) {
-	echo "<h2>Search Results</h2><div># Cases in Current Search: $c</div>";
+	echo "
+	<h2>{$this->translate('labels.search_results')}</h2>
+	<div>{$this->translate('labels.search_results_count')}: $c</div>
+	";
 
 	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('solrObject'=>$this->solrObject));
 	$rows   = new Block('tickets/partials/searchResultsRows.inc',          array('solrObject'=>$this->solrObject));
@@ -19,7 +22,7 @@ if ($c) {
 	echo $rows  ->render('html', $this->template);
 }
 else {
-	echo "<h2>No Cases Found</h2>";
+	echo "<h2>{$this->translate('messages.no_tickets_found')}</h2>";
 }
 
 // Solr rows start at 0, but pages start at 1

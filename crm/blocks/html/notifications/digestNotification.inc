@@ -8,7 +8,11 @@
 $name = View::escape($this->person->getFullname());
 ?>
 <p>
-	<?php echo $name; ?>, here is your weekly summary of open cases in <?php echo APPLICATION_NAME; ?>.
-	Please <a href="<?php echo $this->person->getURL(); ?>">visit your profile</a>
-	or click a case below to edit or update your cases.
+<?php
+	echo sprintf($this->translate('text.digestNotification'),
+		$name,
+		APPLICATION_NAME,
+		$this->person->getURL()
+	);
+?>
 </p>

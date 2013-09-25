@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>, W. Sibo <sibow@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -9,7 +9,7 @@
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?php echo BASE_URI; ?>/tickets/assign">
-		<fieldset><legend>Assign Case</legend>
+		<fieldset><legend><?php echo $this->translate('labels.assign_ticket');  ?></legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in

@@ -12,16 +12,16 @@ $deleteButton   = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"btn\"
-		href=\"".BASE_URL."/issues/update?issue_id={$this->issue->getId()}\">
+		href=\"".BASE_URI."/issues/update?issue_id={$this->issue->getId()}\">
 		<span class=\"icon-pencil\"></span>
-		Edit Issue
+		{$this->translate('labels.edit_issue')}
 	</a>
 	";
 	$deleteButton = "
 	<a class=\"btn\"
-		href=\"".BASE_URL."/issues/delete?issue_id={$this->issue->getId()}\">
+		href=\"".BASE_URI."/issues/delete?issue_id={$this->issue->getId()}\">
 		<span class=\"icon-remove\"></span>
-		Delete Issue
+		{$this->translate('labels.delete_issue')}
 	</a>
 	";
 }

@@ -7,9 +7,12 @@
 ?>
 <div class="findForm">
 	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend>Filter Users</legend>
+		<fieldset><legend><?php echo $this->translate('labels.find_user'); ?></legend>
 			<table>
-				<tr><td><label for="department_id">Department</label></td>
+				<tr><td><label for="department_id">
+							<?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?>
+						</label>
+					</td>
 					<td><select name="department_id" id="department_id">
 							<option></option>
 							<?php
@@ -28,7 +31,7 @@
 					</td>
 				</tr>
 			</table>
-			<button type="submit"><span class="icon-search"></span> Submit</button>
+			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('submit'); ?></button>
 		</fieldset>
 	</form>
 </div>

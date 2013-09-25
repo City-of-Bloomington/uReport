@@ -22,7 +22,10 @@ $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId(
 	: $currentDepartment->getDefaultPerson_id();
 ?>
 <table>
-	<tr><td><label for="assignedPerson_id">Person</label></td>
+	<tr><td><label for="assignedPerson_id">
+				<?php echo $this->translate(array('labels.person', 'labels.people', 1)); ?>
+			</label>
+		</td>
 		<td><select name="assignedPerson_id" id="assignedPerson_id">
 			<?php
 				foreach ($currentDepartment->getPeople() as $person) {
@@ -37,5 +40,5 @@ $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId(
 		</td>
 	</tr>
 </table>
-<div><label for="notes">Note to the assignee</label></div>
+<div><label for="notes"><?php echo $this->translate('labels.assignment_notes'); ?></label></div>
 <div><textarea name="notes" id="notes"></textarea></div>

@@ -29,6 +29,8 @@ class Block extends View
 	 */
 	public function __construct($file,array $vars=null)
 	{
+		parent::__construct();
+		
 		$this->file = $file;
 		if (count($vars)) {
 			foreach ($vars as $name=>$value) {

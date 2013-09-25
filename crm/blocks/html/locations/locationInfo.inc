@@ -15,7 +15,7 @@ if ($this->location) {
 		$addTicketButton = "
 		<a class=\"btn\" href=\"".BASE_URI."/tickets/add?location={$this->location}\">
 			<span class=\"icon-plus\"></span>
-			Add New Case
+			{$this->translate('labels.add_new_ticket')}
 		</a>
 		";
 	}

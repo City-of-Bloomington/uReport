@@ -15,7 +15,7 @@ echo "
 	<div class=\"hd\">
 		<a id=\"findAddressButton\" class=\"btn\" href=\"$url\">
 			<span class=\"icon-globe\"></span>
-			Lookup Location
+			{$this->translate('labels.find_location')}
 		</a>
 	</div>
 	<div class=\"bd\">
@@ -31,7 +31,7 @@ echo "
 			'tickets/ticketList.inc',
 			array(
 				'ticketList'=>new TicketList(array('location'=>$this->ticket->getLocation())),
-				'title'=>'Cases Associated with this Location',
+				'title'=>$this->translate('labels.tickets_for_location'),
 				'disableLinks'=>true
 			)
 		);

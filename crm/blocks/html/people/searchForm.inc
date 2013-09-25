@@ -10,7 +10,7 @@ if (!isset($_GET['setOfPeople'])) {
 }
 ?>
 <div class="findPeople">
-	<h2><?php echo $this->title ? View::escape($this->title) : 'Look up a Person'; ?></h2>
+	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate('labels.find_person'); ?></h2>
 	<form method="get" action="<?php echo BASE_URL; ?>/people">
 		<fieldset>
 			<?php
@@ -56,13 +56,13 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit"><span class="icon-search"></span> Search</button>
+			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
 					<button type=\"button\" onclick=\"self.close();\">
 						<span class=\"icon-remove\"></span>
-						Cancel
+						{$this->translate('labels.cancel')}
 					</button>
 					";
 				}

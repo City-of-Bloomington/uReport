@@ -14,13 +14,13 @@ if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
 	<a class=\"btn\"
 		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()}\">
 		<span class=\"icon-plus\"></span>
-		Add Issue
+		{$this->translate('labels.add_issue')}
 	</a>
 	";
 }
 echo "
 <div class=\"issueList\">
-	<h1>Associated Issues $addButton</h1>
+	<h2>{$this->translate('labels.ticket_issues')} $addButton</h2>
 ";
 	foreach ($this->issueList as $issue) {
 		$block = new Block(

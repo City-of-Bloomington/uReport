@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
@@ -12,14 +12,14 @@
  */
 ?>
 <div class="ticketList">
-	<h2><?php echo $this->title ? View::escape($this->title) : 'Cases'; ?></h2>
+	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate(array('labels.ticket', 'labels.tickets', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th>Status</th>
-				<th>Entered Date</th>
-				<th>SLA</th>
-				<th>Category</th>
-				<th>Location</th>
+			<tr><th><?php echo $this->translate(array('labels.status', 'labels.statuses', 2)); ?></th>
+				<th><?php echo $this->translate('labels.enteredDate'); ?></th>
+				<th><?php echo $this->translate('labels.sla'); ?></th>
+				<th><?php echo $this->translate(array('labels.category', 'labels.categories', 2)); ?></th>
+				<th><?php echo $this->translate(array('labels.location', 'labels.locations', 2)); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -74,7 +74,10 @@
 								// Just ignore invalid people
 							}
 						}
-						echo "<a class=\"btn\" href=\"$url\"><span class=\"icon-plus\"></span> Add Issue</a>";
+						echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+							$url,
+							$this->translate('labels.add_issue')
+						);
 					}
 				echo "
 					</td>
@@ -89,7 +92,7 @@
 			echo "
 			<div>
 				<a href=\"{$this->moreLink}\">
-					More <span class=\"icon-double-angle-right\"></span>
+					{$this->translate('labels.more')} <span class=\"icon-double-angle-right\"></span>
 				</a>
 			</div>
 			";

@@ -13,7 +13,12 @@ foreach ($fields as $field) {
 	$$field = View::escape($this->person->$get());
 }
 ?>
-<fieldset><legend>Person Info</legend>
+<fieldset>
+	<legend>
+	<?php
+		echo $this->translate(array('labels.person', 'labels.people', 1)).' '.$this->translate('labels.info');
+	?>
+	</legend>
 	<input name="person_id" type="hidden" value="<?php echo $this->person->getId(); ?>" />
 	<?php
 		// Preserve any extra parameters passed in
@@ -26,15 +31,23 @@ foreach ($fields as $field) {
 		}
 	?>
 	<table>
-		<tr><td><label for="firstname" class="required">Firstname <span class="icon-asterisk"></span></label></td>
+		<tr><td><label for="firstname" class="required">
+					<?php echo $this->translate('labels.firstname'); ?>
+					<span class="icon-asterisk"></span>
+				</label>
+			</td>
 			<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
 		</tr>
 
-		<tr><td><label for="middlename">Middlename</label></td>
+		<tr><td><label for="middlename"><?php echo $this->translate('labels.middlename'); ?></label></td>
 			<td><input name="middlename" id="middlename" value="<?php echo $middlename; ?>" /></td>
 		</tr>
 
-		<tr><td><label for="lastname" class="required">Lastname <span class="icon-asterisk"></span></label></td>
+		<tr><td><label for="lastname" class="required">
+					<?php echo $this->translate('labels.lastname'); ?>
+					<span class="icon-asterisk"></span>
+				</label>
+			</td>
 			<td><input name="lastname" id="lastname" value="<?php echo $lastname; ?>" /></td>
 		</tr>
 		<?php
@@ -43,12 +56,16 @@ foreach ($fields as $field) {
 				$email = !empty($_POST['email']) ? View::escape($_POST['email']) : '';
 				$phone = !empty($_POST['phone']) ? View::escape($_POST['phone']) : '';
 				echo "
-				<tr><td><label for=\"email\">Email</label></td><td><input name=\"email\" id=\"email\" value=\"$email\" /></td></tr>
-				<tr><td><label for=\"phone\">Phone</label></td><td><input name=\"phone\" id=\"phone\" value=\"$phone\" /></td></tr>
+				<tr><td><label for=\"email\">{$this->translate(array('labels.email', 'labels.emails', 1))}</label></td>
+					<td><input name=\"email\" id=\"email\" value=\"$email\" /></td>
+				</tr>
+				<tr><td><label for=\"phone\">{$this->translate(array('labels.phone', 'labels.phones', 1))}</label></td>
+					<td><input name=\"phone\" id=\"phone\" value=\"$phone\" /></td>
+				</tr>
 				";
 			}
 		?>
-		<tr><td><label for="organization">Organization</label></td>
+		<tr><td><label for="organization"><?php echo $this->translate('labels.organization'); ?></label></td>
 			<td><input name="organization" id="organization" value="<?php echo $organization; ?>" /></td>
 		</tr>
 	</table>

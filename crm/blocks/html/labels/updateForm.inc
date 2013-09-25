@@ -6,24 +6,25 @@
  * @param Label $this->label
  */
 $name = View::escape($this->label->getName());
+$title = $this->label->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.label', 'labels.label', 1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.label', 'labels.label', 1));
 ?>
 <div>
-	<h2><?php echo $this->label->getId() ? 'Edit Label' : 'Add Label'; ?></h2>
+	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo BASE_URI; ?>/labels/update">
 		<input type="hidden" name="label_id" value="<?php echo $this->label->getId(); ?>" />
 
 		<fieldset>
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/labels">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/labels');
+			?>
 		</fieldset>
 	</form>
 </div>

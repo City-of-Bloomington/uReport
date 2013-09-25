@@ -9,27 +9,23 @@
 <div class="substatusList">
 	<h2><?php
 			if (userIsAllowed('substatus','update')) {
-				echo "
-				<a class=\"btn\" href=\"".BASE_URI."/substatus/update\">
-					<span class=\"icon-plus\"></span>
-					Add
-				</a>
-				";
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/substatus/update',
+					$this->translate('labels.add')
+				);
 			}
+			$this->translate(array('labels.substatus', 'labels.substatuses', 2));
 		?>
-		Substatus
 	</h2>
 	<table>
 		<?php
 			foreach ($this->substatusList as $substatus) {
 				$editButton = '';
 				if (userIsAllowed('substatus','update')) {
-					$editButton = "
-					<a class=\"btn\" href=\"".BASE_URI."/substatus/update?substatus_id={$substatus->getId()}\">
-						<span class=\"icon-pencil\"></span>
-						Edit
-					</a>
-					";
+					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+						BASE_URI."/substatus/update?substatus_id={$substatus->getId()}",
+						$this->translate('labels.edit')
+					);
 				}
 				$status      = View::escape($substatus->getStatus());
 				$name        = View::escape($substatus->getName());

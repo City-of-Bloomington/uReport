@@ -6,24 +6,25 @@
  * @param Label $this->contactMethod
  */
 $name = View::escape($this->contactMethod->getName());
+$title = $this->contactMethod->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.contactMethod','labels.contactMethods',1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.contactMethod','labels.contactMethods',1));
 ?>
 <div>
-	<h2><?php echo $this->contactMethod->getId() ? 'Edit Contact Method' : 'Add Contact Method'; ?></h2>
+	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo BASE_URI; ?>/contactMethods/update">
 		<input type="hidden" name="contactMethod_id" value="<?php echo $this->contactMethod->getId(); ?>" />
 
 		<fieldset>
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/contactMethods">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/contactMethods');
+			?>
 		</fieldset>
 	</form>
 </div>

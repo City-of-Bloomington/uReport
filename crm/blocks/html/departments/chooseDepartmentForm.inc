@@ -11,9 +11,9 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 ?>
 <div id="chooseDepartmentForm">
 	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend>Department</legend>
+		<fieldset><legend><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></legend>
 			<table>
-				<tr><td><label for="department_id">Department</label></td>
+				<tr><td><label for="department_id"><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></label></td>
 					<td><select name="department_id" id="department_id">
 							<option></option>
 							<?php
@@ -30,7 +30,11 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 							?>
 						</select>
 					</td>
-					<td><button type="submit"><span class="icon-ok"></span> Switch Department</button></td>
+					<td><button type="submit">
+							<span class="icon-ok"></span>
+							<?php echo $this->translate('labels.change_department'); ?>
+						</button>
+					</td>
 				</tr>
 			</table>
 			<?php

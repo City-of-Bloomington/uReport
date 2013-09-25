@@ -87,8 +87,9 @@ foreach ($tickets as $ticket) {
 	}
 	echo "
 		<div>
-			<h3><a href=\"".BASE_URL."/tickets/view?ticket_id={$ticket->getId()}\">
-					Case # {$ticket->getId()} $category_id $status $substatus_id
+			<h3><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
+					{$this->translate(array('labels.ticket', 'labels.tickets', 1))}
+					# {$ticket->getId()} $category_id $status $substatus_id
 				</a>
 			</h3>
 			<span>$location $city $state $zip</span>

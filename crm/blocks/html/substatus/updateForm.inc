@@ -11,10 +11,14 @@ $description = View::escape($this->substatus->getDescription());
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="<?php echo BASE_URL; ?>/substatus/update">
-	<fieldset><legend>Substatus Info</legend>
+	<fieldset><legend><?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?></legend>
 		<input name="substatus_id" type="hidden" value="<?php echo "{$this->substatus->getId()}"; ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Status <span class="icon-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required">
+						<?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?>
+						<span class="icon-asterisk"></span>
+					</label>
+				</td>
 				<td><select id="status" name="status">
 					<?php
 						foreach (array('open', 'closed') as $status) {
@@ -28,16 +32,18 @@ $description = View::escape($this->substatus->getDescription());
 				</td>
 			</tr>
 
-			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required"><?php echo $this->translate('labels.name'); ?> <span class="icon-asterisk"></span></label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="description">Description</label></td>
+			<tr><td><label for="description"><?php echo $this->translate('labels.description'); ?></label></td>
 				<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
 			</tr>
 
 		</table>
-		<button type="submit"><span class="icon-ok"></span> Submit</button>
-		<a class="btn" href="<?php echo BASE_URL; ?>/substatus"><span class="icon-remove"></span> Cancel</a>
+		<?php
+			$helper = $this->template->getHelper('saveAndCancelButtons');
+			echo $helper->saveAndCancelButtons(BASE_URI.'/substatus');
+		?>
 	</fieldset>
 </form>

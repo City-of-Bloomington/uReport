@@ -7,7 +7,7 @@
  */
 ?>
 <div class="findLocationForm">
-	<h1><?php echo $this->title ? View::escape($this->title) : 'Find a Location'; ?></h1>
+	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate('labels.find_location'); ?></h2>
 	<?php
 		if (defined('ADDRESS_SERVICE')) {
 			include APPLICATION_HOME.'/blocks/html/locations/findAddressForm.inc';
@@ -30,7 +30,7 @@
 			<div>
 				<button type=\"button\" onclick=\"self.close();\">
 					<span class=\"icon-remove\"></span>
-					Cancel
+					{$this->translate('labels.cancel')}
 				</button>
 			</div>
 			";

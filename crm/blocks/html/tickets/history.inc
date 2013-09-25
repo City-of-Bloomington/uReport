@@ -8,7 +8,7 @@
  */
 ?>
 <div class="history">
-	<h2>History</h2>
+	<h2><?php echo $this->translate('labels.history'); ?></h2>
 	<?php
 		foreach ($this->history as $event) {
 			$action = View::escape($event->getAction());
@@ -23,7 +23,7 @@
 			<div class=\"historyItem\">
 				<h4>{$event->getActionDate(DATE_FORMAT)} $description</h4>
 			";
-			
+
 			if (!$this->disableComments) {
 				if ($event->getAction()=='categoryChange') {
 					$j = json_decode($event->getNotes());
@@ -42,9 +42,9 @@
 				else {
 					$notes = View::escape($event->getNotes());
 				}
-				echo "<p> $notes</p>";
+				echo "<p>$notes</p>";
 			}
-			
+
 			echo "</div>";
 		}
 	?>

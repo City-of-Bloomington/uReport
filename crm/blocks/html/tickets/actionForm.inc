@@ -12,13 +12,17 @@ $actions = $department->getActions();
 if (count($actions)) {
 ?>
 <div class="actionForm">
-	<h1>Case Actions</h1>
-	<p>Update the history log with actions performed on this case</p>
+	<h2><?php echo $this->translate(array('labels.action', 'labels.actions', 2)); ?></h2>
+	<p><?php echo $this->translate('messages.add_action'); ?></p>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/recordAction">
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<table>
-				<tr><td><label for="action_id" class="required">Action <span class="icon-asterisk"></span></label></td>
+				<tr><td><label for="action_id" class="required">
+							<?php echo $this->translate(array('labels.action', 'labels.actions', 1)); ?>
+							<span class="icon-asterisk"></span>
+						</label>
+					</td>
 					<td><select name="action_id" id="action_id">
 							<option></option>
 							<?php
@@ -30,23 +34,26 @@ if (count($actions)) {
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="actionDate">Date</label>
-				<p class="help"><?php
-	echo str_replace(array('Y','m','d'), array('yyyy','mm','dd'), DATE_FORMAT);
-?></p></td>
-					<td><input name="actionDate" id="actionDate"
-							value="<?php echo date(DATE_FORMAT); ?>" />
+				<tr><td><label for="actionDate"><?php echo $this->translate('labels.date'); ?></label>
+						<p class="help">
+							<?php
+								// Create a human-readable version of the DATE_FORMAT
+								// So that users know how to enter a date
+								echo str_replace(array('Y','m','d'), array('yyyy','mm','dd'), DATE_FORMAT);
+							?>
+						</p>
 					</td>
+					<td><input name="actionDate" id="actionDate" value="<?php echo date(DATE_FORMAT); ?>" /></td>
 				</tr>
 			</table>
 		</fieldset>
 		<fieldset>
-			<div><label for="notes">Comments</label></div>
+			<div><label for="notes"><?php echo $this->translate(array('labels.comment', 'labels.comments', 2)); ?></label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
 		</fieldset>
 		<fieldset class="buttons">
-			<button type="submit"><span class="icon-ok"></span> Submit</button>
-			<button type="reset"><span class="icon-remove"></span> Cancel</button>
+			<button type="submit"><span class="icon-ok"></span>     <?php echo $this->translate('labels.submit'); ?></button>
+			<button type="reset" ><span class="icon-remove"></span> <?php echo $this->translate('labels.cancel'); ?></button>
 		</fieldset>
 	</form>
 </div>

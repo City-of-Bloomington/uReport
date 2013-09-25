@@ -8,7 +8,7 @@
  */
 ?>
 <div class="findPeopleResults">
-	<h2>Search Results</h2>
+	<h2><?php echo $this->translate('labels.search_results'); ?></h2>
 	<?php
 		if (count($this->personList)) {
 			include APPLICATION_HOME.'/blocks/html/people/personList.inc';
@@ -28,7 +28,10 @@
 					$url->$key = $value;
 				}
 			}
-			echo "<a class=\"btn\" href=\"$url\"><span class=\"icon-plus\"></span> Add a Person</a>";
+			echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$url,
+				$this->translate('labels.add_person')
+			);
 		}
 	?>
 </div>

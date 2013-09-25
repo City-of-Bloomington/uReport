@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -11,7 +11,7 @@ $title = is_null($this->issue->getId()) ? 'Add Issue' : 'Edit Issue';
 <div class="updateIssueForm">
 	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend>Issue Info</legend>
+		<fieldset><legend><?php echo $this->translate('labels.info_issue'); ?></legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
 			<?php

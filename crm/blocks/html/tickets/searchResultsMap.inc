@@ -10,7 +10,7 @@
  */
 $c = $this->solrObject->response->numFound;
 if ($c) {
-	echo "<h2>Search Results</h2>";
+	echo "<h2>{$this->translate('labels.search_results')}</h2>";
 }
 $map = new Block('tickets/partials/searchResultsMap.inc', array('solrObject'=>$this->solrObject));
 echo $map->render('html', $this->template);

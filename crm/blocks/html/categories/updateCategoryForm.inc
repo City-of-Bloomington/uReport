@@ -5,7 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
-$title = $this->category->getId() ? 'Edit Category' : 'Add Category';
+$title = $this->category->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.category','labels.categories',1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.category','labels.categories',1));
 
 $fields = array(
 	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
@@ -17,14 +19,18 @@ foreach ($fields as $field) {
 }
 ?>
 <h2><?php echo $title; ?></h2>
-<form method="post" action="<?php echo BASE_URL; ?>/categories/update">
-	<fieldset><legend>Category</legend>
+<form method="post" action="<?php echo BASE_URI; ?>/categories/update">
+	<fieldset><legend><?php echo $this->translate(array('labels.category','labels.categories',1)); ?></legend>
 		<input name="category_id" type="hidden" value="<?php echo $this->category->getId(); ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required">
+						<?php echo $this->translate('labels.name'); ?>
+						<span class="icon-asterisk"></span>
+					</label>
+				</td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
-			<tr><td><label for="categoryGroup_id">Group</label></td>
+			<tr><td><label for="categoryGroup_id"><?php echo $this->translate(array('labels.categoryGroup','labels.categoryGroup',1)); ?></label></td>
 				<td><select name="categoryGroup_id" id="categoryGroup_id">
 					<?php
 						$groups = new CategoryGroupList();
@@ -40,18 +46,23 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="description">Description</label></td>
+			<tr><td><label for="description"><?php echo $this->translate('labels.description'); ?></label></td>
 				<td><textarea name="description" id="description" rows="3" cols="50"><?php echo $description; ?></textarea>
 				</td>
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend>SLA (Service Level Agreement)</legend>
-		<p>This department agrees to handle new tickets for this category within
-			the amount of time specified.
-		</p>
+	<fieldset>
+		<legend>
+			<?php echo $this->translate('labels.sla'); ?>
+			(<?php echo $this->translate('labels.service_level_agreement'); ?>)
+		</legend>
+		<p><?php echo $this->translate('text.service_level_agreement_description'); ?></p>
 		<table>
-			<tr><td><label for="department_id" class="required">Department</label></td>
+			<tr><td><label for="department_id" class="required">
+					<?php echo $this->translate(array('labels.department','labels.departments',1)); ?>
+					</label>
+				</td>
 				<td><select name="department_id" id="department_id">
 					<?php
 						$list = new DepartmentList();
@@ -67,22 +78,22 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="slaDays">Days</label></td>
+			<tr><td><label for="slaDays"><?php echo $this->translate(array('labels.day','labels.days',2)); ?></label></td>
 				<td><input name="slaDays" id="slaDays" size="2" maxlength="2"
 						value="<?php echo $this->category->getSlaDays(); ?>" />
 				</td>
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend>Permissions required</legend>
+	<fieldset><legend><?php echo $this->translate('labels.permissions_required'); ?></legend>
 		<table>
-			<tr><td><label for="postingPermissionLevel">Posting Cases</label></td>
+			<tr><td><label for="postingPermissionLevel"><?php echo $this->translate('labels.postingPermissionLevel'); ?></label></td>
 				<td><select name="postingPermissionLevel" id="postingPermissionLevel">
 						<option value="staff" <?php if ($postingPermissionLevel=='staff') echo 'selected="selected"'; ?> >
-							Authenticated Staff
+							Staff
 						</option>
 						<option value="public" <?php if ($postingPermissionLevel=='public') echo 'selected="selected"'; ?> >
-							Authenticated Public
+							Public
 						</option>
 						<option value="anonymous" <?php if ($postingPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
 							Anonymous
@@ -90,13 +101,13 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="displayPermissionLevel">Displaying Cases</label></td>
+			<tr><td><label for="displayPermissionLevel"><?php echo $this->translate('labels.displayPermissionLevel'); ?></label></td>
 				<td><select name="displayPermissionLevel" id="displayPermissionLevel">
 						<option value="staff" <?php if ($displayPermissionLevel=='staff') echo 'selected="selected"'; ?> >
-							Authenticated Staff
+							Staff
 						</option>
 						<option value="public" <?php if ($displayPermissionLevel=='public') echo 'selected="selected"'; ?> >
-							Authenticated Public
+							Public
 						</option>
 						<option value="anonymous" <?php if ($displayPermissionLevel=='anonymous') echo 'selected="selected"'; ?> >
 							Anonymous
@@ -106,7 +117,7 @@ foreach ($fields as $field) {
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend>Custom Fields</legend>
+	<fieldset><legend><?php echo $this->translate('labels.custom_fields'); ?></legend>
 		<?php
 			// There may not be any custom fields for this category.
 			// We do not want to display "null" in this case, just
@@ -157,11 +168,10 @@ foreach ($fields as $field) {
 				</pre></code>
 		</div>
 	</fieldset>
-	<fieldset><legend>Submit</legend>
-		<button type="submit"><span class="icon-save"></span> Save</button>
-		<a class="btn" href="<?php echo BASE_URL; ?>/categories">
-			<span class="icon-remove"></span>
-			Cancel
-		</a>
+	<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
+		<?php
+			$helper = $this->template->getHelper('saveAndCancelButtons');
+			echo $helper->saveAndCancelButtons(BASE_URI.'/categories');
+		?>
 	</fieldset>
 </form>

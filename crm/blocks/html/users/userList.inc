@@ -9,19 +9,22 @@
 <div class="interfaceBox">
 	<h2><?php
 			if (userIsAllowed('users','add')) {
-				echo '<a class="btn" href="'.BASE_URI.'/users/update"><span class="icon-plus"></span> Add User Account</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/users/update',
+					$this->translate('labels.create_account')
+				);
 			}
+			$this->translate(array('labels.user', 'labels.users', 2));
 		?>
-		User Accounts
 	</h2>
 	<table>
 		<thead>
 			<tr>
-				<th>Username</th>
-				<th>Name</th>
-				<th>Department</th>
-				<th>Authentication</th>
-				<th>Roles</th>
+				<th><?php echo $this->translate('labels.username'); ?></th>
+				<th><?php echo $this->translate('labels.name'); ?></th>
+				<th><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></th>
+				<th><?php echo $this->translate('labels.authenticationMethod'); ?></th>
+				<th><?php echo $this->translate('labels.role'); ?></th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -35,13 +38,13 @@
 					$editButton = "
 					<a class=\"icon-pencil\"
 						href=\"".BASE_URI."/users/update?person_id={$user->getId()}\">
-						<span class=\"hidden-label\">Edit Account</span>
+						<span class=\"hidden-label\">{$this->translate('labels.edit')}</span>
 					</a>
 					";
 					$deleteButton = "
 					<a class=\"icon-remove\"
 						href=\"".BASE_URI."/users/delete?person_id={$user->getId()}\">
-						<span class=\"hidden-label\">Delete Account</span>
+						<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
 					</a>
 					";
 				}

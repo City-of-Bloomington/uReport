@@ -12,7 +12,7 @@
 </script>
 <button type="button" id="useThisLocation">
 	<span class="icon-ok"></span>
-	Use this location
+	<?php echo $this->translate('labels.use_location'); ?>
 </button>
 <?php
 $this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');

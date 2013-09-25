@@ -34,11 +34,11 @@
 		$responseMethod = View::escape($this->issue->getResponseMethod());
 		$labels = View::escape(implode(', ',$this->issue->getLabels()));
 		echo "<ul class=\"twoColumnlist\">";
-		if ($enteredBy)      { echo "<li><label>Created By:   </label> $enteredBy     </li>"; }
-		if ($reportedBy)     { echo "<li><label>Reported By:  </label> $reportedBy    </li>"; }
-		if ($contactMethod)  { echo "<li><label>Contacted Via:</label> $contactMethod </li>"; }
-		if ($responseMethod) { echo "<li><label>Respond Via:  </label> $responseMethod</li>"; }
-		if ($labels)         { echo "<li><label>Labels:       </label> $labels        </li>"; }
+		if ($enteredBy)      { echo "<li><label>{$this->translate('labels.enteredByPerson' )}:</label> $enteredBy     </li>"; }
+		if ($reportedBy)     { echo "<li><label>{$this->translate('labels.reportedByPerson')}:</label> $reportedBy    </li>"; }
+		if ($contactMethod)  { echo "<li><label>{$this->translate(array('labels.contactMethod', 'labels.contactMethods', 1))}:</label> $contactMethod </li>"; }
+		if ($responseMethod) { echo "<li><label>{$this->translate('labels.responseMethod'  )}:</label> $responseMethod</li>"; }
+		if ($labels)         { echo "<li><label>{$this->translate(array('labels.label', 'labels.labels', 2))}:</label> $labels</li>"; }
 			$t = $this->issue->getTicket();
 			$customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
 			if ($customFields) {

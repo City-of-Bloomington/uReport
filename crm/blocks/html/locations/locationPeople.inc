@@ -10,10 +10,8 @@ if (userIsAllowed('people','view')) {
 	$people = new PersonList(array('address'=>$this->location));
 	if (count($people)) {
 		echo "
-		<h3>People</h3>
-		<p> A list of people who've listed this as their address.
-			Note: it might not be their current address.
-		</p>
+		<h3>{$this->translate(array('labels.person', 'labels.people', 2))}</h3>
+		<p>{$this->translate('text.locationPeople_description')}</p>
 		<ul>
 		";
 		foreach ($people as $person) {
@@ -25,8 +23,9 @@ if (userIsAllowed('people','view')) {
 
 	if (defined('RENTAL_SERVICE')) {
 		$owners = RentalService::getOwnerNames($this->location);
-		if (count($owners)) {
-			echo '<h3>Owners</h3><ul>';
+		$count = count($owners);
+		if ($count) {
+			echo "<h3>{$this->translate(array('labels.owner', 'labels.owners', $count))}</h3><ul>";
 			foreach ($owners as $name) {
 				$name = View::escape($name);
 				echo "<li>$name</li>";

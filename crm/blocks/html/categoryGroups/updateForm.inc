@@ -5,7 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroup $this->categoryGroup
  */
-$title = $this->categoryGroup->getId() ? 'Edit Group' : 'Add Group';
+$title = $this->categoryGroup->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1));
 $name = View::escape($this->categoryGroup->getName());
 ?>
 <div class="updateCategoryGroupForm">
@@ -14,16 +16,14 @@ $name = View::escape($this->categoryGroup->getName());
 		<fieldset>
 			<input name="categoryGroup_id" type="hidden" value="<?php echo $this->categoryGroup->getId(); ?>" />
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> Submit</button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/categoryGroups">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
+			?>
 		</fieldset>
 	</form>
 </div>

@@ -7,22 +7,34 @@
  * @param string $this->action The URL for posting the form
  * @param string $this->return_url
  */
-$title = $this->department->getId() ? 'Edit' : 'Add';
+$title = $this->department->getId()
+	? $this->translate('labels.edit')
+	: $this->translate('labels.add');
 $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
 <div class="updateDepartmentForm">
-<h2><?php echo $title; ?> Department</h2>
+<h2><?php echo $title.' '.$this->translate(array('labels.department', 'labels.departments', 1)); ?></h2>
 <form method="post" action="<?php echo $this->action; ?>">
-	<fieldset><legend>Department Info</legend>
+	<fieldset>
+		<legend>
+		<?php
+			echo $this->translate(array('labels.department', 'labels.departments', 1)).' '.
+				 $this->translate('labels.info')
+		?>
+		</legend>
 		<input name="department_id" type="hidden" value="<?php echo $this->department->getId(); ?>" />
 		<table>
-			<tr><td><label for="name" class="required">Name <span class="icon-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required">
+						<?php echo $this->translate('labels.name'); ?>
+						<span class="icon-asterisk"></span>
+					</label>
+				</td>
 				<td><input name="name" id="name"
 						value="<?php echo View::escape($this->department->getName()); ?>" />
 				</td>
 			</tr>
 
-			<tr><td><label for="defaultPerson_id">Default Person</label></td>
+			<tr><td><label for="defaultPerson_id"><?php echo $this->translate('labels.defaultPerson'); ?></label></td>
 				<td><select name="defaultPerson_id" id="defaultPerson_id">
 						<option value=""></option>
 						<?php
@@ -44,7 +56,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</table>
 	</fieldset>
 	<fieldset class="actions">
-		<legend>Actions</legend>
+		<legend><?php echo $this->translate(array('labels.action', 'labels.actions', 2)); ?></legend>
 		<ul>
 		<?php
 			$list = new ActionList();
@@ -69,7 +81,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</ul>
 	</fieldset>
 	<fieldset class="categories">
-		<legend>Categories</legend>
+		<legend><?php echo $this->translate(array('labels.category', 'labels.categories', 2)); ?></legend>
 		<ul>
 		<?php
 			$list = new CategoryList();
@@ -92,11 +104,10 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</ul>
 	</fieldset>
 	<fieldset>
-		<button type="submit"><span class="icon-save"></span> Save</button>
-		<a class="btn" href="<?php echo $return_url; ?>">
-			<span class="icon-remove"></span>
-			Cancel
-		</a>
+		<?php
+			$helper = $this->template->getHelper('saveAndCancelButtons');
+			echo $helper->saveAndCancelButtons($return_url);
+		?>
 	</fieldset>
 </form>
 </div>

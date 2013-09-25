@@ -1,7 +1,7 @@
 <div class="findLocationResults">
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
@@ -14,8 +14,8 @@ if (count($this->results)) {
 	echo "
 	<table>
 		<thead>
-			<tr><th>Location</th>
-				<th>Cases</th>
+			<tr><th>{$this->translate(array('labels.location', 'labels.locations', 1))}</th>
+				<th>{$this->translate(array('labels.ticket', 'labels.tickets', 2))}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -51,13 +51,13 @@ if (count($this->results)) {
 
 	<table>
 		<tr class=\"verified\">
-			<td>indicates verified locations</td>
+			<td>{$this->translate('messages.verified_locations')}</td>
 		</tr>
 	</table>
 	";
 }
 else {
-	echo '<p>No locations found. Please try your search again or contact an administrator if you believe a location is missing from our database.</p>';
+	echo "<p>{$this->translate('messages.no_locations_found')}</p>";
 
 	// If they don't have a master address service they still need a way to add
 	// new locations.  However, once they have a master address system, users
@@ -71,13 +71,17 @@ else {
 			: '';
 		echo "
 		<form method=\"get\" action=\"$return_url\" onsubmit=\"$onsubmit\">
-			<fieldset><legend>Add a location</legend>
+			<fieldset>
+				<legend>
+					{$this->translate('labels.add')}
+					{$this->translate(array('labels.location', 'labels.locations', 1))}
+				</legend>
 				<table>
-					<tr><th><label for=\"location\">Location</th>
+					<tr><th><label for=\"location\">{$this->translate(array('labels.location', 'labels.locations', 1))}</th>
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\"><span class=\"icon-plus\"></span> Submit</button>
+				<button type=\"submit\"><span class=\"icon-plus\"></span> {$this->translate('labels.submit')}</button>
 			</fieldset>
 		</form>
 		";

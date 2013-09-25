@@ -29,9 +29,7 @@ if (!empty($_GET['query'])
 
 	if (count($fq)) {
 		echo "
-		<p>Your current search parameters.
-			Click on one of the labels to delete that parameter from your search.
-		</p>
+		<p>{$this->translate('text.search_parameters_description')}</p>
 		<span>
 		";
 		// There may only be one filterQuery
@@ -89,14 +87,14 @@ echo "<div>";
 	echo "
 	<a id=\"text-result\" class=\"btn\" href=\"$url\">
 		<span class=\"icon-list-ul\"></span>
-		Text Results
+		{$this->translate('labels.search_results_text')}
 	</a>
 	";
 	$url->resultFormat = 'map';
 	echo "
 	<a id=\"map-result\" class=\"btn\" href=\"$url\">
 		<span class=\"icon-map-marker\"></span>
-		Map Results
+		{$this->translate('labels.search_results_map')}
 	</a>
 	";
 echo "</div>";

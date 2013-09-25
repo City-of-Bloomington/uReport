@@ -29,7 +29,7 @@ if (userIsAllowed('people','view')) {
 		<a class=\"btn\"
 			href=\"".BASE_URI."/users/update?person_id={$this->person->getId()}\">
 			<span class=\"icon-plus\"></span>
-			Create Account
+			{$this->translate('labels.create_account')}
 		</a>
 		";
 	}
@@ -43,7 +43,7 @@ if (userIsAllowed($resource,'update') && !$this->disableButtons) {
 	<a class=\"btn\"
 		href=\"".BASE_URI."/$resource/update$person_param\">
 		<span class=\"icon-pencil\"></span>
-		Edit
+		{$this->translate('labels.edit')}
 	</a>
 	";
 	if (!$this->person->hasTickets()) {
@@ -51,7 +51,7 @@ if (userIsAllowed($resource,'update') && !$this->disableButtons) {
 		<a class=\"btn\"
 			href=\"".BASE_URI."/$resource/delete$person_param\">
 			<span class=\"icon-remove\"></span>
-			Delete Person
+			{$this->translate('labels.delete')}
 		</a>
 		";
 	}
@@ -90,7 +90,7 @@ echo "
 
 	$addressButtons = '';
 	echo "
-	<h3>Addresses</h3>
+	<h3>{$this->translate(array('labels.address', 'labels.addresses', 2))}</h3>
 	<table>
 	";
 	foreach ($this->person->getAddresses() as $a) {
@@ -117,7 +117,8 @@ echo "
 				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updateAddress$person_param\">
 					<span class=\"icon-plus\"></span>
-					Add Address
+					{$this->translate('labels.add')}
+					{$this->translate(array('labels.address', 'labels.addresses', 1))}
 				</a>
 			</td>
 		</tr>
@@ -127,7 +128,7 @@ echo "
 	echo "
 	</table>
 
-	<h3>Email Addresses</h3>
+	<h3>{$this->translate(array('labels.email', 'labels.emails', 2))}</h3>
 	<table>
 	";
 
@@ -153,7 +154,8 @@ echo "
 				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updateEmail$person_param\">
 					<span class=\"icon-plus\"></span>
-					Add Email
+					{$this->translate('labels.add')}
+					{$this->translate(array('labels.email', 'labels.emails', 1))}
 				</a>
 			</td>
 		</tr>
@@ -163,7 +165,7 @@ echo "
 	echo "
 	</table>
 
-	<h3>Phone Numbers</h3>
+	<h3>{$this->translate(array('labels.phone', 'labels.phones', 2))}</h3>
 	<table>
 	";
 	$phoneButtons = '';
@@ -186,7 +188,8 @@ echo "
 				<a class=\"btn\"
 					href=\"".BASE_URI."/$resource/updatePhone$person_param\">
 					<span class=\"icon-plus\"></span>
-					Add Phone
+					{$this->translate('labels.add')}
+					{$this->translate(array('labels.phone', 'labels.phones', 1))}
 				</a>
 			</td>
 		</tr>
@@ -198,7 +201,7 @@ echo "
 </div>
 <table>
 	<tr class=\"usedForNotifications\">
-		<td>Used for notifications</td>
+		<td>{$this->translate('messages.usedForNotifications')}</td>
 	</tr>
 </table>
 ";

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -15,7 +15,7 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 	<h2><?php echo View::escape($title); ?></h2>
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
-		<fieldset><legend>Category</legend>
+		<fieldset><legend><?php echo $this->translate(array('labels.category', 'labels.categories', 1)); ?></legend>
 		<?php
 			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 			$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
@@ -25,34 +25,34 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 		</fieldset>
 
 		<fieldset class="ticketFields">
-			<legend>Location Info</legend>
+			<legend><?php echo $this->translate('labels.info_location'); ?></legend>
 			<table>
-				<tr><td><label for="location">Location</label></td>
+				<tr><td><label for="location"><?php echo $this->translate(array('labels.location', 'labels.locations', 1)); ?></label></td>
 					<td><input name="location" id="location"
 							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="city">City</label></td>
+				<tr><td><label for="city"><?php echo $this->translate('labels.city'); ?></label></td>
 					<td><input name="city" id="city"
 							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="state">State</label></td>
+				<tr><td><label for="state"><?php echo $this->translate('labels.state'); ?></label></td>
 					<td><input name="state" id="state"
 							value="<?php echo View::escape($this->ticket->getState()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="zip">Zip</label></td>
+				<tr><td><label for="zip"><?php echo $this->translate('labels.zip'); ?></label></td>
 					<td><input name="zip" id="zip"
 							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="latitude">Latitude</label></td>
+				<tr><td><label for="latitude"><?php echo $this->translate('labels.latitude'); ?></label></td>
 					<td><input name="latitude" id="latitude"
 							value="<?php echo $this->ticket->getLatitude(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="longitude">Longitude</label></td>
+				<tr><td><label for="longitude"><?php echo $this->translate('labels.longitude'); ?></label></td>
 					<td><input name="longitude" id="longitude"
 							value="<?php echo $this->ticket->getLongitude(); ?>" />
 					</td>
@@ -60,7 +60,7 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 			</table>
 		</fieldset>
 		<fieldset class="issueFields">
-			<legend>Issue Information</legend>
+			<legend><?php echo $this->translate('labels.info_issue'); ?></legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
 
@@ -69,7 +69,7 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
-			<legend>Assignment Information</legend>
+			<legend><?php echo $this->translate('labels.info_assignment'); ?></legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
 			?>
@@ -77,11 +77,10 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 
 
 		<fieldset>
-			<button type="submit"><span class="icon-ok"></span> Submit</button>
-			<a class="btn" href="<?php echo BASE_URL; ?>/tickets">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/tickets');
+			?>
 		</fieldset>
 	</form>
 </div>

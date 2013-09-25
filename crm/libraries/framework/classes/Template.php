@@ -25,6 +25,8 @@ class Template extends View
 	 */
 	public function __construct($filename='default',$outputFormat='html',array $vars=null)
 	{
+		parent::__construct();
+		
 		$this->path = APPLICATION_HOME.'/templates';
 		$this->filename = $filename;
 		$this->outputFormat = preg_replace('/[^a-zA-Z]/','',$outputFormat);

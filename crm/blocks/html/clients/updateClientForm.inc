@@ -9,24 +9,31 @@ $name = View::escape($this->client->getName());
 $url = $this->client->getURL();
 $api_key = View::escape($this->client->getApi_key());
 
-$title = $this->client->getId() ? 'Edit Client' : 'Add Client';
+$title = $this->client->getId()
+	? $this->translate('labels.edit').' '.$this->translate(array('labels.client','labels.clients',1))
+	: $this->translate('labels.add' ).' '.$this->translate(array('labels.client','labels.clients',1));
 ?>
 <div class="updateClientForm">
 	<h1><?php echo $title; ?></h1>
 	<form method="post" action="<?php echo BASE_URL; ?>/clients/update">
-		<fieldset><legend>Client Info</legend>
+		<fieldset>
+			<legend>
+				<?php
+					echo $this->translate(array('labels.client','labels.clients',1)).' '.$this->translate('labels.info');
+				?>
+			</legend>
 			<input name="client_id" type="hidden" value="<?php echo $this->client->getId(); ?>" />
 			<table>
-				<tr><td><label for="name">Name</label></td>
+				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 				</tr>
-				<tr><td><label for="url">URL</label></td>
+				<tr><td><label for="url"><?php echo $this->translate('labels.url'); ?></label></td>
 					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
 				</tr>
-				<tr><td><label>API Key</label></td>
+				<tr><td><label><?php echo $this->translate('labels.api_key'); ?></label></td>
 					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
 				</tr>
-				<tr><td><label>Contact Method</label></td>
+				<tr><td><label><?php echo $this->translate(array('labels.contactMethod','labels.contactMethods',1)); ?></label></td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
 						<?php
 							$contactMethods = new ContactMethodList();
@@ -44,9 +51,14 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 				</tr>
 			</table>
 		</fieldset>
-		<fieldset><legend>Contact Info</legend>
+		<fieldset>
+			<legend>
+				<?php
+					echo $this->translate('labels.contact').' '.$this->translate('labels.info');
+				?>
+			</legend>
 			<table>
-				<tr><td><label for="contactPerson_id">Contact Person</label></td>
+				<tr><td><label for="contactPerson_id"><?php echo $this->translate('labels.contactPerson'); ?></label></td>
 					<td><?php
 							$contactPerson = $this->client->getContactPerson();
 							$helper = $this->template->getHelper('personChooser');
@@ -57,11 +69,10 @@ $title = $this->client->getId() ? 'Edit Client' : 'Add Client';
 			</table>
 		</fieldset>
 		<fieldset>
-			<button type="submit"><span class="icon-save"></span> Save</button>
-			<a class="btn" href="<?php echo BASE_URL; ?>/clients">
-				<span class="icon-remove"></span>
-				Cancel
-			</a>
+			<?php
+				$helper = $this->template->getHelper('saveAndCancelButtons');
+				echo $helper->saveAndCancelButtons(BASE_URI.'/clients');
+			?>
 		</fieldset>
 	</form>
 </div>

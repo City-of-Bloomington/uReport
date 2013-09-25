@@ -21,12 +21,8 @@ foreach ($this->ticket->getIssues() as $issue) {
 if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
-		<h2>Contact List</h2>
-		<p>
-			When a case is closed it is your responsibility to contact
-			constituents who reported this issue to the City.  Log those
-			contacts in the responses below.
-		</p>
+		<h2>{$this->translate('labels.contact_list')}</h2>
+		<p>{$this->translate('text.response_reminder')}</p>
 		<table>
 			$rows
 		</table>

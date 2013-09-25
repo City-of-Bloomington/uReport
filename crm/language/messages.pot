@@ -1,0 +1,599 @@
+# uReport Langue File
+# Copyright (C) YEAR City of Bloomington
+# This file is distributed under the same license as the uReport package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 1.9\n"
+"Report-Msgid-Bugs-To: ureport@googlegroups.com\n"
+"POT-Creation-Date: 2013-09-25 15:48-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "labels.add"
+msgstr ""
+
+msgid "labels.edit"
+msgstr ""
+
+msgid "labels.delete"
+msgstr ""
+
+msgid "labels.submit"
+msgstr ""
+
+msgid "labels.save"
+msgstr ""
+
+#. %s The item they are saving
+msgid "labels.save_as"
+msgstr ""
+
+msgid "labels.cancel"
+msgstr ""
+
+msgid "labels.search"
+msgstr ""
+
+msgid "labels.search_results"
+msgstr ""
+
+msgid "labels.search_results_text"
+msgstr ""
+
+msgid "labels.search_results_map"
+msgstr ""
+
+msgid "labels.search_results_count"
+msgstr ""
+
+msgid "labels.quick_links"
+msgstr ""
+
+msgid "labels.upload"
+msgstr ""
+
+msgid "labels.new"
+msgstr ""
+
+msgid "labels.go"
+msgstr ""
+
+msgid "labels.start"
+msgstr ""
+
+msgid "labels.end"
+msgstr ""
+
+msgid "labels.more"
+msgstr ""
+
+msgid "labels.more_categories"
+msgstr ""
+
+msgid "labels.sort_by"
+msgstr ""
+
+#. The current sorting of a list.  Alpabetical order, Numerical order, etc.
+msgid "labels.order"
+msgstr ""
+
+#. To change the sorting of a list
+msgid "labels.reorder"
+msgstr ""
+
+#. This is the short form for "Information".  This should be an abbreviation
+msgid "labels.info"
+msgstr ""
+
+#. This is the short form for "Administrator".  This should be an abbreviation
+msgid "labels.admin"
+msgstr ""
+
+msgid "labels.my_account"
+msgstr ""
+
+msgid "labels.login"
+msgstr ""
+
+msgid "labels.logout"
+msgstr ""
+
+msgid "labels.help"
+msgstr ""
+
+msgid "labels.contactMethod"
+msgid_plural "labels.contactMethods"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.response"
+msgid_plural "labels.responses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.responseMethod"
+msgstr ""
+
+msgid "labels.api_key"
+msgstr ""
+
+msgid "labels.url"
+msgstr ""
+
+msgid "labels.name"
+msgstr ""
+
+msgid "labels.firstname"
+msgstr ""
+
+msgid "labels.middlename"
+msgstr ""
+
+msgid "labels.lastname"
+msgstr ""
+
+msgid "labels.username"
+msgstr ""
+
+msgid "labels.password"
+msgstr ""
+
+msgid "labels.authenticationMethod"
+msgstr ""
+
+msgid "labels.role"
+msgstr ""
+
+#. The generic term for a where a person works or is associated with
+#. What "organization" is someone affiliated with?
+msgid "labels.organization"
+msgstr ""
+
+msgid "labels.email"
+msgid_plural "labels.emails"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.phone"
+msgid_plural "labels.phones"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.description"
+msgstr ""
+
+msgid "labels.comment"
+msgid_plural "labels.comments"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.type"
+msgstr ""
+
+msgid "labels.media"
+msgid_plural "labels.medias"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.custom_fields"
+msgstr ""
+
+msgid "labels.display_fields"
+msgstr ""
+
+msgid "labels.date"
+msgstr ""
+
+msgid "labels.day"
+msgid_plural "labels.days"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.permissions_required"
+msgstr ""
+
+#. Posting permission level determines who is allowed to post new reports
+#. in a given category to the system
+msgid "labels.postingPermissionLevel"
+msgstr ""
+
+#. Display permission level determines who is allowed to view tickets of a
+#. given category
+msgid "labels.displayPermissionLevel"
+msgstr ""
+
+#. Label for a person when you have a phone number for them
+msgid "labels.contact"
+msgstr ""
+
+msgid "labels.contact_list"
+msgstr ""
+
+#. Label for someone to contact when there is a problem
+msgid "labels.contactPerson"
+msgstr ""
+
+msgid "labels.defaultPerson"
+msgstr ""
+
+#. What to call people who possess a piece of property
+msgid "labels.owner"
+msgid_plural "labels.owners"
+msgstr[0] ""
+msgstr[1] ""
+
+# We are using the word "Application" in english because we think it
+# makes more sense to end users.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "labels.client"
+msgid_plural "labels.clients"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.action"
+msgid_plural "labels.actions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.bookmark"
+msgid_plural "labels.bookmarks"
+msgstr[0] ""
+msgstr[1] ""
+
+#. These are the categories of things users can report to city
+#. Some example "categories" are Potholes and Graffiti
+msgid "labels.category"
+msgid_plural "labels.categories"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Categories are grouped.  This is what you call those groups
+msgid "labels.categoryGroup"
+msgid_plural "labels.categoryGroups"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.department"
+msgid_plural "labels.departments"
+msgstr[0] ""
+msgstr[1] ""
+
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "labels.service_level_agreement"
+msgstr ""
+
+#. The abbreviation for "Service Level Agreement"
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "labels.sla"
+msgstr ""
+
+#. Reports that users send in are organized into Tickets
+#. A ticket can contain multiple issue reports that are related, usually by location
+msgid "labels.ticket"
+msgid_plural "labels.tickets"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.ticket_issues"
+msgstr ""
+
+#. These are the problem reports that users send in
+msgid "labels.issue"
+msgid_plural "labels.issues"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Issues are organized by Type.
+#. Example types are Complaint, Request, Violation, etc.
+msgid "labels.issueType"
+msgid_plural "labels.issueTypes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.label"
+msgid_plural "labels.labels"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.address"
+msgid_plural "labels.addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.city"
+msgstr ""
+
+msgid "labels.state"
+msgstr ""
+
+msgid "labels.zip"
+msgstr ""
+
+msgid "labels.latitude"
+msgstr ""
+
+msgid "labels.longitude"
+msgstr ""
+
+msgid "labels.enteredDate"
+msgstr ""
+
+msgid "labels.enteredByPerson"
+msgstr ""
+
+msgid "labels.reportedByPerson"
+msgstr ""
+
+msgid "labels.history"
+msgstr ""
+
+#. We use the word Location here, which is different from Address
+#. Locations refer to general descriptions of places that are not a street address
+#. Examples: "Behind the post office", "In front of the court house"
+msgid "labels.location"
+msgid_plural "labels.locations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.person"
+msgid_plural "labels.people"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.user"
+msgid_plural "labels.users"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Detailed analysis of ticket data presented to Staff
+msgid "labels.report"
+msgid_plural "labels.reports"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.status"
+msgid_plural "labels.statuses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "labels.substatus"
+msgid_plural "labels.substatuses"
+msgstr[0] ""
+msgstr[1] ""
+
+#. This is a special type of substatus
+msgid "labels.resolution"
+msgstr ""
+
+msgid "labels.add_issue"
+msgstr ""
+
+msgid "labels.add_person"
+msgstr ""
+
+msgid "labels.create_account"
+msgstr ""
+
+msgid "labels.edit_issue"
+msgstr ""
+
+msgid "labels.delete_issue"
+msgstr ""
+
+msgid "labels.info_client"
+msgstr ""
+
+msgid "labels.info_person"
+msgstr ""
+
+msgid "labels.info_department"
+msgstr ""
+
+msgid "labels.info_location"
+msgstr ""
+
+msgid "labels.info_location_additional"
+msgstr ""
+
+msgid "labels.info_issue"
+msgstr ""
+
+msgid "labels.info_assignment"
+msgstr ""
+
+msgid "labels.find_person"
+msgstr ""
+
+msgid "labels.find_user"
+msgstr ""
+
+msgid "labels.find_address"
+msgstr ""
+
+msgid "labels.find_street"
+msgstr ""
+
+msgid "labels.find_location"
+msgstr ""
+
+msgid "labels.use_location"
+msgstr ""
+
+msgid "labels.upload_media"
+msgstr ""
+
+msgid "labels.see_all_thumbnails"
+msgstr ""
+
+msgid "labels.back_to_ticket"
+msgstr ""
+
+msgid "labels.change_department"
+msgstr ""
+
+msgid "labels.add_new_ticket"
+msgstr ""
+
+msgid "labels.assign_ticket"
+msgstr ""
+
+msgid "labels.refer_ticket"
+msgstr ""
+
+msgid "labels.change_category"
+msgstr ""
+
+msgid "labels.change_status"
+msgstr ""
+
+msgid "labels.add_response"
+msgstr ""
+
+msgid "labels.assignment_notes"
+msgstr ""
+
+msgid "labels.merge"
+msgstr ""
+
+msgid "labels.merge_people"
+msgstr ""
+
+msgid "labels.merge_tickets"
+msgstr ""
+
+#. Used during the process of merging people records.
+#. This label is placed on each person, so the user can choose which record will be the master copy
+msgid "labels.merge_into_person"
+msgstr ""
+
+#. Used during the process of merging ticket records.
+#. This label is placed on each ticket, so the user can choose which record will be the master copy
+msgid "labels.merge_into_ticket"
+msgstr ""
+
+#. Tickets that are currently assigned to the user
+msgid "labels.tickets_open_assigned"
+msgstr ""
+
+#. Tickets that the user has reported that are still open
+msgid "labels.tickets_open_reported"
+msgstr ""
+
+msgid "labels.tickets_reported"
+msgstr ""
+
+msgid "labels.tickets_open"
+msgstr ""
+
+msgid "labels.tickets_my"
+msgstr ""
+
+msgid "labels.tickets_my_department"
+msgstr ""
+
+msgid "labels.tickets_for_location"
+msgstr ""
+
+#. Ticket that have been referred to the user
+msgid "labels.tickets_open_referred"
+msgstr ""
+
+msgid "messages.add_action"
+msgstr ""
+
+msgid "messages.merge_people_description"
+msgstr ""
+
+msgid "messages.merge_tickets_description"
+msgstr ""
+
+msgid "messages.how_did_you_respond"
+msgstr ""
+
+msgid "messages.click_full_size"
+msgstr ""
+
+#. %s The user's name
+msgid "messages.signed_in_as"
+msgstr ""
+
+msgid "messages.choose_category"
+msgstr ""
+
+msgid "messages.close_this_ticket"
+msgstr ""
+
+msgid "messages.verified_locations"
+msgstr ""
+
+msgid "messages.no_tickets_found"
+msgstr ""
+
+msgid "messages.no_locations_found"
+msgstr ""
+
+msgid "messages.usedForNotifications"
+msgstr ""
+
+msgid "messages.ticket_search_query_description"
+msgstr ""
+
+#. Describe to the user what "Clients" are.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "text.clients_description"
+msgstr ""
+
+#. Explain to the user that string substitution will happen for action descriptions
+msgid "text.actions_description"
+msgstr ""
+
+msgid "text.actions_enteredByPerson"
+msgstr ""
+
+msgid "text.actions_actionPerson"
+msgstr ""
+
+msgid "text.contactMethods_description"
+msgstr ""
+
+msgid "text.response_reminder"
+msgstr ""
+
+msgid "text.search_parameters_description"
+msgstr ""
+
+msgid "text.labels_description"
+msgstr ""
+
+msgid "text.locationPeople_description"
+msgstr ""
+
+#. %1$s A person's name
+#. %2$s The name of your website
+#. %3$s A Url
+msgid "text.digestNotification"
+msgstr ""
+
+#. Explain to the user what the Service Level Agreement specifies
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "text.service_level_agreement_description"
+msgstr ""
+
+#. %1$d The number of days the case, after which the case is due
+#. %2$d The number of days that have already passed
+msgid "text.sla_status_notice"
+msgstr ""
+
+msgid "text.employee_authentication_description"
+msgstr ""
+
+msgid "text.disclaimer"
+msgstr ""

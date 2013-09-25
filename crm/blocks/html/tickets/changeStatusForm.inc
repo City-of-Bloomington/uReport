@@ -8,7 +8,7 @@
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
-		<fieldset><legend>Change Status</legend>
+		<fieldset><legend><?php echo $this->translate('labels.change_status'); ?></legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in
@@ -21,7 +21,7 @@
 				}
 			?>
 			<table>
-				<tr><td><label for="status">Status</label></td>
+				<tr><td><label for="status"><?php echo $this->translate(array('labels.status', 'labels.statuses', 1)); ?></label></td>
 					<td><select name="status" id="status">
 						<?php
 							foreach (array('open', 'closed') as $status) {
@@ -35,7 +35,7 @@
 					</td>
 				</tr>
 
-				<tr><td><label for="substatus_id">Substatus</label></td>
+				<tr><td><label for="substatus_id"><?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?></label></td>
 					<td><select name="substatus_id" id="substatus_id">
 						<?php
 							// Open tickets do not require substatus
@@ -57,7 +57,11 @@
 					</td>
 				</tr>
 
-				<tr><td><label id="notes" class="required">Comment <span class="icon-asterisk"></span></label></td>
+				<tr><td><label id="notes" class="required">
+							<?php echo $this->translate(array('labels.comment', 'labels.comments', 1)); ?>
+							<span class="icon-asterisk"></span>
+						</label>
+					</td>
 					<td><textarea id="notes" name="notes"></textarea></td>
 				</tr>
 			</table>

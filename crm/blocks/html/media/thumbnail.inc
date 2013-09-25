@@ -11,7 +11,7 @@ $deleteButton = '';
 if (!$this->disableButtons && userIsAllowed('issues','update')) {
 	$deleteButton = "
 	<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$this->media->getId()}\">
-		<span class=\"hidden-label\">Delete Attachment</span>
+		<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
 	</a>
 	";
 }

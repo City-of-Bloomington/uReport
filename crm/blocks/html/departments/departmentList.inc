@@ -8,11 +8,14 @@
 ?>
 <div class="departmentList">
 	<h2><?php
+			echo $this->translate(array('labels.department', 'labels.departments', 2));
 			if (userIsAllowed('departments','update')) {
-				echo '<a class="btn" href="'.BASE_URL.'/departments/update"><span class="icon-plus"></span> Add</a>';
+				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+					BASE_URI.'/departments/update',
+					$this->translate('labels.add')
+				);
 			}
 		?>
-		Departments
 	</h2>
 	<?php
 		foreach ($this->departmentList as $department) {

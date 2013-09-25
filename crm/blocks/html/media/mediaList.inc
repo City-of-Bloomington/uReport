@@ -13,7 +13,7 @@ if (count($this->mediaList)) {
 		if (!$this->disableButtons) {
 			$deleteButton = "
 			<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$media->getId()}\">
-				<span class=\"hidden-label\">Delete Attachment</span>
+				<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
 			</a>
 			";
 		}
