@@ -36,6 +36,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('locations'));
 $ZEND_ACL->add(new Zend_Acl_Resource('tickets'));
 $ZEND_ACL->add(new Zend_Acl_Resource('issues'));
 $ZEND_ACL->add(new Zend_Acl_Resource('media'));
+$ZEND_ACL->add(new Zend_Acl_Resource('solr'));
 
 $ZEND_ACL->add(new Zend_Acl_Resource('open311'));
 $ZEND_ACL->add(new Zend_Acl_Resource('clients'));
@@ -48,6 +49,7 @@ $ZEND_ACL->allow(null,
 				array('index','tickets','issues','locations'),
 				array('index','view', 'thumbnails'));
 $ZEND_ACL->allow(null, 'media', 'resize');
+$ZEND_ACL->allow(null, 'solr', 'index');
 
 // Staff permission
 // Staff has full permission to these tables

@@ -29,8 +29,6 @@ echo "
 	var CENTER_LONGITUDE = $centerLongitude;
 	var ZOOM = $zoom;
 	var SOLR_PARAMS = $solr_params;
-	var SOLR_SERVER_HOSTNAME = '".SOLR_SERVER_HOSTNAME."';
-	var SOLR_SERVER_PATH     = '".SOLR_SERVER_PATH    ."';
 </script>
 ";
 

@@ -5,7 +5,7 @@
  */
 'use strict';
 
-google.maps.event.addDomListener(window, 'load', function() {
+google.maps.event.addDomListener(window, 'load', function () {
 	var initCenter = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
 		zoomLevel = ZOOM,
 		map = new google.maps.Map(document.getElementById('location_map'), {
@@ -13,6 +13,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 			center: initCenter,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		}),
+		solr_base_url = CRM.BASE_URL + '/solr?',
+
 		// Array to store the individual markers that will be shown
 		indivMarkers = [],
 		// Array to store the clusters with no less than 5 tickets.
@@ -24,12 +26,12 @@ google.maps.event.addDomListener(window, 'load', function() {
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
 		// The coordinates should be larger than bbox so that it can handle the clusters around corners.
 		generateCoordinates = function (bounds) {
-			var minLat 			= bounds.getSouthWest().lat(),
-				minLng 			= bounds.getSouthWest().lng(),
-				maxLat 			= bounds.getNorthEast().lat(),
-				maxLng 			= bounds.getNorthEast().lng(),
-				latDist			= maxLat - minLat,
-				lngDist			= maxLng - minLng;
+			var minLat  = bounds.getSouthWest().lat(),
+				minLng  = bounds.getSouthWest().lng(),
+				maxLat  = bounds.getNorthEast().lat(),
+				maxLng  = bounds.getNorthEast().lng(),
+				latDist = maxLat - minLat,
+				lngDist = maxLng - minLng;
 			minLat = minLat - latDist / 4;
 			maxLat = maxLat + latDist / 4;
 			minLng = minLng - lngDist / 4;
@@ -38,47 +40,54 @@ google.maps.event.addDomListener(window, 'load', function() {
 		},
 		// bbox format: xx.xxxxxx,xx.xxxxxx,xx.xxxxxx,xx.xxxxxx
 		generateBBox = function (bounds) {
-			var minLat 			= bounds.getSouthWest().lat(),
-				minLng 			= bounds.getSouthWest().lng(),
-				maxLat 			= bounds.getNorthEast().lat(),
-				maxLng 			= bounds.getNorthEast().lng();
+			var minLat = bounds.getSouthWest().lat(),
+				minLng = bounds.getSouthWest().lng(),
+				maxLat = bounds.getNorthEast().lat(),
+				maxLng = bounds.getNorthEast().lng();
 			return minLat + ',' + minLng + ',' + maxLat + ',' + maxLng;
 		},
-		getSolrStats = function (SOLR_PARAMS, coordinates, clusterLevel) {
-			var solrQueryString = '',
-				queryHeader 	= 'http://'+SOLR_SERVER_HOSTNAME+SOLR_SERVER_PATH+'/select?',
-				param_sort 		= SOLR_PARAMS.sort,
-				param_q 		= SOLR_PARAMS.q,
-				param_fq 		= SOLR_PARAMS.fq,
-				i	 			= 0;
-
-			solrQueryString += queryHeader + 'sort=' + param_sort + '&q=' + param_q;
-			solrQueryString += '&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_' + clusterLevel;
-			if (param_fq) {
-				if (param_fq instanceof Array) {
-					for ( i = 0; i < param_fq.length; i += 1) {
-						if (param_fq[i].substr(0,12) !== 'coordinates:') {
-							solrQueryString += '&fq=' + param_fq[i];
+		/**
+		 * Creates a parameter string for all FQ parameters from the SOLR_PARAMS
+		 * @return string
+		 */
+		getFqParameters = function () {
+			var p = '',
+				i = 0;
+			if (SOLR_PARAMS.fq) {
+				if (SOLR_PARAMS.fq instanceof Array) {
+					for ( i = 0; i < SOLR_PARAMS.fq.length; i += 1) {
+						if (SOLR_PARAMS.fq[i].substr(0,12) !== 'coordinates:') {
+							p += '&fq=' + SOLR_PARAMS.fq[i];
 						}
 					}
 				}
 				else {
-					if (param_fq.substr(0,12) !== 'coordinates:') {
-						solrQueryString += '&fq=' + param_fq;
+					if (SOLR_PARAMS.fq.substr(0,12) !== 'coordinates:') {
+						p += '&fq=' + SOLR_PARAMS.fq;
 					}
 				}
 			}
-			solrQueryString += '&fq=coordinates:' + coordinates;
-			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
-			solrQueryString += '&start=0&rows=0';
-
-			return solrQueryString;
+			return p;
+		},
+		/**
+		 * Creates the solr query url for the map clusters
+		 *
+		 * @param string coordinates
+		 * @param int clusterLevel
+		 * @return string
+		 */
+		statsUrl = function (coordinates, clusterLevel) {
+			return solr_base_url + 'sort=' + SOLR_PARAMS.sort + '&q=' + SOLR_PARAMS.q +
+				'&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_' + clusterLevel +
+				getFqParameters() + '&fq=coordinates:' + coordinates +
+				'&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'] +
+				'&start=0&rows=0';
 		},
 		generateClusterIdString = function (smallClusters) {
 			var i,
 				clusterIdString = '';
-			for(i = 0; i < smallClusters.length; i += 1) {
-				if(i == 0) {
+			for (i = 0; i < smallClusters.length; i += 1) {
+				if (i == 0) {
 					clusterIdString += smallClusters[i];
 				}
 				else {
@@ -87,36 +96,22 @@ google.maps.event.addDomListener(window, 'load', function() {
 			}
 			return clusterIdString;
 		},
-		getSolrIndiv = function (SOLR_PARAMS, coordinates, clusterLevel, smallClusters) {
-			var solrQueryString = '',
-				queryHeader 	= 'http://'+SOLR_SERVER_HOSTNAME+SOLR_SERVER_PATH+'/select?',
-				param_sort 		= SOLR_PARAMS.sort,
-				param_q 		= SOLR_PARAMS.q,
-				param_fq 		= SOLR_PARAMS.fq,
-				i	 			= 0;
-
-			solrQueryString += queryHeader + 'sort=' + param_sort + '&q=' + param_q;
-			if(param_fq instanceof Array) {
-				for(i = 0; i < param_fq.length; i += 1) {
-					if(param_fq[i].substr(0,12) !== 'coordinates:') {
-						solrQueryString += '&fq=' + param_fq[i];
-					}
-				}
-			}
-			else {
-				if(param_fq.substr(0,12) !== 'coordinates:') {
-					solrQueryString += '&fq=' + param_fq;
-				}
-			}
-			solrQueryString += '&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')';
-			solrQueryString += '&fq=coordinates:' + coordinates;
-			solrQueryString += '&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'];
-			solrQueryString += '&start=0&rows=1000';
-
-			return solrQueryString;
+		/**
+		 * Creates the solr query url for individual tickets matching
+		 * @param string coordinates
+		 * @param int clusterLevel
+		 * @param array smallClusters
+		 * @return string
+		 */
+		ticketsUrl = function (coordinates, clusterLevel, smallClusters) {
+			return solr_base_url + 'sort=' + SOLR_PARAMS.sort + '&q=' + SOLR_PARAMS.q + getFqParameters() +
+				'&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')' +
+				'&fq=coordinates:' + coordinates +
+				'&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'] +
+				'&start=0&rows=1000';
 		},
 		getClusterLevel = function (zoomLevel) {
-			if(zoomLevel < 10) {
+			if (zoomLevel < 10) {
 				return 6;
 			}
 			else {
@@ -124,23 +119,20 @@ google.maps.event.addDomListener(window, 'load', function() {
 			}
 		},
 		refreshMap = function () {
-			var zoomLevel 		= map.getZoom(),
-				bounds 			= map.getBounds(),
-				bbox			= generateBBox(bounds),
-				coordinates 	= generateCoordinates(bounds),
-				clusterLevel	= getClusterLevel(zoomLevel),
-				solrStatsQuery,
-				solrIndivQuery;
+			var zoomLevel    = map.getZoom(),
+				bounds       = map.getBounds(),
+				bbox         = generateBBox(bounds),
+				coordinates  = generateCoordinates(bounds),
+				clusterLevel = getClusterLevel(zoomLevel);
 
 			// Correspond with Solr Server
-			solrStatsQuery = getSolrStats(SOLR_PARAMS, coordinates, clusterLevel);
 			YUI().use('io', 'json-parse', function (Y) {
-				Y.io(solrStatsQuery, {
+				Y.io(statsUrl(coordinates, clusterLevel), {
 					on: {
 						complete: function (id, o, args) {
-							var response 	= Y.JSON.parse(o.responseText),
-								latStats 	= response.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
-								lngStats 	= response.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],
+							var response = Y.JSON.parse(o.responseText),
+								latStats = response.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
+								lngStats = response.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],
 								clusterId,
 								centroidLat,
 								centroidLng,
@@ -150,19 +142,19 @@ google.maps.event.addDomListener(window, 'load', function() {
 								largeClusterIndex,
 								smallClusterIndex;
 
-							for(i = 0; i < largeClusters.length; i += 1) {
+							for (i = 0; i < largeClusters.length; i += 1) {
 								largeClusters[i].setMap(null);
 							}
 							largeClusters = [];
 							smallClusters = [];
 							largeClusterIndex = 0;
 							smallClusterIndex = 0;
-							for(clusterId in latStats) {
+							for (clusterId in latStats) {
 								centroidLat = latStats[clusterId].mean;
 								centroidLng = lngStats[clusterId].mean;
 								clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
 								count = latStats[clusterId].count;
-								if(count >= 5) {
+								if (count >= 5) {
 									largeClusters[largeClusterIndex] = new MarkerCluster(map, clusterLatLng, count);
 									largeClusterIndex += 1;
 								}
@@ -171,14 +163,13 @@ google.maps.event.addDomListener(window, 'load', function() {
 									smallClusterIndex += 1;
 								}
 							}
-							for(i = 0; i < indivMarkers.length; i += 1) {
+							for (i = 0; i < indivMarkers.length; i += 1) {
 								indivMarkers[i].setMap(null);
 							}
 							indivMarkers = [];
-							if(smallClusters.length > 0) {
-								solrIndivQuery = getSolrIndiv(SOLR_PARAMS, coordinates, clusterLevel, smallClusters);
+							if (smallClusters.length > 0) {
 								YUI().use('io', 'json-parse', function (Y) {
-									Y.io(solrIndivQuery, {
+									Y.io(ticketsUrl(coordinates, clusterLevel, smallClusters), {
 										on: {
 											complete: function (id, o, args) {
 												var response 	= Y.JSON.parse(o.responseText),
@@ -188,7 +179,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 													markerLatLng,
 													i;
 
-												for(i = 0; i < tickets.length; i += 1) {
+												for (i = 0; i < tickets.length; i += 1) {
 													coordinates = tickets[i].coordinates;
 													latlng = coordinates.split(",");
 													markerLatLng = new google.maps.LatLng(latlng[0],latlng[1]);
@@ -224,7 +215,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 				Y.all('.searchParameters .btn').each(updateBBox);
 				Y.all('#advanced-search a').each(updateBBox);
 			});
-
 		};
 
 	google.maps.event.addListener(map, 'idle', refreshMap);
