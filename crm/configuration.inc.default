@@ -208,6 +208,13 @@ Zend_Loader_Autoloader::getInstance();
 include FRAMEWORK.'/globalFunctions.php';
 spl_autoload_register('autoload');
 
+if (!empty($_SERVER['CRM_DATA_HOME'])) {
+	define('CRM_DATA_HOME', $_SERVER['CRM_DATA_HOME']);
+}
+else {
+	define('CRM_DATA_HOME', __DIR__);
+}
+
 /**
  * Session Startup
  * Don't start a session for CLI usage.
