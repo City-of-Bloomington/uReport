@@ -23,7 +23,7 @@ class Image extends Media
 	public function output($size)
 	{
 		// If they don't specify size, just output the opriginal file
-		$directory    = APPLICATION_HOME."/data/media/{$this->getDirectory()}";
+		$directory    = CRM_DATA_HOME."/data/media/{$this->getDirectory()}";
 		$original = $this->getInternalFilename();
 		if (!$size) {
 			readfile("$directory/$original");
@@ -75,8 +75,8 @@ class Image extends Media
 	public function clearCache()
 	{
 		$uniqid = preg_replace('/[^.]+$/', '', $this->getInternalFilename());
-		$pattern = APPLICATION_HOME."/data/media/{$this->getDirectory()}/*/$uniqid*";
-		
+		$pattern = CRM_DATA_HOME."/data/media/{$this->getDirectory()}/*/$uniqid*";
+
 		foreach(glob($pattern) as $file) {
 			unlink($file);
 		}

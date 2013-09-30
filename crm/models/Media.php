@@ -115,7 +115,7 @@ class Media extends ActiveRecord
 	 */
 	public function delete()
 	{
-		unlink(APPLICATION_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		unlink(CRM_DATA_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 		parent::delete();
 	}
 	//----------------------------------------------------------------
@@ -180,10 +180,10 @@ class Media extends ActiveRecord
 
 		// Move the file where it's supposed to go
 		$directory = $this->getDirectory();
-		if (!is_dir(APPLICATION_HOME."/data/media/$directory")) {
-			mkdir  (APPLICATION_HOME."/data/media/$directory",0777,true);
+		if (!is_dir(CRM_DATA_HOME."/data/media/$directory")) {
+			mkdir  (CRM_DATA_HOME."/data/media/$directory",0777,true);
 		}
-		$newFile  = APPLICATION_HOME."/data/media/$directory/{$this->getInternalFilename()}";
+		$newFile  = CRM_DATA_HOME."/data/media/$directory/{$this->getInternalFilename()}";
 		rename($tempFile, $newFile);
 		chmod($newFile, 0666);
 
@@ -258,7 +258,7 @@ class Media extends ActiveRecord
 	 */
 	public function getFilesize()
 	{
-		return filesize(APPLICATION_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		return filesize(CRM_DATA_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 	}
 
 	/**

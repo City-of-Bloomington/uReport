@@ -4,7 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../configuration.inc';
+if (!empty($_SERVER['CRM_DATA_HOME'])) {
+	include "$_SERVER[CRM_DATA_HOME]/configuration.inc";
+}
+else {
+	include '../configuration.inc';
+}
+
 // Check for Open311 routes
 if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 	$resource = 'open311';

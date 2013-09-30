@@ -36,7 +36,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$media = new Media();
 		$media->setFile($this->FILE);
 
-		$newFile = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
+		$newFile = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
 		$this->assertTrue(file_exists($newFile));
 
 		if (file_exists($newFile)) { unlink($newFile); }
@@ -53,8 +53,8 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$image->output($this->testSize);
 		ob_end_clean();
 
-		$newFile   = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
-		$thumbnail = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$this->testSize}/{$media->getInternalFilename()}";
+		$newFile   = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
+		$thumbnail = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$this->testSize}/{$media->getInternalFilename()}";
 		$this->assertTrue(file_exists($thumbnail));
 
 		$info = getimagesize($thumbnail);
@@ -75,7 +75,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$media = new Media();
 		$media->setFile($this->FILE);
 
-		$newFile   = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
+		$newFile   = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
 
 		$temp = __DIR__."/temp.png";
 		$request = curl_init($media->getURL());
@@ -105,8 +105,8 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$media = new Media($this->testSize);
 		$media->setFile($this->FILE);
 
-		$newFile   = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
-		$thumbnail = APPLICATION_HOME."/data/media/{$media->getDirectory()}/{$this->testSize}/{$media->getInternalFilename()}";
+		$newFile   = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$media->getInternalFilename()}";
+		$thumbnail = CRM_DATA_HOME."/data/media/{$media->getDirectory()}/{$this->testSize}/{$media->getInternalFilename()}";
 
 		$temp = __DIR__."/temp.png";
 		$request = curl_init($media->getURL($this->testSize));
