@@ -194,6 +194,8 @@ define('THUMBNAIL_SIZE', 150);
 
 define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
 
+define('LOCALE', 'auto');
+
 //-------------------------------------------------------------------
 // Bootstrap code
 // No editing is usually needed after this point
