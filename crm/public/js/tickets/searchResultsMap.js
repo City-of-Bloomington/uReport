@@ -13,7 +13,6 @@ google.maps.event.addDomListener(window, 'load', function () {
 			center: initCenter,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		}),
-		solr_base_url = CRM.BASE_URL + '/solr?',
 
 		// Array to store the individual markers that will be shown
 		indivMarkers = [],
@@ -69,6 +68,14 @@ google.maps.event.addDomListener(window, 'load', function () {
 			}
 			return p;
 		},
+		getSolrBaseUrl = function (coordinates) {
+			var url = CRM.BASE_URL + '/solr?';
+			url += SOLR_PARAMS.q    ? 'q='     + SOLR_PARAMS.q    : 'q=*.*';
+			url += SOLR_PARAMS.sort ? '&sort=' + SOLR_PARAMS.sort : '';
+			url += getFqParameters() + '&fq=coordinates:' + coordinates;
+			url += '&wt=json&json.nl=map';
+			return url;
+		},
 		/**
 		 * Creates the solr query url for the map clusters
 		 *
@@ -77,10 +84,8 @@ google.maps.event.addDomListener(window, 'load', function () {
 		 * @return string
 		 */
 		statsUrl = function (coordinates, clusterLevel) {
-			return solr_base_url + 'sort=' + SOLR_PARAMS.sort + '&q=' + SOLR_PARAMS.q +
+			return getSolrBaseUrl(coordinates) +
 				'&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_' + clusterLevel +
-				getFqParameters() + '&fq=coordinates:' + coordinates +
-				'&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'] +
 				'&start=0&rows=0';
 		},
 		generateClusterIdString = function (smallClusters) {
@@ -104,10 +109,8 @@ google.maps.event.addDomListener(window, 'load', function () {
 		 * @return string
 		 */
 		ticketsUrl = function (coordinates, clusterLevel, smallClusters) {
-			return solr_base_url + 'sort=' + SOLR_PARAMS.sort + '&q=' + SOLR_PARAMS.q + getFqParameters() +
+			return getSolrBaseUrl(coordinates) +
 				'&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')' +
-				'&fq=coordinates:' + coordinates +
-				'&wt=' + SOLR_PARAMS.wt + '&json.nl=' + SOLR_PARAMS['json.nl'] +
 				'&start=0&rows=1000';
 		},
 		getClusterLevel = function (zoomLevel) {
@@ -127,7 +130,8 @@ google.maps.event.addDomListener(window, 'load', function () {
 
 			// Correspond with Solr Server
 			YUI().use('io', 'json-parse', function (Y) {
-				Y.io(statsUrl(coordinates, clusterLevel), {
+				var url = statsUrl(coordinates, clusterLevel);
+				Y.io(url, {
 					on: {
 						complete: function (id, o, args) {
 							var response = Y.JSON.parse(o.responseText),
