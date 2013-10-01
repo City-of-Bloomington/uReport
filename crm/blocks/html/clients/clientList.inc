@@ -46,13 +46,13 @@
 					<tr><th>{$this->translate(array('labels.contactMethod','labels.contactMethods',1))}</th>
 						<td>{$client->getContactMethod()}</td>
 					</tr>
-					<tr><th>{$this->translate(array('labels.api_key','labels.api_key',1))}</th>
+					<tr><th>{$this->translate('labels.api_key')}</th>
 						<td>{$client->getApi_key()}</td>
 					</tr>
 					<tr><th>{$this->translate('labels.url')}</th>
 						<td><a href=\"$url\">$url</a></td>
 					</tr>
-					<tr><th>{$this->translate(array('labels.contact','labels.contacts',1))}</th>
+					<tr><th>{$this->translate('labels.contact')}</th>
 						<td><a href=\"{$contact->getURL()}\">$contactName</a></td>
 					</tr>
 				</table>
