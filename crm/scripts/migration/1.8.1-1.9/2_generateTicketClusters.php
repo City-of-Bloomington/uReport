@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Quan Zhang <quanzhang@acm.org>
  */
-include '../../configuration.inc';
+include '../../../configuration.inc';
 
 $zend_db = Database::getConnection();
 $zend_db->delete('ticket_geodata');
