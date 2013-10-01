@@ -2,6 +2,11 @@
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 -- @author Cliff Ingham <inghamn@bloomington.in.gov>
 set foreign_key_checks=0;
+create table version (
+	version varchar(8) not null primary key
+);
+insert version set version='1.9';
+
 create table departments (
 	id               int          unsigned not null primary key auto_increment,
 	name             varchar(128) not null,
