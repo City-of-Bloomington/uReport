@@ -138,7 +138,7 @@ class Search
 	 * @param string $recordType
 	 * @return SolrObject
 	 */
-	public function query($get, $recordType=null)
+	public function query(&$get, $recordType=null)
 	{
 		// Start with all the default query values
 		$query = !empty($get['query'])
@@ -153,13 +153,13 @@ class Search
 
 		// Pagination
 		$rows = self::ITEMS_PER_PAGE;
-		$start = 0;
+		$startingPage = 0;
 		if (!empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
 
 			// Solr rows start at 0, but pages start at 1
-			$start = ($page-1) * self::ITEMS_PER_PAGE;
+			$startingPage = ($page-1) * self::ITEMS_PER_PAGE;
 		}
 
 		// Sorting
@@ -178,16 +178,19 @@ class Search
 
 		// Search Parameters
 		foreach (self::$searchableFields as $field=>$displayName) {
+			if (substr($field, -3) == '_id' && isset($get[$field])) {
+				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
+			}
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
-						$start = !empty($get[$field]['start'])
+						$startDate = !empty($get[$field]['start'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
 							: '*';
-						$end = !empty($get[$field]['end'])
+						$endDate = !empty($get[$field]['end'])
 							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
 							: '*';
-						$fq[] = "$field:[$start TO $end]";
+						$fq[] = "$field:[$startDate TO $endDate]";
 					}
 				}
 				// Added else if statement by Quan on Aug 5, 2013
@@ -209,7 +212,7 @@ class Search
 
 		if (count($fq)) { $additionalParameters['fq'] = $fq; }
 
-		$solrResponse = $this->solrClient->search($query, $start, $rows, $additionalParameters);
+		$solrResponse = $this->solrClient->search($query, $startingPage, $rows, $additionalParameters);
 		return $solrResponse;
 	}
 
@@ -224,7 +227,12 @@ class Search
 			foreach ($o->response->docs as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
-						$models[] = new Ticket($doc->id);
+						// Check to make sure the ticket permits viewing
+						// The search engine could be out of sync with the database record
+						$t = new Ticket($doc->id);
+						if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+							$models[] = new Ticket($doc->id);
+						}
 						break;
 				}
 			}
