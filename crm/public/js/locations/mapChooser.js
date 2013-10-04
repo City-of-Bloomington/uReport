@@ -34,10 +34,15 @@ google.maps.event.addDomListener(window, 'load', function() {
 									newLocation += results[0].address_components[i].long_name;
 									break;
 							}
-							// This function must be passed in from the LOCATION_CHOOSER
+							// This function is passed in from the LOCATION_CHOOSER
 							// in order to be available here.
 							// See chooseLocation.js
-							setLocation(newLocation, center.lat(), center.lng());
+							if (typeof(setLocation) != 'undefined') {
+								setLocation(newLocation, center.lat(), center.lng());
+							}
+							else {
+								document.location.href=CRM.BASE_URL + '/locations/view?location=' + newLocation;
+							}
 						}
 					}
 				}
