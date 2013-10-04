@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../../configuration.inc';
+include '../../../configuration.inc';
 $search = new Search();
 $search->solrClient->deleteByQuery('*:*');
 $search->solrClient->commit();
