@@ -27,7 +27,7 @@ var LOCATION_CHOOSER = {
 			var bd = Y.one('#locationChooser .bd');
 			bd.setContent('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
 
-			Y.io(CRM.BASE_URL + '/locations/view?partial=locations/locationInfo.inc,tickets/ticketList.inc;disableButtons=1;disableLinks=1;location=' + location, {
+			Y.io(CRM.BASE_URL + '/locations/view?partial=locations/locationInfo.inc,tickets/ticketList.inc;disableLinks=1;location=' + location, {
 				on: {
 					complete: function (id, o, args) {
 						bd.setContent(o.responseText);
