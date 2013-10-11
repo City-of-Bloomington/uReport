@@ -142,7 +142,7 @@ define('ERROR_REPORTING','PHP_DEFAULT');
  * posting errors to a Skidder server.  You must register for an application_id
  * on the skidder server you want to post errors to.
  */
-//define('SKIDDER_URL','http://localhost/skidder/home.php');
+//define('SKIDDER_URL','http://localhost/skidder/index/index');
 //define('SKIDDER_APPLICATION_ID',);
 
 /**
