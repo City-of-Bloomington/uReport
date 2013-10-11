@@ -349,24 +349,31 @@ class Person extends ActiveRecord
 		$id = (int)$this->getId();
 		if ($id) {
 			$zend_db = Database::getConnection();
-			$fields = array(
-				"t.enteredByPerson_id=$id",
-				"t.assignedPerson_id=$id",
-				"t.referredPerson_id=$id",
-				"h.enteredByPerson_id=$id",
-				"h.actionPerson_id=$id",
-				"i.enteredByPerson_id=$id",
-				"i.reportedByPerson_id=$id",
-				"r.person_id=$id",
-				"m.person_id=$id"
-			);
-			$or = implode(' or ', $fields);
-			$sql = "select t.id from tickets t
-					left join ticketHistory h on t.id=h.ticket_id
-					left join issues i on t.id=i.ticket_id
-					left join responses r on i.id=r.issue_id
-					left join media m on i.id=m.issue_id
-					where ($or) limit 1";
+			// This query is written as a Union for speed
+			// A Union is the only way to use the indexes for this query
+			$sql = "(select t.id from tickets t
+					where t.enteredByPerson_id=$id
+					   or t.assignedPerson_id=$id
+					   or t.referredPerson_id=$id
+					limit 1)
+					union all
+					(select h.ticket_id from ticketHistory h
+					where h.enteredByPerson_id=$id
+					   or h.actionPerson_id=$id
+					limit 1)
+					union all
+					(select i.ticket_id from issues i
+					where i.enteredByPerson_id=$id
+					   or i.reportedByPerson_id=$id
+					limit 1)
+					union all
+					(select r.issue_id from responses r
+					where r.person_id=$id
+					limit 1)
+					union all
+					(select m.issue_id from media m
+					where m.person_id=$id
+					limit 1)";
 			$result = $zend_db->fetchCol($sql);
 			return count($result) ? true : false;
 		}
