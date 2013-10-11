@@ -46,4 +46,40 @@ class TicketTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($ticket->getLatitude ());
 		$this->assertNull($ticket->getLongitude());
 	}
+
+	public function testSetAddressServiceData()
+	{
+		$ticket = new Ticket();
+		$ticket->setAddressServiceData($this->data);
+		$this->assertEquals($this->data['location'], $ticket->getLocation());
+		$this->assertEquals($this->data['city'],     $ticket->getCity());
+		$this->assertEquals($this->data['state'],    $ticket->getState());
+		$this->assertEquals($this->data['zip'],      $ticket->getZip());
+	}
+
+	public function testSetAddressServiceDataReplacesLocation()
+	{
+		$ticket = new Ticket();
+		// Here's what we get from the user via Google Maps
+		$ticket->setLocation('351 South Washington Street');
+		// We look that up in the AddressService and get this string
+		$ticket->setAddressServiceData(array(
+			'location'=>'351 S Washington'
+		));
+
+		$this->assertEquals('351 S Washington', $ticket->getLocation(), 'Address string was not updated from AddressService');
+	}
+
+	public function testAddressServiceDataDoesNotLatLong()
+	{
+		$ticket = new Ticket();
+		$ticket->setLocation('Somewhere');
+		$ticket->setLatitude(37);
+		$ticket->setLongitude(-80);
+
+		$ticket->setAddressServiceData($this->data);
+		$this->assertEquals($this->data['location'], $ticket->getLocation(), 'Address string was not updated from AddressService');
+		$this->assertEquals(37, $ticket->getLatitude(), 'Latitude was changed from AddressService');
+		$this->assertEquals(-80, $ticket->getLongitude(), 'Longitude was changed from AddressService');
+	}
 }

@@ -451,14 +451,37 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
+	 * Populates ticket data from the AddressService
+	 *
+	 * Preserves any fields that are already set...except...
+	 * We always update the ticket with the address string that
+	 * comes from the AddressService.
+	 *
 	 * @param array $data
 	 */
 	public function setAddressServiceData($data)
 	{
 		foreach ($data as $key=>$value) {
+			$get = 'get'.ucfirst($key);
 			$set = 'set'.ucfirst($key);
+
+			$currentValue = null;
+			if (method_exists($this, $get)) {
+				$currentValue = $this->$get();
+			}
+
 			if (method_exists($this,$set)) {
-				$this->$set($value);
+				// We must replace the user-provided address string
+				// with the string from the AddressService.
+				// We are using the AddressService string as the canonical string
+				// used to identify places in the city.
+				//
+				// Any other fields, we should preserve, especially the
+				// lat/long.  The user chose a point on the map where the problem
+				// was.  We don't want to move that around.
+				if ($key == 'location' || !$currentValue) {
+					$this->$set($value);
+				}
 			}
 			else {
 				$d = $this->getAdditionalFields();
