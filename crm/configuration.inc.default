@@ -194,7 +194,7 @@ define('THUMBNAIL_SIZE', 150);
 
 define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
 
-define('LOCALE', 'auto');
+define('LOCALE', 'en_US');
 
 //-------------------------------------------------------------------
 // Bootstrap code
