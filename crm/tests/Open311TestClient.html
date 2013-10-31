@@ -24,7 +24,9 @@
 </head>
 <body>
 	<h1>Open311 Test Client</h1>
-	<form id="postServiceRequestForm" method="post" onsubmit="postServiceRequest();" target="_blank">
+	<form id="postServiceRequestForm"
+		method="post" enctype="multipart/form-data"
+		onsubmit="postServiceRequest();" target="_blank">
 		<fieldset><legend>Endpoint Info</legend>
 			<table>
 				<tr><th><label for="baseUrl">Endpoint URL</label></th>
@@ -87,6 +89,9 @@
 					<td><input name="email" id="email" /></td>
 				</tr>
 			</table>
+		</fieldset>
+		<fieldset><legend>Media</legend>
+			<input type="file" name="media" />
 		</fieldset>
 		<fieldset>
 			<input type="submit" value="Submit" />
