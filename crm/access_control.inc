@@ -11,7 +11,7 @@ $ZEND_ACL->addRole(new Zend_Acl_Role('Anonymous'))
 		 ->addRole(new Zend_Acl_Role('Administrator'), 'Staff');
 
 /**
- * Declare all the resources
+ * Declare all the controllers as resources
  */
 $ZEND_ACL->add(new Zend_Acl_Resource('index'));
 $ZEND_ACL->add(new Zend_Acl_Resource('callback'));
@@ -52,16 +52,16 @@ $ZEND_ACL->allow(null, 'media', 'resize');
 $ZEND_ACL->allow(null, 'solr', 'index');
 
 // Staff permission
-// Staff has full permission to these tables
+// Staff has full permission to these controllers
 $ZEND_ACL->allow('Staff',array(
 	'account','people','issues','media','reports','bookmarks'
 ));
-// Staff has limited permission to these tables
+// Staff has limited permission to these controllers
 $ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
 $ZEND_ACL->allow('Staff','substatus',  array('index'));
 $ZEND_ACL->allow('Staff','tickets', array(
-	'add', 'update', 'merge', 'delete','assign', 'refer',
+	'add', 'update', 'merge', 'delete','assign', 'refer','print',
 	'changeCategory', 'changeLocation', 'changeStatus', 'recordAction'
 ));
 

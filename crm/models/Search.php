@@ -10,7 +10,8 @@ class Search
 	public $solrClient;
 	public static $defaultSort = array('field'=>'enteredDate', 'order'=>'desc');
 
-	const ITEMS_PER_PAGE = 10;
+	const ITEMS_PER_PAGE  = 10;
+	const MAX_RAW_RESULTS = 10000;
 	const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
 
 	/**
@@ -38,7 +39,7 @@ class Search
 		'label_id'        => 'Label',
 		'contactMethod_id'=> 'Received Via',
 		'enteredDate'     => 'Case Date',
-		'bbox'            => 'Bounding Box'  // Added by Quan on Aug 5, 2013
+		'bbox'            => 'Bounding Box'
 	);
 
 	/**
@@ -134,11 +135,15 @@ class Search
 	}
 
 	/**
+	 * Use the $raw flag to ask for raw results.  This will
+	 * disable facetting and pagination.  It will return up to
+	 * MAX_RAW_RESULTS.
+	 *
 	 * @param array $_GET
-	 * @param string $recordType
+	 * @param BOOL $raw
 	 * @return SolrObject
 	 */
-	public function query(&$get, $recordType=null)
+	public function query(&$get, $raw=false)
 	{
 		// Start with all the default query values
 		$query = !empty($get['query'])
@@ -149,17 +154,15 @@ class Search
 
 		$additionalParameters = array();
 
-		if ($recordType) { $fq[] = "recordType:$recordType"; }
-
 		// Pagination
-		$rows = self::ITEMS_PER_PAGE;
+		$rows = $raw ? self::MAX_RAW_RESULTS : self::ITEMS_PER_PAGE;
 		$startingPage = 0;
-		if (!empty($get['page'])) {
+		if (!$raw && !empty($get['page'])) {
 			$page = (int)$get['page'];
 			if ($page < 1) { $page = 1; }
 
 			// Solr rows start at 0, but pages start at 1
-			$startingPage = ($page-1) * self::ITEMS_PER_PAGE;
+			$startingPage = ($page - 1) * $rows;
 		}
 
 		// Sorting

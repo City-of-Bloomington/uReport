@@ -9,6 +9,7 @@
 	?>
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/skins/local/screen.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/skins/Font-Awesome/css/font-awesome.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/skins/local/print.css" media="print">
 	<!--[if IE 7]>
 		<link rel="stylesheet" href="<?php echo BASE_URI; ?>/skins/Font-Awesome/css/font-awesome-ie7.min.css">
 	<![endif]-->

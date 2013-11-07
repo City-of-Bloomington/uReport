@@ -51,6 +51,9 @@ msgstr ""
 msgid "labels.search_results_map"
 msgstr ""
 
+msgid "labels.search_results_print"
+msgstr ""
+
 msgid "labels.search_results_count"
 msgstr ""
 

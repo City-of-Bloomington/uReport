@@ -44,6 +44,7 @@ if (!empty($_GET['query'])
 				$deleteURL = clone $currentURL;
 
 				if($key === 'coordinates') {
+					if (isset($deleteURL->zoom)) { unset($deleteURL->zoom); }
 					$key = 'bbox';
 					if (isset($deleteURL->$key)) {
 						unset($deleteURL->$key);
@@ -77,24 +78,39 @@ if (!empty($_GET['query'])
 	</div>
 	";
 }
-echo "<div>";
+echo '<div id="resultFormatButtons">';
 	$url = clone $currentURL;
-	$resultFormat = (isset($_GET['resultFormat']) && $_GET['resultFormat']=='map')
-		? 'map'
-		: 'text';
+
+	$resultFormat = (isset($_GET['resultFormat'])) ? trim($_GET['resultFormat']) : 'text';
 
 	unset($url->resultFormat);
+	$current = $resultFormat=='text' ? ' current' : '';
 	echo "
-	<a id=\"text-result\" class=\"btn\" href=\"$url\">
+	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"icon-list-ul\"></span>
 		{$this->translate('labels.search_results_text')}
 	</a>
 	";
+
 	$url->resultFormat = 'map';
+	$current = $resultFormat=='map' ? ' current' : '';
 	echo "
-	<a id=\"map-result\" class=\"btn\" href=\"$url\">
+	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"icon-map-marker\"></span>
 		{$this->translate('labels.search_results_map')}
 	</a>
 	";
+
+	// Users should filter the results somehow before they are allowed to
+	// call for the full, raw results
+	if (isset($fq) && count($fq) && userIsAllowed('tickets', 'print')) {
+		$url->resultFormat = 'raw';
+		$current = $resultFormat=='raw' ? ' current' : '';
+		echo "
+		<a class=\"$current\" href=\"$url\">
+			<span class=\"icon-print\"></span>
+			{$this->translate('labels.search_results_print')}
+		</a>
+		";
+	}
 echo "</div>";

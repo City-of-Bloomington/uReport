@@ -214,10 +214,9 @@ google.maps.event.addDomListener(window, 'load', function () {
 					node.set('href', href);
 				};
 
-				updateBBox(Y.one('#text-result'));
-				updateBBox(Y.one('#map-result'));
+				Y.all('#resultFormatButtons a').each(updateBBox);
 				Y.all('.searchParameters .btn').each(updateBBox);
-				Y.all('#advanced-search a').each(updateBBox);
+				Y.all('#advanced-search a')    .each(updateBBox);
 			});
 		};
 

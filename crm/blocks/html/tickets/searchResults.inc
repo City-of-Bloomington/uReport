@@ -25,13 +25,16 @@ else {
 	echo "<h2>{$this->translate('messages.no_tickets_found')}</h2>";
 }
 
-// Solr rows start at 0, but pages start at 1
-$currentPage = round($this->solrObject->response->start/Search::ITEMS_PER_PAGE) + 1;
+// Raw results should not be paginated
+if (empty($_GET['resultFormat']) || $_GET['resultFormat']!='raw') {
+	// Solr rows start at 0, but pages start at 1
+	$currentPage = round($this->solrObject->response->start/Search::ITEMS_PER_PAGE) + 1;
 
-$paginator = new Zend_Paginator(new SolrPaginatorAdapter($this->solrObject));
-$paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);
-$paginator->setCurrentPageNumber($currentPage);
-$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
-echo $block->render('html', $this->template);
+	$paginator = new Zend_Paginator(new SolrPaginatorAdapter($this->solrObject));
+	$paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);
+	$paginator->setCurrentPageNumber($currentPage);
+	$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
+	echo $block->render('html', $this->template);
+}
 ?>
 </div>

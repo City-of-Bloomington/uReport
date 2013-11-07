@@ -29,10 +29,19 @@ class TicketsController extends Controller
 	 */
 	public function index()
 	{
-		$this->template->setFilename('search');
+		$format = isset($_GET['resultFormat']) ? trim($_GET['resultFormat']) : '';
+
+		if ($format == 'raw'
+			&& $this->template->outputFormat=='html'
+			&& userIsAllowed('tickets', 'print')) {
+			$this->template->setFilename('print');
+		}
+		else {
+			$this->template->setFilename('search');
+		}
 
 		$search = new Search();
-		$solrObject = $search->query($_GET);
+		$solrObject = $search->query($_GET, $format=='raw' ? true : false);
 
 		$this->template->blocks['left'][] = new Block(
 			'tickets/searchForm.inc',
@@ -43,7 +52,7 @@ class TicketsController extends Controller
 			array('solrObject'=>$solrObject)
 		);
 
-		$resultBlock = (isset($_GET['resultFormat']) && $_GET['resultFormat']=='map')
+		$resultBlock = ($format == 'map')
 			? 'searchResultsMap.inc'
 			: 'searchResults.inc';
 		$this->template->blocks['right'][] = new Block(

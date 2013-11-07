@@ -41,6 +41,7 @@ button, .btn {
 .icon-save   		{ color:green; }
 .icon-map-marker 	{ color:blue; }
 .icon-list-ul		{ color:blue; }
+.icon-print         { color:blue; }
 
 .ticketInfo ul [class^="icon-"] {
 	float:right;
@@ -179,7 +180,7 @@ button, .btn {
 
 .pageNavigation          { margin:.5em; }
 .pageNavigation li       { display:inline; margin:.5em; }
-.pageNavigation .current { border:2px solid green; }
+a.current { border:2px solid green; }
 
 tr.verified,
 tr.usedForNotifications { background-color:#cfc; }

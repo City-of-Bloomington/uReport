@@ -1,8 +1,16 @@
-/*Search panel with two vertical columns*/
+/* Pack things in tighter than when they are on screen */
 html { font-size:10pt; }
-#banner { display:none; }
-#menuBar { display:none; }
-#search-form { display:none; }
-#search-results { width:100%; margin:0; padding:0 1em; }
-.button { display:none; }
-.uploadForm { display:none; }
+h3 { margin-bottom:0; }
+ul { margin-bottom:0; }
+p { margin-bottom:0; }
+.panel, li { padding:0; }
+
+/* Hide all the interactive stuff */
+#banner,
+#menuBar,
+#footer,
+#resultFormatButtons,
+.btn, .icon-pencil, .actionForm { display:none; }
+
+/* Break pages nicely for search results */
+.searchResultsRows>div { page-break-inside:avoid; }

@@ -29,6 +29,9 @@ echo "
 		// The key will be the fieldname and the value will be "On" or 1
 		// or whatever the browser gives to checkboxes when you post a form.
 		// We'll loop through all of the fieldnames that were checked
+		if (!isset($_GET['fields'])) {
+			$_GET['fields'] = TicketList::$defaultFieldsToDisplay;
+		}
 		foreach ($_GET['fields'] as $name => $checked) {
 			// Make sure they're allowed to see this field
 			if (array_key_exists($name, $displayableFields)
