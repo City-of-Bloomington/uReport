@@ -24,6 +24,13 @@ else {
 $username = '';
 if (userIsAllowed('people','view')) {
 	$username = $this->person->getUsername();
+	if ($username && $resource=='account' && $_SESSION['USER']->getAuthenticationMethod()=='local') {
+		$username.= "
+		<a href=\"".BASE_URI."/account/changePassword\">
+			{$this->translate('labels.change_password')}
+		</a>
+		";
+	}
 	if (!$username && userIsAllowed('users','add') && !$this->disableButtons) {
 		$username = "
 		<a class=\"btn\"
@@ -73,10 +80,11 @@ if ($username) {
 			<td>$username</td>
 		</tr>
 	";
+
 }
 echo "
 <div class=\"personInfo\">
-	<h1>$name $editButton</h1>
+	<h2>$name $editButton</h2>
 ";
 	if ($organization || $username) {
 		echo "

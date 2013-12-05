@@ -191,6 +191,32 @@ class Person extends ActiveRecord
 		}
 	}
 
+	/**
+	 * @param array $post
+	 */
+	public function handleChangePassword($post)
+	{
+		if (   !empty($post['current_password'])
+			&& !empty($post['new_password'])
+			&& !empty($post['retype_password'])) {
+
+			if ($this->authenticate($_POST['current_password'])) {
+				if ($post['new_password'] == $post['retype_password']) {
+					$this->setPassword($post['new_password']);
+				}
+				else {
+					throw new Exception('users/passwordsDontMatch');
+				}
+			}
+			else {
+				throw new Exception('wrongPassword');
+			}
+		}
+		else {
+			throw new Exception('missingRequiredFields');
+		}
+	}
+
 	//----------------------------------------------------------------
 	// User Authentication
 	//----------------------------------------------------------------

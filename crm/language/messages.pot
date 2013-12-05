@@ -155,6 +155,18 @@ msgstr ""
 msgid "labels.role"
 msgstr ""
 
+msgid "labels.change_password"
+msgstr ""
+
+msgid "labels.current_password"
+msgstr ""
+
+msgid "labels.new_password"
+msgstr ""
+
+msgid "labels.retype_password"
+msgstr ""
+
 #. The generic term for a where a person works or is associated with
 #. What "organization" is someone affiliated with?
 msgid "labels.organization"

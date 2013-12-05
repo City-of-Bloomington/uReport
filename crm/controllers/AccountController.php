@@ -164,4 +164,27 @@ class AccountController extends Controller
 			)
 		);
 	}
+
+	public function changePassword()
+	{
+		if ($_SESSION['USER']->getAuthenticationMethod() != 'local') {
+			$_SESSION['errorMessages'][] = new Exception('users/passwordNotAllowed');
+			header('Location: '.BASE_URL.'/account');
+			exit();
+		}
+
+		if (isset($_POST['current_password'])) {
+			try {
+				$_SESSION['USER']->handleChangePassword($_POST);
+				$_SESSION['USER']->save();
+				header('Location: '.BASE_URL.'/account');
+				exit();
+			}
+			catch (Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		$this->template->blocks[] = new Block('users/changePasswordForm.inc');
+	}
 }
