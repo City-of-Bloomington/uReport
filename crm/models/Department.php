@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -50,6 +50,7 @@ class Department extends ActiveRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setDefaultPerson_id(1);
 		}
 	}
 
@@ -61,6 +62,10 @@ class Department extends ActiveRecord
 	{
 		if (!$this->data['name']) {
 			throw new Exception('missingRequiredFields');
+		}
+
+		if (!$this->getDefaultPerson_id()) {
+			$this->setDefaultPerson_id(1);
 		}
 	}
 
