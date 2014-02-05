@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -410,9 +410,12 @@ class Search
 	 * object corresponding to the value in the search index.
 	 * Example: self::getDisplayName('ticket', 'department_id', 32);
 	 *
+	 * Returns null if the value is an invalid ID
+	 *
 	 * @param string $recordType
 	 * @param string $fieldname
 	 * @param string $value
+	 * @return string
 	 */
 	public static function getDisplayName($recordType, $fieldname, $value)
 	{
@@ -426,13 +429,23 @@ class Search
 				return "$start - $end";
 			}
 			elseif (false !== strpos($fieldname, 'Person_id')) {
-				$o = new Person($value);
-				return $o->getFullname();
+				try {
+					$o = new Person($value);
+					return $o->getFullname();
+				}
+				catch (Exception $e) {
+					// Returns null if person is invalid
+				}
 			}
 			elseif (false !== strpos($fieldname, '_id')) {
-				$class = ucfirst(substr($fieldname, 0, -3));
-				$o = new $class($value);
-				return $o->getName();
+				try {
+					$class = ucfirst(substr($fieldname, 0, -3));
+					$o = new $class($value);
+					return $o->getName();
+				}
+				catch (Exception $e) {
+					// Returns null if the $class ID is invalid
+				}
 			}
 			else {
 				return $value;

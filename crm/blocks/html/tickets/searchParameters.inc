@@ -63,12 +63,14 @@ if (!empty($_GET['query'])
 					}
 					$displayName = Search::$searchableFields[$key];
 					$displayValue = Search::getDisplayName('ticket', $key, $value);
-					echo "
-					<a class=\"btn\" href=\"$deleteURL\">
-						<span class=\"icon-remove\"></span>
-						$displayName: $displayValue
-					</a>
-					";
+					if ($displayValue) {
+						echo "
+						<a class=\"btn\" href=\"$deleteURL\">
+							<span class=\"icon-remove\"></span>
+							$displayName: $displayValue
+						</a>
+						";
+					}
 				}
 			}
 		}
