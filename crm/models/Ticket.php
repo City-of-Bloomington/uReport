@@ -119,13 +119,20 @@ class Ticket extends ActiveRecord
 		}
 
 		if (!$this->getAssignedPerson_id()) {
-			$c = $this->getCategory();
-			if ($c->getDepartment_id()) {
-				$d = $c->getDepartment();
-				$this->setAssignedPerson($d->getDefaultPerson());
+			$category = $this->getCategory();
+			$person   = null;
+			if ($category->getDepartment_id()) {
+				$person = $category->getDepartment()->getDefaultPerson();
+			}
+
+			if ($person) {
+				$this->setAssignedPerson($person);
+			}
+			elseif (isset($_SESSION['USER'])) {
+				$this->setAssignedPerson($_SESSION['USER']);
 			}
 			else {
-				$this->setAssignedPerson($_SESSION['USER']);
+				$this->setAssignedPerson_id(1);
 			}
 		}
 
