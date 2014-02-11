@@ -11,16 +11,8 @@ foreach ($this->ticketList as $t) {
 	$service_name = $c ? View::escape($c->getName()) : '';
 	$service_code = $c ? $c->getId()   : '';
 
-	$issue = $t->getIssue();
-	$description = View::escape($issue->getDescription());
-
 	$history = $t->getHistory();
 	$h = end($history);
-
-	$address = View::escape($t->getLocation());
-	$zip = View::escape($t->getZip());
-	$media = $issue->getMedia();
-	$media_url = count($media) ? $media[0]->getURL() : '';
 
 	$agency_responsible = '';
 	$p = $t->getAssignedPerson();
@@ -37,17 +29,25 @@ foreach ($this->ticketList as $t) {
 		<status>{$t->getStatus()}</status>
 		<service_name>$service_name</service_name>
 		<service_code>$service_code</service_code>
-		<description>$description</description>
 		<agency_responsible>$agency_responsible</agency_responsible>
 		<requested_datetime>{$t->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$h->getEnteredDate('c')}</updated_datetime>
-		<address>$address</address>
-		<address_id>{$t->getAddressId()}</address_id>
-		<zipcode>$zip</zipcode>
-		<lat>{$t->getLatitude()}</lat>
-		<long>{$t->getLongitude()}</long>
-		<media_url>$media_url</media_url>
-	</request>
 	";
+	if ($t->getLocation())  { echo '<address>'   .View::escape($t->getLocation()) .'</address>';    }
+	if ($t->getAddressId()) { echo '<address_id>'.View::escape($t->getAddressId()).'</address_id>'; }
+	if ($t->getZip())       { echo '<zipcode>'   .View::escape($t->getZip())      .'</zipcode>';    }
+	if ($t->getLatitude())  { echo '<lat>'       .View::escape($t->getLatitude()) .'</lat>';        }
+	if ($t->getLongitude()) { echo '<long>'      .View::escape($t->getLongitude()).'</long>';       }
+
+	$issue = $t->getIssue();
+	if ($issue) {
+		echo '<description>'.View::escape($issue->getDescription()).'</description>';
+
+		$media = $issue->getMedia();
+		if (count($media)) {
+			echo "<media_url>{$media[0]->getURL()}</media_url>";
+		}
+	}
+	echo "</request>";
 }
 echo "</service_requests>";

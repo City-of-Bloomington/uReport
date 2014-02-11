@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
@@ -11,14 +11,8 @@ foreach ($this->ticketList as $t) {
 	$service_name = $c ? $c->getName() : '';
 	$service_code = $c ? $c->getId()   : '';
 
-	$issue = $t->getIssue();
-	$description = $issue->getDescription();
-
 	$history = $t->getHistory();
 	$h = end($history);
-
-	$media = $issue->getMedia();
-	$media_url = count($media) ? $media[0]->getURL() : '';
 
 	$agency_responsible = '';
 	$p = $t->getAssignedPerson();
@@ -29,22 +23,32 @@ foreach ($this->ticketList as $t) {
 		}
 	}
 
-	$service_requests[] = array(
+	$sr = array(
 		'service_request_id'=>$t->getId(),
 		'status'            =>$t->getStatus(),
 		'service_name'      =>$service_name,
 		'service_code'      =>$service_code,
-		'description'       =>$description,
 		'agency_responsible'=>$agency_responsible,
 		'requested_datetime'=>$t->getEnteredDate('c'),
-		'updated_datetime'  =>$h->getEnteredDate('c'),
-		'address'           =>$t->getLocation(),
-		'address_id'        =>$t->getAddressId(),
-		'zipcode'           =>$t->getZip(),
-		'lat'               =>$t->getLatitude(),
-		'long'              =>$t->getLongitude(),
-		'media_url'         =>$media_url
+		'updated_datetime'  =>$h->getEnteredDate('c')
 	);
+	if ($t->getLocation())  { $sr['address']    = $t->getLocation();  }
+	if ($t->getAddressId()) { $sr['address_id'] = $t->getAddressId(); }
+	if ($t->getZip())       { $sr['zipcode']    = $t->getZip();       }
+	if ($t->getLatitude())  { $sr['lat']        = $t->getLatitude();  }
+	if ($t->getLongitude()) { $sr['long']       = $t->getLongitude(); }
+
+	$issue = $t->getIssue();
+	if ($issue) {
+		$sr['description'] = $issue->getDescription();
+
+		$media = $issue->getMedia();
+		if (count($media)) {
+			$sr['media_url'] = $media[0]->getURL();
+		}
+	}
+
+	$service_requests[] = $sr;
 }
 
 echo json_encode($service_requests);

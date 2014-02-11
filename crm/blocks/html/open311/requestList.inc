@@ -2,14 +2,14 @@
 /**
  * Displays a list of Tickets using Open311 terminology
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
 echo "
 <div class=\"requestList\">
-	<h1>Requests</h1>
+	<h2>Requests</h2>
 ";
 	// Pagination pages are one-based and will treat page=0
 	// as exactly the same as page=1
@@ -43,15 +43,22 @@ echo "
 			$service_code = $c ? $c->getId()   : '';
 
 			$issue = $t->getIssue();
-			$description = $issue->getDescription();
+			if ($issue) {
+				$description = $issue->getDescription();
+
+				$media = $issue->getMedia();
+				$media_url = count($media) ? $media[0]->getURL() : '';
+			}
+			else {
+				$description = '';
+				$media_url   = '';
+			}
 
 			$history = $t->getHistory();
 			$latestHistory = end($history);
 
 			$address = View::escape($t->getLocation());
 			$zip = View::escape($t->getZip());
-			$media = $issue->getMedia();
-			$media_url = count($media) ? $media[0]->getURL() : '';
 
 			echo "
 			<tr><td>{$t->getId()}</td>
