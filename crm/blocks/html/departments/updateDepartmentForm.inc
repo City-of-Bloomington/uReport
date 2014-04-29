@@ -43,10 +43,13 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 								$name = View::escape($defaultPerson->getFullname());
 								echo "<option value=\"{$defaultPerson->getId()}\" selected=\"selected\">$name</option>";
 							}
-							foreach ($this->department->getPeople() as $person) {
-								$name = View::escape($person->getFullname());
-								if ($name) {
-									echo "<option value=\"{$person->getId()}\">$name</option>";
+							$people = $this->department->getPeople();
+							if ($people) {
+								foreach ($people as $person) {
+									$name = View::escape($person->getFullname());
+									if ($name) {
+										echo "<option value=\"{$person->getId()}\">$name</option>";
+									}
 								}
 							}
 						?>
