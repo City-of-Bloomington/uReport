@@ -80,6 +80,8 @@ class Department extends ActiveRecord
 	public function delete()
 	{
 		if ($this->isSafeToDelete()) {
+			$zend_db = Database::getConnection();
+			$zend_db->query('delete from department_actions where department_id=?', array($this->getId()));
 			parent::delete();
 		}
 		else {
