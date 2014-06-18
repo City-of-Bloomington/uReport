@@ -1,9 +1,12 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+use Zend\Db\Sql\Sql;
+
 abstract class ActiveRecord
 {
 	protected $tablename;
@@ -14,18 +17,31 @@ abstract class ActiveRecord
 	abstract public function validate();
 
 	/**
+	 * Callback from TableGateway
+	 */
+	public function exchangeArray($data)
+	{
+		$this->data = $data;
+	}
+
+	/**
 	 * Writes the database back to the database
 	 */
 	protected function save()
 	{
 		$this->validate();
 		$zend_db = Database::getConnection();
+		$sql = new Sql($zend_db, $this->tablename);
 		if ($this->getId()) {
-			$zend_db->update($this->tablename, $this->data, "id={$this->getId()}");
+			$update = $sql->update()
+				->set($this->data)
+				->where(array('id'=>$this->getId()));
+			$sql->prepareStatementForSqlObject($update)->execute();
 		}
 		else {
-			$zend_db->insert($this->tablename, $this->data);
-			$this->data['id'] = $zend_db->lastInsertId($this->tablename, 'id');
+			$insert = $sql->insert()->values($this->data);
+			$sql->prepareStatementForSqlObject($insert)->execute();
+			$this->data['id'] = $zend_db->getDriver()->getLastGeneratedValue();
 		}
 	}
 
@@ -35,8 +51,9 @@ abstract class ActiveRecord
 	protected function delete()
 	{
 		if ($this->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->delete($this->tablename, 'id='.$this->getId());
+			$sql = new Sql(Database::getConnection(), $this->tablename);
+			$delete = $sql->delete()->where(['id'=>$this->getId()]);
+			$sql->prepareStatementForSqlObject($delete)->execute();
 		}
 	}
 
@@ -74,11 +91,11 @@ abstract class ActiveRecord
 	 * @param DateTimeZone $timezone
 	 * @return string
 	 */
-	protected function getDateData($dateField, $format=null, DateTimeZone $timezone=null)
+	protected function getDateData($dateField, $format=null, \DateTimeZone $timezone=null)
 	{
 		if (isset($this->data[$dateField])) {
 			if ($format) {
-				$date = new DateTime($this->data[$dateField]);
+				$date = new \DateTime($this->data[$dateField]);
 				if ($timezone) { $date->setTimezone($timezone); }
 				return $date->format($format);
 			}
@@ -103,13 +120,13 @@ abstract class ActiveRecord
 	{
 		$date = trim($date);
 		if ($date) {
-			$d = DateTime::createFromFormat(DATE_FORMAT, $date);
+			$d = \DateTime::createFromFormat(DATE_FORMAT, $date);
 			if (!$d) {
 				try {
-					$d = new DateTime($date);
+					$d = new \DateTime($date);
 				}
 				catch (Exception $e) {
-					throw new Exception('unknownDateFormat');
+					throw new \Exception('unknownDateFormat');
 				}
 			}
 			$this->data[$dateField] = $d->format(self::MYSQL_DATE_FORMAT);
@@ -143,9 +160,9 @@ abstract class ActiveRecord
 	 * Loads the object record for the foreign key and caches
 	 * the object in a private variable
 	 *
-	 * @param string $class
-	 * @param string $field
-	 * @param string $id
+	 * @param string $class Fully namespaced classname
+	 * @param string $field Name of field to set
+	 * @param string $id The value to set
 	 */
 	protected function setForeignKeyField($class, $field, $id)
 	{
@@ -167,9 +184,9 @@ abstract class ActiveRecord
 	 * Caches the object in a private variable and sets
 	 * the ID value in the data
 	 *
-	 * @param string $class
-	 * @param string $field
-	 * @param Object $object
+	 * @param string $class Fully namespaced classname
+	 * @param string $field Name of field to set
+	 * @param Object $object Value to set
 	 */
 	protected function setForeignKeyObject($class, $field, $object)
 	{

@@ -7,10 +7,12 @@
  * with your own LDAP server, you will probably need to customize
  * the fields used in this class.
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+
 class Employee implements ExternalIdentity
 {
 	private static $connection;
@@ -61,7 +63,7 @@ class Employee implements ExternalIdentity
 			$this->entry = $entries[0];
 		}
 		else {
-			throw new Exception('ldap/unknownUser');
+			throw new \Exception('ldap/unknownUser');
 		}
 	}
 
@@ -80,17 +82,17 @@ class Employee implements ExternalIdentity
 							$this->config['DIRECTORY_ADMIN_BINDING'],
 							$this->config['DIRECTORY_ADMIN_PASS']
 						)) {
-						throw new Exception(ldap_error(self::$connection));
+						throw new \Exception(ldap_error(self::$connection));
 					}
 				}
 				else {
 					if (!ldap_bind(self::$connection)) {
-						throw new Exception(ldap_error(self::$connection));
+						throw new \Exception(ldap_error(self::$connection));
 					}
 				}
 			}
 			else {
-				throw new Exception(ldap_error(self::$connection));
+				throw new \Exception(ldap_error(self::$connection));
 			}
 		}
 	}

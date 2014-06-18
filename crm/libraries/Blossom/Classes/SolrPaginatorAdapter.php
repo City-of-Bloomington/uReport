@@ -4,11 +4,13 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class SolrPaginatorAdapter implements Zend_Paginator_Adapter_Interface
+namespace Blossom\Classes;
+
+class SolrPaginatorAdapter implements \Zend\Paginator\Adapter\AdapterInterface
 {
 	private $solrObject;
 
-	public function __construct(Apache_Solr_Response $solrObject)
+	public function __construct(\Apache_Solr_Response $solrObject)
 	{
 		$this->solrObject = $solrObject;
 	}

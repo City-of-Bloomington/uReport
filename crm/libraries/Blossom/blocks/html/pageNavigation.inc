@@ -2,14 +2,17 @@
 /**
  * Displays page navigation for any list that has pagination turned on
  *
- * @copyright 2007-2011 City of Bloomington, Indiana
+ * @copyright 2007-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Zend_Paginator $this->paginator
+ * @param Zend\Paginator $this->paginator
  */
-$pages = $this->paginator->getPages();
-if ($pages->pageCount > 1) {
-	$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+use Blossom\Classes\Url;
+
+if ($this->paginator->count() > 1) {
+	$pages = $this->paginator->getPages();
+
+	$url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 	$url->purgeEmptyParameters();
 
 	echo '<ul class="pageNavigation">';

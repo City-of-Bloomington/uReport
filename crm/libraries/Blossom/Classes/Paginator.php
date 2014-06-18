@@ -2,10 +2,12 @@
 /**
  * Takes an array and splits it up into pages (an array of arrays)
  *
- * @copyright 2008-2009 City of Bloomington, Indiana
+ * @copyright 2008-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+
 class Paginator implements ArrayAccess,SeekableIterator,Countable
 {
 	private $pageSize;

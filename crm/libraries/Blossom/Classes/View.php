@@ -4,27 +4,44 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+use Zend\I18n\Translator\Translator;
+
 abstract class View
 {
 	protected $vars = array();
-	private static $zend_translate;
+	private static $translator;
 
 	abstract public function render();
 
-	public function __construct()
+	/**
+	 * Instantiates the Zend Translator
+	 *
+	 * See: ZendFramework documentation for full information
+	 * http://framework.zend.com/manual/2.2/en/modules/zend.i18n.translating.html
+	 * @see http://framework.zend.com/manual/2.2/en/modules/zend.i18n.translating.html
+	 */
+	public function __construct(array $vars=null)
 	{
-		if (!self::$zend_translate) {
-			self::$zend_translate = new Zend_Translate(array(
-				'adapter' => 'gettext',
-				'content' => APPLICATION_HOME.'/language',
-				'locale'  => LOCALE,
-				'scan'    => Zend_Translate::LOCALE_FILENAME
-			));
+		if (count($vars)) {
+			foreach ($vars as $name=>$value) {
+				$this->vars[$name] = $value;
+			}
+		}
+
+		if (!self::$translator) {
+			self::$translator = new Translator();
+			self::$translator->addTranslationFilePattern(
+				'gettext',
+				APPLICATION_HOME.'/language',
+				'%s.mo'
+			);
 		}
 	}
 
 	/**
 	 * Magic Method for setting object properties
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 */
@@ -33,6 +50,7 @@ abstract class View
 	}
 	/**
 	 * Magic method for getting object properties
+	 *
 	 * @param string $key
 	 * @return mixed
 	 */
@@ -71,7 +89,7 @@ abstract class View
 			}
 		}
 		else {
-			$input = htmlspecialchars(trim($input),$quotes);
+			$input = htmlspecialchars(trim($input), $quotes, 'UTF-8');
 		}
 
 		return $input;
@@ -83,14 +101,28 @@ abstract class View
 	 * For entries in the PO that are plurals, you must pass msgid as an array
 	 * $this->translate(array('msgid', 'msgid_plural', $num))
 	 *
-	 * Zend_Translate will use the correct plural version based on the number
-	 * you provide.
+	 * See: ZendFramework documentation for full information
+	 * http://framework.zend.com/manual/2.2/en/modules/zend.i18n.translating.html
 	 *
+	 * @see http://framework.zend.com/manual/2.2/en/modules/zend.i18n.translating.html
 	 * @param mixed $msgid String or Array
 	 * @return string
 	 */
 	public function translate($msgid)
 	{
-		return self::$zend_translate->_($msgid);
+		if (is_array($msgid)) {
+			return self::$translator->translatePlural($msgid[0], $msgid[1], $msgid[2]);
+		}
+		else {
+			return self::$translator->translate($msgid);
+		}
+	}
+
+	/**
+	 * Alias of $this->translate()
+	 */
+	public function _($msgid)
+	{
+		return $this->translate($msgid);
 	}
 }

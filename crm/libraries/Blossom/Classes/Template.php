@@ -4,10 +4,12 @@
  *
  * The template collects all the blocks from the controller
  *
- * @copyright 2006-2012 City of Bloomington, Indiana
+ * @copyright 2006-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+
 class Template extends View
 {
 	private $path;
@@ -25,22 +27,20 @@ class Template extends View
 	 */
 	public function __construct($filename='default',$outputFormat='html',array $vars=null)
 	{
-		parent::__construct();
-		
-		$this->path = APPLICATION_HOME.'/templates';
+		parent::__construct($vars);
+
 		$this->filename = $filename;
 		$this->outputFormat = preg_replace('/[^a-zA-Z]/','',$outputFormat);
+
+		// Check for a SITE_HOME override
+		$this->path = is_file(SITE_HOME."/templates/{$this->outputFormat}/{$this->filename}.inc")
+			? SITE_HOME.'/templates'
+			: APPLICATION_HOME.'/templates';
 
 		// Make sure the output format exists
 		if (!is_file("{$this->path}/{$this->outputFormat}/{$this->filename}.inc")) {
 			$this->filename = 'default';
 			$this->outputFormat = 'html';
-		}
-
-		if (count($vars)) {
-			foreach ($vars as $name=>$value) {
-				$this->vars[$name] = $value;
-			}
 		}
 	}
 
@@ -49,12 +49,17 @@ class Template extends View
 	 */
 	public function setFilename($filename)
 	{
-		if (is_file("{$this->path}/{$this->outputFormat}/$filename.inc")) {
-			$this->filename = $filename;
+		if (      is_file(SITE_HOME."/templates/{$this->outputFormat}/{$this->filename}.inc")) {
+			$this->path = SITE_HOME.'/templates';
+		}
+		elseif (  is_file(APPLICATION_HOME."/templates/{$this->outputFormat}/$filename.inc")) {
+			$this->path = APPLICATION_HOME;
 		}
 		else {
-			throw new Exception('unknownTemplate');
+			throw new \Exception('unknownTemplate');
 		}
+
+		$this->filename = $filename;
 	}
 
 	/**
@@ -63,12 +68,18 @@ class Template extends View
 	public function setOutputFormat($format)
 	{
 		$format = preg_replace('/[^a-zA-Z]/','',$format);
-		if (is_file("{$this->path}/$format/{$this->filename}.inc")) {
-			$this->outputFormat = $format;
+
+		if (      is_file(SITE_HOME."/templates/$format/{$this->filename}.inc")) {
+			$this->path = SITE_HOME.'/templates';
+		}
+		elseif (  is_file(APPLICATION_HOME."/templates/$format/{$this->filename}.inc")) {
+			$this->path = APPLICATION_HOME.'/templates';
 		}
 		else {
-			throw new Exception('unknownOutputFormat');
+			throw new \Exception('unknownOutputFormat');
 		}
+
+		$this->outputFormat = $format;
 	}
 
 	/**
@@ -181,9 +192,36 @@ class Template extends View
 	{
 		if (!array_key_exists($functionName, $this->helpers)) {
 			$class = ucfirst($functionName);
-			require_once APPLICATION_HOME."/templates/{$this->outputFormat}/helpers/$class.php";
+			$file = "/templates/{$this->outputFormat}/helpers/$class.php";
+
+			if (     is_file(SITE_HOME.$file)) {
+				require_once SITE_HOME.$file;
+			}
+			else {
+				require_once APPLICATION_HOME.$file;
+			}
+			$class = "Application\\Templates\\Helpers\\$class";
 			$this->helpers[$functionName] = new $class($this);
 		}
 		return $this->helpers[$functionName];
+	}
+
+	/**
+	 * Includes the given filename.
+	 *
+	 * Supports SITE_HOME overriding.
+	 * Specify a relative path starting from /templates/
+	 * $file paths should not start with a slash.
+	 *
+	 * @param string $file
+	 */
+	public function _include($file)
+	{
+		if (is_file(SITE_HOME."/templates/{$this->outputFormat}/$file")) {
+			include SITE_HOME."/templates/{$this->outputFormat}/$file";
+		}
+		else {
+			include APPLICATION_HOME."/templates/{$this->outputFormat}/$file";
+		}
 	}
 }

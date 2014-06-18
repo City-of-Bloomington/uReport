@@ -9,10 +9,12 @@
  * APPLICATION_HOME/blocks/xml/...
  * APPLICATION_HOME/blocks/json/..
  *
- * @copyright 2006-2012 City of Bloomington, Indiana
+ * @copyright 2006-2013 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Blossom\Classes;
+
 class Block extends View
 {
 	private $file;
@@ -29,14 +31,9 @@ class Block extends View
 	 */
 	public function __construct($file,array $vars=null)
 	{
-		parent::__construct();
-		
+		parent::__construct($vars);
+
 		$this->file = $file;
-		if (count($vars)) {
-			foreach ($vars as $name=>$value) {
-				$this->vars[$name] = $value;
-			}
-		}
 	}
 
 	/**
@@ -54,18 +51,22 @@ class Block extends View
 		$block = "/blocks/$outputFormat/{$this->file}";
 		$this->template = $template;
 
-		if (file_exists(APPLICATION_HOME.$block)) {
-			ob_start();
-			include APPLICATION_HOME.$block;
-			return ob_get_clean();
+		if (is_file(SITE_HOME.$block)) {
+			$file = SITE_HOME.$block;
 		}
-		elseif (file_exists(FRAMEWORK.$block)) {
-			ob_start();
-			include FRAMEWORK.$block;
-			return ob_get_clean();
+		elseif (is_file(APPLICATION_HOME.$block)) {
+			$file = APPLICATION_HOME.$block;
+		}
+		elseif (is_file(BLOSSOM.$block)) {
+			$file = BLOSSOM.$block;
+		}
+		else {
+			throw new \Exception('unknownBlock/'.$this->file);
 		}
 
-		throw new Exception('unknownBlock/'.$this->file);
+		ob_start();
+		include $file;
+		return ob_get_clean();
 	}
 
 	/**
@@ -74,5 +75,24 @@ class Block extends View
 	public function getFile()
 	{
 		return $this->file;
+	}
+
+	/**
+	 * Includes the given filename.
+	 *
+	 * Supports SITE_HOME overriding.
+	 * Specify a relative path starting from /blocks/
+	 * $file paths should not start with a slash.
+	 *
+	 * @param string $file
+	 */
+	public function _include($file)
+	{
+		if (is_file(SITE_HOME."/blocks/$file")) {
+			include SITE_HOME."/blocks/$file";
+		}
+		else {
+			include APPLICATION_HOME."/blocks/$file";
+		}
 	}
 }

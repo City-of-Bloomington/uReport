@@ -11,7 +11,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class URL
+namespace Blossom\Classes;
+
+class Url
 {
 	private $scheme;
 	private $host;
@@ -45,20 +47,18 @@ class URL
 
 		// If scheme wasn't provided add one to the start of the string
 		if (!strpos(substr($script,0,20),'://')) {
-			$scheme = $_SERVER['SERVER_PORT']==443 ? 'https://' : 'http://';
+			$scheme = (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT']==443)
+				? 'https://'
+				: 'http://';
 			$script = $scheme.$script;
 		}
 
 		$url = parse_url($script);
 		$this->scheme = $url['scheme'];
-		$this->host = $url['host'];
-		$this->path = $url['path'];
-		if (isset($url['fragment'])) {
-			$this->anchor = $url['fragment'];
-		}
-		if (isset($url['query'])) {
-			parse_str($url['query'],$this->parameters);
-		}
+		if (isset($url['host']))     { $this->host = $url['host'];       }
+		if (isset($url['path']))     { $this->path = $url['path'];       }
+		if (isset($url['fragment'])) { $this->anchor = $url['fragment']; }
+		if (isset($url['query'])) { parse_str($url['query'],$this->parameters); }
 	}
 
 	/**
@@ -102,7 +102,7 @@ class URL
 	 */
 	public function getScheme() {
 		if (!$this->scheme) {
-			$this->scheme = 'http://';
+			$this->scheme = 'http';
 		}
 		return $this->scheme;
 	}
@@ -113,9 +113,7 @@ class URL
 	 */
 	public function setScheme($string)
 	{
-		if (!preg_match('|://|',$string)) {
-			$string .= '://';
-		}
+		$string = preg_replace('|://|', '', $string);
 		$this->scheme = $string;
 	}
 
