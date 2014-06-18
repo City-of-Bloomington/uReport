@@ -1,7 +1,9 @@
 configuration.inc
 crm/data/media/*
 crm/data/sessions/*
-crm/data/templates
+crm/data/templates/*
+crm/data/blocks/*
+crm/data/site_config.inc
 crm/scripts/backup.cnf
 crm/scripts/migration/0.0-1.0/calltrack/3_tickets.php
 crm/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
