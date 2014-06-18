@@ -5,10 +5,14 @@
  * Files will be stored as /data/media/YYYY/MM/DD/$media_id.ext
  * User provided filenames will be stored in the database
  *
- * @copyright 2006-2012 City of Bloomington, Indiana
+ * @copyright 2006-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Media extends ActiveRecord
 {
 	protected $tablename = 'media';
@@ -82,7 +86,7 @@ class Media extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('media/unknownMedia');
+				throw new \Exception('media/unknownMedia');
 			}
 		}
 		else {
@@ -102,10 +106,10 @@ class Media extends ActiveRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->data['filename'])   { throw new Exception('media/missingFilename');  }
-		if (!$this->data['mime_type'])  { throw new Exception('media/missingMimeType');  }
-		if (!$this->data['media_type']) { throw new Exception('media/missingMediaType'); }
-		if (!$this->data['issue_id'])   { throw new Exception('media/missingIssue_id');  }
+		if (!$this->data['filename'])   { throw new \Exception('media/missingFilename');  }
+		if (!$this->data['mime_type'])  { throw new \Exception('media/missingMimeType');  }
+		if (!$this->data['media_type']) { throw new \Exception('media/missingMediaType'); }
+		if (!$this->data['issue_id'])   { throw new \Exception('media/missingIssue_id');  }
 	}
 
 	public function save() { parent::save(); }
@@ -127,7 +131,7 @@ class Media extends ActiveRecord
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getMedia_type() { return parent::get('media_type'); }
 	public function getPerson_id()  { return parent::get('person_id');  }
-	public function getUploaded($f=null, DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
+	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
 
 	public function getIssue()  { return parent::getForeignKeyObject('Issue',  'issue_id');  }
 	public function getPerson() { return parent::getForeignKeyObject('Person', 'person_id'); }
@@ -140,7 +144,7 @@ class Media extends ActiveRecord
 
 
 	public function getType() { return $this->getMedia_type(); }
-	public function getModified($f=null, DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
+	public function getModified($f=null, \DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
 
 	//----------------------------------------------------------------
 	// Custom Functions
@@ -159,7 +163,7 @@ class Media extends ActiveRecord
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
 		$filename = is_array($file) ? basename($file['name']) : basename($file);
 		if (!$tempFile) {
-			throw new Exception('media/uploadFailed');
+			throw new \Exception('media/uploadFailed');
 		}
 
 		// Clean all bad characters from the filename
@@ -174,7 +178,7 @@ class Media extends ActiveRecord
 
 		}
 		else {
-			throw new Exception('media/unknownFileType');
+			throw new \Exception('media/unknownFileType');
 		}
 
 
@@ -189,7 +193,7 @@ class Media extends ActiveRecord
 
 		// Check and make sure the file was saved
 		if (!is_file($newFile)) {
-			throw new Exception('media/badServerPermissions');
+			throw new \Exception('media/badServerPermissions');
 		}
 	}
 

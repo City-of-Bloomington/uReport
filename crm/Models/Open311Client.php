@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+
 class Open311Client
 {
 	/**
@@ -29,7 +31,7 @@ class Open311Client
 	{
 		// Make sure we have a valid api_key
 		if (!empty($open311Post['api_key'])) { $client = Client::loadByApiKey($open311Post['api_key']); }
-		else { throw new Exception('clients/unknownClient'); }
+		else { throw new \Exception('clients/unknownClient'); }
 
 		$ticketPost = array(
 			'client_id'       => $client->getId(),
@@ -115,7 +117,7 @@ class Open311Client
 							$phone->save();
 						}
 					}
-					catch (Exception $e) { unset($person); }
+					catch (\Exception $e) { unset($person); }
 				}
 			}
 		}

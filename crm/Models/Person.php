@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2009-2013 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Person extends ActiveRecord
 {
 	protected $tablename = 'people';
@@ -48,7 +52,7 @@ class Person extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('people/unknownPerson');
+				throw new \Exception('people/unknownPerson');
 			}
 		}
 		else {
@@ -67,7 +71,7 @@ class Person extends ActiveRecord
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if ((!$this->getFirstname() && !$this->getLastname())
 			&& !$this->getOrganization()) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 
 		if ($this->getUsername() && !$this->getAuthenticationMethod()) {
@@ -84,7 +88,7 @@ class Person extends ActiveRecord
 	{
 		if ($this->getId()) {
 			if ($this->hasTickets()) {
-				throw new Exception('people/personStillHasTickets');
+				throw new \Exception('people/personStillHasTickets');
 			}
 
 			$zend_db = Database::getConnection();
@@ -205,15 +209,15 @@ class Person extends ActiveRecord
 					$this->setPassword($post['new_password']);
 				}
 				else {
-					throw new Exception('users/passwordsDontMatch');
+					throw new \Exception('users/passwordsDontMatch');
 				}
 			}
 			else {
-				throw new Exception('wrongPassword');
+				throw new \Exception('wrongPassword');
 			}
 		}
 		else {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 	}
 
@@ -538,7 +542,7 @@ class Person extends ActiveRecord
 		if ($this->getId() && $person->getId()) {
 			if($this->getId() == $person->getId()){
 				// can not merge same person throw exception
-				throw new Exception('mergerNotAllowed');
+				throw new \Exception('mergerNotAllowed');
 			}
 
 			$zend_db = Database::getConnection();

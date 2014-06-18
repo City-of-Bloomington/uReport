@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Phone extends ActiveRecord
 {
 	protected $tablename = 'peoplePhones';
@@ -38,7 +42,7 @@ class Phone extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('phones/unknownPhone');
+				throw new \Exception('phones/unknownPhone');
 			}
 		}
 		else {
@@ -51,7 +55,7 @@ class Phone extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getLabel()) { $this->setLabel('Other'); }
-		if (!$this->getPerson_id()) { throw new Exception('phones/missingPerson'); }
+		if (!$this->getPerson_id()) { throw new \Exception('phones/missingPerson'); }
 	}
 
 	public function save()   { parent::save();   }

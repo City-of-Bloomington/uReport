@@ -2,10 +2,14 @@
 /**
  * A Web Service Client authorized to POST tickets
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Client extends ActiveRecord
 {
 	protected $tablename = 'clients';
@@ -21,7 +25,7 @@ class Client extends ActiveRecord
 			return new Client($row);
 		}
 		else {
-			throw new Exception('clients/unknownClient');
+			throw new \Exception('clients/unknownClient');
 		}
 	}
 
@@ -54,7 +58,7 @@ class Client extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('clients/unknownClient');
+				throw new \Exception('clients/unknownClient');
 			}
 		}
 		else {
@@ -75,7 +79,7 @@ class Client extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getName() || !$this->getContactPerson()) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 
 		if (!$this->getApi_key()) {

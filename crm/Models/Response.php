@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -40,7 +40,7 @@ class Response extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('responses/unknownResponse');
+				throw new \Exception('responses/unknownResponse');
 			}
 		}
 		else {
@@ -55,13 +55,13 @@ class Response extends ActiveRecord
 
 	public function validate()
 	{
-		if (!$this->getIssue_id()) { throw new Exception('issues/unknownIssue'); }
+		if (!$this->getIssue_id()) { throw new \Exception('issues/unknownIssue'); }
 
 		if (!$this->getDate()) { $this->setDate('now'); }
 
 		if (!$this->getPerson_id()) {
 			if (isset($_SESSION['USER'])) { $this->setPerson($_SESSION['USER']); }
-			else { throw new Exception('response/unknownPerson'); }
+			else { throw new \Exception('response/unknownPerson'); }
 		}
 	}
 
@@ -72,7 +72,7 @@ class Response extends ActiveRecord
 	//----------------------------------------------------------------
 	public function getId()               { return parent::get('id');               }
 	public function getNotes()            { return parent::get('notes');            }
-	public function getDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('date', $f, $tz); }
+	public function getDate($f=null, \DateTimeZone $tz=null) { return parent::getDateData('date', $f, $tz); }
 
 	public function setNotes($s) { parent::set('notes', $s); }
 	public function setDate($d) { parent::setDateData('date', $d); }

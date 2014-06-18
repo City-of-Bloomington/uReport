@@ -4,10 +4,14 @@
  *
  * Issues are part of Ticket records
  *
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Issue extends ActiveRecord
 {
 	protected $tablename = 'issues';
@@ -51,7 +55,7 @@ class Issue extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('issues/unknownIssue');
+				throw new \Exception('issues/unknownIssue');
 			}
 		}
 		else {
@@ -73,7 +77,7 @@ class Issue extends ActiveRecord
 	 */
 	public function validate($preliminary=false)
 	{
-		if (!$this->getTicket_id())    { throw new Exception('issues/missingTicket'); }
+		if (!$this->getTicket_id())    { throw new \Exception('issues/missingTicket'); }
 		if (!$this->getDate()) { $this->setDate('now'); }
 
 		if (isset($_SESSION['USER'])) {
@@ -114,7 +118,7 @@ class Issue extends ActiveRecord
 	public function getEnteredByPerson_id()  { return parent::get('enteredByPerson_id');  }
 	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
 	public function getDescription()         { return parent::get('description');         }
-	public function getDate($format=null, DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
+	public function getDate($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
 	public function getTicket()           { return parent::getForeignKeyObject('Ticket',        'ticket_id');           }
 	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id');    }
 	public function getResponseMethod()   { return parent::getForeignKeyObject('ContactMethod', 'responseMethod_id');   }

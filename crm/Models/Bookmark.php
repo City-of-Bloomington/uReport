@@ -2,10 +2,14 @@
 /**
  * Represents a saved URL for a user
  *
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Bookmark extends ActiveRecord
 {
 	protected $tablename = 'bookmarks';
@@ -38,7 +42,7 @@ class Bookmark extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('bookmarks/unknownBookmark');
+				throw \new Exception('bookmarks/unknownBookmark');
 			}
 		}
 		else {
@@ -58,7 +62,7 @@ class Bookmark extends ActiveRecord
 		}
 
 		if (!$this->getRequestUri()) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 	}
 

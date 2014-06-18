@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 abstract class History extends ActiveRecord
 {
 	protected $enteredByPerson;
@@ -31,7 +35,7 @@ abstract class History extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('history/unknownHistory');
+				throw new \Exception('history/unknownHistory');
 			}
 		}
 		else {
@@ -50,12 +54,12 @@ abstract class History extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getAction()) {
-			throw new Exception('history/missingAction');
+			throw new \Exception('history/missingAction');
 		}
 
 		$id_field = $this->tablename == 'ticketHistory' ? 'ticket_id' : 'issue_id';
 		if (!$this->data[$id_field]) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 
 		if (!$this->data['enteredDate']) { $this->setEnteredDate('now'); }
@@ -82,8 +86,8 @@ abstract class History extends ActiveRecord
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getActionPerson_id()    { return parent::get('actionPerson_id');    }
 	public function getAction_id()          { return parent::get('action_id');          }
-	public function getEnteredDate($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
-	public function getActionDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
+	public function getEnteredDate($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
+	public function getActionDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
 	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person', 'enteredByPerson_id'); }
 	public function getActionPerson()    { return parent::getForeignKeyObject('Person', 'actionPerson_id');    }
 	public function getAction()          { return parent::getForeignKeyObject('Action', 'action_id');          }

@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Department extends ActiveRecord
 {
 	protected $tablename = 'departments';
@@ -44,7 +48,7 @@ class Department extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('departments/unknownDepartment');
+				throw new \Exception('departments/unknownDepartment');
 			}
 		}
 		else {
@@ -61,7 +65,7 @@ class Department extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->data['name']) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 
 		if (!$this->getDefaultPerson_id()) {
@@ -85,7 +89,7 @@ class Department extends ActiveRecord
 			parent::delete();
 		}
 		else {
-			throw new Exception('departments/foreignKeyViolation');
+			throw new \Exception('departments/foreignKeyViolation');
 		}
 	}
 
@@ -175,7 +179,7 @@ class Department extends ActiveRecord
 						'category_id'=>(int)$id
 					));
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 					// Just ignore the bad ones
 				}
 			}

@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2007-2013 City of Bloomington, Indiana. All rights reserved.
+ * @copyright 2007-2014 City of Bloomington, Indiana. All rights reserved.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Image extends Media
 {
 	public function __construct(Media $media)
@@ -11,7 +15,7 @@ class Image extends Media
 		$this->data = $media->data;
 
 		if ($this->getMedia_type() != 'image') {
-			throw new Exception('media/nonimage');
+			throw new \Exception('media/nonimage');
 		}
 	}
 

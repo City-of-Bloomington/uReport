@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Substatus extends ActiveRecord
 {
 	protected $tablename = 'substatus';
@@ -37,7 +41,7 @@ class Substatus extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('substatus/unknownSubstatus');
+				throw new \Exception('substatus/unknownSubstatus');
 			}
 		}
 		else {
@@ -49,7 +53,7 @@ class Substatus extends ActiveRecord
 
 	public function validate()
 	{
-		if (!$this->getName()) { throw new Exception('missingRequiredFields'); }
+		if (!$this->getName()) { throw new \Exception('missingRequiredFields'); }
 		if (!$this->getStatus()) { $this->setStatus('open'); }
 	}
 

@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+
 require_once SOLR_PHP_CLIENT.'/Apache/Solr/Service.php';
 class Search
 {
@@ -433,7 +435,7 @@ class Search
 					$o = new Person($value);
 					return $o->getFullname();
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 					// Returns null if person is invalid
 				}
 			}
@@ -443,7 +445,7 @@ class Search
 					$o = new $class($value);
 					return $o->getName();
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 					// Returns null if the $class ID is invalid
 				}
 			}

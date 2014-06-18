@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Ticket extends ActiveRecord
 {
 	protected $tablename = 'tickets';
@@ -46,7 +50,7 @@ class Ticket extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('tickets/unknownTicket');
+				throw new \\Exception('tickets/unknownTicket');
 			}
 		}
 		else {
@@ -64,18 +68,18 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 * @throws \Exception $e
 	 */
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->getCategory()) {
-			throw new Exception('tickets/missingCategory');
+			throw new \\Exception('tickets/missingCategory');
 		}
 
 		$issue = $this->getIssue();
 		if (!$issue) {
-			throw new Exception('tickets/missingIssue');
+			throw new \\Exception('tickets/missingIssue');
 		}
 
 		// We need at least a location (address or lat/long) or a description
@@ -83,14 +87,14 @@ class Ticket extends ActiveRecord
 		$lat  = $this->getLatitude();
 		$long = $this->getLongitude();
 		if (!$issue->getDescription() && !$this->getLocation() && !($lat && $long)) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 		if (($this->getLatitude() && $this->getLongitude())
 			&& (   defined('MIN_LATITUDE')  && defined('MAX_LATITUDE')
 				&& defined('MIN_LONGITUDE') && defined('MAX_LONGITUDE'))) {
 			if (!(   MIN_LATITUDE <=$lat  && $lat <=MAX_LATITUDE
 				  && MIN_LONGITUDE<=$long && $long<=MAX_LONGITUDE)) {
-				throw new Exception('tickets/locationOutOfBounds');
+				throw new \Exception('tickets/locationOutOfBounds');
 			}
 		}
 
@@ -98,12 +102,12 @@ class Ticket extends ActiveRecord
 		if (!$this->getStatus()) { $this->setStatus('open'); }
 		if ($this->getSubstatus_id()) {
 			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
-				throw new Exception('tickets/statusMismatch');
+				throw new \Exception('tickets/statusMismatch');
 			}
 		}
 		else {
 			if ($this->getStatus()=='closed') {
-				throw new Exception('tickets/missingResolution');
+				throw new \Exception('tickets/missingResolution');
 			}
 		}
 
@@ -175,9 +179,9 @@ class Ticket extends ActiveRecord
 	public function getState()        { return parent::get('state');      }
 	public function getZip()          { return parent::get('zip');        }
 	public function getStatus()       { return parent::get('status');     }
-	public function getEnteredDate ($f=null, DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
-	public function getLastModified($f=null, DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
-	public function getClosedDate  ($f=null, DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
+	public function getEnteredDate ($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
+	public function getLastModified($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
+	public function getClosedDate  ($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
 	public function getSubstatus_id()       { return parent::get('substatus_id');       }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
@@ -253,7 +257,7 @@ class Ticket extends ActiveRecord
 					$this->setSubstatus($substatus);
 				}
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				// Invalid substatus will just ignored
 			}
 		}
@@ -444,7 +448,7 @@ class Ticket extends ActiveRecord
 				$zend_db->update('issues',        array('ticket_id'=>$this->getId()), 'ticket_id='.$ticket->getId());
 				$zend_db->delete('tickets', 'id='.$ticket->getId());
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$zend_db->rollBack();
 				throw $e;
 			}
@@ -605,7 +609,7 @@ class Ticket extends ActiveRecord
 			}
 			$history->save();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$zend_db->rollBack();
 
 			$search = new Search();
@@ -648,10 +652,10 @@ class Ticket extends ActiveRecord
 	{
 		$days = $this->getSlaDays();
 		if ($days) {
-			$dateEntered = new DateTime($this->getEnteredDate());
+			$dateEntered = new \DateTime($this->getEnteredDate());
 			$targetDate = $this->getStatus()=='open'
-				? new DateTime()
-				: new DateTime($this->getClosedDate());
+				? new \DateTime()
+				: new \DateTime($this->getClosedDate());
 			$diff = $targetDate->diff($dateEntered);
 			$daysPassed = $diff->format('%a');
 			return round($daysPassed/$days*100);

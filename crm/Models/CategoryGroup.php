@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class CategoryGroup extends ActiveRecord
 {
 	protected $tablename = 'categoryGroups';
@@ -38,7 +42,7 @@ class CategoryGroup extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('categoryGroups/unknownGroup');
+				throw new \Exception('categoryGroups/unknownGroup');
 			}
 		}
 		else {
@@ -55,7 +59,7 @@ class CategoryGroup extends ActiveRecord
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if(!$this->data['name']) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 	}
 

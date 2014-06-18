@@ -1,9 +1,12 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\Url;
+
 class AddressService
 {
 	/**
@@ -60,7 +63,7 @@ class AddressService
 		$parsedAddress = self::parseAddress($location);
 
 		if (defined('ADDRESS_SERVICE') && $location && isset($parsedAddress->street_number)) {
-			$url = new URL(ADDRESS_SERVICE.'/home.php');
+			$url = new Url(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
 			$url->query = $location;
@@ -81,12 +84,12 @@ class AddressService
 	{
 		$results = array();
 		if (defined('ADDRESS_SERVICE')) {
-			$url = new URL(ADDRESS_SERVICE.'/home.php');
+			$url = new Url(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'address';
 			$url->format = 'xml';
 			$url->query = $query;
 
-			$xml = simplexml_load_string(URL::get($url));
+			$xml = simplexml_load_string(Url::get($url));
 			foreach ($xml as $address) {
 				$data = self::extractAddressData($address,self::parseAddress($query));
 				$results[$data['location']] = $data;
@@ -103,12 +106,12 @@ class AddressService
 	{
 		$results = array();
 		if (defined('ADDRESS_SERVICE')) {
-			$url = new URL(ADDRESS_SERVICE.'/home.php');
+			$url = new Url(ADDRESS_SERVICE.'/home.php');
 			$url->queryType = 'street';
 			$url->format = 'xml';
 			$url->query = $query;
 
-			$xml = simplexml_load_string(URL::get($url));
+			$xml = simplexml_load_string(Url::get($url));
 			foreach ($xml as $street) {
 				$results["$street[name]"] = "$street[id]";
 			}
@@ -123,10 +126,10 @@ class AddressService
 	public static function parseAddress($address)
 	{
 		if (defined('ADDRESS_SERVICE')) {
-			$url = new URL(ADDRESS_SERVICE.'/addresses/parse.php');
+			$url = new Url(ADDRESS_SERVICE.'/addresses/parse.php');
 			$url->format = 'xml';
 			$url->address = $address;
-			return simplexml_load_string(URL::get($url));
+			return simplexml_load_string(Url::get($url));
 		}
 	}
 

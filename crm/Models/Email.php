@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Email extends ActiveRecord
 {
 	protected $tablename = 'peopleEmails';
@@ -39,7 +43,7 @@ class Email extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('emails/unknownEmail');
+				throw new \Exception('emails/unknownEmail');
 			}
 		}
 		else {
@@ -52,7 +56,7 @@ class Email extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getLabel()) { $this->setLabel('Other'); }
-		if (!$this->getPerson_id()) { throw new Exception('phones/missingPerson'); }
+		if (!$this->getPerson_id()) { throw new \Exception('phones/missingPerson'); }
 
 		// Make sure there's at least one email used for notifications
 		$notificationEmails = $this->getPerson()->getNotificationEmails();

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -37,7 +37,7 @@ class ContactMethod extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('contactMethods/unknownContactMethod');
+				throw new \Exception('contactMethods/unknownContactMethod');
 			}
 		}
 		else {
@@ -48,7 +48,7 @@ class ContactMethod extends ActiveRecord
 
 	public function validate()
 	{
-		if (!$this->getName()) { throw new Exception('missingRequiredFields'); }
+		if (!$this->getName()) { throw new \Exception('missingRequiredFields'); }
 	}
 
 	public function save() { parent::save(); }

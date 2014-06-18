@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Category extends ActiveRecord
 {
 	protected $tablename = 'categories';
@@ -44,7 +48,7 @@ class Category extends ActiveRecord
 				$this->data = $result;
 			}
 			else {
-				throw new Exception('categories/unknownCategory');
+				throw new \Exception('categories/unknownCategory');
 			}
 		}
 		else {
@@ -59,8 +63,8 @@ class Category extends ActiveRecord
 	 */
 	public function validate()
 	{
-		if (!$this->data['name'])             { throw new Exception('categories/missingName');  }
-		if (!$this->data['categoryGroup_id']) { throw new Exception('categories/missingGroup'); }
+		if (!$this->data['name'])             { throw new \Exception('categories/missingName');  }
+		if (!$this->data['categoryGroup_id']) { throw new \Exception('categories/missingGroup'); }
 	}
 
 	public function save() {
@@ -223,13 +227,13 @@ class Category extends ActiveRecord
 	 * @param DateTimeZone $timezone
 	 * @return string
 	 */
-	public static function getGlobalLastModifiedDate($format=null, DateTimeZone $timezone=null)
+	public static function getGlobalLastModifiedDate($format=null, \DateTimeZone $timezone=null)
 	{
 		$zend_db = Database::getConnection();
 		$d = $zend_db->fetchOne('select max(lastModified) from categories');
 
 		if ($format) {
-			$date = new DateTime($d);
+			$date = new \DateTime($d);
 			if ($timezone) { $date->setTimezone($timezone); }
 			return $date->format($format);
 		}
@@ -239,9 +243,9 @@ class Category extends ActiveRecord
 	}
 }
 
-class JSONException extends Exception
+class JSONException extends \Exception
 {
-	public function __construct($message, $code=0, Exception $previous=null)
+	public function __construct($message, $code=0, \Exception $previous=null)
 	{
 		switch ($message) {
 			case JSON_ERROR_NONE:
