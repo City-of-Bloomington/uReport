@@ -1,0 +1,11 @@
+<?php
+/**
+ * Database Setup
+ * Refer to the PDO documentation for DSN sytnax for your database type
+ * http://www.php.net/manual/en/pdo.drivers.php
+ */
+define('DB_ADAPTER','Pdo_Mysql');
+define('DB_HOST','localhost');
+define('DB_NAME','test');
+define('DB_USER','test');
+define('DB_PASS','test');

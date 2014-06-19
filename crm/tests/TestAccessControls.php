@@ -1,9 +1,10 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+$_SERVER['SITE_HOME'] = __DIR__;
 include '../configuration.inc';
 
 // These are the basic actions that all things should have

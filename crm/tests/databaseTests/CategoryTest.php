@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-require_once "PHPUnit/Extensions/Database/TestCase.php";
-require_once __DIR__.'/DatabaseTestCase.php';
+use Application\Models\Category;
+
+require_once '/DatabaseTestCase.php';
 
 class CategoryTest extends DatabaseTestCase
 {
