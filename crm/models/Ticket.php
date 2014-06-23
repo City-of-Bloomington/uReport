@@ -32,12 +32,13 @@ class Ticket extends ActiveRecord
 	 */
 	public function __construct($id=null)
 	{
+		$zend_db = Database::getConnection();
+
 		if ($id) {
 			if (is_array($id)) {
 				$result = $id;
 			}
 			else {
-				$zend_db = Database::getConnection();
 				$sql = 'select * from tickets where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
 			}
@@ -255,6 +256,14 @@ class Ticket extends ActiveRecord
 			}
 			catch (Exception $e) {
 				// Invalid substatus will just ignored
+			}
+		}
+		else {
+			// See if there's a default substatus to set
+			$zend_db = Database::getConnection();
+			$result = $zend_db->query('select * from substatus where status=?', $this->getStatus());
+			if (count($result)) {
+				$this->setSubstatus(new Substatus($result->fetch()));
 			}
 		}
 

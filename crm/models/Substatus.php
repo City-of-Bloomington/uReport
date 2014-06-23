@@ -53,7 +53,15 @@ class Substatus extends ActiveRecord
 		if (!$this->getStatus()) { $this->setStatus('open'); }
 	}
 
-	public function save() { parent::save(); }
+	public function save()
+	{
+		if ($this->isDefault()) {
+			$zend_db = Database::getConnection();
+			$zend_db->query('update substatus set isDefault=0 where status=?', $this->getStatus());
+		}
+
+		parent::save();
+	}
 
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
@@ -68,6 +76,9 @@ class Substatus extends ActiveRecord
 	public function setDescription($s) { parent::set('description', $s); }
 	public function setStatus     ($s) { parent::set('status',      $s); }
 
+	public function isDefault() { return parent::get('isDefault') ? true : false; }
+	public function setDefault($b) {     $this->data['isDefault'] = $b ? 1 : 0; }
+
 	/**
 	 * @param array $post
 	 */
@@ -76,5 +87,6 @@ class Substatus extends ActiveRecord
 		$this->setName($post['name']);
 		$this->setDescription($post['description']);
 		$this->setStatus($post['status']);
+		$this->setDefault($post['default']);
 	}
 }

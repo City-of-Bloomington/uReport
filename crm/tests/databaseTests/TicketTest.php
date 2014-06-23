@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-require_once "PHPUnit/Extensions/Database/TestCase.php";
 require_once __DIR__.'/DatabaseTestCase.php';
 
 class TicketTest extends DatabaseTestCase
@@ -68,5 +67,11 @@ class TicketTest extends DatabaseTestCase
 		$row = $zend_db->fetchRow('select latitude,longitude from tickets where id=?', $id);
 		$this->assertNull($row['latitude' ]);
 		$this->assertNull($row['longitude']);
+	}
+
+	public function testDefaultSubstatus()
+	{
+		$ticket = new Ticket();
+		$this->assertEquals('Test', $ticket->getSubstatus());
 	}
 }

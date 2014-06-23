@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-require_once "PHPUnit/Extensions/Database/TestCase.php";
 require_once __DIR__.'/configuration.inc';
 class CustomTruncate extends PHPUnit_Extensions_Database_Operation_Truncate
 {

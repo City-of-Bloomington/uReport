@@ -30,10 +30,12 @@
 				$status      = View::escape($substatus->getStatus());
 				$name        = View::escape($substatus->getName());
 				$description = View::escape($substatus->getDescription());
+				$default = $substatus->isDefault() ? $this->translate('labels.default') : '';
 				echo "
 				<tr><td>$editButton</td>
 					<td>$status</td>
 					<td>$name</td>
+					<td>$default</td>
 					<td>$description</td>
 				</tr>
 				";

@@ -19,7 +19,7 @@ define('DB_PASS','test');
 /**
  * Where on the filesystem this application is installed
  */
-define('APPLICATION_HOME','/var/www/sites/application_name');
+define('APPLICATION_HOME',realpath(__DIR__.'/../../'));
 
 /**
  * The URL to get to this site
@@ -38,7 +38,7 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
  * installation of the ZendFramework
  * http://framework.zend.com
  */
-define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
+define('ZEND',APPLICATION_HOME.'/libraries/zf1/library');
 
 /**
  * Point to the Solr server

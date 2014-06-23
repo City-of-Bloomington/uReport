@@ -15,7 +15,7 @@ $description = View::escape($this->substatus->getDescription());
 		<input name="substatus_id" type="hidden" value="<?php echo "{$this->substatus->getId()}"; ?>" />
 		<table>
 			<tr><td><label for="name" class="required">
-						<?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?>
+						<?php echo $this->translate(array('labels.status', 'labels.statuses', 1)); ?>
 						<span class="icon-asterisk"></span>
 					</label>
 				</td>
@@ -36,8 +36,14 @@ $description = View::escape($this->substatus->getDescription());
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="description"><?php echo $this->translate('labels.description'); ?></label></td>
+			<tr><td><label for="description" class="required"><?php echo $this->translate('labels.description'); ?></label></td>
 				<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
+			</tr>
+
+			<tr><td><label for="default"><?php echo $this->translate('labels.default'); ?></label></td>
+				<td><input name="default" id="default" type="checkbox"
+						<?php echo $this->substatus->isDefault() ? 'checked="checked"' : ''; ?> />
+				</td>
 			</tr>
 
 		</table>

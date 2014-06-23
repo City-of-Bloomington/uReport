@@ -87,7 +87,8 @@ create table substatus (
 	id          int          unsigned not null primary key auto_increment,
 	name        varchar(25)  not null,
 	description varchar(128) not null,
-	status      enum('open', 'closed') not null default 'open'
+	status      enum('open', 'closed') not null default 'open',
+	isDefault   bool not null default false
 );
 insert substatus (status, name, description) values('closed', 'Resolved', 'This ticket has been taken care of');
 insert substatus (status, name, description) values('closed', 'Duplicate','This ticket is a duplicate of another ticket');
