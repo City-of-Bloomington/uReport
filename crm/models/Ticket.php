@@ -261,7 +261,7 @@ class Ticket extends ActiveRecord
 		else {
 			// See if there's a default substatus to set
 			$zend_db = Database::getConnection();
-			$result = $zend_db->query('select * from substatus where status=?', $this->getStatus());
+			$result = $zend_db->query('select * from substatus where status=? and isDefault=1', $this->getStatus());
 			if (count($result)) {
 				$this->setSubstatus(new Substatus($result->fetch()));
 			}
