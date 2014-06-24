@@ -71,7 +71,16 @@ class TicketTest extends DatabaseTestCase
 
 	public function testDefaultSubstatus()
 	{
+		$s1 = new Substatus('Test One');
+		$s2 = new Substatus('Test Two');
+
 		$ticket = new Ticket();
-		$this->assertEquals('Test', $ticket->getSubstatus());
+		$this->assertEquals('Test One', $ticket->getSubstatus()->getName());
+
+		$s2->setDefault(true);
+		$s2->save();
+
+		$ticket = new Ticket();
+		$this->assertEquals('Test Two', $ticket->getSubstatus()->getName());
 	}
 }

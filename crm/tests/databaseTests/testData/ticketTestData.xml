@@ -43,7 +43,7 @@
 		<field name="displayPermissionLevel">staff</field>
 		<field name="postingPermissionLevel">staff</field>
 		<field name="customFields" xsi:nil="true" />
-		<field name="lastModified">2013-09-11 03:45:27</field>
+		<field name="lastModified">2013-09-11 07:45:27</field>
 		<field name="slaDays" xsi:nil="true" />
 	</row>
 	</table_data>
@@ -71,15 +71,15 @@
 	</row>
 	<row>
 		<field name="id">4</field>
-		<field name="name">Test</field>
-		<field name="description">Test Status</field>
+		<field name="name">Test One</field>
+		<field name="description">Test One</field>
 		<field name="status">open</field>
 		<field name="isDefault">1</field>
 	</row>
 	<row>
 		<field name="id">5</field>
-		<field name="name">New</field>
-		<field name="description">Another Test Status</field>
+		<field name="name">Test Two</field>
+		<field name="description">Test Two</field>
 		<field name="status">open</field>
 		<field name="isDefault">0</field>
 	</row>
