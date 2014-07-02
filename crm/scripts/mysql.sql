@@ -78,7 +78,7 @@ create table clients (
 	url              varchar(255),
 	api_key          varchar(50)  not null,
 	contactPerson_id int          unsigned not null,
-	contactMethod_id int          unsigned not null,
+	contactMethod_id int          unsigned,
 	foreign key (contactPerson_id) references people(id),
 	foreign key (contactMethod_id) references contactMethods(id)
 );
