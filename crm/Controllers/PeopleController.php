@@ -106,7 +106,7 @@ class PeopleController extends Controller
 				$count += $this->addTicketList('right', $listType, $title, $person, $disableLinks);
 			}
 
-			if (userIsAllowed('tickets','merge') && !isset($_GET['disableLinks']) && $count>1) {
+			if (Person::isAllowed('tickets','merge') && !isset($_GET['disableLinks']) && $count>1) {
 				$this->template->blocks['right'][] = new Block(
 					'tickets/ticketSelectForMergeForm.inc'
 				);

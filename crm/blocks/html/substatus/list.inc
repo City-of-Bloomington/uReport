@@ -8,7 +8,7 @@
 ?>
 <div class="substatusList">
 	<h2><?php
-			if (userIsAllowed('substatus','update')) {
+			if (Person::isAllowed('substatus','update')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/substatus/update',
 					$this->translate('labels.add')
@@ -21,7 +21,7 @@
 		<?php
 			foreach ($this->substatusList as $substatus) {
 				$editButton = '';
-				if (userIsAllowed('substatus','update')) {
+				if (Person::isAllowed('substatus','update')) {
 					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
 						BASE_URI."/substatus/update?substatus_id={$substatus->getId()}",
 						$this->translate('labels.edit')

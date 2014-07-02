@@ -7,7 +7,7 @@
  */
 $editButton = '';
 $deleteButton = '';
-if (userIsAllowed('departments','update')) {
+if (Person::isAllowed('departments','update')) {
 	$editButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URI."/departments/update?department_id={$this->department->getId()}\">

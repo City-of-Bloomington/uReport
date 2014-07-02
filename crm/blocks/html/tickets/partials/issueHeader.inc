@@ -9,7 +9,7 @@
 $editButton     = '';
 $deleteButton   = '';
 
-if (!$this->disableButtons && userIsAllowed('issues','update')) {
+if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$editButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URI."/issues/update?issue_id={$this->issue->getId()}\">

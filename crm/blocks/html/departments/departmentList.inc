@@ -9,7 +9,7 @@
 <div class="departmentList">
 	<h2><?php
 			echo $this->translate(array('labels.department', 'labels.departments', 2));
-			if (userIsAllowed('departments','update')) {
+			if (Person::isAllowed('departments','update')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/departments/update',
 					$this->translate('labels.add')

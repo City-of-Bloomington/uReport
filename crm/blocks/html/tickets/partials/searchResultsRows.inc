@@ -24,7 +24,7 @@ foreach ($tickets as $ticket) {
 	foreach ($_GET['fields'] as $field=>$value) {
 		// Make sure the user is allowed to see this field
 		if (array_key_exists($field, $displayableFields)
-			&& (false === strpos($field,'Person') || userIsAllowed('people'))) {
+			&& (false === strpos($field,'Person') || Person::isAllowed('people'))) {
 			// Format the data being asked for
 			$get = 'get'.ucfirst($field);
 			switch ($field) {

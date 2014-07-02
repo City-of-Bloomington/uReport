@@ -9,7 +9,7 @@
 <div class="clientList">
 	<h2><?php
 			echo $this->translate(array('labels.client', 'labels.clients', 2));
-			if (userIsAllowed('clients','update')) {
+			if (Person::isAllowed('clients','update')) {
 				echo sprintf(
 					'<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/clients/update',
@@ -23,7 +23,7 @@
 		foreach ($this->clientList as $client) {
 			$editButton = '';
 			$deleteButton = '';
-			if (userIsAllowed('clients','update')) {
+			if (Person::isAllowed('clients','update')) {
 				$editButton = sprintf(
 					'<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
 					BASE_URI.'/clients/update?client_id='.$client->getId(),

@@ -7,7 +7,7 @@
 ?>
 <div class="interfaceBox">
 	<h2><?php
-			if (userIsAllowed('actions','update')) {
+			if (Person::isAllowed('actions','update')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/actions/update',
 					$this->translate('labels.add')
@@ -30,7 +30,7 @@
 			$list->find();
 			foreach ($list as $action) {
 				$editButton = '';
-				if (userIsAllowed('actions','update') && $action->getType()!='system') {
+				if (Person::isAllowed('actions','update') && $action->getType()!='system') {
 					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
 						$this->translate('labels.edit')

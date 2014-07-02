@@ -12,7 +12,7 @@
 	<?php
 		foreach ($this->history as $event) {
 			$action = View::escape($event->getAction());
-			if (userIsAllowed('people','view')) {
+			if (Person::isAllowed('people','view')) {
 				$description = View::escape($event->getDescription());
 				$description = $description ? $description : $action;
 			}

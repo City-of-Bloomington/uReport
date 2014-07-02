@@ -9,7 +9,7 @@
  * @param bool      $this->disableComments
  */
 $addButton = '';
-if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
+if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')) {
 	$addButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()}\">

@@ -26,7 +26,7 @@ class IssuesController extends Controller
 			'tickets/ticketInfo.inc',array('ticket'=>$ticket)
 		);
 
-		if (userIsAllowed('people', 'view')) {
+		if (Person::isAllowed('people', 'view')) {
 			$person = $issue->getReportedByPerson();
 			if ($person) {
 				$this->template->blocks['person-panel'][] = new Block(
@@ -88,9 +88,9 @@ class IssuesController extends Controller
 			$issue->handleUpdate($_POST);
 			try {
 				$issue->save();
-				
+
 				$action = new Action('update');
-				
+
 				$history = new IssueHistory();
 				$history->setIssue($issue);
 				$history->setAction($action);

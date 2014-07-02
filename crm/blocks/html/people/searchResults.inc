@@ -16,7 +16,7 @@
 		else {
 			echo '<p>No results found</p>';
 		}
-		if (!$this->disableButtons && userIsAllowed('people','add')) {
+		if (!$this->disableButtons && Person::isAllowed('people','add')) {
 			include APPLICATION_HOME.'/blocks/html/people/personSelectForMerge.inc';
 
 

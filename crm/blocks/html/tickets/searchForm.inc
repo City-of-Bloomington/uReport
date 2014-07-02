@@ -8,7 +8,7 @@
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 #$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/search.js');
 $this->template->addToAsset('scripts',BASE_URI.'/js/collapsible.js');
-if (userIsAllowed('tickets','add')) {
+if (Person::isAllowed('tickets','add')) {
 	// Solr stores ticket_id as 'id'
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
@@ -131,7 +131,7 @@ if (userIsAllowed('tickets','add')) {
 				}
 
 				foreach (TicketList::getDisplayableFields() as $field=>$name) {
-					if ((false === strpos($field,'Person') || userIsAllowed('people', 'view'))
+					if ((false === strpos($field,'Person') || Person::isAllowed('people', 'view'))
 						&& $field!='id') {
 						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
 						echo "

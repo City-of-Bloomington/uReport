@@ -9,7 +9,7 @@
 <div class="categoryList">
 	<h2><?php
 			echo $this->translate(array('labels.category', 'labels.categories', 2));
-			if (userIsAllowed('categories','update')) {
+			if (Person::isAllowed('categories','update')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/categories/update',
 					$this->translate('labels.add')
@@ -38,7 +38,7 @@
 			}
 
 			$editButton = '';
-			if (userIsAllowed('categories','update')) {
+			if (Person::isAllowed('categories','update')) {
 				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
 					BASE_URI.'/categories/update?category_id='.$category->getId(),
 					$this->translate('labels.edit')

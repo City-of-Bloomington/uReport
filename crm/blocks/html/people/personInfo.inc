@@ -22,7 +22,7 @@ else {
 
 
 $username = '';
-if (userIsAllowed('people','view')) {
+if (Person::isAllowed('people','view')) {
 	$username = $this->person->getUsername();
 	if ($username && $resource=='account' && $_SESSION['USER']->getAuthenticationMethod()=='local') {
 		$username.= "
@@ -31,7 +31,7 @@ if (userIsAllowed('people','view')) {
 		</a>
 		";
 	}
-	if (!$username && userIsAllowed('users','add') && !$this->disableButtons) {
+	if (!$username && Person::isAllowed('users','add') && !$this->disableButtons) {
 		$username = "
 		<a class=\"btn\"
 			href=\"".BASE_URI."/users/update?person_id={$this->person->getId()}\">
@@ -45,7 +45,7 @@ if (userIsAllowed('people','view')) {
 
 $editButton   = '';
 $deleteButton = '';
-if (userIsAllowed($resource,'update') && !$this->disableButtons) {
+if (Person::isAllowed($resource,'update') && !$this->disableButtons) {
 	$editButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URI."/$resource/update$person_param\">

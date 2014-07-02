@@ -11,7 +11,7 @@
 	include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	if (userIsAllowed('people','view')) {
+	if (Person::isAllowed('people','view')) {
 		$enteredBy = '';
 		$p = $this->issue->getEnteredByPerson();
 		if ($p) {
@@ -62,7 +62,7 @@
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	if (userIsAllowed('people','view')
+	if (Person::isAllowed('people','view')
 		&& $this->issue->getReportedByPerson()) {
 		$this->responses = $this->issue->getResponses();
 		include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';

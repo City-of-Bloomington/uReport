@@ -8,7 +8,7 @@
 <div>
 	<h2><?php
 			echo $this->translate(array('labels.label', 'labels.labels', 2));
-			if (userIsAllowed('labels','update')) {
+			if (Person::isAllowed('labels','update')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/labels/update',
 					$this->translate('labels.add')
@@ -22,7 +22,7 @@
 		$list = new LabelList();
 		$list->find();
  		foreach ($list as $label) {
-			if (userIsAllowed('labels','update')) {
+			if (Person::isAllowed('labels','update')) {
 				$editButton = "
 				<a class=\"btn\"
 					href=\"".BASE_URI."/labels/update?label_id={$label->getId()}\">

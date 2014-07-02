@@ -33,7 +33,7 @@ class TicketsController extends Controller
 
 		if ($format == 'raw'
 			&& $this->template->outputFormat=='html'
-			&& userIsAllowed('tickets', 'print')) {
+			&& Person::isAllowed('tickets', 'print')) {
 			$this->template->setFilename('print');
 		}
 		else {
@@ -78,7 +78,7 @@ class TicketsController extends Controller
 				'tickets/slaStatus.inc',
 				array('ticket'=>$ticket)
 			);
-			if (userIsAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
+			if (Person::isAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
 				$this->template->blocks['history-panel'][] = new Block(
 					'tickets/actionForm.inc',
 					array('ticket'=>$ticket)

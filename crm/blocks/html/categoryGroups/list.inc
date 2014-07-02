@@ -9,7 +9,7 @@
 <div class="categoryGroupList">
 	<h2><?php
 			echo $this->translate(array('labels.categoryGroup', 'labels.categoryGroups', 2));
-			if (userIsAllowed('categoryGroups','update')) {
+			if (Person::isAllowed('categoryGroups','update')) {
 				echo "
 				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/update\">
 					<span class=\"icon-plus\"></span>
@@ -36,7 +36,7 @@
 			foreach ($this->categoryGroupList as $group) {
 				$editButton = '';
 				$deleteButton = '';
-				if (userIsAllowed('categoryGroups','update')) {
+				if (Person::isAllowed('categoryGroups','update')) {
 					$editButton = "
 					<a class=\"btn\"
 						href=\"".BASE_URI."/categoryGroups/update?categoryGroup_id={$group->getId()}\">

@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  */
-if (userIsAllowed('people','view')) {
+if (Person::isAllowed('people','view')) {
 	echo '<div class="locationPeople">';
 	$people = new PersonList(array('address'=>$this->location));
 	if (count($people)) {

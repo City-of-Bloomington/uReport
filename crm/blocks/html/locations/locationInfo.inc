@@ -11,7 +11,7 @@ if ($this->location) {
 	$location = View::escape($this->location);
 
 	$addTicketButton = '';
-	if (!$this->disableButtons && userIsAllowed('tickets', 'add')) {
+	if (!$this->disableButtons && Person::isAllowed('tickets', 'add')) {
 		$addTicketButton = "
 		<a class=\"btn\" href=\"".BASE_URI."/tickets/add?location={$this->location}\">
 			<span class=\"icon-plus\"></span>

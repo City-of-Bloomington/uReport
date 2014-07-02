@@ -22,7 +22,7 @@ if (!empty($_GET['query'])
 		<h2>$q</h2>
 	";
 
-	if (userIsAllowed('bookmarks', 'update')) {
+	if (Person::isAllowed('bookmarks', 'update')) {
 		$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'search'));
 		echo $bookmarkForm->render('html', $this->template);
 	}
@@ -105,7 +105,7 @@ echo '<div id="resultFormatButtons">';
 
 	// Users should filter the results somehow before they are allowed to
 	// call for the full, raw results
-	if (isset($fq) && count($fq) && userIsAllowed('tickets', 'print')) {
+	if (isset($fq) && count($fq) && Person::isAllowed('tickets', 'print')) {
 		$url->resultFormat = 'raw';
 		$current = $resultFormat=='raw' ? ' current' : '';
 		echo "

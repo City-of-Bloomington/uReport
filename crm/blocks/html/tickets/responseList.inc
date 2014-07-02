@@ -6,7 +6,7 @@
  * @param array $this->responses
  */
 $responseButton = '';
-if (userIsAllowed('issues','update')
+if (Person::isAllowed('issues','update')
 	&& $this->issue->getReportedByPerson()) {
 	$responseButton = "
 	<a class=\"btn\"

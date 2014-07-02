@@ -61,7 +61,7 @@
 					<td>
 				";
 					if (!$this->disableButtons
-							&& userIsAllowed('issues','update')
+							&& Person::isAllowed('issues','update')
 							&& $ticket->getStatus()!=='closed') {
 						$url = new URL(BASE_URL.'/issues/update');
 						$url->ticket_id = "{$ticket->getId()}";

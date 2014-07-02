@@ -35,7 +35,7 @@ echo "
 		foreach ($_GET['fields'] as $name => $checked) {
 			// Make sure they're allowed to see this field
 			if (array_key_exists($name, $displayableFields)
-				&& (false === strpos($name, 'Person') || userIsAllowed('people'))) {
+				&& (false === strpos($name, 'Person') || Person::isAllowed('people'))) {
 
 				$label = $displayableFields[$name];
 

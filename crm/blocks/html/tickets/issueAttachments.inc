@@ -7,7 +7,7 @@
  * @param boolean $this->disableButtons
  */
 $uploadButton = '';
-if (!$this->disableButtons && userIsAllowed('media','upload')) {
+if (!$this->disableButtons && Person::isAllowed('media','upload')) {
 	$uploadButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">

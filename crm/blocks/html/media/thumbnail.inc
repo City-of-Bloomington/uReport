@@ -8,7 +8,7 @@
  * @param Media $this->media
  */
 $deleteButton = '';
-if (!$this->disableButtons && userIsAllowed('issues','update')) {
+if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$deleteButton = "
 	<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$this->media->getId()}\">
 		<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>

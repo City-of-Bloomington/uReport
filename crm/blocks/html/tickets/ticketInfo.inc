@@ -11,7 +11,7 @@ $location = $location
 	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"
 	: '';
 
-if (userIsAllowed('people','view')) {
+if (Person::isAllowed('people','view')) {
 	$url = new URL(BASE_URL.'/people/view.php');
 	$personFields = array('enteredBy','assigned','referred');
 	foreach ($personFields as $field) {
@@ -38,14 +38,14 @@ $changeLocationButton = '';
 $assignButton         = '';
 $referralButton       = '';
 
-if (!$this->disableButtons && userIsAllowed('tickets','update')) {
+if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 	$editStatusButton = "
 	<a class=\"icon-pencil\"
 		href=\"".BASE_URI."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
 		<span class=\"hidden-label\">Change Status</span>
 	</a>
 	";
-	if (userIsAllowed('tickets', 'delete')) {
+	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = "
 		<a class=\"btn\"
 			href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
@@ -68,7 +68,7 @@ if (!$this->disableButtons && userIsAllowed('tickets','update')) {
 			<span class=\"hidden-label\">Change Location</span>
 		</a>
 		";
-		if (userIsAllowed('people','view')) {
+		if (Person::isAllowed('people','view')) {
 			$assignButton = "
 			<a class=\"icon-pencil\"
 				href=\"".BASE_URI."/tickets/assign?ticket_id={$this->ticket->getId()}\">
@@ -108,7 +108,7 @@ echo "
 			$editStatusButton
 		</li>
 ";
-if (userIsAllowed('people','view')) {
+if (Person::isAllowed('people','view')) {
 	echo "
 		<li><label>Assigned To:</label>
 			$assigned

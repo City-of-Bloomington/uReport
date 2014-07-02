@@ -72,7 +72,7 @@ class LocationsController extends Controller
 				'disableButtons'=>isset($_GET['disableButtons'])
 			)
 		);
-		if (userIsAllowed('tickets','merge') && !isset($_GET['disableLinks']) && count($ticketList)>1) {
+		if (Person::isAllowed('tickets','merge') && !isset($_GET['disableLinks']) && count($ticketList)>1) {
 			$this->template->blocks['right'][] = new Block(
 				'tickets/ticketSelectForMergeForm.inc'
 			);

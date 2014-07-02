@@ -3,7 +3,7 @@
 		<?php
 			$li = '<li><a href="%s">%s</a></li>';
 
-			if (userIsAllowed('users')) {
+			if (Person::isAllowed('users')) {
 				echo sprintf($li, BASE_URI.'/admin', $this->translate('labels.admin'));
 			}
 			if (isset($_SESSION['USER'])) {

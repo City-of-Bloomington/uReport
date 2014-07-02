@@ -8,7 +8,7 @@
 ?>
 <div class="interfaceBox">
 	<h2><?php
-			if (userIsAllowed('users','add')) {
+			if (Person::isAllowed('users','add')) {
 				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
 					BASE_URI.'/users/update',
 					$this->translate('labels.create_account')
@@ -34,7 +34,7 @@
 			foreach ($this->userList as $user) {
 				$editButton = '';
 				$deleteButton = '';
-				if (userIsAllowed('users','update')) {
+				if (Person::isAllowed('users','update')) {
 					$editButton = "
 					<a class=\"icon-pencil\"
 						href=\"".BASE_URI."/users/update?person_id={$user->getId()}\">
