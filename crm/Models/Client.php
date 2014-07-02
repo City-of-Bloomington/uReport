@@ -20,9 +20,10 @@ class Client extends ActiveRecord
 	public static function loadByApiKey($api_key)
 	{
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow('select * from clients where api_key=?', array($api_key));
-		if (count($row)) {
-			return new Client($row);
+		$sql = 'select * from clients where api_key=?';
+		$result = $zend_db->createStatement($sql)->execute([$api_key]);
+		if (count($result)) {
+			return new Client($result->current());
 		}
 		else {
 			throw new \Exception('clients/unknownClient');
@@ -45,20 +46,19 @@ class Client extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$sql = 'select * from clients where id=?';
 
 				$zend_db = Database::getConnection();
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('clients/unknownClient');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('clients/unknownClient');
+				}
 			}
 		}
 		else {
@@ -99,16 +99,16 @@ class Client extends ActiveRecord
 	public function getApi_key()          { return parent::get('api_key');          }
 	public function getContactPerson_id() { return parent::get('contactPerson_id'); }
 	public function getContactMethod_id() { return parent::get('contactMethod_id'); }
-	public function getContactPerson()    { return parent::getForeignKeyObject('Person',        'contactPerson_id'); }
-	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id'); }
+	public function getContactPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person',        'contactPerson_id'); }
+	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id'); }
 
 	public function setName($s)    { parent::set('name', $s); }
 	public function setURL ($s)    { parent::set('url',  $s); }
 	public function setApi_key($s) { parent::set('api_key', $s); }
-	public function setContactPerson_id($id)    { parent::setForeignKeyField( 'Person',        'contactPerson_id', $id); }
-	public function setContactMethod_id($id)    { parent::setForeignKeyField( 'ContactMethod', 'contactMethod_id', $id); }
-	public function setContactPerson(Person        $o) { parent::setForeignKeyObject('Person',        'contactPerson_id', $o);  }
-	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id', $o);  }
+	public function setContactPerson_id($id)           { parent::setForeignKeyField( __namespace__.'\Person',        'contactPerson_id', $id); }
+	public function setContactMethod_id($id)           { parent::setForeignKeyField( __namespace__.'\ContactMethod', 'contactMethod_id', $id); }
+	public function setContactPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'contactPerson_id', $o);  }
+	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id', $o);  }
 
 
 	/**

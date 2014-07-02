@@ -47,8 +47,8 @@ class ActiveRecordTest extends PHPUnit_Framework_TestCase
 
 	public function testForeignKeyObject()
 	{
-		$this->testModel->set('foreignkey_id', 1);
-		$o = $this->testModel->getForeignKeyObject('TestModel', 'foreignkey_id');
+		$this->testModel->setTestModel(new TestModel(1));
+		$o = $this->testModel->getTestModel();
 		$this->assertEquals(1, $o->get('id'));
 	}
 }
@@ -64,8 +64,11 @@ class TestModel extends Blossom\Classes\ActiveRecord
 
 	public function validate() { }
 
-	public function get($field) { return parent::get($field); }
+	public function getId() { return parent::get('id'); }
+	
+	public function get($field)  { return parent::get($field); }
 	public function set($field, $value) { parent::set($field, $value); }
+
 
 	public function getDateData($field, $format=null, \DateTimeZone $timezone=null)
 	{
@@ -74,8 +77,13 @@ class TestModel extends Blossom\Classes\ActiveRecord
 
 	public function setDateData($field, $date) { parent::setDateData($field, $date); }
 
-	public function getForeignKeyObject($class, $field)
+	public function getTestModel()
 	{
-		return parent::getForeignKeyObject($class, $field);
+		return parent::getForeignKeyObject('TestModel', 'foreignkey_id');
+	}
+
+	public function setTestModel(TestModel $o)
+	{
+		parent::setForeignKeyObject('TestModel', 'foreignkey_id', $o);
 	}
 }

@@ -84,7 +84,7 @@ class AddressService
 	{
 		$results = array();
 		if (defined('ADDRESS_SERVICE')) {
-			$url = new Url(ADDRESS_SERVICE.'/home.php');
+			$url = new Url(ADDRESS_SERVICE);
 			$url->queryType = 'address';
 			$url->format = 'xml';
 			$url->query = $query;
@@ -106,7 +106,7 @@ class AddressService
 	{
 		$results = array();
 		if (defined('ADDRESS_SERVICE')) {
-			$url = new Url(ADDRESS_SERVICE.'/home.php');
+			$url = new Url(ADDRESS_SERVICE);
 			$url->queryType = 'street';
 			$url->format = 'xml';
 			$url->query = $query;

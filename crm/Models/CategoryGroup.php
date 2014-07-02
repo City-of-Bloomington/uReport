@@ -28,21 +28,20 @@ class CategoryGroup extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from categoryGroups where id=?'
 					: 'select * from categoryGroups where name=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('categoryGroups/unknownGroup');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('categoryGroups/unknownGroup');
+				}
 			}
 		}
 		else {
@@ -89,10 +88,11 @@ class CategoryGroup extends ActiveRecord
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
-	 * @return CategoryList
+	 * @return Zend\Db\ResultSet
 	 */
 	public function getCategories()
 	{
-		return new CategoryList(array('categoryGroup_id'=>$this->getId()));
+		$table = new CategoryTable();
+		return $table->find(['categoryGroup_id'=>$this->getId()]);
 	}
 }

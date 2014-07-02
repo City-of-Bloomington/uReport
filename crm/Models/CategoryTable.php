@@ -2,37 +2,32 @@
 /**
  * A collection class for Category objects
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class CategoryList extends ZendDbResultIterator
+namespace Application\Models;
+
+use Blossom\Classes\TableGateway;
+use Zend\Db\Sql\Select;
+
+class CategoryTable extends TableGateway
 {
-	/**
-	 * @param array $fields
-	 */
-	public function __construct($fields=null)
-	{
-		parent::__construct();
-
-		$this->select->from(array('c'=>'categories'), 'c.*');
-		$this->select->joinLeft(array('g'=>'categoryGroups'),'c.categoryGroup_id=g.id', array());
-
-		if (is_array($fields)) {
-			$this->find($fields);
-		}
-	}
+	public function __construct() { parent::__construct('categories', __namespace__.'\Category'); }
 
 	/**
 	 * Populates the collection, using strict matching of the requested fields
 	 *
 	 * @param array $fields
 	 * @param string|array $order Multi-column sort should be given as an array
+	 * @param bool $paginated Whether to return a paginator or a raw resultSet
 	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null,$order=array('g.ordering','g.name','c.name'),$limit=null,$groupBy=null)
+	public function find($fields=null, $order=['g.ordering', 'g.name', 'categories.name'], $paginated=false, $limit=null)
 	{
+		$select = new Select('categories');
+		$select->join(['g'=>'categoryGroups'], 'categories.categoryGroup_id=g.id', [], $select::JOIN_LEFT);
+
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
@@ -41,12 +36,12 @@ class CategoryList extends ZendDbResultIterator
 						if ($value instanceof Person) {
 							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$this->select->where("c.postingPermissionLevel in ('public','anonymous')");
+								$select->where(['categories.postingPermissionLevel'=>['public','anonymous']]);
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$this->select->where('c.postingPermissionLevel=?','anonymous');
+							$select->where(['categories.postingPermissionLevel'=>'anonymous']);
 						}
 						break;
 
@@ -55,63 +50,34 @@ class CategoryList extends ZendDbResultIterator
 						if ($value instanceof Person) {
 							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$this->select->where("c.displayPermissionLevel in ('public','anonymous')");
+								$select->where(['categories.displayPermissionLevel'=>['public','anonymous']]);
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$this->select->where('c.displayPermissionLevel=?','anonymous');
+							$select->where(['categories.displayPermissionLevel'=>'anonymous']);
 						}
 						break;
 					case 'department_id':
-						$this->select->joinLeft(array('d'=>'department_categories'),'c.id=d.category_id', array());
-						$this->select->where('d.department_id=?', $value);
+						$select->join(['d'=>'department_categories'], 'categories.id=d.category_id', [], $select::JOIN_LEFT);
+						$select->where(['d.department_id'=>$value]);
 						break;
 
 					default:
 						if ($value) {
-							$this->select->where("c.$key=?",array($value));
+							$select->where(["categories.$key"=>$value]);
 						}
 				}
 			}
 		}
 		// Only get categories this user is allowed to see or post to
 		if (!isset($_SESSION['USER'])) {
-			$this->select->where("c.postingPermissionLevel='anonymous' or c.displayPermissionLevel='anonymous'");
+			$select->where("(categories.postingPermissionLevel='anonymous' or categories.displayPermissionLevel='anonymous')");
 		}
 		elseif ($_SESSION['USER']->getRole()!='Staff' && $_SESSION['USER']->getRole()!='Administrator') {
-			$this->select->where("c.postingPermissionLevel in ('public','anonymous') or c.displayPermissionLevel in ('public','anonymous')");
+			$select->where("(categories.postingPermissionLevel in ('public','anonymous') or categories.displayPermissionLevel in ('public','anonymous'))");
 		}
 
-		$this->select->order($order);
-		if ($limit) {
-			$this->select->limit($limit);
-		}
-		if ($groupBy) {
-			$this->select->group($groupBy);
-		}
-	}
-
-	/**
-	 * Hydrates all the Category objects from a database result set
-	 *
-	 * @param int $key The index of the result row to load
-	 * @return Category
-	 */
-	public function loadResult($key)
-	{
-		return new Category($this->result[$key]);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$categories = array();
-		foreach ($this as $category) {
-			$categories[] = "{$category->getName()}";
-		}
-		return implode(', ',$categories);
+		return parent::performSelect($select, $order, $paginated, $limit);
 	}
 }

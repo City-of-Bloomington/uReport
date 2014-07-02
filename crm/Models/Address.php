@@ -30,19 +30,18 @@ class Address extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from peopleAddresses where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('addresses/unknownAddress');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('addresses/unknownAddress');
+				}
 			}
 		}
 		else {
@@ -79,9 +78,9 @@ class Address extends ActiveRecord
 	public function setLabel  ($s) { parent::set('label',   $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
-	public function getPerson()    { return parent::getForeignKeyObject('Person', 'person_id');      }
-	public function setPerson_id($id)     { parent::setForeignKeyField ('Person', 'person_id', $id); }
-	public function setPerson(Person $p)  { parent::setForeignKeyObject('Person', 'person_id', $p);  }
+	public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
+	public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
+	public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
 
 	public function handleUpdate($post)
 	{

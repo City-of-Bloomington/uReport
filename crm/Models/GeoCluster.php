@@ -7,6 +7,7 @@
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
+use Zend\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord
 {
@@ -27,19 +28,19 @@ class GeoCluster extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = "select id,level,x(center) as longitude, y(center) as latitude
 						from geoclusters where id=?";
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('geoclusters/unknownCluster');
+                $result = $zend_db->createStatement($sql)->execute([$id]);
+                if (count($result)) {
+                    $this->exchangeArray($result->current());
+                }
+				else {
+					throw new \Exception('geoclusters/unknownCluster');
+				}
 			}
 		}
 		else {
@@ -61,18 +62,19 @@ class GeoCluster extends ActiveRecord
 		 // We cannot use the default ActiveRecord save,
 		 // because the center point must use mysql spatial functions
 		$this->validate();
-		$data = array(
-			'level' => $this->data['level'],
-			'center'=> new Zend_Db_Expr("point({$this->data['longitude']}, {$this->data['latitude']})")
-		);
 		$zend_db = Database::getConnection();
 		if ($this->getId()) {
-			$data['id'] = $this->data['id'];
-			$zend_db->update($this->tablename, $data, "id={$this->data['id']}");
+			$sql = 'update geoclusters set level=?, center=point(?, ?) where id=?';
+			$zend_db->query($sql)->execute([
+				$this->getLevel(), $this->getLongitude(), $this->getLatitude(), $this->getId()
+			]);
 		}
 		else {
-			$zend_db->insert($this->tablename, $data);
-			$this->data['id'] = $zend_db->lastInsertId($this->tablename, 'id');
+			$sql = 'insert geoclusters set level=?, center=point(?, ?)';
+			$zend_db->query($sql)->execute([
+				$this->getLevel(), $this->getLongitude(), $this->getLatitude()
+			]);
+			$this->data['id'] = $zend_db->getDriver()->getLastGeneratedValue();
 		}
 	}
 
@@ -95,7 +97,7 @@ class GeoCluster extends ActiveRecord
 	{
 		if ($ticket->getId()) {
 			$zend_db = Database::getConnection();
-			$zend_db->delete('ticket_geodata', 'ticket_id='.$ticket->getId());
+			$zend_db->query('delete from ticket_geodata where ticket_id=?')->execute([$ticket->getId()]);
 
 			if ($ticket->getLatitude() && $ticket->getLongitude()) {
 				$data['ticket_id'] = $ticket->getId();
@@ -103,7 +105,10 @@ class GeoCluster extends ActiveRecord
 					$data["cluster_id_$i"] = self::assignClusterIdForLevel($ticket, $i);
 				}
 
-				$zend_db->insert('ticket_geodata', $data);
+				$sql = new Sql($zend_db);
+				$insert = $sql->insert('ticket_geodata');
+				$insert->values($data);
+				$sql->prepareStatementForSqlObject($insert)->execute();
 			}
 		}
 	}
@@ -150,8 +155,9 @@ class GeoCluster extends ActiveRecord
 		LIMIT 1
 		";
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow($sql, $level);
-		if ($row) {
+		$result = $zend_db->query($sql)->execute([$level]);
+		if (count($result)) {
+			$row = $result->current();
 			return $row['id'];
 		}
 		else {

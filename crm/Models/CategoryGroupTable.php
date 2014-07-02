@@ -1,57 +1,20 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-class CategoryGroupList extends ZendDbResultIterator
+namespace Application\Models;
+
+use Blossom\Classes\TableGateway;
+use Zend\Db\Sql\Select;
+
+class CategoryGroupTable extends TableGateway
 {
-	/**
-	 * @param array $fields
-	 */
-	public function __construct($fields=null)
-	{
-		parent::__construct();
-		if (is_array($fields)) {
-			$this->find($fields);
-		}
-	}
+	public function __construct() { parent::__construct('categoryGroups', __namespace__.'\CategoryGroup'); }
 
-	/**
-	 * Populates the collection
-	 *
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
-	 */
-	public function find($fields=null,$order=array('ordering','name'),$limit=null,$groupBy=null)
+	public function find($fields=null, $order=['ordering', 'name'], $paginated=false, $limit=null)
 	{
-		$this->select->from('categoryGroups');
-
-		if (count($fields)) {
-			foreach ($fields as $key=>$value) {
-				if ($value) {
-					$this->select->where("$key=?", $value);
-				}
-			}
-		}
-		$this->select->order($order);
-		if ($limit) {
-			$this->select->limit($limit);
-		}
-		if ($groupBy) {
-			$this->select->group($groupBy);
-		}
-	}
-
-	/**
-	 * Loads a single object for the row returned from ZendDbResultIterator
-	 *
-	 * @param array $key
-	 */
-	protected function loadResult($key)
-	{
-		return new CategoryGroup($this->result[$key]);
+		return parent::find($field, $order, $paginated, $limit);
 	}
 }

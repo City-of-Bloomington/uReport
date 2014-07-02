@@ -33,22 +33,21 @@ class Category extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from categories where id=?'
 					: 'select * from categories where name=?';
 
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('categories/unknownCategory');
+				$zend_db = Database::getConnection();
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('categories/unknownCategory');
+				}
 			}
 		}
 		else {
@@ -63,8 +62,9 @@ class Category extends ActiveRecord
 	 */
 	public function validate()
 	{
-		if (!$this->data['name'])             { throw new \Exception('categories/missingName');  }
-		if (!$this->data['categoryGroup_id']) { throw new \Exception('categories/missingGroup'); }
+		if (!$this->getName())             { throw new \Exception('categories/missingName');  }
+		if (!$this->getCategoryGroup_id()) { throw new \Exception('categories/missingGroup'); }
+		if (!$this->getDepartment_id())    { throw new \Exception('categories/missingDepartment'); }
 	}
 
 	public function save() {
@@ -73,7 +73,7 @@ class Category extends ActiveRecord
 
 		if ($this->displayPermissionLevelHasChanged) {
 			// Spawn a background process to reindex the search engine
-			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.$this->getId();
+			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.$this->getId().' '.$_SERVER['SITE_HOME'];
 			shell_exec("nohup $cmd > /dev/null 2>&1 &");
 		}
 	}
@@ -90,9 +90,9 @@ class Category extends ActiveRecord
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
-	public function getDepartment()    { return parent::getForeignKeyObject('Department',    'department_id');    }
-	public function getCategoryGroup() { return parent::getForeignKeyObject('CategoryGroup', 'categoryGroup_id'); }
-	public function getLastModified($format=null, DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
+	public function getDepartment()    { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id');    }
+	public function getCategoryGroup() { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'); }
+	public function getLastModified($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
@@ -108,10 +108,10 @@ class Category extends ActiveRecord
 		parent::set('displayPermissionLevel',$s);
 	}
 	public function setSlaDays               ($i) { parent::set('slaDays',          (int)$i); }
-	public function setDepartment_id   ($id)           { parent::setForeignKeyField( 'Department',    'department_id',    $id); }
-	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( 'CategoryGroup', 'categoryGroup_id', $id); }
-	public function setDepartment   (Department    $o) { parent::setForeignKeyObject('Department',    'department_id',    $o);  }
-	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject('CategoryGroup', 'categoryGroup_id', $o);  }
+	public function setDepartment_id   ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',    $id); }
+	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( __namespace__.'\CategoryGroup', 'categoryGroup_id', $id); }
+	public function setDepartment   (Department    $o) { parent::setForeignKeyObject(__namespace__.'\Department',    'department_id',    $o);  }
+	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id', $o);  }
 	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
 
 	/**

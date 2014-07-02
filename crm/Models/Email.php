@@ -31,19 +31,18 @@ class Email extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from peopleEmails where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('emails/unknownEmail');
+                $result = $zend_db->createStatement($sql)->execute([$id]);
+                if (count($result)) {
+                    $this->exchangeArray($result->current());
+                }
+                else {
+                    throw new \Exception('emails/unknownEmail');
+                }
 			}
 		}
 		else {
@@ -62,7 +61,7 @@ class Email extends ActiveRecord
 		$notificationEmails = $this->getPerson()->getNotificationEmails();
 		if (!count($notificationEmails)) { $this->setUsedForNotifications(true); }
 		if  (count($notificationEmails) == 1) {
-			$e = $notificationEmails[0];
+			$e = $notificationEmails->current();
 			if ($e->getId()==$this->getId()) { $this->setUsedForNotifications(true); }
 		}
 
@@ -81,11 +80,13 @@ class Email extends ActiveRecord
 
 		// If we delete the only email used for notifications,
 		// we need to mark one of the other email addresses.
-		$notificationEmails = new EmailList(array('person_id'=>$person->getId(), 'usedForNotifications'=>1));
-		if (!count($notificationEmails)) {
+		$zend_db = Database::getConnection();
+		$result = $zend_db->query('select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?')->execute([$person->getId()]);
+		$row = $result->current();
+		if (!$row['c']) {
 			$list = $person->getEmails();
 			if (count($list)) {
-				$e = $list[0];
+				$e = $list->current();
 				$e->setUsedForNotifications(true);
 				$e->save();
 			}
@@ -104,9 +105,9 @@ class Email extends ActiveRecord
 	public function setLabel($s) { parent::set('label', $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
-	public function getPerson()    { return parent::getForeignKeyObject('Person', 'person_id');      }
-	public function setPerson_id($id)     { parent::setForeignKeyField ('Person', 'person_id', $id); }
-	public function setPerson(Person $p)  { parent::setForeignKeyObject('Person', 'person_id', $p);  }
+	public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
+	public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
+	public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
 
 	public function getUsedForNotifications() { return parent::get('usedForNotifications') ? true : false; }
 	public function setUsedForNotifications($b)      { parent::set('usedForNotifications', $b ? 1 : 0); }

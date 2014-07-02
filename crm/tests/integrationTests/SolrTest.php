@@ -13,8 +13,9 @@ class SolrTest extends PHPUnit_Framework_TestCase
 {
 	public function testParamsReturnedInSolrResponse()
 	{
+		$q = [];
 		$search = new Search();
-		$solrResponse = $search->query(array());
+		$solrResponse = $search->query($q);
 		$this->assertTrue(isset($solrResponse->responseHeader), 'Solr response is missing responseHeader');
 		$this->assertTrue(isset($solrResponse->responseHeader->params), 'Solr response is missing params in responseHeader');
 	}

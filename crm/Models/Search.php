@@ -6,7 +6,7 @@
  */
 namespace Application\Models;
 
-require_once SOLR_PHP_CLIENT.'/Apache/Solr/Service.php';
+require_once SOLR.'/Apache/Solr/Service.php';
 class Search
 {
 	public $solrClient;
@@ -89,7 +89,7 @@ class Search
 	 */
 	public function __construct()
 	{
-		$this->solrClient = new Apache_Solr_Service(
+		$this->solrClient = new \Apache_Solr_Service(
 			SOLR_SERVER_HOSTNAME,
 			SOLR_SERVER_PORT,
 			SOLR_SERVER_PATH
@@ -102,7 +102,7 @@ class Search
 			self::$sortableFields['ticket'][] = $key;
 		}
 		// Add facets that are only to be used if the current user is authorized
-		if (userIsAllowed('people', 'view')) {
+		if (Person::isAllowed('people', 'view')) {
 			self::$searchableFields['enteredByPerson_id']  = 'Entered By';
 			self::$searchableFields['assignedPerson_id']   = 'Assigned To';
 			self::$searchableFields['referredPerson_id']   = 'Referred To';
@@ -225,7 +225,7 @@ class Search
 	 * @param Apache_Solr_Response $object
 	 * @return array An array of CRM models based on the search results
 	 */
-	public static function hydrateDocs(Apache_Solr_Response $o)
+	public static function hydrateDocs(\Apache_Solr_Response $o)
 	{
 		$models = array();
 		if (isset($o->response->docs) && $o->response->docs) {
@@ -309,11 +309,11 @@ class Search
 		);
 
 		if ($record instanceof Ticket) {
-			$document = new Apache_Solr_Document();
+			$document = new \Apache_Solr_Document();
 			$document->addField('recordKey', "t_{$record->getId()}");
 			$document->addField('recordType', 'ticket');
 
-			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), DateTimeZone::UTC);
+			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), \DateTimeZone::UTC);
 			if ($record->getLatLong()) {
 				$document->addField('coordinates', $record->getLatLong());
 			}

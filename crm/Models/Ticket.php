@@ -38,19 +38,18 @@ class Ticket extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from tickets where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \\Exception('tickets/unknownTicket');
+                $result = $zend_db->createStatement($sql)->execute([$id]);
+                if (count($result)) {
+                    $this->exchangeArray($result->current());
+                }
+				else {
+					throw new \Exception('tickets/unknownTicket');
+				}
 			}
 		}
 		else {
@@ -74,12 +73,12 @@ class Ticket extends ActiveRecord
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->getCategory()) {
-			throw new \\Exception('tickets/missingCategory');
+			throw new \Exception('tickets/missingCategory');
 		}
 
 		$issue = $this->getIssue();
 		if (!$issue) {
-			throw new \\Exception('tickets/missingIssue');
+			throw new \Exception('tickets/missingIssue');
 		}
 
 		// We need at least a location (address or lat/long) or a description
@@ -179,21 +178,21 @@ class Ticket extends ActiveRecord
 	public function getState()        { return parent::get('state');      }
 	public function getZip()          { return parent::get('zip');        }
 	public function getStatus()       { return parent::get('status');     }
-	public function getEnteredDate ($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
-	public function getLastModified($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
-	public function getClosedDate  ($f=null, \\DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
+	public function getEnteredDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
+	public function getLastModified($f=null, \DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
+	public function getClosedDate  ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
 	public function getSubstatus_id()       { return parent::get('substatus_id');       }
 	public function getCategory_id()        { return parent::get('category_id');        }
 	public function getClient_id()          { return parent::get('client_id');          }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getAssignedPerson_id()  { return parent::get('assignedPerson_id');  }
 	public function getReferredPerson_id()  { return parent::get('referredPerson_id');  }
-	public function getSubstatus()       { return parent::getForeignKeyObject('Substatus',  'substatus_id');       }
-	public function getCategory()        { return parent::getForeignKeyObject('Category',   'category_id');        }
-	public function getClient()          { return parent::getForeignKeyObject('Client',     'client_id');          }
-	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person',     'enteredByPerson_id'); }
-	public function getAssignedPerson()  { return parent::getForeignKeyObject('Person',     'assignedPerson_id');  }
-	public function getReferredPerson()  { return parent::getForeignKeyObject('Person',     'referredPerson_id');  }
+	public function getSubstatus()       { return parent::getForeignKeyObject(__namespace__.'\Substatus',  'substatus_id');       }
+	public function getCategory()        { return parent::getForeignKeyObject(__namespace__.'\Category',   'category_id');        }
+	public function getClient()          { return parent::getForeignKeyObject(__namespace__.'\Client',     'client_id');          }
+	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',     'enteredByPerson_id'); }
+	public function getAssignedPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'assignedPerson_id');  }
+	public function getReferredPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'referredPerson_id');  }
 
 	public function getLatitude()     { return parent::get('latitude');   }
 	public function getLongitude()    { return parent::get('longitude');  }
@@ -207,18 +206,18 @@ class Ticket extends ActiveRecord
 	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
 	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
 	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
-	public function setSubstatus_id      ($id) { parent::setForeignKeyField('Substatus',  'substatus_id',       $id); }
-	public function setCategory_id       ($id) { parent::setForeignKeyField('Category',   'category_id',        $id); }
-	public function setClient_id         ($id) { parent::setForeignKeyField('Client',     'client_id',          $id); }
-	public function setEnteredByPerson_id($id) { parent::setForeignKeyField('Person',     'enteredByPerson_id', $id); }
-	public function setAssignedPerson_id ($id) { parent::setForeignKeyField('Person',     'assignedPerson_id',  $id); }
-	public function setReferredPerson_id ($id) { parent::setForeignKeyField('Person',     'referredPerson_id',  $id); }
-	public function setSubstatus      (Substatus  $o) { parent::setForeignKeyObject('Substatus','substatus_id',       $o); }
-	public function setCategory       (Category   $o) { parent::setForeignKeyObject('Category', 'category_id',        $o); }
-	public function setClient         (Client     $o) { parent::setForeignKeyObject('Client',   'client_id',          $o); }
-	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject('Person',   'enteredByPerson_id', $o); }
-	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject('Person',   'assignedPerson_id',  $o); }
-	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject('Person',   'referredPerson_id',  $o); }
+	public function setSubstatus_id      ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',  'substatus_id',       $id); }
+	public function setCategory_id       ($id) { parent::setForeignKeyField(__namespace__.'\Category',   'category_id',        $id); }
+	public function setClient_id         ($id) { parent::setForeignKeyField(__namespace__.'\Client',     'client_id',          $id); }
+	public function setEnteredByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',     'enteredByPerson_id', $id); }
+	public function setAssignedPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',     'assignedPerson_id',  $id); }
+	public function setReferredPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',     'referredPerson_id',  $id); }
+	public function setSubstatus      (Substatus  $o) { parent::setForeignKeyObject(__namespace__.'\Substatus','substatus_id',       $o); }
+	public function setCategory       (Category   $o) { parent::setForeignKeyObject(__namespace__.'\Category', 'category_id',        $o); }
+	public function setClient         (Client     $o) { parent::setForeignKeyObject(__namespace__.'\Client',   'client_id',          $o); }
+	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'enteredByPerson_id', $o); }
+	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'assignedPerson_id',  $o); }
+	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'referredPerson_id',  $o); }
 
 	public function setLatitude ($s)  {
 		if (!empty($s) && $this->getLatitude() != (float)$s) {
@@ -341,7 +340,8 @@ class Ticket extends ActiveRecord
 		// Just select all the fields that are in the table, and
 		// we'll remove the ticket_id field.
 		// All the rest of the fields should be cluster_ids
-		$row = $zend_db->fetchRow("select * from ticket_geodata where ticket_id=?", $this->getId());
+		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->getId()]);
+		$row = $result->current();
 		unset($row['ticket_id']);
 
 		return $row;
@@ -357,7 +357,7 @@ class Ticket extends ActiveRecord
 
 			$zend_db = Database::getConnection();
 			$sql = 'select * from issues where ticket_id=?';
-			$result = $zend_db->query($sql, array($this->getId()));
+			$result = $zend_db->query($sql)->execute([$this->getId()]);
 			foreach ($result as $row) {
 				$this->issues[] = new Issue($row);
 			}
@@ -371,7 +371,7 @@ class Ticket extends ActiveRecord
 	 * Defaults to the first issue, if you don't provide an index
 	 *
 	 * @param int $index
-	 * @param Issue
+	 * @return Issue
 	 */
 	public function getIssue($index=0)
 	{
@@ -414,7 +414,7 @@ class Ticket extends ActiveRecord
 
 		$zend_db = Database::getConnection();
 		$sql = 'select * from ticketHistory where ticket_id=?';
-		$result = $zend_db->query($sql, array($this->getId()));
+		$result = $zend_db->query($sql)->execute([$this->getId()]);
 		foreach ($result as $row) {
 			$history[] = new TicketHistory($row);
 		}
@@ -442,17 +442,17 @@ class Ticket extends ActiveRecord
 	{
 		if ($this->getId()) {
 			$zend_db = Database::getConnection();
-			$zend_db->beginTransaction();
+			$zend_db->getDriver()->getConnection()->beginTransaction();
 			try {
-				$zend_db->update('ticketHistory', array('ticket_id'=>$this->getId()), 'ticket_id='.$ticket->getId());
-				$zend_db->update('issues',        array('ticket_id'=>$this->getId()), 'ticket_id='.$ticket->getId());
-				$zend_db->delete('tickets', 'id='.$ticket->getId());
+				$zend_db->query('update ticketHistory set ticket_id=? where ticket_id=?')->execute([$this->getId(), $ticket->getId()]);
+				$zend_db->query('update issues        set ticket_id=? where ticket_id=?')->execute([$this->getId(), $ticket->getId()]);
+				$zend_db->query('delete from tickets where id=?')->execute([$ticket->getId()]);
 			}
 			catch (\Exception $e) {
-				$zend_db->rollBack();
+				$zend_db->getDriver()->getConnection()->rollback();
 				throw $e;
 			}
-			$zend_db->commit();
+			$zend_db->getDriver()->getConnection()->commit();
 
 			$search = new Search();
 			$search->delete($ticket);
@@ -571,7 +571,7 @@ class Ticket extends ActiveRecord
 	public function handleAdd($post)
 	{
 		$zend_db = Database::getConnection();
-		$zend_db->beginTransaction();
+		$zend_db->getDriver()->getConnection()->beginTransaction();
 		try {
 			$this ->handleUpdate($post);
 
@@ -610,7 +610,7 @@ class Ticket extends ActiveRecord
 			$history->save();
 		}
 		catch (\Exception $e) {
-			$zend_db->rollBack();
+			$zend_db->getDriver()->getConnection()->rollback();
 
 			$search = new Search();
 			$search->delete($this);
@@ -618,7 +618,7 @@ class Ticket extends ActiveRecord
 
 			throw $e;
 		}
-		$zend_db->commit();
+		$zend_db->getDriver()->getConnection()->commit();
 		$history->sendNotification($this);
 	}
 
@@ -663,12 +663,13 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return PeopleList
+	 * @return Zend\Db\ResultSet
 	 */
 	public function getReportedByPeople()
 	{
 		if ($this->getId()) {
-			return new PersonList(array('reportedTicket_id'=>$this->getId()));
+			$table = new PersonTable();
+			return $table->find(['reportedTicket_id'=>$this->getId()]);
 		}
 	}
 }

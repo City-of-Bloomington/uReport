@@ -30,10 +30,9 @@ class Person extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
 				if (ActiveRecord::isId($id)) {
 					$sql = 'select * from people where id=?';
 				}
@@ -45,14 +44,15 @@ class Person extends ActiveRecord
 				else {
 					$sql = 'select * from people where username=?';
 				}
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
 
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('people/unknownPerson');
+				$zend_db = Database::getConnection();
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('people/unknownPerson');
+				}
 			}
 		}
 		else {
@@ -92,9 +92,9 @@ class Person extends ActiveRecord
 			}
 
 			$zend_db = Database::getConnection();
-			$zend_db->delete('peopleAddresses', 'person_id='.$this->getId());
-			$zend_db->delete('peoplePhones',    'person_id='.$this->getId());
-			$zend_db->delete('peopleEmails',    'person_id='.$this->getId());
+			$zend_db->query('delete from peopleAddresses where person_id=?', [$this->getId()]);
+			$zend_db->query('delete from peoplePhones where person_id=?',    [$this->getId()]);
+			$zend_db->query('delete from peopleEmails where person_id=?',    [$this->getId()]);
 
 			parent::delete();
 		}
@@ -130,9 +130,9 @@ class Person extends ActiveRecord
 	public function setOrganization($s) { parent::set('organization', $s); }
 
 	public function getDepartment_id()    { return parent::get('department_id'); }
-	public function getDepartment()       { return parent::getForeignKeyObject('Department', 'department_id');      }
-	public function setDepartment_id($id)        { parent::setForeignKeyField ('Department', 'department_id', $id); }
-	public function setDepartment(Department $d) { parent::setForeignKeyObject('Department', 'department_id', $d);  }
+	public function getDepartment()       { return parent::getForeignKeyObject(__namespace__.'\Department', 'department_id');      }
+	public function setDepartment_id($id)        { parent::setForeignKeyField (__namespace__.'\Department', 'department_id', $id); }
+	public function setDepartment(Department $d) { parent::setForeignKeyObject(__namespace__.'\Department', 'department_id', $d);  }
 
 	public function getUsername()             { return parent::get('username'); }
 	public function getPassword()             { return parent::get('password'); } # Encrypted
@@ -274,10 +274,13 @@ class Person extends ActiveRecord
 	 * @param string $action
 	 * @return boolean
 	 */
-	public function IsAllowed($resource, $action=null)
+	public static function isAllowed($resource, $action=null)
 	{
 		global $ZEND_ACL;
-		$role = $this->getRole() ? $this->getRole() : 'Anonymous';
+		$role = 'Anonymous';
+		if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()) {
+			$role = $_SESSION['USER']->getRole();
+		}
 		return $ZEND_ACL->isAllowed($role, $resource, $action);
 	}
 
@@ -290,7 +293,8 @@ class Person extends ActiveRecord
 	public function getPhones()
 	{
 		if ($this->getId()) {
-			return new PhoneList(array('person_id'=>$this->getId()));
+            $table = new PhoneTable();
+			return $table->find( ['person_id'=>$this->getId()] );
 		}
 		return array();
 	}
@@ -301,7 +305,8 @@ class Person extends ActiveRecord
 	public function getEmails()
 	{
 		if ($this->getId()) {
-			return new EmailList(array('person_id'=>$this->getId()));
+            $table = new EmailTable();
+			return $table->find( ['person_id'=>$this->getId()] );
 		}
 		return array();
 	}
@@ -311,7 +316,8 @@ class Person extends ActiveRecord
 	 */
 	public function getNotificationEmails()
 	{
-		return new EmailList(array('person_id'=>$this->getId(), 'usedForNotifications'=>1));
+        $table = new EmailTable();
+		return $table->find( ['person_id'=>$this->getId(), 'usedForNotifications'=>1] );
 	}
 
 	/**
@@ -320,7 +326,8 @@ class Person extends ActiveRecord
 	public function getAddresses()
 	{
 		if ($this->getId()) {
-			return new AddressList(array('person_id'=>$this->getId()));
+            $table = new AddressTable();
+			return $table->find( ['person_id'=>$this->getId()] );
 		}
 		return array();
 	}
@@ -365,7 +372,8 @@ class Person extends ActiveRecord
 			else {
 				$search = array($field=>$this->getId());
 			}
-			return new TicketList($search);
+			$table = new TicketTable();
+			return $table->find($search);
 		}
 	}
 
@@ -404,8 +412,8 @@ class Person extends ActiveRecord
 					(select m.issue_id from media m
 					where m.person_id=$id
 					limit 1)";
-			$result = $zend_db->fetchCol($sql);
-			return count($result) ? true : false;
+			$result = $zend_db->createStatement($sql)->execute();
+			return $result->count() ? true : false;
 		}
 	}
 
@@ -483,7 +491,8 @@ class Person extends ActiveRecord
 		elseif ($fieldname == 'email') {
 			$sql = "select distinct email from peopleEmails where email like ?";
 		}
-		return $zend_db->fetchCol($sql, array("$query%"));
+		$result = $zend_db->createStatement($sql)->execute(["$query%"]);
+		return $result->toArray();
 	}
 
 	/**
@@ -561,37 +570,39 @@ class Person extends ActiveRecord
 					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
 					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
 					   or m.person_id=$id or r.person_id=$id";
-			$ticketIds = $zend_db->fetchCol($sql);
+			$result = $zend_db->createStatement($sql)->execute();
+			$ticketIds = $result->toArray();
 
-			$zend_db->beginTransaction();
+			$zend_db->getDriver()->getConnection()->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$zend_db->update('responses',    array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
-				$zend_db->update('media',        array(          'person_id'=> $this->getId()),          'person_id='.$person->getId());
-				$zend_db->update('issueHistory', array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
-				$zend_db->update('issueHistory', array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
-				$zend_db->update('issues',       array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
-				$zend_db->update('issues',       array('reportedByPerson_id'=> $this->getId()),'reportedByPerson_id='.$person->getId());
-				$zend_db->update('ticketHistory',array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
-				$zend_db->update('ticketHistory',array(    'actionPerson_id'=> $this->getId()),    'actionPerson_id='.$person->getId());
-				$zend_db->update('tickets',      array( 'enteredByPerson_id'=> $this->getId()), 'enteredByPerson_id='.$person->getId());
-				$zend_db->update('tickets',      array(  'assignedPerson_id'=> $this->getId()),  'assignedPerson_id='.$person->getId());
-				$zend_db->update('tickets',      array(  'referredPerson_id'=> $this->getId()),  'referredPerson_id='.$person->getId());
+				$zend_db->query('update responses     set           person_id=? where           person_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update issueHistory  set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update issueHistory  set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update issues        set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update issues        set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update tickets       set   referredPerson_id=? where   referredPerson_id=?')->execute([$this->getId, $person->getId()]);
+
 
 				// Fields that don't hit the Solr index
-				$zend_db->update('clients',         array('contactPerson_id'=> $this->getId()), 'contactPerson_id='.$person->getId());
-				$zend_db->update('departments',     array('defaultPerson_id'=> $this->getId()), 'defaultPerson_id='.$person->getId());
-				$zend_db->update('peopleAddresses', array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
-				$zend_db->update('peoplePhones',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
-				$zend_db->update('peopleEmails',    array(       'person_id'=> $this->getId()),        'person_id='.$person->getId());
+				$zend_db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
 
-				$zend_db->delete('people','id='.$person->getId());
+				$zend_db->query('delete from people where id=?')->execute([$person->getId()]);
 			}
 			catch (Exception $e) {
-				$zend_db->rollBack();
+				$zend_db->getDriver()->getConnection()->rollback();
 				throw($e);
 			}
-			$zend_db->commit();
+			$zend_db->getDriver()->getConnection()->commit();
 
 			foreach ($ticketIds as $id) {
 				$search = new Search();

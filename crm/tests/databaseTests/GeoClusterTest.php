@@ -18,7 +18,7 @@ class GeoClusterTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/testData/geoclusterTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/geoclusters.xml');
 	}
 
 	public function testSave()

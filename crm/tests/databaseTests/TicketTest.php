@@ -17,7 +17,7 @@ class TicketTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/testData/ticketTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/tickets.xml');
 	}
 
 	public function testAdd()

@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class ContactMethod extends ActiveRecord
 {
 	protected $tablename = 'contactMethods';
@@ -23,21 +27,20 @@ class ContactMethod extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from contactMethods where id=?'
 					: 'select * from contactMethods where name=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('contactMethods/unknownContactMethod');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('contactMethods/unknownContactMethod');
+				}
 			}
 		}
 		else {

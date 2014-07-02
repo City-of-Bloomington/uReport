@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Department;
+use Application\Models\Action;
 
 require_once './DatabaseTestCase.php';
 
@@ -15,7 +16,44 @@ class DepartmentTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/testData/departmentTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/departments.xml');
+	}
+
+	public function testSetActions()
+	{
+        $test       = new Action('test');
+        $attempt    = new Action('attempt');
+        $department = new Department($this->unusedDepartment);
+
+        $department->setActions([$test->getId(), $attempt->getId()]);
+        $actions = $department->getActions();
+        $this->assertEquals(2, count($actions));
+        $this->assertTrue(in_array($test->getId(),    array_keys($actions)));
+        $this->assertTrue(in_array($attempt->getId(), array_keys($actions)));
+
+        $department->setActions([]);
+        $actions = $department->getActions();
+        $this->assertEquals(0, count($actions));
+	}
+
+	public function testSaveActions()
+	{
+        $test       = new Action('test');
+        $attempt    = new Action('attempt');
+        $department = new Department($this->unusedDepartment);
+
+        $department->saveActions([$test->getId(), $attempt->getId()]);
+        $department = new Department($this->unusedDepartment);
+        $actions = $department->getActions();
+        $this->assertEquals(2, count($actions));
+        $this->assertTrue(in_array($test->getId(),    array_keys($actions)));
+        $this->assertTrue(in_array($attempt->getId(), array_keys($actions)));
+
+
+        $department->saveActions([]);
+        $department = new Department($this->unusedDepartment);
+        $actions = $department->getActions();
+        $this->assertEquals(0, count($actions));
 	}
 
 	public function testIsSafeToDelete()

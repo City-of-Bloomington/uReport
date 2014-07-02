@@ -34,21 +34,20 @@ class Department extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from departments where id=?'
 					: 'select * from departments where name=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('departments/unknownDepartment');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('departments/unknownDepartment');
+				}
 			}
 		}
 		else {
@@ -100,11 +99,11 @@ class Department extends ActiveRecord
 	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getDefaultPerson_id() { return parent::get('defaultPerson_id'); }
-	public function getDefaultPerson()    { return parent::getForeignKeyObject('Person', 'defaultPerson_id'); }
+	public function getDefaultPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'defaultPerson_id'); }
 
 	public function setName($s)  { parent::set('name', $s); }
-	public function setDefaultPerson_id($id)    { parent::setForeignKeyField( 'Person', 'defaultPerson_id', $id); }
-	public function setDefaultPerson(Person $p) { parent::setForeignKeyObject('Person', 'defaultPerson_id', $p);  }
+	public function setDefaultPerson_id($id)    { parent::setForeignKeyField( __namespace__.'\Person', 'defaultPerson_id', $id); }
+	public function setDefaultPerson(Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'defaultPerson_id', $p);  }
 
 	/**
 	 * Handler for Controller::update action
@@ -137,7 +136,8 @@ class Department extends ActiveRecord
 	public function getCategories()
 	{
 		if (!count($this->categories) && $this->getId()) {
-			$list = new CategoryList(array('department_id'=>$this->getId()));
+			$table = new CategoryTable();
+			$list = $table->find(['department_id'=>$this->getId()]);
 			foreach ($list as $c) {
 				$this->categories[$c->getId()] = $c;
 			}
@@ -170,14 +170,12 @@ class Department extends ActiveRecord
 		if ($this->getId()) {
 			$this->categories = array();
 			$zend_db = Database::getConnection();
-			$zend_db->delete('department_categories','department_id='.$this->getId());
+			$zend_db->query('delete from department_categories where department_id=?')->execute([$this->getId()]);
 
+			$query = $zend_db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
 			foreach ($category_ids as $id) {
 				try {
-					$zend_db->insert('department_categories', array(
-						'department_id'=>$this->getId(),
-						'category_id'=>(int)$id
-					));
+					$query->execute($this->getId(), $id);
 				}
 				catch (\Exception $e) {
 					// Just ignore the bad ones
@@ -205,7 +203,8 @@ class Department extends ActiveRecord
 	public function getActions()
 	{
 		if (!count($this->actions)  && $this->getId()) {
-			$list = new ActionList(array('department_id'=>$this->getId()));
+            $table = new ActionTable();
+			$list = $table->find(['department_id'=>$this->getId()]);
 			foreach ($list as $action) {
 				$this->actions[$action->getId()] = $action;
 			}
@@ -238,15 +237,11 @@ class Department extends ActiveRecord
 		if ($this->getId()) {
 			$this->actions = array();
 			$zend_db = Database::getConnection();
-			$zend_db->delete('department_actions','department_id='.$this->getId());
+			$zend_db->query('delete from department_actions where department_id=?')->execute([$this->getId()]);
 
+			$query = $zend_db->createStatement('insert into department_actions set department_id=?, action_id=?');
 			foreach ($action_ids as $id) {
-				$zend_db->insert('department_actions',
-					array(
-						'department_id'=>$this->getId(),
-						'action_id'=>(int)$id
-					)
-				);
+                $query->execute([$this->getId(), (int)$id]);
 			}
 		}
 	}
@@ -266,7 +261,8 @@ class Department extends ActiveRecord
 	public function getPeople()
 	{
 		if ($this->getId()) {
-			return new PersonList(array('department_id'=>$this->getId()));
+            $table = new PersonTable();
+			return $table->find( ['department_id'=>$this->getId()] );
 		}
 	}
 
@@ -283,14 +279,17 @@ class Department extends ActiveRecord
 		// We need to absolutely know if there is any foreign key
 		// violation before we delete.
 		$zend_db = Database::getConnection();
-		$c = $zend_db->fetchOne('select count(*) from categories where department_id=?', $this->getId());
-		if ($c) { return false; }
+        $result = $zend_db->query('select count(*) as c from categories where department_id=?')->execute([$this->getId()]);
+        $row = $result->current();
+		if ($row['c']) { return false; }
 
-		$c = $zend_db->fetchOne('select count(*) from department_categories where department_id=?', $this->getId());
-		if ($c) { return false; }
+		$result = $zend_db->query('select count(*) as c from department_categories where department_id=?')->execute([$this->getId()]);
+        $row = $result->current();
+        if ($row['c']) { return false; }
 
-		$c = $zend_db->fetchOne('select count(*) from people where department_id=?', $this->getId());
-		if ($c) { return false; }
+        $result = $zend_db->query('select count(*) as c from people where department_id=?')->execute([$this->getId()]);
+        $row = $result->current();
+        if ($row['c']) { return false; }
 
 		return true;
 	}

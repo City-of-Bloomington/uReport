@@ -195,6 +195,9 @@ abstract class ActiveRecord
 			$this->data[$field] = $object->getId();
 			$this->$var = $object;
 		}
+		else {
+			throw new \Exception('Object does not match the given class');
+		}
 	}
 
 	/**

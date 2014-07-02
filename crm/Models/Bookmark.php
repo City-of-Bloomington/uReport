@@ -30,19 +30,19 @@ class Bookmark extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
 				$sql = 'select * from bookmarks where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
 
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw \new Exception('bookmarks/unknownBookmark');
+				$zend_db = Database::getConnection();
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('bookmarks/unknownBookmark');
+				}
 			}
 		}
 		else {
@@ -81,7 +81,7 @@ class Bookmark extends ActiveRecord
 	public function getType()       { return parent::get('type');        }
 	public function getRequestUri() { return parent::get('requestUri');  }
 	public function getPerson_id()  { return parent::get('person_id');   }
-	public function getPerson()     { return parent::getForeignKeyObject('Person', 'person_id'); }
+	public function getPerson()     { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id'); }
 	public function getName() {
 		$name = parent::get('name');
 		return $name ? $name : $this->getRequestUri();
@@ -90,8 +90,8 @@ class Bookmark extends ActiveRecord
 	public function setName($s)          { parent::set('name',       $s); }
 	public function setType($s)          { parent::set('type',       $s); }
 	public function setRequestUri($s)    { parent::set('requestUri', $s); }
-	public function setPerson_id($id)    { parent::setForeignKeyField( 'Person', 'person_id', $id); }
-	public function setPerson(Person $o) { parent::setForeignKeyObject('Person', 'person_id', $o); }
+	public function setPerson_id($id)    { parent::setForeignKeyField( __namespace__.'\Person', 'person_id', $id); }
+	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o); }
 
 	public function handleUpdate($post)
 	{
