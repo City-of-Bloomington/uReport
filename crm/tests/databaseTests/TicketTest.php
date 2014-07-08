@@ -50,7 +50,8 @@ class TicketTest extends DatabaseTestCase
 		$this->assertEquals($ticket->getLongitude(), $this->testLongitude);
 
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow('select * from ticket_geodata where ticket_id=?', $id);
+		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$id]);
+		$row = $result->current();
 		for ($i=0; $i<=6; $i++) {
 			$this->assertGreaterThan(0, $row["cluster_id_$i"]);
 		}
@@ -67,7 +68,8 @@ class TicketTest extends DatabaseTestCase
 		));
 		$id = $ticket->getId();
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow('select latitude,longitude from tickets where id=?', $id);
+		$result = $zend_db->query('select latitude,longitude from tickets where id=?')->execute([$id]);
+		$row = $result->current();
 		$this->assertNull($row['latitude' ]);
 		$this->assertNull($row['longitude']);
 	}

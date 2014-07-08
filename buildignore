@@ -5,6 +5,7 @@
 .git/
 .git*
 configuration.inc
+site_config.inc
 /crm/data/media/*
 /crm/data/sessions/*
 /crm/scripts/backup.cnf

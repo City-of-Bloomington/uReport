@@ -53,7 +53,8 @@ class GeoClusterTest extends DatabaseTestCase
 		GeoCluster::updateTicketClusters($ticket);
 
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow('select * from ticket_geodata where ticket_id=?', $this->testTicketId);
+		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->testTicketId]);
+		$row = $result->current();
 		for ($i=0; $i<=6; $i++) {
 			$this->assertGreaterThan(0, $row["cluster_id_$i"]);
 		}

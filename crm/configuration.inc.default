@@ -5,6 +5,7 @@
 define('APPLICATION_HOME', __DIR__);
 define('BLOSSOM', APPLICATION_HOME.'/libraries/Blossom');
 define('ZEND',    APPLICATION_HOME.'/libraries/zf2/library/Zend');
+define('SOLR',    APPLICATION_HOME.'/libraries/solr-php-client');
 
 /**
  * Multi-Site support

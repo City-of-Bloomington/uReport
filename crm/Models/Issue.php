@@ -43,19 +43,19 @@ class Issue extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from issues where id=?';
 				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('issues/unknownIssue');
+                $result = $zend_db->createStatement($sql)->execute([$id]);
+                if (count($result)) {
+                    $this->exchangeArray($result->current());
+                }
+				else {
+					throw new \Exception('issues/unknownIssue');
+				}
 			}
 		}
 		else {
@@ -100,9 +100,9 @@ class Issue extends ActiveRecord
 			foreach ($this->getMedia() as $m) { $m->delete(); }
 
 			$zend_db = Database::getConnection();
-			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
-			$zend_db->delete('issueHistory', 'issue_id='.$this->getId());
-			$zend_db->delete('responses',    'issue_id='.$this->getId());
+			$zend_db->query('delete from issue_labels where issue_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from issueHistory where issue_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from responses    where issue_id=?')->execute([$this->getId()]);
 			parent::delete();
 		}
 	}
@@ -119,27 +119,27 @@ class Issue extends ActiveRecord
 	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
 	public function getDescription()         { return parent::get('description');         }
 	public function getDate($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('date', $format, $timezone); }
-	public function getTicket()           { return parent::getForeignKeyObject('Ticket',        'ticket_id');           }
-	public function getContactMethod()    { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id');    }
-	public function getResponseMethod()   { return parent::getForeignKeyObject('ContactMethod', 'responseMethod_id');   }
-	public function getIssueType()        { return parent::getForeignKeyObject('IssueType',     'issueType_id');        }
-	public function getEnteredByPerson()  { return parent::getForeignKeyObject('Person',        'enteredByPerson_id');  }
-	public function getReportedByPerson() { return parent::getForeignKeyObject('Person',        'reportedByPerson_id'); }
+	public function getTicket()           { return parent::getForeignKeyObject(__namespace__.'\Ticket',        'ticket_id');           }
+	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
+	public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
+	public function getIssueType()        { return parent::getForeignKeyObject(__namespace__.'\IssueType',     'issueType_id');        }
+	public function getEnteredByPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id');  }
+	public function getReportedByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id'); }
 
 	public function setDescription ($s) { parent::set('description', $s); }
 	public function setDate($d)         { parent::setDateData('date', $d); }
-	public function setTicket_id          ($id) { parent::setForeignKeyField('Ticket',        'ticket_id',           $id); }
-	public function setContactMethod_id   ($id) { parent::setForeignKeyField('ContactMethod', 'contactMethod_id',    $id); }
-	public function setResponseMethod_id  ($id) { parent::setForeignKeyField('ContactMethod', 'responseMethod_id',   $id); }
-	public function setIssueType_id       ($id) { parent::setForeignKeyField('IssueType',     'issueType_id',        $id); }
-	public function setEnteredByPerson_id ($id) { parent::setForeignKeyField('Person',        'enteredByPerson_id',  $id); }
-	public function setReportedByPerson_id($id) { parent::setForeignKeyField('Person',        'reportedByPerson_id', $id); }
-	public function setTicket          (Ticket        $o) { parent::setForeignKeyObject('Ticket',        'ticket_id',           $o); }
-	public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id',    $o); }
-	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'responseMethod_id',   $o); }
-	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject('IssueType',     'issueType_id',        $o); }
-	public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject('Person',        'enteredByPerson_id',  $o); }
-	public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject('Person',        'reportedByPerson_id', $o); }
+	public function setTicket_id          ($id) { parent::setForeignKeyField(__namespace__.'\Ticket',        'ticket_id',           $id); }
+	public function setContactMethod_id   ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id',    $id); }
+	public function setResponseMethod_id  ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'responseMethod_id',   $id); }
+	public function setIssueType_id       ($id) { parent::setForeignKeyField(__namespace__.'\IssueType',     'issueType_id',        $id); }
+	public function setEnteredByPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'enteredByPerson_id',  $id); }
+	public function setReportedByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',        'reportedByPerson_id', $id); }
+	public function setTicket          (Ticket        $o) { parent::setForeignKeyObject(__namespace__.'\Ticket',        'ticket_id',           $o); }
+	public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id',    $o); }
+	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',   $o); }
+	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject(__namespace__.'\IssueType',     'issueType_id',        $o); }
+	public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id',  $o); }
+	public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id', $o); }
 
 	/**
 	 * @param array $post
@@ -218,12 +218,10 @@ class Issue extends ActiveRecord
 	{
 		if ($this->getId()) {
 			$zend_db = Database::getConnection();
-			$zend_db->delete('issue_labels', 'issue_id='.$this->getId());
+			$zend_db->query('delete from issue_labels where issue_id=?')->execute([$this->getId()]);
+			$query = $zend_db->createStatement('insert into issue_labels (issue_id, label_id) values(?, ?)');
 			foreach ($this->labels as $id=>$label) {
-				$zend_db->insert('issue_labels', array(
-					'issue_id'=>$this->data['id'],
-					'label_id'=>$label->getId()
-				));
+				$query->execute([$this->getId(), $label->getId()]);
 			}
 		}
 	}
@@ -247,7 +245,7 @@ class Issue extends ActiveRecord
 		if (!count($this->history)) {
 			$zend_db = Database::getConnection();
 			$sql = 'select * from issueHistory where issue_id=?';
-			$r = $zend_db->fetchAll($sql, array($this->getId()));
+			$r = $zend_db->query($sql)->execute([$this->getId()]);
 			foreach ($r as $row) {
 				$this->history[] = new IssueHistory($row);
 			}

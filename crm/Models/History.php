@@ -24,18 +24,18 @@ abstract class History extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+                $this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = "select * from {$this->tablename} where id=?";
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('history/unknownHistory');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('history/unknownHistory');
+				}
 			}
 		}
 		else {
@@ -88,27 +88,27 @@ abstract class History extends ActiveRecord
 	public function getAction_id()          { return parent::get('action_id');          }
 	public function getEnteredDate($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
 	public function getActionDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
-	public function getEnteredByPerson() { return parent::getForeignKeyObject('Person', 'enteredByPerson_id'); }
-	public function getActionPerson()    { return parent::getForeignKeyObject('Person', 'actionPerson_id');    }
-	public function getAction()          { return parent::getForeignKeyObject('Action', 'action_id');          }
+	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id'); }
+	public function getActionPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'actionPerson_id');    }
+	public function getAction()          { return parent::getForeignKeyObject(__namespace__.'\Action', 'action_id');          }
 
 	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
 	public function setActionDate ($d) { parent::setDateData('actionDate',  $d); }
-	public function setEnteredByPerson_id($id)    { parent::setForeignKeyField( 'Person', 'enteredByPerson_id', $id); }
-	public function setActionPerson_id   ($id)    { parent::setForeignKeyField( 'Person', 'actionPerson_id',    $id); }
-	public function setAction_id         ($id)    { parent::setForeignKeyField( 'Action', 'action_id',          $id); }
-	public function setEnteredByPerson(Person $p) { parent::setForeignKeyObject('Person', 'enteredByPerson_id', $p);  }
-	public function setActionPerson   (Person $p) { parent::setForeignKeyObject('Person', 'actionPerson_id',    $p);  }
-	public function setAction         (Action $o) { parent::setForeignKeyObject('Action', 'action_id',          $o);  }
+	public function setEnteredByPerson_id($id)    { parent::setForeignKeyField( __namespace__.'\Person', 'enteredByPerson_id', $id); }
+	public function setActionPerson_id   ($id)    { parent::setForeignKeyField( __namespace__.'\Person', 'actionPerson_id',    $id); }
+	public function setAction_id         ($id)    { parent::setForeignKeyField( __namespace__.'\Action', 'action_id',          $id); }
+	public function setEnteredByPerson(Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id', $p);  }
+	public function setActionPerson   (Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'actionPerson_id',    $p);  }
+	public function setAction         (Action $o) { parent::setForeignKeyObject(__namespace__.'\Action', 'action_id',          $o);  }
 
 	// History is either for a Ticket or an Issue
 	public function getTicket_id() { return parent::get('ticket_id');          }
 	public function getIssue_id()  { return parent::get('issue_id');           }
-	public function setTicket_id($id) { parent::setForeignKeyField('Ticket', 'ticket_id', $id); }
-	public function setIssue_id ($id) { parent::setForeignKeyField('Issue',  'issue_id',  $id); }
-	public function setTicket(Ticket $o) { parent::setForeignKeyObject('Ticket', 'ticket_id', $o); }
-	public function setIssue (Issue  $o) { parent::setForeignKeyObject('Issue',  'issue_id',  $o); }
+	public function setTicket_id($id)    { parent::setForeignKeyField( __namespace__.'\Ticket', 'ticket_id', $id); }
+	public function setIssue_id ($id)    { parent::setForeignKeyField( __namespace__.'\Issue',  'issue_id',  $id); }
+	public function setTicket(Ticket $o) { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o); }
+	public function setIssue (Issue  $o) { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o); }
 
 	/**
 	 * @param array $post

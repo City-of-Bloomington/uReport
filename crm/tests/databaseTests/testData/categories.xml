@@ -1,12 +1,31 @@
 <?xml version="1.0"?>
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <database name="test">
+	<table_data name="departments">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Information Services</field>
+		<field name="defaultPerson_id" xsi:nil="true" />
+	</row>
+	</table_data>
 	<table_data name="categoryGroups">
 	<row>
 		<field name="id">1</field>
-		<field name="name">Test Group</field>
+		<field name="name">Streets</field>
 		<field name="ordering" xsi:nil="true" />
 	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="name">Sanitation</field>
+		<field name="ordering" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="id">3</field>
+		<field name="name">Other</field>
+		<field name="ordering" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="categories">
 	</table_data>
 </database>
 </mysqldump>
