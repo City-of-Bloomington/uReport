@@ -1,3 +1,7 @@
+<?php
+use Application\Models\Person;
+use Blossom\Classes\View;
+?>
 <div id="banner">
 	<ul id="utilityBar">
 		<?php

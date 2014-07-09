@@ -1,3 +1,6 @@
+<?php
+use Application\Models\Person;
+?>
 <div id="menuBar">
 	<ul><?php
 			$li = '<li><a href="%s">%s</a></li>';
