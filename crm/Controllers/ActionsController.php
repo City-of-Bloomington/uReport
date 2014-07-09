@@ -1,9 +1,17 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Action;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class ActionsController extends Controller
 {
 	public function __construct(Template $template)
@@ -24,7 +32,7 @@ class ActionsController extends Controller
 			try {
 				$action = new Action($_REQUEST['action_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				header('Location: '.BASE_URL.'/actions');
 				exit();
@@ -43,7 +51,7 @@ class ActionsController extends Controller
 				header('Location: '.BASE_URL.'/actions');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}

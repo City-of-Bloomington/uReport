@@ -1,9 +1,23 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Action;
+use Application\Models\Issue;
+use Application\Models\IssueHistory;
+use Application\Models\Person;
+use Application\Models\Response;
+use Application\Models\Ticket;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class IssuesController extends Controller
 {
 	/**
@@ -15,7 +29,7 @@ class IssuesController extends Controller
 			$issue = new Issue($_GET['issue_id']);
 			$ticket = $issue->getTicket();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL.'/tickets');
 			exit();
@@ -68,10 +82,10 @@ class IssuesController extends Controller
 					$issue = new Issue();
 					$issue->setTicket_id($_REQUEST['ticket_id']);
 				}
-				else { throw new Exception('tickets/unknownTicket'); }
+				else { throw new \Exception('tickets/unknownTicket'); }
 			}
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL.'/tickets');
 			exit();
@@ -104,7 +118,7 @@ class IssuesController extends Controller
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -140,7 +154,7 @@ class IssuesController extends Controller
 			$issue = new Issue($_REQUEST['issue_id']);
 			$ticket = $issue->getTicket();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL);
 			exit();
@@ -154,7 +168,7 @@ class IssuesController extends Controller
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				#header('Location: '.$this->return_url);
 				print_r($e);
@@ -183,7 +197,7 @@ class IssuesController extends Controller
 			$issue = new Issue($_REQUEST['issue_id']);
 			$ticket = $issue->getTicket();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL.'/tickets');
 			exit();
@@ -198,7 +212,7 @@ class IssuesController extends Controller
 				header('Location: '.$ticket->getURL());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -230,13 +244,14 @@ class IssuesController extends Controller
 				'locations/locationInfo.inc',
 				array('location'=>$ticket->getLocation(),'disableButtons'=>true)
 			);
+			$table = new TicketTable();
 			$this->template->blocks['bottom-right'][] = new Block(
 				'tickets/ticketList.inc',
 				array(
-					'ticketList'=>new TicketList(array('location'=>$ticket->getLocation())),
-					'title'=>'Other tickets for this location',
-					'disableButtons'=>true,
-					'filterTicket'=>$ticket
+					'ticketList'    => $table->find(['location'=>$ticket->getLocation()]),
+					'title'         => 'Other tickets for this location',
+					'disableButtons'=> true,
+					'filterTicket'  => $ticket
 				)
 			);
 		}

@@ -12,6 +12,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Blossom\Classes\Controller;
+use Blossom\Classes\Url;
+
 class SolrController extends Controller
 {
 	public function index()
@@ -28,7 +33,7 @@ class SolrController extends Controller
 		if (SOLR_SERVER_PORT != 80) { $url.= ':'.SOLR_SERVER_PORT; }
 		$url.= SOLR_SERVER_PATH.'/select?'.$_SERVER['QUERY_STRING'];
 
-		echo URL::get($url);
+		echo Url::get($url);
 		exit();
 	}
 }

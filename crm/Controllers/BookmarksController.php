@@ -1,14 +1,24 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Bookmark;
+use Application\Models\BookmarkTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class BookmarksController extends Controller
 {
 	public function index()
 	{
-		$list = new BookmarkList(array('person_id'=>$_SESSION['USER']->getId()));
+		$t = new BookmarkTable();
+		$list = $t->find(['person_id' => $_SESSION['USER']->getId()]);
 		$this->template->blocks[] = new Block('bookmarks/list.inc', array('bookmarks'=>$list));
 	}
 
@@ -18,7 +28,7 @@ class BookmarksController extends Controller
 			try {
 				$bookmark = new Bookmark($_REQUEST['bookmark_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				header('Location: '.BASE_URL.'/bookmarks');
 				exit();
@@ -38,7 +48,7 @@ class BookmarksController extends Controller
 				header('Location: '.$bookmark->getFullUrl());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -51,7 +61,7 @@ class BookmarksController extends Controller
 			$bookmark = new Bookmark($_REQUEST['bookmark_id']);
 			$bookmark->delete();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 		}
 

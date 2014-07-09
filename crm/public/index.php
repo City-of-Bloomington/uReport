@@ -1,15 +1,13 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-if (!empty($_SERVER['CRM_DATA_HOME'])) {
-	include "$_SERVER[CRM_DATA_HOME]/configuration.inc";
-}
-else {
-	include '../configuration.inc';
-}
+use Blossom\Classes\Block;
+use Blossom\Classes\Template;
+
+include '../configuration.inc';
 
 // Check for Open311 routes
 if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
@@ -54,16 +52,16 @@ $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
 $template = new Template('default', $format);
 
 // Execute the Controller::action()
-if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
+if (isset($resource) && isset($action) && $ZEND_ACL->hasResource($resource)) {
 	$role = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';
 	if ($ZEND_ACL->isAllowed($role, $resource, $action)) {
-		$controller = ucfirst($resource).'Controller';
+		$controller = 'Application\\Controllers\\'.ucfirst($resource).'Controller';
 		$c = new $controller($template);
 		$c->$action();
 	}
 	else {
 		header('HTTP/1.1 403 Forbidden', true, 403);
-		$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+		$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 	}
 }
 else {
@@ -74,4 +72,5 @@ else {
 if (!empty($_REQUEST['partial'])) {
 	$template->setFilename('partial');
 }
+
 echo $template->render();

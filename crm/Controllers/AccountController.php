@@ -1,9 +1,15 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class AccountController extends Controller
 {
 	public function __construct(Template $template)
@@ -12,7 +18,7 @@ class AccountController extends Controller
 		$this->template->setFilename('backend');
 	}
 
-	private function redirectToErrorUrl(Exception $e)
+	private function redirectToErrorUrl(\Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
 		header('Location: '.BASE_URL.'/account');
@@ -36,7 +42,7 @@ class AccountController extends Controller
 				header('Location: '.BASE_URL.'/account');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -60,7 +66,7 @@ class AccountController extends Controller
 	 */
 	private function deleteLinkedItem($item)
 	{
-		$class = ucfirst($item);
+		$class = 'Application\\Models\\'.ucfirst($item);
 
 		if (isset($_REQUEST[$item.'_id'])) {
 			try {
@@ -69,10 +75,10 @@ class AccountController extends Controller
 				header('Location: '.BASE_URL.'/account');
 				exit();
 			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+			catch (\Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 		else {
-			$this->redirectToErrorUrl(new Exception("people/unknown$class"));
+			$this->redirectToErrorUrl(new \Exception("people/unknown$class"));
 		}
 	}
 	public function deleteEmail()   { $this->deleteLinkedItem('email');   }
@@ -90,16 +96,16 @@ class AccountController extends Controller
 	 */
 	private function updateLinkedItem($item, $requiredField)
 	{
-		$class = ucfirst($item);
+		$class = 'Application\\Models\\'.ucfirst($item);
 
 		if (isset($_REQUEST[$item.'_id'])) {
 			try {
 				$object = new $class($_REQUEST[$item.'_id']);
 				if ($object->getPerson_id() != $_SESSION['USER']->getId()) {
-					$this->redirectToErrorUrl(new Exception("people/unknown$class"));
+					$this->redirectToErrorUrl(new \Exception("people/unknown$class"));
 				}
 			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+			catch (\Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 		else {
 			$object = new $class();
@@ -107,7 +113,7 @@ class AccountController extends Controller
 		}
 
 		if (!$object->getPerson_id()) {
-			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+			$this->redirectToErrorUrl(new \Exception('people/unknownPerson'));
 		}
 
 		if (isset($_POST[$requiredField])) {
@@ -117,7 +123,7 @@ class AccountController extends Controller
 				header('Location: '.BASE_URL.'/account');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -136,7 +142,7 @@ class AccountController extends Controller
 		$department = $_SESSION['USER']->getDepartment();
 
 		if (!$department) {
-			$_SESSION['errorMessages'][] = new Exception('departments/unknownDepartment');
+			$_SESSION['errorMessages'][] = new \Exception('departments/unknownDepartment');
 			header('Location: '.$return_url);
 			exit();
 		}
@@ -149,7 +155,7 @@ class AccountController extends Controller
 				header('Location: '.$return_url);
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -168,7 +174,7 @@ class AccountController extends Controller
 	public function changePassword()
 	{
 		if ($_SESSION['USER']->getAuthenticationMethod() != 'local') {
-			$_SESSION['errorMessages'][] = new Exception('users/passwordNotAllowed');
+			$_SESSION['errorMessages'][] = new \Exception('users/passwordNotAllowed');
 			header('Location: '.BASE_URL.'/account');
 			exit();
 		}
@@ -180,7 +186,7 @@ class AccountController extends Controller
 				header('Location: '.BASE_URL.'/account');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}

@@ -1,9 +1,20 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Category;
+use Application\Models\CategoryTable;
+use Application\Models\Ticket;
+use Application\Models\Open311Client;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class Open311Controller extends Controller
 {
 	private $person;
@@ -39,19 +50,19 @@ class Open311Controller extends Controller
 				else {
 					// Not allowed to post to this category
 					header('HTTP/1.0 403 Forbidden',true,403);
-					$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+					$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 				}
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				// Unknown service
 				header('HTTP/1.0 404 Not Found',true,404);
-				$_SESSION['errorMessages'][] = new Exception('open311/unknownService');
+				$_SESSION['errorMessages'][] = new \Exception('open311/unknownService');
 			}
 		}
 		// Provide the full service list
 		else {
-			$categoryList = new CategoryList();
-			$categoryList->find();
+			$table = new CategoryTable();
+			$categoryList = $table->find();
 			$this->template->blocks[] = new Block('open311/serviceList.inc',array('categoryList'=>$categoryList));
 		}
 	}
@@ -65,7 +76,7 @@ class Open311Controller extends Controller
 			try {
 				$category = new Category($_REQUEST['service_code']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				header('HTTP/1.0 404 Not Found', true, 404);
 				$_SESSION['errorMessages'][] = $e;
 				return;
@@ -81,10 +92,10 @@ class Open311Controller extends Controller
 				}
 				else {
 					header('HTTP/1.0 403 Forbidden', true, 403);
-					$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+					$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 				}
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				// Unknown ticket
 				header('HTTP/1.0 404 Not Found', true, 404);
 				$_SESSION['errorMessages'][] = $e;
@@ -107,13 +118,13 @@ class Open311Controller extends Controller
 						$media->setFile($_FILES['media']);
 						$media->save();
 					}
-					catch (Exception $e) {
+					catch (\Exception $e) {
 						// Just ignore any media errors for now
 					}
 				}
 				$this->template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				switch ($e->getMessage()) {
 					case 'clients/unknownClient':
@@ -134,7 +145,7 @@ class Open311Controller extends Controller
 				}
 				else {
 					header('HTTP/1.0 404 Not Found', true, 404);
-					$_SESSION['errorMessages'][] = new Exception('categories/unknownCategory');
+					$_SESSION['errorMessages'][] = new \Exception('categories/unknownCategory');
 					return;
 				}
 			}

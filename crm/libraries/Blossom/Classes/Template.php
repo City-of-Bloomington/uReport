@@ -53,7 +53,7 @@ class Template extends View
 			$this->path = SITE_HOME.'/templates';
 		}
 		elseif (  is_file(APPLICATION_HOME."/templates/{$this->outputFormat}/$filename.inc")) {
-			$this->path = APPLICATION_HOME;
+			$this->path = APPLICATION_HOME.'/templates';
 		}
 		else {
 			throw new \Exception('unknownTemplate');

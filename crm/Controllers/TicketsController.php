@@ -1,9 +1,26 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Action;
+use Application\Models\Person;
+use Application\Models\Category;
+use Application\Models\Issue;
+use Application\Models\Department;
+use Application\Models\Ticket;
+use Application\Models\TicketHistory;
+use Application\Models\TicketTable;
+use Application\Models\Search;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+use Blossom\Classes\Url;
+
 class TicketsController extends Controller
 {
 	/**
@@ -16,7 +33,7 @@ class TicketsController extends Controller
 			$ticket = new Ticket($id);
 			return $ticket;
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL.'/tickets');
 			exit();
@@ -87,7 +104,7 @@ class TicketsController extends Controller
 			$this->addStandardInfoBlocks($ticket);
 		}
 		else {
-			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 		}
 	}
 
@@ -106,7 +123,7 @@ class TicketsController extends Controller
 			);
 		}
 		else {
-			$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 		}
 	}
 
@@ -126,7 +143,7 @@ class TicketsController extends Controller
 				$ticket->setCategory($category);
 			}
 			else {
-				$_SESSION['errorMessages'][] = new Exception('noAccessAllowed');
+				$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
 				header('Location: '.BASE_URL);
 				exit();
 			}
@@ -151,7 +168,7 @@ class TicketsController extends Controller
 			try {
 				$currentDepartment = new Department($_GET['department_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				// Ignore any bad departments passed in
 			}
 		}
@@ -171,7 +188,7 @@ class TicketsController extends Controller
 				$ticket->handleAdd($_POST); // Calls save as needed - no need to save() again
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -231,7 +248,7 @@ class TicketsController extends Controller
 			try {
 				$currentDepartment = new Department($_GET['department_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 			}
 		}
 		if (!isset($currentDepartment)) {
@@ -257,7 +274,7 @@ class TicketsController extends Controller
 
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -286,7 +303,7 @@ class TicketsController extends Controller
 			try {
 				$person = new Person($_REQUEST['person_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 			}
 		}
 
@@ -307,7 +324,7 @@ class TicketsController extends Controller
 
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -341,7 +358,7 @@ class TicketsController extends Controller
 				$history->handleUpdate($_POST);
 				$history->save();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 			$this->redirectToTicketView($ticket);
@@ -375,13 +392,13 @@ class TicketsController extends Controller
 				if (defined('CLOSING_COMMENT_REQUIRED_LENGTH')) {
 					if ($action->getName() == 'closed') {
 						if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
-							throw new Exception('tickets/missingClosingComment');
+							throw new \Exception('tickets/missingClosingComment');
 						}
 
 						// Display an alert, reminding them to respond to any citizens
 						$citizens = $ticket->getReportedByPeople();
 						if (count($citizens)) {
-							$_SESSION['errorMessages'][] = new Exception('tickets/closingResponseReminder');
+							$_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
 						}
 					}
 				}
@@ -391,7 +408,7 @@ class TicketsController extends Controller
 
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -425,7 +442,7 @@ class TicketsController extends Controller
 				$ticket->save();
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -454,7 +471,7 @@ class TicketsController extends Controller
 				$ticket->save();
 				$this->redirectToTicketView($ticket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -496,7 +513,7 @@ class TicketsController extends Controller
 
 				$this->redirectToTicketView($targetTicket);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -593,12 +610,13 @@ class TicketsController extends Controller
 				array('ticket'=>$ticket)
 			);
 
-			$ticketList = new TicketList(array('location'=>$ticket->getLocation()));
-			if (count($ticketList) > 1) {
+			$table = new TicketTable();
+			$list = $table->find(array('location'=>$ticket->getLocation()));
+			if (count($list) > 1) {
 				$this->template->blocks['bottom-left'][] = new Block(
 					'tickets/ticketList.inc',
 					array(
-						'ticketList'    => $ticketList,
+						'ticketList'    => $list,
 						'title'         => 'Other cases for this location',
 						'filterTicket'  => $ticket,
 						'disableButtons'=> true

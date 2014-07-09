@@ -1,12 +1,25 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Person;
+use Application\Models\PersonTable;
+use Application\Models\Email;
+use Application\Models\Phone;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+use Blossom\Classes\Url;
+
 class PeopleController extends Controller
 {
-	private function redirectToErrorUrl(Exception $e)
+	private function redirectToErrorUrl(\Exception $e)
 	{
 		$_SESSION['errorMessages'][] = $e;
 		header('Location: '.BASE_URL.'/people');
@@ -58,8 +71,8 @@ class PeopleController extends Controller
 						break;
 				}
 			}
-			$personList = new PersonList();
-			$personList->search($search);
+			$table = new PersonTable();
+			$personList = $table->search($search);
 			$searchResults = new Block('people/searchResults.inc',array('personList'=>$personList));
 			$this->template->blocks[] = $searchResults;
 		}
@@ -73,12 +86,12 @@ class PeopleController extends Controller
 	{
 		$this->template->setFilename('people');
 		if (!isset($_GET['person_id'])) {
-			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+			$this->redirectToErrorUrl(new \Exception('people/unknownPerson'));
 		}
 		try {
 			$person = new Person($_GET['person_id']);
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$this->redirectToErrorUrl($e);
 		}
 		$this->template->title = $person->getFullname();
@@ -132,8 +145,8 @@ class PeopleController extends Controller
 	{
 		$field = $listType.'Person_id';
 
-		$tickets = new TicketList();
-		$tickets->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
+		$table = new TicketTable();
+		$tickets = $table->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
 
 		$count = count($tickets);
 		if ($count) {
@@ -162,7 +175,7 @@ class PeopleController extends Controller
 			try {
 				$person = new Person($_REQUEST['person_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				header("Location: $errorURL");
 				exit();
@@ -195,11 +208,11 @@ class PeopleController extends Controller
 				}
 
 				if (isset($_REQUEST['return_url'])) {
-					$return_url = new URL($_REQUEST['return_url']);
+					$return_url = new Url($_REQUEST['return_url']);
 					$return_url->person_id = $person->getId();
 				}
 				elseif (isset($_REQUEST['callback'])) {
-					$return_url = new URL(BASE_URL.'/callback');
+					$return_url = new Url(BASE_URL.'/callback');
 					$return_url->callback = $_REQUEST['callback'];
 					$return_url->data = "{$person->getId()}";
 				}
@@ -209,7 +222,7 @@ class PeopleController extends Controller
 				header("Location: $return_url");
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -224,7 +237,7 @@ class PeopleController extends Controller
 			$person = new Person($_GET['person_id']);
 			$person->delete();
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 		}
 		header('Location: '.BASE_URL.'/people');
@@ -250,10 +263,10 @@ class PeopleController extends Controller
 				header('Location: '.$person->getURL());
 				exit();
 			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+			catch (\Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 		else {
-			$this->redirectToErrorUrl(new Exception("people/unknown$class"));
+			$this->redirectToErrorUrl(new \Exception("people/unknown$class"));
 		}
 	}
 	public function deleteEmail()   { $this->deleteLinkedItem('email');   }
@@ -272,13 +285,13 @@ class PeopleController extends Controller
 	private function updateLinkedItem($item, $requiredField)
 	{
 		$this->template->setFilename('people');
-		$class = ucfirst($item);
+		$class = 'Application\\Models\\'.ucfirst($item);
 
 		if (isset($_REQUEST[$item.'_id'])) {
 			try {
 				$object = new $class($_REQUEST[$item.'_id']);
 			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+			catch (\Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 		else {
 			$object = new $class();
@@ -288,11 +301,11 @@ class PeopleController extends Controller
 			try {
 				$object->setPerson_id($_REQUEST['person_id']);
 			}
-			catch (Exception $e) { $this->redirectToErrorUrl($e); }
+			catch (\Exception $e) { $this->redirectToErrorUrl($e); }
 		}
 
 		if (!$object->getPerson_id()) {
-			$this->redirectToErrorUrl(new Exception('people/unknownPerson'));
+			$this->redirectToErrorUrl(new \Exception('people/unknownPerson'));
 		}
 
 
@@ -303,12 +316,12 @@ class PeopleController extends Controller
 				header('Location: '.$object->getPerson()->getUrl());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
 
-		$this->template->blocks['left'][] = new Block('people/personInfo.inc',array('person'=>$object->getPerson(), 'disableButtons'=>true));
+		$this->template->blocks['left' ][] = new Block('people/personInfo.inc',array('person'=>$object->getPerson(), 'disableButtons'=>true));
 		$this->template->blocks['right'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
 	}
 	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
@@ -325,7 +338,7 @@ class PeopleController extends Controller
 			$personA = new Person($_REQUEST['person_id_a']);
 			$personB = new Person($_REQUEST['person_id_b']);
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL);
 			exit();
@@ -345,7 +358,7 @@ class PeopleController extends Controller
 				header('Location: '.$targetPerson->getURL());
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}

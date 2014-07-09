@@ -1,15 +1,24 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Controllers;
+
+use Application\Models\Category;
+use Application\Models\CategoryTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\Controller;
+use Blossom\Classes\Template;
+
 class CategoriesController extends Controller
 {
 	public function index()
 	{
-		$categoryList = new CategoryList();
-		$categoryList->find();
+		$t = new CategoryTable;
+		$categoryList = $t->find();
 
 		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block(
@@ -29,7 +38,7 @@ class CategoriesController extends Controller
 				$category = new Category($_REQUEST['category_id']);
 				$this->template->blocks[] = new Block('categories/info.inc', array('category'=>$category));
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -42,7 +51,7 @@ class CategoriesController extends Controller
 			try {
 				$category = new Category($_REQUEST['category_id']);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 				header('Location: '.BASE_URL.'/categories');
 				exit();
@@ -60,7 +69,7 @@ class CategoriesController extends Controller
 				header('Location: '.BASE_URL.'/categories');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
@@ -80,8 +89,8 @@ class CategoriesController extends Controller
 			? new URL($_GET['return_url'])
 			: new URL(BASE_URL.'/categories/view');
 
-		$categoryList = new CategoryList();
-		$categoryList->find(null,'c.name');
+		$t = new CategoryTable();
+		$categoryList = $t->find(null, 'categories.name');
 
 		$this->template->blocks[] = new Block(
 			'categories/categoryChoices.inc',
@@ -106,14 +115,14 @@ class CategoriesController extends Controller
 				header('Location: '.BASE_URL.'/categories');
 				exit();
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
 
-		$list = new CategoryList();
-		$list->find();
+		$t = new CategoryTable();
+		$list = $t->find();
 
-		$this->template->blocks[] = new Block('categories/slaForm.inc', array('categoryList'=>$list));
+		$this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$list]);
 	}
 }
