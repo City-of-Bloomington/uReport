@@ -15,7 +15,7 @@
 	?>
 	<div id="panel-container">
 	<?php
-		include FRAMEWORK.'/errorMessages.php';
+		include BLOSSOM.'/errorMessages.php';
 		$panels = array('left', 'right');
 		foreach ($panels as $p) {
 			if (isset($this->blocks[$p])) {

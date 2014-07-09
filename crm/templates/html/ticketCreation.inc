@@ -12,7 +12,7 @@
 		include $dir.'/partials/menubar.inc';
 	?>
 	<div id="panel-container">
-		<?php include FRAMEWORK.'/errorMessages.php'; ?>
+		<?php include BLOSSOM.'/errorMessages.php'; ?>
 		<div id="left" class="panel">
 			<?php echo $this->includeBlocks('left'); ?>
 		</div>
