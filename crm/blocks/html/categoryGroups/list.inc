@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroupList $this->categoryGroupList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="categoryGroupList">
 	<h2><?php

@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="categoryList">
 	<h2><?php

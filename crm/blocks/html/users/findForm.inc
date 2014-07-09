@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\DepartmentTable;
+use Blossom\Classes\View;
 ?>
 <div class="findForm">
 	<form method="get" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
@@ -16,8 +18,8 @@
 					<td><select name="department_id" id="department_id">
 							<option></option>
 							<?php
-								$list = new DepartmentList();
-								$list->find();
+								$table = new DepartmentTable();
+								$list = $table->find();
 								foreach ($list as $department) {
 									$name = View::escape($department->getName());
 									$selected = (isset($_GET['department_id'])

@@ -3,8 +3,11 @@
  * @copyright 2011 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param TicketList $this->ticketList
+ * @param Zend\Db\ResultSet $this->ticketList
  */
+use Application\Models\Person;
+use Application\Models\TicketTable;
+
 foreach ($this->ticketList as $row) {
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data

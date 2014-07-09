@@ -7,7 +7,12 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
-$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+use Application\Models\Person;
+use Application\Models\Search;
+use Blossom\Classes\Block;
+use Blossom\Classes\Url;
+
+$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
 if (!empty($_GET['query'])
 	|| isset($this->solrObject->responseHeader->params->fq)) {
@@ -61,7 +66,7 @@ if (!empty($_GET['query'])
 					if (isset($deleteURL->$key)) {
 						unset($deleteURL->$key);
 					}
-					$displayName = Search::$searchableFields[$key];
+					$displayName  = Search::$searchableFields[$key];
 					$displayValue = Search::getDisplayName('ticket', $key, $value);
 					if ($displayValue) {
 						echo "

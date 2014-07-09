@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->userList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="interfaceBox">
 	<h2><?php
@@ -32,7 +34,7 @@
 		<tbody>
 		<?php
 			foreach ($this->userList as $user) {
-				$editButton = '';
+				$editButton   = '';
 				$deleteButton = '';
 				if (Person::isAllowed('users','update')) {
 					$editButton = "
@@ -50,7 +52,7 @@
 				}
 
 				$username = View::escape($user->getUsername());
-				$name = View::escape("{$user->getFirstname()} {$user->getLastname()}");
+				$name     = View::escape("{$user->getFirstname()} {$user->getLastname()}");
 
 				$department = $user->getDepartment();
 				$departmentName = $department ? View::escape($department->getName()) : '';

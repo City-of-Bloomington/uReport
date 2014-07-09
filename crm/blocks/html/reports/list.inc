@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\BookmarkTable;
+use Blossom\Classes\Block;
 ?>
 <div>
 	<h2>Reports</h2>
@@ -13,13 +15,15 @@
 		<li><a href="<?php echo BASE_URI; ?>/reports">Activity</a></li>
 	</ul>
 	<?php
+		$table = new BookmarkTable();
+
 		$bookmarks = new Block(
 			'bookmarks/list.inc',
 			array(
-				'bookmarks' => new BookmarkList(array(
+				'bookmarks' => $table->find([
 					'person_id'=>$_SESSION['USER']->getId(),
 					'type'=>'report'
-				)),
+				]),
 				'title'=>'Saved Reports'
 			)
 		);

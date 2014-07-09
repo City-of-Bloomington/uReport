@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->type
  */
+use Blossom\Classes\View;
+
 $type = View::escape($this->type);
 ?>
 <form id="bookmark-updateForm" method="post" action="<?php echo BASE_URI; ?>/bookmarks/update">

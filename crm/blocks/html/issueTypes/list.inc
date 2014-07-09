@@ -1,9 +1,12 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\issueTypeTable;
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div>
 	<h2><?php
@@ -18,8 +21,8 @@
 	</h2>
 	<ul>
 	<?php
-		$list = new IssueTypeList();
-		$list->find();
+		$t = new issueTypeTable();
+		$list = $t->find();
  		foreach ($list as $type) {
 			if (Person::isAllowed('issueTypes','update')) {
 				$editButton = "

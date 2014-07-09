@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Blossom\Classes\View;
+
 echo "
 <div class=\"serviceList\">
 	<h1>Services</h1>
@@ -24,9 +26,9 @@ echo "
 		foreach ($this->categoryList as $category) {
 			$service_code = "{$category->getId()}";
 			$service_name = View::escape($category->getName());
-			$group = View::escape($category->getCategoryGroup());
-			$description = View::escape($category->getDescription());
-			$metadata = count($category->getCustomFields()) ? 'true' : 'false';
+			$group        = View::escape($category->getCategoryGroup());
+			$description  = View::escape($category->getDescription());
+			$metadata     = count($category->getCustomFields()) ? 'true' : 'false';
 
 			$url = BASE_URL."/open311/v2/services/$service_code";
 			$service_code = $metadata=='true' ? "<a href=\"$url\">$service_code</a>" : $service_code;

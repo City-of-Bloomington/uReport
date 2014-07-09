@@ -6,6 +6,9 @@
  * @param Issue $this->issue
  * @param boolean $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\Block;
+
 $uploadButton = '';
 if (!$this->disableButtons && Person::isAllowed('media','upload')) {
 	$uploadButton = "

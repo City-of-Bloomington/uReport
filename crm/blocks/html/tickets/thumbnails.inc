@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
+
 $issueHeader = new Block('tickets/partials/issueHeader.inc', array('disableButtons'=>true));
 $thumbnail   = new Block('media/thumbnail.inc');
 echo "

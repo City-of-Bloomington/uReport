@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->data
  */
+use Blossom\Classes\View;
+
 include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
 $h = $this->template->getHelper('formatDuration');
 ?>

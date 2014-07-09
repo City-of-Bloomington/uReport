@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Application\Models\SubstatusTable;
+use Blossom\Classes\View;
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
@@ -44,7 +46,8 @@
 								echo '<option value=""></option>';
 							}
 
-							$list = new SubstatusList(array('status'=>$this->ticket->getStatus()));
+							$table = new SubstatusTable();
+							$list = $table->find(array('status'=>$this->ticket->getStatus()));
 							foreach ($list as $substatus) {
 								$selected = $this->ticket->getSubstatus_id()==$substatus->getId()
 									? 'selected="selected"'

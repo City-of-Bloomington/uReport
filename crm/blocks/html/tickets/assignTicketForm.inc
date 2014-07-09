@@ -6,6 +6,7 @@
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
+use Blossom\Classes\View;
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?php echo BASE_URI; ?>/tickets/assign">
@@ -15,7 +16,7 @@
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key = View::escape($key);
+						$key   = View::escape($key);
 						$value = View::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}

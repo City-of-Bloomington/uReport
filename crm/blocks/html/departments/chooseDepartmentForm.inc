@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->currentDepartment
  */
+use Application\Models\DepartmentTable;
+use Blossom\Classes\View;
+
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
 
@@ -17,8 +20,8 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 					<td><select name="department_id" id="department_id">
 							<option></option>
 							<?php
-								$list = new DepartmentList();
-								$list->find();
+								$t = new DepartmentTable();
+								$list = $t->find();
 								foreach ($list as $department) {
 									$id = $this->currentDepartment ? $this->currentDepartment->getId() : null;
 									$selected = "{$department->getId()}"==$id

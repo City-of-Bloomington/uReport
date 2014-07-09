@@ -6,6 +6,8 @@
  * @param array $this->history
  * @param bool $this->disableComments
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="history">
 	<h2><?php echo $this->translate('labels.history'); ?></h2>

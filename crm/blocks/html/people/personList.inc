@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  */
+use Blossom\Classes\View;
 ?>
 <div class="personList interfaceBox">
 	<h2><?php echo $this->translate(array('labels.person', 'labels.people', 2)); ?></h2>

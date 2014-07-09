@@ -7,6 +7,8 @@
  * @param Issue $this->issue
  * @param Department $this->currentDepartment
  */
+use Blossom\Classes\View;
+
 $category    = $this->ticket->getCategory();
 $category_id = $category ? $category->getId() : '';
 $title       = $category ? "New {$category->getName()} Case" : 'New Case';

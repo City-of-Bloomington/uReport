@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param BookmarkList $this->bookmarks
  */
+use Blossom\Classes\View;
+
 $title = !empty($this->title)
 	? View::escape($this->title)
 	: $this->translate(array('labels.bookmark', 'labels.bookmarks', 2));

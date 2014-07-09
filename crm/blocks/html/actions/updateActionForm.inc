@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Blossom\Classes\View;
+
 $title = $this->action->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.action', 'labels.actions', 1))
 	: $this->translate('labels.add' ).' '.$this->translate(array('labels.action', 'labels.actions', 1));

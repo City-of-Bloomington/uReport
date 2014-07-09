@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Blossom\Classes\View;
+
 $status = strtolower($this->ticket->getStatus());
 
 $c = $this->ticket->getCategory();

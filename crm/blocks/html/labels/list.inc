@@ -1,9 +1,12 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\LabelTable;
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div>
 	<h2><?php
@@ -19,8 +22,8 @@
 	<p><?php echo $this->translate('text.labels_description'); ?></p>
 	<ul>
 	<?php
-		$list = new LabelList();
-		$list->find();
+		$t = new LabelTable();
+		$list = $t->find();
  		foreach ($list as $label) {
 			if (Person::isAllowed('labels','update')) {
 				$editButton = "

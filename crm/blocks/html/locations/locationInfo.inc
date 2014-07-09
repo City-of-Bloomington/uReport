@@ -6,6 +6,9 @@
  * @param string $this->location
  * @param bool $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 if ($this->location) {
 	$url = new URL(BASE_URL.'/locations/view?location='.$this->location);
 	$location = View::escape($this->location);

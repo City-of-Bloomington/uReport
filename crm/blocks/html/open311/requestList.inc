@@ -7,6 +7,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
+
 echo "
 <div class=\"requestList\">
 	<h2>Requests</h2>

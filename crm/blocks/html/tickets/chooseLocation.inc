@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Application\Models\TicketTable;
+use Blossom\Classes\Block;
+
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
 
@@ -27,12 +30,13 @@ echo "
 		);
 		echo $block->render('html', $this->template);
 
+		$table = new TicketTable();
 		$block = new Block(
 			'tickets/ticketList.inc',
 			array(
-				'ticketList'=>new TicketList(array('location'=>$this->ticket->getLocation())),
-				'title'=>$this->translate('labels.tickets_for_location'),
-				'disableLinks'=>true
+				'ticketList'  => $table->find(array('location'=>$this->ticket->getLocation())),
+				'title'       => $this->translate('labels.tickets_for_location'),
+				'disableLinks'=> true
 			)
 		);
 		echo $block->render('html', $this->template);

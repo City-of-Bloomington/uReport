@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
+use Blossom\Classes\View;
+
 $title = $this->person->getId() ? View::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
 // Let the template override the title, if it wants to
 $title = $this->title ? View::escape($this->title) : $title;

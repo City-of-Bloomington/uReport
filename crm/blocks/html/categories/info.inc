@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
+use Application\Models\Issue;
+use Blossom\Classes\View;
+
 $name = View::escape($this->category->getName());
 $description = View::escape($this->category->getDescription());
 

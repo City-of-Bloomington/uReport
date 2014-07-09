@@ -1,4 +1,3 @@
-<div class="issueInfo">
 <?php
 /**
  * @copyright 2011-2013 City of Bloomington, Indiana
@@ -7,6 +6,11 @@
  * @param Issue $this->issue
  * @param bool  $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+?>
+<div class="issueInfo">
+<?php
 	include APPLICATION_HOME.'/blocks/html/tickets/partials/issueHeader.inc';
 	include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
 

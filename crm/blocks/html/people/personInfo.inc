@@ -6,6 +6,8 @@
  * @param Person $this->person
  * @param bool $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 // This screen is also used when a person views their own account.
 // When a person is viewing their own account, the URLs need to point
 // to the "account" versions of updating things.

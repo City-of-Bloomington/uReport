@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Phone $this->phone
  */
+use Application\Models\Phone;
+use Blossom\Classes\View;
 ?>
 <fieldset><legend><?php echo $this->translate(array('labels.phone', 'labels.phones', 1)); ?></legend>
 	<label>

@@ -5,6 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  */
+use Application\Models\Person;
+use Application\Models\RentalService;
+use Blossom\Classes\View;
+
 if (Person::isAllowed('people','view')) {
 	echo '<div class="locationPeople">';
 	$people = new PersonList(array('address'=>$this->location));

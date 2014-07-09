@@ -35,9 +35,9 @@ class LoginController extends Controller
 		}
 
 		require_once CAS.'/CAS.php';
-		phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
-		phpCAS::setNoCasServerValidation();
-		phpCAS::forceAuthentication();
+		\phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
+		\phpCAS::setNoCasServerValidation();
+		\phpCAS::forceAuthentication();
 		// at this step, the user has been authenticated by the CAS server
 		// and the user's login name can be read with phpCAS::getUser().
 
@@ -46,7 +46,7 @@ class LoginController extends Controller
 		// and even if they have a person record, they may not
 		// have a user account for that person record.
 		try {
-			$_SESSION['USER'] = new Person(phpCAS::getUser());
+			$_SESSION['USER'] = new Person(\phpCAS::getUser());
 			header("Location: {$this->return_url}");
 			exit();
 		}

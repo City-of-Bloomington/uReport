@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Address $this->address
  */
+use Application\Models\Address;
+use Blossom\Classes\View;
+
 $fields = array(
 	'address','city','state','zip'
 );

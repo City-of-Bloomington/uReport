@@ -7,6 +7,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Media $this->media
  */
+use Application\Models\Person;
+
 $deleteButton = '';
 if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$deleteButton = "

@@ -1,10 +1,19 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
+use Application\Models\BookmarkTable;
+use Application\Models\Person;
+use Application\Models\Search;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
+use Blossom\Classes\Url;
+
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 #$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/search.js');
 $this->template->addToAsset('scripts',BASE_URI.'/js/collapsible.js');
@@ -44,10 +53,11 @@ if (Person::isAllowed('tickets','add')) {
 	echo "
 		</ul>
 	";
+	$table = new BookmarkTable();
 	$bookmarks = new Block(
 		'bookmarks/list.inc',
 		array(
-			'bookmarks' => new BookmarkList(array(
+			'bookmarks' => $table->find(array(
 				'person_id'=>$_SESSION['USER']->getId(),
 				'type'=>'search'
 			))
@@ -75,7 +85,7 @@ if (Person::isAllowed('tickets','add')) {
 				if (isset($this->solrObject->facet_counts->facet_fields)) {
 					$person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
 					$facetFields = $this->solrObject->facet_counts->facet_fields;
-					$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+					$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 
 					foreach (Search::$facetFields['ticket'] as $key) {
 						$list = '';
@@ -127,10 +137,10 @@ if (Person::isAllowed('tickets','add')) {
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
-					$_GET['fields'] = TicketList::$defaultFieldsToDisplay;
+					$_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
 				}
 
-				foreach (TicketList::getDisplayableFields() as $field=>$name) {
+				foreach (TicketTable::getDisplayableFields() as $field=>$name) {
 					if ((false === strpos($field,'Person') || Person::isAllowed('people', 'view'))
 						&& $field!='id') {
 						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';

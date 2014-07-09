@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Label $this->label
  */
+use Blossom\Classes\View;
+
 $name = View::escape($this->label->getName());
 $title = $this->label->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.label', 'labels.label', 1))

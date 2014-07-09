@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubstatusList $this->substatusList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="substatusList">
 	<h2><?php

@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Label $this->contactMethod
  */
+use Blossom\Classes\View;
+
 $name = View::escape($this->contactMethod->getName());
 $title = $this->contactMethod->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.contactMethod','labels.contactMethods',1))

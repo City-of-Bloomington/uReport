@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Blossom\Classes\View;
 ?>
 <div class="changeCategoryForm">
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeCategory">
@@ -14,7 +15,7 @@
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key = View::escape($key);
+						$key   = View::escape($key);
 						$value = View::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}

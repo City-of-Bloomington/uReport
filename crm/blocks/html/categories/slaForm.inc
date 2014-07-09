@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Blossom\Classes\View;
 ?>
 <div class="slaForm">
 	<h2><?php echo $this->translate('labels.service_level_agreement'); ?></h2>

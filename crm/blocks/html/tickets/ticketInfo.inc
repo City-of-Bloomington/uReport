@@ -6,6 +6,9 @@
  * @param Ticket $this->ticket
  * @param bool $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 $location = View::escape($this->ticket->getLocation());
 $location = $location
 	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"

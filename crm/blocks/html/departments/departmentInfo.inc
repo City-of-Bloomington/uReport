@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->department
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 $editButton = '';
 $deleteButton = '';
 if (Person::isAllowed('departments','update')) {

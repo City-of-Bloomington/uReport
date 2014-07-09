@@ -6,6 +6,7 @@
  * @param PersonList $this->personList
  * @param bool $this->disableButtons
  */
+use Blossom\Classes\Url;
 ?>
 <div class="findPeopleResults">
 	<h2><?php echo $this->translate('labels.search_results'); ?></h2>
@@ -21,7 +22,7 @@
 
 
 			// Preserve any extra parameters passed in
-			$url = new URL(BASE_URL.'/people/update');
+			$url = new Url(BASE_URL.'/people/update');
 			$fields = array('firstname','lastname','email','organization','setOfPeople');
 			foreach ($_REQUEST as $key=>$value) {
 				if (!in_array($key,$fields)) {

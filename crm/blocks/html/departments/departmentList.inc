@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param DepartmentList $this->departmentList
  */
+use Application\Models\Person;
+use Blossom\Classes\Block;
 ?>
 <div class="departmentList">
 	<h2><?php

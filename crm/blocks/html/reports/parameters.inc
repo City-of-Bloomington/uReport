@@ -6,6 +6,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\Category;
+use Application\Models\Department;
+use Application\Models\Person;
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
 $currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 ?>
 <div class="searchParameters">

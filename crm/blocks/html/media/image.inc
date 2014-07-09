@@ -10,6 +10,8 @@
  * @param Media $this->media
  * @param int $this->size
  */
+use Application\Models\Image;
+
 $mime             = $this->media->getMime_type();
 $disposition      = $this->media->getMedia_type()=='attachment' ? 'attachment' : 'inline';
 $path             = $this->media->getDirectory();

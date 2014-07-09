@@ -8,6 +8,9 @@
  * @param bool      $this->disableButtons
  * @param bool      $this->disableComments
  */
+use Application\Models\Person;
+use Blossom\Classes\Block;
+
 $addButton = '';
 if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')) {
 	$addButton = "

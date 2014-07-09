@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Application\Models\Department;
+use Blossom\Classes\View;
+
 $department = $_SESSION['USER']->getDepartment_id()
 	? $_SESSION['USER']->getDepartment()
 	: new Department();

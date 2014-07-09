@@ -10,6 +10,8 @@
  * @param Ticket $this->filterTicket A ticket to leave out of the display
  * @param string $this->moreLink
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="ticketList">
 	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate(array('labels.ticket', 'labels.tickets', 2)); ?></h2>

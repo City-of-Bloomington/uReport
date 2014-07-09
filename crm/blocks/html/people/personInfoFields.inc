@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
+use Blossom\Classes\View;
+
 $fields = array(
 	'firstname','middlename','lastname','organization'
 );
@@ -24,7 +26,7 @@ foreach ($fields as $field) {
 		// Preserve any extra parameters passed in
 		foreach ($_REQUEST as $key=>$value) {
 			if (!in_array($key,$fields)) {
-				$key = View::escape($key);
+				$key   = View::escape($key);
 				$value = View::escape($value);
 				echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 			}

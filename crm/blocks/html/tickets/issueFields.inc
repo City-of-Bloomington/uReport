@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
+use Application\Models\ContactMethodTable;
+use Application\Models\IssueTypeTable;
+use Application\Models\LabelTable;
+use Blossom\Classes\View;
 ?>
 <table>
 	<tr><td><label for="issueType_id" class="required">
@@ -14,8 +18,8 @@
 		</td>
 		<td><select name="issueType_id" id="issueType_id">
 				<?php
-					$list = new IssueTypeList();
-					$list->find();
+					$table = new IssueTypeTable();
+					$list = $table->find();
 					foreach ($list as $type) {
 						$selected = $this->issue->getIssueType_id()==$type->getId()
 							? 'selected="selected"'
@@ -45,8 +49,8 @@
 		<td><select name="contactMethod_id" id="contactMethod_id">
 				<option></option>
 				<?php
-					$contactMethods = new ContactMethodList();
-					$contactMethods->find();
+					$table = new ContactMethodTable();
+					$contactMethods = $table->find();
 					foreach ($contactMethods as $method) {
 						$selected = $this->issue->getContactMethod_id()==$method->getId()
 							? 'selected="selected"'
@@ -79,8 +83,8 @@
 	<tr><td><label><?php echo $this->translate(array('labels.label', 'labels.labels', 2)); ?></label></td>
 		<td>
 		<?php
-			$list = new LabelList();
-			$list->find();
+			$table = new LabelTable();
+			$list = $table->find();
 			foreach ($list as $label) {
 				$checked = $this->issue->hasLabel($label)
 					? 'checked="checked"'

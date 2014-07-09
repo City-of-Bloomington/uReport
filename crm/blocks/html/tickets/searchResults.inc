@@ -1,4 +1,3 @@
-<div class="searchResults">
 <?php
 /**
  * Displays a list of Tickets from a Solr response
@@ -8,6 +7,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
+use Blossom\Classes\Block;
+?>
+<div class="searchResults">
+<?php
 $c = $this->solrObject->response->numFound;
 if ($c) {
 	echo "

@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Substatus $this->substatus
  */
+use Blossom\Classes\View;
+
 $title = $this->substatus->getId() ? 'Edit Substatus' : 'Add Substatus';
 $name        = View::escape($this->substatus->getName());
 $description = View::escape($this->substatus->getDescription());

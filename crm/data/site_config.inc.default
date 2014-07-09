@@ -1,5 +1,6 @@
 <?php
 define('APPLICATION_NAME','CRM');
+define('LOCATION_NAME', 'City of Bloomington, Mark Kruzan, Mayor');
 
 /**
  * The URL to get to this site

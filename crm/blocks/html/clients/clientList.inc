@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param ClientList $this->clientList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="clientList">
 	<h2><?php
