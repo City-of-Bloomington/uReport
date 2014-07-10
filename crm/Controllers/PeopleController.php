@@ -146,7 +146,7 @@ class PeopleController extends Controller
 		$field = $listType.'Person_id';
 
 		$table = new TicketTable();
-		$tickets = $table->find(array($field=>$person->getId()), 't.enteredDate desc', 10);
+		$tickets = $table->find(array($field=>$person->getId()), 'tickets.enteredDate desc', 10);
 
 		$count = count($tickets);
 		if ($count) {
@@ -253,7 +253,7 @@ class PeopleController extends Controller
 	 */
 	private function deleteLinkedItem($item)
 	{
-		$class = ucfirst($item);
+		$class = 'Application\\Models\\'.ucfirst($item);
 
 		if (isset($_REQUEST[$item.'_id'])) {
 			try {
@@ -285,7 +285,8 @@ class PeopleController extends Controller
 	private function updateLinkedItem($item, $requiredField)
 	{
 		$this->template->setFilename('people');
-		$class = 'Application\\Models\\'.ucfirst($item);
+		$basename = ucfirst($item);
+		$class = "Application\\Models\\$basename";
 
 		if (isset($_REQUEST[$item.'_id'])) {
 			try {
@@ -322,7 +323,7 @@ class PeopleController extends Controller
 		}
 
 		$this->template->blocks['left' ][] = new Block('people/personInfo.inc',array('person'=>$object->getPerson(), 'disableButtons'=>true));
-		$this->template->blocks['right'][] = new Block("people/update{$class}Form.inc", array($item=>$object));
+		$this->template->blocks['right'][] = new Block("people/update{$basename}Form.inc", [$item=>$object]);
 	}
 	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
 	public function updatePhone()   { $this->updateLinkedItem('phone',   'number');  }

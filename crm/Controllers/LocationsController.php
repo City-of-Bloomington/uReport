@@ -7,6 +7,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Location;
+use Application\Models\Person;
 use Application\Models\TicketTable;
 
 use Blossom\Classes\Block;

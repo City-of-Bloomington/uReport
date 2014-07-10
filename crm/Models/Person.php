@@ -7,6 +7,7 @@
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
+use Blossom\Classes\ExternalIdentity;
 
 class Person extends ActiveRecord
 {
@@ -190,7 +191,8 @@ class Person extends ActiveRecord
 
 		$method = $this->getAuthenticationMethod();
 		if ($this->getUsername() && $method && $method != 'local') {
-			$identity = new $method($this->getUsername());
+			$class = "Blossom\\Classes\\$method";
+			$identity = new $class($this->getUsername());
 			$this->populateFromExternalIdentity($identity);
 		}
 	}
@@ -570,31 +572,34 @@ class Person extends ActiveRecord
 					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
 					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
 					   or m.person_id=$id or r.person_id=$id";
-			$result = $zend_db->createStatement($sql)->execute();
-			$ticketIds = $result->toArray();
+			$result = $zend_db->query($sql)->execute();
+			$ticketIds = [];
+			foreach ($result as $row) {
+				$ticketIds[] = $row['id'];
+			}
 
 			$zend_db->getDriver()->getConnection()->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$zend_db->query('update responses     set           person_id=? where           person_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update issueHistory  set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update issueHistory  set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update issues        set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update issues        set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update tickets       set   referredPerson_id=? where   referredPerson_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update responses     set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update issueHistory  set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update issueHistory  set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update issues        set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update issues        set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update tickets       set   referredPerson_id=? where   referredPerson_id=?')->execute([$this->getId(), $person->getId()]);
 
 
 				// Fields that don't hit the Solr index
-				$zend_db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
-				$zend_db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId, $person->getId()]);
+				$zend_db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
 
 				$zend_db->query('delete from people where id=?')->execute([$person->getId()]);
 			}

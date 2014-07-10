@@ -174,8 +174,8 @@ class Department extends ActiveRecord
 
 			$query = $zend_db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
 			foreach ($category_ids as $id) {
+				$query->execute([$this->getId(), $id]);
 				try {
-					$query->execute($this->getId(), $id);
 				}
 				catch (\Exception $e) {
 					// Just ignore the bad ones

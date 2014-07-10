@@ -89,6 +89,18 @@
 			<field name="lastModified">2014-07-10 16:43:01</field>
 			<field name="slaDays" xsi:nil="true" />
 		</row>
+		<row>
+			<field name="id">3</field>
+			<field name="name">Public Category</field>
+			<field name="description" xsi:nil="true" />
+			<field name="department_id">1</field>
+			<field name="categoryGroup_id">1</field>
+			<field name="displayPermissionLevel">anonymous</field>
+			<field name="postingPermissionLevel">anonymous</field>
+			<field name="customFields" xsi:nil="true" />
+			<field name="lastModified">2014-07-10 16:43:01</field>
+			<field name="slaDays" xsi:nil="true" />
+		</row>
 	</table_data>
 	<table_data name="department_categories">
 		<row>

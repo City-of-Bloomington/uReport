@@ -9,6 +9,7 @@ namespace Application\Controllers;
 use Application\Models\Category;
 use Application\Models\CategoryTable;
 use Application\Models\Ticket;
+use Application\Models\TicketTable;
 use Application\Models\Open311Client;
 
 use Blossom\Classes\Block;
@@ -168,10 +169,14 @@ class Open311Controller extends Controller
 				$p = (int)$_REQUEST['page'];
 				if ($p) { $page = $p; }
 			}
-			$tickets = new TicketList();
-			$tickets->find($search);
-			$tickets->setPagination($pageSize, $page);
+			$table = new TicketTable();
+			$tickets = $table->find($search, null, true);
+			$tickets->setCurrentPageNumber($page);
+			$tickets->setItemCountPerPage($pageSize);
 			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$tickets));
+			if ($this->template->outputFormat == 'html') {
+				$this->template->blocks[] = new Block('pageNavigation.inc', ['paginator'=>$tickets]);
+			}
 		}
 	}
 }

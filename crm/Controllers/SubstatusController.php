@@ -24,10 +24,9 @@ class SubstatusController extends Controller
 	public function index()
 	{
 		$table = new SubstatusTable();
-		$list = $table->find();
-		!empty($_REQUEST['status'])
-			? $list->find(array('status'=>$_REQUEST['status']))
-			: $list->find();
+		$list = !empty($_REQUEST['status'])
+			? $table->find(array('status'=>$_REQUEST['status']))
+			: $table->find();
 
 		$this->template->blocks[] = new Block('substatus/list.inc',array('substatusList'=>$list));
 	}

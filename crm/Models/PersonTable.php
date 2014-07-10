@@ -52,7 +52,7 @@ class PersonTable extends TableGateway
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null, $order=null, $limit=null, $groupBy=null)
+	public function find($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
 	{
 		$this->select = new Select('people');
 		if (count($fields)) {
@@ -98,7 +98,7 @@ class PersonTable extends TableGateway
 			}
 		}
 
-		return parent::performSelect($select, $order, $paginated, $limit);
+		return parent::performSelect($this->select, $order, $paginated, $limit);
 	}
 
 	/**
@@ -109,16 +109,17 @@ class PersonTable extends TableGateway
 	 * @param int $limit
 	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null, $order=null, $limit=null, $groupBy=null)
+	public function search($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
 	{
+		$this->select = new Select('people');
 		$search = array();
 		if (isset($fields['query'])) {
 			$value = trim($fields['query']).'%';
 			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
-			$this->select->where (function (Where $w) { $w->like('people.firstname', $value); })
-						->orWhere(function (Where $w) { $w->like('people.lastname' , $value); })
-						->orWhere(function (Where $w) { $w->like('email.email'     , $value); })
-						->orWhere(function (Where $w) { $w->like('people.username' , $value); });
+			$this->select->where (function (Where $w) use ($value) { $w->like('people.firstname', $value); })
+						->orWhere(function (Where $w) use ($value) { $w->like('people.lastname' , $value); })
+						->orWhere(function (Where $w) use ($value) { $w->like('email.email'     , $value); })
+						->orWhere(function (Where $w) use ($value) { $w->like('people.username' , $value); });
 		}
 		elseif (count($fields)) {
 			$this->prepareJoins($fields);
@@ -132,26 +133,26 @@ class PersonTable extends TableGateway
 						break;
 
 					case 'email':
-						$this->select->where(function (Where $w) { $w->like('email.email', "$value%"); });
+						$this->select->where(function (Where $w) use ($value) { $w->like('email.email', "$value%"); });
 						break;
 
 					case 'phoneNumber':
-						$this->select->where(function (Where $w) { $w->like('phone.number', "$value%"); });
+						$this->select->where(function (Where $w) use ($value) { $w->like('phone.number', "$value%"); });
 						break;
 
 					case 'phoneDeviceId':
-						$this->select->where(function (Where $w) { $w->like('phone.deviceId', "$value%"); });
+						$this->select->where(function (Where $w) use ($value) { $w->like('phone.deviceId', "$value%"); });
 						break;
 
 					case 'department_id':
-						$this->select->where(function (Where $w) { $w->like('people.department_id', "$value%"); });
+						$this->select->where(function (Where $w) use ($value) { $w->like('people.department_id', "$value%"); });
 						break;
 
 					case 'address':
 					case 'city':
 					case 'state':
 					case 'zip':
-						$this->select->where(function (Where $w) { $w->like("address.$key", "$value%"); });
+						$this->select->where(function (Where $w) use ($key, $value) { $w->like("address.$key", "$value%"); });
 						break;
 
 					case 'reportedTicket_id':
@@ -160,12 +161,12 @@ class PersonTable extends TableGateway
 
 					default:
 						if (in_array($key, self::$fields)) {
-							$this->select->where(function (Where $w) { $w->like("people.$key", "$value%"); });
+							$this->select->where(function (Where $w) use ($key, $value) { $w->like("people.$key", "$value%"); });
 						}
 				}
 			}
 		}
 
-		return parent::performSelect($select, $order, $paginated, $limit);
+		return parent::performSelect($this->select, $order, $paginated, $limit);
 	}
 }

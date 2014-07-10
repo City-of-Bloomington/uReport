@@ -230,15 +230,16 @@ class Category extends ActiveRecord
 	public static function getGlobalLastModifiedDate($format=null, \DateTimeZone $timezone=null)
 	{
 		$zend_db = Database::getConnection();
-		$d = $zend_db->fetchOne('select max(lastModified) from categories');
+		$result = $zend_db->query('select max(lastModified) as lastModified from categories')->execute();
+		$row = $result->current();
 
 		if ($format) {
-			$date = new \DateTime($d);
+			$date = new \DateTime($row['lastModified']);
 			if ($timezone) { $date->setTimezone($timezone); }
 			return $date->format($format);
 		}
 		else {
-			return $d;
+			return $row['lastModified'];
 		}
 	}
 }

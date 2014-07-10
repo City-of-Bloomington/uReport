@@ -7,6 +7,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Action;
+use Application\Models\AddressService;
 use Application\Models\Person;
 use Application\Models\Category;
 use Application\Models\Issue;

@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->responses
  */
+use Application\Models\Person;
 use Blossom\Classes\View;
 
 $responseButton = '';

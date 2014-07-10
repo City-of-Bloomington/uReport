@@ -38,7 +38,7 @@ $description = View::escape($this->substatus->getDescription());
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="description"><?php echo $this->translate('labels.description'); ?></label></td>
+			<tr><td><label for="description" class="required"><?php echo $this->translate('labels.description'); ?></label></td>
 				<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>
 			</tr>
 

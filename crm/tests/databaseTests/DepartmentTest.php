@@ -4,8 +4,9 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-use Application\Models\Department;
 use Application\Models\Action;
+use Application\Models\Category;
+use Application\Models\Department;
 
 require_once './DatabaseTestCase.php';
 
@@ -17,6 +18,13 @@ class DepartmentTest extends DatabaseTestCase
 	public function getDataSet()
 	{
 		return $this->createMySQLXMLDataSet(__DIR__.'/testData/departments.xml');
+	}
+
+	public function testGetCategories()
+	{
+		$department = new Department($this->unusedDepartment);
+		$categories = $department->getCategories();
+		$this->assertEquals(2, count($categories));
 	}
 
 	public function testSetActions()
@@ -54,6 +62,44 @@ class DepartmentTest extends DatabaseTestCase
         $department = new Department($this->unusedDepartment);
         $actions = $department->getActions();
         $this->assertEquals(0, count($actions));
+	}
+
+	public function testSetCategories()
+	{
+		$test    = new Category('Test Category');
+		$another = new Category('Another Category');
+
+		$department = new Department($this->unusedDepartment);
+
+		$department->setCategories([$test->getId(), $another->getId()]);
+		$categories = $department->getCategories();
+		$this->assertEquals(2, count($categories));
+		$this->assertTrue(in_array($test->getId(),    array_keys($categories)));
+		$this->assertTrue(in_array($another->getId(), array_keys($categories)));
+
+		$department->setCategories([]);
+		$categories = $department->getCategories();
+		$this->assertEquals(0, count($categories));
+	}
+
+	public function testSaveCategories()
+	{
+		$test    = new Category('Test Category');
+		$another = new Category('Another Category');
+        $department = new Department($this->unusedDepartment);
+
+        $department->saveCategories([$test->getId(), $another->getId()]);
+        $department = new Department($this->unusedDepartment);
+        $categories = $department->getCategories();
+        $this->assertEquals(2, count($categories));
+        $this->assertTrue(in_array($test->getId(),    array_keys($categories)));
+        $this->assertTrue(in_array($another->getId(), array_keys($categories)));
+
+
+        $department->saveActions([]);
+        $department = new Department($this->unusedDepartment);
+        $categories = $department->getCategories();
+        $this->assertEquals(0, count($categories));
 	}
 
 	public function testIsSafeToDelete()

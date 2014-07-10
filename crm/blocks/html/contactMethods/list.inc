@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\ContactMethodTable;
 use Application\Models\Person;
+
 use Blossom\Classes\View;
 ?>
 <div>
@@ -21,8 +23,8 @@ use Blossom\Classes\View;
 	<p><?php echo $this->translate('text.contactMethods_description'); ?></p>
 	<ul>
 	<?php
-		$list = new ContactMethodList();
-		$list->find();
+		$table = new ContactMethodTable();
+		$list = $table->find();
  		foreach ($list as $method) {
 			if (Person::isAllowed('contactMethods','update')) {
 				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',

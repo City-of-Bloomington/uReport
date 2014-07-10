@@ -15,6 +15,6 @@ class CategoryGroupTable extends TableGateway
 
 	public function find($fields=null, $order=['ordering', 'name'], $paginated=false, $limit=null)
 	{
-		return parent::find($field, $order, $paginated, $limit);
+		return parent::find($fields, $order, $paginated, $limit);
 	}
 }

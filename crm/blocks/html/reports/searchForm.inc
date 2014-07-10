@@ -6,6 +6,8 @@
  */
 use Application\Models\CategoryTable;
 use Application\Models\Department;
+use Application\Models\DepartmentTable;
+
 use Blossom\Classes\View;
 
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');

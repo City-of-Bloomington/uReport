@@ -21,6 +21,6 @@ class SubstatusTable extends TableGateway
 	 */
 	public function find($fields=null, $order='name', $paginated=false, $limit=null)
 	{
-		return parent::find($select, $order, $paginated, $limit);
+		return parent::find($fields, $order, $paginated, $limit);
 	}
 }

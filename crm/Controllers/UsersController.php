@@ -26,7 +26,8 @@ class UsersController extends Controller
 		if (!empty($_GET['department_id'])) {
 			$search['department_id'] = $_GET['department_id'];
 		}
-		$people = new PersonList($search);
+		$table = new PersonTable();
+		$people = $table->find($search);
 
 		$this->template->blocks[] = new Block('users/userList.inc',array('userList'=>$people));
 	}

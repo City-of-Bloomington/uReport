@@ -80,7 +80,9 @@ abstract class TableGateway
 			return $paginator;
 		}
 		else {
-			return $this->tableGateway->selectWith($select);
+			$result = $this->tableGateway->selectWith($select);
+			$result->buffer();
+			return $result;
 		}
 	}
 

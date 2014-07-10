@@ -21,6 +21,6 @@ class ResponseTable extends TableGateway
 	 */
 	public function find($fields=null, $order='date', $paginated=false, $limit=null)
 	{
-		return parent::find($select, $order, $paginated, $limit);
+		return parent::find($fields, $order, $paginated, $limit);
 	}
 }

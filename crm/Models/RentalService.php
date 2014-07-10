@@ -12,6 +12,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+use Blossom\Classes\Url;
 
 class RentalService
 {
@@ -27,7 +28,7 @@ class RentalService
 
 		$location = urlencode($location);
 		$url = RENTAL_SERVICE."?streetAddress=$location&type=xml";
-		$xml = simplexml_load_string(URL::get($url));
+		$xml = simplexml_load_string(Url::get($url));
 		$owners = $xml->xpath("//Owner");
 		if (count($owners)) {
 			foreach ($owners as $owner) {

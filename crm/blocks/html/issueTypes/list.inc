@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-use Application\Models\issueTypeTable;
+use Application\Models\IssueTypeTable;
 use Application\Models\Person;
 use Blossom\Classes\View;
 ?>
@@ -21,7 +21,7 @@ use Blossom\Classes\View;
 	</h2>
 	<ul>
 	<?php
-		$t = new issueTypeTable();
+		$t = new IssueTypeTable();
 		$list = $t->find();
  		foreach ($list as $type) {
 			if (Person::isAllowed('issueTypes','update')) {
