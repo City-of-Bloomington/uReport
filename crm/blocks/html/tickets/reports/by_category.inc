@@ -5,11 +5,18 @@
  * If categories are chosen in the search, we only display those categories.
  * If categories are not chosen, we will go through all the categories in the system
  *
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
 * @param array $this->sort (optional) A mongo array that defines the sort
  */
+use Application\Models\Category;
+use Application\Models\CategoryTable;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
+
 if (isset($_GET['category'])) {
 	// Remove all the requested categories from the search
 	// Later, we'll do a search using each one, one at a time
@@ -17,8 +24,8 @@ if (isset($_GET['category'])) {
 	unset($_GET['category']);
 }
 else {
-	$categories = new CategoryList();
-	$categories->find();
+	$t = new CategoryTable();
+	$categories = $t->find();
 }
 
 // Make sure Ticket Number is always displayed
@@ -45,8 +52,8 @@ echo "
 
 		$_GET['category'] = "{$category->getId()}";
 
-		$ticketList = new TicketList();
-		$ticketList->findRawData($_GET);
+		$table = new TicketTable();
+		$ticketList = $table->findRawData($_GET);
 		$count = count($ticketList);
 
 		if ($count) {

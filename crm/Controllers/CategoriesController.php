@@ -12,6 +12,7 @@ use Application\Models\CategoryTable;
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
 use Blossom\Classes\Template;
+use Blossom\Classes\Url;
 
 class CategoriesController extends Controller
 {
@@ -86,8 +87,8 @@ class CategoriesController extends Controller
 	public function choose()
 	{
 		$return_url = !empty($_GET['return_url'])
-			? new URL($_GET['return_url'])
-			: new URL(BASE_URL.'/categories/view');
+			? new Url($_GET['return_url'])
+			: new Url(BASE_URL.'/categories/view');
 
 		$t = new CategoryTable();
 		$categoryList = $t->find(null, 'categories.name');

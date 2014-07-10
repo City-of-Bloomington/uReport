@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
@@ -8,6 +8,7 @@
  */
 use Application\Models\Person;
 use Blossom\Classes\View;
+use Blossom\Classes\Url;
 
 $location = View::escape($this->ticket->getLocation());
 $location = $location
@@ -15,7 +16,7 @@ $location = $location
 	: '';
 
 if (Person::isAllowed('people','view')) {
-	$url = new URL(BASE_URL.'/people/view.php');
+	$url = new Url(BASE_URL.'/people/view.php');
 	$personFields = array('enteredBy','assigned','referred');
 	foreach ($personFields as $field) {
 		$$field = '';

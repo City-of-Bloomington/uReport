@@ -6,6 +6,9 @@
  * @param Issue $this->issue
  * @param bool  $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 $editButton     = '';
 $deleteButton   = '';
 

@@ -5,6 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
+use Application\Models\Person;
+use Application\Models\Search;
+use Application\Models\TicketTable;
+use Blossom\Classes\Url;
 echo "
 <table>
 <thead>
@@ -21,8 +25,8 @@ echo "
 				: 'desc';
 		}
 
-		$url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		$displayableFields = TicketList::getDisplayableFields();
+		$url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$displayableFields = TicketTable::getDisplayableFields();
 		$sortableFields = Search::$sortableFields['ticket'];
 
 		// Loop through all the fields the user asked to see
@@ -30,7 +34,7 @@ echo "
 		// or whatever the browser gives to checkboxes when you post a form.
 		// We'll loop through all of the fieldnames that were checked
 		if (!isset($_GET['fields'])) {
-			$_GET['fields'] = TicketList::$defaultFieldsToDisplay;
+			$_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
 		}
 		foreach ($_GET['fields'] as $name => $checked) {
 			// Make sure they're allowed to see this field

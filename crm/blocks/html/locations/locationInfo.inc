@@ -8,9 +8,10 @@
  */
 use Application\Models\Person;
 use Blossom\Classes\View;
+use Blossom\Classes\Url;
 
 if ($this->location) {
-	$url = new URL(BASE_URL.'/locations/view?location='.$this->location);
+	$url = new Url(BASE_URL.'/locations/view?location='.$this->location);
 	$location = View::escape($this->location);
 
 	$addTicketButton = '';

@@ -11,6 +11,7 @@
  * @param string $this->moreLink
  */
 use Application\Models\Person;
+use Blossom\Classes\Url;
 use Blossom\Classes\View;
 ?>
 <div class="ticketList">
@@ -65,7 +66,7 @@ use Blossom\Classes\View;
 					if (!$this->disableButtons
 							&& Person::isAllowed('issues','update')
 							&& $ticket->getStatus()!=='closed') {
-						$url = new URL(BASE_URL.'/issues/update');
+						$url = new Url(BASE_URL.'/issues/update');
 						$url->ticket_id = "{$ticket->getId()}";
 						if (isset($_GET['person_id'])) {
 							try {

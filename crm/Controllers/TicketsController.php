@@ -447,7 +447,7 @@ class TicketsController extends Controller
 			}
 		}
 
-		$_REQUEST['return_url'] = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$this->template->setFilename('tickets');
 		$this->template->blocks['ticket-panel'][] = new Block(
 			'locations/findLocationForm.inc',
@@ -568,7 +568,7 @@ class TicketsController extends Controller
 	private function redirectToTicketView(Ticket $ticket)
 	{
 		if (isset($_REQUEST['callback'])) {
-			$return_url = new URL(BASE_URL.'/callback');
+			$return_url = new Url(BASE_URL.'/callback');
 			$return_url->callback = $_REQUEST['callback'];
 		}
 		else {

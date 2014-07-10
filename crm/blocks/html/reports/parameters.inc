@@ -9,9 +9,12 @@
 use Application\Models\Category;
 use Application\Models\Department;
 use Application\Models\Person;
+
 use Blossom\Classes\Block;
 use Blossom\Classes\View;
-$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+use Blossom\Classes\Url;
+
+$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 ?>
 <div class="searchParameters">
 	<?php
