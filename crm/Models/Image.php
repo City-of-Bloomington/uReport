@@ -109,7 +109,6 @@ class Image extends Media
 	 */
 	public function getWidth($size=null)
 	{
-		echo $this->getFullPathForSize($size)."\n";
 		return exec(IMAGEMAGICK."/identify -format '%w' ".$this->getFullPathForSize($size));
 	}
 

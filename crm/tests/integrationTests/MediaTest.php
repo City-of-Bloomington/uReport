@@ -65,7 +65,6 @@ class MediaTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse(file_exists($image->getFullPathForSize($this->testSize)));
 
 			$url = $image->getURL($this->testSize);
-			echo "$url\n";
 			$request = curl_init($image->getURL($this->testSize));
 			curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($request, CURLOPT_BINARYTRANSFER, true);
@@ -73,11 +72,8 @@ class MediaTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue(file_exists($temp));
 
 			$info = getimagesize($temp);
-			echo "*";
-			print_r($info);
-			echo "*";
 
-			#$this->assertTrue(($info[0]==$this->testSize || $info[1]==$this->testSize));
+			$this->assertTrue(($info[0]==$this->testSize || $info[1]==$this->testSize));
 
 			#if (file_exists($temp)) { unlink($temp); }
 		}
