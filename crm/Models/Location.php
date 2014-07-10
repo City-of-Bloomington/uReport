@@ -41,7 +41,7 @@ class Location
 					count(*) as ticketCount
 					from tickets where location like ?
 					group by location, addressId, city";
-			$q = $zend_db->fetchAll($sql, array("$crm_query%"));
+			$q = $zend_db->query($sql)->execute(["$crm_query%"]);
 			foreach ($q as $row) {
 				$results[$row['location']] = $row;
 			}

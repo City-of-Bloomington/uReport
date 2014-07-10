@@ -27,7 +27,7 @@ class Image extends Media
 	public function output($size)
 	{
 		// If they don't specify size, just output the opriginal file
-		$directory    = CRM_DATA_HOME."/data/media/{$this->getDirectory()}";
+		$directory    = SITE_HOME."/media/{$this->getDirectory()}";
 		$original = $this->getInternalFilename();
 		if (!$size) {
 			readfile("$directory/$original");
@@ -79,14 +79,14 @@ class Image extends Media
 	public function clearCache()
 	{
 		$uniqid = preg_replace('/[^.]+$/', '', $this->getInternalFilename());
-		$pattern = CRM_DATA_HOME."/data/media/{$this->getDirectory()}/*/$uniqid*";
+		$pattern = SITE_HOME."/media/{$this->getDirectory()}/*/$uniqid*";
 
 		foreach(glob($pattern) as $file) {
 			unlink($file);
 		}
 	}
 
-	private function getFullPathForSize($size=null)
+	public function getFullPathForSize($size=null)
 	{
 		$size = (int)$size;
 
@@ -94,11 +94,11 @@ class Image extends Media
 		$filename = $matches[1];
 
 		if ($size) {
-			return "{$this->getDirectory()}/$size/$filename.png";
+			return SITE_HOME."/media/{$this->getDirectory()}/$size/$filename.png";
 		}
 		else {
 			// Return the size of the original
-			return "{$this->getDirectory()}/{$this->getInternalFilename()}";
+			return SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
 		}
 	}
 
@@ -109,6 +109,7 @@ class Image extends Media
 	 */
 	public function getWidth($size=null)
 	{
+		echo $this->getFullPathForSize($size)."\n";
 		return exec(IMAGEMAGICK."/identify -format '%w' ".$this->getFullPathForSize($size));
 	}
 

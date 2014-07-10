@@ -47,7 +47,7 @@ class Report
 				order by p.lastname, p.firstname, c.name, t.status, t.substatus_id";
 
 		$zend_db = Database::getConnection();
-		$result = $zend_db->fetchAll($sql);
+		$result = $zend_db->query($sql)->execute();
 		$d = array();
 		foreach ($result as $r) {
 			$pid = $r['assignedPerson_id'];
@@ -87,7 +87,7 @@ class Report
 				order by c.name, p.lastname, p.firstname, t.status desc, t.substatus_id";
 		$zend_db = Database::getConnection();
 		$d = array();
-		$result = $zend_db->fetchAll($sql);
+		$result = $zend_db->query($sql)->execute();
 		foreach ($result as $r) {
 			$cid = $r['category_id'];
 			$pid = $r['assignedPerson_id'];
@@ -166,6 +166,9 @@ class Report
 		}
 	}
 
+	/**
+	 * @return Zend\Db\ResultSet
+	 */
 	public static function currentOpenTickets()
 	{
 		$sql = "select t.category_id, c.name as category, sum(status='open') as open
@@ -175,13 +178,13 @@ class Report
 				having open>0
 				order by open";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
 	/**
 	 * Returns the tickets opened in the past 24 hours
 	 *
-	 * @return array
+	 * @return Zend\Db\ResultSet
 	 */
 	public static function openedTickets()
 	{
@@ -193,13 +196,13 @@ class Report
 				having open>0
 				order by open";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
 	/**
 	 * Returns the tickets closed in the past 24 hours
 	 *
-	 * @return array
+	 * @return Zend\Db\ResultSet
 	 */
 	public static function closedTickets()
 	{
@@ -211,7 +214,7 @@ class Report
 				group by t.category_id
 				order by closed";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
 	/**
@@ -221,7 +224,7 @@ class Report
 	 *
 	 * @param string $start
 	 * @param string $end
-	 * @return array
+	 * @return Zend\Db\ResultSet
 	 */
 	public static function openTicketsCount($start, $end)
 	{
@@ -233,7 +236,7 @@ class Report
 				group by date
 				order by date";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
 	/**
@@ -243,7 +246,7 @@ class Report
 	 *
 	 * @param string $start
 	 * @param string $end
-	 * @return array ('date'=>xx, 'closed'=>xx)
+	 * @return Zend\Db\ResultSet ('date'=>xx, 'closed'=>xx)
 	 */
 	public static function closedTicketsCount($start, $end)
 	{
@@ -256,9 +259,12 @@ class Report
 				group by date
 				order by date";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
+	/**
+	 * @return Zend\Db\ResultSet
+	 */
 	public static function categoryActivity()
 	{
 		$closed = self::closedId();
@@ -276,7 +282,7 @@ class Report
 				group by t.category_id
 				order by currentopen desc";
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchAll($sql);
+		return $zend_db->query($sql)->execute();
 	}
 
 
@@ -305,7 +311,9 @@ class Report
 			$sql.= " and p.department_id in ($ids)";
 		}
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchOne($sql, array($date, $date));
+		$result = $zend_db->query($sql)->execute([$date, $date]);
+		$row = $result->current();
+		return $row['count'];
 	}
 
 	/**
@@ -334,7 +342,9 @@ class Report
 			$sql.= " and p.department_id in ($ids)";
 		}
 		$zend_db = Database::getConnection();
-		return $zend_db->fetchOne($sql, array($date, $date));
+		$result = $zend_db->query($sql)->execute([$date, $date]);
+		$row = $result->current();
+		return $row['slaPercentage'];
 	}
 
 	/**

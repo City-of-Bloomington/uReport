@@ -64,7 +64,7 @@ class Media extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
@@ -79,14 +79,13 @@ class Media extends ActiveRecord
 					$id = "$filename%";
 					$sql = 'select * from media where internalFilename like ?';
 				}
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('media/unknownMedia');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('media/unknownMedia');
+				}
 			}
 		}
 		else {
@@ -119,7 +118,7 @@ class Media extends ActiveRecord
 	 */
 	public function delete()
 	{
-		unlink(CRM_DATA_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		unlink(SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 		parent::delete();
 	}
 	//----------------------------------------------------------------
@@ -133,13 +132,13 @@ class Media extends ActiveRecord
 	public function getPerson_id()  { return parent::get('person_id');  }
 	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
 
-	public function getIssue()  { return parent::getForeignKeyObject('Issue',  'issue_id');  }
-	public function getPerson() { return parent::getForeignKeyObject('Person', 'person_id'); }
+	public function getIssue()  { return   parent::getForeignKeyObject(__namespace__.'\Issue',  'issue_id');  }
+	public function getPerson() { return   parent::getForeignKeyObject(__namespace__.'\Person', 'person_id'); }
 
-	public function setIssue_id ($id)    { parent::setForeignKeyField ('Issue',  'issue_id',  $id); }
-	public function setPerson_id($id)    { parent::setForeignKeyField ('Person', 'person_id', $id); }
-	public function setIssue (Issue  $o) { parent::setForeignKeyObject('Issue',  'issue_id',  $o);  }
-	public function setPerson(Person $o) { parent::setForeignKeyObject('Person', 'person_id', $o);  }
+	public function setIssue_id ($id)    { parent::setForeignKeyField (__namespace__.'\Issue',  'issue_id',  $id); }
+	public function setPerson_id($id)    { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
+	public function setIssue (Issue  $o) { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o);  }
+	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o);  }
 	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 
 
@@ -184,10 +183,10 @@ class Media extends ActiveRecord
 
 		// Move the file where it's supposed to go
 		$directory = $this->getDirectory();
-		if (!is_dir(CRM_DATA_HOME."/data/media/$directory")) {
-			mkdir  (CRM_DATA_HOME."/data/media/$directory",0777,true);
+		if (!is_dir(SITE_HOME."/media/$directory")) {
+			mkdir  (SITE_HOME."/media/$directory",0777,true);
 		}
-		$newFile  = CRM_DATA_HOME."/data/media/$directory/{$this->getInternalFilename()}";
+		$newFile  = SITE_HOME."/media/$directory/{$this->getInternalFilename()}";
 		rename($tempFile, $newFile);
 		chmod($newFile, 0666);
 
@@ -198,9 +197,9 @@ class Media extends ActiveRecord
 	}
 
 	/**
-	 * Returns the path of the file, relative to /data/media
+	 * Returns the path of the file, relative to SITE_HOME/media
 	 *
-	 * Media is stored in the data directory, outside of the web directory
+	 * Media is stored in the SITE_HOME directory, outside of the web directory
 	 * This variable only contains the partial path.
 	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
 	 *
@@ -262,7 +261,7 @@ class Media extends ActiveRecord
 	 */
 	public function getFilesize()
 	{
-		return filesize(CRM_DATA_HOME."/data/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		return filesize(SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
 	}
 
 	/**

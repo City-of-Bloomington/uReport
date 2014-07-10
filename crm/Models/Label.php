@@ -27,21 +27,20 @@ class Label extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from labels where id=?'
 					: 'select * from labels where name=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('labels/unknownLabel');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('labels/unknownLabel');
+				}
 			}
 		}
 		else {

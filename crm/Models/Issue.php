@@ -48,7 +48,6 @@ class Issue extends ActiveRecord
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from issues where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
                 $result = $zend_db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
                     $this->exchangeArray($result->current());
@@ -188,7 +187,8 @@ class Issue extends ActiveRecord
 	public function getLabels()
 	{
 		if (!count($this->labels) && $this->getId()) {
-			$list = new LabelList(array('issue_id'=>$this->getId()));
+			$table = new LabelTable();
+			$list = $table->find(['issue_id' => $this->getId()]);
 			foreach ($list as $label) {
 				$this->labels[$label->getId()] = $label;
 			}
@@ -254,11 +254,12 @@ class Issue extends ActiveRecord
 	}
 
 	/**
-	 * @return MediaList
+	 * @return Zend\Db\ResultSet
 	 */
 	public function getMedia()
 	{
-		return new MediaList(array('issue_id'=>$this->getId()));
+		$table = new MediaTable();
+		return $table->find(['issue_id' => $this->getId()]);
 	}
 
 	/**
@@ -278,10 +279,11 @@ class Issue extends ActiveRecord
 	}
 
 	/**
-	 * @return ResponseList
+	 * @return Zend\Db\ResultSet
 	 */
 	public function getResponses()
 	{
-		return new ResponseList(array('issue_id'=>$this->getId()));
+		$table = new ResponseTable();
+		return $table->find(['issue_id' => $this->getId()]);
 	}
 }

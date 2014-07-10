@@ -27,21 +27,20 @@ class Substatus extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$sql = ActiveRecord::isId($id)
 					? 'select * from substatus where id=?'
 					: 'select * from substatus where name=?';
 				$zend_db = Database::getConnection();
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('substatus/unknownSubstatus');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('substatus/unknownSubstatus');
+				}
 			}
 		}
 		else {

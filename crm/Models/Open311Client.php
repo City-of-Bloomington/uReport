@@ -87,7 +87,8 @@ class Open311Client
 		}
 		// If the user provided any personal info, do a person search
 		if (count($search)) {
-			$list = new PersonList($search);
+			$table = new PersonTable();
+			$list = $table->find($search);
 			// When we find one and only one record, use the record we found
 			if (count($list) == 1) { $person = $list[0]; }
 			// Otherwise, create a new person record

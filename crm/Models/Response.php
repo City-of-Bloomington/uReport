@@ -4,6 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Models;
+
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\Database;
+
 class Response extends ActiveRecord
 {
 	protected $tablename = 'responses';
@@ -28,19 +33,18 @@ class Response extends ActiveRecord
 	{
 		if ($id) {
 			if (is_array($id)) {
-				$result = $id;
+				$this->exchangeArray($id);
 			}
 			else {
 				$zend_db = Database::getConnection();
 				$sql = 'select * from responses where id=?';
-				$result = $zend_db->fetchRow($sql, array($id));
-			}
-
-			if ($result) {
-				$this->data = $result;
-			}
-			else {
-				throw new \Exception('responses/unknownResponse');
+				$result = $zend_db->createStatement($sql)->execute([$id]);
+				if (count($result)) {
+					$this->exchangeArray($result->current());
+				}
+				else {
+					throw new \Exception('responses/unknownResponse');
+				}
 			}
 		}
 		else {
@@ -80,16 +84,16 @@ class Response extends ActiveRecord
 	public function getIssue_id()         { return parent::get('issue_id');         }
 	public function getContactMethod_id() { return parent::get('contactMethod_id'); }
 	public function getPerson_id()        { return parent::get('person_id');        }
-	public function getIssue()         { return parent::getForeignKeyObject('Issue',         'issue_id');         }
-	public function getContactMethod() { return parent::getForeignKeyObject('ContactMethod', 'contactMethod_id'); }
-	public function getPerson()        { return parent::getForeignKeyObject('Person',        'person_id');        }
+	public function getIssue()         { return parent::getForeignKeyObject(__namespace__.'\Issue',         'issue_id');         }
+	public function getContactMethod() { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id'); }
+	public function getPerson()        { return parent::getForeignKeyObject(__namespace__.'\Person',        'person_id');        }
 
-	public function setIssue_id        ($id) { parent::setForeignKeyField('Issue',         'issue_id',         $id); }
-	public function setContactMethod_id($id) { parent::setForeignKeyField('ContactMethod', 'contactMethod_id', $id); }
-	public function setPerson_id       ($id) { parent::setForeignKeyField('Person',        'person_id',        $id); }
-	public function setIssue        (Issue         $o) { parent::setForeignKeyObject('Issue',         'issue_id',         $o); }
-	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject('ContactMethod', 'contactMethod_id', $o); }
-	public function setPerson       (Person        $o) { parent::setForeignKeyObject('Person',        'person_id',        $o); }
+	public function setIssue_id        ($id) { parent::setForeignKeyField(__namespace__.'\Issue',         'issue_id',         $id); }
+	public function setContactMethod_id($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id', $id); }
+	public function setPerson_id       ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'person_id',        $id); }
+	public function setIssue        (Issue         $o) { parent::setForeignKeyObject(__namespace__.'\Issue',         'issue_id',         $o); }
+	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id', $o); }
+	public function setPerson       (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'person_id',        $o); }
 
 	/**
 	 * @param array $post

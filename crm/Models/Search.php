@@ -441,7 +441,7 @@ class Search
 			}
 			elseif (false !== strpos($fieldname, '_id')) {
 				try {
-					$class = ucfirst(substr($fieldname, 0, -3));
+					$class = 'Application\\Models\\'.ucfirst(substr($fieldname, 0, -3));
 					$o = new $class($value);
 					return $o->getName();
 				}

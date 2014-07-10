@@ -2,7 +2,7 @@
 /**
  * Helper class for URL handling.  Parses URLs and allows adding parameters from variables.
  *
- * $url = new URL('/path/to/webpage.php?initialParameter=whatever');
+ * $url = new Url('/path/to/webpage.php?initialParameter=whatever');
  * $url->parameters['somevar'] = $somevar;
  * $url->somevar = $somevar;
  * echo $url->getURL();
