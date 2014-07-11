@@ -1,19 +1,22 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param ClientList $this->clientList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="clientList">
 	<h2><?php
 			echo $this->translate(array('labels.client', 'labels.clients', 2));
-			if (userIsAllowed('clients','update')) {
-				echo sprintf(
-					'<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+			if (Person::isAllowed('clients','update')) {
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/clients/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -21,23 +24,23 @@
 	<p><?php echo $this->translate('text.clients_description'); ?>	</p>
 	<?php
 		foreach ($this->clientList as $client) {
-			$editButton = '';
+			$editButton   = '';
 			$deleteButton = '';
-			if (userIsAllowed('clients','update')) {
-				$editButton = sprintf(
-					'<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+			if (Person::isAllowed('clients','update')) {
+				$editButton = $helper->buttonLink(
 					BASE_URI.'/clients/update?client_id='.$client->getId(),
-					$this->translate('labels.edit')
+					$this->translate('labels.edit'),
+					'edit'
 				);
-				$deleteButton = sprintf(
-					'<a class="btn" href="%s"><span class="icon-remove"></span> %s</a>',
+				$deleteButton = $helper->buttonLink(
 					BASE_URI.'/clients/delete?client_id='.$client->getId(),
-					$this->translate('labels.delete')
+					$this->translate('labels.delete'),
+					'delete'
 				);
 			}
-			$name = View::escape($client->getName());
-			$url = $client->getURL();
-			$contact = $client->getContactPerson();
+			$url         = $client->getURL();
+			$contact     = $client->getContactPerson();
+			$name        = View::escape($client->getName());
 			$contactName = View::escape($contact->getFullname());
 			echo "
 			<div>

@@ -13,7 +13,7 @@ header('Content-type: text/json; charset=utf-8');
 if (isset($_GET['callback'])) {
 	echo $_GET['callback'].'(';
 }
-include FRAMEWORK.'/errorMessages.php';
+include BLOSSOM.'/errorMessages.php';
 echo $this->includeBlocks();
 if (isset($_GET['callback'])) {
 	echo ');';

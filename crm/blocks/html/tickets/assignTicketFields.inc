@@ -6,6 +6,9 @@
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
+use Application\Models\Department;
+use Blossom\Classes\View;
+
 // There may not be a currentDepartment.
 // This can happen when the current user is not in a department
 $currentDepartment = $this->currentDepartment ? $this->currentDepartment : new Department();

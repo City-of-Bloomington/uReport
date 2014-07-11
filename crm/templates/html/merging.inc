@@ -14,7 +14,7 @@
 
 	<div id="panel-container">
 		<?php
-			include FRAMEWORK.'/errorMessages.php';
+			include BLOSSOM.'/errorMessages.php';
 			echo $this->includeBlocks();
 		?>
 		<div id="left">

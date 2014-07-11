@@ -5,12 +5,18 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
+use Application\Models\Person;
+use Application\Models\Search;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\View;
+
 $tickets = Search::hydrateDocs($this->solrObject);
 echo '<div class="searchResultsRows">';
 foreach ($tickets as $ticket) {
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
-	$displayableFields = TicketList::getDisplayableFields();
+	$displayableFields = TicketTable::getDisplayableFields();
 	$additionalFields = $ticket->getAdditionalFields();
 	// Create empty variables needed for the final markup
 	foreach (array( 'status', 'substatus_id',
@@ -24,7 +30,7 @@ foreach ($tickets as $ticket) {
 	foreach ($_GET['fields'] as $field=>$value) {
 		// Make sure the user is allowed to see this field
 		if (array_key_exists($field, $displayableFields)
-			&& (false === strpos($field,'Person') || userIsAllowed('people'))) {
+			&& (false === strpos($field,'Person') || Person::isAllowed('people'))) {
 			// Format the data being asked for
 			$get = 'get'.ucfirst($field);
 			switch ($field) {

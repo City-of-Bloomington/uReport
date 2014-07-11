@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueType $this->issueType
  */
+use Blossom\Classes\View;
+
 $name = View::escape($this->issueType->getName());
 $title = $this->issueType->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.issueType', 'labels.issueTypes', 1))

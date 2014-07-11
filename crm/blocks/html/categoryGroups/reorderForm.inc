@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\CategoryGroupTable;
+use Blossom\Classes\View;
 ?>
 <div class="categoryGroupReportForm">
 	<h2><?php
@@ -20,8 +22,8 @@
 			</thead>
 			<tbody>
 			<?php
-				$groups = new CategoryGroupList();
-				$groups->find();
+				$t = new CategoryGroupTable();
+				$groups = $t->find();
 				foreach ($groups as $group) {
 					$name = View::escape($group->getName());
 					$order = (int)$group->getOrdering();

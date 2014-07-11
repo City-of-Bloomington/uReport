@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
+use Blossom\Classes\View;
+
 $name = View::escape($this->category->getName());
 echo "
 <div class=\"serviceInfo\">

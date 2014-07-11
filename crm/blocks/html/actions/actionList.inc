@@ -1,16 +1,21 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\ActionTable;
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="interfaceBox">
 	<h2><?php
-			if (userIsAllowed('actions','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+			if (Person::isAllowed('actions','update')) {
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/actions/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -26,19 +31,20 @@
 		</thead>
 		<tbody>
 		<?php
-			$list = new ActionList();
-			$list->find();
+			$t = new ActionTable();
+			$list = $t->find();
 			foreach ($list as $action) {
 				$editButton = '';
-				if (userIsAllowed('actions','update') && $action->getType()!='system') {
-					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+				if (Person::isAllowed('actions','update') && $action->getType()!='system') {
+					$editButton = $helper->buttonLink(
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
-						$this->translate('labels.edit')
+						$this->translate('labels.edit'),
+						'edit'
 					);
 				}
-				$name = View::escape($action->getName());
+				$name        = View::escape($action->getName());
 				$description = View::escape($action->getDescription());
-				$type = View::escape($action->getType());
+				$type        = View::escape($action->getType());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>

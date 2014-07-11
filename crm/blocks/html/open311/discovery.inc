@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\Category;
+
 $lastModified = Category::getGlobalLastModifiedDate('c');
 ?>
 <h1>Service Discovery</h1>

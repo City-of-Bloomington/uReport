@@ -10,6 +10,9 @@
  * @param Ticket $this->filterTicket A ticket to leave out of the display
  * @param string $this->moreLink
  */
+use Application\Models\Person;
+use Blossom\Classes\Url;
+use Blossom\Classes\View;
 ?>
 <div class="ticketList">
 	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate(array('labels.ticket', 'labels.tickets', 2)); ?></h2>
@@ -61,9 +64,9 @@
 					<td>
 				";
 					if (!$this->disableButtons
-							&& userIsAllowed('issues','update')
+							&& Person::isAllowed('issues','update')
 							&& $ticket->getStatus()!=='closed') {
-						$url = new URL(BASE_URL.'/issues/update');
+						$url = new Url(BASE_URL.'/issues/update');
 						$url->ticket_id = "{$ticket->getId()}";
 						if (isset($_GET['person_id'])) {
 							try {
@@ -74,9 +77,11 @@
 								// Just ignore invalid people
 							}
 						}
-						echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+						$helper = $this->template->getHelper('buttonLink');
+						echo $helper->buttonLink(
 							$url,
-							$this->translate('labels.add_issue')
+							$this->translate('labels.add_issue'),
+							'add'
 						);
 					}
 				echo "
@@ -92,7 +97,7 @@
 			echo "
 			<div>
 				<a href=\"{$this->moreLink}\">
-					{$this->translate('labels.more')} <span class=\"icon-double-angle-right\"></span>
+					{$this->translate('labels.more')} <span class=\"fa fa-angle-double-right\"></span>
 				</a>
 			</div>
 			";

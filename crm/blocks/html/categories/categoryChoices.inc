@@ -14,6 +14,7 @@
  * @param CategoryList $this->categoryList
  * @param URL $this->return_url
  */
+use Blossom\Classes\View;
 echo "
 <div class=\"categoryChoices\">
 	<h2>{$this->translate('messages.choose_category')}</h2>

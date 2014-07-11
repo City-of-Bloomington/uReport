@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\Report;
+use Blossom\Classes\ActiveRecord;
+use Blossom\Classes\View;
+
 $h = $this->template->getHelper('formatDuration');
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URI.'/js/reports/activityCharts.js');

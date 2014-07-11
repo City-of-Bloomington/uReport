@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroup $this->categoryGroup
  */
+use Blossom\Classes\View;
+
 $title = $this->categoryGroup->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1))
 	: $this->translate('labels.add' ).' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1));

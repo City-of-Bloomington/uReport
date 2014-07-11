@@ -1,21 +1,25 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
+use Application\Models\TicketTable;
+use Blossom\Classes\Block;
+use Blossom\Classes\Url;
+
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/choosePerson.js');
 
-$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 $url = BASE_URL."/people?return_url=$return_url";
 echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
 		<h3>{$this->translate('labels.reportedByPerson')}</h3>
 		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
-			<span class=\"icon-user\"></span>
+			<span class=\"fa fa-user\"></span>
 			{$this->translate('labels.find_person')}
 		</a>
 	</div>
@@ -30,8 +34,8 @@ echo "
 		echo $block->render('html', $this->template);
 
 
-		$reportedTickets = new TicketList();
-		$reportedTickets->find(array('reportedByPerson_id'=>$person->getId()), null, 10);
+		$table = new TicketTable();
+		$reportedTickets = $table->find(array('reportedByPerson_id'=>$person->getId()), null, 10);
 		if (count($reportedTickets)) {
 			$block = new Block(
 				'tickets/ticketList.inc',

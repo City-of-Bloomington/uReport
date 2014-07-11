@@ -18,6 +18,14 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+namespace Application\Templates\Helpers;
+
+use Application\Models\Person;
+
+use Blossom\Classes\Template;
+use Blossom\Classes\Url;
+use Blossom\Classes\View;
+
 class PersonChooser
 {
 	private $template;
@@ -43,7 +51,7 @@ class PersonChooser
 			$id   = $person->getId();
 			$name = View::escape($person->getFullname());
 		}
-		$return_url = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$personChooser = BASE_URI.'/people?return_url='.$return_url;
 
 		$html = "
@@ -52,7 +60,7 @@ class PersonChooser
 		<a class=\"btn\"
 			href=\"$personChooser\"
 			onclick=\"PERSON_CHOOSER.open('$fieldname');return false;\">
-			<span class=\"icon-user\"></span>
+			<span class=\"fa fa-user\"></span>
 			Change Person
 		</a>
 		";

@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2009-2013 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  */
+use Blossom\Classes\View;
+use Blossom\Classes\Url;
 ?>
 <div class="personList interfaceBox">
 	<h2><?php echo $this->translate(array('labels.person', 'labels.people', 2)); ?></h2>
@@ -20,7 +22,7 @@
 		<?php
 			foreach ($this->personList as $person) {
 				if (isset($_REQUEST['return_url'])) {
-					$url = new URL($_REQUEST['return_url']);
+					$url = new Url($_REQUEST['return_url']);
 					$url->person_id = "{$person->getId()}";
 					foreach ($_REQUEST as $key=>$value) {
 						if ($value && $key!='ticket_id' && $key!='return_url') {

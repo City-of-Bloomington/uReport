@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->title
  */
+use Blossom\Classes\View;
 ?>
 <div class="findLocationForm">
 	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate('labels.find_location'); ?></h2>

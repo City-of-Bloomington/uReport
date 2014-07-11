@@ -8,8 +8,8 @@
 $days = $this->ticket->getSlaDays();
 if ($days) {
 	$status = $this->ticket->getStatus();
-	$dateEntered = new DateTime($this->ticket->getEnteredDate());
-	$targetDate = $status=='open' ? new DateTime() : new DateTime($this->ticket->getClosedDate());
+	$dateEntered = new \DateTime($this->ticket->getEnteredDate());
+	$targetDate = $status=='open' ? new \DateTime() : new \DateTime($this->ticket->getClosedDate());
 	$diff = $targetDate->diff($dateEntered);
 	$daysPassed = $diff->format('%a');
 

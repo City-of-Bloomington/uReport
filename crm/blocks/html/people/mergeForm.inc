@@ -29,7 +29,7 @@
 				<input name="person_id_b" type="hidden" value="<?php echo $this->personB->getId(); ?>" />
 			</div>
 			<button type="submit">
-				<span class="icon-ok"></span>
+				<span class="fa fa-check"></span>
 				<?php echo $this->translate('labels.submit'); ?>
 			</button>
 		</fieldset>

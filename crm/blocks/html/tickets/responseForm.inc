@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
+use Application\Models\ContactMethodTable;
+use Blossom\Classes\View;
 ?>
 <div class="responseForm">
 	<h2><?php echo $this->translate('labels.add_response'); ?></h2>
@@ -18,8 +20,8 @@
 					</td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
 						<?php
-							$list = new ContactMethodList();
-							$list->find();
+							$table = new contactMethodTable();
+							$list = $table->find();
 							foreach ($list as $method) {
 								$name = View::escape($method->getName());
 								$selected = $method->getId() == $this->issue->getContactMethod_id()

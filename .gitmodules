@@ -1,12 +1,12 @@
 [submodule "crm/libraries/phpCAS"]
 	path = crm/libraries/phpCAS
 	url = https://github.com/Jasig/phpCAS.git
-[submodule "crm/libraries/zf1"]
-	path = crm/libraries/zf1
-	url = https://github.com/zendframework/zf1.git
 [submodule "crm/public/js/vendor/yui3"]
 	path = crm/public/js/vendor/yui3
 	url = https://github.com/yui/yui3.git
 [submodule "crm/public/skins/Font-Awesome"]
 	path = crm/public/skins/Font-Awesome
 	url = https://github.com/FortAwesome/Font-Awesome.git
+[submodule "crm/libraries/zf2"]
+	path = crm/libraries/zf2
+	url = https://github.com/zendframework/zf2.git

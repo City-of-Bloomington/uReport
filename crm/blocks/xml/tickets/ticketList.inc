@@ -30,7 +30,7 @@ foreach ($this->ticketList as $ticket) {
 		<location>$location</location>
 		<enteredDate>$enteredDate</enteredDate>
 	";
-		if (userIsAllowed('People')) {
+		if (Person::isAllowed('People')) {
 			echo "<enteredBy>$enteredBy</enteredBy>";
 		}
 	echo "

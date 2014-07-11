@@ -1,11 +1,15 @@
-<div class="findLocationResults">
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
  */
+use Blossom\Classes\Url;
+use Blossom\Classes\View;
+?>
+<div class="findLocationResults">
+<?php
 $callback = isset($_REQUEST['callback'])
 	? preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback'])
 	: '';
@@ -22,8 +26,8 @@ if (count($this->results)) {
 	";
 
 	$url = !empty($_REQUEST['return_url'])
-		? new URL($_REQUEST['return_url'])
-		: new URL(BASE_URL.'/locations/view');
+		? new Url($_REQUEST['return_url'])
+		: new Url(BASE_URL.'/locations/view');
 
 	foreach ($this->results as $location=>$data) {
 		if ($callback) {
@@ -81,7 +85,7 @@ else {
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\"><span class=\"icon-plus\"></span> {$this->translate('labels.submit')}</button>
+				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->translate('labels.submit')}</button>
 			</fieldset>
 		</form>
 		";

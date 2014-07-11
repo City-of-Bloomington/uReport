@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubstatusList $this->substatusList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="substatusList">
 	<h2><?php
-			if (userIsAllowed('substatus','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+			if (Person::isAllowed('substatus','update')) {
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/substatus/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 			$this->translate(array('labels.substatus', 'labels.substatuses', 2));
@@ -21,10 +25,11 @@
 		<?php
 			foreach ($this->substatusList as $substatus) {
 				$editButton = '';
-				if (userIsAllowed('substatus','update')) {
-					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+				if (Person::isAllowed('substatus','update')) {
+					$editButton = $helper->buttonLink(
 						BASE_URI."/substatus/update?substatus_id={$substatus->getId()}",
-						$this->translate('labels.edit')
+						$this->translate('labels.edit'),
+						'edit'
 					);
 				}
 				$status      = View::escape($substatus->getStatus());

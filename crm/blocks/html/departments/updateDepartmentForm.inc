@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department this->department
  * @param string $this->action The URL for posting the form
  * @param string $this->return_url
  */
+use Application\Models\ActionTable;
+use Application\Models\CategoryTable;
+use Blossom\Classes\View;
+
 $title = $this->department->getId()
 	? $this->translate('labels.edit')
 	: $this->translate('labels.add');
@@ -26,7 +30,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		<table>
 			<tr><td><label for="name" class="required">
 						<?php echo $this->translate('labels.name'); ?>
-						<span class="icon-asterisk"></span>
+						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
 				<td><input name="name" id="name"
@@ -62,8 +66,8 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		<legend><?php echo $this->translate(array('labels.action', 'labels.actions', 2)); ?></legend>
 		<ul>
 		<?php
-			$list = new ActionList();
-			$list->find();
+			$t = new ActionTable();
+			$list = $t->find();
 			foreach ($list as $action) {
 				if ($action->getType()=='department') {
 					$id = $action->getId();
@@ -87,8 +91,8 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		<legend><?php echo $this->translate(array('labels.category', 'labels.categories', 2)); ?></legend>
 		<ul>
 		<?php
-			$list = new CategoryList();
-			$list->find();
+			$t = new CategoryTable();
+			$list = $t->find();
 			foreach ($list as $category) {
 				$id = $category->getId();
 				$name = View::escape($category->getName());

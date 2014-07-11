@@ -19,7 +19,7 @@
 		</div>
 		<div id="content" class="panel">
 			<?php
-				include FRAMEWORK.'/errorMessages.php';
+				include BLOSSOM.'/errorMessages.php';
 				echo $this->includeBlocks();
 			?>
 		</div>

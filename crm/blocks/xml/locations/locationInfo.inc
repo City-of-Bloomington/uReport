@@ -29,7 +29,7 @@ if ($this->location) {
 		}
 	}
 
-	if (userIsAllowed('People')) {
+	if (Person::isAllowed('People')) {
 		$people = new PersonList(array('address'=>$this->location));
 		if (count($people)) {
 			echo '<people>';

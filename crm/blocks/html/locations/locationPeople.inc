@@ -5,9 +5,15 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  */
-if (userIsAllowed('people','view')) {
+use Application\Models\Person;
+use Application\Models\PersonTable;
+use Application\Models\RentalService;
+use Blossom\Classes\View;
+
+if (Person::isAllowed('people','view')) {
 	echo '<div class="locationPeople">';
-	$people = new PersonList(array('address'=>$this->location));
+	$table = new PersonTable();
+	$people = $table->find(['address' => $this->location]);
 	if (count($people)) {
 		echo "
 		<h3>{$this->translate(array('labels.person', 'labels.people', 2))}</h3>

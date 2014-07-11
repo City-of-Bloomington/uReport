@@ -6,8 +6,8 @@ existing environments.
 
 System Requirements
 ----------------------
-* [PHP 5.3.3](http://php.net) or later
-* [Zend Framework 1](http://framework.zend.com/)
+* [PHP 5.4](http://php.net) or later
+* [Zend Framework 2](http://framework.zend.com/)
 * [Apache](http://httpd.apache.org)
 * [MySQL](http://dev.mysql.com)
 * [Tomcat](http://tomcat.apache.org)

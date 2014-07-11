@@ -6,12 +6,15 @@
  * @param Issue $this->issue
  * @param boolean $this->disableButtons
  */
+use Application\Models\Person;
+use Blossom\Classes\Block;
+
 $uploadButton = '';
-if (!$this->disableButtons && userIsAllowed('media','upload')) {
+if (!$this->disableButtons && Person::isAllowed('media','upload')) {
 	$uploadButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
-		<span class=\"icon-upload-alt\"></span>
+		<span class=\"fa fa-upload\"></span>
 		{$this->translate('labels.upload_media')}
 	</a>
 	";

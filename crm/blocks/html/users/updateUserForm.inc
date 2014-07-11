@@ -5,6 +5,10 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
+use Application\Models\DepartmentTable;
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 ?>
 <div class="updateUserForm">
@@ -16,8 +20,8 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 					<td><select name="department_id" id="department_id">
 							<option></option>
 						<?php
-							$list = new DepartmentList();
-							$list->find();
+							$table = new DepartmentTable();
+							$list = $table->find();
 							foreach ($list as $department) {
 								$name = View::escape($department->getName());
 								$selected = $this->person->getDepartment_id()==$department->getId()

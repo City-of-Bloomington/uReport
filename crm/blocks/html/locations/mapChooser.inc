@@ -11,7 +11,7 @@
 		DEFAULT_LONGITUDE = <?php echo DEFAULT_LONGITUDE; ?>;
 </script>
 <button type="button" id="useThisLocation">
-	<span class="icon-ok"></span>
+	<span class="fa fa-check"></span>
 	<?php echo $this->translate('labels.use_location'); ?>
 </button>
 <?php

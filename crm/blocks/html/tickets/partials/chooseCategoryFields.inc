@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->return_url
  */
+use Application\Models\Category;
+use Blossom\Classes\View;
+use Blossom\Classes\Url;
 ?>
 <div>
 	<select id="category_id" name="category_id">
@@ -32,7 +35,7 @@
 </div>
 <div>
 	<?php
-		$url = new URL(BASE_URL.'/categories/choose');
+		$url = new Url(BASE_URL.'/categories/choose');
 		// Preserve any extra parameters passed in
 		foreach ($_REQUEST as $key=>$value) {
 			if ($key!='ticket_id' && $key!='return_url') {
@@ -43,7 +46,7 @@
 		echo "
 		<a href=\"$url\" id=\"moreCategoriesLink\">
 			{$this->translate('labels.more_categories')}
-			<span class=\"icon-double-angle-right\"></span>
+			<span class=\"fa fa-angle-double-right\"></span>
 		</a>
 		";
 	?>

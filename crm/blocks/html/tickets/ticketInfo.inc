@@ -1,18 +1,24 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  * @param bool $this->disableButtons
  */
+use Application\Models\Person;
+use Application\Templates\Helpers\ButtonLink;
+
+use Blossom\Classes\View;
+use Blossom\Classes\Url;
+
 $location = View::escape($this->ticket->getLocation());
 $location = $location
 	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"
 	: '';
 
-if (userIsAllowed('people','view')) {
-	$url = new URL(BASE_URL.'/people/view.php');
+if (Person::isAllowed('people','view')) {
+	$url = new Url(BASE_URL.'/people/view.php');
 	$personFields = array('enteredBy','assigned','referred');
 	foreach ($personFields as $field) {
 		$$field = '';
@@ -38,51 +44,48 @@ $changeLocationButton = '';
 $assignButton         = '';
 $referralButton       = '';
 
-if (!$this->disableButtons && userIsAllowed('tickets','update')) {
-	$editStatusButton = "
-	<a class=\"icon-pencil\"
-		href=\"".BASE_URI."/tickets/changeStatus?ticket_id={$this->ticket->getId()}\">
-		<span class=\"hidden-label\">Change Status</span>
-	</a>
-	";
-	if (userIsAllowed('tickets', 'delete')) {
-		$deleteButton = "
-		<a class=\"btn\"
-			href=\"".BASE_URI."/tickets/delete?ticket_id={$this->ticket->getId()}\">
-			<span class=\"icon-remove\"></span>
-			Delete Case
-		</a>
-		";
+if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
+	$helper = $this->template->getHelper('buttonLink');
+	$editStatusButton = $helper->buttonLink(
+		BASE_URI.'/tickets/changeStatus?ticket_id='.$this->ticket->getId(),
+		$this->translate('labels.change_status'),
+		'edit',
+		ButtonLink::SIZE_ICON
+	);
+	if (Person::isAllowed('tickets', 'delete')) {
+		$deleteButton = $helper->buttonLink(
+			BASE_URI.'/tickets/delete?ticket_id=',$this->ticket->getId(),
+			$this->translate('labels.delete_ticket'),
+			'delete'
+		);
 	}
 
 	if ($this->ticket->getStatus()!='closed') {
-		$changeCategoryButton = "
-		<a class=\"icon-pencil\"
-			href=\"".BASE_URI."/tickets/changeCategory?ticket_id={$this->ticket->getId()}\">
-			<span class=\"hidden-label\">Change Category</span>
-		</a>
-		";
-		$changeLocationButton = "
-		<a class=\"icon-pencil\"
-			href=\"".BASE_URI."/tickets/changeLocation?ticket_id={$this->ticket->getId()}\">
-			<span class=\"hidden-label\">Change Location</span>
-		</a>
-		";
-		if (userIsAllowed('people','view')) {
-			$assignButton = "
-			<a class=\"icon-pencil\"
-				href=\"".BASE_URI."/tickets/assign?ticket_id={$this->ticket->getId()}\">
-				<span class=\"hidden-label\">Assign</span>
-			</a>
-			";
-
-			$return_url = $this->ticket->getURL();
-			$referralButton = "
-			<a class=\"icon-pencil\"
-				href=\"".BASE_URI."/tickets/refer?ticket_id={$this->ticket->getId()}\">
-				<span class=\"hidden-label\">Refer</span>
-			</a>
-			";
+		$changeCategoryButton = $helper->buttonLink(
+			BASE_URI.'/tickets/changeCategory?ticket_id='.$this->ticket->getId(),
+			$this->translate('labels.change_category'),
+			'edit',
+			ButtonLink::SIZE_ICON
+		);
+		$changeLocationButton = $helper->buttonLink(
+			BASE_URI.'/tickets/changeLocation?ticket_id='.$this->ticket->getId(),
+			$this->translate('labels.change_location'),
+			'edit',
+			ButtonLink::SIZE_ICON
+		);
+		if (Person::isAllowed('people','view')) {
+			$assignButton = $helper->buttonLink(
+				BASE_URI.'/tickets/assign?ticket_id='.$this->ticket->getId(),
+				$this->translate('labels.assign_ticket'),
+				'edit',
+				ButtonLink::SIZE_ICON
+			);
+			$referralButton = $helper->buttonLink(
+				BASE_URI.'/tickets/refer?ticket_id='.$this->ticket->getId(),
+				$this->translate('labels.refer_ticket'),
+				'edit',
+				ButtonLink::SIZE_ICON
+			);
 		}
 	}
 
@@ -108,7 +111,7 @@ echo "
 			$editStatusButton
 		</li>
 ";
-if (userIsAllowed('people','view')) {
+if (Person::isAllowed('people','view')) {
 	echo "
 		<li><label>Assigned To:</label>
 			$assigned

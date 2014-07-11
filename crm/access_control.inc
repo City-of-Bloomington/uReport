@@ -1,47 +1,51 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-$ZEND_ACL = new Zend_Acl();
-$ZEND_ACL->addRole(new Zend_Acl_Role('Anonymous'))
-		 ->addRole(new Zend_Acl_Role('Public'), 'Anonymous')
-		 ->addRole(new Zend_Acl_Role('Staff'), 'Public')
-		 ->addRole(new Zend_Acl_Role('Administrator'), 'Staff');
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+
+$ZEND_ACL = new Acl();
+$ZEND_ACL->addRole(new Role('Anonymous'))
+		 ->addRole(new Role('Public'), 'Anonymous')
+		 ->addRole(new Role('Staff'), 'Public')
+		 ->addRole(new Role('Administrator'), 'Staff');
 
 /**
  * Declare all the controllers as resources
  */
-$ZEND_ACL->add(new Zend_Acl_Resource('index'));
-$ZEND_ACL->add(new Zend_Acl_Resource('callback'));
-$ZEND_ACL->add(new Zend_Acl_Resource('login'));
-$ZEND_ACL->add(new Zend_Acl_Resource('admin'));
-$ZEND_ACL->add(new Zend_Acl_Resource('account'));
+$ZEND_ACL->addResource(new Resource('index'));
+$ZEND_ACL->addResource(new Resource('callback'));
+$ZEND_ACL->addResource(new Resource('login'));
+$ZEND_ACL->addResource(new Resource('admin'));
+$ZEND_ACL->addResource(new Resource('account'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('users'));
-$ZEND_ACL->add(new Zend_Acl_Resource('people'));
-$ZEND_ACL->add(new Zend_Acl_Resource('departments'));
+$ZEND_ACL->addResource(new Resource('users'));
+$ZEND_ACL->addResource(new Resource('people'));
+$ZEND_ACL->addResource(new Resource('departments'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('actions'));
-$ZEND_ACL->add(new Zend_Acl_Resource('categories'));
-$ZEND_ACL->add(new Zend_Acl_Resource('categoryGroups'));
-$ZEND_ACL->add(new Zend_Acl_Resource('labels'));
-$ZEND_ACL->add(new Zend_Acl_Resource('issueTypes'));
-$ZEND_ACL->add(new Zend_Acl_Resource('substatus'));
-$ZEND_ACL->add(new Zend_Acl_Resource('contactMethods'));
-$ZEND_ACL->add(new Zend_Acl_Resource('neighborhoodAssociations'));
+$ZEND_ACL->addResource(new Resource('actions'));
+$ZEND_ACL->addResource(new Resource('categories'));
+$ZEND_ACL->addResource(new Resource('categoryGroups'));
+$ZEND_ACL->addResource(new Resource('labels'));
+$ZEND_ACL->addResource(new Resource('issueTypes'));
+$ZEND_ACL->addResource(new Resource('substatus'));
+$ZEND_ACL->addResource(new Resource('contactMethods'));
+$ZEND_ACL->addResource(new Resource('neighborhoodAssociations'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('locations'));
-$ZEND_ACL->add(new Zend_Acl_Resource('tickets'));
-$ZEND_ACL->add(new Zend_Acl_Resource('issues'));
-$ZEND_ACL->add(new Zend_Acl_Resource('media'));
-$ZEND_ACL->add(new Zend_Acl_Resource('solr'));
+$ZEND_ACL->addResource(new Resource('locations'));
+$ZEND_ACL->addResource(new Resource('tickets'));
+$ZEND_ACL->addResource(new Resource('issues'));
+$ZEND_ACL->addResource(new Resource('media'));
+$ZEND_ACL->addResource(new Resource('solr'));
 
-$ZEND_ACL->add(new Zend_Acl_Resource('open311'));
-$ZEND_ACL->add(new Zend_Acl_Resource('clients'));
-$ZEND_ACL->add(new Zend_Acl_Resource('reports'));
-$ZEND_ACL->add(new Zend_Acl_Resource('bookmarks'));
+$ZEND_ACL->addResource(new Resource('open311'));
+$ZEND_ACL->addResource(new Resource('clients'));
+$ZEND_ACL->addResource(new Resource('reports'));
+$ZEND_ACL->addResource(new Resource('bookmarks'));
 
 // Permissions for non-authenticated web browsing
 $ZEND_ACL->allow(null,array('callback','login','open311'));

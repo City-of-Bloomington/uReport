@@ -6,6 +6,7 @@
  * @param string $this->title
  * @param string $this->return_url
  */
+use Blossom\Classes\View;
 ?>
 <div class="confirm">
 	<h1><?php echo $this->title ? View::escape($this->title) : 'Confirm'; ?></h1>

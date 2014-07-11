@@ -6,5 +6,5 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 header('Content-type: text/xml; charset=utf-8');
-include FRAMEWORK.'/errorMessages.php';
+include BLOSSOM.'/errorMessages.php';
 echo $this->includeBlocks();

@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Substatus $this->substatus
  */
+use Blossom\Classes\View;
+
 $title = $this->substatus->getId() ? 'Edit Substatus' : 'Add Substatus';
 $name        = View::escape($this->substatus->getName());
 $description = View::escape($this->substatus->getDescription());
@@ -15,8 +17,8 @@ $description = View::escape($this->substatus->getDescription());
 		<input name="substatus_id" type="hidden" value="<?php echo "{$this->substatus->getId()}"; ?>" />
 		<table>
 			<tr><td><label for="name" class="required">
-						<?php echo $this->translate(array('labels.status', 'labels.statuses', 1)); ?>
-						<span class="icon-asterisk"></span>
+						<?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?>
+						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
 				<td><select id="status" name="status">
@@ -32,7 +34,7 @@ $description = View::escape($this->substatus->getDescription());
 				</td>
 			</tr>
 
-			<tr><td><label for="name" class="required"><?php echo $this->translate('labels.name'); ?> <span class="icon-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required"><?php echo $this->translate('labels.name'); ?> <span class="fa fa-asterisk"></span></label></td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
 			</tr>
 

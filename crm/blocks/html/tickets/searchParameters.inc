@@ -2,12 +2,18 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
-$currentURL = new URL($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+use Application\Models\Person;
+use Application\Models\Search;
+use Blossom\Classes\Block;
+use Blossom\Classes\Url;
+
+$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$helper = $this->template->getHelper('buttonLink');
 
 if (!empty($_GET['query'])
 	|| isset($this->solrObject->responseHeader->params->fq)) {
@@ -22,7 +28,7 @@ if (!empty($_GET['query'])
 		<h2>$q</h2>
 	";
 
-	if (userIsAllowed('bookmarks', 'update')) {
+	if (Person::isAllowed('bookmarks', 'update')) {
 		$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'search'));
 		echo $bookmarkForm->render('html', $this->template);
 	}
@@ -50,26 +56,16 @@ if (!empty($_GET['query'])
 						unset($deleteURL->$key);
 					}
 					$displayName = Search::$searchableFields[$key];
-					echo "
-					<a class=\"btn\" href=\"$deleteURL\">
-						<span class=\"icon-remove\"></span>
-						$displayName
-					</a>
-					";
+					echo $helper->buttonLink($deleteURL, $displayName, 'delete');
 				}
 				else {
 					if (isset($deleteURL->$key)) {
 						unset($deleteURL->$key);
 					}
-					$displayName = Search::$searchableFields[$key];
+					$displayName  = Search::$searchableFields[$key];
 					$displayValue = Search::getDisplayName('ticket', $key, $value);
 					if ($displayValue) {
-						echo "
-						<a class=\"btn\" href=\"$deleteURL\">
-							<span class=\"icon-remove\"></span>
-							$displayName: $displayValue
-						</a>
-						";
+						echo $helper->buttonLink($deleteURL, "$displayName: $displayValue", 'delete');
 					}
 				}
 			}
@@ -89,7 +85,7 @@ echo '<div id="resultFormatButtons">';
 	$current = $resultFormat=='text' ? ' current' : '';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
-		<span class=\"icon-list-ul\"></span>
+		<span class=\"fa fa-list-ul\"></span>
 		{$this->translate('labels.search_results_text')}
 	</a>
 	";
@@ -98,19 +94,19 @@ echo '<div id="resultFormatButtons">';
 	$current = $resultFormat=='map' ? ' current' : '';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
-		<span class=\"icon-map-marker\"></span>
+		<span class=\"fa fa-map-marker\"></span>
 		{$this->translate('labels.search_results_map')}
 	</a>
 	";
 
 	// Users should filter the results somehow before they are allowed to
 	// call for the full, raw results
-	if (isset($fq) && count($fq) && userIsAllowed('tickets', 'print')) {
+	if (isset($fq) && count($fq) && Person::isAllowed('tickets', 'print')) {
 		$url->resultFormat = 'raw';
 		$current = $resultFormat=='raw' ? ' current' : '';
 		echo "
 		<a class=\"$current\" href=\"$url\">
-			<span class=\"icon-print\"></span>
+			<span class=\"fa fa-print\"></span>
 			{$this->translate('labels.search_results_print')}
 		</a>
 		";

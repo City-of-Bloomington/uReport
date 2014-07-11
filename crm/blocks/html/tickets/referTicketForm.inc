@@ -6,6 +6,7 @@
  * @param Ticket $this->ticket
  * @param Person $this->person
  */
+use Blossom\Classes\View;
 ?>
 <div class="referTicketForm">
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
@@ -15,7 +16,7 @@
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key = View::escape($key);
+						$key   = View::escape($key);
 						$value = View::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}

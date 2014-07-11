@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
@@ -8,15 +8,17 @@
  * @param bool      $this->disableButtons
  * @param bool      $this->disableComments
  */
+use Application\Models\Person;
+use Blossom\Classes\Block;
+
 $addButton = '';
-if (!$this->disableButtons && $this->ticket && userIsAllowed('issues','add')) {
-	$addButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URL."/issues/update?ticket_id={$this->ticket->getId()}\">
-		<span class=\"icon-plus\"></span>
-		{$this->translate('labels.add_issue')}
-	</a>
-	";
+if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')) {
+	$h = $this->template->getHelper('buttonLink');
+	$addButton = $h->buttonLink(
+		BASE_URL.'/issues/update?ticket_id='.$this->ticket->getId(),
+		$this->translate('labels.add_issue'),
+		'add'
+	);
 }
 echo "
 <div class=\"issueList\">

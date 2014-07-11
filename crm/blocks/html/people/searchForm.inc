@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Blossom\Classes\View;
+
 $fields = array('firstname','lastname','email','organization');
 if (!isset($_GET['setOfPeople'])) {
 	$_GET['setOfPeople'] = 'all';
@@ -17,7 +19,7 @@ if (!isset($_GET['setOfPeople'])) {
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='setOfPeople' && !in_array($key,$fields)) {
-						$key = View::escape($key);
+						$key   = View::escape($key);
 						$value = View::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
@@ -56,12 +58,12 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.search'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
 					<button type=\"button\" onclick=\"self.close();\">
-						<span class=\"icon-remove\"></span>
+						<span class=\"fa fa-times\"></span>
 						{$this->translate('labels.cancel')}
 					</button>
 					";

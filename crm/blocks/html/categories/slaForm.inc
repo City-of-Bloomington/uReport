@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Blossom\Classes\View;
 ?>
 <div class="slaForm">
 	<h2><?php echo $this->translate('labels.service_level_agreement'); ?></h2>
@@ -45,12 +46,10 @@
 				?>
 				</tbody>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> <?php echo $this->translate('labels.save'); ?></button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/categories">
-				<span class="icon-remove"></span>
-				<?php echo $this->translate('labels.cancel'); ?>
-			</a>
+			<?php
+				$h = $this->template->getHelper('saveAndCancelButtons');
+				echo $h->saveAndCancelButtons(BASE_URI.'/categories');
+			?>
 		</fieldset>
 	</form>
 </div>

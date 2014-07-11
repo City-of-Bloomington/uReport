@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Email $this->email
  */
+use Application\Models\Email;
+use Blossom\Classes\View;
 ?>
 <div class="updateEmailForm">
 	<form method="post">

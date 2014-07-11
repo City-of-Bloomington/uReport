@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="people">
+	<row>
+		<field name="id">1</field>
+		<field name="firstname">Test</field>
+		<field name="middlename" xsi:nil="true" />
+		<field name="lastname">Person</field>
+		<field name="organization" xsi:nil="true" />
+		<field name="address" xsi:nil="true" />
+		<field name="city" xsi:nil="true" />
+		<field name="state" xsi:nil="true" />
+		<field name="zip" xsi:nil="true" />
+		<field name="department_id" xsi:nil="true" />
+		<field name="username" xsi:nil="true" />
+		<field name="password" xsi:nil="true" />
+		<field name="authenticationMethod" xsi:nil="true" />
+		<field name="role" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="peopleAddresses">
+	</table_data>
+</database>
+</mysqldump>

@@ -6,6 +6,8 @@
  * @param Category $this->category
  * @param Issue $this->issue
  */
+use Blossom\Classes\View;
+
 echo "<div id=\"customFields\">";
 $category = $this->category;
 if ($category) {

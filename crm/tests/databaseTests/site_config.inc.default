@@ -1,0 +1,20 @@
+<?php
+define('APPLICATION_NAME','TEST');
+
+define('BASE_URL','http://localhost/test');
+define('BASE_URI','/test');
+
+define('DB_ADAPTER','Pdo_Mysql');
+define('DB_HOST','localhost');
+define('DB_NAME','test');
+define('DB_USER','test');
+define('DB_PASS','test');
+
+define('DATE_FORMAT', 'n/j/Y H:i:s');
+
+define('DEFAULT_CITY', 'Bloomington');
+define('DEFAULT_STATE', 'IN');
+
+define('SOLR_SERVER_HOSTNAME', 'localhost');
+define('SOLR_SERVER_PORT', 8080);
+define('SOLR_SERVER_PATH', '/solr/test');

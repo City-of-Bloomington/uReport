@@ -7,14 +7,13 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+use Blossom\Classes\Block;
+use Blossom\Classes\View;
+
 echo "
 <div class=\"requestList\">
 	<h2>Requests</h2>
 ";
-	// Pagination pages are one-based and will treat page=0
-	// as exactly the same as page=1
-	$page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
-	$this->ticketList->setPagination(50, $page);
 	if (count($this->ticketList)) {
 		echo "
 		<table>
@@ -46,8 +45,12 @@ echo "
 			if ($issue) {
 				$description = $issue->getDescription();
 
+				$media_url = '';
 				$media = $issue->getMedia();
-				$media_url = count($media) ? $media[0]->getURL() : '';
+				if (count($media)) {
+					$m = $media->current();
+					$media_url = $m->getURL();
+				}
 			}
 			else {
 				$description = '';

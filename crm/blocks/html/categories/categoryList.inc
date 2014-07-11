@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="categoryList">
 	<h2><?php
 			echo $this->translate(array('labels.category', 'labels.categories', 2));
-			if (userIsAllowed('categories','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+			if (Person::isAllowed('categories','update')) {
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/categories/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -38,10 +42,11 @@
 			}
 
 			$editButton = '';
-			if (userIsAllowed('categories','update')) {
-				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+			if (Person::isAllowed('categories','update')) {
+				$editButton = $helper->buttonLink(
 					BASE_URI.'/categories/update?category_id='.$category->getId(),
-					$this->translate('labels.edit')
+					$this->translate('labels.edit'),
+					'edit'
 				);
 			}
 			$name              = View::escape($category->getName());

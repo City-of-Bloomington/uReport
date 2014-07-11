@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Blossom\Classes\View;
+
 $rows = '';
 foreach ($this->ticket->getIssues() as $issue) {
 	$person = $issue->getReportedByPerson();

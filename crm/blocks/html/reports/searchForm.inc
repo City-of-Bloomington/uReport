@@ -1,9 +1,15 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\CategoryTable;
+use Application\Models\Department;
+use Application\Models\DepartmentTable;
+
+use Blossom\Classes\View;
+
 $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 ?>
@@ -14,8 +20,8 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 				<h3 class="hd">Category</h3>
 				<ul class="bd">
 				<?php
-					$list = new CategoryList();
-					$list->find();
+					$t = new CategoryTable();
+					$list = $t->find();
 					foreach ($list as $c) {
 						$checked = !empty($_GET['categories'][$c->getId()])
 							? 'checked="checked"'
@@ -36,8 +42,8 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 				<h3 class="hd">Department</h3>
 				<ul class="bd">
 				<?php
-					$list = new DepartmentList();
-					$list->find();
+					$t = new DepartmentTable();
+					$list = $t->find();
 					foreach ($list as $d) {
 						$checked = !empty($_GET['departments'][$d->getId()])
 							? 'checked="checked"'
@@ -73,7 +79,10 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('enteredDate'));
 			?>
-			<button type="submit"><span class="icon-ok"></span> Submit</button>
+			<button type="submit">
+				<span class="fa fa-check"></span>
+				<?php echo $this->template->translate('labels.submit'); ?>
+			</button>
 		</fieldset>
 	</form>
 </div>

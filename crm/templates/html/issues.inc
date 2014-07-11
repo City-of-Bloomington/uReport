@@ -15,7 +15,7 @@
 	<div id="panel-container">
 		<div id="content-panel">
 			<?php
-				include FRAMEWORK.'/errorMessages.php';
+				include BLOSSOM.'/errorMessages.php';
 
 				$panels = array(
 					'ticket-panel', 'person-panel', 'issue-panel', 'bottom-left', 'bottom-right'

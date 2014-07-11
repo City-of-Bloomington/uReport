@@ -1,29 +1,29 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Department $this->department
  */
-$editButton = '';
+use Application\Models\Person;
+use Blossom\Classes\View;
+
+$editButton   = '';
 $deleteButton = '';
-if (userIsAllowed('departments','update')) {
-	$editButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URI."/departments/update?department_id={$this->department->getId()}\">
-		<span class=\"icon-pencil\"></span>
-		{$this->translate('labels.edit')}
-	</a>
-	";
+if (Person::isAllowed('departments','update')) {
+	$helper = $this->template->getHelper('buttonLink');
+	$editButton = $helper->buttonLink(
+		BASE_URI.'/departments/update?department_id='.$this->department->getId(),
+		$this->translate('labels.edit'),
+		'edit'
+	);
 	// Make sure this would not violate any foreign keys
 	if ($this->department->isSafeToDelete()) {
-		$deleteButton = "
-		<a class=\"btn\"
-			href=\"".BASE_URI."/departments/delete?department_id={$this->department->getId()}\">
-			<span class=\"icon-remove\"></span>
-			{$this->translate('labels.delete')}
-		</a>
-		";
+		$deleteButton = $helper->buttonLink(
+			BASE_URI.'/departments/delete?department_id='.$this->department->getId(),
+			$this->translate('labels.delete'),
+			'delete'
+		);
 	}
 }
 $name = View::escape($this->department->getName());

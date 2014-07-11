@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
+use Application\Models\CategoryGroupTable;
+use Application\Models\DepartmentTable;
+use Blossom\Classes\View;
+
 $title = $this->category->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.category','labels.categories',1))
 	: $this->translate('labels.add' ).' '.$this->translate(array('labels.category','labels.categories',1));
@@ -25,7 +29,7 @@ foreach ($fields as $field) {
 		<table>
 			<tr><td><label for="name" class="required">
 						<?php echo $this->translate('labels.name'); ?>
-						<span class="icon-asterisk"></span>
+						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
 				<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
@@ -33,8 +37,8 @@ foreach ($fields as $field) {
 			<tr><td><label for="categoryGroup_id"><?php echo $this->translate(array('labels.categoryGroup','labels.categoryGroup',1)); ?></label></td>
 				<td><select name="categoryGroup_id" id="categoryGroup_id">
 					<?php
-						$groups = new CategoryGroupList();
-						$groups->find();
+						$t = new CategoryGroupTable();
+						$groups = $t->find();
 						foreach ($groups as $group) {
 							$selected = $categoryGroup_id==$group->getId()
 								? 'selected="selected"'
@@ -65,8 +69,8 @@ foreach ($fields as $field) {
 				</td>
 				<td><select name="department_id" id="department_id">
 					<?php
-						$list = new DepartmentList();
-						$list->find();
+						$t = new DepartmentTable();
+						$list = $t->find();
 						foreach ($list as $department) {
 							$selected = $department->getId()==$department_id
 								? 'selected="selected"'

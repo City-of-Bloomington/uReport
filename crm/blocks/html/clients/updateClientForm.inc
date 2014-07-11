@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Client $this->client
  */
+use Application\Models\ContactMethodTable;
+use Blossom\Classes\View;
+
 $name = View::escape($this->client->getName());
 $url = $this->client->getURL();
 $api_key = View::escape($this->client->getApi_key());
@@ -36,8 +39,8 @@ $title = $this->client->getId()
 				<tr><td><label><?php echo $this->translate(array('labels.contactMethod','labels.contactMethods',1)); ?></label></td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
 						<?php
-							$contactMethods = new ContactMethodList();
-							$contactMethods->find();
+							$t = new ContactMethodTable();
+							$contactMethods = $t->find();
 							foreach ($contactMethods as $method) {
 								$selected = $this->client->getContactMethod_id()==$method->getId()
 									? 'selected="selected"'

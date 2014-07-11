@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
+use Blossom\Classes\View;
+
 $name = View::escape($this->person->getFullname());
 ?>
 <p>

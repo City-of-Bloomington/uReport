@@ -5,6 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->results
  */
+use Blossom\Classes\View;
 
 echo "
 <div class=\"distinctFieldValues\">

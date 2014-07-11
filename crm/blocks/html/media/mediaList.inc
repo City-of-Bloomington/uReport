@@ -6,16 +6,20 @@
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons
  */
+use Application\Templates\Helpers\ButtonLink;
+
 if (count($this->mediaList)) {
 	echo "<table class=\"mediaList\">";
 	foreach ($this->mediaList as $media) {
 		$deleteButton = '';
 		if (!$this->disableButtons) {
-			$deleteButton = "
-			<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$media->getId()}\">
-				<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
-			</a>
-			";
+			$h = $this->template->getHelper('buttonLink');
+			$deleteButton = $h->buttonLink(
+				BASE_URI.'/media/delete?media_id='.$media->getId(),
+				$this->translate('labels.delete'),
+				'delete',
+				ButtonLink::SIZE_ICON
+			);
 		}
 		echo "
 		<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">

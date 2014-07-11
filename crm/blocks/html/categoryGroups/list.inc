@@ -1,25 +1,27 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroupList $this->categoryGroupList
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
 ?>
 <div class="categoryGroupList">
 	<h2><?php
 			echo $this->translate(array('labels.categoryGroup', 'labels.categoryGroups', 2));
-			if (userIsAllowed('categoryGroups','update')) {
-				echo "
-				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/update\">
-					<span class=\"icon-plus\"></span>
-					{$this->translate('labels.add')}
-				</a>
-				<a class=\"btn\" href=\"".BASE_URI."/categoryGroups/reorder\">
-					<span class=\"icon-reorder\"></span>
-					{$this->translate('labels.reorder')}
-				</a>
-				";
+			if (Person::isAllowed('categoryGroups','update')) {
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
+					BASE_URI.'/categoryGroups/update',
+					$this->translate('labels.add'),
+					'add'
+				) .  $helper->buttonLink(
+					BASE_URI.'/categoryGroups/reorder',
+					$this->translate('labels.reorder'),
+					'reorder'
+				);
 			}
 		?>
 	</h2>
@@ -36,21 +38,17 @@
 			foreach ($this->categoryGroupList as $group) {
 				$editButton = '';
 				$deleteButton = '';
-				if (userIsAllowed('categoryGroups','update')) {
-					$editButton = "
-					<a class=\"btn\"
-						href=\"".BASE_URI."/categoryGroups/update?categoryGroup_id={$group->getId()}\">
-						<span class=\"icon-pencil\"></span>
-						{$this->translate('labels.edit')}
-					</a>
-					";
-					$deleteButton = "
-					<a class=\"btn\"
-						href=\"".BASE_URI."/categoryGroups/delete?categoryGroup_id={$group->getId()}\">
-						<span class=\"icon-remove\"></span>
-						{$this->translate('labels.delete')}
-					</a>
-					";
+				if (Person::isAllowed('categoryGroups','update')) {
+					$editButton = $helper->buttonLink(
+						BASE_URI.'/categoryGroups/update?categoryGroup_id='.$group->getId(),
+						$this->translate('labels.edit'),
+						'edit'
+					);
+					$deleteButton = $helper->buttonLink(
+						BASE_URI.'/categoryGroups/delete?categoryGroup_id='.$group->getId(),
+						$this->translate('labels.delete'),
+						'delete'
+					);
 				}
 				$name = View::escape($group->getName());
 				$order = (int)$group->getOrdering();

@@ -1,11 +1,14 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-require_once "PHPUnit/Extensions/Database/TestCase.php";
-require_once __DIR__.'/DatabaseTestCase.php';
+use Application\Models\GeoCluster;
+use Application\Models\Ticket;
+use Blossom\Classes\Database;
+
+require_once './DatabaseTestCase.php';
 
 class GeoClusterTest extends DatabaseTestCase
 {
@@ -15,7 +18,7 @@ class GeoClusterTest extends DatabaseTestCase
 
 	public function getDataSet()
 	{
-		return $this->createMySQLXMLDataSet(__DIR__.'/testData/geoclusterTestData.xml');
+		return $this->createMySQLXMLDataSet(__DIR__.'/testData/geoclusters.xml');
 	}
 
 	public function testSave()
@@ -50,7 +53,8 @@ class GeoClusterTest extends DatabaseTestCase
 		GeoCluster::updateTicketClusters($ticket);
 
 		$zend_db = Database::getConnection();
-		$row = $zend_db->fetchRow('select * from ticket_geodata where ticket_id=?', $this->testTicketId);
+		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->testTicketId]);
+		$row = $result->current();
 		for ($i=0; $i<=6; $i++) {
 			$this->assertGreaterThan(0, $row["cluster_id_$i"]);
 		}

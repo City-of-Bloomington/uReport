@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="actions">
+	<row>
+		<field name="id">1</field>
+		<field name="name">open</field>
+		<field name="description">Opened by {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="name">assignment</field>
+		<field name="description">{enteredByPerson} assigned this case to {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">3</field>
+		<field name="name">closed</field>
+		<field name="description">Closed by {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">4</field>
+		<field name="name">referral</field>
+		<field name="description">{enteredByPerson} referred this case to {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">5</field>
+		<field name="name">update</field>
+		<field name="description">Updated by {enteredByPerson}</field>
+		<field name="type">system</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>

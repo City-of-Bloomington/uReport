@@ -5,6 +5,9 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  */
+use Application\Models\AddressService;
+use Blossom\Classes\View;
+
 if (defined('ADDRESS_SERVICE')) {
 	$data = AddressService::getLocationData($this->location);
 	if (count($data)) {

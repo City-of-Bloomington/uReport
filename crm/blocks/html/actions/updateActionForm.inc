@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Blossom\Classes\View;
+
 $title = $this->action->getId()
 	? $this->translate('labels.edit').' '.$this->translate(array('labels.action', 'labels.actions', 1))
 	: $this->translate('labels.add' ).' '.$this->translate(array('labels.action', 'labels.actions', 1));
@@ -29,7 +31,7 @@ $description = View::escape($this->action->getDescription());
 
 				<tr><td><label for="name" class="required">
 							<?php echo $this->translate('labels.name'); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
@@ -37,7 +39,7 @@ $description = View::escape($this->action->getDescription());
 
 				<tr><td><label for="description" class="required">
 							<?php echo $this->translate('labels.description'); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>

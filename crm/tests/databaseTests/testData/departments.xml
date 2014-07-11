@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="test">
+	<table_data name="actions">
+	<row>
+		<field name="id">1</field>
+		<field name="name">open</field>
+		<field name="description">Opened by {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="name">assignment</field>
+		<field name="description">{enteredByPerson} assigned this case to {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">3</field>
+		<field name="name">closed</field>
+		<field name="description">Closed by {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">4</field>
+		<field name="name">referral</field>
+		<field name="description">{enteredByPerson} referred this case to {actionPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">5</field>
+		<field name="name">update</field>
+		<field name="description">Updated by {enteredByPerson}</field>
+		<field name="type">system</field>
+	</row>
+	<row>
+		<field name="id">6</field>
+		<field name="name">test</field>
+		<field name="description">Tested by {enteredByPerson}</field>
+		<field name="type">department</field>
+	</row>
+	<row>
+		<field name="id">7</field>
+		<field name="name">attempt</field>
+		<field name="description">Attempted by {enteredByPerson}</field>
+		<field name="type">department</field>
+	</row>
+	</table_data>
+	<table_data name="departments">
+	<row>
+		<field name="id">1</field>
+		<field name="name">Information Services</field>
+		<field name="defaultPerson_id" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="name">Test Department</field>
+		<field name="defaultPerson_id" xsi:nil="true" />
+	</row>
+	</table_data>
+	<table_data name="categoryGroups">
+		<row>
+			<field name="id">1</field>
+			<field name="name">Test Group</field>
+			<field name="ordering" xsi:nil="true" />
+		</row>
+	</table_data>
+	<table_data name="categories">
+		<row>
+			<field name="id">1</field>
+			<field name="name">Test Category</field>
+			<field name="description" xsi:nil="true" />
+			<field name="department_id">1</field>
+			<field name="categoryGroup_id">1</field>
+			<field name="displayPermissionLevel">staff</field>
+			<field name="postingPermissionLevel">staff</field>
+			<field name="customFields" xsi:nil="true" />
+			<field name="lastModified">2013-09-11 03:45:27</field>
+			<field name="slaDays" xsi:nil="true" />
+		</row>
+		<row>
+			<field name="id">2</field>
+			<field name="name">Another Category</field>
+			<field name="description" xsi:nil="true" />
+			<field name="department_id">1</field>
+			<field name="categoryGroup_id">1</field>
+			<field name="displayPermissionLevel">staff</field>
+			<field name="postingPermissionLevel">staff</field>
+			<field name="customFields" xsi:nil="true" />
+			<field name="lastModified">2014-07-10 16:43:01</field>
+			<field name="slaDays" xsi:nil="true" />
+		</row>
+	</table_data>
+	<table_data name="department_categories">
+		<row>
+			<field name="department_id">2</field>
+			<field name="category_id">1</field>
+		</row>
+		<row>
+			<field name="department_id">2</field>
+			<field name="category_id">2</field>
+		</row>
+	</table_data>
+</database>
+</mysqldump>
