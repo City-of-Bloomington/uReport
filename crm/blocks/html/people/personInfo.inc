@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2013 City of Bloomington, Indiana
+ * @copyright 2009-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
@@ -22,6 +22,7 @@ else {
 	$person_param = '?person_id='.$this->person->getId();
 }
 
+$helper = $this->template->getHelper('buttonLink');
 
 $username = '';
 if (Person::isAllowed('people','view')) {
@@ -34,38 +35,30 @@ if (Person::isAllowed('people','view')) {
 		";
 	}
 	if (!$username && Person::isAllowed('users','add') && !$this->disableButtons) {
-		$username = "
-		<a class=\"btn\"
-			href=\"".BASE_URI."/users/update?person_id={$this->person->getId()}\">
-			<span class=\"icon-plus\"></span>
-			{$this->translate('labels.create_account')}
-		</a>
-		";
+		$username = $helper->buttonLink(
+			BASE_URI.'/users/update?person_id='.$this->person->getId(),
+			$this->translate('labels.create_account'),
+			'add'
+		);
 	}
 }
-
 
 $editButton   = '';
 $deleteButton = '';
 if (Person::isAllowed($resource,'update') && !$this->disableButtons) {
-	$editButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URI."/$resource/update$person_param\">
-		<span class=\"icon-pencil\"></span>
-		{$this->translate('labels.edit')}
-	</a>
-	";
+	$editButton = $helper->buttonLink(
+		BASE_URI."/$resource/update$person_param",
+		$this->translate('labels.edit'),
+		'edit'
+	);
 	if (!$this->person->hasTickets()) {
-		$deleteButton = "
-		<a class=\"btn\"
-			href=\"".BASE_URI."/$resource/delete$person_param\">
-			<span class=\"icon-remove\"></span>
-			{$this->translate('labels.delete')}
-		</a>
-		";
+		$deleteButton = $helper->buttonLink(
+			BASE_URI."/$resource/delete$person_param",
+			$this->translate('labels.delete'),
+			'delete'
+		);
 	}
 }
-
 
 $name         = View::escape($this->person->getFullname());
 $organization = View::escape($this->person->getOrganization());
@@ -122,17 +115,12 @@ echo "
 		";
 	}
 	if ($editButton) {
-		echo "
-		<tr><td colspan=\"3\">
-				<a class=\"btn\"
-					href=\"".BASE_URI."/$resource/updateAddress$person_param\">
-					<span class=\"icon-plus\"></span>
-					{$this->translate('labels.add')}
-					{$this->translate(array('labels.address', 'labels.addresses', 1))}
-				</a>
-			</td>
-		</tr>
-		";
+		$addButton = $helper->buttonLink(
+			BASE_URI."/$resource/updateAddress$person_param",
+			"{$this->translate('labels.add')} {$this->translate(array('labels.address', 'labels.addresses', 1))}",
+			'add'
+		);
+		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
 	}
 
 	echo "
@@ -141,7 +129,6 @@ echo "
 	<h3>{$this->translate(array('labels.email', 'labels.emails', 2))}</h3>
 	<table>
 	";
-
 	$emailButtons = '';
 	foreach ($this->person->getEmails() as $e) {
 		if ($editButton) {
@@ -159,19 +146,13 @@ echo "
 		";
 	}
 	if ($editButton) {
-		echo "
-		<tr><td colspan=\"3\">
-				<a class=\"btn\"
-					href=\"".BASE_URI."/$resource/updateEmail$person_param\">
-					<span class=\"icon-plus\"></span>
-					{$this->translate('labels.add')}
-					{$this->translate(array('labels.email', 'labels.emails', 1))}
-				</a>
-			</td>
-		</tr>
-		";
+		$addButton = $helper->buttonLink(
+			BASE_URI."/$resource/updateEmail$person_param",
+			"{$this->translate('labels.add')} {$this->translate(array('labels.email', 'labels.emails', 1))}",
+			'add'
+		);
+		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
 	}
-
 	echo "
 	</table>
 
@@ -193,17 +174,12 @@ echo "
 		";
 	}
 	if ($editButton) {
-		echo "
-		<tr><td colspan=\"3\">
-				<a class=\"btn\"
-					href=\"".BASE_URI."/$resource/updatePhone$person_param\">
-					<span class=\"icon-plus\"></span>
-					{$this->translate('labels.add')}
-					{$this->translate(array('labels.phone', 'labels.phones', 1))}
-				</a>
-			</td>
-		</tr>
-		";
+		$addButton = $helper->buttonLink(
+			BASE_URI."/$resource/updatePhone$person_param",
+			"{$this->translate('labels.add')} {$this->translate(array('labels.phone', 'labels.phones', 1))}",
+			'add'
+		);
+		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
 	}
 	echo "
 	</table>

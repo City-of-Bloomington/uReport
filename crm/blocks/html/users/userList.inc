@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright 2007-2013 City of Bloomington, Indiana
+ * @copyright 2007-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->userList
  */
 use Application\Models\Person;
+use Application\Templates\Helpers\ButtonLink;
+
 use Blossom\Classes\View;
 ?>
 <div class="interfaceBox">
 	<h2><?php
 			if (Person::isAllowed('users','add')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/users/update',
-					$this->translate('labels.create_account')
+					$this->translate('labels.create_account'),
+					'add'
 				);
 			}
 			$this->translate(array('labels.user', 'labels.users', 2));
@@ -37,18 +41,18 @@ use Blossom\Classes\View;
 				$editButton   = '';
 				$deleteButton = '';
 				if (Person::isAllowed('users','update')) {
-					$editButton = "
-					<a class=\"icon-pencil\"
-						href=\"".BASE_URI."/users/update?person_id={$user->getId()}\">
-						<span class=\"hidden-label\">{$this->translate('labels.edit')}</span>
-					</a>
-					";
-					$deleteButton = "
-					<a class=\"icon-remove\"
-						href=\"".BASE_URI."/users/delete?person_id={$user->getId()}\">
-						<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
-					</a>
-					";
+					$editButton = $helper->buttonLink(
+						BASE_URI.'/users/update?person_id='.$user->getId(),
+						$this->translate('labels.edit'),
+						'edit',
+						ButtonLink::SIZE_ICON
+					);
+					$deleteButton = $helper->buttonLink(
+						BASE_URI.'/users/delete?person_id='.$user->getId(),
+						$this->translate('labels.delete'),
+						'delete',
+						ButtonLink::SIZE_ICON
+					);
 				}
 
 				$username = View::escape($user->getUsername());

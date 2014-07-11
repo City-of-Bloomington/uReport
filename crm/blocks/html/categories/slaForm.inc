@@ -46,12 +46,10 @@ use Blossom\Classes\View;
 				?>
 				</tbody>
 			</table>
-
-			<button type="submit"><span class="icon-save"></span> <?php echo $this->translate('labels.save'); ?></button>
-			<a class="btn" href="<?php echo BASE_URI; ?>/categories">
-				<span class="icon-remove"></span>
-				<?php echo $this->translate('labels.cancel'); ?>
-			</a>
+			<?php
+				$h = $this->template->getHelper('saveAndCancelButtons');
+				echo $h->saveAndCancelButtons(BASE_URI.'/categories');
+			?>
 		</fieldset>
 	</form>
 </div>

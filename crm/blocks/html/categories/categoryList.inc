@@ -12,9 +12,11 @@ use Blossom\Classes\View;
 	<h2><?php
 			echo $this->translate(array('labels.category', 'labels.categories', 2));
 			if (Person::isAllowed('categories','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/categories/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -41,9 +43,10 @@ use Blossom\Classes\View;
 
 			$editButton = '';
 			if (Person::isAllowed('categories','update')) {
-				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+				$editButton = $helper->buttonLink(
 					BASE_URI.'/categories/update?category_id='.$category->getId(),
-					$this->translate('labels.edit')
+					$this->translate('labels.edit'),
+					'edit'
 				);
 			}
 			$name              = View::escape($category->getName());

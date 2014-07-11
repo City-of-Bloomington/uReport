@@ -18,7 +18,7 @@ echo "
 <div id=\"locationChooser\">
 	<div class=\"hd\">
 		<a id=\"findAddressButton\" class=\"btn\" href=\"$url\">
-			<span class=\"icon-globe\"></span>
+			<span class=\"fa fa-globe\"></span>
 			{$this->translate('labels.find_location')}
 		</a>
 	</div>

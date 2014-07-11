@@ -60,7 +60,7 @@ class PersonChooser
 		<a class=\"btn\"
 			href=\"$personChooser\"
 			onclick=\"PERSON_CHOOSER.open('$fieldname');return false;\">
-			<span class=\"icon-user\"></span>
+			<span class=\"fa fa-user\"></span>
 			Change Person
 		</a>
 		";

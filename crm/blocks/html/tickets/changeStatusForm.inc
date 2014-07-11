@@ -62,7 +62,7 @@ use Blossom\Classes\View;
 
 				<tr><td><label id="notes" class="required">
 							<?php echo $this->translate(array('labels.comment', 'labels.comments', 1)); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><textarea id="notes" name="notes"></textarea></td>

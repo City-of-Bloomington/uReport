@@ -11,14 +11,12 @@ use Blossom\Classes\View;
 $responseButton = '';
 if (Person::isAllowed('issues','update')
 	&& $this->issue->getReportedByPerson()) {
-	$responseButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URL."/issues/respond?issue_id={$this->issue->getId()}\">
-		<span class=\"icon-plus\">
-		</span>
-		{$this->translate('labels.add_response')}
-	</a>
-	";
+	$h = $this->template->getHelper('buttonLink');
+	$responseButton = $h->buttonLink(
+		BASE_URL.'/issues/respond?issue_id='.$this->issue->getId(),
+		$this->translate('labels.add_response'),
+		'add'
+	);
 }
 ?>
 <div class="responseList">

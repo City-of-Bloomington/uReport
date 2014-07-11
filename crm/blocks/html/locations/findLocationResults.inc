@@ -85,7 +85,7 @@ else {
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\"><span class=\"icon-plus\"></span> {$this->translate('labels.submit')}</button>
+				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->translate('labels.submit')}</button>
 			</fieldset>
 		</form>
 		";

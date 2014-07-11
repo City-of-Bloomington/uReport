@@ -30,7 +30,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		<table>
 			<tr><td><label for="name" class="required">
 						<?php echo $this->translate('labels.name'); ?>
-						<span class="icon-asterisk"></span>
+						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
 				<td><input name="name" id="name"

@@ -77,7 +77,7 @@ if (Person::isAllowed('tickets','add')) {
 			<label><?php echo $this->translate('labels.search'); ?>
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.go'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.go'); ?></button>
 			<p class="help"><?php echo $this->translate('messages.ticket_search_query_description'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
@@ -163,7 +163,7 @@ if (Person::isAllowed('tickets','add')) {
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit"><span class="icon-search"></span> <?php echo $this->translate('labels.search'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.search'); ?></button>
 		</fieldset>
 	</form>
 </div>

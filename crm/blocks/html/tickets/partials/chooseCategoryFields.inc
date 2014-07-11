@@ -46,7 +46,7 @@ use Blossom\Classes\Url;
 		echo "
 		<a href=\"$url\" id=\"moreCategoriesLink\">
 			{$this->translate('labels.more_categories')}
-			<span class=\"icon-double-angle-right\"></span>
+			<span class=\"fa fa-angle-double-right\"></span>
 		</a>
 		";
 	?>

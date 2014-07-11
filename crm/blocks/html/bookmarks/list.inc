@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param BookmarkList $this->bookmarks
  */
 use Blossom\Classes\View;
+use Application\Template\Helpers\ButtonLink;
 
 $title = !empty($this->title)
 	? View::escape($this->title)
@@ -18,14 +19,16 @@ if (count($this->bookmarks)) {
  	";
 		foreach ($this->bookmarks as $bookmark) {
 			$name = View::escape($bookmark->getName());
-			echo "
-			<li><a href=\"{$bookmark->getRequestUri()}\">$name</a>
-				<a class=\"icon-remove\"
-					href=\"".BASE_URI."/bookmarks/delete?bookmark_id={$bookmark->getId()};return_url=$_SERVER[REQUEST_URI]\">
-					<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
-				</a>
-			</li>
-			";
+
+			$h = $this->template->getHelper('buttonLink');
+			$button = $h->buttonLink(
+				BASE_URI."/bookmarks/delete?bookmark_id={$bookmark->getId()};return_url=$_SERVER[REQUEST_URI]",
+				$this->translate('labels.delete'),
+				'delete',
+				ButtonLink::SIZE_ICON
+			);
+
+			echo "<li><a href=\"{$bookmark->getRequestUri()}\">$name</a> $button</li>";
 		}
 	echo "
 		</ul>

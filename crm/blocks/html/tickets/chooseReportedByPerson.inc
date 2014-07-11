@@ -19,7 +19,7 @@ echo "
 	<div class=\"hd\">
 		<h3>{$this->translate('labels.reportedByPerson')}</h3>
 		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
-			<span class=\"icon-user\"></span>
+			<span class=\"fa fa-user\"></span>
 			{$this->translate('labels.find_person')}
 		</a>
 	</div>

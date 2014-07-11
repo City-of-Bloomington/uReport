@@ -23,7 +23,7 @@ $text = isset($_GET['location']['text']) ? View::escape($_GET['location']['text'
 				}
 			?>
 			<button type="submit">
-				<span class="icon-search"></span>
+				<span class="fa fa-search"></span>
 				<?php echo $this->translate('labels.search'); ?>
 			</button>
 		</fieldset>

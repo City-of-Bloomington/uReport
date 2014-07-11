@@ -34,7 +34,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js'
 						</select>
 					</td>
 					<td><button type="submit">
-							<span class="icon-ok"></span>
+							<span class="fa fa-check"></span>
 							<?php echo $this->translate('labels.change_department'); ?>
 						</button>
 					</td>

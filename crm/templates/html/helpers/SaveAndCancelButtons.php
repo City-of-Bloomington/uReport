@@ -19,14 +19,17 @@ class SaveAndCancelButtons
 
 	public function saveAndCancelButtons($cancelURL)
 	{
+		$helper = $this->template->getHelper('buttonLink');
+
 		$buttons = "
-		<button type=\"submit\"><span class=\"icon-save\"></span>
+		<button type=\"submit\"><span class=\"fa fa-floppy-o\"></span>
 			{$this->template->translate('labels.save')}
 		</button>
-		<a class=\"btn\" href=\"$cancelURL\"><span class=\"icon-remove\"></span>
-			{$this->template->translate('labels.cancel')}
-		</a>
-		";
+		".$helper->buttonLink(
+			$cancelURL,
+			$this->template->translate('labels.cancel'),
+			'cancel'
+		);
 		return $buttons;
 	}
 }

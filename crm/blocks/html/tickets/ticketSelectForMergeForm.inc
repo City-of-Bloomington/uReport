@@ -13,7 +13,7 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/tickets/merge.js');
 		<div>
 			<span class="yui3-dd-drop"><input name="ticket_id_a" id="ticket_id_a" /></span>
 			<span class="yui3-dd-drop"><input name="ticket_id_b" id="ticket_id_b" /></span>
-			<button type="submit"><span class="icon-ok"></span> <?php echo $this->translate('labels.merge'); ?></button>
+			<button type="submit"><span class="fa fa-check"></span> <?php echo $this->translate('labels.merge'); ?></button>
 		</div>
 	</fieldset>
 </form>

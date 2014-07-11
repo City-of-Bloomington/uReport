@@ -14,7 +14,7 @@ $this->template->addToAsset('scripts',BASE_URI.'/js/people/merge.js');
 			<span class="yui3-dd-drop"><input name="person_id_a" id="person_id_a" /></span>
 			<span class="yui3-dd-drop"><input name="person_id_b" id="person_id_b" /></span>
 			<button type="submit">
-				<span class="icon-ok"></span>
+				<span class="fa fa-check"></span>
 				<?php echo $this->translate('labels.merge'); ?>
 			</button>
 		</div>

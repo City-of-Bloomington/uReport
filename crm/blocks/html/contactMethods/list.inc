@@ -13,9 +13,11 @@ use Blossom\Classes\View;
 	<h2><?php
 			echo $this->translate(array('labels.contactMethod','labels.contactMethods',2));
 			if (Person::isAllowed('contactMethods','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/contactMethods/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -27,9 +29,10 @@ use Blossom\Classes\View;
 		$list = $table->find();
  		foreach ($list as $method) {
 			if (Person::isAllowed('contactMethods','update')) {
-				$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+				$editButton = $helper->buttonLink(
 					BASE_URI.'/contactMethods/update?contactMethod_id='.$method->getId(),
-					$this->translate('labels.edit')
+					$this->translate('labels.edit'),
+					'edit'
 				);
 			}
 			$name = View::escape($method->getName());

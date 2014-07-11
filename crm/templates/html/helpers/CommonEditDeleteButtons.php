@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -25,16 +25,20 @@ class CommonEditDeleteButtons
 	public function commonEditDeleteButtons($controller, $item, $object)
 	{
 		$class = ucfirst($item);
-		$buttons = "
-		<a class=\"icon-pencil\"
-			href=\"".BASE_URI."/{$controller}/update{$class}?{$item}_id={$object->getId()}\">
-			<span class=\"hidden-label\">Edit $class</span>
-		</a>
-		<a class=\"icon-remove\"
-			href=\"".BASE_URI."/{$controller}/delete{$class}?{$item}_id={$object->getId()}\">
-			<span class=\"hidden-label\">Delete $class</span>
-		</a>
-		";
+
+		$h = $this->template->getHelper('buttonLink');
+		$buttons = $h->buttonLink(
+			BASE_URI."/{$controller}/update{$class}?{$item}_id={$object->getId()}",
+			$this->template->translate('labels.edit'),
+			'edit',
+			ButtonLink::SIZE_ICON
+		);
+		$buttons.= $h->buttonLink(
+			BASE_URI."/{$controller}/delete{$class}?{$item}_id={$object->getId()}",
+			$this->template->translate('labels.delete'),
+			'delete',
+			ButtonLink::SIZE_ICON
+		);
 		return $buttons;
 	}
 }

@@ -28,7 +28,7 @@
 				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
 				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
 			</div>
-			<button type="submit"><span class="icon-ok"></span> <?php echo $this->translate('labels.merge'); ?></button>
+			<button type="submit"><span class="fa fa-check"></span> <?php echo $this->translate('labels.merge'); ?></button>
 		</fieldset>
 	</form>
 </div>

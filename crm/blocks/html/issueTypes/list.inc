@@ -12,9 +12,11 @@ use Blossom\Classes\View;
 	<h2><?php
 			echo $this->translate(array('labels.issueType', 'labels.issueTypes', 2));
 			if (Person::isAllowed('issueTypes','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/issueTypes/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -25,13 +27,11 @@ use Blossom\Classes\View;
 		$list = $t->find();
  		foreach ($list as $type) {
 			if (Person::isAllowed('issueTypes','update')) {
-				$editButton = "
-				<a class=\"btn\"
-					href=\"".BASE_URI."/issueTypes/update?issueType_id={$type->getId()}\">
-					<span class=\"icon-pencil\"></span>
-					{$this->translate('labels.edit')}
-				</a>
-				";
+				$editButton = $helper->buttonLink(
+					BASE_URI.'/issueTypes/update?issueType_id='.$type->getId(),
+					$this->translate('labels.edit'),
+					'edit'
+				);
 			}
 			$name = View::escape($type->getName());
 			echo "<li>$editButton $name</li>";

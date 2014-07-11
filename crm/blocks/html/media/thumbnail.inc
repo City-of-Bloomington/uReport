@@ -8,14 +8,17 @@
  * @param Media $this->media
  */
 use Application\Models\Person;
+use Application\Templates\Helpers\ButtonLink;
 
 $deleteButton = '';
 if (!$this->disableButtons && Person::isAllowed('issues','update')) {
-	$deleteButton = "
-	<a class=\"icon-remove\" href=\"".BASE_URI."/media/delete?media_id={$this->media->getId()}\">
-		<span class=\"hidden-label\">{$this->translate('labels.delete')}</span>
-	</a>
-	";
+	$h = $this->template->getHelper('buttonLink');
+	$deleteButton = $h->buttonLink(
+		BASE_URI.'/media/delete?media_id='.$this->media->getId(),
+		$this->translate('labels.delete'),
+		'delete',
+		ButtonLink::SIZE_ICON
+	);
 }
 echo "
 <div class=\"thumbnail\">

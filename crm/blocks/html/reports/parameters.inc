@@ -31,18 +31,15 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 	?>
 	<span>
 	<?php
+		$helper = $this->template->getHelper('buttonLink');
+
 		if (!empty($_GET['enteredDate']['start']) || !empty($_GET['enteredDate']['end'])) {
 			$deleteURL = clone $currentURL;
 			unset($deleteURL->enteredDate);
 
 			$s = !empty($_GET['enteredDate']['start']) ? $_GET['enteredDate']['start'] : '*';
 			$e = !empty($_GET['enteredDate']['end'])   ? $_GET['enteredDate']['end']   : '*';
-			echo "
-			<a class=\"btn\" href=\"$deleteURL\">
-				<span class=\"icon-remove\"></span>
-				$s to $e
-			</a>
-			";
+			echo $helper->buttonLink($deleteURL, "$s to $e", 'delete');
 		}
 		if (!empty($_GET['departments'])) {
 			foreach (array_keys($_GET['departments']) as $id) {
@@ -51,12 +48,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['departments'][$id]);
 					$name = View::escape($d->getName());
-					echo "
-					<a class=\"btn\" href=\"$deleteURL\">
-						<span class=\"icon-remove\"></span>
-						$name
-					</a>
-					";
+					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
 				catch (Exception $e) {
 				}
@@ -69,12 +61,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['categories'][$id]);
 					$name = View::escape($c->getName());
-					echo "
-					<a class=\"btn\" href=\"$deleteURL\">
-						<span class=\"icon-remove\"></span>
-						$name
-					</a>
-					";
+					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
 				catch (Exception $e) {
 				}

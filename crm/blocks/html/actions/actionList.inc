@@ -11,9 +11,11 @@ use Blossom\Classes\View;
 <div class="interfaceBox">
 	<h2><?php
 			if (Person::isAllowed('actions','update')) {
-				echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+				$helper = $this->template->getHelper('buttonLink');
+				echo $helper->buttonLink(
 					BASE_URI.'/actions/update',
-					$this->translate('labels.add')
+					$this->translate('labels.add'),
+					'add'
 				);
 			}
 		?>
@@ -34,9 +36,10 @@ use Blossom\Classes\View;
 			foreach ($list as $action) {
 				$editButton = '';
 				if (Person::isAllowed('actions','update') && $action->getType()!='system') {
-					$editButton = sprintf('<a class="btn" href="%s"><span class="icon-pencil"></span> %s</a>',
+					$editButton = $helper->buttonLink(
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
-						$this->translate('labels.edit')
+						$this->translate('labels.edit'),
+						'edit'
 					);
 				}
 				$name        = View::escape($action->getName());

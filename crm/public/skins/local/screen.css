@@ -33,17 +33,22 @@ button, .btn {
 	background-image:url('images/buttonBackground.png');
 	background-position:left center repeat-x;
 }
-.hidden-label 		{ font-size:0; height:1px; overflow:hidden; }
-.icon-remove 		{ color:red;   }
-.icon-pencil 		{ color:blue;  }
-.icon-plus   		{ color:green; }
-.icon-ok     		{ color:green; }
-.icon-save   		{ color:green; }
-.icon-map-marker 	{ color:blue; }
-.icon-list-ul		{ color:blue; }
-.icon-print         { color:blue; }
+.hidden-label { font-size:0; height:1px; overflow:hidden; }
+.fa-times 		{ color:red;   }
+.fa-pencil 		{ color:blue;  }
+.fa-plus   		{ color:green; }
+.fa-check     	{ color:green; }
+.fa-floppy-o   	{ color:green; }
+.fa-map-marker 	{ color:blue;  }
+.fa-globe       { color:blue;  }
+.fa-list-ul		{ color:blue;  }
+.fa-print       { color:blue;  }
+.fa-reorder     {}
+.fa-user        {}
+.fa-search      {}
+.fa-upload      {}
 
-.ticketInfo ul [class^="icon-"] {
+.ticketInfo ul [class^="fa"] {
 	float:right;
 }
 

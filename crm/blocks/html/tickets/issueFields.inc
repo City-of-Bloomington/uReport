@@ -13,7 +13,7 @@ use Blossom\Classes\View;
 <table>
 	<tr><td><label for="issueType_id" class="required">
 				<?php echo $this->translate('labels.type'); ?>
-				<span class="icon-asterisk"></span>
+				<span class="fa fa-asterisk"></span>
 			</label>
 		</td>
 		<td><select name="issueType_id" id="issueType_id">

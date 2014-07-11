@@ -21,7 +21,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 
 		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
 			<button type="submit">
-				<span class="icon-save"></span>
+				<span class="fa fa-check"></span>
 				<?php echo $this->translate('labels.save'); ?>
 			</button>
 			<?php
@@ -40,7 +40,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 					: '';
 				echo "
 				<a class=\"btn\" href=\"$return_url\" $onclick>
-					<span class=\"icon-remove\"></span>
+					<span class=\"fa fa-times\"></span>
 					{$this->translate('labels.cancel')}
 				</a>
 				";

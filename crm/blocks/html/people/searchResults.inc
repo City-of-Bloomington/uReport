@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
@@ -30,9 +30,11 @@ use Blossom\Classes\Url;
 					$url->$key = $value;
 				}
 			}
-			echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+			$h = $this->template->getHelper('buttonLink');
+			echo $h->buttonLink(
 				$url,
-				$this->translate('labels.add_person')
+				$this->translate('labels.add_person'),
+				'add'
 			);
 		}
 	?>

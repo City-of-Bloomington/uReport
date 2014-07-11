@@ -23,7 +23,7 @@ if (count($actions)) {
 			<table>
 				<tr><td><label for="action_id" class="required">
 							<?php echo $this->translate(array('labels.action', 'labels.actions', 1)); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><select name="action_id" id="action_id">
@@ -55,8 +55,8 @@ if (count($actions)) {
 			<div><textarea name="notes" id="notes"></textarea></div>
 		</fieldset>
 		<fieldset class="buttons">
-			<button type="submit"><span class="icon-ok"></span>     <?php echo $this->translate('labels.submit'); ?></button>
-			<button type="reset" ><span class="icon-remove"></span> <?php echo $this->translate('labels.cancel'); ?></button>
+			<button type="submit"><span class="fa fa-check"></span> <?php echo $this->translate('labels.submit'); ?></button>
+			<button type="reset" ><span class="fa fa-times"></span> <?php echo $this->translate('labels.cancel'); ?></button>
 		</fieldset>
 	</form>
 </div>

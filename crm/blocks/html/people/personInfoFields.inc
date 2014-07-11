@@ -35,7 +35,7 @@ foreach ($fields as $field) {
 	<table>
 		<tr><td><label for="firstname" class="required">
 					<?php echo $this->translate('labels.firstname'); ?>
-					<span class="icon-asterisk"></span>
+					<span class="fa fa-asterisk"></span>
 				</label>
 			</td>
 			<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
@@ -47,7 +47,7 @@ foreach ($fields as $field) {
 
 		<tr><td><label for="lastname" class="required">
 					<?php echo $this->translate('labels.lastname'); ?>
-					<span class="icon-asterisk"></span>
+					<span class="fa fa-asterisk"></span>
 				</label>
 			</td>
 			<td><input name="lastname" id="lastname" value="<?php echo $lastname; ?>" /></td>

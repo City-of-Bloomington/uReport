@@ -77,9 +77,11 @@ use Blossom\Classes\View;
 								// Just ignore invalid people
 							}
 						}
-						echo sprintf('<a class="btn" href="%s"><span class="icon-plus"></span> %s</a>',
+						$helper = $this->template->getHelper('buttonLink');
+						echo $helper->buttonLink(
 							$url,
-							$this->translate('labels.add_issue')
+							$this->translate('labels.add_issue'),
+							'add'
 						);
 					}
 				echo "
@@ -95,7 +97,7 @@ use Blossom\Classes\View;
 			echo "
 			<div>
 				<a href=\"{$this->moreLink}\">
-					{$this->translate('labels.more')} <span class=\"icon-double-angle-right\"></span>
+					{$this->translate('labels.more')} <span class=\"fa fa-angle-double-right\"></span>
 				</a>
 			</div>
 			";

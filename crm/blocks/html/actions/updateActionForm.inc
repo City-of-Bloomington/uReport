@@ -31,7 +31,7 @@ $description = View::escape($this->action->getDescription());
 
 				<tr><td><label for="name" class="required">
 							<?php echo $this->translate('labels.name'); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
@@ -39,7 +39,7 @@ $description = View::escape($this->action->getDescription());
 
 				<tr><td><label for="description" class="required">
 							<?php echo $this->translate('labels.description'); ?>
-							<span class="icon-asterisk"></span>
+							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
 					<td><input name="description" id="description" value="<?php echo $description; ?>" /></td>

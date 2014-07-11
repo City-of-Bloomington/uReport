@@ -14,7 +14,7 @@ if (!$this->disableButtons && Person::isAllowed('media','upload')) {
 	$uploadButton = "
 	<a class=\"btn\"
 		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
-		<span class=\"icon-upload-alt\"></span>
+		<span class=\"fa fa-upload\"></span>
 		{$this->translate('labels.upload_media')}
 	</a>
 	";
