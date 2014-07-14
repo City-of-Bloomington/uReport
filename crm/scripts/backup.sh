@@ -1,38 +1,42 @@
 #!/bin/bash
 # Creates a tarball containing a full snapshot of the data in the site
 #
-# @copyright Copyright 2011-2012 City of Bloomington, Indiana
+# @copyright 2011-2014 City of Bloomington, Indiana
 # @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
 # @author Cliff Ingham <inghamn@bloomington.in.gov>
+
+# Where to store the nightly backup tarballs
+BACKUP_DIR=/srv/backups/crm
+# The path to the mysqldump executable
 MYSQLDUMP=/usr/local/mysql/bin/mysqldump
-BACKUP_DIR=/var/www/backups/crm
-APPLICATION_HOME=/var/www/sites/crm
+# Your APPLICATION_HOME from configuration.inc
+APPLICATION_HOME=/srv/sites/crm
+# You SITE_HOME from configuration.inc
+SITE_HOME=$APPLICATION_HOME/data
+# Where to store the database dump files
+DB_DUMP_DIR=$SITE_HOME/database_backup
 
 MYSQL_DBNAME=crm
 
-# How many days worth of tarballs to keep around
+# How many days worth of backups to keep around
 num_days_to_keep=5
 
 #----------------------------------------------------------
-# No Editing Required below this line
+# No editing is usually required below this line
 #----------------------------------------------------------
 now=`date +%s`
 today=`date +%F`
 
-cd $BACKUP_DIR
-mkdir $today
-
 # Dump the database
-$MYSQLDUMP --defaults-extra-file=$APPLICATION_HOME/scripts/backup.cnf $MYSQL_DBNAME > $today/$MYSQL_DBNAME.sql
-
-# Copy media uploads into this directory, so they're backed up, too.
-cp -R $APPLICATION_HOME/data/media $today/media
+$MYSQLDUMP --defaults-extra-file=$APPLICATION_HOME/scripts/backup.cnf $MYSQL_DBNAME > $DB_DUMP_DIR/$MYSQL_DBNAME.sql
 
 # Tarball the Data
-tar czf $today.tar.gz $today
-rm -Rf $today
+cd $SITE_HOME/..
+basename=${SITE_HOME##*/}
+tar czf $BACKUP_DIR/$today.tar.gz $basename
 
 # Purge any backup tarballs that are too old
+cd $BACKUP_DIR
 for file in `ls`
 do
 	atime=`stat -c %Y $file`
