@@ -145,49 +145,6 @@ class IssuesController extends Controller
 	}
 
 	/**
-	 * @param GET issue_id
-	 */
-	public function delete()
-	{
-		// Load the issue
-		try {
-			$issue = new Issue($_REQUEST['issue_id']);
-			$ticket = $issue->getTicket();
-		}
-		catch (\Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL);
-			exit();
-		}
-
-		// Once they've confirmed, go ahead and do the delete
-		if (isset($_REQUEST['confirm'])) {
-			try {
-				$ticket = $issue->getTicket();
-				$issue->delete();
-				header('Location: '.$ticket->getURL());
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-				#header('Location: '.$this->return_url);
-				print_r($e);
-				exit();
-			}
-		}
-
-		// Display the confirmation form
-		$this->template->blocks[] = new Block(
-			'confirmForm.inc',
-			array('title'=>'Confirm Delete', 'return_url'=>$ticket->getURL())
-		);
-		$this->template->blocks[] = new Block(
-			'tickets/issueInfo.inc',
-			array('issue'=>$issue, 'disableButtons'=>true)
-		);
-	}
-
-	/**
 	 * @param REQUEST issue_id
 	 */
 	public function respond()

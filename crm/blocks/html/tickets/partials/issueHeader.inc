@@ -10,7 +10,6 @@ use Application\Models\Person;
 use Blossom\Classes\View;
 
 $editButton     = '';
-$deleteButton   = '';
 
 if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$helper = $this->template->getHelper('buttonLink');
@@ -18,11 +17,6 @@ if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 		BASE_URI.'/issues/update?issue_id='.$this->issue->getId(),
 		$this->translate('labels.edit_issue'),
 		'edit'
-	);
-	$deleteButton = $helper->buttonLink(
-		BASE_URI.'/issues/delete?issue_id='.$this->issue->getId(),
-		$this->translate('labels.delete_issue'),
-		'delete'
 	);
 }
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
@@ -33,7 +27,6 @@ echo "
 		<span class=\"issueType\"><a href=\"$url\">$type</a></span>
 		<span class=\"issueActions\">
 			$editButton
-			$deleteButton
 		</span>
 	</h2>
 </div>
