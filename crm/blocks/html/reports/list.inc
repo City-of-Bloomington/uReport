@@ -13,6 +13,7 @@ use Blossom\Classes\Block;
 		<li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories</a></li>
 		<li><a href="<?php echo BASE_URI; ?>/reports/sla">SLA</a></li>
 		<li><a href="<?php echo BASE_URI; ?>/reports">Activity</a></li>
+		<li><a href="<?php echo BASE_URI; ?>/reports/volume">Volume</a></li>
 	</ul>
 	<?php
 		$table = new BookmarkTable();

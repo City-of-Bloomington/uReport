@@ -7,6 +7,7 @@
 use Application\Models\CategoryTable;
 use Application\Models\Department;
 use Application\Models\DepartmentTable;
+use Application\Models\ClientTable;
 
 use Blossom\Classes\View;
 
@@ -14,6 +15,7 @@ $this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 ?>
 <div>
+    <h2>Filters</h2>
 	<form method="get">
 		<fieldset>
 			<div class="collapsible">
@@ -75,6 +77,46 @@ $this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
 					</tr>
 				</table>
 			</div>
+			<div class="collapsible">
+                <h3 class="hd">Reportable By:</h3>
+                <div class="bd">
+                    <?php
+                        foreach (['anonymous', 'staff'] as $v) {
+                            $checked = (!empty($_GET['postingPermissionLevel']) && $_GET['postingPermissionLevel']==$v)
+                                ? 'checked="checked"'
+                                : '';
+                            echo "
+                            <div><label>$v
+                                    <input name=\"postingPermissionLevel\" type=\"radio\" value=\"$v\" $checked/>
+                                </label>
+                            </div>
+                            ";
+                        }
+                    ?>
+                </div>
+			</div>
+            <div class="collapsible">
+                <h3 class="hd"><?php echo $this->_(['labels.client', 'labels.clients', 2]); ?></h3>
+                <div class="bd">
+                <?php
+                    $table = new ClientTable();
+                    $list = $table->find();
+                    foreach ($list as $c) {
+                        $checked = !empty($_GET['clients'][$c->getId()])
+                            ? 'checked="checked"'
+                            : '';
+                        $name = View::escape($c->getName());
+                        echo "
+                        <div><label>
+                                <input name=\"clients[{$c->getId()}]\" type=\"checkbox\" $checked />
+                                $name
+                            </label>
+                        </div>
+                        ";
+                    }
+                ?>
+                </div>
+            </div>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('enteredDate'));

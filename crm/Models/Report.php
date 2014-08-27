@@ -23,13 +23,15 @@ class Report
 	}
 
 	/**
+	 * @param array $get The raw GET request
 	 * @return array
 	 */
 	public static function assignments($get)
 	{
 		$closed = self::closedId();
+        $options = self::handleSearchParameters($get);
+        $where = $options ? "where $options" : '';
 
-		$where = self::handleSearchParameters($get);
 		$sql = "select t.assignedPerson_id, t.status, t.category_id,
 					p.firstname, p.lastname,
 					c.name as category,
@@ -65,12 +67,15 @@ class Report
 	}
 
 	/**
+	 * @param array $get The raw GET request
 	 * @return array
 	 */
 	public static function categories($get)
 	{
 		$closed = self::closedId();
-		$where = self::handleSearchParameters($get);
+		$options = self::handleSearchParameters($get);
+		$where = $options ? "where $options" : '';
+
 		$sql = "select c.id as category_id, c.name as category,
 					t.assignedPerson_id, t.status, t.substatus_id,
 					p.firstname, p.lastname, s.name as substatus,
@@ -130,6 +135,16 @@ class Report
 		return implode(',', $ids);
 	}
 
+	private static function parseDate($string)
+	{
+        try {
+            $d = \DateTime::createFromFormat(DATE_FORMAT, $string);
+            return $d->format(ActiveRecord::MYSQL_DATE_FORMAT);
+        }
+        catch (\Exception $e) {
+        }
+	}
+
 	/**
 	 * WARNING:
 	 * Be very careful here, we're handling SQL as raw strings for
@@ -144,27 +159,73 @@ class Report
 	{
 		$options = array();
 		if (!empty($get['enteredDate'])) {
-			$start = !empty($get['enteredDate']['start'])
-				? date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($get['enteredDate']['start']))
-				: '1970-01-01';
-			$end = !empty($get['enteredDate']['end'])
-				? date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($get['enteredDate']['end']))
-				: date(ActiveRecord::MYSQL_DATE_FORMAT);
+            if (!empty($get['enteredDate']['start'])) {
+                $start = self::parseDate($get['enteredDate']['start']);
+            }
+            $start = $start ? $start : '1970-01-01';
+
+            if (!empty($get['enteredDate']['end'])) {
+                $end = self::parseDate($get['enteredDate']['end']);
+            }
+            $end = $end ? $end : date(ActiveRecord::MYSQL_DATE_FORMAT);
+            
 			$options[] = "(t.enteredDate<='$end' and ifnull(t.closedDate, now())>='$start')";
 		}
-		if (!empty($get['departments'])) {
-			$ids = self::implodeIds($get['departments']);
-			$options[] = "p.department_id in ($ids)";
-		}
-		if (!empty($get['categories'])) {
-			$ids = self::implodeIds($get['categories']);
-			$options[] = "t.category_id in ($ids)";
-		}
-		if ($options) {
-			$options = implode(' and ', $options);
-			return "where $options";
-		}
+		self::handleFilters($options, $get);
+
+		return $options ? implode(' and ', $options) : '';
 	}
+
+	private static function handleFilters(&$options, $get)
+	{
+        if (!empty($get['departments'])) {
+            $ids = self::implodeIds($get['departments']);
+            $options[] = "p.department_id in ($ids)";
+        }
+        if (!empty($get['categories'])) {
+            $ids = self::implodeIds($get['categories']);
+            $options[] = "t.category_id in ($ids)";
+        }
+        if (!empty($get['clients'])) {
+            $ids = self::implodeIds($get['clients']);
+            $options[] = "t.client_id in ($ids)";
+        }
+        if (!empty($get['postingPermissionLevel'])) {
+            $v = $get['postingPermissionLevel']=='anonymous'
+                ? 'anonymous'
+                : 'staff';
+            $options[] = "postingPermissionLevel='$v'";
+        }
+	}
+
+    /**
+     * The volume query wants tickets reported during the provided
+     * date range.  This is different from the rest of the reports
+     * that are looking for tickets that were active during the date
+     * range.
+     *
+     * So, the date ranges get handled in a special way, but all the
+     * other possible filters are handled the same.
+     *
+     * @param array $get The raw GET request
+     * @return string The sql for the where portion of a select
+     */
+    private static function volumeOptions($get)
+    {
+        $options = [];
+        if (!empty($get['enteredDate'])) {
+            $start = !empty($get['enteredDate']['start'])
+                ? date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($get['enteredDate']['start']))
+                : '1970-01-01';
+            $end = !empty($get['enteredDate']['end'])
+                ? date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($get['enteredDate']['end']))
+                : date(ActiveRecord::MYSQL_DATE_FORMAT);
+            $options[] = "enteredDate between '$start' and '$end'";
+        }
+        self::handleFilters($options, $get);
+
+        return count($options) ? implode(' and ', $options) : '';
+    }
 
 	/**
 	 * @return Zend\Db\ResultSet
@@ -361,4 +422,54 @@ class Report
 		}
 		return $dates;
 	}
+
+
+	/**
+	 * @param array $get The raw GET request
+	 * @return array
+	 */
+	public static function volumeByDepartment($get)
+	{
+        $options = self::volumeOptions($get);
+        $where = $options ? "where $options" : '';
+
+        $zend_db = Database::getConnection();
+
+        $sql = "select count(*) as count
+                from tickets t
+                join categories p on t.category_id=p.id
+                $where";
+        $result = $zend_db->query($sql)->execute();
+        $row = $result->current();
+        $totalCount = $row['count'];
+
+
+        $sql = "select d.id, d.name, count(*) as count
+                from departments d
+                join categories p on d.id=p.department_id
+                join tickets t on p.id=t.category_id
+                $where
+                group by d.id, d.name";
+        $result = $zend_db->query($sql)->execute();
+
+        return [ 'totalCount'=>$totalCount, 'result'=>$result ];
+	}
+
+
+	public static function volumeByCategory($get, $department_id)
+	{
+        $options = self::volumeOptions($get);
+        $options = $options ? "and $options" : '';
+
+        $zend_db = Database::getConnection();
+
+        $sql = "select p.name, count(*) as count
+                from categories p
+                join tickets t on p.id=t.category_id
+                where p.department_id=?
+                $options
+                group by p.name";
+        $result = $zend_db->query($sql)->execute([$department_id]);
+        return ['result'=>$result];
+    }
 }

@@ -53,4 +53,11 @@ class ReportsController extends Controller
 			'reports/sla.inc'
 		);
 	}
+
+	public function volume()
+	{
+        $this->template->blocks['right'][] = new Block(
+            'reports/volume.inc'
+        );
+	}
 }

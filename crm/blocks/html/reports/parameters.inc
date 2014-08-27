@@ -7,6 +7,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Category;
+use Application\Models\Client;
 use Application\Models\Department;
 use Application\Models\Person;
 
@@ -21,7 +22,9 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		echo '<div>';
 		if (   !empty($_GET['enteredDate'])
 			|| !empty($_GET['departments'])
-			|| !empty($_GET['categories'])) {
+			|| !empty($_GET['categories'])
+			|| !empty($_GET['postingPermissionLevel'])
+			|| !empty($_GET['clients'])) {
 			if (Person::isAllowed('bookmarks', 'update')) {
 				$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'report'));
 				echo $bookmarkForm->render('html', $this->template);
@@ -50,7 +53,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$name = View::escape($d->getName());
 					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 				}
 			}
 		}
@@ -63,9 +66,28 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$name = View::escape($c->getName());
 					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 				}
 			}
+		}
+		if (!empty($_GET['postingPermissionLevel'])) {
+            $deleteURL = clone $currentURL;
+            unset($deleteURL->parameters['postingPermissionLevel']);
+            $name = View::escape($_GET['postingPermissionLevel']);
+            echo $helper->buttonLink($deleteURL, $name, 'delete');
+		}
+		if (!empty($_GET['clients'])) {
+            foreach (array_keys($_GET['clients']) as $id) {
+                try {
+                    $c = new Client($id);
+                    $deleteURL = clone $currentURL;
+                    unset($deleteURL->parameters['clients'][$id]);
+                    $name = View::escape($c->getName());
+                    echo $helper->buttonLink($deleteURL, $name, 'delete');
+                }
+                catch (\Exception $e) {
+                }
+            }
 		}
 	?>
 	</span>
