@@ -90,7 +90,7 @@ class Open311Client
 			$table = new PersonTable();
 			$list = $table->find($search);
 			// When we find one and only one record, use the record we found
-			if (count($list) == 1) { $person = $list[0]; }
+			if (count($list) == 1) { $person = $list->current(); }
 			// Otherwise, create a new person record
 			else {
 				$p = array();

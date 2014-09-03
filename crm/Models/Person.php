@@ -8,7 +8,6 @@ namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 use Blossom\Classes\ExternalIdentity;
-use Zend\Mail;
 
 class Person extends ActiveRecord
 {
@@ -459,15 +458,9 @@ class Person extends ActiveRecord
 				$html = mb_convert_encoding($html,    'ISO-8859-1', 'UTF-8');
 			}
 			foreach ($this->getNotificationEmails() as $email) {
-				$mail = new Mail\Message();
-				$mail->addTo($email->getEmail(), $this->getFullname());
-				$mail->setFrom($fromEmail, $fromFullname);
-				$mail->setSubject($subject);
-				$mail->setBody($message);
-				//if ($html) {
-				//	$mail->setBodyHtml($html);
-				//}
-				$mail->send();
+                $to = $email->getEmail();
+                $from = "From: $fromFullname <$fromEmail>";
+                mail($to, $subject, $message, $from, "-f$fromEmail");
 			}
 		}
 	}

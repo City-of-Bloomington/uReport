@@ -6,7 +6,7 @@
  * @param BookmarkList $this->bookmarks
  */
 use Blossom\Classes\View;
-use Application\Template\Helpers\ButtonLink;
+use Application\Templates\Helpers\ButtonLink;
 
 $title = !empty($this->title)
 	? View::escape($this->title)

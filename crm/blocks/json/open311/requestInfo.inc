@@ -16,7 +16,7 @@ $history = end($h);
 $media_url = '';
 $media = $issue->getMedia();
 if (count($media)) {
-	$m = $media[0];
+	$m = $media->current();
 	$media_url = $m->getURL();
 }
 

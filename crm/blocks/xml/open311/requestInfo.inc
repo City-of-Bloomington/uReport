@@ -25,7 +25,7 @@ $zipcode = View::escape($this->ticket->getZip());
 $media_url = '';
 $media = $issue->getMedia();
 if (count($media)) {
-	$m = $media[0];
+	$m = $media->current();
 	$media_url = $m->getURL();
 }
 

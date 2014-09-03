@@ -11,6 +11,7 @@ use Application\Models\CategoryTable;
 use Application\Models\Ticket;
 use Application\Models\TicketTable;
 use Application\Models\Open311Client;
+use Application\Models\Media;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
