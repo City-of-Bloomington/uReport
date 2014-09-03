@@ -11,6 +11,7 @@ use Application\Models\Person;
 use Application\Models\Search;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
+use Blossom\Classes\View;
 
 $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 $helper = $this->template->getHelper('buttonLink');

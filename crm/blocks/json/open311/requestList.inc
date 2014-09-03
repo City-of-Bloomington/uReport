@@ -44,7 +44,8 @@ foreach ($this->ticketList as $t) {
 
 		$media = $issue->getMedia();
 		if (count($media)) {
-			$sr['media_url'] = $media[0]->getURL();
+            $first = $media->current();
+			$sr['media_url'] = $first->getURL();
 		}
 	}
 

@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
+use Blossom\Classes\View;
+
 echo "
 <service_definition>
 	<service_code>{$this->category->getId()}</service_code>

@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
+use Blossom\Classes\View;
+
 echo "<services>";
 foreach ($this->categoryList as $category) {
 	$service_code = "{$category->getId()}";

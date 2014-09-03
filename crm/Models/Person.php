@@ -8,6 +8,7 @@ namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 use Blossom\Classes\ExternalIdentity;
+use Zend\Mail;
 
 class Person extends ActiveRecord
 {
@@ -260,7 +261,7 @@ class Person extends ActiveRecord
 				break;
 
 				default:
-					$method = $this->getAuthenticationMethod();
+					$method = 'Blossom\\Classes\\'.$this->getAuthenticationMethod();
 					return $method::authenticate($this->getUsername(),$password);
 			}
 		}
@@ -434,7 +435,7 @@ class Person extends ActiveRecord
 			if ($personFrom) {
 				$emails = $personFrom->getNotificationEmails();
 				if (count($emails)) {
-					$fromEmail    = $emails[0];
+					$fromEmail    = $emails->current();
 					$fromFullname = $personFrom->getFullname();
 				}
 			}
@@ -458,14 +459,14 @@ class Person extends ActiveRecord
 				$html = mb_convert_encoding($html,    'ISO-8859-1', 'UTF-8');
 			}
 			foreach ($this->getNotificationEmails() as $email) {
-				$mail = new Zend_Mail();
-				$mail->addTo($email->getEmail(),$this->getFullname());
-				$mail->setFrom($fromEmail,$fromFullname);
+				$mail = new Mail\Message();
+				$mail->addTo($email->getEmail(), $this->getFullname());
+				$mail->setFrom($fromEmail, $fromFullname);
 				$mail->setSubject($subject);
-				$mail->setBodyText($message);
-				if ($html) {
-					$mail->setBodyHtml($html);
-				}
+				$mail->setBody($message);
+				//if ($html) {
+				//	$mail->setBodyHtml($html);
+				//}
 				$mail->send();
 			}
 		}

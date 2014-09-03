@@ -1,11 +1,16 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  * @param bool $this->disableButtons
  */
+use Application\Models\AddressService;
+use Application\Models\Person;
+use Application\Models\RentalService;
+use Blossom\Classes\View;
+
 if ($this->location) {
 	$location = View::escape($this->location);
 

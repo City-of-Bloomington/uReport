@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
+use Blossom\Classes\View;
+
 echo "<service_requests>";
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
@@ -45,7 +47,8 @@ foreach ($this->ticketList as $t) {
 
 		$media = $issue->getMedia();
 		if (count($media)) {
-			echo "<media_url>{$media[0]->getURL()}</media_url>";
+            $first = $media->current();
+			echo "<media_url>{$first->getURL()}</media_url>";
 		}
 	}
 	echo "</request>";

@@ -54,7 +54,7 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 	);
 	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = $helper->buttonLink(
-			BASE_URI.'/tickets/delete?ticket_id=',$this->ticket->getId(),
+			BASE_URI.'/tickets/delete?ticket_id='.$this->ticket->getId(),
 			$this->translate('labels.delete_ticket'),
 			'delete'
 		);

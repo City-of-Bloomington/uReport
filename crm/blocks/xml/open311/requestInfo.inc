@@ -5,6 +5,8 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
+use Blossom\Classes\View;
+
 $c = $this->ticket->getCategory();
 $service_name = $c ? View::escape($c->getName()) : '';
 $service_code = $c ? $c->getId() : '';

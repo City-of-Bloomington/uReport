@@ -10,6 +10,9 @@
  * @param Ticket $this->filterTicket A ticket to leave out of the display
  * @param string $this->moreLink
  */
+use Application\Models\Person;
+use Blossom\Classes\View;
+
 echo "<tickets>";
 foreach ($this->ticketList as $ticket) {
 	if ($this->filterTicket && $this->filterTicket->getId()==$ticket->getId()) {
