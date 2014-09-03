@@ -90,8 +90,9 @@ if (!defined('STDIN')) {
 }
 
 if (ERROR_REPORTING != 'PHP_DEFAULT') {
-	set_error_handler    ('Blossom\Classes\Error::customErrorHandler');
-	set_exception_handler('Blossom\Classes\Error::customExceptionHandler');
+    set_error_handler         ('Blossom\Classes\Error::customErrorHandler');
+    set_exception_handler     ('Blossom\Classes\Error::customExceptionHandler');
+    register_shutdown_function('Blossom\Classes\Error::shutdownHandler');
 }
 
 /**
