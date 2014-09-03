@@ -29,7 +29,7 @@ if (Person::isAllowed('tickets','add')) {
 					{$this->translate(array('labels.ticket', 'labels.tickets', 1))}
 					# <input name=\"id\" value=\"$id\" size=\"6\" />
 				</label>
-				<button type=\"submit\"><span class=\"icon-search\"></span> Go</button>
+				<button type=\"submit\"><span class=\"fa fa-search\"></span> Go</button>
 			</fieldset>
 		</form>
 		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
