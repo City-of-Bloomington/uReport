@@ -42,8 +42,6 @@ class Error
 		global $ERROR_REPORTING;
 
 		if (isset($ERROR_REPORTING)) {
-            echo "ERROR_REPORTING is configured\n";
-
 			if (in_array('PRETTY_PRINT',$ERROR_REPORTING)) {
 				echo "
 				<div id=\"errorMessages\">
@@ -79,7 +77,6 @@ class Error
                 mail($_SESSION['USER']->getEmail(), $subject, $message, $from);
             }
 			if (in_array('SKIDDER', $ERROR_REPORTING)) {
-                echo "SKIDDER is configured\n";
 				$skidder = curl_init(SKIDDER_URL);
 				curl_setopt($skidder, CURLOPT_POST,           true);
 				curl_setopt($skidder, CURLOPT_HEADER,         true);
