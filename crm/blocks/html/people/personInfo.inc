@@ -79,7 +79,7 @@ if ($username) {
 }
 echo "
 <div class=\"personInfo\">
-	<h2>$name $editButton</h2>
+	<h2>$name $editButton $deleteButton</h2>
 ";
 	if ($organization || $username) {
 		echo "
@@ -183,7 +183,6 @@ echo "
 	}
 	echo "
 	</table>
-	<div>$deleteButton</div>
 </div>
 <table>
 	<tr class=\"usedForNotifications\">

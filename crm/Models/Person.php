@@ -488,7 +488,9 @@ class Person extends ActiveRecord
 			$sql = "select distinct email from peopleEmails where email like ?";
 		}
 		$result = $zend_db->createStatement($sql)->execute(["$query%"]);
-		return $result->toArray();
+		$o = [];
+		foreach ($result as $row) { $o[] = $row[$fieldname]; }
+		return $o;
 	}
 
 	/**
