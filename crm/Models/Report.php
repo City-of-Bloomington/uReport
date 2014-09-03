@@ -168,7 +168,7 @@ class Report
                 $end = self::parseDate($get['enteredDate']['end']);
             }
             $end = $end ? $end : date(ActiveRecord::MYSQL_DATE_FORMAT);
-            
+
 			$options[] = "(t.enteredDate<='$end' and ifnull(t.closedDate, now())>='$start')";
 		}
 		self::handleFilters($options, $get);
@@ -449,7 +449,7 @@ class Report
                 join categories p on d.id=p.department_id
                 join tickets t on p.id=t.category_id
                 $where
-                group by d.id, d.name";
+                group by d.id, d.name order by d.name";
         $result = $zend_db->query($sql)->execute();
 
         return [ 'totalCount'=>$totalCount, 'result'=>$result ];
@@ -468,7 +468,7 @@ class Report
                 join tickets t on p.id=t.category_id
                 where p.department_id=?
                 $options
-                group by p.name";
+                group by p.name order by count desc";
         $result = $zend_db->query($sql)->execute([$department_id]);
         return ['result'=>$result];
     }
