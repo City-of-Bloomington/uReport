@@ -162,12 +162,12 @@ class Report
             if (!empty($get['enteredDate']['start'])) {
                 $start = self::parseDate($get['enteredDate']['start']);
             }
-            $start = $start ? $start : '1970-01-01';
+            $start = !empty($start) ? $start : '1970-01-01';
 
             if (!empty($get['enteredDate']['end'])) {
                 $end = self::parseDate($get['enteredDate']['end']);
             }
-            $end = $end ? $end : date(ActiveRecord::MYSQL_DATE_FORMAT);
+            $end = !empty($end) ? $end : date(ActiveRecord::MYSQL_DATE_FORMAT);
 
 			$options[] = "(t.enteredDate<='$end' and ifnull(t.closedDate, now())>='$start')";
 		}
