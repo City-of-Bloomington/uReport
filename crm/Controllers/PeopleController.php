@@ -146,10 +146,12 @@ class PeopleController extends Controller
 		$field = $listType.'Person_id';
 
 		$table = new TicketTable();
-		$tickets = $table->find(array($field=>$person->getId()), 'tickets.enteredDate desc', 10);
+		$tickets = $table->find([$field=>$person->getId()], 'tickets.enteredDate desc', true);
+		$tickets->setCurrentPageNumber(1);
+		$tickets->setItemCountPerPage(10);
 
-		$count = count($tickets);
-		if ($count) {
+		$numPages = count($tickets);
+		if ($numPages) {
 			$block = new Block(
 				'tickets/ticketList.inc',
 				array(
@@ -159,12 +161,12 @@ class PeopleController extends Controller
 					'disableButtons'=> $disableButtons
 				)
 			);
-			if (count($tickets) >= 10) {
+			if ($numPages > 1) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
 			$this->template->blocks[$panel][] = $block;
 		}
-		return $count;
+		return $numPages;
 	}
 
 	public function update()
