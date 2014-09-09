@@ -57,6 +57,22 @@ class Response extends ActiveRecord
 		}
 	}
 
+	/**
+     * When repopulating with fresh data, make sure to set default
+     * values on all object properties.
+     *
+     * @Override
+     * @param array $data
+     */
+    public function exchangeArray($data)
+    {
+        parent::exchangeArray($data);
+
+        $this->issue         = null;
+        $this->person        = null;
+        $this->contactMethod = null;
+    }
+
 	public function validate()
 	{
 		if (!$this->getIssue_id()) { throw new \Exception('issues/unknownIssue'); }

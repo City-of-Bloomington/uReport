@@ -66,6 +66,28 @@ class Ticket extends ActiveRecord
 		}
 	}
 
+    /**
+     * When repopulating with fresh data, make sure to set default
+     * values on all object properties.
+     *
+     * @Override
+     * @param array $data
+     */
+    public function exchangeArray($data)
+    {
+        parent::exchangeArray($data);
+
+        $this->substatus       = null;
+        $this->category        = null;
+        $this->client          = null;
+        $this->enteredByPerson = null;
+        $this->assignedPerson  = null;
+        $this->referredPerson  = null;
+
+        $this->issues = null;
+        $this->needToUpdateClusters = false;
+    }
+
 	/**
 	 * Throws an exception if anything's wrong
 	 * @throws \Exception $e

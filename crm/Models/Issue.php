@@ -69,6 +69,29 @@ class Issue extends ActiveRecord
 	}
 
 	/**
+     * When repopulating with fresh data, make sure to set default
+     * values on all object properties.
+     *
+     * @Override
+     * @param array $data
+     */
+    public function exchangeArray($data)
+    {
+        parent::exchangeArray($data);
+
+        $this->ticket           = null;
+        $this->contactMethod    = null;
+        $this->responseMethod   = null;
+        $this->issueType        = null;
+        $this->enteredByPerson  = null;
+        $this->reportedByPerson = null;
+
+        $this->history = [];
+        $this->labels  = [];
+        $this->labelsModified = false;
+    }
+
+	/**
 	 * Throws an exception if anything's wrong
 	 *
 	 * @param bool $preliminary

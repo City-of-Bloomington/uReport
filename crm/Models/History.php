@@ -46,6 +46,24 @@ abstract class History extends ActiveRecord
 		}
 	}
 
+    /**
+     * When repopulating with fresh data, make sure to set default
+     * values on all object properties.
+     *
+     * @Override
+     * @param array $data
+     */
+    public function exchangeArray($data)
+    {
+        parent::exchangeArray($data);
+
+        $this->enteredByPerson = null;
+        $this->actionPerson    = null;
+        $this->ticket          = null;
+        $this->issue           = null;
+        $this->action          = null;
+    }
+
 	/**
 	 * Throws an exception if anything's wrong
 	 *
