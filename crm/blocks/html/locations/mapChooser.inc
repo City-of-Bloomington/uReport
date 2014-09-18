@@ -15,6 +15,5 @@
 	<?php echo $this->translate('labels.use_location'); ?>
 </button>
 <?php
-$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
 $this->template->addToAsset('scripts', BASE_URL.'/js/locations/mapChooser.js');

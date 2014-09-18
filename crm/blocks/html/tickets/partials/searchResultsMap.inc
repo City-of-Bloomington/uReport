@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Quan Zhang <quanzhang@acm.org>
  * @param Apache_Solr_Response $this->solrObject
@@ -32,7 +32,7 @@ echo "
 </script>
 ";
 
-$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
 $this->template->addToAsset('scripts', BASE_URI.'/js/urlParsing.js');
 $this->template->addToAsset('scripts', BASE_URI.'/js/markerCluster.js');

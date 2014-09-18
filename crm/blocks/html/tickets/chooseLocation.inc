@@ -9,8 +9,8 @@ use Application\Models\TicketTable;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseLocation.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseLocation.js');
 
 $return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 $url = BASE_URL."/locations?return_url=$return_url";

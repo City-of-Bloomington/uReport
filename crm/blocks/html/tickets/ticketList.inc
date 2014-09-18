@@ -56,7 +56,8 @@ use Blossom\Classes\View;
 					$category    = "<a href=\"{$ticket->getURL()}\">$category</a>";
 				}
 				echo "
-				<tr><td>$status</td>
+				<tr draggable=\"true\" ondragstart=\"event.dataTransfer.setData('text/plain', '{$ticket->getId()}');\">
+                    <td>$status</td>
 					<td>$enteredDate</td>
 					<td>$sla</td>
 					<td>$category</td>

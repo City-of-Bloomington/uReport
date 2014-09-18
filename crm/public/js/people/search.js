@@ -1,15 +1,13 @@
 "use strict";
-YUI().use('autocomplete', function (Y) {
-	Y.one('#firstname').plug(Y.Plugin.AutoComplete, {
-		source: CRM.BASE_URL + '/people/distinct?format=json;field=firstname;query={query}'
-	});
-	Y.one('#lastname').plug(Y.Plugin.AutoComplete, {
-		source: CRM.BASE_URL + '/people/distinct?format=json;field=lastname;query={query}'
-	});
-	Y.one('#email').plug(Y.Plugin.AutoComplete, {
-		source: CRM.BASE_URL + '/people/distinct?format=json;field=email;query={query}'
-	});
-	Y.one('#organization').plug(Y.Plugin.AutoComplete, {
-		source: CRM.BASE_URL + '/people/distinct?format=json;field=organization;query={query}'
-	});
+jQuery('#firstname').autocomplete({
+    source: CRM.BASE_URL + '/people/distinct?format=json;field=firstname'
+});
+jQuery('#lastname').autocomplete({
+    source: CRM.BASE_URL + '/people/distinct?format=json;field=lastname'
+});
+jQuery('#email').autocomplete({
+    source: CRM.BASE_URL + '/people/distinct?format=json;field=email'
+});
+jQuery('#organization').autocomplete({
+    source: CRM.BASE_URL + '/people/distinct?format=json;field=organization'
 });

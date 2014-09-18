@@ -33,19 +33,15 @@ var PERSON_CHOOSER = {
 		);
 	},
 	setPerson: function (person_id) {
-		YUI().use('node', 'io', 'json-parse', function (Y) {
-			Y.io(CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id, {
-				on: {
-					complete: function (id, o, args) {
-						var person = Y.JSON.parse(o.responseText);
-						var idElement   = '#' + PERSON_CHOOSER.fieldname + '_id';
-						var nameElement = '#' + PERSON_CHOOSER.fieldname + '-name';
-						Y.one(idElement).set('value', person.id);
-						Y.one(nameElement).setContent(person.fullname);
-						PERSON_CHOOSER.popup.close();
-					}
-				}
-			});
-		});
+        jQuery.ajax(CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id, {
+            dataType: 'json',
+            success: function (person, status, xhr) {
+                var id   = PERSON_CHOOSER.fieldname + '_id',
+                    name = PERSON_CHOOSER.fieldname + '-name';
+                document.getElementById(id).value       = person.id;
+                document.getElementById(name).innerHTML = person.fullname;
+                PERSON_CHOOSER.popup.close();
+            }
+        });
 	}
 }

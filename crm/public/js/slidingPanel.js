@@ -2,17 +2,11 @@
 /**
  * Adds a button that toggles the classes on the panelContainer
  * The Layout css should have styles for all this.
+ * See: twoColumn_300-a.css
  */
-YUI().use('node', function(Y) {
-	Y.one('#left').insert('<button class="fa fa-angle-left" id="slideButton"><span class="hidden-label">Slide</span></button>', 0);
-	function togglePanel(e) {
-		var panelContainer = this.get('parentNode').get('parentNode');
-		if (panelContainer.hasClass('hideLeft')) {
-			panelContainer.removeClass('hideLeft');
-		}
-		else {
-			panelContainer.addClass('hideLeft');
-		}
-	}
-	Y.delegate('click', togglePanel, '#left', '#slideButton');
+jQuery(function ($) {
+    $('#left').prepend('<button class="fa fa-angle-left" id="slideButton"><span class="hidden-label">Slide</span></button>');
+    $('#slideButton').on('click', function () {
+        $('#panel-container').toggleClass('hideLeft');
+    });
 });

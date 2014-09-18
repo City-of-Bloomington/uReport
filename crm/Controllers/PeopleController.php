@@ -403,17 +403,17 @@ class PeopleController extends Controller
 	}
 
 	/**
-	 * Displays the list of distinct values for a given field and query
+	 * Displays the list of distinct values for a given field and term
 	 *
 	 * Used primarily to support autocomplete on the person search form
 	 *
 	 * @param GET field
-	 * @param GET query
+	 * @param GET term
 	 */
 	public function distinct()
 	{
 		$this->template->blocks[] = new Block(
 			'people/distinctFieldValues.inc',
-			array('results'=>Person::getDistinct($_GET['field'],$_GET['query'])));
+			array('results'=>Person::getDistinct($_GET['field'], $_GET['term'])));
 	}
 }

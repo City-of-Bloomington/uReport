@@ -152,5 +152,5 @@ echo "
 	CRM.ticket_id = {$this->ticket->getId()};
 </script>
 ";
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/actionForms.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/actionForms.js');

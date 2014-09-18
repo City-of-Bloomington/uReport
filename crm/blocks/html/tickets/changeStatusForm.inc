@@ -9,7 +9,7 @@ use Application\Models\SubstatusTable;
 use Blossom\Classes\View;
 ?>
 <div class="changeStatusForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeStatus">
+	<form method="post" action="<?php echo BASE_URI; ?>/tickets/changeStatus">
 		<fieldset><legend><?php echo $this->translate('labels.change_status'); ?></legend>
 			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
 			<?php
@@ -76,5 +76,5 @@ use Blossom\Classes\View;
 	</form>
 </div>
 <?php
-	$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-	$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseStatus.js');
+	$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+	$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseStatus.js');

@@ -14,9 +14,8 @@ use Blossom\Classes\Block;
 use Blossom\Classes\View;
 use Blossom\Classes\Url;
 
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-#$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/search.js');
-$this->template->addToAsset('scripts',BASE_URI.'/js/collapsible.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 if (Person::isAllowed('tickets','add')) {
 	// Solr stores ticket_id as 'id'
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';

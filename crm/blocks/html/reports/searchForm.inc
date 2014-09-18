@@ -11,8 +11,8 @@ use Application\Models\ClientTable;
 
 use Blossom\Classes\View;
 
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URL.'/js/collapsible.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 ?>
 <div>
     <h2>Filters</h2>

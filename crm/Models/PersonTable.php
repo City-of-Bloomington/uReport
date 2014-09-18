@@ -145,7 +145,7 @@ class PersonTable extends TableGateway
 						break;
 
 					case 'department_id':
-						$this->select->where(function (Where $w) use ($value) { $w->like('people.department_id', "$value%"); });
+						$this->select->where([$key=>$value]);
 						break;
 
 					case 'address':

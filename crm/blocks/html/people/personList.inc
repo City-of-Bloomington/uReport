@@ -31,8 +31,8 @@ use Blossom\Classes\Url;
 					}
 				}
 				elseif (isset($_REQUEST['callback'])) {
-					$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-					$this->template->addToAsset('scripts',BASE_URI.'/js/issues/changePerson.js');
+					$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson.js');
 
 					$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
 					$url = "javascript:self.opener.$callback('{$person->getId()}');";
@@ -80,7 +80,8 @@ use Blossom\Classes\Url;
 					$phoneList = $list;
 				}
 				echo "
-				<tr><td><a href=\"$url\">$name</a></td>
+				<tr draggable=\"true\" ondragstart=\"event.dataTransfer.setData('text/plain', '{$person->getId()}');\">
+                    <td><a href=\"$url\">$name</a></td>
 					<td>$emailList</td>
 					<td>$addressList</td>
 					<td>$phoneList</td>

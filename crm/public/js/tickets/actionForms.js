@@ -1,6 +1,6 @@
 "use strict";
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-214 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -15,40 +15,31 @@ var ACTION_FORM = {
 		Assign:			function () { ACTION_FORM.closeAndReload(); },
 		Refer:			function () { ACTION_FORM.closeAndReload(); },
 		ChangeCategory: function (category_id) {
-			YUI().use('io', function (Y) {
-				Y.io(CRM.BASE_URL + '/tickets/changeCategory?ticket_id=' + CRM.ticket_id + ';category_id=' + category_id, {
-					on: {
-						complete: function (id, o, args) {
-							ACTION_FORM.closeAndReload();
-						}
-					}
-				});
-			});
+            jQuery.ajax(CRM.BASE_URL + '/tickets/changeCategory?ticket_id=' + CRM.ticket_id + ';category_id=' + category_id, {
+                complete: function (id, o, args) {
+                    ACTION_FORM.closeAndReload();
+                }
+            });
 		},
 		ChangeLocation: function (location) {
-			YUI().use('io', function (Y) {
-				Y.io(CRM.BASE_URL + '/tickets/changeLocation?ticket_id=' + CRM.ticket_id + ';location=' + location, {
-					on: {
-						complete: function (id, o, args) {
-							ACTION_FORM.closeAndReload();
-						}
-					}
-				});
-			});
+            jQuery.ajax(CRM.BASE_URL + '/tickets/changeLocation?ticket_id=' + CRM.ticket_id + ';location=' + location, {
+                complete: function () {
+                    ACTION_FORM.closeAndReload();
+                }
+            });
 		}
 	}
 };
+jQuery('#ticket-panel ul .fa-pencil').on('click', function (e) {
+    e.preventDefault();
+    var a = $(this),
+        buttonName = a.children('i').first().text().replace(' ', ''),
+        url        = a.attr('href') + ';popup=1;callback=ACTION_FORM.handleFormSuccess.' + buttonName;
 
-YUI().use('node', function (Y) {
-	Y.on('click', function (e) {
-		var buttonName = Y.Lang.trim(this.getContent()).replace(' ','');
-
-		var url = this.get('href') + ';popup=1;callback=ACTION_FORM.handleFormSuccess.' + buttonName;
-		ACTION_FORM.popup = window.open(
-			url,
-			'popup',
-			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
-		);
-		e.preventDefault();
-	}, '#ticket-panel ul .button');
+    ACTION_FORM.popup = window.open(
+        url,
+        'popup',
+        'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
+    );
+    return false;
 });

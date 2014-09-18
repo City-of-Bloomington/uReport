@@ -8,8 +8,8 @@
 use Application\Models\DepartmentTable;
 use Blossom\Classes\View;
 
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URL.'/js/tickets/chooseDepartment.js');
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseDepartment.js');
 
 ?>
 <div id="chooseDepartmentForm">

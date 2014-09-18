@@ -126,98 +126,88 @@ google.maps.event.addDomListener(window, 'load', function () {
 				bounds       = map.getBounds(),
 				bbox         = generateBBox(bounds),
 				coordinates  = generateCoordinates(bounds),
-				clusterLevel = getClusterLevel(zoomLevel);
+				clusterLevel = getClusterLevel(zoomLevel),
+                url          = statsUrl(coordinates, clusterLevel),
+                updateBBox   = function (i) {
+                    var href = jQuery(this).attr('href');
+                    href = URL.replaceParam(href, 'bbox', bbox);
+                    href = URL.replaceParam(href, 'zoom', zoomLevel);
+                    jQuery(this).attr('href', href);
+                };
+
+            jQuery('#resultFormatButtons a').each(updateBBox);
+            jQuery('.searchParameters .btn').each(updateBBox);
+            jQuery('#advanced-search a')    .each(updateBBox);
 
 			// Correspond with Solr Server
-			YUI().use('io', 'json-parse', function (Y) {
-				var url = statsUrl(coordinates, clusterLevel);
-				Y.io(url, {
-					on: {
-						complete: function (id, o, args) {
-							var response = Y.JSON.parse(o.responseText),
-								latStats = response.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
-								lngStats = response.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],
-								clusterId,
-								centroidLat,
-								centroidLng,
-								clusterLatLng,
-								count,
-								i,
-								largeClusterIndex,
-								smallClusterIndex;
+            jQuery.ajax(url, {
+                dataType: 'json',
+                success: function (json, status, xhr) {
+                    var latStats = json.stats.stats_fields.latitude .facets['cluster_id_'+clusterLevel],
+                        lngStats = json.stats.stats_fields.longitude.facets['cluster_id_'+clusterLevel],
+                        clusterId,
+                        centroidLat,
+                        centroidLng,
+                        clusterLatLng,
+                        count,
+                        largeClusterIndex = 0,
+                        smallClusterIndex = 0,
+                        len = 0,
+                        i   = 0;
+                    len = largeClusterIndex.length;
+                    for (i=0; i<len; i++) {
+                        largeClusters[i].setMap(null);
+                    }
+                    largeClusters = [];
+                    smallClusters = [];
+                    for (clusterId in latStats) {
+                        centroidLat = latStats[clusterId].mean;
+                        centroidLng = lngStats[clusterId].mean;
+                        clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
+                        count = latStats[clusterId].count;
+                        if (count >= 5) {
+                            largeClusters[largeClusterIndex] = new MarkerCluster(map, clusterLatLng, count);
+                            largeClusterIndex += 1;
+                        }
+                        else {
+                            smallClusters[smallClusterIndex] = clusterId;
+                            smallClusterIndex += 1;
+                        }
+                    }
+                    len = indivMarkers.length;
+                    for (i=0; i<len; i++) {
+                        indivMarkers[i].setMap(null);
+                    }
+                    indivMarkers = [];
+                    if (smallClusters.length > 0) {
+                        jQuery.ajax(ticketsUrl(coordinates, clusterLevel, smallClusters), {
+                            dataType: 'json',
+                            success: function (json, status, xhr) {
+                                var tickets = json.response.docs,
+                                coordinates,
+                                latlng,
+                                markerLatLng;
 
-							for (i = 0; i < largeClusters.length; i += 1) {
-								largeClusters[i].setMap(null);
-							}
-							largeClusters = [];
-							smallClusters = [];
-							largeClusterIndex = 0;
-							smallClusterIndex = 0;
-							for (clusterId in latStats) {
-								centroidLat = latStats[clusterId].mean;
-								centroidLng = lngStats[clusterId].mean;
-								clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
-								count = latStats[clusterId].count;
-								if (count >= 5) {
-									largeClusters[largeClusterIndex] = new MarkerCluster(map, clusterLatLng, count);
-									largeClusterIndex += 1;
-								}
-								else {
-									smallClusters[smallClusterIndex] = clusterId;
-									smallClusterIndex += 1;
-								}
-							}
-							for (i = 0; i < indivMarkers.length; i += 1) {
-								indivMarkers[i].setMap(null);
-							}
-							indivMarkers = [];
-							if (smallClusters.length > 0) {
-								YUI().use('io', 'json-parse', function (Y) {
-									Y.io(ticketsUrl(coordinates, clusterLevel, smallClusters), {
-										on: {
-											complete: function (id, o, args) {
-												var response 	= Y.JSON.parse(o.responseText),
-													tickets 	= response.response.docs,
-													coordinates,
-													latlng,
-													markerLatLng,
-													i;
-
-												for (i = 0; i < tickets.length; i += 1) {
-													coordinates = tickets[i].coordinates;
-													latlng = coordinates.split(",");
-													markerLatLng = new google.maps.LatLng(latlng[0],latlng[1]);
-													indivMarkers[i] = new google.maps.Marker({
-														position: markerLatLng,
-														map: map,
-														title: tickets[i].id.toString()
-													});
-												}
-												for (i = 0; i < indivMarkers.length; i += 1) {
-													oms.addMarker(indivMarkers[i]);
-												}
-											}
-										}
-									});
-								});
-							}
-						}
-					}
-				});
-			});
-
-			YUI().use('node', function(Y) {
-				var updateBBox = function (node) {
-					var href = node.get('href');
-					href = URL.replaceParam(href, 'bbox', bbox);
-					href = URL.replaceParam(href, 'zoom', zoomLevel);
-					node.set('href', href);
-				};
-
-				Y.all('#resultFormatButtons a').each(updateBBox);
-				Y.all('.searchParameters .btn').each(updateBBox);
-				Y.all('#advanced-search a')    .each(updateBBox);
-			});
+                                len = tickets.length;
+                                for (i=0; i<len; i++) {
+                                    coordinates = tickets[i].coordinates;
+                                    latlng = coordinates.split(",");
+                                    markerLatLng    = new google.maps.LatLng(latlng[0],latlng[1]);
+                                    indivMarkers[i] = new google.maps.Marker({
+                                        position: markerLatLng,
+                                        map: map,
+                                        title: tickets[i].id.toString()
+                                    });
+                                }
+                                len = indivMarkers.length;
+                                for (i = 0; i<len; i++) {
+                                    oms.addMarker(indivMarkers[i]);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
 		};
 
 	google.maps.event.addListener(map, 'idle', refreshMap);

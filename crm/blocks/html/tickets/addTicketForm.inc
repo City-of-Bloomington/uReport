@@ -19,8 +19,8 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
 		<fieldset><legend><?php echo $this->translate(array('labels.category', 'labels.categories', 1)); ?></legend>
 		<?php
-			$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-			$this->template->addToAsset('scripts',BASE_URI.'/js/tickets/chooseCategory.js');
+			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
 			$this->return_url = BASE_URL.'/tickets/add';
 			include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
 		?>
