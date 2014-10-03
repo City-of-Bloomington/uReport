@@ -39,7 +39,6 @@ use Blossom\Classes\View;
 				var points = [{latitude:$latitude, longitude:$longitude}];
 			</script>
 			";
-			$this->template->addToAsset('scripts', YUI.'/yui/yui-min.js');
 			$this->template->addToAsset('scripts', GOOGLE_MAPS);
 			$this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
 		}

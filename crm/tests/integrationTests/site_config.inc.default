@@ -11,7 +11,6 @@ define('BASE_URI','/crm');
 /**
  * JavaScript Libraries
  */
-define('YUI', BASE_URI.'/js/vendor/yui3/build');
 define('GOOGLE_MAPS','http://maps.googleapis.com/maps/api/js?sensor=false');
 
 /**
