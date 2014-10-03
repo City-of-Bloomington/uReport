@@ -17,9 +17,9 @@ class ReportsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-		$this->template->setFilename('search');
-		$this->template->blocks['left'][]    = new Block('reports/list.inc');
-		$this->template->blocks['left'][]    = new Block('reports/searchForm.inc');
+        $this->template->setFilename('search');
+        $this->template->blocks['left'][] = new Block('reports/list.inc');
+        $this->template->blocks['left'][] = new Block('reports/searchForm.inc');
 	}
 
 	public function index()
@@ -58,6 +58,31 @@ class ReportsController extends Controller
 	{
         $this->template->blocks['right'][] = new Block(
             'reports/volume.inc'
+        );
+	}
+
+	public function currentOpenTickets()
+	{
+        $data = Report::currentOpenTickets();
+        $this->template->blocks['right'][] = new Block(
+            'reports/ticketCounts.inc',
+            ['data'=>$data, 'title'=>'Tickets currently open']
+        );
+	}
+
+	public function openedTickets()
+	{
+        $this->template->blocks['right'][] = new Block(
+            'reports/ticketCounts.inc',
+            ['data'=>Report::openedTickets(), 'title'=>'Tickets opened today']
+        );
+	}
+
+	public function closedTickets()
+	{
+        $this->template->blocks['right'][] = new Block(
+            'reports/ticketCounts.inc',
+            ['data'=>Report::closedTickets(), 'title'=>'Tickets closed today']
         );
 	}
 }

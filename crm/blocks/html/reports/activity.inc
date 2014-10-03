@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -9,19 +9,27 @@ use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\View;
 
 $h = $this->template->getHelper('formatDuration');
-$this->template->addToAsset('scripts',YUI.'/yui/yui-min.js');
-$this->template->addToAsset('scripts',BASE_URI.'/js/reports/activityCharts.js');
-$ACTIVITY_DATA = array(
-	'currentOpenTickets'=>array(),
-	'ticketsClosedToday'=>array(),
-	'activityThisWeek'  =>array()
-);
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', GOOGLE_LOADER);
+$this->template->addToAsset('scripts', BASE_URI.'/js/reports/activityCharts.js');
+
+$ACTIVITY_DATA = [
+    'currentOpenTickets' => [['Category', 'Count']],
+    'openedTickets'      => [['Category', 'Count']],
+    'closedTickets'      => [['Category', 'Count']],
+	'activityThisMonth'  => [['Date', 'Opened', 'Closed']],
+	'categoryActivity'   => [[
+        'Category', 'SLA','Avg Days Open', 'Open',
+        'Opened Today', 'Opened This Week', 'Opened This Month',
+        'Closed Today', 'Closed This Week', 'Closed This Month'
+	]]
+];
 ?>
 <style type="text/css">
 	.chart { width:100%; height:200px; }
 	#pieCharts { overflow:auto; }
 
-	#pieCharts .chartData { float:left; height:240px; width:200px; }
+	#pieCharts .chartData { float:left; width: 200px; height:240px; }
 	#activityThisWeek { width:600px; clear:both; }
 	#categoryActivity .original { display:none; }
 </style>
@@ -30,191 +38,89 @@ $ACTIVITY_DATA = array(
 	<div id="pieCharts">
 		<div id="currentOpenTickets" class="chartData">
 			<h3>Tickets currently open</h3>
-			<div class="chart"></div>
-			<table>
-				<thead>
-					<tr><th>Category</th><th>Open</th></tr>
-				</thead>
-				<tbody>
-				<?php
-					$data = Report::currentOpenTickets();
-					foreach ($data as $r) {
-						$name = View::escape($r['category']);
-						echo "
-						<tr><td>$name</td>
-							<td>$r[open]</td>
-						</tr>
-						";
-						$ACTIVITY_DATA['currentOpenTickets'][] = array('category'=>$name, 'open'=>$r['open']);
-					}
-				?>
-				</tbody>
-			</table>
+			<div class="chart" id="currentOpenTickets_chart"></div>
+			<?php
+                $data = Report::currentOpenTickets();
+                foreach ($data as $r) {
+                    $name = View::escape($r['category']);
+                    $ACTIVITY_DATA['currentOpenTickets'][] = [$name, (int)$r['count']];
+                }
+            ?>
 		</div>
-		<div id="ticketsOpenedToday" class="chartData">
+		<div id="openedTickets" class="chartData">
 			<h3>Tickets Opened Today</h3>
-			<div class="chart"></div>
-			<table>
-				<thead>
-					<tr><th>Category</th><th>Open</th></tr>
-				</thead>
-				<tbody>
-				<?php
-					$data = Report::openedTickets();
-					foreach ($data as $r) {
-						$name = View::escape($r['category']);
-						echo "
-						<tr><td>$name</td>
-							<td>$r[open]</td>
-						</tr>
-						";
-						$ACTIVITY_DATA['ticketsOpenedToday'][] = array('category'=>$name, 'open'=>$r['open']);
-					}
-				?>
-				</tbody>
-			</table>
+			<div class="chart" id="openedTickets_chart"></div>
+			<?php
+                $data = Report::openedTickets();
+                foreach ($data as $r) {
+                    $name = View::escape($r['category']);
+                    $ACTIVITY_DATA['openedTickets'][] = [$name, (int)$r['count']];
+                }
+            ?>
 		</div>
-		<div id="ticketsClosedToday" class="chartData">
+		<div id="closedTickets" class="chartData">
 			<h3>Tickets closed today</h3>
-			<div class="chart"></div>
-			<table>
-				<thead>
-					<tr><th>Category</th><th>Closed</th></tr>
-				</thead>
-				<tbody>
-				<?php
-					$data = Report::closedTickets();
-					foreach ($data as $r) {
-						$name = View::escape($r['category']);
-						echo "
-						<tr><td>$name</td>
-							<td>$r[closed]</td>
-						</tr>
-						";
-						$ACTIVITY_DATA['ticketsClosedToday'][] = array('category'=>$name, 'closed'=>$r['closed']);
-					}
-				?>
-				</tbody>
-			</table>
+			<div class="chart" id="closedTickets_chart"></div>
+            <?php
+                $data = Report::closedTickets();
+                foreach ($data as $r) {
+                    $name = View::escape($r['category']);
+                    $ACTIVITY_DATA['closedTickets'][] = [$name, (int)$r['count']];
+                }
+            ?>
 		</div>
 	</div>
-	<div id="activityThisWeek" class="chartData">
+	<div id="activityThisMonth" class="chartData">
 		<h3>Activity the past month</h3>
-		<div class="chart"></div>
-		<table>
-			<thead>
-				<tr><th>Date</th><th>Open</th></tr>
-			</thead>
-			<tbody>
-			<?php
-				$d = array();
-				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 month'));
-				$end   = date(ActiveRecord::MYSQL_DATE_FORMAT);
-				$data = Report::openTicketsCount($start, $end);
-				foreach ($data as $r) {
-					echo "
-					<tr><td>$r[date]</td>
-						<td>$r[open]</td>
-					</tr>
-					";
+		<div class="chart" id="activityThisMonth_chart"></div>
+        <?php
+            $d = [];
+            $start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 month'));
+            $end   = date(ActiveRecord::MYSQL_DATE_FORMAT);
 
-					$d[$r['date']]['open'] = $r['open'];
-				}
-			?>
-			</tbody>
-		</table>
-		<table>
-			<thead>
-				<tr><th>Date</th><th>Closed</th></tr>
-			</thead>
-			<tbody>
-			<?php
-				$start = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime('-1 month'));
-				$end   = date(ActiveRecord::MYSQL_DATE_FORMAT);
-				$data = Report::closedTicketsCount($start, $end);
-				foreach ($data as $r) {
-					echo "
-					<tr><td>$r[date]</td>
-						<td>$r[closed]</td>
-					</tr>
-					";
-					$d[$r['date']]['closed'] = $r['closed'];
-				}
-				foreach ($d as $date=>$t) {
-					$ACTIVITY_DATA['activityThisWeek'][] = array(
-						'category'   =>$date,
-						'opened' =>isset($t['open'])   ? $t['open']   : 0,
-						'closed' =>isset($t['closed']) ? $t['closed'] : 0
-					);
-				}
-			?>
-			</tbody>
-		</table>
+            $data = Report::openTicketsCount($start, $end);
+            foreach ($data as $r) {
+                $d[$r['date']]['open'] = $r['open'];
+            }
+
+            $data = Report::closedTicketsCount($start, $end);
+            foreach ($data as $r) {
+                $d[$r['date']]['closed'] = $r['closed'];
+            }
+
+            foreach ($d as $date=>$t) {
+                $ACTIVITY_DATA['activityThisMonth'][] = [
+                    $date,
+                    isset($t['open'])   ? (int)$t['open']   : 0,
+                    isset($t['closed']) ? (int)$t['closed'] : 0
+                ];
+            }
+        ?>
 	</div>
 </div>
 <div id="categoryActivity" class="yui3-skin-sam">
 	<p>* Average Days spent open is calculated as how long tickets stayed open during the entire
 		history of the data.
 	</p>
-	<div class="datatable"></div>
-	<table class="original">
-		<thead>
-			<tr><th></th>
-				<th>Open</th>
-				<th>Avg Days*</th>
-				<th colspan="3">Opened</th>
-				<th colspan="3">Closed</th>
-			</tr>
-			<tr><th></th>
-				<th>now</th>
-				<th>open</th>
-				<th>day</th>
-				<th>week</th>
-				<th>month</th>
-				<th>day</th>
-				<th>week</th>
-				<th>month</th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php
-			$data = Report::categoryActivity();
-			foreach ($data as $r) {
-				$name = View::escape($r['name']);
-				$fields = array(
-					'slaDays','currentopen','days',
-					'openedday', 'openedweek', 'openedmonth',
-					'closedday', 'closedweek', 'closedmonth'
-				);
-				foreach ($fields as $f) {
-					$$f = $r[$f] ? $r[$f] : 0;
-				}
-				echo "
-				<tr><th>$name</th>
-					<th>$slaDays</th>
-					<th>$days</th>
-					<td>$currentopen</td>
-					<td>$openedday</td>
-					<td>$openedweek</td>
-					<td>$openedmonth</td>
-					<td>$closedday</td>
-					<td>$closedweek</td>
-					<td>$closedmonth</td>
-				</tr>
-				";
-				// Do all the data formatting in PHP, rather than
-				// relying on JavaScript to do the formatting.
-				foreach ($r as $i=>$v) {
-					if ($i != 'name') {
-						$r[$i] = (int)$v;
-					}
-				}
-				$ACTIVITY_DATA['categoryActivity'][] = $r;
-			}
-		?>
-		</tbody>
-	</table>
+	<div id="categoryActivity_chart"></div>
+    <?php
+        $data = Report::categoryActivity();
+        foreach ($data as $r) {
+            $ACTIVITY_DATA['categoryActivity'][] = [
+                $r['name'],
+                (int)$r['slaDays'],
+                (int)$r['days'],
+                (int)$r['currentopen'],
+                (int)$r['openedday'],
+                (int)$r['openedweek'],
+                (int)$r['openedmonth'],
+                (int)$r['closedday'],
+                (int)$r['closedweek'],
+                (int)$r['closedmonth']
+            ];
+        }
+    ?>
 </div>
 <script type="text/javascript">
-var ACTIVITY_DATA = <?php echo json_encode($ACTIVITY_DATA); ?>
+var ACTIVITY_DATA = <?php echo json_encode($ACTIVITY_DATA, JSON_PRETTY_PRINT); ?>
 </script>

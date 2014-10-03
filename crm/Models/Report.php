@@ -232,12 +232,12 @@ class Report
 	 */
 	public static function currentOpenTickets()
 	{
-		$sql = "select t.category_id, c.name as category, sum(status='open') as open
+		$sql = "select t.category_id, c.name as category, sum(status='open') as count
 				from tickets t
 				join categories c on t.category_id=c.id
 				group by t.category_id
-				having open>0
-				order by open";
+				having count>0
+				order by count";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}
@@ -249,13 +249,13 @@ class Report
 	 */
 	public static function openedTickets()
 	{
-		$sql = "select t.category_id, c.name as category, sum(status='open') as open
+		$sql = "select t.category_id, c.name as category, sum(status='open') as count
 				from tickets t
 				join categories c on t.category_id=c.id
 				where t.enteredDate > (now() - interval 1 day)
 				group by t.category_id
-				having open>0
-				order by open";
+				having count>0
+				order by count";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}
@@ -268,12 +268,12 @@ class Report
 	public static function closedTickets()
 	{
 		$closed = self::closedId();
-		$sql = "select t.category_id, c.name as category, sum(status='closed') as closed
+		$sql = "select t.category_id, c.name as category, sum(status='closed') as count
 				from tickets t
 				join categories c on t.category_id=c.id
 				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
-				order by closed";
+				order by count";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}

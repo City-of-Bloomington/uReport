@@ -8,13 +8,23 @@ use Application\Models\BookmarkTable;
 use Blossom\Classes\Block;
 ?>
 <div>
-	<h2>Reports</h2>
-	<ul><li><a href="<?php echo BASE_URI; ?>/reports/assignments">Assignments</a></li>
-		<li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories</a></li>
-		<li><a href="<?php echo BASE_URI; ?>/reports/sla">SLA</a></li>
-		<li><a href="<?php echo BASE_URI; ?>/reports">Activity</a></li>
-		<li><a href="<?php echo BASE_URI; ?>/reports/volume">Volume</a></li>
-	</ul>
+    <div>
+        <h2>Reports</h2>
+        <ul><li><a href="<?php echo BASE_URI; ?>/reports/assignments">Assignments</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/categories">Categories</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/sla">SLA</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports">Activity</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/volume">Volume</a></li>
+        </ul>
+	</div>
+	<div>
+        <h2>Activity</h2>
+        <ul><li><a href="<?php echo BASE_URI; ?>/reports/currentOpenTickets">Currently Open</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/openedTickets">Opened Today</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/closedTickets">Closed Today</a></li>
+            <li><a href="<?php echo BASE_URI; ?>/reports/">Past Month</a></li>
+        </ul>
+	</div>
 	<?php
 		$table = new BookmarkTable();
 
