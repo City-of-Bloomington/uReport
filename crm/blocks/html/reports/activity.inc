@@ -27,6 +27,8 @@ $ACTIVITY_DATA = [
 ?>
 <style type="text/css">
 	.chart { width:100%; height:200px; }
+	.charts-tooltip div { color:infotext; }
+	
 	#pieCharts { overflow:auto; }
 
 	#pieCharts .chartData { float:left; width: 200px; height:240px; }
