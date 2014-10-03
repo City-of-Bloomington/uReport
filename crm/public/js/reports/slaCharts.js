@@ -4,35 +4,19 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-YUI().use('node', 'charts', 'charts-legend', 'stylesheet', function (Y) {
-	var openTicketsChart = new Y.Chart({
-		axes: {
-			category: {
-				keys: ["date"],
-				type: "category",
-				styles: { label: { rotation: -45 } }
-			},
-			values: { roundingMethod: 'auto'}
-		},
-		categoryKey: "date",
-		dataProvider:SLA_DATA.openTicketCounts,
-		horizontalGridlines: true,
-		verticalGridlines: true,
-		render:"#openTicketsChart"
-	});
-	var slaChart = new Y.Chart({
-		axes: {
-			category: {
-				keys: ["date"],
-				type: "category",
-				styles: { label: { rotation: -45 } }
-			},
-			values: { roundingMethod: 'auto'}
-		},
-		categoryKey: "date",
-		dataProvider:SLA_DATA.slaPercentages,
-		horizontalGridlines: true,
-		verticalGridlines: true,
-		render:"#slaChart"
-	});
+google.load('visualization', '1.0', {'packages': ['corechart', 'table']});
+google.setOnLoadCallback(function () {
+    var line = function (id, data) {
+        var datatable = new google.visualization.DataTable(data),
+            chart     = new google.visualization.LineChart(document.getElementById(id));
+
+        if (data.rows.length > 1) {
+            chart.draw(datatable, {
+                hAxis:  { format: 'MMM d, y', slantedText: true },
+                legend: { position: 'none'}
+            });
+        }
+    }
+    line('openTicketCounts', SLA_DATA.openTicketCounts);
+    line('slaPercentages',   SLA_DATA.slaPercentages);
 });
