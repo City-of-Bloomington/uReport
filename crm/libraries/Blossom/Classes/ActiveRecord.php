@@ -125,7 +125,7 @@ abstract class ActiveRecord
 				try {
 					$d = new \DateTime($date);
 				}
-				catch (Exception $e) {
+				catch (\Exception $e) {
 					throw new \Exception('unknownDateFormat');
 				}
 			}

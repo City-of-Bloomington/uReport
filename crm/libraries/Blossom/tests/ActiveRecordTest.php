@@ -29,6 +29,23 @@ class ActiveRecordTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($dateString, $this->testModel->getDateData('testField'));
 	}
 
+	public function testSetDateNow()
+	{
+        $dateString = 'now';
+        $this->testModel->setDateData('testField', $dateString);
+        $this->assertEquals(date('Y-m-d'), $this->testModel->getDateData('testField', 'Y-m-d'));
+	}
+
+	/**
+	 * @expectedException Exception
+	 * @expectedExceptionMessage invalidDate
+	 */
+	public function testSetDateInvalidFormat()
+	{
+        $dateString = '12390481290/asjdk';
+        $this->testModel->setDateData('testField', $dateString);
+	}
+
 	public function testDateFormat()
 	{
 		$dateString = '1/3/2013 01:23:43';
@@ -65,7 +82,7 @@ class TestModel extends Blossom\Classes\ActiveRecord
 	public function validate() { }
 
 	public function getId() { return parent::get('id'); }
-	
+
 	public function get($field)  { return parent::get($field); }
 	public function set($field, $value) { parent::set($field, $value); }
 
