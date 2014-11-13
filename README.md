@@ -7,11 +7,24 @@ existing environments.
 System Requirements
 ----------------------
 * [PHP 5.4](http://php.net) or later
-* [Zend Framework 2](http://framework.zend.com/)
 * [Apache](http://httpd.apache.org)
 * [MySQL](http://dev.mysql.com)
 * [Tomcat](http://tomcat.apache.org)
 * [Solr](http://lucene.apache.org/solr)
+
+### Additional libraries ###
+uReport also requires a few other vendor libraries.  If you download a binary
+release, the extra libraries are already included.
+
+The git repository has the vendor libraries included as git submodules.  If
+you clone the repository, you will need to update the submodules to have git
+download them into your source code.
+
+```bash
+git clone https://github.com/City-of-Bloomington/uReport.git
+cd uReport
+git submodule update -i
+```
 
 Questions and Feedback
 ----------------------
