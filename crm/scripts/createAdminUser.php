@@ -12,10 +12,12 @@
  * If you are doing Employee or CAS authentication you do
  * not need to save a password into the database.
  *
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2014 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+use Application\Models\Person;
+
 include '../configuration.inc';
 
 $person = new Person();
