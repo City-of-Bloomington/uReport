@@ -2,7 +2,7 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
@@ -22,15 +22,15 @@ if (!empty($_GET['query'])
 		? 'Results for: '.View::escape($_GET['query'])
 		: 'Current Search';
 	$fq = isset($this->solrObject->responseHeader->params->fq)
-		? $this->solrObject->responseHeader->params->fq
-		: array();
+		?       $this->solrObject->responseHeader->params->fq
+		: [];
 	echo "
 	<div class=\"searchParameters\">
 		<h2>$q</h2>
 	";
 
 	if (Person::isAllowed('bookmarks', 'update')) {
-		$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'search'));
+		$bookmarkForm = new Block('bookmarks/updateForm.inc', ['type'=>'search']);
 		echo $bookmarkForm->render('html', $this->template);
 	}
 
@@ -40,11 +40,11 @@ if (!empty($_GET['query'])
 		<span>
 		";
 		// There may only be one filterQuery
-		if (!is_array($fq)) { $fq = array($fq); }
+		if (!is_array($fq)) { $fq = [$fq]; }
 
 		foreach ($fq as $facet) {
 			preg_match('/([^:]+):(.+)/', $facet, $matches);
-			$key = $matches[1];
+			$key   = $matches[1];
 			$value = $matches[2];
 			// Users should not change the permission level they're searching as
 			if ($key != 'displayPermissionLevel') {
