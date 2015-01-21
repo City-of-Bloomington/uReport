@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -16,6 +16,7 @@ class Category extends ActiveRecord
 	protected $categoryGroup;
 
 	private $displayPermissionLevelHasChanged = false;
+	private $slaDaysHasChanged = false;
 
 	/**
 	 * Populates the object with data
@@ -87,9 +88,11 @@ class Category extends ActiveRecord
 		$this->setLastModified(date(DATE_FORMAT));
 		parent::save();
 
-		if ($this->displayPermissionLevelHasChanged) {
+		if ($this->displayPermissionLevelHasChanged || $this->slaDaysHasChanged) {
 			// Spawn a background process to reindex the search engine
-			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.$this->getId().' '.$_SERVER['SITE_HOME'];
+			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.SITE_HOME.' '.$this->getId();
+			if ($this->slaDaysHasChanged) { $cmd .= ' open'; }
+
 			shell_exec("nohup $cmd > /dev/null 2>&1 &");
 		}
 	}
@@ -113,22 +116,35 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
-	public function setDisplayPermissionLevel($s) {
-		if ($this->getId()) {
-			$s = trim($s);
-			if (   $this->getDisplayPermissionLevel()
-				&& $this->getDisplayPermissionLevel() != $s) {
-				$this->displayPermissionLevelHasChanged = true;
-			}
-		}
-		parent::set('displayPermissionLevel',$s);
-	}
-	public function setSlaDays               ($i) { parent::set('slaDays',          (int)$i); }
 	public function setDepartment_id   ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',    $id); }
 	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( __namespace__.'\CategoryGroup', 'categoryGroup_id', $id); }
 	public function setDepartment   (Department    $o) { parent::setForeignKeyObject(__namespace__.'\Department',    'department_id',    $o);  }
 	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id', $o);  }
 	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
+
+    public function setDisplayPermissionLevel($s)
+    {
+        if ($this->getId()) {
+            $s = trim($s);
+            if (   $this->getDisplayPermissionLevel()
+                && $this->getDisplayPermissionLevel() != $s) {
+                $this->displayPermissionLevelHasChanged = true;
+            }
+        }
+        parent::set('displayPermissionLevel',$s);
+    }
+
+    public function setSlaDays($i)
+    {
+        $i = (int)$i;
+
+        if ($this->getId()) {
+            if ($this->getSlaDays() != $i) {
+                $this->slaDaysHasChanged = true;
+            }
+        }
+        parent::set('slaDays', $i);
+    }
 
 	/**
 	 * @param array $post

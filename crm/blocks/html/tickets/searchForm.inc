@@ -111,6 +111,17 @@ if (Person::isAllowed('tickets','add')) {
 							";
 						}
 					}
+					$value = $this->solrObject->facet_counts->facet_queries->{Search::SLA_OVERDUE_FUNCTION};
+					$url = clone $currentURL;
+					$url->sla = 'overdue';
+					echo "
+                    <div class=\"collapsible\">
+                        <h3 class=\"hd\">{$this->_('labels.sla')}</h3>
+                        <ul class=\"bd\">
+                            <li><a href=\"$url\">{$this->_('labels.overdue')}</a> ($value)</li>
+                        </ul>
+                    </div>
+                    ";
 				}
 			?>
 			<div class="collapsible">

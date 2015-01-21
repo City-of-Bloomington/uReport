@@ -42,34 +42,39 @@ if (!empty($_GET['query'])
 		// There may only be one filterQuery
 		if (!is_array($fq)) { $fq = [$fq]; }
 
-		foreach ($fq as $facet) {
-			preg_match('/([^:]+):(.+)/', $facet, $matches);
-			$key   = $matches[1];
-			$value = $matches[2];
-			// Users should not change the permission level they're searching as
-			if ($key != 'displayPermissionLevel') {
-				$deleteURL = clone $currentURL;
+		foreach ($fq as $filter) {
+			if (preg_match('/([^:]+):(.+)/', $filter, $matches)) {
+                $key   = $matches[1];
+                $value = $matches[2];
 
-				if($key === 'coordinates') {
-					if (isset($deleteURL->zoom)) { unset($deleteURL->zoom); }
-					$key = 'bbox';
-					if (isset($deleteURL->$key)) {
-						unset($deleteURL->$key);
-					}
-					$displayName = Search::$searchableFields[$key];
-					echo $helper->buttonLink($deleteURL, $displayName, 'delete');
-				}
-				else {
-					if (isset($deleteURL->$key)) {
-						unset($deleteURL->$key);
-					}
-					$displayName  = Search::$searchableFields[$key];
-					$displayValue = Search::getDisplayName('ticket', $key, $value);
-					if ($displayValue) {
-						echo $helper->buttonLink($deleteURL, "$displayName: $displayValue", 'delete');
-					}
-				}
-			}
+                if (array_key_exists($key, Search::$searchableFields)) {
+                    $deleteURL = clone $currentURL;
+
+                    if ($key === 'coordinates') {
+                        if (isset($deleteURL->zoom)) { unset($deleteURL->zoom); }
+                        if (isset($deleteURL->bbox)) { unset($deleteURL->bbox); }
+
+                        $displayName = Search::$searchableFields['bbox'];
+                        echo $helper->buttonLink($deleteURL, $displayName, 'delete');
+                    }
+                    else {
+                        if (isset($deleteURL->$key)) { unset($deleteURL->$key); }
+
+                        $displayName  = Search::$searchableFields[$key];
+                        $displayValue = Search::getDisplayName('ticket', $key, $value);
+                        if ($displayValue) {
+                            echo $helper->buttonLink($deleteURL, "$displayName: $displayValue", 'delete');
+                        }
+                    }
+                }
+            }
+            else {
+                if ($filter == Search::SLA_OVERDUE_FUNCTION) {
+                    $deleteURL = clone $currentURL;
+                    if (isset($deleteURL->sla)) { unset($deleteURL->sla); }
+                    echo $helper->buttonLink($deleteURL, "{$this->_('labels.sla')}: {$this->_('labels.overdue')}", 'delete');
+                }
+            }
 		}
 		echo "</span>";
 	}

@@ -2,40 +2,44 @@
 /**
  * Reindex all tickets for the given category_id
  *
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param int $argv[1] The category_id to reindex tickets for
- * @param int $argv[2] The path to the SITE_HOME directory
+ * @param int $argv[2] The category_id to reindex tickets for
+ * @param int $argv[1] The path to the SITE_HOME directory
  */
 use Application\Models\Search;
 use Application\Models\Ticket;
 use Blossom\Classes\Database;
 
-if (isset($argv[1]) && is_numeric($argv[1])) {
-	$_SERVER['SITE_HOME'] = $argv[2];
+if (isset($argv[2]) && is_numeric($argv[2])) {
+	$_SERVER['SITE_HOME'] = $argv[1];
+	$openFlag = isset($argv[3]) ? $argv[3] : null;
 
 	include_once realpath(__DIR__.'/../../configuration.inc');
-	$search = new Search();
+
+    $filename = SITE_HOME.'/workers/indexCategory_'.uniqid();
+    $LOG = fopen($filename, 'a');
 
 	$sql = 'select * from tickets where category_id=?';
+	if ($openFlag) { $sql.= ' and closedDate is null'; }
+
+	fwrite($LOG, "$sql\n");
 	$zend_db = Database::getConnection();
-	$query = $zend_db->query($sql, array($argv[1]));
+    $result = $zend_db->query($sql)->execute([$argv[2]]);
+    $count = count($result);
 
-	$filename = SITE_HOME.'/workers/indexCategory_'.uniqid();
-	$LOG = fopen($filename, 'a');
-
-	$c = 0;
-	while ($row = $query->fetch()) {
+    $search = new Search();
+	foreach ($result as $c=>$row) {
 		$ticket = new Ticket($row);
 		$search->add($ticket);
-		$c++;
-		fwrite($LOG, "$c: {$ticket->getId()}\n");;
+		fwrite($LOG, "$c/$count: {$ticket->getId()}\n");
 	}
 	fwrite($LOG, "Committing\n");
 	$search->solrClient->commit();
 	fwrite($LOG, "Optimizing\n");
 	$search->solrClient->optimize();
+	fwrite($LOG, "Done\n");
 	fclose($LOG);
 
 	unlink($filename);

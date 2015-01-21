@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -15,6 +15,8 @@ class Search
 	const ITEMS_PER_PAGE  = 10;
 	const MAX_RAW_RESULTS = 10000;
 	const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
+
+	const SLA_OVERDUE_FUNCTION = '{!frange l=0}if(exists(slaDays),sub(if(exists(closedDate),ms(closedDate,enteredDate),ms(NOW,enteredDate)),product(slaDays,86400000)),-1)';
 
 	/**
 	 * The full list of fields that can be searched on
@@ -41,7 +43,8 @@ class Search
 		'label_id'        => 'Label',
 		'contactMethod_id'=> 'Received Via',
 		'enteredDate'     => 'Case Date',
-		'bbox'            => 'Bounding Box'
+		'bbox'            => 'Bounding Box',
+		'sla'             => 'SLA'
 	);
 
 	/**
@@ -179,6 +182,7 @@ class Search
 
 		// Facets
 		$additionalParameters['facet'] = 'true';
+		$additionalParameters['facet.query'] = self::SLA_OVERDUE_FUNCTION;
 		$additionalParameters['facet.field'] = self::$facetFields['ticket'];
 
 		// Search Parameters
@@ -198,13 +202,15 @@ class Search
 						$fq[] = "$field:[$startDate TO $endDate]";
 					}
 				}
-				// Added else if statement by Quan on Aug 5, 2013
 				// coordinates is a not a numeric value but does not need to be quoted.
-				else if (false !== strpos($field, 'bbox')) {
+				elseif (false !== strpos($field, 'bbox')) {
 					$key = 'coordinates';
 					list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $get[$field]);
 					$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
 					$fq[] = "$key:$value";
+				}
+				elseif ($field == 'sla' && $get[$field] == 'overdue') {
+                    $fq[] = self::SLA_OVERDUE_FUNCTION;
 				}
 				else {
 					$value = is_numeric($get[$field])
@@ -313,12 +319,20 @@ class Search
 			$document->addField('recordKey', "t_{$record->getId()}");
 			$document->addField('recordType', 'ticket');
 
-			$document->addField('enteredDate', $record->getEnteredDate(Search::DATE_FORMAT), \DateTimeZone::UTC);
+			$document->addField('enteredDate',    $record->getEnteredDate(Search::DATE_FORMAT), \DateTimeZone::UTC);
+			if ($record->getClosedDate()) {
+                $document->addField('closedDate', $record->getClosedDate (Search::DATE_FORMAT), \DateTimeZone::UTC);
+            }
+
 			if ($record->getLatLong()) {
 				$document->addField('coordinates', $record->getLatLong());
 			}
 			if ($record->getCategory()) {
-				$document->addField('displayPermissionLevel', $record->getCategory()->getDisplayPermissionLevel());
+                $c = $record->getCategory();
+				$document->addField('displayPermissionLevel', $c->getDisplayPermissionLevel());
+				if ($c->getSlaDays()) {
+                    $document->addField('slaDays', $c->getSlaDays());
+				}
 			}
 
 			// Ticket information indexing
