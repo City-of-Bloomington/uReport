@@ -2,7 +2,7 @@
 /**
  * Provides markup for button links
  *
- * @copyright 2014 City of Bloomington, Indiana
+ * @copyright 2014-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -32,12 +32,16 @@ class ButtonLink
 		$this->template = $template;
 	}
 
-	public function buttonLink($url, $label, $type, $size=self::SIZE_BUTTON)
+	public function buttonLink($url, $label, $type, $size=self::SIZE_BUTTON, array $additionalAttributes=[])
 	{
+        $class = array_key_exists($type, self::$types) ? self::$types[$type] : $type;
+        $attrs = '';
+        foreach ($additionalAttributes as $key=>$value) {
+            $attrs.= " $key=\"$value\"";
+        }
 		$a = $size == self::SIZE_BUTTON
-			? '<a href="%s" class="btn"><i class="%s"></i> %s</a>'
-			: '<a href="%s" class="%s" ><i class="hidden-label">%s</i></a>';
-		$class = array_key_exists($type, self::$types) ? self::$types[$type] : $type;
-		return sprintf($a, $url, $class, $label);
+			? "<a href=\"$url\" class=\"btn\"    $attrs><i class=\"$class\"></i> $label</a>"
+			: "<a href=\"$url\" class=\"$class\" $attrs><i class=\"hidden-label\">$label</i></a>";
+		return $a;
 	}
 }

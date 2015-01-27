@@ -50,7 +50,8 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 		BASE_URI.'/tickets/changeStatus?ticket_id='.$this->ticket->getId(),
 		$this->translate('labels.change_status'),
 		'edit',
-		ButtonLink::SIZE_ICON
+		ButtonLink::SIZE_ICON,
+		['data-callback'=>'changeStatus']
 	);
 	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = $helper->buttonLink(
@@ -65,26 +66,30 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 			BASE_URI.'/tickets/changeCategory?ticket_id='.$this->ticket->getId(),
 			$this->translate('labels.change_category'),
 			'edit',
-			ButtonLink::SIZE_ICON
+			ButtonLink::SIZE_ICON,
+			['data-callback'=>'changeCategory']
 		);
 		$changeLocationButton = $helper->buttonLink(
 			BASE_URI.'/tickets/changeLocation?ticket_id='.$this->ticket->getId(),
 			$this->translate('labels.change_location'),
 			'edit',
-			ButtonLink::SIZE_ICON
+			ButtonLink::SIZE_ICON,
+			['data-callback'=>'changeLocation']
 		);
 		if (Person::isAllowed('people','view')) {
 			$assignButton = $helper->buttonLink(
 				BASE_URI.'/tickets/assign?ticket_id='.$this->ticket->getId(),
 				$this->translate('labels.assign_ticket'),
 				'edit',
-				ButtonLink::SIZE_ICON
+				ButtonLink::SIZE_ICON,
+				['data-callback'=>'assign']
 			);
 			$referralButton = $helper->buttonLink(
 				BASE_URI.'/tickets/refer?ticket_id='.$this->ticket->getId(),
 				$this->translate('labels.refer_ticket'),
 				'edit',
-				ButtonLink::SIZE_ICON
+				ButtonLink::SIZE_ICON,
+				['data-callback'=>'refer']
 			);
 		}
 	}

@@ -11,17 +11,17 @@ var ACTION_FORM = {
 		document.location.reload();
 	},
 	handleFormSuccess: {
-		ChangeStatus:	function () { ACTION_FORM.closeAndReload(); },
-		Assign:			function () { ACTION_FORM.closeAndReload(); },
-		Refer:			function () { ACTION_FORM.closeAndReload(); },
-		ChangeCategory: function (category_id) {
+		changeStatus:	function () { ACTION_FORM.closeAndReload(); },
+		assign:			function () { ACTION_FORM.closeAndReload(); },
+		refer:			function () { ACTION_FORM.closeAndReload(); },
+		changeCategory: function (category_id) {
             jQuery.ajax(CRM.BASE_URL + '/tickets/changeCategory?ticket_id=' + CRM.ticket_id + ';category_id=' + category_id, {
                 complete: function (id, o, args) {
                     ACTION_FORM.closeAndReload();
                 }
             });
 		},
-		ChangeLocation: function (location) {
+		changeLocation: function (location) {
             jQuery.ajax(CRM.BASE_URL + '/tickets/changeLocation?ticket_id=' + CRM.ticket_id + ';location=' + location, {
                 complete: function () {
                     ACTION_FORM.closeAndReload();
@@ -32,9 +32,9 @@ var ACTION_FORM = {
 };
 jQuery('#ticket-panel ul .fa-pencil').on('click', function (e) {
     e.preventDefault();
-    var a = $(this),
-        buttonName = a.children('i').first().text().replace(' ', ''),
-        url        = a.attr('href') + ';popup=1;callback=ACTION_FORM.handleFormSuccess.' + buttonName;
+    var a = e.target,
+        callback = a.getAttribute('data-callback'),
+        url      = a.getAttribute('href') + ';popup=1;callback=ACTION_FORM.handleFormSuccess.' + callback;
 
     ACTION_FORM.popup = window.open(
         url,
