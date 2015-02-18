@@ -1,10 +1,9 @@
 "use strict";
 jQuery(function ($) {
-    var fields = $('.collapsible');
-    fields.addClass('collapsed');
-    fields.on('click', function (e) {
-        var div = $(this);
-        
+    $('.collapsible').addClass('collapsed');
+    $('.collapsible h3').on('click', function (e) {
+        var div = $(this).parent();
+
         if (div.hasClass('collapsed')) {
             div.removeClass('collapsed');
             div.addClass('expanded');
