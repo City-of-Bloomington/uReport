@@ -3,6 +3,7 @@ use Blossom\Classes\View;
 ?>
 <head>
 	<meta charset="utf-8" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<link rel="stylesheet" type="text/css" href="<?php echo BASE_URI; ?>/skins/local/reset.css" />
 	<?php
 		if ($this->layout) {
