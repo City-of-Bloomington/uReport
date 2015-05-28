@@ -436,45 +436,31 @@ class Person extends ActiveRecord
 	/**
 	 * @param string $message
 	 * @param string $subject
-	 * @param Person $personFrom
 	 */
-	public function sendNotification($message, $subject=null, Person $personFrom=null, $html=null)
+	public function sendNotification($message, $subject=null)
 	{
 		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
 			if (!$subject) {
 				$subject = APPLICATION_NAME.' Notification';
 			}
 
-			if ($personFrom) {
-				$emails = $personFrom->getNotificationEmails();
-				if (count($emails)) {
-					$fromEmail    = $emails->current();
-					$fromFullname = $personFrom->getFullname();
-				}
-			}
-			if (!isset($fromEmail)) {
-				if (isset($_SERVER['SERVER_NAME'])) {
-					$name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
-					$fromEmail    = "$name@$_SERVER[SERVER_NAME]";
-					$fromFullname = APPLICATION_NAME;
-				}
-				else {
-					$fromFullname = APPLICATION_NAME;
-					preg_match('#//([^/]+)#', BASE_URL, $matches);
-					$server = $matches[1];
-					$fromEmail    = "$fromFullname@$server";
-				}
-
-			}
+            if (isset($_SERVER['SERVER_NAME'])) {
+                $name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
+                $fromEmail    = "$name@$_SERVER[SERVER_NAME]";
+                $fromFullname = APPLICATION_NAME;
+            }
+            else {
+                $fromFullname = APPLICATION_NAME;
+                preg_match('#//([^/]+)#', BASE_URL, $matches);
+                $server = $matches[1];
+                $fromEmail    = "$fromFullname@$server";
+            }
 
 			$message  = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
-			if (isset($html)) {
-				$html = mb_convert_encoding($html,    'ISO-8859-1', 'UTF-8');
-			}
 			foreach ($this->getNotificationEmails() as $email) {
                 $to = $email->getEmail();
                 $from = "From: $fromFullname <$fromEmail>";
-                mail($to, $subject, $message, $from, "-f$fromEmail");
+                mail($to, $subject, $message, $from, '-f'.ADMINISTRATOR_EMAIL);
 			}
 		}
 	}

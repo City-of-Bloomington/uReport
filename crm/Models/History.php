@@ -211,8 +211,7 @@ abstract class History extends ActiveRecord
 
 			$actionPerson->sendNotification(
 				"$url\n\n{$this->getDescription()}\n\n{$this->getNotes()}",
-				APPLICATION_NAME.' '.$this->getAction(),
-				$enteredByPerson
+				APPLICATION_NAME.' '.$this->getAction()
 			);
 		}
 	}

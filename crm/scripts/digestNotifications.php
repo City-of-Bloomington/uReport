@@ -41,11 +41,8 @@ foreach ($ids as $id) {
 		)
 	);
 
-	// Create both text and html output for the email
 	$text = $template->render();
-	$template->setOutputFormat('html');
-	$html = $template->render();
 
 	$count = count($tickets);
-	$person->sendNotification($text, "$count open cases in ".APPLICATION_NAME, null, $html);
+	$person->sendNotification($text, "$count open cases in ".APPLICATION_NAME);
 }
