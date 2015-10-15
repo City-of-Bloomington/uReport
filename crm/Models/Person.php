@@ -436,8 +436,9 @@ class Person extends ActiveRecord
 	/**
 	 * @param string $message
 	 * @param string $subject
+	 * @param string $replyTo
 	 */
-	public function sendNotification($message, $subject=null)
+	public function sendNotification($message, $subject=null, $replyTo=null)
 	{
 		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
 			if (!$subject) {
@@ -460,6 +461,7 @@ class Person extends ActiveRecord
 			foreach ($this->getNotificationEmails() as $email) {
                 $to = $email->getEmail();
                 $from = "From: $fromFullname <$fromEmail>";
+                if ($replyTo) { $from.="\r\nReply-to: $replyTo"; }
                 mail($to, $subject, $message, $from, '-f'.ADMINISTRATOR_EMAIL);
 			}
 		}

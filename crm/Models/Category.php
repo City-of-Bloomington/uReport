@@ -113,6 +113,7 @@ class Category extends ActiveRecord
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
+	public function getNotificationReplyEmail() { return parent::get('notificationReplyEmail'); }
 	public function getAutoResponseIsActive()   { return parent::get('autoResponseIsActive');   }
 	public function getAutoResponseText()       { return parent::get('autoResponseText');       }
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
@@ -125,6 +126,7 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
+	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
 	public function setAutoResponseText      ($s) { parent::set('autoResponseText',      $s); }
 	public function setAutoResponseIsActive  ($b) { parent::set('autoResponseIsActive',  $b ? 1 : 0); }
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
@@ -168,7 +170,7 @@ class Category extends ActiveRecord
         $fields = [
             'name', 'description', 'department_id', 'categoryGroup_id',
             'postingPermissionLevel', 'displayPermissionLevel',
-            'customFields', 'slaDays',
+            'customFields', 'slaDays', 'notificationReplyEmail',
             'autoResponseIsActive', 'autoResponseText', 'autoCloseIsActive', 'autoCloseSubstatus_id'
         ];
         foreach ($fields as $f) {
@@ -207,7 +209,7 @@ class Category extends ActiveRecord
                 if ($this->allowsDisplay($person)) {
                     $message.="\n\n{$ticket->getURL()}\n";
                 }
-                $person->sendNotification($message);
+                $person->sendNotification($message, null, $this->getNotificationReplyEmail());
             }
         }
 	}

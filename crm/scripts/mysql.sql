@@ -126,6 +126,7 @@ create table categories (
 	customFields           text,
 	lastModified           timestamp    not null default CURRENT_TIMESTAMP,
 	slaDays                int          unsigned,
+	notificationReplyEmail varchar(128),
 	autoResponseIsActive   bool,
 	autoResponseText       text,
 	autoCloseIsActive      bool,

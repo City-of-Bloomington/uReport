@@ -32,7 +32,10 @@ class CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($category->autoCloseIsActive());
 
         $category->setAutoResponseText('test message');
-        $this->assertEquals($category->getAutoResponseText(), 'test message');
+        $this->assertEquals('test message', $category->getAutoResponseText());
+
+        $category->setNotificationReplyEmail('test@somewhere');
+        $this->assertEquals('test@somewhere', $category->getNotificationReplyEmail());
     }
 
     public function testHandleUpdate()
@@ -40,7 +43,7 @@ class CategoryTest extends PHPUnit_Framework_TestCase
         $data = [
             'name'=>'Name', 'description'=>'Description',
             'postingPermissionLevel'=>'test permission', 'displayPermissionLevel'=>'testing display',
-            'slaDays'=>2,
+            'slaDays'=>2, 'notificationReplyEmail'=>'test@somewhere',
             'autoResponseIsActive'=>1,'autoResponseText'=>'auto response','autoCloseIsActive'=>1,
             // The rest of these fields would cause hits to the database if we set values for them
             // We have left them empty so we can do clean unit tests.

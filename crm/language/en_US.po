@@ -300,6 +300,9 @@ msgstr "SLA"
 msgid "labels.overdue"
 msgstr "Over SLA"
 
+msgid "labels.notificationReplyEmail"
+msgstr "Reply To Email"
+
 msgid "labels.autoResponseIsActive"
 msgstr "Auto Respond"
 

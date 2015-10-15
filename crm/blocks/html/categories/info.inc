@@ -19,6 +19,7 @@ $group = $g ? View::escape($g->getName()) : '';
 $d = $this->category->getDepartment();
 $department = $d ? View::escape($d->getName()) : '';
 
+$notificationReply  = View::escape($this->category->getNotificationReplyEmail());
 $autoResponseText   = View::escape($this->category->getAutoResponseText());
 $autoResponseActive = $this->category->autoResponseIsActive() ? $this->_('labels.active_yes') : $this->_('labels.active_no');
 $autoCloseActive    = $this->category->autoCloseIsActive   () ? $this->_('labels.active_yes') : $this->_('labels.active_no');
@@ -52,6 +53,9 @@ echo "
 			<td>{$this->category->getPostingPermissionLevel()}</td>
 		</tr>
 
+		<tr><th>{$this->_('labels.notificationReplyEmail')}</th>
+            <td>$notificationReply</td>
+        </tr>
 		<tr><th>{$this->_('labels.autoResponseIsActive')}</th>
             <td>$autoResponseActive</td>
         </tr>

@@ -198,7 +198,7 @@ abstract class History extends ActiveRecord
 	 * Does not send if the enteredByPerson and actionPerson are the same person
 	 * @param Ticket $ticket
 	 */
-	public function sendNotification($ticket=null)
+	public function sendNotification(Ticket $ticket=null)
 	{
 		$enteredByPerson = $this->getEnteredByPerson();
 		$actionPerson    = $this->getActionPerson();
@@ -211,7 +211,8 @@ abstract class History extends ActiveRecord
 
 			$actionPerson->sendNotification(
 				"$url\n\n{$this->getDescription()}\n\n{$this->getNotes()}",
-				APPLICATION_NAME.' '.$this->getAction()
+				APPLICATION_NAME.' '.$this->getAction(),
+				$ticket->getCategory()->getNotificationReplyEmail()
 			);
 		}
 	}

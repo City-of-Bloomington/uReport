@@ -16,7 +16,7 @@ $title = $this->category->getId()
 
 $fields = [
 	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
-	'categoryGroup_id', 'department_id', 'autoResponseText'
+	'categoryGroup_id', 'department_id', 'autoResponseText', 'notificationReplyEmail'
 ];
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
@@ -121,8 +121,11 @@ foreach ($fields as $field) {
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend><?= $this->_('labels.autoResponseIsActive'); ?></legend>
+	<fieldset><legend><?= $this->_('messages.usedForNotifications'); ?></legend>
         <table>
+            <tr><td><label  for="notificationReplyEmail"><?= $this->_('labels.notificationReplyEmail'); ?></label></td>
+                <td><input name="notificationReplyEmail" id="notificationReplyEmail" value="<?= $notificationReplyEmail; ?>" /></td>
+            </tr>
             <tr><td><label><?= $this->_('labels.autoResponseIsActive'); ?></label></td>
                 <td><label>
                         <input name="autoResponseIsActive" type="radio" value="1"
