@@ -295,10 +295,28 @@ msgstr "Service Level Agreement"
 #. The abbreviation for "Service Level Agreement"
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "labels.sla"
-msgstr "SLA (Service Level)"
+msgstr "SLA"
 
 msgid "labels.overdue"
 msgstr "Over SLA"
+
+msgid "labels.autoResponseIsActive"
+msgstr "Auto Respond"
+
+msgid "labels.autoResponseText"
+msgstr "Auto Response Message"
+
+msgid "labels.autoCloseIsActive"
+msgstr "Auto Close"
+
+msgid "labels.autoCloseSubstatus_id"
+msgstr "Auto Close Status"
+
+msgid "labels.active_yes"
+msgstr "Active"
+
+msgid "labels.active_no"
+msgstr "Disabled"
 
 #. Reports that users send in are organized into Tickets
 #. A ticket can contain multiple issue reports that are related, usually by location

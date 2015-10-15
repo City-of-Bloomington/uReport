@@ -82,6 +82,10 @@ class Category extends ActiveRecord
 		if (!$this->getName())             { throw new \Exception('categories/missingName');  }
 		if (!$this->getCategoryGroup_id()) { throw new \Exception('categories/missingGroup'); }
 		if (!$this->getDepartment_id())    { throw new \Exception('categories/missingDepartment'); }
+
+		if ($this->autoResponseIsActive() && !$this->getAutoResponseText()) {
+            throw new \Exception('categories/missingAutoResponseText');
+		}
 	}
 
 	public function save() {
@@ -109,17 +113,27 @@ class Category extends ActiveRecord
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
-	public function getDepartment()    { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id');    }
-	public function getCategoryGroup() { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'); }
+	public function getAutoResponseIsActive()   { return parent::get('autoResponseIsActive');   }
+	public function getAutoResponseText()       { return parent::get('autoResponseText');       }
+	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
+	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
+	public function getAutoCloseSubstatus() { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id'); }
+	public function getDepartment()         { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id');    }
+	public function getCategoryGroup()      { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'); }
 	public function getLastModified($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
-	public function setDepartment_id   ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',    $id); }
-	public function setCategoryGroup_id($id)           { parent::setForeignKeyField( __namespace__.'\CategoryGroup', 'categoryGroup_id', $id); }
-	public function setDepartment   (Department    $o) { parent::setForeignKeyObject(__namespace__.'\Department',    'department_id',    $o);  }
-	public function setCategoryGroup(CategoryGroup $o) { parent::setForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id', $o);  }
+	public function setAutoResponseText      ($s) { parent::set('autoResponseText',      $s); }
+	public function setAutoResponseIsActive  ($b) { parent::set('autoResponseIsActive',  $b ? 1 : 0); }
+	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
+	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
+	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
+	public function setCategoryGroup_id     ($id)           { parent::setForeignKeyField( __namespace__.'\CategoryGroup', 'categoryGroup_id',      $id); }
+	public function setAutoCloseSubstatus(Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id', $o);  }
+	public function setDepartment        (Department    $o) { parent::setForeignKeyObject(__namespace__.'\Department',    'department_id',         $o);  }
+	public function setCategoryGroup     (CategoryGroup $o) { parent::setForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id',      $o);  }
 	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
 
     public function setDisplayPermissionLevel($s)
@@ -151,25 +165,56 @@ class Category extends ActiveRecord
 	 */
 	public function handleUpdate($post)
 	{
-		$this->setName                  ($post['name']);
-		$this->setDescription           ($post['description']);
-		$this->setDepartment_id         ($post['department_id']);
-		$this->setCategoryGroup_id      ($post['categoryGroup_id']);
-		$this->setPostingPermissionLevel($post['postingPermissionLevel']);
-		$this->setDisplayPermissionLevel($post['displayPermissionLevel']);
-		$this->setCustomFields          ($post['custom_fields']);
-		$this->setSlaDays               ($post['slaDays']);
+        $fields = [
+            'name', 'description', 'department_id', 'categoryGroup_id',
+            'postingPermissionLevel', 'displayPermissionLevel',
+            'customFields', 'slaDays',
+            'autoResponseIsActive', 'autoResponseText', 'autoCloseIsActive', 'autoCloseSubstatus_id'
+        ];
+        foreach ($fields as $f) {
+            $set = 'set'.ucfirst($f);
+            $this->$set($post[$f]);
+        }
 	}
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
+	 * @return bool
+	 */
+	public function autoResponseIsActive() { return $this->getAutoResponseIsActive() ? true : false; }
+	public function autoCloseIsActive   () { return $this->getAutoCloseIsActive   () ? true : false; }
+
+	/**
+	 * Event handler called from Ticket::handleAdd()
+	 *
+	 * Handles the autoClose and autoResponse sending
+	 * @param Ticket $ticket
+	 */
+	public function onTicketAdd(Ticket &$ticket)
+	{
+        if ($this->autoCloseIsActive()) {
+            $ticket->handleChangeStatus([
+                'status'      => 'closed',
+                'substatus_id'=> $this->getAutoCloseSubstatus_id(),
+                'notes'       => AUTO_CLOSE_COMMENT
+            ]);
+        }
+
+        if ($this->autoResponseIsActive()) {
+            foreach ($ticket->getReportedByPeople() as $p) {
+                $p->sendNotification($this->getAutoResponseText());
+            }
+        }
+	}
+
+	/**
 	 * Returns a PHP array representing the description of custom fields
 	 *
 	 * The category holds the description of the custom fields desired
-	 * $customFields = array(
-	 *		array('name'=>'','type'=>'','label'=>'','values'=>array())
-	 * )
+	 * $customFields = [
+	 *		[ 'name'=>'','type'=>'','label'=>'','values'=>[] ]
+	 * ]
 	 * Name and Label are required.
 	 * Anything without a type will be rendered as type='text'
 	 * If type is select, radio, or checkbox, you must provide values
@@ -229,7 +274,7 @@ class Category extends ActiveRecord
 		elseif ($person->getRole()!='Staff' && $person->getRole()!='Administrator') {
 			return in_array(
 				$this->getDisplayPermissionLevel(),
-				array('public','anonymous')
+				['public','anonymous']
 			);
 		}
 		return true;
@@ -246,7 +291,7 @@ class Category extends ActiveRecord
 		elseif ($person->getRole()!='Staff' && $person->getRole()!='Administrator') {
 			return in_array(
 				$this->getPostingPermissionLevel(),
-				array('public','anonymous')
+				['public','anonymous']
 			);
 		}
 		return true;

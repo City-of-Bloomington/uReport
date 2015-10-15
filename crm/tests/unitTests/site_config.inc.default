@@ -4,3 +4,4 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
+define('DATE_FORMAT', 'n/j/Y H:i:s');

@@ -36,13 +36,12 @@ class Ticket extends ActiveRecord
 	 */
 	public function __construct($id=null)
 	{
-		$zend_db = Database::getConnection();
-
 		if ($id) {
 			if (is_array($id)) {
                 $this->exchangeArray($id);
 			}
 			else {
+                $zend_db = Database::getConnection();
 				$sql = 'select * from tickets where id=?';
                 $result = $zend_db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
@@ -161,7 +160,6 @@ class Ticket extends ActiveRecord
 				$this->setAssignedPerson_id(1);
 			}
 		}
-
 	}
 
 	public function updateSearchIndex()
@@ -620,6 +618,7 @@ class Ticket extends ActiveRecord
 			$issue->setTicket($this);
 			$issue->save();
 
+			// Create the entry in the history log
 			$history = new TicketHistory();
 			$history->setTicket($this);
 			$history->setAction(new Action('open'));
@@ -639,6 +638,8 @@ class Ticket extends ActiveRecord
 				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
 			}
 			$history->save();
+
+			$this->getCategory()->onTicketAdd($this);
 		}
 		catch (\Exception $e) {
 			$zend_db->getDriver()->getConnection()->rollback();
@@ -651,6 +652,41 @@ class Ticket extends ActiveRecord
 		}
 		$zend_db->getDriver()->getConnection()->commit();
 		$history->sendNotification($this);
+	}
+
+	/**
+	 * Does all the database work for TicketController::changeStatus
+	 *
+	 * Saves the ticket and creates history entries for the status change
+	 *
+	 * This function calls save() as needed.  After using this function,
+	 * there's no need to make an additional save() call.
+	 *
+	 * @param array $post[status=>'', 'substatus_id'=>'', 'notes'=>'']
+	 */
+	public function handleChangeStatus($post)
+	{
+        $substatus_id = !empty($post['substatus_id']) ? $post['substatus_id'] : null;
+        $this->setStatus($post['status'], $substatus_id);
+
+        // add a record to ticket history
+        $action = new Action($post['status']);
+
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction($action);
+        $history->setNotes($post['notes']);
+
+        if (defined('CLOSING_COMMENT_REQUIRED_LENGTH')) {
+            if ($action->getName() === 'closed') {
+                if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
+                    throw new \Exception('tickets/missingClosingComment');
+                }
+            }
+        }
+
+        $history->save();
+        $this->save();
 	}
 
 	/**

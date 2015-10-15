@@ -144,5 +144,6 @@ define('OPEN311_KEY_SERVICE', 'http://localhost/open311-api-key-request');
 define('THUMBNAIL_SIZE', 150);
 
 define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
+define('AUTO_CLOSE_COMMENT', 'Closed automatically');
 
 define('LOCALE', 'en_US');

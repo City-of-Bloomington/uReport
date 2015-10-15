@@ -379,33 +379,14 @@ class TicketsController extends Controller
 
 		if (isset($_POST['status'])) {
 			try {
-				$substatus_id = !empty($_POST['substatus_id']) ? $_POST['substatus_id'] : null;
-				$ticket->setStatus($_POST['status'], $substatus_id);
+                // This function will call $ticket->save() internally
+                $ticket->handleChangeStatus($_POST);
 
-				// add a record to ticket history
-				$action = new Action($_POST['status']);
-
-				$history = new TicketHistory();
-				$history->setTicket($ticket);
-				$history->setAction($action);
-				$history->setNotes($_POST['notes']);
-
-				if (defined('CLOSING_COMMENT_REQUIRED_LENGTH')) {
-					if ($action->getName() == 'closed') {
-						if (strlen($history->getNotes()) < CLOSING_COMMENT_REQUIRED_LENGTH) {
-							throw new \Exception('tickets/missingClosingComment');
-						}
-
-						// Display an alert, reminding them to respond to any citizens
-						$citizens = $ticket->getReportedByPeople();
-						if (count($citizens)) {
-							$_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
-						}
-					}
-				}
-
-				$history->save();
-				$ticket->save();
+                // Display an alert, reminding them to respond to any citizens
+                $citizens = $ticket->getReportedByPeople();
+                if (count($citizens)) {
+                    $_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
+                }
 
 				$this->redirectToTicketView($ticket);
 			}

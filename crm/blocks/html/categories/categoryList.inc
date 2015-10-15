@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2015 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
@@ -10,12 +10,12 @@ use Blossom\Classes\View;
 ?>
 <div class="categoryList">
 	<h2><?php
-			echo $this->translate(array('labels.category', 'labels.categories', 2));
+			echo $this->_(['labels.category', 'labels.categories', 2]);
 			if (Person::isAllowed('categories','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/categories/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
@@ -45,7 +45,7 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('categories','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/categories/update?category_id='.$category->getId(),
-					$this->translate('labels.edit'),
+					$this->_('labels.edit'),
 					'edit'
 				);
 			}
@@ -57,6 +57,9 @@ use Blossom\Classes\View;
 			$d = $category->getDepartment();
 			$department = $d ? View::escape($d->getName()) : '';
 
+            $autoResponseActive = $category->autoResponseIsActive() ? $this->_('labels.active_yes') : $this->_('labels.active_no');
+            $autoCloseActive    = $category->autoCloseIsActive   () ? $this->_('labels.active_yes') : $this->_('labels.active_no');
+
 			$html.= "
 			<div class=\"category\">
 				<h4><a href=\"".BASE_URI."/categories/view?category_id={$category->getId()}\">
@@ -67,12 +70,14 @@ use Blossom\Classes\View;
 				<p>$description</p>
 				<table>
 					<thead>
-						<tr><th>{$this->translate(array('labels.department', 'labels.departments', 1))}</th>
-							<th>{$this->translate('labels.sla')}
-								{$this->translate(array('labels.day', 'labels.days', 2))}
+						<tr><th>{$this->_(['labels.department', 'labels.departments', 1])}</th>
+							<th>{$this->_('labels.sla')}
+								{$this->_(['labels.day', 'labels.days', 2])}
 							</th>
-							<th>{$this->translate('labels.postingPermissionLevel')}</th>
-							<th>{$this->translate('labels.displayPermissionLevel')}</th>
+							<th>{$this->_('labels.postingPermissionLevel')}</th>
+							<th>{$this->_('labels.displayPermissionLevel')}</th>
+							<th>{$this->_('labels.autoResponseIsActive')}</th>
+							<th>{$this->_('labels.autoCloseIsActive')}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -81,6 +86,8 @@ use Blossom\Classes\View;
 							<td>{$category->getSlaDays()}</td>
 							<td>$postPermission</td>
 							<td>$displayPermission</td>
+							<td>$autoResponseActive</td>
+							<td>$autoCloseActive</td>
 						</tr>
 					</tbody>
 				</table>

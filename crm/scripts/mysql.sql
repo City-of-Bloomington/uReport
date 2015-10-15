@@ -126,6 +126,10 @@ create table categories (
 	customFields           text,
 	lastModified           timestamp    not null default CURRENT_TIMESTAMP,
 	slaDays                int          unsigned,
+	autoResponseIsActive   bool,
+	autoResponseText       text,
+	autoCloseIsActive      bool,
+	autoCloseSubstatus_id  int          unsigned,
 	foreign key (department_id)    references departments   (id),
 	foreign key (categoryGroup_id) references categoryGroups(id)
 );
