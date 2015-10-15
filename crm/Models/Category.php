@@ -202,8 +202,12 @@ class Category extends ActiveRecord
         }
 
         if ($this->autoResponseIsActive()) {
-            foreach ($ticket->getReportedByPeople() as $p) {
-                $p->sendNotification($this->getAutoResponseText());
+            foreach ($ticket->getReportedByPeople() as $person) {
+                $message = $this->getAutoResponseText();
+                if ($this->allowsDisplay($person)) {
+                    $message.="\n\n{$ticket->getURL()}\n";
+                }
+                $person->sendNotification($message);
             }
         }
 	}
@@ -266,12 +270,12 @@ class Category extends ActiveRecord
 	 * @param Person $person
 	 * @return bool
 	 */
-	public function allowsDisplay($person)
+	public function allowsDisplay(Person $person=null)
 	{
-		if (!$person instanceof Person) {
-			return $this->getDisplayPermissionLevel()=='anonymous';
+		if (!$person) {
+			return $this->getDisplayPermissionLevel()==='anonymous';
 		}
-		elseif ($person->getRole()!='Staff' && $person->getRole()!='Administrator') {
+		elseif ($person->getRole()!=='Staff' && $person->getRole()!=='Administrator') {
 			return in_array(
 				$this->getDisplayPermissionLevel(),
 				['public','anonymous']
@@ -281,14 +285,15 @@ class Category extends ActiveRecord
 	}
 
 	/**
+	 * @param Person $person
 	 * @return bool
 	 */
-	public function allowsPosting($person)
+	public function allowsPosting(Person $person=null)
 	{
-		if (!$person instanceof Person) {
-			return $this->getPostingPermissionLevel()=='anonymous';
+		if (!$person) {
+			return $this->getPostingPermissionLevel()==='anonymous';
 		}
-		elseif ($person->getRole()!='Staff' && $person->getRole()!='Administrator') {
+		elseif ($person->getRole()!=='Staff' && $person->getRole()!=='Administrator') {
 			return in_array(
 				$this->getPostingPermissionLevel(),
 				['public','anonymous']

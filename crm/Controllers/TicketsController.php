@@ -86,7 +86,7 @@ class TicketsController extends Controller
 	{
 		$ticket = $this->loadTicket($_GET['ticket_id']);
 
-		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->setFilename('tickets');
 			$this->template->blocks['ticket-panel'][] = new Block(
 				'tickets/ticketInfo.inc',
@@ -117,7 +117,7 @@ class TicketsController extends Controller
 	public function thumbnails()
 	{
 		$ticket = $this->loadTicket($_GET['ticket_id']);
-		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous')) {
+		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->blocks[] = new Block(
 				'tickets/thumbnails.inc',
 				array('ticket'=>$ticket)

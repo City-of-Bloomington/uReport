@@ -695,7 +695,7 @@ class Ticket extends ActiveRecord
 	 * @param Person $person
 	 * @return bool
 	 */
-	public function allowsDisplay($person)
+	public function allowsDisplay(Person $person=null)
 	{
 		$category = $this->getCategory_id() ? $this->getCategory() : new Category();
 		return $category->allowsDisplay($person);
