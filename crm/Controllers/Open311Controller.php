@@ -25,7 +25,7 @@ class Open311Controller extends Controller
 	{
 		parent::__construct($template);
 		$this->template->setFilename('open311');
-		$this->person = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
+		$this->person = isset($_SESSION['USER']) ? $_SESSION['USER'] : null;
 	}
 
 	public function index()
