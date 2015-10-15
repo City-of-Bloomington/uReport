@@ -206,9 +206,10 @@ class Category extends ActiveRecord
         if ($this->autoResponseIsActive()) {
             foreach ($ticket->getReportedByPeople() as $person) {
                 $message = $this->getAutoResponseText();
-                if ($this->allowsDisplay($person)) {
-                    $message.="\n\n{$ticket->getURL()}\n";
-                }
+                # Commenting out the inclusion of a link to the ticket
+                #if ($this->allowsDisplay($person)) {
+                #    $message.="\n\n{$ticket->getURL()}\n";
+                #}
                 $person->sendNotification($message, null, $this->getNotificationReplyEmail());
             }
         }
