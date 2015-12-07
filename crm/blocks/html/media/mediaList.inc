@@ -6,13 +6,14 @@
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons
  */
+use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
 if (count($this->mediaList)) {
 	echo "<table class=\"mediaList\">";
 	foreach ($this->mediaList as $media) {
 		$deleteButton = '';
-		if (!$this->disableButtons) {
+		if (!$this->disableButtons && Person::isAllowed('media', 'delete')) {
 			$h = $this->template->getHelper('buttonLink');
 			$deleteButton = $h->buttonLink(
 				BASE_URI.'/media/delete?media_id='.$media->getId(),
