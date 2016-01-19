@@ -1,0 +1,678 @@
+# uReport Translation
+# Copyright (C) 2013 City of Bloomington
+# This file is distributed under the same license as the uReport package.
+#
+# Cliff Ingham, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 1.9\n"
+"Report-Msgid-Bugs-To: ureport@googlegroups.com\n"
+"POT-Creation-Date: 2013-09-20 16:33-0400\n"
+"PO-Revision-Date: 2015-01-21 10:13-0500\n"
+"Last-Translator: Milo van der Linden <milo.vd.linden@eindhoven.nl>\n"
+"Language-Team: City of Bloomington <ureport@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: en_US\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "labels.add"
+msgstr "Toevoegen"
+
+msgid "labels.edit"
+msgstr "Wijzigen"
+
+msgid "labels.delete"
+msgstr "Verwijderen"
+
+msgid "labels.submit"
+msgstr "Opslaan"
+
+msgid "labels.save"
+msgstr "Opslaan"
+
+msgid "labels.save_as"
+msgstr "Sla %s op als"
+
+msgid "labels.cancel"
+msgstr "Annuleren"
+
+msgid "labels.search"
+msgstr "Zoeken"
+
+msgid "labels.search_results"
+msgstr "Zoek resultaten"
+
+msgid "labels.search_results_text"
+msgstr "Tekst resultaten"
+
+msgid "labels.search_results_map"
+msgstr "Locatie resultaten"
+
+msgid "labels.search_results_print"
+msgstr "Resultaten afdrukken"
+
+msgid "labels.search_results_count"
+msgstr "# resultaten op basis van de zoekopdracht"
+
+msgid "labels.quick_links"
+msgstr "Snelkoppelingen"
+
+msgid "labels.upload"
+msgstr "Upload"
+
+msgid "labels.new"
+msgstr "Nieuw"
+
+msgid "labels.go"
+msgstr "Uitvoeren"
+
+msgid "labels.start"
+msgstr "Start"
+
+msgid "labels.end"
+msgstr "Eind"
+
+msgid "labels.more"
+msgstr "Meer"
+
+msgid "labels.top"
+msgstr "Terug naar begin"
+
+msgid "labels.more_categories"
+msgstr "Meer categorieën"
+
+msgid "labels.sort_by"
+msgstr "Sorteren op"
+
+#. The current sorting of a list.  Alpabetical order, Numerical order, etc.
+msgid "labels.order"
+msgstr "Volgorde"
+
+#. To change the sorting of a list
+msgid "labels.reorder"
+msgstr "Sorteren"
+
+#. This is the short form for "Information".  This should be an abbreviation
+msgid "labels.info"
+msgstr "Info"
+
+#. This is the short form for "Administrator".  This should be an abbreviation
+msgid "labels.admin"
+msgstr "Admin"
+
+msgid "labels.my_account"
+msgstr "Mijn account"
+
+msgid "labels.login"
+msgstr "Aanmelden"
+
+msgid "labels.logout"
+msgstr "Afmelden"
+
+msgid "labels.help"
+msgstr "Help"
+
+msgid "labels.default"
+msgstr "Standaard"
+
+msgid "labels.contactMethod"
+msgid_plural "labels.contactMethods"
+msgstr[0] "Contact methode"
+msgstr[1] "Contact methodes"
+
+msgid "labels.response"
+msgid_plural "labels.responses"
+msgstr[0] "Reactie"
+msgstr[1] "Reacties"
+
+msgid "labels.responseMethod"
+msgstr "Methode van reactie"
+
+msgid "labels.api_key"
+msgstr "API sleutel"
+
+msgid "labels.url"
+msgstr "URL"
+
+msgid "labels.name"
+msgstr "Naam"
+
+msgid "labels.firstname"
+msgstr "Voornaam"
+
+msgid "labels.middlename"
+msgstr "Tussenvoegsels"
+
+msgid "labels.lastname"
+msgstr "Achternaam"
+
+msgid "labels.username"
+msgstr "Gebruikersnaam"
+
+msgid "labels.password"
+msgstr "Wachtwoord"
+
+msgid "labels.authenticationMethod"
+msgstr "Authenticatie"
+
+msgid "labels.role"
+msgstr "Rol"
+
+msgid "labels.change_password"
+msgstr "Wachtwoord wijzigen"
+
+msgid "labels.current_password"
+msgstr "Huidige wachtwoord"
+
+msgid "labels.new_password"
+msgstr "Nieuw wachtwoord"
+
+msgid "labels.retype_password"
+msgstr "Wachtwoord opnieuw ingeven"
+
+#. The generic term for a where a person works or is associated with
+#. What "organization" is someone affiliated with?
+msgid "labels.organization"
+msgstr "Organisatie"
+
+msgid "labels.email"
+msgid_plural "labels.emails"
+msgstr[0] "E-mail"
+msgstr[1] "E-mailadres"
+
+msgid "labels.phone"
+msgid_plural "labels.phones"
+msgstr[0] "Telefoon"
+msgstr[1] "Telefoonnummers"
+
+msgid "labels.description"
+msgstr "Omschrijving"
+
+msgid "labels.comment"
+msgid_plural "labels.comments"
+msgstr[0] "Opmerking"
+msgstr[1] "Opmerkingen"
+
+msgid "labels.type"
+msgstr "Type"
+
+msgid "labels.media"
+msgid_plural "labels.medias"
+msgstr[0] "Bijlage"
+msgstr[1] "Bijlagen"
+
+msgid "labels.custom_fields"
+msgstr "Aangepaste velden"
+
+msgid "labels.display_fields"
+msgstr "Zichtbare velden"
+
+msgid "labels.date"
+msgstr "Datum"
+
+msgid "labels.day"
+msgid_plural "labels.days"
+msgstr[0] "Dag"
+msgstr[1] "Dagen"
+
+msgid "labels.permissions_required"
+msgstr "Toestemming vereist"
+
+#. Posting permission level determines who is allowed to post new reports
+#. in a given category to the system
+msgid "labels.postingPermissionLevel"
+msgstr "Melden"
+
+#. Display permission level determines who is allowed to view tickets of a
+#. given category
+msgid "labels.displayPermissionLevel"
+msgstr "Inzien"
+
+#. Label for a person when you have a phone number for them
+msgid "labels.contact"
+msgstr "Contact"
+
+msgid "labels.contact_list"
+msgstr "Contactlijst"
+
+#. Label for someone to contact when there is a problem
+msgid "labels.contactPerson"
+msgstr "Contactpersoon"
+
+msgid "labels.defaultPerson"
+msgstr "Standaard"
+
+#. What to call people who possess a piece of property
+msgid "labels.owner"
+msgid_plural "labels.owners"
+msgstr[0] "Eigenaar"
+msgstr[1] "Eigenaren"
+
+# We are using the word "Application" in english because we think it
+# makes more sense to end users.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "labels.client"
+msgid_plural "labels.clients"
+msgstr[0] "Toepassing"
+msgstr[1] "Toepassingen"
+
+msgid "labels.action"
+msgid_plural "labels.actions"
+msgstr[0] "Actie"
+msgstr[1] "Acties"
+
+msgid "labels.bookmark"
+msgid_plural "labels.bookmarks"
+msgstr[0] "Favoriet"
+msgstr[1] "Favorieten"
+
+#. These are the categories of things users can report to city
+#. Some example "categories" are Potholes and Graffiti
+msgid "labels.category"
+msgid_plural "labels.categories"
+msgstr[0] "Categorie"
+msgstr[1] "Categorieën"
+
+#. Categories are grouped.  This is what you call those groups
+msgid "labels.categoryGroup"
+msgid_plural "labels.categoryGroups"
+msgstr[0] "Groep"
+msgstr[1] "Groepen"
+
+msgid "labels.department"
+msgid_plural "labels.departments"
+msgstr[0] "Afdeling"
+msgstr[1] "Afdelingen"
+
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "labels.service_level_agreement"
+msgstr "Service Level Agreement"
+
+#. The abbreviation for "Service Level Agreement"
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "labels.sla"
+msgstr "SLA"
+
+msgid "labels.overdue"
+msgstr "Over SLA"
+
+msgid "labels.notificationReplyEmail"
+msgstr "Beantwoorden per e-mail"
+
+msgid "labels.autoResponseIsActive"
+msgstr "Automatisch beantwoorden"
+
+msgid "labels.autoResponseText"
+msgstr "Tekst voor automatisch beantwoorden"
+
+msgid "labels.autoCloseIsActive"
+msgstr "Automatisch sluiten"
+
+msgid "labels.autoCloseSubstatus_id"
+msgstr "Status voor automatisch sluiten"
+
+msgid "labels.active_yes"
+msgstr "Actief"
+
+msgid "labels.active_no"
+msgstr "Uitgeschakeld"
+
+#. Reports that users send in are organized into Tickets
+#. A ticket can contain multiple issue reports that are related, usually by location
+msgid "labels.ticket"
+msgid_plural "labels.tickets"
+msgstr[0] "Zaak"
+msgstr[1] "Zaken"
+
+msgid "labels.ticket_issues"
+msgstr "Gekoppelde melding"
+
+#. These are the problem reports that users send in
+msgid "labels.issue"
+msgid_plural "labels.issues"
+msgstr[0] "Melding"
+msgstr[1] "Meldingen"
+
+#. Issues are organized by Type.
+#. Example types are Complaint, Request, Violation, etc.
+msgid "labels.issueType"
+msgid_plural "labels.issueTypes"
+msgstr[0] "Soort melding"
+msgstr[1] "Soorten meldingen"
+
+msgid "labels.label"
+msgid_plural "labels.labels"
+msgstr[0] "Label"
+msgstr[1] "Labels"
+
+msgid "labels.address"
+msgid_plural "labels.addresses"
+msgstr[0] "Adres"
+msgstr[1] "Adressen"
+
+msgid "labels.city"
+msgstr "Gemeente/Instelling"
+
+msgid "labels.state"
+msgstr "Provincie"
+
+msgid "labels.zip"
+msgstr "Postcode"
+
+msgid "labels.latitude"
+msgstr "Latitude"
+
+msgid "labels.longitude"
+msgstr "Longitude"
+
+msgid "labels.enteredDate"
+msgstr "Datum zaak"
+
+msgid "labels.enteredByPerson"
+msgstr "Aangemaakt door"
+
+msgid "labels.reportedByPerson"
+msgstr "Gemeld door"
+
+msgid "labels.history"
+msgstr "Historie"
+
+#. We use the word Location here, which is different from Address
+#. Locations refer to general descriptions of places that are not a street address
+#. Examples: "Behind the post office", "In front of the court house"
+msgid "labels.location"
+msgid_plural "labels.locations"
+msgstr[0] "Locatie"
+msgstr[1] "Locaties"
+
+msgid "labels.change_location"
+msgstr "Locatie aanpassen"
+
+msgid "labels.person"
+msgid_plural "labels.people"
+msgstr[0] "Persoon"
+msgstr[1] "Personen"
+
+msgid "labels.user"
+msgid_plural "labels.users"
+msgstr[0] "Gebruikersaccount"
+msgstr[1] "Gebruikersaccounts"
+
+#. Detailed analysis of ticket data presented to Staff
+msgid "labels.report"
+msgid_plural "labels.reports"
+msgstr[0] "Rapport"
+msgstr[1] "Rapporten"
+
+msgid "labels.status"
+msgid_plural "labels.statuses"
+msgstr[0] "Status"
+msgstr[1] "Status"
+
+msgid "labels.substatus"
+msgid_plural "labels.substatuses"
+msgstr[0] "Deelstatus"
+msgstr[1] "Deelstatus"
+
+#. This is a special type of substatus
+msgid "labels.resolution"
+msgstr "Resolutie"
+
+msgid "labels.add_issue"
+msgstr "Melding toevoegem"
+
+msgid "labels.add_person"
+msgstr "Persoon toevoegen"
+
+msgid "labels.create_account"
+msgstr "Account aanmaken"
+
+msgid "labels.edit_issue"
+msgstr "Melding aanpassen"
+
+msgid "labels.delete_issue"
+msgstr "Melding verwijderen"
+
+msgid "labels.info_client"
+msgstr "Subjectinformatie"
+
+msgid "labels.info_person"
+msgstr "Persoonsinformatie"
+
+msgid "labels.info_department"
+msgstr "Afdelingsinformatie"
+
+msgid "labels.info_location"
+msgstr "Locatieinformatie"
+
+msgid "labels.info_location_additional"
+msgstr "Uitgebreide locatieinformatie"
+
+msgid "labels.info_issue"
+msgstr "Meldinginformatie"
+
+msgid "labels.info_assignment"
+msgstr "Toewijzinginformatie"
+
+msgid "labels.find_person"
+msgstr "Persoon zoeken"
+
+msgid "labels.find_user"
+msgstr "Gebruikers filteren"
+
+msgid "labels.find_address"
+msgstr "Zoek een adres"
+
+msgid "labels.find_street"
+msgstr "Zoek een straat"
+
+msgid "labels.find_location"
+msgstr "Zoek een locatie"
+
+msgid "labels.use_location"
+msgstr "Gebruik deze locatie"
+
+msgid "labels.upload_media"
+msgstr "Bijlage bijwerken"
+
+msgid "labels.see_all_thumbnails"
+msgstr "Bekijk alle miniatuurafbeeldingen"
+
+msgid "labels.back_to_ticket"
+msgstr "Terug naar zaak"
+
+msgid "labels.change_department"
+msgstr "Afdeling veranderen"
+
+msgid "labels.add_new_ticket"
+msgstr "Nieuwe zaak"
+
+msgid "labels.assign_ticket"
+msgstr "Zaak toewijzen"
+
+msgid "labels.refer_ticket"
+msgstr "Aan zaak refereren"
+
+msgid "labels.delete_ticket"
+msgstr "Zaak verwijderen"
+
+msgid "labels.change_category"
+msgstr "Categorie veranderen"
+
+msgid "labels.change_status"
+msgstr "Status veranderen"
+
+msgid "labels.add_response"
+msgstr "Reactie registreren"
+
+msgid "labels.assignment_notes"
+msgstr "Opmerking voor de behandelaar"
+
+msgid "labels.merge"
+msgstr "Samenvoegen"
+
+msgid "labels.merge_people"
+msgstr "Personen samenvoegen"
+
+msgid "labels.merge_tickets"
+msgstr "Zaken samenvoegen"
+
+#. Used during the process of merging people records.
+#. This label is placed on each person, so the user can choose which record will be the master copy
+msgid "labels.merge_into_person"
+msgstr "Samenvoegen met persoon"
+
+#. Used during the process of merging ticket records.
+#. This label is placed on each ticket, so the user can choose which record will be the master copy
+msgid "labels.merge_into_ticket"
+msgstr "Samenvoegen met zaak"
+
+#. Tickets that are currently assigned to the user
+msgid "labels.tickets_open_assigned"
+msgstr "Toegewezen zaken"
+
+#. Tickets that the user has reported that are still open
+msgid "labels.tickets_open_reported"
+msgstr "Openstaande zaken"
+
+msgid "labels.tickets_reported"
+msgstr "Gemelde zaken"
+
+msgid "labels.tickets_open"
+msgstr "Open zaken"
+
+msgid "labels.tickets_my"
+msgstr "Mijn zaken"
+
+msgid "labels.tickets_my_department"
+msgstr "Zaken van mijn afdeling"
+
+msgid "labels.tickets_for_location"
+msgstr "Zaken op deze locatie"
+
+#. Ticket that have been referred to the user
+msgid "labels.tickets_open_referred"
+msgstr "Gerelateerde zaken"
+
+msgid "messages.add_action"
+msgstr "Werk de historie bij met de acties uitgevoerd in deze zaak"
+
+msgid "messages.merge_people_description"
+msgstr "Voeg twee persoonsregistraties samen door rijen te slepen of ID's in te typen."
+
+msgid "messages.merge_tickets_description"
+msgstr "Voeg twee zaken samen door rijen te slepen of ID's in te typen."
+
+msgid "messages.how_did_you_respond"
+msgstr "Hoe heeft u gereageerd op deze melding?"
+
+msgid "messages.click_full_size"
+msgstr "Klik op de miniatuur voor volledige afbeelding"
+
+msgid "messages.signed_in_as"
+msgstr "Aangemeld als %s"
+
+msgid "messages.choose_category"
+msgstr "Kies een categorie"
+
+msgid "messages.close_this_ticket"
+msgstr "Sluit deze zaak"
+
+msgid "messages.verified_locations"
+msgstr "Geaccordeerde locaties"
+
+msgid "messages.no_tickets_found"
+msgstr "Geen zaken gevonden"
+
+msgid "messages.no_locations_found"
+msgstr ""
+"Geen locaties gevonden. Zoek met andere invoer of neem contact op met de systeembeheerder "
+"wanneer je denkt dat er een locatie ontbreekt in het systeem."
+
+msgid "messages.usedForNotifications"
+msgstr "Gebruikt voor notificatie"
+
+msgid "messages.ticket_search_query_description"
+msgstr "Alleen zoeken in de omschrijving"
+
+#. Describe to the user what "Clients" are.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "text.clients_description"
+msgstr ""
+"Dit zijn applicaties of gebruikers die via het internet zaken kunnen publiceren (POST) "
+"op de services. Dit systeem voldoet aan de Open311 GeoReporter_v2 standaard."
+
+#. Explain to the user that string substitution will happen for action descriptions
+msgid "text.actions_description"
+msgstr ""
+"Het bericht dat wordt weer gegeven voor deze actie in de historie kan worden aangepast. "
+"In dit bericht zullen de persoonsnamen met een macro worden gevuld."
+
+msgid "text.actions_enteredByPerson"
+msgstr "De persoon die de actie heeft ingevoerd"
+
+msgid "text.actions_actionPerson"
+msgstr "De persoon die de actie moet uitvoeren"
+
+msgid "text.contactMethods_description"
+msgstr ""
+"Dit zijn de beschikbare contactmethodes van het systeem. Deze worden gebruikt om "
+"aan te geven welke methode van contact de voorkeur heeft. Dit kan worden ingegeven door burgers en "
+"instanties."
+
+msgid "text.response_reminder"
+msgstr ""
+"Wanneer een zaak wordt gesloten is het uw verantwoordelijk contact op te nemen met de burgers die melding "
+"hebben gemaakt. Leg de contacten vast in onderstaande reacties"
+
+msgid "text.search_parameters_description"
+msgstr ""
+"Zoekwoorden. Klik op een van de labels om een zoekwoord "
+"te verwijderen."
+
+msgid "text.labels_description"
+msgstr "Dit zijn voorgedefinieerde labels die gebruikers kunnen koppelen aan zaken."
+
+msgid "text.locationPeople_description"
+msgstr ""
+"Een lijst van personen die dit adres hebben opgegeven. Let op: dit hoeft niet persé "
+"het huidige adres te zijn."
+
+#. %1$s A person's name
+#. %2$s The name of your website
+#. %3$s A Url
+msgid "text.digestNotification"
+msgstr ""
+"%1$s, hier is het weekoverzicht van open zaken in %2$s.  Bezoek <a href="
+"\"%3$s\">de website</a> of klik op een zaak om deze te bewerken."
+
+#. Explain to the user what the Service Level Agreement specifies
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "text.service_level_agreement_description"
+msgstr "Afdelingen zijn overeengekomen nieuwe zaken te behandelen in de genoemde tijdsduur."
+
+#. %1$d The number of days the case, after which the case is due
+#. %2$d The number of days that have already passed
+msgid "text.sla_status_notice"
+msgstr ""
+"Voor zaken van dit type wordt gestreefd naar afhandeling in %1$d dagen. "
+"Er zijn %2$d dagen verstreken."
+
+msgid "text.employee_authentication_description"
+msgstr ""
+"Wanneer gebruik wordt gemaakt van externe authenticatie, dan wordt deze informatie "
+"automatisch gevuld. Indien dit niet het geval is, vul dan tenminste "
+"een voor en achternaam in."
+
+msgid "text.disclaimer"
+msgstr ""
+"Disclaimer: uReport is een open source product. De inhoud van uReport "
+"kan daarom geproduceerd zijn door niet aan ons gerelateerde "
+"ontwikkelaars. Het is daarom niet mogelijk aanspraak te maken op garanties "
+", fouten en ontbrekende gegevens. Wij kunnen niet aansprakelijk worden "
+"gehouden voor de inhoud. Het afhandelen van meldingen is onderhevig aan "
+"prioriteit en beschikbare capaciteit."
