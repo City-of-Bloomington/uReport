@@ -36,6 +36,7 @@ abstract class View
 				APPLICATION_HOME.'/language',
 				'%s.mo'
 			);
+			self::$translator->setLocale(LOCALE);
 		}
 	}
 
