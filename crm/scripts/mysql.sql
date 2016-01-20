@@ -150,7 +150,7 @@ create table department_categories (
 	foreign key (department_id) references departments(id),
 	foreign key (category_id)   references categories (id)
 );
-
+SET SQL_MODE='ALLOW_INVALID_DATES';
 create table tickets (
 	id                 int         unsigned not null primary key auto_increment,
 	category_id        int         unsigned,
