@@ -17,6 +17,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Person;
+use Application\Models\Email;
 
 include '../configuration.inc';
 
