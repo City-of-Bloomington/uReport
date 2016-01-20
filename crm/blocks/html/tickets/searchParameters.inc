@@ -12,8 +12,8 @@ use Application\Models\Search;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 use Blossom\Classes\View;
-
-$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$urlString = "http" . (($_SERVER['SERVER_PORT'] == 443) ? "s://" : "://" . $_SERVER['HTTP_HOST']) .  $_SERVER['REQUEST_URI'];
+$currentURL = new Url($urlString);
 $helper = $this->template->getHelper('buttonLink');
 
 if (!empty($_GET['query'])

@@ -17,6 +17,7 @@ class Url
 {
 	private $scheme;
 	private $host;
+	private $port;
 	private $path;
 	private $anchor;
 
@@ -57,6 +58,7 @@ class Url
 		$this->scheme = $url['scheme'];
 		if (isset($url['host']))     { $this->host = $url['host'];       }
 		if (isset($url['path']))     { $this->path = $url['path'];       }
+		if (isset($url['port'])) { $this->port = ":" . $url['port']; } else {$this->port = '';}
 		if (isset($url['fragment'])) { $this->anchor = $url['fragment']; }
 		if (isset($url['query'])) { parse_str($url['query'],$this->parameters); }
 	}
@@ -66,7 +68,7 @@ class Url
 	 * @return string
 	 */
 	public function getScript() {
-		return $this->scheme.'://'.$this->host.$this->path;
+		return $this->scheme.'://'.$this->host.$this->port.$this->path;
 	}
 
 	/**
