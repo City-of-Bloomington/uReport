@@ -20,7 +20,7 @@ if (!empty($_GET['query'])
 	|| isset($this->solrObject->responseHeader->params->fq)) {
 	$q = !empty($_GET['query'])
 		? 'Results for: '.View::escape($_GET['query'])
-		: 'Current Search';
+		: $this->translate('labels.search_current');
 	$fq = isset($this->solrObject->responseHeader->params->fq)
 		?       $this->solrObject->responseHeader->params->fq
 		: [];

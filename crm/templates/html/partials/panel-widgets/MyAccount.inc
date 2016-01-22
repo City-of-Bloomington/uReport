@@ -5,13 +5,13 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
-<div><h2>My Account</h2>
-	<ul><li><a href="<?php echo BASE_URL; ?>/account">Personal Info</a></li>
-		<li><a href="<?php echo $_SESSION['USER']->getURL(); ?>">My Profile</a></li>
+<div><h2><?php echo $this->translate('labels.my_account', 'labels.my_account'); ?></h2>
+	<ul><li><a href="<?php echo BASE_URL; ?>/account"><?php echo $this->translate('labels.my_info', 'labels.my_info'); ?></a></li>
+		<li><a href="<?php echo $_SESSION['USER']->getURL(); ?>"><?php echo $this->translate('labels.my_profile', 'labels.my_profile'); ?></a></li>
 		<?php
 			if ($_SESSION['USER']->getDepartment_id()) {
 				echo "
-				<li><a href=\"".BASE_URL."/account/updateMyDepartment\">Department</a></li>
+				<li><a href=\"".BASE_URL."/account/updateMyDepartment\"><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></a></li>
 				";
 			}
 		?>

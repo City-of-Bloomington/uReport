@@ -58,6 +58,9 @@ msgstr "Resultaten afdrukken"
 msgid "labels.search_results_count"
 msgstr "# resultaten op basis van de zoekopdracht"
 
+msgid "labels.search_current"
+msgstr "Zoekresultaat"
+
 msgid "labels.quick_links"
 msgstr "Snelkoppelingen"
 
@@ -102,10 +105,16 @@ msgstr "Info"
 
 #. This is the short form for "Administrator".  This should be an abbreviation
 msgid "labels.admin"
-msgstr "Admin"
+msgstr "Beheer"
 
 msgid "labels.my_account"
-msgstr "Mijn account"
+msgstr "Instellingen"
+
+msgid "labels.my_profile"
+msgstr "Profiel"
+
+msgid "labels.my_info"
+msgstr "Persoonsgegevens"
 
 msgid "labels.login"
 msgstr "Aanmelden"
@@ -316,10 +325,10 @@ msgid "labels.autoCloseSubstatus_id"
 msgstr "Status voor automatisch sluiten"
 
 msgid "labels.active_yes"
-msgstr "Actief"
+msgstr "Ja"
 
 msgid "labels.active_no"
-msgstr "Uitgeschakeld"
+msgstr "Nee"
 
 #. Reports that users send in are organized into Tickets
 #. A ticket can contain multiple issue reports that are related, usually by location
@@ -676,3 +685,48 @@ msgstr ""
 ", fouten en ontbrekende gegevens. Wij kunnen niet aansprakelijk worden "
 "gehouden voor de inhoud. Het afhandelen van meldingen is onderhevig aan "
 "prioriteit en beschikbare capaciteit."
+
+msgid "fields.case_date"
+msgstr "Datum"
+
+msgid "fields.category"
+msgstr "Categorie"
+
+msgid "fields.department"
+msgstr "Afdeling"
+
+msgid "fields.status"
+msgstr "Status"
+
+msgid "fields.substatus"
+msgstr "Deelstatus"
+
+msgid "fields.location"
+msgstr "Locatie"
+
+msgid "fields.latitude"
+msgstr "Latitude"
+
+msgid "fields.longitude"
+msgstr "Longitude"
+
+msgid "fields.city"
+msgstr "Gemeente"
+
+msgid "fields.state"
+msgstr "Provincie"
+
+msgid "fields.zip"
+msgstr "Postcode"
+
+msgid "fields.description"
+msgstr "Omschrijving"
+
+msgid "fields.sla"
+msgstr "SLA"
+
+msgid "fields.neighborhood_association"
+msgstr "Wijk of buurt"
+
+msgid "fields.township"
+msgstr "Stadsdeel"
