@@ -156,9 +156,9 @@ if (Person::isAllowed('tickets','add')) {
 						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
 						echo "
 						<li><label>
-								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />
-								$name
-							</label>
+								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />" .
+								$this->translate('fields.' . str_replace(' ', '_',strtolower($name))	) .
+							  "</label>
 						</li>
 						";
 					}

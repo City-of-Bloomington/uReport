@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'twoColumn_400-a';
 	$dir = dirname(__FILE__);

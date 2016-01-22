@@ -55,6 +55,9 @@ msgstr "Map Results"
 msgid "labels.search_results_print"
 msgstr "Printable Results"
 
+msgid "labels.search_current"
+msgstr "Current Search"
+
 msgid "labels.search_results_count"
 msgstr "# cases in current search"
 
@@ -106,6 +109,12 @@ msgstr "Admin"
 
 msgid "labels.my_account"
 msgstr "My Account"
+
+msgid "labels.my_profile"
+msgstr "My Profile"
+
+msgid "labels.my_info"
+msgstr "Personal Info"
 
 msgid "labels.login"
 msgstr "Login"
@@ -680,3 +689,48 @@ msgstr ""
 "and takes no responsibility and disclaims all liability for third party "
 "content. Reports submitted by the community are addressed on the basis of "
 "priority and available resources."
+
+msgid "fields.case_date"
+msgstr "Case Date"
+
+msgid "fields.category"
+msgstr "Category"
+
+msgid "fields.department"
+msgstr "Department"
+
+msgid "fields.status"
+msgstr "Status"
+
+msgid "fields.substatus"
+msgstr "Substatus"
+
+msgid "fields.location"
+msgstr "Location"
+
+msgid "fields.latitude"
+msgstr "Latitude"
+
+msgid "fields.longitude"
+msgstr "Longitude"
+
+msgid "fields.city"
+msgstr "City"
+
+msgid "fields.state"
+msgstr "State"
+
+msgid "fields.zip"
+msgstr "Zip"
+
+msgid "fields.description"
+msgstr "Description"
+
+msgid "fields.sla"
+msgstr "SLA"
+
+msgid "fields.neighborhood_association"
+msgstr "Neighborhood Association"
+
+msgid "fields.township"
+msgstr "Township"
