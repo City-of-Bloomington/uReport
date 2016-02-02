@@ -35,7 +35,7 @@ msgid "labels.save"
 msgstr "Opslaan"
 
 msgid "labels.save_as"
-msgstr "Sla %s op als"
+msgstr "%s toevoegen aan favorieten"
 
 msgid "labels.cancel"
 msgstr "Annuleren"
@@ -44,7 +44,7 @@ msgid "labels.search"
 msgstr "Zoeken"
 
 msgid "labels.search_results"
-msgstr "Zoek resultaten"
+msgstr "Gevonden"
 
 msgid "labels.search_results_text"
 msgstr "Tekst resultaten"
@@ -55,11 +55,11 @@ msgstr "Locatie resultaten"
 msgid "labels.search_results_print"
 msgstr "Resultaten afdrukken"
 
+msgid "labels.search_current"
+msgstr "Filter"
+
 msgid "labels.search_results_count"
 msgstr "# resultaten op basis van de zoekopdracht"
-
-msgid "labels.search_current"
-msgstr "Zoekresultaat"
 
 msgid "labels.quick_links"
 msgstr "Snelkoppelingen"
@@ -97,7 +97,7 @@ msgstr "Volgorde"
 
 #. To change the sorting of a list
 msgid "labels.reorder"
-msgstr "Sorteren"
+msgstr "Volgorde aanpassen"
 
 #. This is the short form for "Information".  This should be an abbreviation
 msgid "labels.info"
@@ -130,8 +130,8 @@ msgstr "Standaard"
 
 msgid "labels.contactMethod"
 msgid_plural "labels.contactMethods"
-msgstr[0] "Contact methode"
-msgstr[1] "Contact methodes"
+msgstr[0] "Contactmethode"
+msgstr[1] "Contactmethoden"
 
 msgid "labels.response"
 msgid_plural "labels.responses"
@@ -229,7 +229,7 @@ msgstr[0] "Dag"
 msgstr[1] "Dagen"
 
 msgid "labels.permissions_required"
-msgstr "Toestemming vereist"
+msgstr "Rechten"
 
 #. Posting permission level determines who is allowed to post new reports
 #. in a given category to the system
@@ -253,7 +253,7 @@ msgid "labels.contactPerson"
 msgstr "Contactpersoon"
 
 msgid "labels.defaultPerson"
-msgstr "Standaard"
+msgstr "Verantwoordelijke"
 
 #. What to call people who possess a piece of property
 msgid "labels.owner"
@@ -266,8 +266,8 @@ msgstr[1] "Eigenaren"
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
 msgid "labels.client"
 msgid_plural "labels.clients"
-msgstr[0] "Toepassing"
-msgstr[1] "Toepassingen"
+msgstr[0] "Applicatie"
+msgstr[1] "Applicaties"
 
 msgid "labels.action"
 msgid_plural "labels.actions"
@@ -289,8 +289,8 @@ msgstr[1] "Categorieën"
 #. Categories are grouped.  This is what you call those groups
 msgid "labels.categoryGroup"
 msgid_plural "labels.categoryGroups"
-msgstr[0] "Groep"
-msgstr[1] "Groepen"
+msgstr[0] "Thema"
+msgstr[1] "Thema's"
 
 msgid "labels.department"
 msgid_plural "labels.departments"
@@ -299,15 +299,15 @@ msgstr[1] "Afdelingen"
 
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "labels.service_level_agreement"
-msgstr "Service Level Agreement"
+msgstr "Afhandeling"
 
 #. The abbreviation for "Service Level Agreement"
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "labels.sla"
-msgstr "SLA"
+msgstr "Afhandeling"
 
 msgid "labels.overdue"
-msgstr "Over SLA"
+msgstr "Verlopen"
 
 msgid "labels.notificationReplyEmail"
 msgstr "Beantwoorden per e-mail"
@@ -334,24 +334,24 @@ msgstr "Nee"
 #. A ticket can contain multiple issue reports that are related, usually by location
 msgid "labels.ticket"
 msgid_plural "labels.tickets"
-msgstr[0] "Zaak"
-msgstr[1] "Zaken"
+msgstr[0] "Melding"
+msgstr[1] "Meldingen"
 
 msgid "labels.ticket_issues"
-msgstr "Gekoppelde melding"
+msgstr "Discussie"
 
 #. These are the problem reports that users send in
 msgid "labels.issue"
 msgid_plural "labels.issues"
-msgstr[0] "Melding"
-msgstr[1] "Meldingen"
+msgstr[0] "Discussie"
+msgstr[1] "Discussies"
 
 #. Issues are organized by Type.
 #. Example types are Complaint, Request, Violation, etc.
 msgid "labels.issueType"
 msgid_plural "labels.issueTypes"
-msgstr[0] "Soort melding"
-msgstr[1] "Soorten meldingen"
+msgstr[0] "Meldsoort"
+msgstr[1] "Meldsoorten"
 
 msgid "labels.label"
 msgid_plural "labels.labels"
@@ -379,7 +379,7 @@ msgid "labels.longitude"
 msgstr "Longitude"
 
 msgid "labels.enteredDate"
-msgstr "Datum zaak"
+msgstr "Melddatum"
 
 msgid "labels.enteredByPerson"
 msgstr "Aangemaakt door"
@@ -389,6 +389,9 @@ msgstr "Gemeld door"
 
 msgid "labels.history"
 msgstr "Historie"
+
+msgid "labels.general"
+msgstr "Algemeen"
 
 #. We use the word Location here, which is different from Address
 #. Locations refer to general descriptions of places that are not a street address
@@ -417,6 +420,14 @@ msgid_plural "labels.reports"
 msgstr[0] "Rapport"
 msgstr[1] "Rapporten"
 
+msgid "labels.assignment"
+msgid_plural "labels.assignments"
+msgstr[0] "Toewijzing"
+msgstr[1] "Toewijzingen"
+
+msgid "labels.activity"
+msgstr "Activiteit"
+
 msgid "labels.status"
 msgid_plural "labels.statuses"
 msgstr[0] "Status"
@@ -424,21 +435,24 @@ msgstr[1] "Status"
 
 msgid "labels.substatus"
 msgid_plural "labels.substatuses"
-msgstr[0] "Deelstatus"
-msgstr[1] "Deelstatus"
+msgstr[0] "Oplossing"
+msgstr[1] "Oplossingen"
 
 #. This is a special type of substatus
 msgid "labels.resolution"
 msgstr "Resolutie"
 
 msgid "labels.add_issue"
-msgstr "Melding toevoegem"
+msgstr "Melding toevoegen"
 
 msgid "labels.add_person"
 msgstr "Persoon toevoegen"
 
 msgid "labels.create_account"
-msgstr "Account aanmaken"
+msgstr "Nieuwe gebruiker"
+
+msgid "labels.edit_account"
+msgstr "Gebruiker wijzigen"
 
 msgid "labels.edit_issue"
 msgstr "Melding aanpassen"
@@ -492,22 +506,22 @@ msgid "labels.see_all_thumbnails"
 msgstr "Bekijk alle miniatuurafbeeldingen"
 
 msgid "labels.back_to_ticket"
-msgstr "Terug naar zaak"
+msgstr "Terug"
 
 msgid "labels.change_department"
 msgstr "Afdeling veranderen"
 
 msgid "labels.add_new_ticket"
-msgstr "Nieuwe zaak"
+msgstr "Nieuwe Melding"
 
 msgid "labels.assign_ticket"
-msgstr "Zaak toewijzen"
+msgstr "Melding toewijzen"
 
 msgid "labels.refer_ticket"
-msgstr "Aan zaak refereren"
+msgstr "Relatie"
 
 msgid "labels.delete_ticket"
-msgstr "Zaak verwijderen"
+msgstr "Melding verwijderen"
 
 msgid "labels.change_category"
 msgstr "Categorie veranderen"
@@ -528,7 +542,7 @@ msgid "labels.merge_people"
 msgstr "Personen samenvoegen"
 
 msgid "labels.merge_tickets"
-msgstr "Zaken samenvoegen"
+msgstr "Meldingen samenvoegen"
 
 #. Used during the process of merging people records.
 #. This label is placed on each person, so the user can choose which record will be the master copy
@@ -538,46 +552,48 @@ msgstr "Samenvoegen met persoon"
 #. Used during the process of merging ticket records.
 #. This label is placed on each ticket, so the user can choose which record will be the master copy
 msgid "labels.merge_into_ticket"
-msgstr "Samenvoegen met zaak"
+msgstr "Meldingen samenvoegen"
 
 #. Tickets that are currently assigned to the user
 msgid "labels.tickets_open_assigned"
-msgstr "Toegewezen zaken"
+msgstr "Toegewezen meldingen"
 
 #. Tickets that the user has reported that are still open
 msgid "labels.tickets_open_reported"
-msgstr "Openstaande zaken"
+msgstr "Open meldingen"
 
 msgid "labels.tickets_reported"
-msgstr "Gemelde zaken"
+msgstr "Meldingen"
 
 msgid "labels.tickets_open"
-msgstr "Open zaken"
+msgstr "Open meldingen"
 
 msgid "labels.tickets_my"
-msgstr "Mijn zaken"
+msgstr "Mijn meldingen"
 
 msgid "labels.tickets_my_department"
-msgstr "Zaken van mijn afdeling"
+msgstr "Afdelingsmeldingen"
 
 msgid "labels.tickets_for_location"
-msgstr "Zaken op deze locatie"
+msgstr "Melding op locatie"
 
 #. Ticket that have been referred to the user
 msgid "labels.tickets_open_referred"
-msgstr "Gerelateerde zaken"
+msgstr "Gerelateerde meldingen"
 
 msgid "messages.add_action"
-msgstr "Werk de historie bij met de acties uitgevoerd in deze zaak"
+msgstr "Werk de historie bij met de activiteiten voor deze melding"
 
 msgid "messages.merge_people_description"
 msgstr "Voeg twee persoonsregistraties samen door rijen te slepen of ID's in te typen."
 
 msgid "messages.merge_tickets_description"
-msgstr "Voeg twee zaken samen door rijen te slepen of ID's in te typen."
+msgstr ""
+"Voeg twee meldingen samen door rijen te slepen of ID's in te typen."
+""
 
 msgid "messages.how_did_you_respond"
-msgstr "Hoe heeft u gereageerd op deze melding?"
+msgstr "Hoe heeft u gereageerd op de melding?"
 
 msgid "messages.click_full_size"
 msgstr "Klik op de miniatuur voor volledige afbeelding"
@@ -589,13 +605,13 @@ msgid "messages.choose_category"
 msgstr "Kies een categorie"
 
 msgid "messages.close_this_ticket"
-msgstr "Sluit deze zaak"
+msgstr "Melding afhandelen"
 
 msgid "messages.verified_locations"
 msgstr "Geaccordeerde locaties"
 
 msgid "messages.no_tickets_found"
-msgstr "Geen zaken gevonden"
+msgstr "Geen meldingen gevonden"
 
 msgid "messages.no_locations_found"
 msgstr ""
@@ -603,7 +619,7 @@ msgstr ""
 "wanneer je denkt dat er een locatie ontbreekt in het systeem."
 
 msgid "messages.usedForNotifications"
-msgstr "Gebruikt voor notificatie"
+msgstr "Communicatie"
 
 msgid "messages.ticket_search_query_description"
 msgstr "Alleen zoeken in de omschrijving"
@@ -612,7 +628,7 @@ msgstr "Alleen zoeken in de omschrijving"
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
 msgid "text.clients_description"
 msgstr ""
-"Dit zijn applicaties of gebruikers die via het internet zaken kunnen publiceren (POST) "
+"Dit zijn applicaties of gebruikers die via het internet meldingen kunnen indienen (POST) "
 "op de services. Dit systeem voldoet aan de Open311 GeoReporter_v2 standaard."
 
 #. Explain to the user that string substitution will happen for action descriptions
@@ -620,6 +636,7 @@ msgid "text.actions_description"
 msgstr ""
 "Het bericht dat wordt weer gegeven voor deze actie in de historie kan worden aangepast. "
 "In dit bericht zullen de persoonsnamen met een macro worden gevuld."
+""
 
 msgid "text.actions_enteredByPerson"
 msgstr "De persoon die de actie heeft ingevoerd"
@@ -629,22 +646,22 @@ msgstr "De persoon die de actie moet uitvoeren"
 
 msgid "text.contactMethods_description"
 msgstr ""
-"Dit zijn de beschikbare contactmethodes van het systeem. Deze worden gebruikt om "
+"Dit zijn de beschikbare contactmethoden van het systeem. Deze worden gebruikt om "
 "aan te geven welke methode van contact de voorkeur heeft. Dit kan worden ingegeven door burgers en "
 "instanties."
 
 msgid "text.response_reminder"
 msgstr ""
-"Wanneer een zaak wordt gesloten is het uw verantwoordelijk contact op te nemen met de burgers die melding "
-"hebben gemaakt. Leg de contacten vast in onderstaande reacties"
+"Wanneer een melding is afgehandeld is het uw verantwoordelijkheid contact op te nemen met de melder. "
+"Leg de contacten vast in onderstaande reacties"
 
 msgid "text.search_parameters_description"
 msgstr ""
-"Zoekwoorden. Klik op een van de labels om een zoekwoord "
-"te verwijderen."
+"Er zijn filters actief. Klik op een filter om deze te verwijderen."
+""
 
 msgid "text.labels_description"
-msgstr "Dit zijn voorgedefinieerde labels die gebruikers kunnen koppelen aan zaken."
+msgstr "Labels die gebruikers kunnen koppelen aan meldingen."
 
 msgid "text.locationPeople_description"
 msgstr ""
@@ -656,19 +673,20 @@ msgstr ""
 #. %3$s A Url
 msgid "text.digestNotification"
 msgstr ""
-"%1$s, hier is het weekoverzicht van open zaken in %2$s.  Bezoek <a href="
-"\"%3$s\">de website</a> of klik op een zaak om deze te bewerken."
+"%1$s, hier is het weekoverzicht van open meldingen in %2$s.  Bezoek <a href="
+"\"%3$s\">de website</a> of klik op een melding om deze te bewerken."
+""
 
 #. Explain to the user what the Service Level Agreement specifies
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "text.service_level_agreement_description"
-msgstr "Afdelingen zijn overeengekomen nieuwe zaken te behandelen in de genoemde tijdsduur."
+msgstr "Afdelingen zijn overeengekomen meldingen af te handelen in de genoemde tijdsduur."
 
 #. %1$d The number of days the case, after which the case is due
 #. %2$d The number of days that have already passed
 msgid "text.sla_status_notice"
 msgstr ""
-"Voor zaken van dit type wordt gestreefd naar afhandeling in %1$d dagen. "
+"Voor meldingen van dit type wordt gestreefd naar afhandeling in %1$d dagen. "
 "Er zijn %2$d dagen verstreken."
 
 msgid "text.employee_authentication_description"
@@ -686,20 +704,23 @@ msgstr ""
 "gehouden voor de inhoud. Het afhandelen van meldingen is onderhevig aan "
 "prioriteit en beschikbare capaciteit."
 
-msgid "fields.case_date"
+msgid "fields.id"
+msgstr "#"
+
+msgid "fields.entereddate"
 msgstr "Datum"
 
-msgid "fields.category"
+msgid "fields.category_id"
 msgstr "Categorie"
 
-msgid "fields.department"
+msgid "fields.department_id"
 msgstr "Afdeling"
 
 msgid "fields.status"
 msgstr "Status"
 
-msgid "fields.substatus"
-msgstr "Deelstatus"
+msgid "fields.substatus_id"
+msgstr "Resolutie"
 
 msgid "fields.location"
 msgstr "Locatie"
@@ -722,11 +743,92 @@ msgstr "Postcode"
 msgid "fields.description"
 msgstr "Omschrijving"
 
-msgid "fields.sla"
-msgstr "SLA"
+msgid "fields.slapercentage"
+msgstr "Afhandeling"
 
-msgid "fields.neighborhood_association"
+msgid "fields.neighborhoodassociation"
 msgstr "Wijk of buurt"
 
 msgid "fields.township"
 msgstr "Stadsdeel"
+
+msgid "fields.enteredbyperson_id"
+msgstr "Ingevoerd door"
+
+msgid "fields.assignedperson_id"
+msgstr "Toegewezen aan"
+
+msgid "fields.label_id"
+msgstr "Labels"
+
+msgid "fields.issuetype_id"
+msgstr "Soort"
+
+msgid "fields.contactmethod_id"
+msgstr "Contactvorm"
+
+msgid "fields.referredperson_id"
+msgstr "Verwijzingen"
+
+msgid "labels.are_you_sure"
+msgstr "Weet je het zeker?"
+
+msgid "labels.disclaimer"
+msgstr "Disclaimer"
+
+msgid "labels.volume"
+msgstr "Volume"
+
+msgid "labels.open_current"
+msgstr "Recent geopend"
+
+msgid "labels.open_today"
+msgstr "Vandaag geopend"
+
+msgid "labels.closed_today"
+msgstr "Vandaag gesloten"
+
+msgid "labels.past_month"
+msgstr "Maandoverzicht"
+
+msgid "labels.activity_report"
+msgstr "Recente activiteit"
+
+msgid "text.activity_description"
+msgstr "* Het gemiddeld aantal open dagen wordt berekend vanaf de oudste historie."
+
+msgid "labels.create_department"
+msgstr "Nieuwe afdeling"
+
+msgid "labels.create_category"
+msgstr "Nieuwe categorie"
+
+msgid "labels.create_categorygroup"
+msgstr "Nieuw thema"
+
+msgid "labels.create_substatus"
+msgstr "Nieuwe oplossing"
+
+msgid "labels.create_action"
+msgstr "Nieuwe actie"
+
+msgid "labels.create_client"
+msgstr "Nieuwe applicatie"
+
+msgid "labels.create_label"
+msgstr "Nieuw label"
+
+msgid "labels.create_contactmethod"
+msgstr "Nieuwe contactmethode"
+
+msgid "labels.create_issuetype"
+msgstr "Nieuwe meldsoort"
+
+msgid "status.open"
+msgstr "open"
+
+msgid "status.closed"
+msgstr "gesloten"
+
+msgid "labels.total"
+msgstr "totaal"
