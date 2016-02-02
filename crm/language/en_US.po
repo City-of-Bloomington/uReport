@@ -426,7 +426,7 @@ msgstr[0] "Assignment"
 msgstr[1] "Assignments"
 
 msgid "labels.activity"
-msgstr "Activiteit"
+msgstr "Activity"
 
 msgid "labels.status"
 msgid_plural "labels.statuses"
