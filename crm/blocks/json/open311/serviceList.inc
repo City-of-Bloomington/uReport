@@ -13,7 +13,7 @@ foreach ($this->categoryList as $category) {
 		'type'=>'realtime',
 		'description'=>$category->getDescription(),
 		'metadata'=> count($category->getCustomFields()) ? true : false,
-		'keywords'=>'',
+		'keywords'=>[],
 		'group'=>"{$category->getCategoryGroup()}"
 	);
 }
