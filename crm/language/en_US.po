@@ -390,6 +390,9 @@ msgstr "Reported By"
 msgid "labels.history"
 msgstr "History"
 
+msgid "labels.general"
+msgstr "General"
+
 #. We use the word Location here, which is different from Address
 #. Locations refer to general descriptions of places that are not a street address
 #. Examples: "Behind the post office", "In front of the court house"
@@ -417,6 +420,14 @@ msgid_plural "labels.reports"
 msgstr[0] "Report"
 msgstr[1] "Reports"
 
+msgid "labels.assignment"
+msgid_plural "labels.assignments"
+msgstr[0] "Assignment"
+msgstr[1] "Assignments"
+
+msgid "labels.activity"
+msgstr "Activity"
+
 msgid "labels.status"
 msgid_plural "labels.statuses"
 msgstr[0] "Status"
@@ -439,6 +450,9 @@ msgstr "Add a Person"
 
 msgid "labels.create_account"
 msgstr "Create Account"
+
+msgid "labels.edit_account"
+msgstr "Edit Account"
 
 msgid "labels.edit_issue"
 msgstr "Edit Issue"
@@ -690,19 +704,22 @@ msgstr ""
 "content. Reports submitted by the community are addressed on the basis of "
 "priority and available resources."
 
-msgid "fields.case_date"
+msgid "fields.id"
+msgstr "#"
+
+msgid "fields.entereddate"
 msgstr "Case Date"
 
-msgid "fields.category"
+msgid "fields.category_id"
 msgstr "Category"
 
-msgid "fields.department"
+msgid "fields.department_id"
 msgstr "Department"
 
 msgid "fields.status"
 msgstr "Status"
 
-msgid "fields.substatus"
+msgid "fields.substatus_id"
 msgstr "Substatus"
 
 msgid "fields.location"
@@ -734,3 +751,84 @@ msgstr "Neighborhood Association"
 
 msgid "fields.township"
 msgstr "Township"
+
+msgid "fields.enteredbyperson_id"
+msgstr "Entered by"
+
+msgid "fields.assignedperson_id"
+msgstr "Assigned to"
+
+msgid "fields.label_id"
+msgstr "Label"
+
+msgid "fields.issuetype_id"
+msgstr "Issue Type"
+
+msgid "fields.contactmethod_id"
+msgstr "Contact Method"
+
+msgid "fields.referredperson_id"
+msgstr "Referred Person"
+
+msgid "labels.are_you_sure"
+msgstr "Are you sure?"
+
+msgid "labels.disclaimer"
+msgstr "Disclaimer"
+
+msgid "labels.volume"
+msgstr "Volume"
+
+msgid "labels.open_current"
+msgstr "Tickets currently open"
+
+msgid "labels.open_today"
+msgstr "Tickets opened today"
+
+msgid "labels.closed_today"
+msgstr "Tickets closed today"
+
+msgid "labels.past_month"
+msgstr "Activity the past month"
+
+msgid "labels.activity_report"
+msgstr "Activity Report"
+
+msgid "text.activity_description"
+msgstr "* Average Days spent open is calculated as how long tickets stayed open during the entire history of the data."
+
+msgid "labels.create_department"
+msgstr "New Department"
+
+msgid "labels.create_category"
+msgstr "New Category"
+
+msgid "labels.create_categorygroup"
+msgstr "New Category Group"
+
+msgid "labels.create_substatus"
+msgstr "New Substatus"
+
+msgid "labels.create_action"
+msgstr "New action"
+
+msgid "labels.create_client"
+msgstr "New Client"
+
+msgid "labels.create_label"
+msgstr "New Label"
+
+msgid "labels.create_contactmethod"
+msgstr "New Contact Method"
+
+msgid "labels.create_issuetype"
+msgstr "New Issue Type"
+
+msgid "status.open"
+msgstr "Open"
+
+msgid "status.closed"
+msgstr "Closed"
+
+msgid "labels.total"
+msgstr "Total"

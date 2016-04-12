@@ -215,9 +215,8 @@ class Ticket extends ActiveRecord
 	public function getAssignedPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'assignedPerson_id');  }
 	public function getReferredPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'referredPerson_id');  }
 
-	public function getLatitude()     { return parent::get('latitude');   }
-	public function getLongitude()    { return parent::get('longitude');  }
-
+        public function getLatitude() { return floatval(parent::get('latitude')); }
+        public function getLongitude() { return floatval(parent::get('longitude')); }
 
 	public function setAddressId($s)  { parent::set('addressId', $s); }
 	public function setLocation ($s)  { parent::set('location',  $s); }
