@@ -1,4 +1,8 @@
 #!/bin/bash
-for f in $(find *.po); do
-    msgfmt -cvo ${f%.po}.mo $f
+DIR=`pwd`
+for LANG in */*
+do
+    cd $LANG
+    msgfmt -cv *.po
+    cd $DIR
 done
