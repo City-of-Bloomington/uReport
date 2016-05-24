@@ -8,13 +8,12 @@
  * Each category will be a link to $return_url containg
  * the category_id of the chosen category
  *
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  * @param URL $this->return_url
  */
-use Blossom\Classes\View;
 echo "
 <div class=\"categoryChoices\">
 	<h2>{$this->translate('messages.choose_category')}</h2>
@@ -28,8 +27,14 @@ echo "
 		}
 	}
 	foreach ($this->categoryList as $category) {
-		$name = View::escape($category->getName());
-		$description = View::escape(trim($category->getDescription()));
+		$name        = self::escape($category->getName());
+		$description = self::escape(trim($category->getDescription()));
+
+		$dept = '';
+		$department = $category->getDepartment();
+		if ($department) {
+            $dept = self::escape($department->getName());
+		}
 
 		if (isset($_REQUEST['callback'])) {
 			$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
@@ -38,7 +43,7 @@ echo "
 		else {
 			$return_url->category_id = $category->getId();
 		}
-		echo "<li><a href=\"$return_url\" title=\"$description\">$name</a></li>\n";
+		echo "<li><a href=\"$return_url\" title=\"$description\">$name ($dept)</a></li>\n";
 	}
 echo "
 	</ul>
