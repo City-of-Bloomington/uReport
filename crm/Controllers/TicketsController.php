@@ -416,10 +416,15 @@ class TicketsController extends Controller
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		// Once the user has chosen a location, they'll pass it in here
-		if (isset($_REQUEST['location']) && $_REQUEST['location']) {
+		if (!empty($_REQUEST['location'])) {
 			$ticket->clearAddressServiceData();
 			$ticket->setLocation($_REQUEST['location']);
-			$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+			if (!empty($_REQUEST['latitude']) && !empty($_REQUEST['longitude'])) {
+                $ticket->setLatitude ($_REQUEST['latitude' ]);
+                $ticket->setLongitude($_REQUEST['longitude']);
+			}
+            $ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+
 			try {
 				$ticket->save();
 				$this->redirectToTicketView($ticket);
@@ -430,11 +435,12 @@ class TicketsController extends Controller
 		}
 
 		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
+		$this->template->setFilename('locations');
+		$this->template->blocks['left'][] = new Block(
 			'locations/findLocationForm.inc',
-			array('includeExternalResults'=>true)
+			['includeExternalResults' => true]
 		);
+		$this->template->blocks['right'][] = new Block('locations/mapChooser.inc');
 
 		$this->addStandardInfoBlocks($ticket);
 	}

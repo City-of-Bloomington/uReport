@@ -1,8 +1,7 @@
 "use strict";
 /**
- * @copyright 2012-214 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 var ACTION_FORM = {
 	popup: {},
@@ -21,8 +20,14 @@ var ACTION_FORM = {
                 }
             });
 		},
-		changeLocation: function (location) {
-            jQuery.ajax(CRM.BASE_URL + '/tickets/changeLocation?ticket_id=' + CRM.ticket_id + ';location=' + location, {
+		changeLocation: function (location, lat, long) {
+            var busy = ACTION_FORM.popup.document.getElementById('left');
+            busy.innerHTML = '<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />';
+
+            jQuery.ajax(CRM.BASE_URL +  '/tickets/changeLocation?ticket_id=' + CRM.ticket_id +
+                                        ';location='  + location +
+                                        ';latitude='  + lat +
+                                        ';longitude=' + long, {
                 complete: function () {
                     ACTION_FORM.closeAndReload();
                 }
@@ -41,5 +46,12 @@ jQuery('#ticket-panel ul .fa-pencil').on('click', function (e) {
         'popup',
         'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
     );
+    if (callback === 'changeLocation') {
+        // We've added the mapChooser to the chooseLocation form.
+        // We need to tell that mapChooser.js what to callback when the
+        // user hits the "use this location" button.
+        ACTION_FORM.popup.setLocation = ACTION_FORM.handleFormSuccess.changeLocation;
+    }
+
     return false;
 });

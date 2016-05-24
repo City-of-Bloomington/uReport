@@ -36,22 +36,22 @@ google.maps.event.addDomListener(window, 'load', function() {
                                 newLocation += results[0].address_components[i].long_name;
                                 break;
                         }
-                        // Another javascript chooser should pass a "setLocation" function to be
-                        // called once we have an address back from Google.
-                        // If there is a function passed in, call that function with the chosen
-                        // address information.
-                        //
-                        // If there is not a "setLocation" function passed in, I'm not sure
-                        // what we're trying to do.  I guess just send the user to the
-                        // locations/view page for that location
-                        //
-                        // See chooseLocation.js
-                        if (typeof(setLocation) != 'undefined') {
-                            setLocation(newLocation, center.lat(), center.lng());
-                        }
-                        else {
-                            document.location.href=CRM.BASE_URL + '/locations/view?location=' + newLocation;
-                        }
+                    }
+                    // Another javascript chooser should pass a "setLocation" function to be
+                    // called once we have an address back from Google.
+                    // If there is a function passed in, call that function with the chosen
+                    // address information.
+                    //
+                    // If there is not a "setLocation" function passed in, I'm not sure
+                    // what we're trying to do.  I guess just send the user to the
+                    // locations/view page for that location
+                    //
+                    // See chooseLocation.js
+                    if (typeof(setLocation) != 'undefined') {
+                        setLocation(newLocation, center.lat(), center.lng());
+                    }
+                    else {
+                        document.location.href=CRM.BASE_URL + '/locations/view?location=' + newLocation;
                     }
                 }
             }
