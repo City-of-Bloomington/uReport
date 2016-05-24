@@ -11,4 +11,4 @@ crm/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
 build
 dist
 *.mo
-
+vendor
