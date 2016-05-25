@@ -142,7 +142,7 @@ if (Person::isAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend><?php echo $this->translate('labels.display_fields'); ?></legend>
+		<fieldset><legend><?= $this->_('labels.display_fields'); ?></legend>
 			<ul class="fields twoColumnlist">
 			<?php
 				// Default columns to display
@@ -153,12 +153,13 @@ if (Person::isAllowed('tickets','add')) {
 				foreach (TicketTable::getDisplayableFields() as $field=>$name) {
 					if ((false === strpos($field,'Person') || Person::isAllowed('people', 'view'))
 						&& $field!='id') {
+
 						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
 						echo "
 						<li><label>
-								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />" .
-								$this->translate('fields.' . str_replace(' ', '_',strtolower($name))	) .
-							  "</label>
+								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />
+                                    {$this->_('fields.'.$field)}
+							  </label>
 						</li>
 						";
 					}

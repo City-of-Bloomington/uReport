@@ -1,6 +1,12 @@
 # uReport Translation
 # Copyright (C) 2013 City of Bloomington
 # This file is distributed under the same license as the uReport package.
+#
+# The msgid's in this file should be names of database columns and code variables.
+# Since the code is written in US English, the variable names will be en_US.
+#
+# However, we do not want to use the en_US translation as the msgid.
+# The en_US translation will change over time as we find better words for things.
 domain "labels"
 
 msgid ""
@@ -705,7 +711,7 @@ msgstr ""
 msgid "fields.id"
 msgstr "#"
 
-msgid "fields.entereddate"
+msgid "fields.enteredDate"
 msgstr "Datum"
 
 msgid "fields.category_id"
@@ -741,31 +747,31 @@ msgstr "Postcode"
 msgid "fields.description"
 msgstr "Omschrijving"
 
-msgid "fields.slapercentage"
+msgid "fields.slaPercentage"
 msgstr "Afhandeling"
 
-msgid "fields.neighborhoodassociation"
+msgid "fields.neighborhoodAssociation"
 msgstr "Wijk of buurt"
 
 msgid "fields.township"
 msgstr "Stadsdeel"
 
-msgid "fields.enteredbyperson_id"
+msgid "fields.enteredByPerson_id"
 msgstr "Ingevoerd door"
 
-msgid "fields.assignedperson_id"
+msgid "fields.assignedPerson_id"
 msgstr "Toegewezen aan"
 
 msgid "fields.label_id"
 msgstr "Labels"
 
-msgid "fields.issuetype_id"
+msgid "fields.issueType_id"
 msgstr "Soort"
 
-msgid "fields.contactmethod_id"
+msgid "fields.contactMethod_id"
 msgstr "Contactvorm"
 
-msgid "fields.referredperson_id"
+msgid "fields.referredPerson_id"
 msgstr "Verwijzingen"
 
 msgid "labels.are_you_sure"
