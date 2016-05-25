@@ -79,7 +79,6 @@ $DIRECTORY_CONFIG = [
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
-define('DATE_FORMAT', 'n/j/Y H:i:s');
 
 /**
  * Controls whether the system sends email notifications to people
@@ -144,4 +143,7 @@ define('THUMBNAIL_SIZE', 150);
 define('CLOSING_COMMENT_REQUIRED_LENGTH', 1);
 define('AUTO_CLOSE_COMMENT', 'Closed automatically');
 
+define('DATE_FORMAT', 'n/j/Y');
+define('DATETIME_FORMAT', 'n/j/Y H:i:s');
+define('TIME_FORMAT', 'H:i:s');
 define('LOCALE', 'en_US');

@@ -13,6 +13,7 @@
         "zendframework/zend-loader": "~2.5",
         "zendframework/zend-paginator": "~2.5",
         "zendframework/zend-permissions-acl": "~2.5",
-        "zendframework/zend-servicemanager": "~2"
+        "zendframework/zend-servicemanager": "~2",
+        "components/font-awesome": "~4"
     }
 }
