@@ -12,6 +12,7 @@
         "zendframework/zend-log": "~2.5",
         "zendframework/zend-loader": "~2.5",
         "zendframework/zend-paginator": "~2.5",
-        "zendframework/zend-permissions-acl": "~2.5"
+        "zendframework/zend-permissions-acl": "~2.5",
+        "zendframework/zend-servicemanager": "~2"
     }
 }

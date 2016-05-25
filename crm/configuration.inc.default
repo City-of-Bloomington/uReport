@@ -29,12 +29,14 @@ $config = [
 			'Application' => APPLICATION_HOME,
 			'Site'        => SITE_HOME,
             'Blossom'     => BLOSSOM.'/src',
+            'Interop\Container'    => APPLICATION_HOME.'/vendor/container-interop/container-interop/src/Interop/Container',
             'Zend\Stdlib'          => APPLICATION_HOME.'/vendor/zendframework/zend-stdlib/src',
             'Zend\Permissions\Acl' => APPLICATION_HOME.'/vendor/zendframework/zend-permissions-acl/src',
             'Zend\Paginator'       => APPLICATION_HOME.'/vendor/zendframework/zend-paginator/src',
             'Zend\Log'             => APPLICATION_HOME.'/vendor/zendframework/zend-log/src',
             'Zend\Loader'          => APPLICATION_HOME.'/vendor/zendframework/zend-loader/src',
             'Zend\Db'              => APPLICATION_HOME.'/vendor/zendframework/zend-db/src',
+            'Zend\ServiceManager'  => APPLICATION_HOME.'/vendor/zendframework/zend-servicemanager/src'
 		],
 		'prefixes' => [
 			'Apache'               => APPLICATION_HOME.'/vendor/reprovinci/solr-php-client/Apache'
