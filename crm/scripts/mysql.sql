@@ -126,13 +126,21 @@ create table categories (
 	customFields           text,
 	lastModified           timestamp    not null default CURRENT_TIMESTAMP,
 	slaDays                int          unsigned,
-	notificationReplyEmail varchar(128),
-	autoResponseIsActive   bool,
-	autoResponseText       text,
 	autoCloseIsActive      bool,
 	autoCloseSubstatus_id  int          unsigned,
 	foreign key (department_id)    references departments   (id),
 	foreign key (categoryGroup_id) references categoryGroups(id)
+);
+
+create table category_action_responses (
+    id int unsigned not null primary key auto_increment,
+    category_id int unsigned not null,
+    action_id   int unsigned not null,
+    response    text,
+    autoRespond bool,
+    replyEmail  varchar(128),
+    foreign key (category_id) references categories(id),
+    foreign key (action_id)   references actions   (id)
 );
 
 create table department_actions (

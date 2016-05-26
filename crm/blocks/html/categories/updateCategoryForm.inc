@@ -1,14 +1,12 @@
 <?php
 /**
- * @copyright 2011-2015 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
 use Application\Models\CategoryGroupTable;
 use Application\Models\DepartmentTable;
 use Application\Models\SubstatusTable;
-use Blossom\Classes\View;
 
 $title = $this->category->getId()
 	? $this->_('labels.edit').' '.$this->_(['labels.category','labels.categories',1])
@@ -16,11 +14,11 @@ $title = $this->category->getId()
 
 $fields = [
 	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
-	'categoryGroup_id', 'department_id', 'autoResponseText', 'notificationReplyEmail'
+	'categoryGroup_id', 'department_id'
 ];
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
-	$$field = isset($_POST[$field]) ? View::escape($_POST[$field]) : View::escape($this->category->$get());
+	$$field = isset($_POST[$field]) ? self::escape($_POST[$field]) : self::escape($this->category->$get());
 }
 ?>
 <h2><?= $title; ?></h2>
@@ -44,7 +42,7 @@ foreach ($fields as $field) {
 							$selected = $categoryGroup_id==$group->getId()
 								? 'selected="selected"'
 								: '';
-							$name = View::escape($group->getName());
+							$name = self::escape($group->getName());
 							echo "<option value=\"{$group->getId()}\" $selected>$name</option>";
 						}
 					?>
@@ -76,7 +74,7 @@ foreach ($fields as $field) {
 							$selected = $department->getId()==$department_id
 								? 'selected="selected"'
 								: '';
-							$name = View::escape($department->getName());
+							$name = self::escape($department->getName());
 							echo "<option value=\"{$department->getId()}\" $selected >$name</option>";
 						}
 					?>
@@ -121,27 +119,8 @@ foreach ($fields as $field) {
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend><?= $this->_('messages.usedForNotifications'); ?></legend>
+	<fieldset><legend><?= $this->_('labels.autoCloseIsActive'); ?></legend>
         <table>
-            <tr><td><label  for="notificationReplyEmail"><?= $this->_('labels.notificationReplyEmail'); ?></label></td>
-                <td><input name="notificationReplyEmail" id="notificationReplyEmail" value="<?= $notificationReplyEmail; ?>" /></td>
-            </tr>
-            <tr><td><label><?= $this->_('labels.autoResponseIsActive'); ?></label></td>
-                <td><label>
-                        <input name="autoResponseIsActive" type="radio" value="1"
-                            <?= $this->category->autoResponseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('labels.active_yes'); ?>
-                    </label>
-                    <label>
-                        <input name="autoResponseIsActive" type="radio" value="0"
-                            <?= !$this->category->autoResponseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('labels.active_no'); ?>
-                    </label>
-                </td>
-            </tr>
-            <tr><td><label     for="autoResponseText"><?= $this->_('labels.autoResponseText'); ?></label></td>
-                <td><textarea name="autoResponseText" id="autoResponseText"><?= $autoResponseText; ?></textarea></td>
-            </tr>
             <tr><td><label><?= $this->_('labels.autoCloseIsActive'); ?></label></td>
                 <td><label>
                         <input name="autoCloseIsActive" type="radio" value="1"
@@ -165,7 +144,7 @@ foreach ($fields as $field) {
                                 $selected = $s->getId()===$this->category->getAutoCloseSubstatus_id()
                                     ? 'selected="selected"'
                                     : '';
-                                $name = View::escape($s->getName());
+                                $name = self::escape($s->getName());
                                 echo "<option value=\"{$s->getId()}\" $selected>$name</option>";
                             }
                         ?>
@@ -181,7 +160,7 @@ foreach ($fields as $field) {
 			// leave the textarea empty.
 			$customFields = '';
 			if (isset($_POST['customFields'])) {
-				$customFields = View::escape($_POST['customFields']);
+				$customFields = self::escape($_POST['customFields']);
 			}
 			else {
 				$fields = $this->category->getCustomFields();

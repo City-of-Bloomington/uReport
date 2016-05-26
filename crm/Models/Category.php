@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2015 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
@@ -113,9 +112,6 @@ class Category extends ActiveRecord
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
-	public function getNotificationReplyEmail() { return parent::get('notificationReplyEmail'); }
-	public function getAutoResponseIsActive()   { return parent::get('autoResponseIsActive');   }
-	public function getAutoResponseText()       { return parent::get('autoResponseText');       }
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
 	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
 	public function getAutoCloseSubstatus() { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id'); }
@@ -126,9 +122,6 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
-	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
-	public function setAutoResponseText      ($s) { parent::set('autoResponseText',      $s); }
-	public function setAutoResponseIsActive  ($b) { parent::set('autoResponseIsActive',  $b ? 1 : 0); }
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
 	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
 	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
@@ -170,21 +163,21 @@ class Category extends ActiveRecord
         $fields = [
             'name', 'description', 'department_id', 'categoryGroup_id',
             'postingPermissionLevel', 'displayPermissionLevel',
-            'customFields', 'slaDays', 'notificationReplyEmail',
-            'autoResponseIsActive', 'autoResponseText', 'autoCloseIsActive', 'autoCloseSubstatus_id'
+            'customFields', 'slaDays',
+            'autoCloseIsActive', 'autoCloseSubstatus_id'
         ];
         foreach ($fields as $f) {
             $set = 'set'.ucfirst($f);
             $this->$set($post[$f]);
         }
 	}
+
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
 	 * @return bool
 	 */
-	public function autoResponseIsActive() { return $this->getAutoResponseIsActive() ? true : false; }
 	public function autoCloseIsActive   () { return $this->getAutoCloseIsActive   () ? true : false; }
 
 	/**
@@ -201,17 +194,6 @@ class Category extends ActiveRecord
                 'substatus_id'=> $this->getAutoCloseSubstatus_id(),
                 'notes'       => AUTO_CLOSE_COMMENT
             ]);
-        }
-
-        if ($this->autoResponseIsActive()) {
-            foreach ($ticket->getReportedByPeople() as $person) {
-                $message = $this->getAutoResponseText();
-                # Commenting out the inclusion of a link to the ticket
-                #if ($this->allowsDisplay($person)) {
-                #    $message.="\n\n{$ticket->getURL()}\n";
-                #}
-                $person->sendNotification($message, null, $this->getNotificationReplyEmail());
-            }
         }
 	}
 

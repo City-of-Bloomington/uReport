@@ -1,27 +1,21 @@
 <?php
 /**
- * @copyright 2012-2015 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
 use Application\Models\Issue;
 use Application\Models\Person;
 
-use Blossom\Classes\View;
-
-$name = View::escape($this->category->getName());
-$description = View::escape($this->category->getDescription());
+$name = self::escape($this->category->getName());
+$description = self::escape($this->category->getDescription());
 
 $g = $this->category->getCategoryGroup();
-$group = $g ? View::escape($g->getName()) : '';
+$group = $g ? self::escape($g->getName()) : '';
 
 $d = $this->category->getDepartment();
-$department = $d ? View::escape($d->getName()) : '';
+$department = $d ? self::escape($d->getName()) : '';
 
-$notificationReply  = View::escape($this->category->getNotificationReplyEmail());
-$autoResponseText   = View::escape($this->category->getAutoResponseText());
-$autoResponseActive = $this->category->autoResponseIsActive() ? $this->_('labels.active_yes') : $this->_('labels.active_no');
 $autoCloseActive    = $this->category->autoCloseIsActive   () ? $this->_('labels.active_yes') : $this->_('labels.active_no');
 
 $c = $this->category->getCustomFields();
@@ -53,15 +47,6 @@ echo "
 			<td>{$this->category->getPostingPermissionLevel()}</td>
 		</tr>
 
-		<tr><th>{$this->_('labels.notificationReplyEmail')}</th>
-            <td>$notificationReply</td>
-        </tr>
-		<tr><th>{$this->_('labels.autoResponseIsActive')}</th>
-            <td>$autoResponseActive</td>
-        </tr>
-        <tr><th>{$this->_('labels.autoResponseText')}</th>
-            <td>$autoResponseText</td>
-        </tr>
         <tr><th>{$this->_('labels.autoCloseIsActive')}</th>
             <td>$autoCloseActive</td>
         </tr>

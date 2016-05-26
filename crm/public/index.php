@@ -1,13 +1,12 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Blossom\Classes\Block;
 use Blossom\Classes\Template;
 
-include '../configuration.inc';
+include '../bootstrap.inc';
 
 // Check for Open311 routes
 if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
