@@ -81,10 +81,6 @@ class Category extends ActiveRecord
 		if (!$this->getName())             { throw new \Exception('categories/missingName');  }
 		if (!$this->getCategoryGroup_id()) { throw new \Exception('categories/missingGroup'); }
 		if (!$this->getDepartment_id())    { throw new \Exception('categories/missingDepartment'); }
-
-		if ($this->autoResponseIsActive() && !$this->getAutoResponseText()) {
-            throw new \Exception('categories/missingAutoResponseText');
-		}
 	}
 
 	public function save() {
@@ -309,6 +305,21 @@ class Category extends ActiveRecord
 			return $row['lastModified'];
 		}
 	}
+
+	/**
+	 * Returns an array of templates, with the template ID as the key
+	 *
+	 * @return array An array of ResponseTemplate objects
+	 */
+	public function getResponseTemplates()
+	{
+        $templates = [];
+        $table = new ResponseTemplateTable();
+        $list = $table->find(['category_id'=>$this->getId()]);
+        foreach ($list as $t) { $templates[$t->getId()] = $t; }
+        return $templates;
+	}
+
 }
 
 class JSONException extends \Exception

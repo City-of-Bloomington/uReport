@@ -313,14 +313,22 @@ msgstr "Afhandeling"
 msgid "labels.overdue"
 msgstr "Verlopen"
 
-msgid "labels.notificationReplyEmail"
+msgid "labels.replyEmail"
 msgstr "Beantwoorden per e-mail"
 
-msgid "labels.autoResponseIsActive"
+msgid "labels.autoRespond"
 msgstr "Automatisch beantwoorden"
 
-msgid "labels.autoResponseText"
-msgstr "Tekst voor automatisch beantwoorden"
+msgid "labels.responseTemplate"
+msgid_plural "labels.responseTemplates"
+msgstr[0] "Tekst voor automatisch beantwoorden"
+msgstr[1] "Teksten voor automatisch beantwoorden"
+
+msgid "labels.responseTemplate_add"
+msgstr "Tekst toevoegen"
+
+msgid "labels.responseTemplate_edit"
+msgstr "Tekst wijzigen"
 
 msgid "labels.autoCloseIsActive"
 msgstr "Automatisch sluiten"

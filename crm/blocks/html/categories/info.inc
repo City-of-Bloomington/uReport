@@ -7,59 +7,65 @@
 use Application\Models\Issue;
 use Application\Models\Person;
 
-$name = self::escape($this->category->getName());
-$description = self::escape($this->category->getDescription());
+$fields = [
+    'id', 'name', 'description', 'categoryGroup', 'department',
+    'displayPermissionLevel', 'postingPermissionLevel'
+];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $$f  = self::escape($this->category->$get());
+}
 
-$g = $this->category->getCategoryGroup();
-$group = $g ? self::escape($g->getName()) : '';
+$autoCloseActive = $this->category->autoCloseIsActive()
+    ? $this->_('labels.active_yes')
+    : $this->_('labels.active_no');
 
-$d = $this->category->getDepartment();
-$department = $d ? self::escape($d->getName()) : '';
-
-$autoCloseActive    = $this->category->autoCloseIsActive   () ? $this->_('labels.active_yes') : $this->_('labels.active_no');
-
-$c = $this->category->getCustomFields();
 
 $editButton = '';
-if (Person::isAllowed('categories','update')) {
+if (Person::isAllowed('categories', 'update')) {
     $helper = $this->template->getHelper('buttonLink');
     $editButton = $helper->buttonLink(
-        BASE_URI.'/categories/update?category_id='.$this->category->getId(),
+        BASE_URI."/categories/update?category_id=$id",
         $this->_('labels.edit'),
         'edit'
     );
 }
 echo "
-<div class=\"categoryInfo\">
-	<h2>$name $editButton</h2>
+<section class=\"categoryInfo\">
+    <header>
+        <h1>$name</h1>
+        <div class=\"tools\">$editButton</div>
+    </header>
 	<p>$description</p>
 	<table>
-		<tr><th>Category Group</th>
-			<td>$group</td>
+		<tr><th>{$this->_('labels.categoryGroup')}</th>
+			<td>$categoryGroup</td>
 		</tr>
-		<tr><th>Default Department</th>
+		<tr><th>{$this->_('labels.department')}</th>
 			<td>$department</td>
 		</tr>
 		<tr><th>{$this->_('labels.displayPermissionLevel')}</th>
-			<td>{$this->category->getDisplayPermissionLevel()}</td>
+			<td>$displayPermissionLevel</td>
 		</tr>
 		<tr><th>{$this->_('labels.postingPermissionLevel')}</th>
-			<td>{$this->category->getPostingPermissionLevel()}</td>
+			<td>$postingPermissionLevel</td>
 		</tr>
 
         <tr><th>{$this->_('labels.autoCloseIsActive')}</th>
             <td>$autoCloseActive</td>
         </tr>
 	</table>
+";
+    $this->_include('responseTemplates/list.inc');
 
-
+echo "
 	<form method=\"get\">
 		<fieldset><legend>{$this->_('labels.custom_fields')}</legend>
 ";
 			$this->issue = new Issue();
-			include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
+			$this->_include('tickets/issueCustomFields.inc');
 echo "
 		</fieldset>
 	</form>
-</div>
+</section>
 ";

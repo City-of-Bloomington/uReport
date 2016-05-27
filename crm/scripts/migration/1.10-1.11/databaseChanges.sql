@@ -8,14 +8,14 @@ create table category_action_responses (
     id int unsigned not null primary key auto_increment,
     category_id int unsigned not null,
     action_id   int unsigned not null,
-    response    text,
+    template    text,
     autoRespond bool,
     replyEmail  varchar(128),
     foreign key (category_id) references categories(id),
     foreign key (action_id)   references actions   (id)
 );
 
-insert into category_action_responses (category_id, action_id, response, autoRespond, replyEmail)
+insert into category_action_responses (category_id, action_id, template, autoRespond, replyEmail)
 select id, 5, autoResponseText, autoResponseIsActive, notificationReplyEmail
 from categories where autoResponseText is not null;
 

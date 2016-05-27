@@ -313,14 +313,22 @@ msgstr "SLA"
 msgid "labels.overdue"
 msgstr "Over SLA"
 
-msgid "labels.notificationReplyEmail"
+msgid "labels.replyEmail"
 msgstr "Reply To Email"
 
-msgid "labels.autoResponseIsActive"
+msgid "labels.autoRespond"
 msgstr "Auto Respond"
 
-msgid "labels.autoResponseText"
-msgstr "Auto Response Message"
+msgid "labels.responseTemplate"
+msgid_plural "labels.responseTemplates"
+msgstr[0] "Auto Response Message"
+msgstr[1] "Auto Response Messages"
+
+msgid "labels.responseTemplate_add"
+msgstr "New Auto Response Message"
+
+msgid "labels.responseTemplate_edit"
+msgstr "Edit Auto Response Message"
 
 msgid "labels.autoCloseIsActive"
 msgstr "Auto Close"

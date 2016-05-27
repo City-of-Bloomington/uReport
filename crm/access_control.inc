@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
@@ -30,6 +30,7 @@ $ZEND_ACL->addResource(new Resource('departments'));
 $ZEND_ACL->addResource(new Resource('actions'));
 $ZEND_ACL->addResource(new Resource('categories'));
 $ZEND_ACL->addResource(new Resource('categoryGroups'));
+$ZEND_ACL->addResource(new Resource('responseTemplates'));
 $ZEND_ACL->addResource(new Resource('labels'));
 $ZEND_ACL->addResource(new Resource('issueTypes'));
 $ZEND_ACL->addResource(new Resource('substatus'));
@@ -48,26 +49,26 @@ $ZEND_ACL->addResource(new Resource('reports'));
 $ZEND_ACL->addResource(new Resource('bookmarks'));
 
 // Permissions for non-authenticated web browsing
-$ZEND_ACL->allow(null,array('callback','login','open311'));
+$ZEND_ACL->allow(null,['callback','login','open311']);
 $ZEND_ACL->allow(null,
-				array('index','tickets','issues','locations'),
-				array('index','view', 'thumbnails'));
+				['index','tickets','issues','locations'],
+				['index','view', 'thumbnails']);
 $ZEND_ACL->allow(null, 'media', 'resize');
 $ZEND_ACL->allow(null, 'solr', 'index');
 
 // Staff permission
 // Staff has full permission to these controllers
-$ZEND_ACL->allow('Staff',array(
+$ZEND_ACL->allow('Staff', [
 	'account','people','issues','media','reports','bookmarks'
-));
+]);
 // Staff has limited permission to these controllers
-$ZEND_ACL->allow('Staff','departments',array('index', 'view', 'choose'));
-$ZEND_ACL->allow('Staff','categories', array('index', 'view', 'choose'));
-$ZEND_ACL->allow('Staff','substatus',  array('index'));
-$ZEND_ACL->allow('Staff','tickets', array(
+$ZEND_ACL->allow('Staff','departments',['index', 'view', 'choose']);
+$ZEND_ACL->allow('Staff','categories', ['index', 'view', 'choose']);
+$ZEND_ACL->allow('Staff','substatus',  ['index']);
+$ZEND_ACL->allow('Staff','tickets', [
 	'add', 'update', 'merge', 'delete','assign', 'refer','print',
 	'changeCategory', 'changeLocation', 'changeStatus', 'recordAction'
-));
+]);
 
 
 // Administrator is allowed access to everything
