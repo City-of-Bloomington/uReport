@@ -66,7 +66,7 @@ $ZEND_ACL->allow('Staff','departments',['index', 'view', 'choose']);
 $ZEND_ACL->allow('Staff','categories', ['index', 'view', 'choose']);
 $ZEND_ACL->allow('Staff','substatus',  ['index']);
 $ZEND_ACL->allow('Staff','tickets', [
-	'add', 'update', 'merge', 'delete','assign', 'refer','print',
+	'add', 'update', 'merge', 'delete','assign', 'print',
 	'changeCategory', 'changeLocation', 'changeStatus', 'recordAction'
 ]);
 

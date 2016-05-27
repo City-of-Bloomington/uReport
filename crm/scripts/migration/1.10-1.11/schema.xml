@@ -178,7 +178,6 @@
 
 	<field name="enteredByPerson_id"  type="int" indexed="true" stored="false" />
 	<field name="assignedPerson_id"   type="int" indexed="true" stored="false" />
-	<field name="referredPerson_id"   type="int" indexed="true" stored="false" />
 
 	<!-- GeoHash Fields -->
 	<field name="latitude"		type="float" indexed="true"	stored="true" />
@@ -206,7 +205,6 @@
    <field name="substatus"        type="string" indexed="true" stored="false" />
    <field name="enteredByPerson"  type="string" indexed="true" stored="false" />
    <field name="assignedPerson"   type="string" indexed="true" stored="false" />
-   <field name="referredPerson"   type="string" indexed="true" stored="false" />
 
    <field name="issueType"        type="string" indexed="true" stored="false" multiValued="true" />
    <field name="label"            type="string" indexed="true" stored="false" multiValued="true" />

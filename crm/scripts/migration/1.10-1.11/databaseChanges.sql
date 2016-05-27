@@ -1,3 +1,14 @@
+update ticketHistory set actionDate=enteredDate where actionDate=0;
+update issueHistory  set actionDate=enteredDate where actionDate=0;
+alter table tickets       modify enteredDate datetime not null default now();
+alter table ticketHistory modify actionDate  datetime not null default now();
+alter table issueHistory  modify actionDate  datetime not null default now();
+
+--
+-- This section should be reworked before release
+-- These changes occurred in development versions over time
+-- We can probably simplify this to just add the new table
+-- in it's final form
 alter table categories add notificationReplyEmail varchar(128);
 alter table categories add autoResponseIsActive   bool;
 alter table categories add autoResponseText       text;
@@ -22,3 +33,13 @@ from categories where autoResponseText is not null;
 alter table categories drop notificationReplyEmail;
 alter table categories drop autoResponseIsActive;
 alter table categories drop autoResponseText;
+
+
+update ticketHistory h
+join actions a on h.action_id=a.id
+join actions b on b.name='assignment'
+set h.action_id=b.id
+where a.name='referral';
+
+alter table tickets drop foreign key tickets_ibfk_5;
+alter table tickets drop referredPerson_id;

@@ -165,7 +165,6 @@ create table tickets (
 	client_id          int         unsigned,
 	enteredByPerson_id int         unsigned,
 	assignedPerson_id  int         unsigned,
-	referredPerson_id  int         unsigned,
 	enteredDate        datetime    not null default now(),
 	lastModified       timestamp   not null default CURRENT_TIMESTAMP,
 	addressId          int         unsigned,
@@ -183,7 +182,6 @@ create table tickets (
 	foreign key (client_id)          references clients    (id),
 	foreign key (enteredByPerson_id) references people     (id),
 	foreign key (assignedPerson_id)  references people     (id),
-	foreign key (referredPerson_id)  references people     (id),
 	foreign key (substatus_id)       references substatus  (id)
 );
 
@@ -194,7 +192,7 @@ create table ticketHistory (
 	actionPerson_id    int       unsigned,
 	action_id          int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
-	actionDate         datetime,
+	actionDate         datetime  not null default now(),
 	notes              text,
 	foreign key (ticket_id)          references tickets(id),
 	foreign key (enteredByPerson_id) references people (id),
@@ -252,7 +250,7 @@ create table issueHistory (
 	actionPerson_id    int       unsigned,
 	action_id          int       unsigned,
 	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
-	actionDate         datetime,
+	actionDate         datetime  not null default now(),
 	notes              text,
 	foreign key (issue_id)           references issues (id),
 	foreign key (enteredByPerson_id) references people (id),

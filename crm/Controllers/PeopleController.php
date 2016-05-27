@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -107,12 +106,11 @@ class PeopleController extends Controller
 			$this->template->blocks['left'][] = $block;
 			$this->template->blocks['right'][] = new Block('people/stats.inc',array('person'=>$person));
 
-			$lists = array(
+			$lists = [
 				'reportedBy'=>'Reported Cases',
 				'assigned'  =>'Assigned Cases',
-				'referred'  =>'Referred Cases',
 				'enteredBy' =>'Entered Cases'
-			);
+			];
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			$count = 0;
 			foreach ($lists as $listType=>$title) {
@@ -134,7 +132,7 @@ class PeopleController extends Controller
 	 * Adds a ticketList about the Person to the template
 	 *
 	 * @param string $panel
-	 * @param string $listType (enteredBy, assigned, reportedBy, referred)
+	 * @param string $listType (enteredBy, assigned, reportedBy)
 	 * @param string $title
 	 * @param Person $person
 	 * @param bool $disableLinks
@@ -380,7 +378,6 @@ class PeopleController extends Controller
 		$lists = array(
 			'reportedBy'=>'Reported Cases',
 			'assigned'  =>'Assigned Cases',
-			'referred'  =>'Referred Cases',
 			'enteredBy' =>'Entered Cases'
 		);
 		foreach ($lists as $listType=>$title) {
@@ -390,12 +387,6 @@ class PeopleController extends Controller
 		$this->template->blocks['right'][] = new Block(
 			'people/personInfo.inc',
 			array('person'=>$personB,'disableButtons'=>true)
-		);
-		$lists = array(
-			'reportedBy'=>'Reported Cases',
-			'assigned'  =>'Assigned Cases',
-			'referred'  =>'Referred Cases',
-			'enteredBy' =>'Entered Cases'
 		);
 		foreach ($lists as $listType=>$title) {
 			$this->addTicketList('right', $listType, $title, $personB, true, true);

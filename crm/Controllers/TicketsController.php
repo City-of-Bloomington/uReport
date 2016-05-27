@@ -294,59 +294,6 @@ class TicketsController extends Controller
 	}
 
 	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST person_id
-	 */
-	public function refer()
-	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
-		if (isset($_REQUEST['person_id'])) {
-			try {
-				$person = new Person($_REQUEST['person_id']);
-			}
-			catch (\Exception $e) {
-			}
-		}
-
-		// Handle any stuff the user posts
-		if (isset($_POST['referredPerson_id'])) {
-			try {
-				$ticket->setReferredPerson_id($_POST['referredPerson_id']);
-				$ticket->save();
-
-				// add a record to ticket history
-				$history = new TicketHistory();
-				$history->setTicket($ticket);
-				$history->setAction(new Action('referral'));
-				$history->setEnteredByPerson($_SESSION['USER']);
-				$history->setActionPerson($ticket->getReferredPerson());
-				$history->setNotes($_POST['notes']);
-				$history->save();
-
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		// Display the view
-		$this->template->setFilename('tickets');
-		if (isset($person)) {
-			$this->template->blocks['ticket-panel'][] = new Block(
-				'tickets/referTicketForm.inc',
-				array('ticket'=>$ticket,'person'=>$person)
-			);
-		}
-		else {
-			$_REQUEST['return_url'] = BASE_URL.'/tickets/refer?ticket_id='.$ticket->getId();
-			$this->template->blocks['ticket-panel'][] = new Block('people/searchForm.inc');
-		}
-
-		$this->addStandardInfoBlocks($ticket);
-	}
-
-	/**
 	 * @param POST ticket_id
 	 */
 	public function recordAction()

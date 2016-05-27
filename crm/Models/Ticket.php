@@ -17,7 +17,6 @@ class Ticket extends ActiveRecord
 	protected $client;
 	protected $enteredByPerson;
 	protected $assignedPerson;
-	protected $referredPerson;
 
 	private $issues;
 	private $needToUpdateClusters = false;
@@ -81,7 +80,6 @@ class Ticket extends ActiveRecord
         $this->client          = null;
         $this->enteredByPerson = null;
         $this->assignedPerson  = null;
-        $this->referredPerson  = null;
 
         $this->issues = null;
         $this->needToUpdateClusters = false;
@@ -207,16 +205,13 @@ class Ticket extends ActiveRecord
 	public function getClient_id()          { return parent::get('client_id');          }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getAssignedPerson_id()  { return parent::get('assignedPerson_id');  }
-	public function getReferredPerson_id()  { return parent::get('referredPerson_id');  }
 	public function getSubstatus()       { return parent::getForeignKeyObject(__namespace__.'\Substatus',  'substatus_id');       }
 	public function getCategory()        { return parent::getForeignKeyObject(__namespace__.'\Category',   'category_id');        }
 	public function getClient()          { return parent::getForeignKeyObject(__namespace__.'\Client',     'client_id');          }
 	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',     'enteredByPerson_id'); }
 	public function getAssignedPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'assignedPerson_id');  }
-	public function getReferredPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'referredPerson_id');  }
-
-        public function getLatitude() { return floatval(parent::get('latitude')); }
-        public function getLongitude() { return floatval(parent::get('longitude')); }
+    public function getLatitude()  { return floatval(parent::get('latitude' )); }
+    public function getLongitude() { return floatval(parent::get('longitude')); }
 
 	public function setAddressId($s)  { parent::set('addressId', $s); }
 	public function setLocation ($s)  { parent::set('location',  $s); }
@@ -231,13 +226,11 @@ class Ticket extends ActiveRecord
 	public function setClient_id         ($id) { parent::setForeignKeyField(__namespace__.'\Client',     'client_id',          $id); }
 	public function setEnteredByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',     'enteredByPerson_id', $id); }
 	public function setAssignedPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',     'assignedPerson_id',  $id); }
-	public function setReferredPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',     'referredPerson_id',  $id); }
 	public function setSubstatus      (Substatus  $o) { parent::setForeignKeyObject(__namespace__.'\Substatus','substatus_id',       $o); }
 	public function setCategory       (Category   $o) { parent::setForeignKeyObject(__namespace__.'\Category', 'category_id',        $o); }
 	public function setClient         (Client     $o) { parent::setForeignKeyObject(__namespace__.'\Client',   'client_id',          $o); }
 	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'enteredByPerson_id', $o); }
 	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'assignedPerson_id',  $o); }
-	public function setReferredPerson (Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'referredPerson_id',  $o); }
 
 	public function setLatitude ($s)  {
 		if (!empty($s) && $this->getLatitude() != (float)$s) {

@@ -93,7 +93,9 @@ class Search
 		$this->solrClient = new \Apache_Solr_Service(
 			SOLR_SERVER_HOSTNAME,
 			SOLR_SERVER_PORT,
-			SOLR_SERVER_PATH
+			SOLR_SERVER_PATH,
+			false,
+			new \Apache_Solr_Compatibility_Solr4CompatibilityLayer()
 		);
 
 		// Add facets for the AddressService custom fields
@@ -106,14 +108,12 @@ class Search
 		if (Person::isAllowed('people', 'view')) {
 			self::$searchableFields['enteredByPerson_id']  = 'Entered By';
 			self::$searchableFields['assignedPerson_id']   = 'Assigned To';
-			self::$searchableFields['referredPerson_id']   = 'Referred To';
 			self::$searchableFields['reportedByPerson_id'] = 'Reported By';
 
 			self::$facetFields['ticket'][] = 'assignedPerson_id';
 
 			self::$sortableFields['ticket'][] = 'enteredByPerson';
 			self::$sortableFields['ticket'][] = 'assignedPerson';
-			self::$sortableFields['ticket'][] = 'referredPerson';
 			self::$sortableFields['ticket'][] = 'reportedByPerson';
 		}
 	}
@@ -302,7 +302,7 @@ class Search
 		// They are just handled slightly differently from the generic fields listed
 		$ticketFields = array(
 			'id', 'category_id', 'client_id',
-			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id',
+			'enteredByPerson_id', 'assignedPerson_id',
 			'addressId', 'location', 'city', 'state', 'zip',
 			'status', 'substatus_id'
 			// enteredDate, latitude, longitude

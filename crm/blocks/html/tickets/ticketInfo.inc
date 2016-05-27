@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  * @param bool $this->disableButtons
  */
@@ -19,7 +18,7 @@ $location = $location
 
 if (Person::isAllowed('people','view')) {
 	$url = new Url(BASE_URL.'/people/view.php');
-	$personFields = array('enteredBy','assigned','referred');
+	$personFields = ['enteredBy', 'assigned'];
 	foreach ($personFields as $field) {
 		$$field = '';
 		$get = 'get'.ucfirst($field).'Person';
@@ -42,7 +41,6 @@ $deleteButton         = '';
 $changeCategoryButton = '';
 $changeLocationButton = '';
 $assignButton         = '';
-$referralButton       = '';
 
 if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 	$helper = $this->template->getHelper('buttonLink');
@@ -84,13 +82,6 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 				ButtonLink::SIZE_ICON,
 				['data-callback'=>'assign']
 			);
-			$referralButton = $helper->buttonLink(
-				BASE_URI.'/tickets/refer?ticket_id='.$this->ticket->getId(),
-				$this->translate('labels.refer_ticket'),
-				'edit',
-				ButtonLink::SIZE_ICON,
-				['data-callback'=>'refer']
-			);
 		}
 	}
 
@@ -121,10 +112,6 @@ if (Person::isAllowed('people','view')) {
 		<li><label>Assigned To:</label>
 			$assigned
 			$assignButton
-		</li>
-		<li><label>Referred To:</label>
-			$referred
-			$referralButton
 		</li>
 		<li><label>Created By:</label>
 			$enteredBy

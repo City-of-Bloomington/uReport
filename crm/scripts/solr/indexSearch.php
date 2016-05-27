@@ -1,14 +1,13 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Search;
 use Application\Models\Ticket;
 use Blossom\Classes\Database;
 
-include '../../configuration.inc';
+include '../../bootstrap.inc';
 $search = new Search();
 $search->solrClient->deleteByQuery('*:*');
 $search->solrClient->commit();

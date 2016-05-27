@@ -284,7 +284,7 @@ class Person extends ActiveRecord
 	 * Checks if the user is supposed to have acces to the resource
 	 *
 	 * This is implemented by checking against a Zend_Acl object
-	 * The Zend_Acl should be created in configuration.inc
+	 * The Zend_Acl should be created in bootstrap.inc
 	 *
 	 * @param string $resource
 	 * @param string $action
@@ -408,7 +408,6 @@ class Person extends ActiveRecord
 			$sql = "(select t.id from tickets t
 					where t.enteredByPerson_id=$id
 					   or t.assignedPerson_id=$id
-					   or t.referredPerson_id=$id
 					limit 1)
 					union all
 					(select h.ticket_id from ticketHistory h
@@ -565,7 +564,7 @@ class Person extends ActiveRecord
 					left join issueHistory  ih on i.id=ih.issue_id
 					left join media          m on i.id= m.issue_id
 					left join responses      r on i.id= r.issue_id
-					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.referredPerson_id=$id)
+					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or th.actionPerson_id=$id)
 					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
 					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
@@ -589,8 +588,6 @@ class Person extends ActiveRecord
 				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update tickets       set   referredPerson_id=? where   referredPerson_id=?')->execute([$this->getId(), $person->getId()]);
-
 
 				// Fields that don't hit the Solr index
 				$zend_db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 
@@ -100,12 +99,11 @@ class TicketTable extends TableGateway
 	 */
 	public static function getDisplayableFields()
 	{
-		$fields = array(
+		$fields = [
 			'id'                => 'Case #',
 			'enteredDate'       => 'Case Date',
 			'enteredByPerson_id'=> 'Entered By',
 			'assignedPerson_id' => 'Assigned To',
-			'referredPerson_id' => 'Referred To',
 			'category_id'       => 'Category',
 			'department_id'     => 'Department',
 			'status'            => 'Status',
@@ -118,7 +116,7 @@ class TicketTable extends TableGateway
 			'zip'               => 'Zip',
 			'description'       => 'Description',
 			'slaPercentage'     => 'SLA'
-		);
+		];
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
 			$fields[$key] = $value['description'];
 		}
@@ -134,9 +132,9 @@ class TicketTable extends TableGateway
 	 */
 	public static function getSearchableFields()
 	{
-		$fields = array(
+		$fields = [
 			'enteredDate', 'description',
-			'enteredByPerson_id', 'assignedPerson_id', 'referredPerson_id', 'reportedByPerson_id',
+			'enteredByPerson_id', 'assignedPerson_id', 'reportedByPerson_id',
 			'category_id', 'department_id', 'client_id',
 			'status', 'substatus_id',
 			'location', 'latitude', 'longitude',
@@ -144,7 +142,7 @@ class TicketTable extends TableGateway
 			'start_date',
 			'end_date',
 			'label_id', 'issueType_id'
-		);
+		];
 		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
 			$fields[$key] = $key;
 		}

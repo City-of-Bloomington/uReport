@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\Person;
@@ -52,7 +51,6 @@ foreach ($tickets as $ticket) {
 
 				case 'enteredByPerson_id':
 				case 'assignedPerson_id':
-				case 'referredPerson_id':
 					$get = 'get'.ucfirst(substr($field, 0, -3));
 					$person = $ticket->$get();
 					if ($person) {
