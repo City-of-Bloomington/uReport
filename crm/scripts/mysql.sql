@@ -103,7 +103,6 @@ create table actions (
 insert actions (name,type,description) values('open',      'system','Opened by {actionPerson}');
 insert actions (name,type,description) values('assignment','system','{enteredByPerson} assigned this case to {actionPerson}');
 insert actions (name,type,description) values('closed',    'system','Closed by {actionPerson}');
-insert actions (name,type,description) values('referral',  'system','{enteredByPerson} referred this case to {actionPerson}');
 insert actions (name,type,description) values('update',    'system','Updated by {enteredByPerson}');
 
 create table categoryGroups (
@@ -126,6 +125,7 @@ create table categories (
 	customFields           text,
 	lastModified           timestamp    not null default CURRENT_TIMESTAMP,
 	slaDays                int          unsigned,
+	notificationReplyEmail varchar(128),
 	autoCloseIsActive      bool,
 	autoCloseSubstatus_id  int          unsigned,
 	foreign key (department_id)    references departments   (id),

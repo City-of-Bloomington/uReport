@@ -265,13 +265,11 @@ class TicketsController extends Controller
 				// add a record to ticket history
 				$history = new TicketHistory();
 				$history->setTicket($ticket);
-				$history->setAction(new Action('assignment'));
+				$history->setAction(new Action(Action::ASSIGNED));
 				$history->setEnteredByPerson($_SESSION['USER']);
 				$history->setActionPerson($ticket->getAssignedPerson());
 				$history->setNotes($_REQUEST['notes']);
 				$history->save();
-
-				$history->sendNotification($ticket);
 
 				$this->redirectToTicketView($ticket);
 			}
@@ -330,10 +328,10 @@ class TicketsController extends Controller
                 $ticket->handleChangeStatus($_POST);
 
                 // Display an alert, reminding them to respond to any citizens
-                $citizens = $ticket->getReportedByPeople();
-                if (count($citizens)) {
-                    $_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
-                }
+                #$citizens = $ticket->getReportedByPeople();
+                #if (count($citizens)) {
+                #    $_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
+                #}
 
 				$this->redirectToTicketView($ticket);
 			}

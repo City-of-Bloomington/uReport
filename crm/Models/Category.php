@@ -108,6 +108,7 @@ class Category extends ActiveRecord
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
+	public function getNotificationReplyEmail() { return parent::get('notificationReplyEmail'); }
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
 	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
 	public function getAutoCloseSubstatus() { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id'); }
@@ -118,6 +119,7 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
+	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
 	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
 	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
@@ -159,7 +161,7 @@ class Category extends ActiveRecord
         $fields = [
             'name', 'description', 'department_id', 'categoryGroup_id',
             'postingPermissionLevel', 'displayPermissionLevel',
-            'customFields', 'slaDays',
+            'customFields', 'slaDays', 'notificationReplyEmail',
             'autoCloseIsActive', 'autoCloseSubstatus_id'
         ];
         foreach ($fields as $f) {
@@ -320,6 +322,16 @@ class Category extends ActiveRecord
         return $templates;
 	}
 
+	/**
+	 * @param Action $action
+	 * @return ResponseTemplate
+	 */
+	public function responseTemplateForAction(Action $action)
+	{
+        $table = new ResponseTemplateTable();
+        $list = $table->find(['category_id'=>$this->getId(), 'action_id'=>$action->getId()]);
+        return $list->current();
+	}
 }
 
 class JSONException extends \Exception

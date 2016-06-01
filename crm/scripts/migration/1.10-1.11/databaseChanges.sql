@@ -30,7 +30,6 @@ insert into category_action_responses (category_id, action_id, template, autoRes
 select id, 5, autoResponseText, autoResponseIsActive, notificationReplyEmail
 from categories where autoResponseText is not null;
 
-alter table categories drop notificationReplyEmail;
 alter table categories drop autoResponseIsActive;
 alter table categories drop autoResponseText;
 
@@ -43,3 +42,5 @@ where a.name='referral';
 
 alter table tickets drop foreign key tickets_ibfk_5;
 alter table tickets drop referredPerson_id;
+
+delete from actions where name='referral';

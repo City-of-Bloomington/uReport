@@ -51,6 +51,7 @@ use Blossom\Classes\View;
 				<?php
 					$table = new ContactMethodTable();
 					$contactMethods = $table->find();
+					$contactMethods->buffer();
 					foreach ($contactMethods as $method) {
 						$selected = $this->issue->getContactMethod_id()==$method->getId()
 							? 'selected="selected"'

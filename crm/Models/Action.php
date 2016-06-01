@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
@@ -10,8 +9,14 @@ use Blossom\Classes\Database;
 
 class Action extends ActiveRecord
 {
+    // Pre-defined system level actions
+    const OPENED   = 'open';
+    const CLOSED   = 'closed';
+    const ASSIGNED = 'assignment';
+    const UPDATED  = 'update';
+
 	protected $tablename = 'actions';
-	public static $types = array('system','department');
+	public static $types = ['system', 'department'];
 
 	/**
 	 * Populates the object with data
@@ -35,7 +40,7 @@ class Action extends ActiveRecord
 				$sql = ActiveRecord::isId($id)
 					? 'select * from actions where id=?'
 					: 'select * from actions where name=?';
-					
+
 				$zend_db = Database::getConnection();
 				$result = $zend_db->createStatement($sql)->execute([$id]);
 				if (count($result)) {

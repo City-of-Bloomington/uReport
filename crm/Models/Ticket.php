@@ -599,7 +599,7 @@ class Ticket extends ActiveRecord
 			// We must add an issue to the ticket for validation to pass
 			$issue = new Issue();
 			$issue->handleUpdate($post);
-			$this->issues = array($issue);
+			$this->issues = [$issue];
 
 			if (!$this->getEnteredByPerson_id() && $issue->getReportedByPerson_id()) {
 				$this->setEnteredByPerson_id($issue->getReportedByPerson_id());
@@ -609,27 +609,6 @@ class Ticket extends ActiveRecord
 
 			$issue->setTicket($this);
 			$issue->save();
-
-			// Create the entry in the history log
-			$history = new TicketHistory();
-			$history->setTicket($this);
-			$history->setAction(new Action('open'));
-			if ($this->getEnteredByPerson_id()) {
-				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
-			}
-			$history->save();
-
-			$history = new TicketHistory();
-			$history->setTicket($this);
-			$history->setAction(new Action('assignment'));
-			$history->setActionPerson_id($this->getAssignedPerson_id());
-			if (!empty($post['notes'])) {
-				$history->setNotes($post['notes']);
-			}
-			if ($this->getEnteredByPerson_id()) {
-				$history->setEnteredByPerson_id($this->getEnteredByPerson_id());
-			}
-			$history->save();
 
 			$this->getCategory()->onTicketAdd($this);
 		}
@@ -643,7 +622,27 @@ class Ticket extends ActiveRecord
 			throw $e;
 		}
 		$zend_db->getDriver()->getConnection()->commit();
-		$history->sendNotification($this);
+
+        // Create the entry in the history log
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction(new Action(Action::OPENED));
+        if ($this->getEnteredByPerson_id()) {
+            $history->setEnteredByPerson_id($this->getEnteredByPerson_id());
+        }
+        $history->save();
+
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction(new Action(Action::ASSIGNED));
+        $history->setActionPerson_id($this->getAssignedPerson_id());
+        if (!empty($post['notes'])) {
+            $history->setNotes($post['notes']);
+        }
+        if ($this->getEnteredByPerson_id()) {
+            $history->setEnteredByPerson_id($this->getEnteredByPerson_id());
+        }
+        $history->save();
 	}
 
 	/**
@@ -722,13 +721,28 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return Zend\Db\ResultSet
+	 * Returns the notification email addresses for everyone involved with this ticket
+	 *
+	 * @return array An array of Email objects
 	 */
-	public function getReportedByPeople()
+	public function getNotificationEmails()
 	{
-		if ($this->getId()) {
-			$table = new PersonTable();
-			return $table->find(['reportedTicket_id'=>$this->getId()]);
-		}
+        $emails = [];
+        $sql = "select distinct e.* from (
+                    select enteredByPerson_id  id from tickets where id=? and enteredByPerson_id is not null
+                    union
+                    select assignedPerson_id   id from tickets where id=? and assignedPerson_id  is not null
+                    union
+                    select reportedByPerson_id id from tickets
+                    join issues on tickets.id=issues.ticket_id
+                    where tickets.id=? and reportedByPerson_id is not null
+                ) as p
+                join peopleEmails e on p.id=e.person_id
+                where usedForNotifications=1";
+        $id      = $this->getId();
+        $zend_db = Database::getConnection();
+        $result  = $zend_db->createStatement($sql)->execute([$id, $id, $id]);
+        foreach ($result as $row) { $emails[] = new Email($row); }
+        return $emails;
 	}
 }

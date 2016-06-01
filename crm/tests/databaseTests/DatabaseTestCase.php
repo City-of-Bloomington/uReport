@@ -1,11 +1,10 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $_SERVER['SITE_HOME'] = __DIR__;
-require_once '../../configuration.inc';
+require_once '../../bootstrap.inc';
 class CustomTruncate extends PHPUnit_Extensions_Database_Operation_Truncate
 {
 	public function execute(PHPUnit_Extensions_Database_DB_IDatabaseConnection $connection, PHPUnit_Extensions_Database_DataSet_IDataSet $dataSet)

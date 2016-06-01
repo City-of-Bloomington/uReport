@@ -265,6 +265,9 @@ msgid_plural "labels.owners"
 msgstr[0] "Eigenaar"
 msgstr[1] "Eigenaren"
 
+msgid "labels.someone"
+msgstr "Iemand"
+
 # We are using the word "Application" in english because we think it
 # makes more sense to end users.
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.

@@ -9,7 +9,7 @@ use Application\Models\Person;
 
 $fields = [
     'id', 'name', 'description', 'categoryGroup', 'department',
-    'displayPermissionLevel', 'postingPermissionLevel'
+    'displayPermissionLevel', 'postingPermissionLevel', 'notificationReplyEmail'
 ];
 foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
@@ -50,7 +50,9 @@ echo "
 		<tr><th>{$this->_('labels.postingPermissionLevel')}</th>
 			<td>$postingPermissionLevel</td>
 		</tr>
-
+        <tr><th>{$this->_('labels.replyEmail')}</th>
+            <td>$notificationReplyEmail</td>
+        </tr>
         <tr><th>{$this->_('labels.autoCloseIsActive')}</th>
             <td>$autoCloseActive</td>
         </tr>

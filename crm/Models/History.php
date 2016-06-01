@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -93,7 +93,14 @@ abstract class History extends ActiveRecord
 		}
 	}
 
-	public function save()   { parent::save();   }
+	public function save()
+	{
+        parent::save();
+
+        if ($this->getTIcket_id()) {
+            $this->sendNotifications();
+        }
+    }
 	public function delete() { parent::delete(); }
 
 	//----------------------------------------------------------------
@@ -122,11 +129,13 @@ abstract class History extends ActiveRecord
 
 	// History is either for a Ticket or an Issue
 	public function getTicket_id() { return parent::get('ticket_id');          }
-	public function getIssue_id()  { return parent::get('issue_id');           }
-	public function setTicket_id($id)    { parent::setForeignKeyField( __namespace__.'\Ticket', 'ticket_id', $id); }
-	public function setIssue_id ($id)    { parent::setForeignKeyField( __namespace__.'\Issue',  'issue_id',  $id); }
-	public function setTicket(Ticket $o) { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o); }
-	public function setIssue (Issue  $o) { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o); }
+	public function getIssue_id () { return parent::get('issue_id');           }
+	public function getTicket()    { return parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
+	public function getIssue ()    { return parent::getForeignKeyObject(__namespace__.'\Issue',  'issue_id' ); }
+	public function setTicket_id($id)     { parent::setForeignKeyField( __namespace__.'\Ticket', 'ticket_id', $id); }
+	public function setIssue_id ($id)     { parent::setForeignKeyField( __namespace__.'\Issue',  'issue_id',  $id); }
+	public function setTicket(Ticket $o)  { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o); }
+	public function setIssue (Issue  $o)  { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o); }
 
 	/**
 	 * @param array $post
@@ -150,70 +159,88 @@ abstract class History extends ActiveRecord
 	/**
 	 * Returns the parsed description
 	 *
-	 * This is where the placeholders are defined
-	 * Add any placeholders and their values to the array being
-	 * passed to $this->parseDescription()
-	 *
+	 * @param Person $person The person to whom the description will be displayed
 	 * @return string
 	 */
-	public function getDescription()
+	public function getDescription(Person $person=null)
 	{
-		$ep = $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '';
-		$ap = $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '';
-
 		$a = $this->getAction();
 		if ($a) {
-			return $this->parseDescription(
+			return $this->renderVariables(
 				$this->getAction()->getDescription(),
-				array(
-					'enteredByPerson'=> $ep,
-					'actionPerson'   => $ap
-				)
+				$person
 			);
 		}
 	}
 
 	/**
-	 * Substitutes actual data for the placeholders in the description
+	 * Substitutes actual data for placeholders in the message
 	 *
-	 * Specify the placeholders as an associative array
-	 * $placeholders = array('enteredByPerson'=>'Joe Smith',
-	 *						'actionPerson'=>'Mary Sue')
+	 * Variables are embedded in the message using curly braces.
+	 * Example: This message has a {variable} in it
 	 *
-	 * @param string $description
-	 * @param array $placeholders
+	 * Some of the possible variables are for peoples' names.
+	 * We to be careful and only give out peoples' names to authorized users
+	 * Make sure to call this function by sending in the user to
+	 * whom you're displaying the information.
+	 *
+	 * @param string $message
+	 * @param Person $person   The person to whom the message will be displayed
 	 * @return string
 	 */
-	public function parseDescription($description, $placeholders)
+	public function renderVariables($message, Person $person=null)
 	{
+        global $ZEND_ACL;
+
+        $userCanViewPeople = $person
+            ? $ZEND_ACL->isAllowed($person->getRole(), 'people', 'view')
+            : Person::isAllowed('people', 'view');
+
+        $placeholders = [
+            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
+            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : ''
+        ];
+
 		foreach ($placeholders as $key=>$value) {
-			$description = preg_replace("/\{$key\}/", $value, $description);
+            if (false !== strpos($key, 'Person') && !$userCanViewPeople) {
+                $value = $this->_('labels.someone');
+            }
+			$message = preg_replace("/\{$key\}/", $value, $message);
 		}
-		return $description;
+		return $message;
 	}
 
 	/**
-	 * Send a notification of this action to the actionPerson
-	 *
-	 * Does not send if the enteredByPerson and actionPerson are the same person
-	 * @param Ticket $ticket
+	 * Send a notification to all people involved with the ticket
 	 */
-	public function sendNotification(Ticket $ticket=null)
+	public function sendNotifications()
 	{
-		$enteredByPerson = $this->getEnteredByPerson();
-		$actionPerson    = $this->getActionPerson();
+        $ticket   = $this->getTicket();
+        $category = $ticket->getCategory();
+        $url      = $ticket->getUrl();
+        $action   = $this->getAction();
 
-		$url = $ticket ? $ticket->getURL() : '';
+        $template = $category->responseTemplateForAction($action);
+        $notes    = $this->getNotes();
+        if ($template || $notes) {
+            foreach ($ticket->getNotificationEmails() as $email) {
+                $emailTo     = $email->getPerson();
+                $description = $this->getDescription($emailTo);
+                if ($template) {
+                    $response   = $this->renderVariables($template->getTemplate(), $emailTo);
+                    $emailReply = $template->getReplyEmail();
+                }
+                else {
+                    $response   = '';
+                    $emailReply = $category->getNotificationReplyEmail();
+                }
 
-		if ($actionPerson
-			&& (!$enteredByPerson
-				|| $enteredByPerson->getId() != $actionPerson->getId())) {
-
-			$actionPerson->sendNotification(
-				"$url\n\n{$this->getDescription()}\n\n{$this->getNotes()}",
-				APPLICATION_NAME.' '.$this->getAction(),
-				$ticket->getCategory()->getNotificationReplyEmail()
-			);
-		}
+                $emailTo->sendNotification(
+                    "$url\n\n$description\n\n$response\n\n$notes",
+                    APPLICATION_NAME.' '.$action,
+                    $emailReply
+                );
+            }
+        }
 	}
 }
