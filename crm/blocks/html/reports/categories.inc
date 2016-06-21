@@ -10,16 +10,24 @@
  * count(*) as count,
  * avg(time) as seconds
  */
+use Blossom\Classes\Url;
+
 include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
 $h = $this->template->getHelper('formatDuration');
 ?>
 <div class="searchResultsRows">
 	<h2>Categories Report</h2>
 	<?php
-		foreach ($this->data as $cid=>$c) {
+        $current_url = new Url(Url::current_url());
+        $search_url  = new Url(BASE_URL.'/tickets');
+        $search_url->parameters = $current_url->parameters;
+        unset($search_url->categories);
+
+		foreach ($this->data as $category_id => $c) {
 			$category = self::escape($c['name']);
-			$open = 0;
+			$open   = 0;
 			$closed = 0;
+			$search_url->category_id = $category_id;
 			echo "
 			<div><h3>$category</h3>
 				<table>
@@ -33,7 +41,7 @@ $h = $this->template->getHelper('formatDuration');
 					</thead>
 					<tbody>
 			";
-				foreach ($c['people'] as $pid=>$p) {
+				foreach ($c['people'] as $assignedPerson_id => $p) {
 					$counts = ['open'=>0, 'closed'=>0, 'substatus'=>[]];
 					foreach ($p['data'] as $r) {
 						if ($r['substatus']) {
@@ -44,27 +52,30 @@ $h = $this->template->getHelper('formatDuration');
 							${$r['status']} += $r['count'];
 						}
 					}
-					$substatus = count($counts['substatus'])
+					$substatus =  count($counts['substatus'])
 						? implode(', ', $counts['substatus'])
 						: '';
 					$person = self::escape($p['name']);
 					$total = $counts['open'] + $counts['closed'];
+
+					$search_url->assignedPerson_id = $assignedPerson_id;
 					echo "
 					<tr><th>$person</th>
-						<td>$counts[open]</td>
-						<td>$counts[closed]</td>
+						<td><a href=\"$search_url;status=open\">$counts[open]</a></td>
+						<td><a href=\"$search_url;status=closed\">$counts[closed]</a></td>
 						<td>$substatus</td>
-						<td>$total</td>
+						<td><a href=\"$search_url\">$total</a></td>
 					</tr>
 					";
 				}
 			$total = $open + $closed;
+			unset($search_url->assignedPerson_id);
 			echo "
 					<tr class=\"totals\"><td></td>
-						<td>$open</td>
-						<td>$closed</td>
+						<td><a href=\"$search_url;status=open\">$open</a></td>
+						<td><a href=\"$search_url;status=closed\">$closed</a></td>
 						<td></td>
-						<td>$total</td>
+						<td><a href=\"$search_url\">$total</a></td>
 					</tr>
 					</tbody>
 				</table>
