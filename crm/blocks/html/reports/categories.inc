@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->data
  *
  * select c.id as category_id, c.name as category,
@@ -11,8 +10,6 @@
  * count(*) as count,
  * avg(time) as seconds
  */
-use Blossom\Classes\View;
-
 include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
 $h = $this->template->getHelper('formatDuration');
 ?>
@@ -20,7 +17,7 @@ $h = $this->template->getHelper('formatDuration');
 	<h2>Categories Report</h2>
 	<?php
 		foreach ($this->data as $cid=>$c) {
-			$category = View::escape($c['name']);
+			$category = self::escape($c['name']);
 			$open = 0;
 			$closed = 0;
 			echo "
@@ -37,20 +34,20 @@ $h = $this->template->getHelper('formatDuration');
 					<tbody>
 			";
 				foreach ($c['people'] as $pid=>$p) {
-					$counts = array('open'=>0, 'closed'=>0, 'substatus'=>array());
+					$counts = ['open'=>0, 'closed'=>0, 'substatus'=>[]];
 					foreach ($p['data'] as $r) {
 						if ($r['substatus']) {
 							$counts['substatus'][] = "$r[substatus]: $r[count]";
 						}
 						$counts[$r['status']] += $r['count'];
-						if (in_array($r['status'], array('open','closed'))) {
-							$$r['status'] += $r['count'];
+						if (in_array($r['status'], ['open','closed'])) {
+							${$r['status']} += $r['count'];
 						}
 					}
-					$substatus = $counts['substatus']
+					$substatus = count($counts['substatus'])
 						? implode(', ', $counts['substatus'])
 						: '';
-					$person = View::escape($p['name']);
+					$person = self::escape($p['name']);
 					$total = $counts['open'] + $counts['closed'];
 					echo "
 					<tr><th>$person</th>
