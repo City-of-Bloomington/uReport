@@ -388,12 +388,12 @@ class Report
 	 */
 	public static function closedTicketsSlaPercentage($date, $get)
 	{
-		$sql = "select round(floor(avg(datediff(t.closedDate,t.enteredDate))) / slaDays * 100) as slaPercentage
-				from tickets t
-				join categories c on t.category_id=c.id
-				left join people p on t.assignedPerson_id=p.id
-				where slaDays is not null
-				  and ?<=closedDate and closedDate<=adddate(?, interval 1 day)";
+		$sql = "select  round(avg(((datediff(t.closedDate, t.enteredDate) / c.slaDays) * 100))) as slaPercentage
+                from  tickets    t
+                join  categories c on t.category_id=c.id
+                left join people p on t.assignedPerson_id=p.id
+                where slaDays is not null
+                  and ?<=closedDate and closedDate<=adddate(?, interval 1 day)";
 		if (!empty($get['categories'])) {
 			$ids = self::implodeIds($get['categories']);
 			$sql.= " and t.category_id in ($ids)";
