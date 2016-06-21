@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
@@ -369,7 +368,7 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return IssueList
+	 * @return array  An array of Issues
 	 */
 	public function getIssues()
 	{
@@ -479,6 +478,11 @@ class Ticket extends ActiveRecord
 			$search->delete($ticket);
 			$search->add($this);
 			$search->solrClient->commit();
+
+			$history = new TicketHistory();
+			$history->setTicket($this);
+			$history->setAction(new Action(Action::UPDATED));
+			$history->save();
 		}
 	}
 
@@ -678,6 +682,50 @@ class Ticket extends ActiveRecord
 
         $history->save();
         $this->save();
+	}
+
+	/**
+	 * Does all the database work for updating the ticket location
+	 *
+	 * This function calls save() as needed.  After using this function,
+	 * there's no need to make an additional save() call.
+	 *
+	 * @param array $post
+	 */
+	public function handleChangeLocation($post)
+	{
+        $this->clearAddressServiceData();
+        $this->setLocation($post['location']);
+        if (!empty($post['latitude']) && !empty($post['longitude'])) {
+            $this->setLatitude ($post['latitude' ]);
+            $this->setLongitude($post['longitude']);
+        }
+        $this->setAddressServiceData(AddressService::getLocationData($this->getLocation()));
+        $this->save();
+
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction(new Action(Action::UPDATED));
+        $history->save();
+	}
+
+	/**
+	 * Does all the database work for changing the category
+	 *
+	 * This function calls save() as needed.  After using this function,
+	 * there's no need to make an additional save() call.
+	 *
+	 * @param array $post
+	 */
+	public function handleChangeCategory($post)
+	{
+        $this->setCategory_id($post['category_id']);
+        $this->save();
+
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction(new Action(Action::UPDATED));
+        $history->save();
 	}
 
 	/**

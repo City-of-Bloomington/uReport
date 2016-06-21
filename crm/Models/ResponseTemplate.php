@@ -13,6 +13,9 @@ class ResponseTemplate extends ActiveRecord
 {
 	protected $tablename = 'category_action_responses';
 
+	protected $category;
+	protected $action;
+
 	/**
 	 * Populates the object with data
 	 *

@@ -83,7 +83,8 @@ $DIRECTORY_CONFIG = [
 /**
  * Controls whether the system sends email notifications to people
  */
-define('NOTIFICATIONS_ENABLED',true);
+define('NOTIFICATIONS_ENABLED', true);
+define('ADMINISTRATOR_EMAIL', 'someone@localhost');
 
 /**
  * Point to the Solr server

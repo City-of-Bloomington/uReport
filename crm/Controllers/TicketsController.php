@@ -362,16 +362,8 @@ class TicketsController extends Controller
 
 		// Once the user has chosen a location, they'll pass it in here
 		if (!empty($_REQUEST['location'])) {
-			$ticket->clearAddressServiceData();
-			$ticket->setLocation($_REQUEST['location']);
-			if (!empty($_REQUEST['latitude']) && !empty($_REQUEST['longitude'])) {
-                $ticket->setLatitude ($_REQUEST['latitude' ]);
-                $ticket->setLongitude($_REQUEST['longitude']);
-			}
-            $ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
-
 			try {
-				$ticket->save();
+                $ticket->handleChangeLocation($_REQUEST);
 				$this->redirectToTicketView($ticket);
 			}
 			catch (\Exception $e) {
@@ -400,8 +392,7 @@ class TicketsController extends Controller
 
 		if (isset($_REQUEST['category_id'])) {
 			try {
-				$ticket->setCategory_id($_REQUEST['category_id']);
-				$ticket->save();
+                $ticket->handleChangeCategory($_REQUEST);
 				$this->redirectToTicketView($ticket);
 			}
 			catch (\Exception $e) {
