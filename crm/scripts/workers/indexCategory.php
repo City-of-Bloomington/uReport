@@ -2,9 +2,8 @@
 /**
  * Reindex all tickets for the given category_id
  *
- * @copyright 2013-2015 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param int $argv[2] The category_id to reindex tickets for
  * @param int $argv[1] The path to the SITE_HOME directory
  */
@@ -16,7 +15,7 @@ if (isset($argv[2]) && is_numeric($argv[2])) {
 	$_SERVER['SITE_HOME'] = $argv[1];
 	$openFlag = isset($argv[3]) ? $argv[3] : null;
 
-	include_once realpath(__DIR__.'/../../configuration.inc');
+	include_once realpath(__DIR__.'/../../bootstrap.inc');
 
     $filename = SITE_HOME.'/workers/indexCategory_'.uniqid();
     $LOG = fopen($filename, 'a');

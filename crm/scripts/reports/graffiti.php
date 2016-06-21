@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright 2012 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include './configuration.inc';
+include './bootstrap.inc';
 $FILE = fopen('./output.txt', 'w');
 $header = "Ticket ID|Entered Date|Status|Resolution|Location|Close Date|Person|Private Property|Public Property|Business\n";
 fwrite($FILE, $header);

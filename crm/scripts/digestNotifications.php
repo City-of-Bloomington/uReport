@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-include '../configuration.inc';
+include '../bootstrap.inc';
 
 // We want to find all tickets, not just the ones that are public.
 // This can only be done with a logged in user, which we don't have

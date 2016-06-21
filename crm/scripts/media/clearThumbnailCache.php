@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-require_once '../../configuration.inc';
+require_once '../../bootstrap.inc';
 
 $files = glob(APPLICATION_HOME.'/data/media/*/*/*/*/*/');
 foreach ($files as $file) {

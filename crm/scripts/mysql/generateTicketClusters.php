@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Quan Zhang <quanzhang@acm.org>
  */
-include '../../configuration.inc';
+include '../../bootstrap.inc';
 
 $zend_db = Database::getConnection();
 $zend_db->delete('ticket_geodata');
