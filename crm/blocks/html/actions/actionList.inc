@@ -1,50 +1,54 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\ActionTable;
 use Application\Models\Person;
-use Blossom\Classes\View;
+
+$t    = new ActionTable();
+$list = $t->find();
 ?>
-<div class="interfaceBox">
-	<h2><?php
-			if (Person::isAllowed('actions','update')) {
+<section>
+    <header>
+        <h1>
+        <?php
+			if (Person::isAllowed('actions', 'add')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/actions/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
+			echo $this->_(['labels.action', 'labels.actions', count($list)]);
 		?>
-		Actions
-	</h2>
+		</h1>
+    </header>
 	<table>
 		<thead>
 			<tr><th></th>
-				<th><?php echo $this->translate(array('labels.action', 'labels.actions', 1)); ?></th>
-				<th><?php echo $this->translate('labels.description'); ?></th>
-				<th><?php echo $this->translate('labels.type'); ?></th>
+				<th><?= $this->_('labels.action'); ?></th>
+				<th><?= $this->_('labels.description'); ?></th>
+				<th><?= $this->_('labels.type'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
-			$t = new ActionTable();
-			$list = $t->find();
+            $userCanEdit = Person::isAllowed('actions', 'update');
+
 			foreach ($list as $action) {
 				$editButton = '';
-				if (Person::isAllowed('actions','update') && $action->getType()!='system') {
+				if ($userCanEdit && $action->getType()!='system') {
 					$editButton = $helper->buttonLink(
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
-						$this->translate('labels.edit'),
+						$this->_('labels.edit'),
 						'edit'
 					);
 				}
-				$name        = View::escape($action->getName());
-				$description = View::escape($action->getDescription());
-				$type        = View::escape($action->getType());
+				$name        = self::escape($action->getName());
+				$description = self::escape($action->getDescription());
+				$type        = self::escape($action->getType());
 				echo "
 				<tr><td>$editButton</td>
 					<td>$name</td>
@@ -56,4 +60,4 @@ use Blossom\Classes\View;
 		?>
 		</tbody>
 	</table>
-</div>
+</section>
