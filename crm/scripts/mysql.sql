@@ -185,21 +185,6 @@ create table tickets (
 	foreign key (substatus_id)       references substatus  (id)
 );
 
-create table ticketHistory (
-	id                 int       unsigned not null primary key auto_increment,
-	ticket_id          int       unsigned not null,
-	enteredByPerson_id int       unsigned,
-	actionPerson_id    int       unsigned,
-	action_id          int       unsigned,
-	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
-	actionDate         datetime  not null default now(),
-	notes              text,
-	foreign key (ticket_id)          references tickets(id),
-	foreign key (enteredByPerson_id) references people (id),
-	foreign key (actionPerson_id)    references people (id),
-	foreign key (action_id)          references actions(id)
-);
-
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
 	name varchar(128) not null
@@ -243,15 +228,17 @@ create table issue_labels (
 	foreign key (label_id) references labels(id)
 );
 
-create table issueHistory (
-	id                 int       unsigned not null primary key auto_increment,
-	issue_id           int       unsigned not null,
-	enteredByPerson_id int       unsigned,
-	actionPerson_id    int       unsigned,
-	action_id          int       unsigned,
-	enteredDate        timestamp not null default CURRENT_TIMESTAMP,
-	actionDate         datetime  not null default now(),
+create table ticketHistory (
+	id                 int unsigned not null primary key auto_increment,
+	ticket_id          int unsigned not null,
+	issue_id           int unsigned,
+	enteredByPerson_id int unsigned,
+	actionPerson_id    int unsigned,
+	action_id          int unsigned,
+	enteredDate        timestamp    not null default CURRENT_TIMESTAMP,
+	actionDate         datetime     not null default now(),
 	notes              text,
+	foreign key (ticket_id)          references tickets(id),
 	foreign key (issue_id)           references issues (id),
 	foreign key (enteredByPerson_id) references people (id),
 	foreign key (actionPerson_id)    references people (id),

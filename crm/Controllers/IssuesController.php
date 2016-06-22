@@ -8,7 +8,7 @@ namespace Application\Controllers;
 
 use Application\Models\Action;
 use Application\Models\Issue;
-use Application\Models\IssueHistory;
+use Application\Models\TicketHistory;
 use Application\Models\Person;
 use Application\Models\Response;
 use Application\Models\Ticket;
@@ -103,11 +103,9 @@ class IssuesController extends Controller
 			try {
 				$issue->save();
 
-				$action = new Action('update');
-
-				$history = new IssueHistory();
+				$history = new TicketHistory();
 				$history->setIssue($issue);
-				$history->setAction($action);
+				$history->setAction(new Action(Action::UPDATED));
 				$history->save();
 
 				// Update the search index

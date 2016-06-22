@@ -44,3 +44,13 @@ alter table tickets drop foreign key tickets_ibfk_5;
 alter table tickets drop referredPerson_id;
 
 delete from actions where name='referral';
+
+
+alter table ticketHistory add issue_id int unsigned after ticket_id;
+alter table ticketHistory add foreign key (issue_id) references issues(id);
+insert ticketHistory
+    (    ticket_id,   issue_id,   enteredByPerson_id,   actionPerson_id,   action_id,   enteredDate,   actionDate,   notes)
+select x.ticket_id, i.issue_id, i.enteredByPerson_id, i.actionPerson_id, i.action_id, i.enteredDate, i.actionDate, i.notes
+from issueHistory i join issues x on i.issue_id=x.id;
+
+drop table issueHistory;

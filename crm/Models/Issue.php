@@ -122,9 +122,9 @@ class Issue extends ActiveRecord
 			foreach ($this->getMedia() as $m) { $m->delete(); }
 
 			$zend_db = Database::getConnection();
-			$zend_db->query('delete from issue_labels where issue_id=?')->execute([$this->getId()]);
-			$zend_db->query('delete from issueHistory where issue_id=?')->execute([$this->getId()]);
-			$zend_db->query('delete from responses    where issue_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from issue_labels  where issue_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from ticketHistory where issue_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from responses     where issue_id=?')->execute([$this->getId()]);
 			parent::delete();
 		}
 	}
@@ -267,10 +267,10 @@ class Issue extends ActiveRecord
 	{
 		if (!count($this->history)) {
 			$zend_db = Database::getConnection();
-			$sql = 'select * from issueHistory where issue_id=?';
+			$sql = 'select * from ticketHistory where issue_id=?';
 			$r = $zend_db->query($sql)->execute([$this->getId()]);
 			foreach ($r as $row) {
-				$this->history[] = new IssueHistory($row);
+				$this->history[] = new TicketHistory($row);
 			}
 		}
 		return $this->history;

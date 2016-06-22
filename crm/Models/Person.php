@@ -561,7 +561,6 @@ class Person extends ActiveRecord
 			$sql = "select distinct t.id from tickets t
 					left join ticketHistory th on t.id=th.ticket_id
 					left join issues         i on t.id= i.ticket_id
-					left join issueHistory  ih on i.id=ih.issue_id
 					left join media          m on i.id= m.issue_id
 					left join responses      r on i.id= r.issue_id
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id)
@@ -580,8 +579,6 @@ class Person extends ActiveRecord
 				// These are all the database fields that hit the Solr index
 				$zend_db->query('update responses     set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update issueHistory  set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update issueHistory  set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update issues        set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update issues        set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
