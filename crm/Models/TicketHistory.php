@@ -8,8 +8,10 @@ namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
-abstract class History extends ActiveRecord
+class TicketHistory extends ActiveRecord
 {
+    protected $tablename = 'ticketHistory';
+
 	protected $enteredByPerson;
 	protected $actionPerson;
 
@@ -28,7 +30,7 @@ abstract class History extends ActiveRecord
 			}
 			else {
 				$zend_db = Database::getConnection();
-				$sql = "select * from {$this->tablename} where id=?";
+				$sql = "select * from ticketHistory where id=?";
 				$result = $zend_db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
@@ -75,9 +77,14 @@ abstract class History extends ActiveRecord
 			throw new \Exception('history/missingAction');
 		}
 
-		$id_field = $this->tablename == 'ticketHistory' ? 'ticket_id' : 'issue_id';
-		if (!$this->data[$id_field]) {
-			throw new \Exception('missingRequiredFields');
+		if (!$this->getTicket_id()) {
+            if ($this->getIssue_id()) {
+                $issue = $this->getIssue();
+                $this->setTicket_id($issue->getTicket_id());
+            }
+            else {
+                throw new \Exception('missingRequiredFields');
+            }
 		}
 
 		if (!$this->data['enteredDate']) { $this->setEnteredDate('now'); }
@@ -96,10 +103,7 @@ abstract class History extends ActiveRecord
 	public function save()
 	{
         parent::save();
-
-        if ($this->getTIcket_id()) {
-            $this->sendNotifications();
-        }
+        $this->sendNotifications();
     }
 	public function delete() { parent::delete(); }
 
@@ -148,9 +152,8 @@ abstract class History extends ActiveRecord
 		$this->setEnteredByPerson($_SESSION['USER']);
 		$this->setActionPerson   ($_SESSION['USER']);
 
-		$this->tablename == 'ticketHistory'
-			? $this->setTicket_id($post['ticket_id'])
-			: $this->setIssue_id($post['issue_id']);
+		if (!empty($post['ticket_id'])) { $this->setTicket_id($post['ticket_id']); }
+		if (!empty($post['issue_id' ])) { $this->setIssue_id ($post['issue_id' ]); }
 	}
 
 	//----------------------------------------------------------------
