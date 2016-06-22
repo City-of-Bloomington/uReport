@@ -102,8 +102,9 @@ class Action extends ActiveRecord
 	 */
 	public function handleUpdate($post)
 	{
-		$this->setName($post['name']);
+        if ($this->getType() !== 'system') {
+            $this->setName($post['name']);
+        }
 		$this->setDescription($post['description']);
-		$this->setType($post['type']);
 	}
 }

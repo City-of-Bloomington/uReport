@@ -39,7 +39,7 @@ $list = $t->find();
 
 			foreach ($list as $action) {
 				$editButton = '';
-				if ($userCanEdit && $action->getType()!='system') {
+				if ($userCanEdit) {
 					$editButton = $helper->buttonLink(
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
 						$this->_('labels.edit'),

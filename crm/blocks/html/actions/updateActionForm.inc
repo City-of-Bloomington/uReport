@@ -22,7 +22,7 @@ $description = self::escape($this->action->getDescription());
 			<td><?= $this->_('text.actions_actionPerson'); ?></td>
 		</tr>
 	</table>
-	<form method="post" action="<?= BASE_URL; ?>/actions/update">
+	<form method="post" action="<?= BASE_URI; ?>/actions/update">
 		<fieldset><legend><?= $this->_('labels.action'); ?></legend>
 			<input name="action_id" type="hidden" value="<?= $this->action->getId(); ?>" />
 			<table>
@@ -32,7 +32,13 @@ $description = self::escape($this->action->getDescription());
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
-					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
+					<td>
+					<?php
+                        echo $this->action->getType() === 'system'
+                            ? $name
+                            : "<input name=\"name\" id=\"name\" value=\"$name\" />";
+					?>
+					</td>
 				</tr>
 
 				<tr><td><label for="description" class="required">
