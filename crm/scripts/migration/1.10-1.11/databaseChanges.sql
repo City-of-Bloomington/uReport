@@ -54,3 +54,7 @@ select x.ticket_id, i.issue_id, i.enteredByPerson_id, i.actionPerson_id, i.actio
 from issueHistory i join issues x on i.issue_id=x.id;
 
 drop table issueHistory;
+
+alter table ticketHistory add data text;
+insert actions (name,type,description) values('changeCategory', 'system', 'Changed category from {original:category_id} to {updated:category_id}');
+insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');

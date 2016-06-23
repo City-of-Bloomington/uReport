@@ -100,10 +100,12 @@ create table actions (
 	description varchar(128) not null,
 	type        enum('system', 'department') not null default 'department'
 );
-insert actions (name,type,description) values('open',      'system','Opened by {actionPerson}');
-insert actions (name,type,description) values('assignment','system','{enteredByPerson} assigned this case to {actionPerson}');
-insert actions (name,type,description) values('closed',    'system','Closed by {actionPerson}');
-insert actions (name,type,description) values('update',    'system','Updated by {enteredByPerson}');
+insert actions (name,type,description) values('open',           'system', 'Opened by {actionPerson}');
+insert actions (name,type,description) values('assignment',     'system', '{enteredByPerson} assigned this case to {actionPerson}');
+insert actions (name,type,description) values('closed',         'system', 'Closed by {actionPerson}');
+insert actions (name,type,description) values('update',         'system', 'Updated by {enteredByPerson}');
+insert actions (name,type,description) values('changeCategory', 'system', 'Changed category from {original:category_id} to {updated:category_id}');
+insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
@@ -238,6 +240,7 @@ create table ticketHistory (
 	enteredDate        timestamp    not null default CURRENT_TIMESTAMP,
 	actionDate         datetime     not null default now(),
 	notes              text,
+	data               text,
 	foreign key (ticket_id)          references tickets(id),
 	foreign key (issue_id)           references issues (id),
 	foreign key (enteredByPerson_id) references people (id),

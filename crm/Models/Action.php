@@ -14,6 +14,8 @@ class Action extends ActiveRecord
     const CLOSED   = 'closed';
     const ASSIGNED = 'assignment';
     const UPDATED  = 'update';
+    const CHANGED_CATEGORY = 'changeCategory';
+    const CHANGED_LOCATION = 'changeLocation';
 
 	protected $tablename = 'actions';
 	public static $types = ['system', 'department'];

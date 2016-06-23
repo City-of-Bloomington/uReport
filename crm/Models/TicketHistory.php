@@ -7,6 +7,7 @@ namespace Application\Models;
 
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
+use Blossom\Classes\Template;
 
 class TicketHistory extends ActiveRecord
 {
@@ -120,6 +121,7 @@ class TicketHistory extends ActiveRecord
 	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id'); }
 	public function getActionPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'actionPerson_id');    }
 	public function getAction()          { return parent::getForeignKeyObject(__namespace__.'\Action', 'action_id');          }
+	public function getData() { return json_decode(parent::get('data'), true); }
 
 	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
@@ -130,6 +132,7 @@ class TicketHistory extends ActiveRecord
 	public function setEnteredByPerson(Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id', $p);  }
 	public function setActionPerson   (Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'actionPerson_id',    $p);  }
 	public function setAction         (Action $o) { parent::setForeignKeyObject(__namespace__.'\Action', 'action_id',          $o);  }
+	public function setData(array $data=null) { parent::set('data', json_encode($data)); }
 
 	// History is either for a Ticket or an Issue
 	public function getTicket_id() { return parent::get('ticket_id');          }
@@ -162,15 +165,17 @@ class TicketHistory extends ActiveRecord
 	/**
 	 * Returns the parsed description
 	 *
-	 * @param Person $person The person to whom the description will be displayed
+	 * @param Template $template  The template being used for output formatting
+	 * @param Person   $person    The person to whom the message will be displayed
 	 * @return string
 	 */
-	public function getDescription(Person $person=null)
+	public function getDescription(Template $template, Person $person=null)
 	{
 		$a = $this->getAction();
 		if ($a) {
 			return $this->renderVariables(
 				$this->getAction()->getDescription(),
+				$template,
 				$person
 			);
 		}
@@ -187,11 +192,12 @@ class TicketHistory extends ActiveRecord
 	 * Make sure to call this function by sending in the user to
 	 * whom you're displaying the information.
 	 *
-	 * @param string $message
-	 * @param Person $person   The person to whom the message will be displayed
+	 * @param string   $message
+	 * @param Template $template  The template being used for output formatting
+	 * @param Person   $person    The person to whom the message will be displayed
 	 * @return string
 	 */
-	public function renderVariables($message, Person $person=null)
+	public function renderVariables($message, Template $template, Person $person=null)
 	{
         global $ZEND_ACL;
 
@@ -200,14 +206,27 @@ class TicketHistory extends ActiveRecord
             : Person::isAllowed('people', 'view');
 
         $placeholders = [
-            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
-            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : ''
+            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $userCanViewPeople ? $this->getEnteredByPerson()->getFullname() : $template->_('labels.someone') : '',
+            'actionPerson'   => $this->getActionPerson_id()    ? $userCanViewPeople ? $this->getActionPerson()   ->getFullname() : $template->_('labels.someone') : '',
+            'ticket_id'      => $this->getTicket_id(),
+            'issue_id'       => $this->getIssue_id(),
         ];
+        $data = $this->getData();
+        if ($data) {
+            foreach (['original', 'updated'] as $type) {
+                if (!empty(  $data[$type])) {
+                    foreach ($data[$type] as $key => $value) {
+                        // Convert any _id values
+                        if (false !== strpos($key, '_id')) {
+                            $value = Search::getDisplayName($key, $value);
+                        }
+                        $placeholders["$type:$key"] = $value;
+                    }
+                }
+            }
+        }
 
 		foreach ($placeholders as $key=>$value) {
-            if (false !== strpos($key, 'Person') && !$userCanViewPeople) {
-                $value = $this->_('labels.someone');
-            }
 			$message = preg_replace("/\{$key\}/", $value, $message);
 		}
 		return $message;
@@ -223,21 +242,23 @@ class TicketHistory extends ActiveRecord
         $url      = $ticket->getUrl();
         $action   = $this->getAction();
 
-        $template = $category->responseTemplateForAction($action);
+        $message  = $category->responseTemplateForAction($action);
         $notes    = $this->getNotes();
-        if ($template || $notes) {
+        if ($message || $notes) {
+            $template = new Template('email', 'txt');
+
             foreach ($ticket->getNotificationEmails() as $email) {
-                $emailTo     = $email->getPerson();
-                $description = $this->getDescription($emailTo);
-                if ($template) {
-                    $response   = $this->renderVariables($template->getTemplate(), $emailTo);
-                    $emailReply = $template->getReplyEmail();
+                $emailTo = $email->getPerson();
+                if ($message) {
+                    $response   = $this->renderVariables($message->getTemplate(), $template, $emailTo);
+                    $emailReply = $message->getReplyEmail();
                 }
                 else {
                     $response   = '';
                     $emailReply = $category->getNotificationReplyEmail();
                 }
 
+                $description = $this->getDescription($template, $emailTo);
                 $emailTo->sendNotification(
                     "$url\n\n$description\n\n$response\n\n$notes",
                     APPLICATION_NAME.' '.$action,

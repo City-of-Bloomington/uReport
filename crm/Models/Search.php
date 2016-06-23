@@ -339,14 +339,14 @@ class Search
 				if ($record->$get()) {
 					$document->addField($f, $record->$get());
 					if (substr($f, -3) == '_id') {
-						$document->addField(substr($f, 0, -3), $this->sortableString($record, $f));
+						$document->addField(substr($f, 0, -3), self::sortableString($record, $f));
 					}
 				}
 			}
 			$person = $record->getAssignedPerson();
 			if ($person && $person->getDepartment_id()) {
 				$document->addField('department_id', $person->getDepartment_id());
-				$document->addField('department', $this->sortableString($person, 'department_id'));
+				$document->addField('department', self::sortableString($person, 'department_id'));
 			}
 
 			// Issue information indexing
@@ -357,7 +357,7 @@ class Search
 					$get = 'get'.ucfirst($f);
 					if ($issue->$get()) {
 						$document->addField($f, $issue->$get());
-						$document->addField(substr($f, 0, -3), $this->sortableString($issue, $f));
+						$document->addField(substr($f, 0, -3), self::sortableString($issue, $f));
 					}
 				}
 				foreach ($issue->getLabels() as $id=>$label) {
@@ -404,7 +404,7 @@ class Search
 	 * @param string $field
 	 * @return string
 	 */
-	private function sortableString($record, $field)
+	public static function sortableString($record, $field)
 	{
 		$n = substr($field, 0, -3);
 		$get = 'get'.ucfirst($n);
@@ -422,16 +422,15 @@ class Search
 	 *
 	 * For each of the self::$searchableFields we need a way to look up the CRM
 	 * object corresponding to the value in the search index.
-	 * Example: self::getDisplayName('ticket', 'department_id', 32);
+	 * Example: self::getDisplayName('department_id', 32);
 	 *
 	 * Returns null if the value is an invalid ID
 	 *
-	 * @param string $recordType
 	 * @param string $fieldname
 	 * @param string $value
 	 * @return string
 	 */
-	public static function getDisplayName($recordType, $fieldname, $value)
+	public static function getDisplayName($fieldname, $value)
 	{
 		if (isset(self::$searchableFields[$fieldname])) {
 			if (false !== strpos($fieldname, 'Date')) {

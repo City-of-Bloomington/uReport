@@ -61,7 +61,7 @@ if (!empty($_GET['query'])
                         if (isset($deleteURL->$key)) { unset($deleteURL->$key); }
 
                         $displayName  = Search::$searchableFields[$key];
-                        $displayValue = Search::getDisplayName('ticket', $key, $value);
+                        $displayValue = Search::getDisplayName($key, $value);
                         if ($displayValue) {
                             echo $helper->buttonLink($deleteURL, "$displayName: $displayValue", 'delete');
                         }

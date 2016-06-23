@@ -93,7 +93,7 @@ if (Person::isAllowed('tickets','add')) {
 								$url = clone $currentURL;
 								$url->$key = $value;
 								try {
-									$displayValue = Search::getDisplayName('ticket', $key, $value);
+									$displayValue = Search::getDisplayName($key, $value);
 									$list.= "<li><a href=\"$url\">$displayValue</a> ($count)</li>";
 								}
 								catch (Exception $e) {

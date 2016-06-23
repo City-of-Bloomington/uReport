@@ -694,6 +694,8 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleChangeLocation($post)
 	{
+        $data['original']['location'] = $this->getLocation();
+
         $this->clearAddressServiceData();
         $this->setLocation($post['location']);
         if (!empty($post['latitude']) && !empty($post['longitude'])) {
@@ -703,9 +705,12 @@ class Ticket extends ActiveRecord
         $this->setAddressServiceData(AddressService::getLocationData($this->getLocation()));
         $this->save();
 
+        $data['updated']['location'] = $this->getLocation();
+
         $history = new TicketHistory();
         $history->setTicket($this);
-        $history->setAction(new Action(Action::UPDATED));
+        $history->setAction(new Action(Action::CHANGED_LOCATION));
+        $history->setData($data);
         $history->save();
 	}
 
@@ -719,12 +724,17 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleChangeCategory($post)
 	{
+        $data['original']['category_id'] = $this->getCategory_id();
+
         $this->setCategory_id($post['category_id']);
         $this->save();
 
+        $data['updated']['category_id'] = $this->getCategory_id();
+
         $history = new TicketHistory();
         $history->setTicket($this);
-        $history->setAction(new Action(Action::UPDATED));
+        $history->setAction(new Action(Action::CHANGED_CATEGORY));
+        $history->setData($data);
         $history->save();
 	}
 
