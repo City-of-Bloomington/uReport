@@ -14,14 +14,14 @@ if (Person::isAllowed('departments','update')) {
 	$helper = $this->template->getHelper('buttonLink');
 	$editButton = $helper->buttonLink(
 		BASE_URI.'/departments/update?department_id='.$this->department->getId(),
-		$this->_('labels.edit'),
+		$this->_('edit'),
 		'edit'
 	);
 	// Make sure this would not violate any foreign keys
 	if ($this->department->isSafeToDelete()) {
 		$deleteButton = $helper->buttonLink(
 			BASE_URI.'/departments/delete?department_id='.$this->department->getId(),
-			$this->_('labels.delete'),
+			$this->_('delete'),
 			'delete'
 		);
 	}
@@ -53,11 +53,11 @@ echo "
 		$editButton $deleteButton
 	</h3>
 	<table>
-		<tr><th>{$this->_('labels.defaultPerson')}</th>
+		<tr><th>{$this->_('defaultPerson')}</th>
 			<td>$defaultPerson</td></tr>
-		<tr><th>{$this->_(array('labels.category', 'labels.categories', 2))}</th>
+		<tr><th>{$this->_(array('category', 'categories', 2))}</th>
 			<td>$categories</td></tr>
-		<tr><th>{$this->_(array('labels.action', 'labels.actions', 2))}</th>
+		<tr><th>{$this->_(array('action', 'actions', 2))}</th>
 			<td>$actions</td></tr>
 	</table>
 </div>

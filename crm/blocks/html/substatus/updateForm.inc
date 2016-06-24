@@ -13,11 +13,11 @@ $description = self::escape($this->substatus->getDescription());
 ?>
 <h1><?= $title; ?></h1>
 <form method="post" action="<?= BASE_URL; ?>/substatus/update">
-	<fieldset><legend><?= $this->_(array('labels.substatus', 'labels.substatuses', 1)); ?></legend>
+	<fieldset><legend><?= $this->_(array('substatus', 'substatuses', 1)); ?></legend>
 		<input name="substatus_id" type="hidden" value="<?= "{$this->substatus->getId()}"; ?>" />
 		<table>
 			<tr><td><label for="name" class="required">
-						<?= $this->_(array('labels.substatus', 'labels.substatuses', 1)); ?>
+						<?= $this->_(array('substatus', 'substatuses', 1)); ?>
 						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
@@ -34,15 +34,15 @@ $description = self::escape($this->substatus->getDescription());
 				</td>
 			</tr>
 
-			<tr><td><label for="name" class="required"><?= $this->_('labels.name'); ?> <span class="fa fa-asterisk"></span></label></td>
+			<tr><td><label for="name" class="required"><?= $this->_('name'); ?> <span class="fa fa-asterisk"></span></label></td>
 				<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="description" class="required"><?= $this->_('labels.description'); ?></label></td>
+			<tr><td><label for="description" class="required"><?= $this->_('description'); ?></label></td>
 				<td><input name="description" id="description" value="<?= $description; ?>" /></td>
 			</tr>
 
-			<tr><td><label for="default"><?= $this->_('labels.default'); ?></label></td>
+			<tr><td><label for="default"><?= $this->_('default'); ?></label></td>
 				<td><input name="default" id="default" type="checkbox"
 						<?= $this->substatus->isDefault() ? 'checked="checked"' : ''; ?> />
 				</td>

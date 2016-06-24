@@ -15,14 +15,14 @@ use Blossom\Classes\Url;
 use Blossom\Classes\View;
 ?>
 <div class="ticketList">
-	<h2><?= $this->title ? self::escape($this->title) : $this->_(array('labels.ticket', 'labels.tickets', 2)); ?></h2>
+	<h2><?= $this->title ? self::escape($this->title) : $this->_(array('ticket', 'tickets', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th><?= $this->_(array('labels.status', 'labels.statuses', 2)); ?></th>
-				<th><?= $this->_('labels.enteredDate'); ?></th>
-				<th><?= $this->_('labels.sla'); ?></th>
-				<th><?= $this->_(array('labels.category', 'labels.categories', 2)); ?></th>
-				<th><?= $this->_(array('labels.location', 'labels.locations', 2)); ?></th>
+			<tr><th><?= $this->_(array('status', 'statuses', 2)); ?></th>
+				<th><?= $this->_('enteredDate'); ?></th>
+				<th><?= $this->_('sla'); ?></th>
+				<th><?= $this->_(array('category', 'categories', 2)); ?></th>
+				<th><?= $this->_(array('location', 'locations', 2)); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -81,7 +81,7 @@ use Blossom\Classes\View;
 						$helper = $this->template->getHelper('buttonLink');
 						echo $helper->buttonLink(
 							$url,
-							$this->_('labels.add_issue'),
+							$this->_('add_issue'),
 							'add'
 						);
 					}
@@ -98,7 +98,7 @@ use Blossom\Classes\View;
 			echo "
 			<div>
 				<a href=\"{$this->moreLink}\">
-					{$this->_('labels.more')} <span class=\"fa fa-angle-double-right\"></span>
+					{$this->_('more')} <span class=\"fa fa-angle-double-right\"></span>
 				</a>
 			</div>
 			";

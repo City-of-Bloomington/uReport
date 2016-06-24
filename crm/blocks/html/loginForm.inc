@@ -1,16 +1,16 @@
 <div class="loginForm.inc">
 	<form method="post" action="<?= BASE_URL; ?>/login/login">
-		<fieldset><legend><?= $this->_('labels.login'); ?></legend>
+		<fieldset><legend><?= $this->_('login'); ?></legend>
 			<input name="return_url" type="hidden" value="<?= $this->return_url ?>" />
 			<table>
-				<tr><th><label for="username"><?= $this->_('labels.username'); ?>:</label></th>
+				<tr><th><label for="username"><?= $this->_('username'); ?>:</label></th>
 					<td><input name="username" id="username" /></td>
 				</tr>
-				<tr><th><label for="password"><?= $this->_('labels.password'); ?>:</label></th>
+				<tr><th><label for="password"><?= $this->_('password'); ?>:</label></th>
 					<td><input type="password" name="password" id="password" /></td>
 				</tr>
 			</table>
-			<button type="submit" class="login"><?= $this->_('labels.login'); ?></button>
+			<button type="submit" class="login"><?= $this->_('login'); ?></button>
 		</fieldset>
 	</form>
 	<script type="text/javascript">

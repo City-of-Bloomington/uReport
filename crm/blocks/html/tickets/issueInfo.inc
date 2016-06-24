@@ -39,10 +39,10 @@ use Application\Models\Person;
     $contactMethod  = self::escape($this->issue->getContactMethod());
     $responseMethod = self::escape($this->issue->getResponseMethod());
     echo "<ul class=\"twoColumnlist\">";
-    if ($enteredBy)      { echo "<li><label>{$this->_('labels.enteredByPerson' )}:</label> $enteredBy     </li>"; }
-    if ($reportedBy)     { echo "<li><label>{$this->_('labels.reportedByPerson')}:</label> $reportedBy    </li>"; }
-    if ($contactMethod)  { echo "<li><label>{$this->_('labels.contactMethod'   )}:</label> $contactMethod </li>"; }
-    if ($responseMethod) { echo "<li><label>{$this->_('labels.responseMethod'  )}:</label> $responseMethod</li>"; }
+    if ($enteredBy)      { echo "<li><label>{$this->_('enteredByPerson' )}:</label> $enteredBy     </li>"; }
+    if ($reportedBy)     { echo "<li><label>{$this->_('reportedByPerson')}:</label> $reportedBy    </li>"; }
+    if ($contactMethod)  { echo "<li><label>{$this->_('contactMethod'   )}:</label> $contactMethod </li>"; }
+    if ($responseMethod) { echo "<li><label>{$this->_('responseMethod'  )}:</label> $responseMethod</li>"; }
 
     $t = $this->issue->getTicket();
     $customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;

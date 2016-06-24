@@ -8,9 +8,9 @@
 use Application\Models\Phone;
 use Blossom\Classes\View;
 ?>
-<fieldset><legend><?= $this->_(array('labels.phone', 'labels.phones', 1)); ?></legend>
+<fieldset><legend><?= $this->_(array('phone', 'phones', 1)); ?></legend>
 	<label>
-		<?= $this->_(array('labels.label', 'labels.label', 1)); ?>
+		<?= $this->_(array('label', 'label', 1)); ?>
 		<select name="label" id="label">
 		<?php
 			foreach (Phone::$LABELS as $label) {

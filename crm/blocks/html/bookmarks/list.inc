@@ -10,7 +10,7 @@ use Application\Templates\Helpers\ButtonLink;
 
 $title = !empty($this->title)
 	? self::escape($this->title)
-	: $this->_(array('labels.bookmark', 'labels.bookmarks', 2));
+	: $this->_(array('bookmark', 'bookmarks', 2));
 if (count($this->bookmarks)) {
 	echo "
 	<div class=\"bookmarkList\">
@@ -23,7 +23,7 @@ if (count($this->bookmarks)) {
 			$h = $this->template->getHelper('buttonLink');
 			$button = $h->buttonLink(
 				BASE_URI."/bookmarks/delete?bookmark_id={$bookmark->getId()};return_url=$_SERVER[REQUEST_URI]",
-				$this->_('labels.delete'),
+				$this->_('delete'),
 				'delete',
 				ButtonLink::SIZE_ICON
 			);

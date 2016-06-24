@@ -8,17 +8,17 @@
 use Blossom\Classes\View;
 ?>
 <div class="slaForm">
-	<h2><?= $this->_('labels.service_level_agreement'); ?></h2>
+	<h2><?= $this->_('service_level_agreement'); ?></h2>
 	<p><?= $this->_('text.service_level_agreement_description'); ?></p>
 
 	<form method="post" action="<?= BASE_URI; ?>/categories/sla">
-		<fieldset><legend><?= $this->_(array('labels.category','labels.categories', 2)); ?></legend>
+		<fieldset><legend><?= $this->_(array('category','categories', 2)); ?></legend>
 			<table>
 				<thead>
-					<tr><th><?= $this->_(array('labels.category', 'labels.categories', 1)); ?></th>
-						<th><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></th>
-						<th><?= $this->_('labels.sla'); ?>
-							<?= $this->_(array('labels.day', 'labels.days', 2)); ?>
+					<tr><th><?= $this->_(array('category', 'categories', 1)); ?></th>
+						<th><?= $this->_(array('department', 'departments', 1)); ?></th>
+						<th><?= $this->_('sla'); ?>
+							<?= $this->_(array('day', 'days', 2)); ?>
 						</th>
 					</tr>
 				</thead>

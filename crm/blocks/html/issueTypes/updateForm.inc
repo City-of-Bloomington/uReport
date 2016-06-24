@@ -9,8 +9,8 @@ use Blossom\Classes\View;
 
 $name = self::escape($this->issueType->getName());
 $title = $this->issueType->getId()
-	? $this->_('labels.edit').' '.$this->_(array('labels.issueType', 'labels.issueTypes', 1))
-	: $this->_('labels.add' ).' '.$this->_(array('labels.issueType', 'labels.issueTypes', 1));
+	? $this->_('edit').' '.$this->_(array('issueType', 'issueTypes', 1))
+	: $this->_('add' ).' '.$this->_(array('issueType', 'issueTypes', 1));
 ?>
 <div>
 	<h2><?= $title; ?></h2>
@@ -19,7 +19,7 @@ $title = $this->issueType->getId()
 
 		<fieldset>
 			<table>
-				<tr><td><label for="name"><?= $this->_('labels.name'); ?></label></td>
+				<tr><td><label for="name"><?= $this->_('name'); ?></label></td>
 					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 				</tr>
 			</table>

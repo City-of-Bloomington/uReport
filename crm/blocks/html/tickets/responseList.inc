@@ -14,22 +14,22 @@ if (Person::isAllowed('issues','update')
 	$h = $this->template->getHelper('buttonLink');
 	$responseButton = $h->buttonLink(
 		BASE_URL.'/issues/respond?issue_id='.$this->issue->getId(),
-		$this->_('labels.add_response'),
+		$this->_('add_response'),
 		'add'
 	);
 }
 ?>
 <div class="responseList">
 	<h2><?php
-			echo $this->_(array('labels.response', 'labels.responses', 2)).' '.$responseButton;
+			echo $this->_(array('response', 'responses', 2)).' '.$responseButton;
 		?>
 	</h2>
 	<table>
 		<thead>
-			<tr><th><?= $this->_('labels.date'); ?></th>
-				<th><?= $this->_(array('labels.person', 'labels.people', 1)); ?></th>
-				<th><?= $this->_(array('labels.contactMethod', 'labels.contactMethods', 1)); ?></th>
-				<th><?= $this->_(array('labels.comment', 'labels.comments', 2)); ?></th>
+			<tr><th><?= $this->_('date'); ?></th>
+				<th><?= $this->_(array('person', 'people', 1)); ?></th>
+				<th><?= $this->_(array('contactMethod', 'contactMethods', 1)); ?></th>
+				<th><?= $this->_(array('comment', 'comments', 2)); ?></th>
 			</tr>
 		</thead>
 		<tbody>

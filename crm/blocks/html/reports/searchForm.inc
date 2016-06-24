@@ -96,7 +96,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                 </div>
 			</div>
             <div class="collapsible">
-                <h3 class="hd"><?= $this->_(['labels.client', 'labels.clients', 2]); ?></h3>
+                <h3 class="hd"><?= $this->_(['client', 'clients', 2]); ?></h3>
                 <div class="bd">
                 <?php
                     $table = new ClientTable();
@@ -123,7 +123,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 			?>
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?= $this->template->translate('labels.submit'); ?>
+				<?= $this->template->translate('submit'); ?>
 			</button>
 		</fieldset>
 	</form>

@@ -9,7 +9,7 @@ use Application\Models\Person;
 ?>
 <section class="history">
     <header>
-        <h1><?= $this->_('labels.history'); ?></h1>
+        <h1><?= $this->_('history'); ?></h1>
     </header>
 	<?php
 		foreach ($this->history as $event) {

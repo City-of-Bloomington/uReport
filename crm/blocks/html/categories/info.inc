@@ -17,8 +17,8 @@ foreach ($fields as $f) {
 }
 
 $autoCloseActive = $this->category->autoCloseIsActive()
-    ? $this->_('labels.active_yes')
-    : $this->_('labels.active_no');
+    ? $this->_('active_yes')
+    : $this->_('active_no');
 
 
 $editButton = '';
@@ -26,7 +26,7 @@ if (Person::isAllowed('categories', 'update')) {
     $helper = $this->template->getHelper('buttonLink');
     $editButton = $helper->buttonLink(
         BASE_URI."/categories/update?category_id=$id",
-        $this->_('labels.edit'),
+        $this->_('edit'),
         'edit'
     );
 }
@@ -38,22 +38,22 @@ echo "
     </header>
 	<p>$description</p>
 	<table>
-		<tr><th>{$this->_('labels.categoryGroup')}</th>
+		<tr><th>{$this->_('categoryGroup')}</th>
 			<td>$categoryGroup</td>
 		</tr>
-		<tr><th>{$this->_('labels.department')}</th>
+		<tr><th>{$this->_('department')}</th>
 			<td>$department</td>
 		</tr>
-		<tr><th>{$this->_('labels.displayPermissionLevel')}</th>
+		<tr><th>{$this->_('displayPermissionLevel')}</th>
 			<td>$displayPermissionLevel</td>
 		</tr>
-		<tr><th>{$this->_('labels.postingPermissionLevel')}</th>
+		<tr><th>{$this->_('postingPermissionLevel')}</th>
 			<td>$postingPermissionLevel</td>
 		</tr>
-        <tr><th>{$this->_('labels.replyEmail')}</th>
+        <tr><th>{$this->_('replyEmail')}</th>
             <td>$notificationReplyEmail</td>
         </tr>
-        <tr><th>{$this->_('labels.autoCloseIsActive')}</th>
+        <tr><th>{$this->_('autoCloseIsActive')}</th>
             <td>$autoCloseActive</td>
         </tr>
 	</table>
@@ -62,7 +62,7 @@ echo "
 
 echo "
 	<form method=\"get\">
-		<fieldset><legend>{$this->_('labels.custom_fields')}</legend>
+		<fieldset><legend>{$this->_('custom_fields')}</legend>
 ";
 			$this->issue = new Issue();
 			$this->_include('tickets/issueCustomFields.inc');

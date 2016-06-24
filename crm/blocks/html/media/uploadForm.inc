@@ -8,18 +8,18 @@
 ?>
 <div class="uploadForm">
 	<form method="post" action="<?= BASE_URL; ?>/media/upload" enctype="multipart/form-data">
-		<fieldset><legend><?= $this->_('labels.upload_media'); ?></legend>
+		<fieldset><legend><?= $this->_('upload_media'); ?></legend>
 			<input name="issue_id"   type="hidden" value="<?= $this->issue->getId(); ?>" />
 			<input name="attachment" type="file" />
 			<button type="submit">
 				<span class="fa fa-upload"></span>
-				<?= $this->_('labels.upload'); ?>
+				<?= $this->_('upload'); ?>
 			</button>
 			<?php
 				$h = $this->template->getHelper('buttonLink');
 				echo $h->buttonLink(
 					$this->issue->getTicket()->getURL(),
-					$this->_('labels.cancel'),
+					$this->_('cancel'),
 					'cancel'
 				);
 			?>

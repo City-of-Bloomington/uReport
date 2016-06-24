@@ -8,8 +8,8 @@
 use Blossom\Classes\View;
 
 $title = $this->categoryGroup->getId()
-	? $this->_('labels.edit').' '.$this->_(array('labels.categoryGroup','labels.categoryGroups',1))
-	: $this->_('labels.add' ).' '.$this->_(array('labels.categoryGroup','labels.categoryGroups',1));
+	? $this->_('edit').' '.$this->_(array('categoryGroup','categoryGroups',1))
+	: $this->_('add' ).' '.$this->_(array('categoryGroup','categoryGroups',1));
 $name = self::escape($this->categoryGroup->getName());
 ?>
 <div class="updateCategoryGroupForm">
@@ -18,7 +18,7 @@ $name = self::escape($this->categoryGroup->getName());
 		<fieldset>
 			<input name="categoryGroup_id" type="hidden" value="<?= $this->categoryGroup->getId(); ?>" />
 			<table>
-				<tr><td><label for="name"><?= $this->_('labels.name'); ?></label></td>
+				<tr><td><label for="name"><?= $this->_('name'); ?></label></td>
 					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 				</tr>
 			</table>

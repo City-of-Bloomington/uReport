@@ -29,13 +29,13 @@ class CommonEditDeleteButtons
 		$h = $this->template->getHelper('buttonLink');
 		$buttons = $h->buttonLink(
 			BASE_URI."/{$controller}/update{$class}?{$item}_id={$object->getId()}",
-			$this->template->translate('labels.edit'),
+			$this->template->translate('edit'),
 			'edit',
 			ButtonLink::SIZE_ICON
 		);
 		$buttons.= $h->buttonLink(
 			BASE_URI."/{$controller}/delete{$class}?{$item}_id={$object->getId()}",
-			$this->template->translate('labels.delete'),
+			$this->template->translate('delete'),
 			'delete',
 			ButtonLink::SIZE_ICON
 		);

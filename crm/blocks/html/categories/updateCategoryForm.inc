@@ -9,8 +9,8 @@ use Application\Models\DepartmentTable;
 use Application\Models\SubstatusTable;
 
 $title = $this->category->getId()
-	? $this->_('labels.edit').' '.$this->_(['labels.category','labels.categories',1])
-	: $this->_('labels.add' ).' '.$this->_(['labels.category','labels.categories',1]);
+	? $this->_('edit').' '.$this->_(['category','categories',1])
+	: $this->_('add' ).' '.$this->_(['category','categories',1]);
 
 $fields = [
 	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
@@ -23,17 +23,17 @@ foreach ($fields as $field) {
 ?>
 <h2><?= $title; ?></h2>
 <form method="post" action="<?= BASE_URI; ?>/categories/update">
-	<fieldset><legend><?= $this->_(['labels.category','labels.categories',1]); ?></legend>
+	<fieldset><legend><?= $this->_(['category','categories',1]); ?></legend>
 		<input name="category_id" type="hidden" value="<?= $this->category->getId(); ?>" />
 		<table>
 			<tr><td><label for="name" class="required">
-						<?= $this->_('labels.name'); ?>
+						<?= $this->_('name'); ?>
 						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
 				<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 			</tr>
-			<tr><td><label for="categoryGroup_id"><?= $this->_(['labels.categoryGroup','labels.categoryGroup',1]); ?></label></td>
+			<tr><td><label for="categoryGroup_id"><?= $this->_(['categoryGroup','categoryGroup',1]); ?></label></td>
 				<td><select name="categoryGroup_id" id="categoryGroup_id">
 					<?php
 						$t = new CategoryGroupTable();
@@ -49,7 +49,7 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="description"><?= $this->_('labels.description'); ?></label></td>
+			<tr><td><label for="description"><?= $this->_('description'); ?></label></td>
 				<td><textarea name="description" id="description" rows="3" cols="50"><?= $description; ?></textarea>
 				</td>
 			</tr>
@@ -57,13 +57,13 @@ foreach ($fields as $field) {
 	</fieldset>
 	<fieldset>
 		<legend>
-			<?= $this->_('labels.sla'); ?>
-			(<?= $this->_('labels.service_level_agreement'); ?>)
+			<?= $this->_('sla'); ?>
+			(<?= $this->_('service_level_agreement'); ?>)
 		</legend>
 		<p><?= $this->_('text.service_level_agreement_description'); ?></p>
 		<table>
 			<tr><td><label for="department_id" class="required">
-					<?= $this->_(['labels.department','labels.departments',1]); ?>
+					<?= $this->_(['department','departments',1]); ?>
 					</label>
 				</td>
 				<td><select name="department_id" id="department_id">
@@ -81,16 +81,16 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="slaDays"><?= $this->_(['labels.day','labels.days',2]); ?></label></td>
+			<tr><td><label for="slaDays"><?= $this->_(['day','days',2]); ?></label></td>
 				<td><input name="slaDays" id="slaDays" size="2" maxlength="2"
 						value="<?= $this->category->getSlaDays(); ?>" />
 				</td>
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend><?= $this->_('labels.permissions_required'); ?></legend>
+	<fieldset><legend><?= $this->_('permissions_required'); ?></legend>
 		<table>
-			<tr><td><label for="postingPermissionLevel"><?= $this->_('labels.postingPermissionLevel'); ?></label></td>
+			<tr><td><label for="postingPermissionLevel"><?= $this->_('postingPermissionLevel'); ?></label></td>
 				<td><select name="postingPermissionLevel" id="postingPermissionLevel">
                     <?php
                         global $ZEND_ACL;
@@ -104,7 +104,7 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="displayPermissionLevel"><?= $this->_('labels.displayPermissionLevel'); ?></label></td>
+			<tr><td><label for="displayPermissionLevel"><?= $this->_('displayPermissionLevel'); ?></label></td>
 				<td><select name="displayPermissionLevel" id="displayPermissionLevel">
                     <?php
                         foreach ($ZEND_ACL->getRoles() as $role) {
@@ -121,23 +121,23 @@ foreach ($fields as $field) {
 	</fieldset>
 	<fieldset><legend><?= $this->_('messages.usedForNotifications'); ?></legend>
         <table>
-            <tr><td><label  for="notificationReplyEmail"><?= $htis->_('labels.notificationReplyEmail'); ?></label></td>
+            <tr><td><label  for="notificationReplyEmail"><?= $htis->_('notificationReplyEmail'); ?></label></td>
                 <td><input name="notificationReplyEmail" id="notificationReplyEmail" value="<?= $notificationReplyEmail; ?>" /></td>
             </tr>
-            <tr><td><label><?= $this->_('labels.autoCloseIsActive'); ?></label></td>
+            <tr><td><label><?= $this->_('autoCloseIsActive'); ?></label></td>
                 <td><label>
                         <input name="autoCloseIsActive" type="radio" value="1"
                             <?= $this->category->autoCloseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('labels.active_yes'); ?>
+                        <?= $this->_('active_yes'); ?>
                     </label>
                     <label>
                         <input name="autoCloseIsActive" type="radio" value="0"
                             <?= !$this->category->autoCloseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('labels.active_no'); ?>
+                        <?= $this->_('active_no'); ?>
                     </label>
                 </td>
             </tr>
-            <tr><td><label   for="autoCloseSubstatus_id"><?= $this->_('labels.autoCloseSubstatus_id'); ?></label></td>
+            <tr><td><label   for="autoCloseSubstatus_id"><?= $this->_('autoCloseSubstatus_id'); ?></label></td>
                 <td><select name="autoCloseSubstatus_id" id="autoCloseSubstatus_id">
                         <option value=""></option>
                         <?php
@@ -156,7 +156,7 @@ foreach ($fields as $field) {
             </tr>
         </table>
 	</fieldset>
-	<fieldset><legend><?= $this->_('labels.custom_fields'); ?></legend>
+	<fieldset><legend><?= $this->_('custom_fields'); ?></legend>
 		<?php
 			// There may not be any custom fields for this category.
 			// We do not want to display "null" in this case, just
@@ -193,7 +193,7 @@ foreach ($fields as $field) {
 				</pre></code>
 		</div>
 	</fieldset>
-	<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
+	<fieldset><legend><?= $this->_('submit'); ?></legend>
 		<?php
 			$helper = $this->template->getHelper('saveAndCancelButtons');
 			echo $helper->saveAndCancelButtons(BASE_URI.'/categories');

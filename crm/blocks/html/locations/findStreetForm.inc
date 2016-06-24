@@ -10,7 +10,7 @@ $street = isset($_GET['location']['street']) ? self::escape($_GET['location']['s
 ?>
 <div class="findStreetForm">
 	<form method="get" action="<?= BASE_URL; ?>/locations">
-		<fieldset><legend><?= $this->_('labels.find_street'); ?></legend>
+		<fieldset><legend><?= $this->_('find_street'); ?></legend>
 			<input name="location[street]" id="location-street" value="<?= $street; ?>" />
 			<?php
 				// Preserve any extra parameters passed in
@@ -24,7 +24,7 @@ $street = isset($_GET['location']['street']) ? self::escape($_GET['location']['s
 			?>
 			<button type="submit">
 				<span class="fa fa-search"></span>
-				<?= $this->_('labels.search'); ?>
+				<?= $this->_('search'); ?>
 			</button>
 		</fieldset>
 	</form>

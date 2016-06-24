@@ -10,7 +10,7 @@ use Application\Models\Person;
 use Blossom\Classes\Url;
 ?>
 <div class="findPeopleResults">
-	<h2><?= $this->_('labels.search_results'); ?></h2>
+	<h2><?= $this->_('search_results'); ?></h2>
 	<?php
 		if (count($this->personList)) {
 			include APPLICATION_HOME.'/blocks/html/people/personList.inc';
@@ -33,7 +33,7 @@ use Blossom\Classes\Url;
 			$h = $this->template->getHelper('buttonLink');
 			echo $h->buttonLink(
 				$url,
-				$this->_('labels.add_person'),
+				$this->_('add_person'),
 				'add'
 			);
 		}

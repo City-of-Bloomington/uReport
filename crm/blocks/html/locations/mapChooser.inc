@@ -12,7 +12,7 @@
 </script>
 <button type="button" id="useThisLocation">
 	<span class="fa fa-check"></span>
-	<?= $this->_('labels.use_location'); ?>
+	<?= $this->_('use_location'); ?>
 </button>
 <?php
 $this->template->addToAsset('scripts', GOOGLE_MAPS);

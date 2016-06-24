@@ -14,9 +14,9 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseDepartment.js
 ?>
 <div id="chooseDepartmentForm">
 	<form method="get" action="<?= $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></legend>
+		<fieldset><legend><?= $this->_(array('department', 'departments', 1)); ?></legend>
 			<table>
-				<tr><td><label for="department_id"><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></label></td>
+				<tr><td><label for="department_id"><?= $this->_(array('department', 'departments', 1)); ?></label></td>
 					<td><select name="department_id" id="department_id">
 							<option></option>
 							<?php
@@ -35,7 +35,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseDepartment.js
 					</td>
 					<td><button type="submit">
 							<span class="fa fa-check"></span>
-							<?= $this->_('labels.change_department'); ?>
+							<?= $this->_('change_department'); ?>
 						</button>
 					</td>
 				</tr>

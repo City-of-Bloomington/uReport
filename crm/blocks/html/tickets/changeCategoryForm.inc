@@ -9,7 +9,7 @@ use Blossom\Classes\View;
 ?>
 <div class="changeCategoryForm">
 	<form method="post" action="<?= BASE_URL; ?>/tickets/changeCategory">
-		<fieldset><legend><?= $this->_('labels.change_category'); ?></legend>
+		<fieldset><legend><?= $this->_('change_category'); ?></legend>
 			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in

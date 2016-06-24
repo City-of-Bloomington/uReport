@@ -50,7 +50,7 @@ if (!$this->disableButtons) {
 	if (Person::isAllowed('tickets', 'changeStatus')) {
         $editStatusButton = $helper->buttonLink(
             BASE_URI.'/tickets/changeStatus?ticket_id='.$ticket_id,
-            $this->_('labels.change_status'),
+            $this->_('change_status'),
             'edit',
             ButtonLink::SIZE_ICON,
             ['data-callback'=>'changeStatus']
@@ -59,7 +59,7 @@ if (!$this->disableButtons) {
 	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = $helper->buttonLink(
 			BASE_URI.'/tickets/delete?ticket_id='.$ticket_id,
-			$this->_('labels.delete_ticket'),
+			$this->_('delete_ticket'),
 			'delete'
 		);
 	}
@@ -68,7 +68,7 @@ if (!$this->disableButtons) {
         if (Person::isAllowed('tickets', 'changeCategory')) {
             $changeCategoryButton = $helper->buttonLink(
                 BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
-                $this->_('labels.change_category'),
+                $this->_('change_category'),
                 'edit',
                 ButtonLink::SIZE_ICON,
                 ['data-callback'=>'changeCategory']
@@ -77,7 +77,7 @@ if (!$this->disableButtons) {
         if (Person::isAllowed('tickets', 'changeLocation')) {
             $changeLocationButton = $helper->buttonLink(
                 BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
-                $this->_('labels.change_location'),
+                $this->_('change_location'),
                 'edit',
                 ButtonLink::SIZE_ICON,
                 ['data-callback'=>'changeLocation']
@@ -86,7 +86,7 @@ if (!$this->disableButtons) {
 		if (Person::isAllowed('tickets', 'assign')) {
 			$assignButton = $helper->buttonLink(
 				BASE_URI.'/tickets/assign?ticket_id='.$ticket_id,
-				$this->_('labels.assign_ticket'),
+				$this->_('assign_ticket'),
 				'edit',
 				ButtonLink::SIZE_ICON,
 				['data-callback'=>'assign']
@@ -103,23 +103,23 @@ echo "
 <div class=\"ticketInfo twoColumnlist\">
 	<h2><a href=\"{$this->ticket->getURL()}\">Case #{$ticket_id}</a> $deleteButton</h2>
 	<ul>
-		<li><label>{$this->_('fields.category_id')}:</label>
+		<li><label>{$this->_('category_id')}:</label>
 			$category
 			$changeCategoryButton
 		</li>
-		<li><label>{$this->_('fields.location')}:</label>
+		<li><label>{$this->_('location')}:</label>
 			$location
 			$changeLocationButton
 		</li>
-		<li><label>{$this->_('fields.status')}:</label>
+		<li><label>{$this->_('status')}:</label>
 			$status
 			$editStatusButton
 		</li>
-		<li><label>{$this->_('fields.assignedPerson_id')}:</label>
+		<li><label>{$this->_('assignedPerson_id')}:</label>
 			$assigned
 			$assignButton
 		</li>
-		<li><label>{$this->_('fields.enteredByPerson_id')}:</label>
+		<li><label>{$this->_('enteredByPerson_id')}:</label>
 			$enteredBy
 		</li>
 	";

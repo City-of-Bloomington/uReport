@@ -12,24 +12,24 @@ use Application\Models\CategoryTable;
 use Blossom\Classes\View;
 
 $title = $this->department->getId()
-	? $this->_('labels.edit')
-	: $this->_('labels.add');
+	? $this->_('edit')
+	: $this->_('add');
 $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
 <div class="updateDepartmentForm">
-<h2><?= $title.' '.$this->_(array('labels.department', 'labels.departments', 1)); ?></h2>
+<h2><?= $title.' '.$this->_(array('department', 'departments', 1)); ?></h2>
 <form method="post" action="<?= $this->action; ?>">
 	<fieldset>
 		<legend>
 		<?php
-			echo $this->_(array('labels.department', 'labels.departments', 1)).' '.
-				 $this->_('labels.info')
+			echo $this->_(array('department', 'departments', 1)).' '.
+				 $this->_('info')
 		?>
 		</legend>
 		<input name="department_id" type="hidden" value="<?= $this->department->getId(); ?>" />
 		<table>
 			<tr><td><label for="name" class="required">
-						<?= $this->_('labels.name'); ?>
+						<?= $this->_('name'); ?>
 						<span class="fa fa-asterisk"></span>
 					</label>
 				</td>
@@ -38,7 +38,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 				</td>
 			</tr>
 
-			<tr><td><label for="defaultPerson_id"><?= $this->_('labels.defaultPerson'); ?></label></td>
+			<tr><td><label for="defaultPerson_id"><?= $this->_('defaultPerson'); ?></label></td>
 				<td><select name="defaultPerson_id" id="defaultPerson_id">
 						<option value=""></option>
 						<?php
@@ -63,7 +63,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</table>
 	</fieldset>
 	<fieldset class="actions">
-		<legend><?= $this->_(array('labels.action', 'labels.actions', 2)); ?></legend>
+		<legend><?= $this->_(array('action', 'actions', 2)); ?></legend>
 		<ul>
 		<?php
 			$t = new ActionTable();
@@ -88,7 +88,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 		</ul>
 	</fieldset>
 	<fieldset class="categories">
-		<legend><?= $this->_(array('labels.category', 'labels.categories', 2)); ?></legend>
+		<legend><?= $this->_(array('category', 'categories', 2)); ?></legend>
 		<ul>
 		<?php
 			$t = new CategoryTable();

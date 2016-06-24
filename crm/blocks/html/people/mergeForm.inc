@@ -15,14 +15,14 @@
 				<input name="person_id_a" type="hidden" value="<?= $this->personA->getId(); ?>" />
 				<label for="targetPerson_a">
 				<?php
-					echo $this->_('labels.merge_into_person').' #'.$this->personA->getId();
+					echo $this->_('merge_into_person').' #'.$this->personA->getId();
 				?>
 				</label>
 			</div>
 			<div class="target_b">
 				<label for="targetPerson_b">
 				<?php
-					echo $this->_('labels.merge_into_person').' #'.$this->personB->getId();
+					echo $this->_('merge_into_person').' #'.$this->personB->getId();
 				?>
 				</label>
 				<input name="targetPerson" id="targetPerson_b" type="radio" value="b" />
@@ -30,7 +30,7 @@
 			</div>
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?= $this->_('labels.submit'); ?>
+				<?= $this->_('submit'); ?>
 			</button>
 		</fieldset>
 	</form>

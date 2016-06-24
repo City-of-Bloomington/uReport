@@ -10,7 +10,7 @@ use Blossom\Classes\View;
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/assign">
-		<fieldset><legend><?= $this->_('labels.assign_ticket');  ?></legend>
+		<fieldset><legend><?= $this->_('assign_ticket');  ?></legend>
 			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in

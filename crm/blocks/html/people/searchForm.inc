@@ -12,7 +12,7 @@ if (!isset($_GET['setOfPeople'])) {
 }
 ?>
 <div class="findPeople">
-	<h2><?= $this->title ? self::escape($this->title) : $this->_('labels.find_person'); ?></h2>
+	<h2><?= $this->title ? self::escape($this->title) : $this->_('find_person'); ?></h2>
 	<form method="get" action="<?= BASE_URL; ?>/people">
 		<fieldset>
 			<?php
@@ -58,13 +58,13 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('labels.search'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
 					<button type=\"button\" onclick=\"self.close();\">
 						<span class=\"fa fa-times\"></span>
-						{$this->_('labels.cancel')}
+						{$this->_('cancel')}
 					</button>
 					";
 				}

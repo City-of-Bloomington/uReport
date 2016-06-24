@@ -18,8 +18,8 @@ if (count($this->results)) {
 	echo "
 	<table>
 		<thead>
-			<tr><th>{$this->_(array('labels.location', 'labels.locations', 1))}</th>
-				<th>{$this->_(array('labels.ticket', 'labels.tickets', 2))}</th>
+			<tr><th>{$this->_(array('location', 'locations', 1))}</th>
+				<th>{$this->_(array('ticket', 'tickets', 2))}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -77,15 +77,15 @@ else {
 		<form method=\"get\" action=\"$return_url\" onsubmit=\"$onsubmit\">
 			<fieldset>
 				<legend>
-					{$this->_('labels.add')}
-					{$this->_(array('labels.location', 'labels.locations', 1))}
+					{$this->_('add')}
+					{$this->_(array('location', 'locations', 1))}
 				</legend>
 				<table>
-					<tr><th><label for=\"location\">{$this->_(array('labels.location', 'labels.locations', 1))}</th>
+					<tr><th><label for=\"location\">{$this->_(array('location', 'locations', 1))}</th>
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->_('labels.submit')}</button>
+				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->_('submit')}</button>
 			</fieldset>
 		</form>
 		";

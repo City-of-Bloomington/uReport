@@ -89,7 +89,7 @@ foreach ($tickets as $ticket) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
-					{$this->_('labels.ticket')}
+					{$this->_('ticket')}
 					# {$ticket->getId()} $category_id $status $substatus_id
 				</a>
 			</h3>

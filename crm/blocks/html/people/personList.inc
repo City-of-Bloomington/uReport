@@ -9,13 +9,13 @@ use Blossom\Classes\View;
 use Blossom\Classes\Url;
 ?>
 <div class="personList interfaceBox">
-	<h2><?= $this->_(array('labels.person', 'labels.people', 2)); ?></h2>
+	<h2><?= $this->_(array('person', 'people', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th><?= $this->_('labels.name'); ?></th>
-				<th><?= $this->_(array('labels.email'  , 'labels.emails'   , 1)); ?></th>
-				<th><?= $this->_(array('labels.address', 'labels.addresses', 1)); ?></th>
-				<th><?= $this->_(array('labels.phone'  , 'labels.phones'   , 1)); ?></th>
+			<tr><th><?= $this->_('name'); ?></th>
+				<th><?= $this->_(array('email'  , 'emails'   , 1)); ?></th>
+				<th><?= $this->_(array('address', 'addresses', 1)); ?></th>
+				<th><?= $this->_(array('phone'  , 'phones'   , 1)); ?></th>
 			</tr>
 		</thead>
 		<tbody>

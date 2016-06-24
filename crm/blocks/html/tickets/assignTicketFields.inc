@@ -26,7 +26,7 @@ $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId(
 ?>
 <table>
 	<tr><td><label for="assignedPerson_id">
-				<?= $this->_(array('labels.person', 'labels.people', 1)); ?>
+				<?= $this->_(array('person', 'people', 1)); ?>
 			</label>
 		</td>
 		<td><select name="assignedPerson_id" id="assignedPerson_id">
@@ -43,5 +43,5 @@ $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId(
 		</td>
 	</tr>
 </table>
-<div><label for="notes"><?= $this->_('labels.assignment_notes'); ?></label></div>
+<div><label for="notes"><?= $this->_('assignment_notes'); ?></label></div>
 <div><textarea name="notes" id="notes"></textarea></div>

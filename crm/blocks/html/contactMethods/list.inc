@@ -11,12 +11,12 @@ use Blossom\Classes\View;
 ?>
 <div>
 	<h2><?php
-			echo $this->_(array('labels.contactMethod','labels.contactMethods',2));
+			echo $this->_(array('contactMethod','contactMethods',2));
 			if (Person::isAllowed('contactMethods','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/contactMethods/update',
-					$this->_('labels.add'),
+					$this->_('add'),
 					'add'
 				);
 			}
@@ -31,7 +31,7 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('contactMethods','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/contactMethods/update?contactMethod_id='.$method->getId(),
-					$this->_('labels.edit'),
+					$this->_('edit'),
 					'edit'
 				);
 			}

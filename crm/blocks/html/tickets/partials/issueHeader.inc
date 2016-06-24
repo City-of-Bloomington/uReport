@@ -15,7 +15,7 @@ if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$helper = $this->template->getHelper('buttonLink');
 	$editButton = $helper->buttonLink(
 		BASE_URI.'/issues/update?issue_id='.$this->issue->getId(),
-		$this->_('labels.edit_issue'),
+		$this->_('edit_issue'),
 		'edit'
 	);
 }

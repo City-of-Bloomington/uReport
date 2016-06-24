@@ -1,5 +1,5 @@
 # uReport Translation
-# Copyright (C) 2013 City of Bloomington
+# Copyright (C) 2013-2016 City of Bloomington
 # This file is distributed under the same license as the uReport package.
 #
 # The msgid's in this file should be names of database columns and code variables.
@@ -23,572 +23,572 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_US\n"
 
-msgid "labels.add"
+msgid "add"
 msgstr "Add"
 
-msgid "labels.edit"
+msgid "edit"
 msgstr "Edit"
 
-msgid "labels.delete"
+msgid "delete"
 msgstr "Delete"
 
-msgid "labels.submit"
+msgid "submit"
 msgstr "Submit"
 
-msgid "labels.save"
+msgid "save"
 msgstr "Save"
 
-msgid "labels.save_as"
+msgid "save_as"
 msgstr "Save %s as"
 
-msgid "labels.cancel"
+msgid "cancel"
 msgstr "Cancel"
 
-msgid "labels.search"
+msgid "search"
 msgstr "Search"
 
-msgid "labels.search_results"
+msgid "search_results"
 msgstr "Search Results"
 
-msgid "labels.search_results_text"
+msgid "search_results_text"
 msgstr "Text Results"
 
-msgid "labels.search_results_map"
+msgid "search_results_map"
 msgstr "Map Results"
 
-msgid "labels.search_results_print"
+msgid "search_results_print"
 msgstr "Printable Results"
 
-msgid "labels.search_current"
+msgid "search_current"
 msgstr "Current Search"
 
-msgid "labels.search_results_count"
+msgid "search_results_count"
 msgstr "# cases in current search"
 
-msgid "labels.quick_links"
+msgid "quick_links"
 msgstr "Quick Links"
 
-msgid "labels.upload"
+msgid "upload"
 msgstr "Upload"
 
-msgid "labels.new"
+msgid "new"
 msgstr "New"
 
-msgid "labels.go"
+msgid "go"
 msgstr "Go"
 
-msgid "labels.start"
+msgid "start"
 msgstr "Start"
 
-msgid "labels.end"
+msgid "end"
 msgstr "End"
 
-msgid "labels.more"
+msgid "more"
 msgstr "More"
 
-msgid "labels.top"
+msgid "top"
 msgstr "Back to Top"
 
-msgid "labels.more_categories"
+msgid "more_categories"
 msgstr "More Categories"
 
-msgid "labels.sort_by"
+msgid "sort_by"
 msgstr "Sort by"
 
 #. The current sorting of a list.  Alpabetical order, Numerical order, etc.
-msgid "labels.order"
+msgid "order"
 msgstr "Order"
 
 #. To change the sorting of a list
-msgid "labels.reorder"
+msgid "reorder"
 msgstr "Reorder"
 
 #. This is the short form for "Information".  This should be an abbreviation
-msgid "labels.info"
+msgid "info"
 msgstr "Info"
 
 #. This is the short form for "Administrator".  This should be an abbreviation
-msgid "labels.admin"
+msgid "admin"
 msgstr "Admin"
 
-msgid "labels.my_account"
+msgid "my_account"
 msgstr "My Account"
 
-msgid "labels.my_profile"
+msgid "my_profile"
 msgstr "My Profile"
 
-msgid "labels.my_info"
+msgid "my_info"
 msgstr "Personal Info"
 
-msgid "labels.login"
+msgid "login"
 msgstr "Login"
 
-msgid "labels.logout"
+msgid "logout"
 msgstr "Logout"
 
-msgid "labels.help"
+msgid "help"
 msgstr "Help"
 
-msgid "labels.default"
+msgid "default"
 msgstr "Default"
 
-msgid "labels.contactMethod"
-msgid_plural "labels.contactMethods"
+msgid "contactMethod"
+msgid_plural "contactMethods"
 msgstr[0] "Contact Method"
 msgstr[1] "Contact Methods"
 
-msgid "labels.response"
-msgid_plural "labels.responses"
+msgid "response"
+msgid_plural "responses"
 msgstr[0] "Response"
 msgstr[1] "Responses"
 
-msgid "labels.responseMethod"
+msgid "responseMethod"
 msgstr "Response Method"
 
-msgid "labels.api_key"
+msgid "api_key"
 msgstr "API Key"
 
-msgid "labels.url"
+msgid "url"
 msgstr "URL"
 
-msgid "labels.name"
+msgid "name"
 msgstr "Name"
 
-msgid "labels.firstname"
+msgid "firstname"
 msgstr "First Name"
 
-msgid "labels.middlename"
+msgid "middlename"
 msgstr "Middle Name"
 
-msgid "labels.lastname"
+msgid "lastname"
 msgstr "Last Name"
 
-msgid "labels.username"
+msgid "username"
 msgstr "Username"
 
-msgid "labels.password"
+msgid "password"
 msgstr "Password"
 
-msgid "labels.authenticationMethod"
+msgid "authenticationMethod"
 msgstr "Authentication"
 
-msgid "labels.role"
+msgid "role"
 msgstr "Role"
 
-msgid "labels.change_password"
+msgid "change_password"
 msgstr "Change Password"
 
-msgid "labels.current_password"
+msgid "current_password"
 msgstr "Current Password"
 
-msgid "labels.new_password"
+msgid "new_password"
 msgstr "New Password"
 
-msgid "labels.retype_password"
+msgid "retype_password"
 msgstr "Retype Password"
 
 #. The generic term for a where a person works or is associated with
 #. What "organization" is someone affiliated with?
-msgid "labels.organization"
+msgid "organization"
 msgstr "Organization"
 
-msgid "labels.email"
-msgid_plural "labels.emails"
+msgid "email"
+msgid_plural "emails"
 msgstr[0] "Email"
 msgstr[1] "Email Addresses"
 
-msgid "labels.phone"
-msgid_plural "labels.phones"
+msgid "phone"
+msgid_plural "phones"
 msgstr[0] "Phone"
 msgstr[1] "Phone Numbers"
 
-msgid "labels.description"
+msgid "description"
 msgstr "Description"
 
-msgid "labels.comment"
-msgid_plural "labels.comments"
+msgid "comment"
+msgid_plural "comments"
 msgstr[0] "Comment"
 msgstr[1] "Comments"
 
-msgid "labels.type"
+msgid "type"
 msgstr "Type"
 
-msgid "labels.media"
-msgid_plural "labels.medias"
+msgid "media"
+msgid_plural "medias"
 msgstr[0] "Attachment"
 msgstr[1] "Attachments"
 
-msgid "labels.custom_fields"
+msgid "custom_fields"
 msgstr "Custom Fields"
 
-msgid "labels.display_fields"
+msgid "display_fields"
 msgstr "Fields to display"
 
-msgid "labels.date"
+msgid "date"
 msgstr "Date"
 
-msgid "labels.day"
-msgid_plural "labels.days"
+msgid "day"
+msgid_plural "days"
 msgstr[0] "Day"
 msgstr[1] "Days"
 
-msgid "labels.permissions_required"
+msgid "permissions_required"
 msgstr "Permission Required"
 
 #. Posting permission level determines who is allowed to post new reports
 #. in a given category to the system
-msgid "labels.postingPermissionLevel"
+msgid "postingPermissionLevel"
 msgstr "Posting"
 
 #. Display permission level determines who is allowed to view tickets of a
 #. given category
-msgid "labels.displayPermissionLevel"
+msgid "displayPermissionLevel"
 msgstr "Display"
 
 #. Label for a person when you have a phone number for them
-msgid "labels.contact"
+msgid "contact"
 msgstr "Contact"
 
-msgid "labels.contact_list"
+msgid "contact_list"
 msgstr "Contact List"
 
 #. Label for someone to contact when there is a problem
-msgid "labels.contactPerson"
+msgid "contactPerson"
 msgstr "Contact Person"
 
-msgid "labels.defaultPerson"
+msgid "defaultPerson"
 msgstr "Default Person"
 
 #. What to call people who possess a piece of property
-msgid "labels.owner"
-msgid_plural "labels.owners"
+msgid "owner"
+msgid_plural "owners"
 msgstr[0] "Owner"
 msgstr[1] "Owners"
 
-msgid "labels.someone"
+msgid "someone"
 msgstr "Someone"
 
 # We are using the word "Application" in english because we think it
 # makes more sense to end users.
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
-msgid "labels.client"
-msgid_plural "labels.clients"
+msgid "client"
+msgid_plural "clients"
 msgstr[0] "Application"
 msgstr[1] "Applications"
 
-msgid "labels.action"
-msgid_plural "labels.actions"
+msgid "action"
+msgid_plural "actions"
 msgstr[0] "Action"
 msgstr[1] "Actions"
 
-msgid "labels.bookmark"
-msgid_plural "labels.bookmarks"
+msgid "bookmark"
+msgid_plural "bookmarks"
 msgstr[0] "Bookmark"
 msgstr[1] "Bookmarks"
 
 #. These are the categories of things users can report to city
 #. Some example "categories" are Potholes and Graffiti
-msgid "labels.category"
-msgid_plural "labels.categories"
+msgid "category"
+msgid_plural "categories"
 msgstr[0] "Category"
 msgstr[1] "Categories"
 
 #. Categories are grouped.  This is what you call those groups
-msgid "labels.categoryGroup"
-msgid_plural "labels.categoryGroups"
+msgid "categoryGroup"
+msgid_plural "categoryGroups"
 msgstr[0] "Group"
 msgstr[1] "Groups"
 
-msgid "labels.department"
-msgid_plural "labels.departments"
+msgid "department"
+msgid_plural "departments"
 msgstr[0] "Department"
 msgstr[1] "Departments"
 
 #. http://en.wikipedia.org/wiki/Service-level_agreement
-msgid "labels.service_level_agreement"
+msgid "service_level_agreement"
 msgstr "Service Level Agreement"
 
 #. The abbreviation for "Service Level Agreement"
 #. http://en.wikipedia.org/wiki/Service-level_agreement
-msgid "labels.sla"
+msgid "sla"
 msgstr "SLA"
 
-msgid "labels.overdue"
+msgid "overdue"
 msgstr "Over SLA"
 
-msgid "labels.replyEmail"
+msgid "replyEmail"
 msgstr "Reply To Email"
 
-msgid "labels.autoRespond"
+msgid "autoRespond"
 msgstr "Auto Respond"
 
-msgid "labels.responseTemplate"
-msgid_plural "labels.responseTemplates"
+msgid "responseTemplate"
+msgid_plural "responseTemplates"
 msgstr[0] "Auto Response Message"
 msgstr[1] "Auto Response Messages"
 
-msgid "labels.responseTemplate_add"
+msgid "responseTemplate_add"
 msgstr "New Auto Response Message"
 
-msgid "labels.responseTemplate_edit"
+msgid "responseTemplate_edit"
 msgstr "Edit Auto Response Message"
 
-msgid "labels.autoCloseIsActive"
+msgid "autoCloseIsActive"
 msgstr "Auto Close"
 
-msgid "labels.autoCloseSubstatus_id"
+msgid "autoCloseSubstatus_id"
 msgstr "Auto Close Status"
 
-msgid "labels.active_yes"
+msgid "active_yes"
 msgstr "Active"
 
-msgid "labels.active_no"
+msgid "active_no"
 msgstr "Disabled"
 
 #. Reports that users send in are organized into Tickets
 #. A ticket can contain multiple issue reports that are related, usually by location
-msgid "labels.ticket"
-msgid_plural "labels.tickets"
+msgid "ticket"
+msgid_plural "tickets"
 msgstr[0] "Case"
 msgstr[1] "Cases"
 
-msgid "labels.ticket_issues"
+msgid "ticket_issues"
 msgstr "Associated Issues"
 
 #. These are the problem reports that users send in
-msgid "labels.issue"
-msgid_plural "labels.issues"
+msgid "issue"
+msgid_plural "issues"
 msgstr[0] "Issue"
 msgstr[1] "Issues"
 
 #. Issues are organized by Type.
 #. Example types are Complaint, Request, Violation, etc.
-msgid "labels.issueType"
-msgid_plural "labels.issueTypes"
+msgid "issueType"
+msgid_plural "issueTypes"
 msgstr[0] "Issue Type"
 msgstr[1] "Issue Types"
 
-msgid "labels.address"
-msgid_plural "labels.addresses"
+msgid "address"
+msgid_plural "addresses"
 msgstr[0] "Address"
 msgstr[1] "Addresses"
 
-msgid "labels.city"
+msgid "city"
 msgstr "City"
 
-msgid "labels.state"
+msgid "state"
 msgstr "State"
 
-msgid "labels.zip"
+msgid "zip"
 msgstr "Zip"
 
-msgid "labels.latitude"
+msgid "latitude"
 msgstr "Latitude"
 
-msgid "labels.longitude"
+msgid "longitude"
 msgstr "Longitude"
 
-msgid "labels.enteredDate"
+msgid "enteredDate"
 msgstr "Case Date"
 
-msgid "labels.enteredByPerson"
+msgid "enteredByPerson"
 msgstr "Entered By"
 
-msgid "labels.reportedByPerson"
+msgid "reportedByPerson"
 msgstr "Reported By"
 
-msgid "labels.history"
+msgid "history"
 msgstr "History"
 
-msgid "labels.general"
+msgid "general"
 msgstr "General"
 
 #. We use the word Location here, which is different from Address
 #. Locations refer to general descriptions of places that are not a street address
 #. Examples: "Behind the post office", "In front of the court house"
-msgid "labels.location"
-msgid_plural "labels.locations"
+msgid "location"
+msgid_plural "locations"
 msgstr[0] "Location"
 msgstr[1] "Locations"
 
-msgid "labels.change_location"
+msgid "change_location"
 msgstr "Change Location"
 
-msgid "labels.person"
-msgid_plural "labels.people"
+msgid "person"
+msgid_plural "people"
 msgstr[0] "Person"
 msgstr[1] "People"
 
-msgid "labels.user"
-msgid_plural "labels.users"
+msgid "user"
+msgid_plural "users"
 msgstr[0] "User Account"
 msgstr[1] "User Accounts"
 
 #. Detailed analysis of ticket data presented to Staff
-msgid "labels.report"
-msgid_plural "labels.reports"
+msgid "report"
+msgid_plural "reports"
 msgstr[0] "Report"
 msgstr[1] "Reports"
 
-msgid "labels.assignment"
-msgid_plural "labels.assignments"
+msgid "assignment"
+msgid_plural "assignments"
 msgstr[0] "Assignment"
 msgstr[1] "Assignments"
 
-msgid "labels.activity"
+msgid "activity"
 msgstr "Activity"
 
-msgid "labels.status"
-msgid_plural "labels.statuses"
+msgid "status"
+msgid_plural "statuses"
 msgstr[0] "Status"
 msgstr[1] "Status"
 
-msgid "labels.substatus"
-msgid_plural "labels.substatuses"
+msgid "substatus"
+msgid_plural "substatuses"
 msgstr[0] "Substatus"
 msgstr[1] "Substatus"
 
 #. This is a special type of substatus
-msgid "labels.resolution"
+msgid "resolution"
 msgstr "Resolution"
 
-msgid "labels.add_issue"
+msgid "add_issue"
 msgstr "Add Issue"
 
-msgid "labels.add_person"
+msgid "add_person"
 msgstr "Add a Person"
 
-msgid "labels.create_account"
+msgid "create_account"
 msgstr "Create Account"
 
-msgid "labels.edit_account"
+msgid "edit_account"
 msgstr "Edit Account"
 
-msgid "labels.edit_issue"
+msgid "edit_issue"
 msgstr "Edit Issue"
 
-msgid "labels.delete_issue"
+msgid "delete_issue"
 msgstr "Delete Issue"
 
-msgid "labels.info_client"
+msgid "info_client"
 msgstr "Client Info"
 
-msgid "labels.info_person"
+msgid "info_person"
 msgstr "Person Info"
 
-msgid "labels.info_department"
+msgid "info_department"
 msgstr "Department Info"
 
-msgid "labels.info_location"
+msgid "info_location"
 msgstr "Location Info"
 
-msgid "labels.info_location_additional"
+msgid "info_location_additional"
 msgstr "Additional Location Info"
 
-msgid "labels.info_issue"
+msgid "info_issue"
 msgstr "Issue Info"
 
-msgid "labels.info_assignment"
+msgid "info_assignment"
 msgstr "Assignment Info"
 
-msgid "labels.find_person"
+msgid "find_person"
 msgstr "Look up a person"
 
-msgid "labels.find_user"
+msgid "find_user"
 msgstr "Filter users"
 
-msgid "labels.find_address"
+msgid "find_address"
 msgstr "Find a specific address"
 
-msgid "labels.find_street"
+msgid "find_street"
 msgstr "Find a street"
 
-msgid "labels.find_location"
+msgid "find_location"
 msgstr "Find a location"
 
-msgid "labels.use_location"
+msgid "use_location"
 msgstr "Use this location"
 
-msgid "labels.upload_media"
+msgid "upload_media"
 msgstr "Upload an attachment"
 
-msgid "labels.see_all_thumbnails"
+msgid "see_all_thumbnails"
 msgstr "See all thumbnails"
 
-msgid "labels.back_to_ticket"
+msgid "back_to_ticket"
 msgstr "Back to case"
 
-msgid "labels.change_department"
+msgid "change_department"
 msgstr "Switch Department"
 
-msgid "labels.add_new_ticket"
+msgid "add_new_ticket"
 msgstr "New Case"
 
-msgid "labels.assign_ticket"
+msgid "assign_ticket"
 msgstr "Assign Case"
 
-msgid "labels.refer_ticket"
+msgid "refer_ticket"
 msgstr "Refer Case"
 
-msgid "labels.delete_ticket"
+msgid "delete_ticket"
 msgstr "Delete Case"
 
-msgid "labels.change_category"
+msgid "change_category"
 msgstr "Change Category"
 
-msgid "labels.change_status"
+msgid "change_status"
 msgstr "Change Status"
 
-msgid "labels.add_response"
+msgid "add_response"
 msgstr "Record a response"
 
-msgid "labels.assignment_notes"
+msgid "assignment_notes"
 msgstr "Notes to the assignee"
 
-msgid "labels.merge"
+msgid "merge"
 msgstr "Merge"
 
-msgid "labels.merge_people"
+msgid "merge_people"
 msgstr "Merge People"
 
-msgid "labels.merge_tickets"
+msgid "merge_tickets"
 msgstr "Merge Cases"
 
 #. Used during the process of merging people records.
 #. This label is placed on each person, so the user can choose which record will be the master copy
-msgid "labels.merge_into_person"
+msgid "merge_into_person"
 msgstr "Merge into Person"
 
 #. Used during the process of merging ticket records.
 #. This label is placed on each ticket, so the user can choose which record will be the master copy
-msgid "labels.merge_into_ticket"
+msgid "merge_into_ticket"
 msgstr "Merge into Case"
 
 #. Tickets that are currently assigned to the user
-msgid "labels.tickets_open_assigned"
+msgid "tickets_open_assigned"
 msgstr "Currently assigned cases"
 
 #. Tickets that the user has reported that are still open
-msgid "labels.tickets_open_reported"
+msgid "tickets_open_reported"
 msgstr "Outstanding reported cases"
 
-msgid "labels.tickets_reported"
+msgid "tickets_reported"
 msgstr "Reported Cases"
 
-msgid "labels.tickets_open"
+msgid "tickets_open"
 msgstr "Open Cases"
 
-msgid "labels.tickets_my"
+msgid "tickets_my"
 msgstr "My Cases"
 
-msgid "labels.tickets_my_department"
+msgid "tickets_my_department"
 msgstr "My Department's Cases"
 
-msgid "labels.tickets_for_location"
+msgid "tickets_for_location"
 msgstr "Cases associated with this location"
 
 #. Ticket that have been referred to the user
-msgid "labels.tickets_open_referred"
+msgid "tickets_open_referred"
 msgstr "Currently referred cases"
 
 msgid "messages.add_action"
@@ -714,131 +714,104 @@ msgstr ""
 "content. Reports submitted by the community are addressed on the basis of "
 "priority and available resources."
 
-msgid "fields.id"
+msgid "id"
 msgstr "#"
 
-msgid "fields.enteredDate"
-msgstr "Case Date"
-
-msgid "fields.category_id"
+msgid "category_id"
 msgstr "Category"
 
-msgid "fields.department_id"
+msgid "department_id"
 msgstr "Department"
 
-msgid "fields.status"
-msgstr "Status"
-
-msgid "fields.substatus_id"
+msgid "substatus_id"
 msgstr "Substatus"
 
-msgid "fields.location"
-msgstr "Location"
-
-msgid "fields.latitude"
-msgstr "Latitude"
-
-msgid "fields.longitude"
-msgstr "Longitude"
-
-msgid "fields.city"
-msgstr "City"
-
-msgid "fields.state"
-msgstr "State"
-
-msgid "fields.zip"
-msgstr "Zip"
-
-msgid "fields.description"
-msgstr "Description"
-
-msgid "fields.slaPercentage"
+msgid "slaPercentage"
 msgstr "SLA"
 
-msgid "fields.neighborhoodAssociation"
+msgid "neighborhoodAssociation"
 msgstr "Neighborhood Association"
 
-msgid "fields.township"
+msgid "township"
 msgstr "Township"
 
-msgid "fields.enteredByPerson_id"
+msgid "enteredByPerson_id"
 msgstr "Entered by"
 
-msgid "fields.assignedPerson_id"
+msgid "assignedPerson_id"
 msgstr "Assigned to"
 
-msgid "fields.label_id"
+msgid "label_id"
 msgstr "Label"
 
-msgid "fields.issueType_id"
+msgid "issueType_id"
 msgstr "Issue Type"
 
-msgid "fields.contactMethod_id"
+msgid "contactMethod_id"
 msgstr "Contact Method"
 
-msgid "fields.referredPerson_id"
+msgid "referredPerson_id"
 msgstr "Referred Person"
 
-msgid "labels.are_you_sure"
+msgid "are_you_sure"
 msgstr "Are you sure?"
 
-msgid "labels.disclaimer"
+msgid "disclaimer"
 msgstr "Disclaimer"
 
-msgid "labels.volume"
+msgid "volume"
 msgstr "Volume"
 
-msgid "labels.open_current"
+msgid "open_current"
 msgstr "Tickets currently open"
 
-msgid "labels.open_today"
+msgid "open_today"
 msgstr "Tickets opened today"
 
-msgid "labels.closed_today"
+msgid "closed_today"
 msgstr "Tickets closed today"
 
-msgid "labels.past_month"
+msgid "past_month"
 msgstr "Activity the past month"
 
-msgid "labels.activity_report"
+msgid "activity_report"
 msgstr "Activity Report"
 
 msgid "text.activity_description"
 msgstr "* Average Days spent open is calculated as how long tickets stayed open during the entire history of the data."
 
-msgid "labels.create_department"
+msgid "create_department"
 msgstr "New Department"
 
-msgid "labels.create_category"
+msgid "create_category"
 msgstr "New Category"
 
-msgid "labels.create_categorygroup"
+msgid "create_categorygroup"
 msgstr "New Category Group"
 
-msgid "labels.create_substatus"
+msgid "create_substatus"
 msgstr "New Substatus"
 
-msgid "labels.create_action"
+msgid "create_action"
 msgstr "New action"
 
-msgid "labels.create_client"
+msgid "create_client"
 msgstr "New Client"
 
-msgid "labels.create_label"
+msgid "create_label"
 msgstr "New Label"
 
-msgid "labels.create_contactmethod"
+msgid "create_contactmethod"
 msgstr "New Contact Method"
 
-msgid "labels.create_issuetype"
+msgid "create_issuetype"
 msgstr "New Issue Type"
 
-msgid "labels.open"
+msgid "open"
 msgstr "Open"
 
-msgid "labels.closed"
+msgid "closed"
 msgstr "Closed"
 
-msgid "labels.total"
+msgid "total"
 msgstr "Total"

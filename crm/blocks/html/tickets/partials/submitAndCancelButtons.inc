@@ -11,10 +11,10 @@ $onclick = isset($_REQUEST['callback'])
 echo "
 <button type=\"submit\">
 	<span class=\"fa fa-check\"></span>
-	{$this->_('labels.submit')}
+	{$this->_('submit')}
 </button>
 <a class=\"btn\" href=\"{$this->ticket->getURL()}\" $onclick>
 	<span class=\"fa fa-times\"></span>
-	{$this->_('labels.cancel')}
+	{$this->_('cancel')}
 </a>
 ";

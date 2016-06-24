@@ -10,12 +10,12 @@ use Blossom\Classes\View;
 ?>
 <div class="clientList">
 	<h2><?php
-			echo $this->_(array('labels.client', 'labels.clients', 2));
+			echo $this->_(array('client', 'clients', 2));
 			if (Person::isAllowed('clients','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/clients/update',
-					$this->_('labels.add'),
+					$this->_('add'),
 					'add'
 				);
 			}
@@ -29,12 +29,12 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('clients','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/clients/update?client_id='.$client->getId(),
-					$this->_('labels.edit'),
+					$this->_('edit'),
 					'edit'
 				);
 				$deleteButton = $helper->buttonLink(
 					BASE_URI.'/clients/delete?client_id='.$client->getId(),
-					$this->_('labels.delete'),
+					$this->_('delete'),
 					'delete'
 				);
 			}
@@ -46,16 +46,16 @@ use Blossom\Classes\View;
 			<div>
 				<h3>$name $editButton $deleteButton</h3>
 				<table>
-					<tr><th>{$this->_(array('labels.contactMethod','labels.contactMethods',1))}</th>
+					<tr><th>{$this->_(array('contactMethod','contactMethods',1))}</th>
 						<td>{$client->getContactMethod()}</td>
 					</tr>
-					<tr><th>{$this->_('labels.api_key')}</th>
+					<tr><th>{$this->_('api_key')}</th>
 						<td>{$client->getApi_key()}</td>
 					</tr>
-					<tr><th>{$this->_('labels.url')}</th>
+					<tr><th>{$this->_('url')}</th>
 						<td><a href=\"$url\">$url</a></td>
 					</tr>
-					<tr><th>{$this->_('labels.contact')}</th>
+					<tr><th>{$this->_('contact')}</th>
 						<td><a href=\"{$contact->getURL()}\">$contactName</a></td>
 					</tr>
 				</table>

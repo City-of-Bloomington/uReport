@@ -17,20 +17,20 @@ $list = $t->find();
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/actions/update',
-					$this->_('labels.add'),
+					$this->_('add'),
 					'add'
 				);
 			}
-			echo $this->_(['labels.action', 'labels.actions', count($list)]);
+			echo $this->_(['action', 'actions', count($list)]);
 		?>
 		</h1>
     </header>
 	<table>
 		<thead>
 			<tr><th></th>
-				<th><?= $this->_('labels.action'); ?></th>
-				<th><?= $this->_('labels.description'); ?></th>
-				<th><?= $this->_('labels.type'); ?></th>
+				<th><?= $this->_('action'); ?></th>
+				<th><?= $this->_('description'); ?></th>
+				<th><?= $this->_('type'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,7 +42,7 @@ $list = $t->find();
 				if ($userCanEdit) {
 					$editButton = $helper->buttonLink(
 						BASE_URI.'/actions/update?action_id='.$action->getId(),
-						$this->_('labels.edit'),
+						$this->_('edit'),
 						'edit'
 					);
 				}

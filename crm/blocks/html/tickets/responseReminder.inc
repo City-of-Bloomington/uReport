@@ -23,7 +23,7 @@ foreach ($this->ticket->getIssues() as $issue) {
 if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
-		<h2>{$this->_('labels.contact_list')}</h2>
+		<h2>{$this->_('contact_list')}</h2>
 		<p>{$this->_('text.response_reminder')}</p>
 		<table>
 			$rows

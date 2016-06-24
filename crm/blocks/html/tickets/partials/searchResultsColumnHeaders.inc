@@ -11,7 +11,7 @@ use Blossom\Classes\Url;
 echo "
 <table>
 <thead>
-	<tr><td>{$this->_('labels.sort_by')}:</td>
+	<tr><td>{$this->_('sort_by')}:</td>
 ";
 	$c = $this->solrObject->response->numFound;
 	if ($c) {

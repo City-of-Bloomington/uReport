@@ -1,16 +1,16 @@
 <div>
-	<h2><?= $this->_('labels.admin'); ?></h2>
+	<h2><?= $this->_('admin'); ?></h2>
 	<ul>
-		<li><a href="<?= BASE_URL; ?>/users">         <?= $this->_(['labels.user'         ,'labels.users'         ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/departments">   <?= $this->_(['labels.department'   ,'labels.departments'   ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/categories">    <?= $this->_(['labels.category'     ,'labels.categories'    ,2]); ?></a> /
-			<a href="<?= BASE_URL; ?>/categories/sla"><?= $this->_('labels.sla'); ?></a>
+		<li><a href="<?= BASE_URL; ?>/users">         <?= $this->_(['user'         ,'users'         ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/departments">   <?= $this->_(['department'   ,'departments'   ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/categories">    <?= $this->_(['category'     ,'categories'    ,2]); ?></a> /
+			<a href="<?= BASE_URL; ?>/categories/sla"><?= $this->_('sla'); ?></a>
 		</li>
-		<li><a href="<?= BASE_URL; ?>/categoryGroups"><?= $this->_(['labels.categoryGroup','labels.categoryGroups',2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/substatus">     <?= $this->_(['labels.substatus'    ,'labels.substatuses'   ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/actions">       <?= $this->_(['labels.action'       ,'labels.actions'       ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/clients">       <?= $this->_(['labels.client'       ,'labels.clients'       ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/contactMethods"><?= $this->_(['labels.contactMethod','labels.contactMethods',2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/issueTypes">    <?= $this->_(['labels.issueType'    ,'labels.issueTypes'    ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/categoryGroups"><?= $this->_(['categoryGroup','categoryGroups',2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/substatus">     <?= $this->_(['substatus'    ,'substatuses'   ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/actions">       <?= $this->_(['action'       ,'actions'       ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/clients">       <?= $this->_(['client'       ,'clients'       ,2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/contactMethods"><?= $this->_(['contactMethod','contactMethods',2]); ?></a></li>
+		<li><a href="<?= BASE_URL; ?>/issueTypes">    <?= $this->_(['issueType'    ,'issueTypes'    ,2]); ?></a></li>
 	</ul>
 </div>

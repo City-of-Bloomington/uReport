@@ -20,7 +20,7 @@ if (!empty($_GET['query'])
 	|| isset($this->solrObject->responseHeader->params->fq)) {
 	$q = !empty($_GET['query'])
 		? 'Results for: '.self::escape($_GET['query'])
-		: $this->_('labels.search_current');
+		: $this->_('search_current');
 	$fq = isset($this->solrObject->responseHeader->params->fq)
 		?       $this->solrObject->responseHeader->params->fq
 		: [];
@@ -72,7 +72,7 @@ if (!empty($_GET['query'])
                 if ($filter == Search::SLA_OVERDUE_FUNCTION) {
                     $deleteURL = clone $currentURL;
                     if (isset($deleteURL->sla)) { unset($deleteURL->sla); }
-                    echo $helper->buttonLink($deleteURL, "{$this->_('labels.sla')}: {$this->_('labels.overdue')}", 'delete');
+                    echo $helper->buttonLink($deleteURL, "{$this->_('sla')}: {$this->_('overdue')}", 'delete');
                 }
             }
 		}
@@ -92,7 +92,7 @@ echo '<div id="resultFormatButtons">';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"fa fa-list-ul\"></span>
-		{$this->_('labels.search_results_text')}
+		{$this->_('search_results_text')}
 	</a>
 	";
 
@@ -101,7 +101,7 @@ echo '<div id="resultFormatButtons">';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"fa fa-map-marker\"></span>
-		{$this->_('labels.search_results_map')}
+		{$this->_('search_results_map')}
 	</a>
 	";
 
@@ -113,7 +113,7 @@ echo '<div id="resultFormatButtons">';
 		echo "
 		<a class=\"$current\" href=\"$url\">
 			<span class=\"fa fa-print\"></span>
-			{$this->_('labels.search_results_print')}
+			{$this->_('search_results_print')}
 		</a>
 		";
 	}

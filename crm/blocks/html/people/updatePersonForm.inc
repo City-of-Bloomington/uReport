@@ -19,10 +19,10 @@ $title = $this->title ? self::escape($this->title) : $title;
 			include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc';
 		?>
 
-		<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
+		<fieldset><legend><?= $this->_('submit'); ?></legend>
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?= $this->_('labels.save'); ?>
+				<?= $this->_('save'); ?>
 			</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
@@ -41,7 +41,7 @@ $title = $this->title ? self::escape($this->title) : $title;
 				echo "
 				<a class=\"btn\" href=\"$return_url\" $onclick>
 					<span class=\"fa fa-times\"></span>
-					{$this->_('labels.cancel')}
+					{$this->_('cancel')}
 				</a>
 				";
 			?>

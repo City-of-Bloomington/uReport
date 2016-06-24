@@ -10,7 +10,7 @@ $text = isset($_GET['location']['text']) ? self::escape($_GET['location']['text'
 ?>
 <div class="findDescriptiveLocationForm">
 	<form method="get" action="<?= BASE_URL; ?>/locations">
-		<fieldset><legend><?= $this->_('labels.find_location'); ?></legend>
+		<fieldset><legend><?= $this->_('find_location'); ?></legend>
 			<input name="location[text]" id="location-text" value="<?= $text; ?>" />
 			<?php
 				// Preserve any extra parameters passed in
@@ -24,7 +24,7 @@ $text = isset($_GET['location']['text']) ? self::escape($_GET['location']['text'
 			?>
 			<button type="submit">
 				<span class="fa fa-search"></span>
-				<?= $this->_('labels.search'); ?>
+				<?= $this->_('search'); ?>
 			</button>
 		</fieldset>
 	</form>

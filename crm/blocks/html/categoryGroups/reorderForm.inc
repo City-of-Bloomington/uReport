@@ -9,15 +9,15 @@ use Blossom\Classes\View;
 ?>
 <div class="categoryGroupReportForm">
 	<h2><?php
-			echo $this->_('labels.reorder').' '.
-				 $this->_(array('labels.categoryGroup', 'labels.categoryGroups', 2));
+			echo $this->_('reorder').' '.
+				 $this->_(array('categoryGroup', 'categoryGroups', 2));
 		?>
 	</h2>
 	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
 		<table>
 			<thead>
-				<tr><th><?= $this->_('labels.name' ); ?></th>
-					<th><?= $this->_('labels.order'); ?></th>
+				<tr><th><?= $this->_('name' ); ?></th>
+					<th><?= $this->_('order'); ?></th>
 				</tr>
 			</thead>
 			<tbody>

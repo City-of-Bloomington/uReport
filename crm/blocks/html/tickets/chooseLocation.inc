@@ -19,7 +19,7 @@ echo "
 	<div class=\"hd\">
 		<a id=\"findAddressButton\" class=\"btn\" href=\"$url\">
 			<span class=\"fa fa-globe\"></span>
-			{$this->_('labels.find_location')}
+			{$this->_('find_location')}
 		</a>
 	</div>
 	<div class=\"bd\">
@@ -36,7 +36,7 @@ echo "
 			'tickets/ticketList.inc',
 			array(
 				'ticketList'  => $table->find(array('location'=>$this->ticket->getLocation())),
-				'title'       => $this->_('labels.tickets_for_location'),
+				'title'       => $this->_('tickets_for_location'),
 				'disableLinks'=> true
 			)
 		);

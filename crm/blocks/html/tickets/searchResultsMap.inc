@@ -13,7 +13,7 @@ use Blossom\Classes\Block;
 <?php
 	$c = $this->solrObject->response->numFound;
 	if ($c) {
-		echo "<h2>{$this->_('labels.search_results')}</h2>";
+		echo "<h2>{$this->_('search_results')}</h2>";
 	}
 	$map = new Block('tickets/partials/searchResultsMap.inc', ['solrObject'=>$this->solrObject]);
 	echo $map->render('html', $this->template);

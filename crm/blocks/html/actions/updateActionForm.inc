@@ -5,8 +5,8 @@
  * @param Action $this->action
  */
 $title = $this->action->getId()
-	? $this->_('labels.edit').' '.$this->_('labels.action')
-	: $this->_('labels.add' ).' '.$this->_('labels.action');
+	? $this->_('edit').' '.$this->_('action')
+	: $this->_('add' ).' '.$this->_('action');
 
 $name        = self::escape($this->action->getName());
 $description = self::escape($this->action->getDescription());
@@ -23,12 +23,12 @@ $description = self::escape($this->action->getDescription());
 		</tr>
 	</table>
 	<form method="post" action="<?= BASE_URI; ?>/actions/update">
-		<fieldset><legend><?= $this->_('labels.action'); ?></legend>
+		<fieldset><legend><?= $this->_('action'); ?></legend>
 			<input name="action_id" type="hidden" value="<?= $this->action->getId(); ?>" />
 			<table>
 
 				<tr><td><label for="name" class="required">
-							<?= $this->_('labels.name'); ?>
+							<?= $this->_('name'); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
@@ -42,7 +42,7 @@ $description = self::escape($this->action->getDescription());
 				</tr>
 
 				<tr><td><label for="description" class="required">
-							<?= $this->_('labels.description'); ?>
+							<?= $this->_('description'); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>

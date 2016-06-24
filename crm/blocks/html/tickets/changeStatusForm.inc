@@ -10,7 +10,7 @@ use Blossom\Classes\View;
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/changeStatus">
-		<fieldset><legend><?= $this->_('labels.change_status'); ?></legend>
+		<fieldset><legend><?= $this->_('change_status'); ?></legend>
 			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in
@@ -23,7 +23,7 @@ use Blossom\Classes\View;
 				}
 			?>
 			<table>
-				<tr><td><label for="status"><?= $this->_(array('labels.status', 'labels.statuses', 1)); ?></label></td>
+				<tr><td><label for="status"><?= $this->_(array('status', 'statuses', 1)); ?></label></td>
 					<td><select name="status" id="status">
 						<?php
 							foreach (array('open', 'closed') as $status) {
@@ -37,7 +37,7 @@ use Blossom\Classes\View;
 					</td>
 				</tr>
 
-				<tr><td><label for="substatus_id"><?= $this->_(array('labels.substatus', 'labels.substatuses', 1)); ?></label></td>
+				<tr><td><label for="substatus_id"><?= $this->_(array('substatus', 'substatuses', 1)); ?></label></td>
 					<td><select name="substatus_id" id="substatus_id">
 						<?php
 							// Open tickets do not require substatus
@@ -61,7 +61,7 @@ use Blossom\Classes\View;
 				</tr>
 
 				<tr><td><label id="notes" class="required">
-							<?= $this->_(array('labels.comment', 'labels.comments', 1)); ?>
+							<?= $this->_(array('comment', 'comments', 1)); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>

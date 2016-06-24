@@ -18,9 +18,9 @@ foreach ($fields as $field) {
 ?>
 <div class="updateAddressForm">
 	<form method="post">
-		<fieldset><legend><?= $this->_(array('labels.address', 'labels.addresses', 1)); ?></legend>
+		<fieldset><legend><?= $this->_(array('address', 'addresses', 1)); ?></legend>
 			<table>
-				<tr><td><label for="label"><?= $this->_(array('labels.label', 'labels.labels', 1)); ?></label></td>
+				<tr><td><label for="label"><?= $this->_(array('label', 'labels', 1)); ?></label></td>
 					<td><select name="label" id="label">
 						<?php
 							foreach (Address::$LABELS as $label) {
@@ -33,20 +33,20 @@ foreach ($fields as $field) {
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="address"><?= $this->_(array('labels.address', 'labels.addresses', 1)); ?></label></td>
+				<tr><td><label for="address"><?= $this->_(array('address', 'addresses', 1)); ?></label></td>
 					<td><input name="address" id="address" value="<?= $address; ?>" /></td>
 				</tr>
 
-				<tr><td><label for="city"><?= $this->_('labels.city'); ?></label></td>
+				<tr><td><label for="city"><?= $this->_('city'); ?></label></td>
 					<td><input name="city" id="city" value="<?= $city; ?>" /></td>
 				</tr>
 
-				<tr><td><label for="state"><?= $this->_('labels.state'); ?></label></td>
+				<tr><td><label for="state"><?= $this->_('state'); ?></label></td>
 					<td><input name="state" id="state" size="2" maxlength="2" value="<?= $state; ?>" />
 					</td>
 				</tr>
 
-				<tr><td><label for="zip"><?= $this->_('labels.zip'); ?></label></td>
+				<tr><td><label for="zip"><?= $this->_('zip'); ?></label></td>
 					<td><input name="zip" id="zip" size="5" maxlength="5" value="<?= $zip; ?>" />
 					</td>
 				</tr>

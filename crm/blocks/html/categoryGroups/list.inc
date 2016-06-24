@@ -10,16 +10,16 @@ use Blossom\Classes\View;
 ?>
 <div class="categoryGroupList">
 	<h2><?php
-			echo $this->_(array('labels.categoryGroup', 'labels.categoryGroups', 2));
+			echo $this->_(array('categoryGroup', 'categoryGroups', 2));
 			if (Person::isAllowed('categoryGroups','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/categoryGroups/update',
-					$this->_('labels.add'),
+					$this->_('add'),
 					'add'
 				) .  $helper->buttonLink(
 					BASE_URI.'/categoryGroups/reorder',
-					$this->_('labels.reorder'),
+					$this->_('reorder'),
 					'reorder'
 				);
 			}
@@ -28,8 +28,8 @@ use Blossom\Classes\View;
 	<table>
 		<thead>
 			<tr><th></th>
-				<th><?= $this->_('labels.name' ); ?></th>
-				<th><?= $this->_('labels.order'); ?></th>
+				<th><?= $this->_('name' ); ?></th>
+				<th><?= $this->_('order'); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -41,12 +41,12 @@ use Blossom\Classes\View;
 				if (Person::isAllowed('categoryGroups','update')) {
 					$editButton = $helper->buttonLink(
 						BASE_URI.'/categoryGroups/update?categoryGroup_id='.$group->getId(),
-						$this->_('labels.edit'),
+						$this->_('edit'),
 						'edit'
 					);
 					$deleteButton = $helper->buttonLink(
 						BASE_URI.'/categoryGroups/delete?categoryGroup_id='.$group->getId(),
-						$this->_('labels.delete'),
+						$this->_('delete'),
 						'delete'
 					);
 				}

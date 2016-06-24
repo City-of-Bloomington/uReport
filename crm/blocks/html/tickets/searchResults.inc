@@ -19,8 +19,8 @@ use Zend\Paginator\Paginator;
 $c = $this->solrObject->response->numFound;
 if ($c) {
 	echo "
-	<h2>{$this->_('labels.search_results')}</h2>
-	<div>{$this->_('labels.search_results_count')}: $c</div>
+	<h2>{$this->_('search_results')}</h2>
+	<div>{$this->_('search_results_count')}: $c</div>
 	";
 
 	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('solrObject'=>$this->solrObject));

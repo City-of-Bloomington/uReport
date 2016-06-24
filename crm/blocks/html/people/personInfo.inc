@@ -30,14 +30,14 @@ if (Person::isAllowed('people','view')) {
 	if ($username && $resource=='account' && $_SESSION['USER']->getAuthenticationMethod()=='local') {
 		$username.= "
 		<a href=\"".BASE_URI."/account/changePassword\">
-			{$this->_('labels.change_password')}
+			{$this->_('change_password')}
 		</a>
 		";
 	}
 	if (!$username && Person::isAllowed('users','add') && !$this->disableButtons) {
 		$username = $helper->buttonLink(
 			BASE_URI.'/users/update?person_id='.$this->person->getId(),
-			$this->_('labels.create_account'),
+			$this->_('create_account'),
 			'add'
 		);
 	}
@@ -48,13 +48,13 @@ $deleteButton = '';
 if (Person::isAllowed($resource,'update') && !$this->disableButtons) {
 	$editButton = $helper->buttonLink(
 		BASE_URI."/$resource/update$person_param",
-		$this->_('labels.edit'),
+		$this->_('edit'),
 		'edit'
 	);
 	if (!$this->person->hasTickets()) {
 		$deleteButton = $helper->buttonLink(
 			BASE_URI."/$resource/delete$person_param",
-			$this->_('labels.delete'),
+			$this->_('delete'),
 			'delete'
 		);
 	}
@@ -93,7 +93,7 @@ echo "
 
 	$addressButtons = '';
 	echo "
-	<h3>{$this->_(array('labels.address', 'labels.addresses', 2))}</h3>
+	<h3>{$this->_(array('address', 'addresses', 2))}</h3>
 	<table>
 	";
 	foreach ($this->person->getAddresses() as $a) {
@@ -117,7 +117,7 @@ echo "
 	if ($editButton) {
 		$addButton = $helper->buttonLink(
 			BASE_URI."/$resource/updateAddress$person_param",
-			"{$this->_('labels.add')} {$this->_(array('labels.address', 'labels.addresses', 1))}",
+			"{$this->_('add')} {$this->_(array('address', 'addresses', 1))}",
 			'add'
 		);
 		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
@@ -126,7 +126,7 @@ echo "
 	echo "
 	</table>
 
-	<h3>{$this->_(array('labels.email', 'labels.emails', 2))}</h3>
+	<h3>{$this->_(array('email', 'emails', 2))}</h3>
 	<table>
 	";
 	$emailButtons = '';
@@ -148,7 +148,7 @@ echo "
 	if ($editButton) {
 		$addButton = $helper->buttonLink(
 			BASE_URI."/$resource/updateEmail$person_param",
-			"{$this->_('labels.add')} {$this->_(array('labels.email', 'labels.emails', 1))}",
+			"{$this->_('add')} {$this->_(array('email', 'emails', 1))}",
 			'add'
 		);
 		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
@@ -156,7 +156,7 @@ echo "
 	echo "
 	</table>
 
-	<h3>{$this->_(array('labels.phone', 'labels.phones', 2))}</h3>
+	<h3>{$this->_(array('phone', 'phones', 2))}</h3>
 	<table>
 	";
 	$phoneButtons = '';
@@ -176,7 +176,7 @@ echo "
 	if ($editButton) {
 		$addButton = $helper->buttonLink(
 			BASE_URI."/$resource/updatePhone$person_param",
-			"{$this->_('labels.add')} {$this->_(array('labels.phone', 'labels.phones', 1))}",
+			"{$this->_('add')} {$this->_(array('phone', 'phones', 1))}",
 			'add'
 		);
 		echo "<tr><td colspan=\"3\">$addButton</td></tr>";

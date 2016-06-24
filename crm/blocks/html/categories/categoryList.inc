@@ -8,12 +8,12 @@ use Application\Models\Person;
 ?>
 <div class="categoryList">
 	<h2><?php
-			echo $this->_(['labels.category', 'labels.categories', 2]);
+			echo $this->_(['category', 'categories', 2]);
 			if (Person::isAllowed('categories','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/categories/update',
-					$this->_('labels.add'),
+					$this->_('add'),
 					'add'
 				);
 			}
@@ -47,7 +47,7 @@ use Application\Models\Person;
 			$d = $category->getDepartment();
 			$department = $d ? self::escape($d->getName()) : '';
 
-            $autoCloseActive    = $category->autoCloseIsActive   () ? $this->_('labels.active_yes') : $this->_('labels.active_no');
+            $autoCloseActive    = $category->autoCloseIsActive   () ? $this->_('active_yes') : $this->_('active_no');
 
 			$html.= "
 			<div class=\"category\">
@@ -58,13 +58,13 @@ use Application\Models\Person;
 				<p>$description</p>
 				<table>
 					<thead>
-						<tr><th>{$this->_(['labels.department', 'labels.departments', 1])}</th>
-							<th>{$this->_('labels.sla')}
-								{$this->_(['labels.day', 'labels.days', 2])}
+						<tr><th>{$this->_(['department', 'departments', 1])}</th>
+							<th>{$this->_('sla')}
+								{$this->_(['day', 'days', 2])}
 							</th>
-							<th>{$this->_('labels.postingPermissionLevel')}</th>
-							<th>{$this->_('labels.displayPermissionLevel')}</th>
-							<th>{$this->_('labels.autoCloseIsActive')}</th>
+							<th>{$this->_('postingPermissionLevel')}</th>
+							<th>{$this->_('displayPermissionLevel')}</th>
+							<th>{$this->_('autoCloseIsActive')}</th>
 						</tr>
 					</thead>
 					<tbody>

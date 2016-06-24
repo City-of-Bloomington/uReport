@@ -19,22 +19,22 @@ if (Person::isAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h2>{$this->_('labels.quick_links')}</h2>
+		<h2>{$this->_('quick_links')}</h2>
 		<form method=\"get\" action=\"".BASE_URI."/tickets\">
 			<fieldset>
 				<label>
-					{$this->_('labels.ticket')}
+					{$this->_('ticket')}
 					# <input name=\"id\" value=\"$id\" size=\"6\" />
 				</label>
 				<button type=\"submit\"><span class=\"fa fa-search\"></span> Go</button>
 			</fieldset>
 		</form>
 		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
-					{$this->_('labels.tickets_open')}
+					{$this->_('tickets_open')}
 				</a>
 			</li>
 			<li><a href=\"".BASE_URI."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
-					{$this->_('labels.tickets_my')}
+					{$this->_('tickets_my')}
 				</a>
 			</li>
 		";
@@ -42,7 +42,7 @@ if (Person::isAllowed('tickets','add')) {
 			$d = $_SESSION['USER']->getDepartment();
 			echo "
 			<li><a href=\"".BASE_URI."/tickets?status=open;department_id={$d->getId()}\">
-					{$this->_('labels.tickets_my_department')}
+					{$this->_('tickets_my_department')}
 				</a>
 			</li>
 			";
@@ -68,13 +68,13 @@ if (Person::isAllowed('tickets','add')) {
 }
 ?>
 <div>
-	<h2><?= $this->_('labels.search'); ?></h2>
+	<h2><?= $this->_('search'); ?></h2>
 	<form method="get" action="<?= BASE_URI; ?>/tickets">
 		<fieldset>
-			<label><?= $this->_('labels.search'); ?>
+			<label><?= $this->_('search'); ?>
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo self::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('labels.go'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('go'); ?></button>
 			<p class="help"><?= $this->_('messages.ticket_search_query_description'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
@@ -114,23 +114,23 @@ if (Person::isAllowed('tickets','add')) {
 					$url->sla = 'overdue';
 					echo "
                     <div class=\"collapsible\">
-                        <h3 class=\"hd\">{$this->_('labels.sla')}</h3>
+                        <h3 class=\"hd\">{$this->_('sla')}</h3>
                         <ul class=\"bd\">
-                            <li><a href=\"$url\">{$this->_('labels.overdue')}</a> ($value)</li>
+                            <li><a href=\"$url\">{$this->_('overdue')}</a> ($value)</li>
                         </ul>
                     </div>
                     ";
 				}
 			?>
 			<div class="collapsible">
-				<h3 class="hd"><?= $this->_('labels.enteredDate'); ?></h3>
+				<h3 class="hd"><?= $this->_('enteredDate'); ?></h3>
 				<table class="bd">
-					<tr><td><label  for="enteredDate-start"><?= $this->_('labels.start'); ?>:</label></td>
+					<tr><td><label  for="enteredDate-start"><?= $this->_('start'); ?>:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
 								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
 						</td>
 					</tr>
-					<tr><td><label  for="enteredDate-end"><?= $this->_('labels.end'); ?>:</label></td>
+					<tr><td><label  for="enteredDate-end"><?= $this->_('end'); ?>:</label></td>
 						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
 								value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
 						</td>
@@ -140,7 +140,7 @@ if (Person::isAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend><?= $this->_('labels.display_fields'); ?></legend>
+		<fieldset><legend><?= $this->_('display_fields'); ?></legend>
 			<ul class="fields twoColumnlist">
 			<?php
 				// Default columns to display
@@ -155,7 +155,7 @@ if (Person::isAllowed('tickets','add')) {
 						echo "
 						<li><label>
 								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />
-                                    {$this->_('fields.'.$field)}
+                                    {$this->_($field)}
 							  </label>
 						</li>
 						";
@@ -166,12 +166,12 @@ if (Person::isAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
+		<fieldset><legend><?= $this->_('submit'); ?></legend>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit"><i class="fa fa-search"></i> <?= $this->_('labels.search'); ?></button>
+			<button type="submit"><i class="fa fa-search"></i> <?= $this->_('search'); ?></button>
 		</fieldset>
 	</form>
 </div>

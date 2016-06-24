@@ -7,14 +7,14 @@
 $this->template->addToAsset('scripts',BASE_URI.'/js/merge.js');
 ?>
 <form method="get" action="<?= BASE_URI; ?>/people/merge" class="personSelectForMergeForm">
-	<fieldset><legend><?= $this->_('labels.merge_people'); ?></legend>
+	<fieldset><legend><?= $this->_('merge_people'); ?></legend>
 		<p><?= $this->_('messages.merge_people_description'); ?></p>
 		<div>
 			<input name="person_id_a" id="person_id_a" ondragover="MERGE.drag(event);" ondrop="MERGE.drop(event);" />
 			<input name="person_id_b" id="person_id_b" ondragover="MERGE.drag(event);" ondrop="MERGE.drop(event);" />
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?= $this->_('labels.merge'); ?>
+				<?= $this->_('merge'); ?>
 			</button>
 		</div>
 	</fieldset>

@@ -10,9 +10,9 @@ use Blossom\Classes\View;
 ?>
 <div class="updateEmailForm">
 	<form method="post">
-		<fieldset><legend><?= $this->_(array('labels.email', 'labels.emails', 1)); ?></legend>
+		<fieldset><legend><?= $this->_(array('email', 'emails', 1)); ?></legend>
 			<table>
-				<tr><td><label><?= $this->_(array('labels.label', 'labels.labels', 1)); ?>
+				<tr><td><label><?= $this->_(array('label', 'labels', 1)); ?>
 							<select name="label" id="label">
 							<?php
 								foreach (Email::$LABELS as $label) {

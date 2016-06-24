@@ -14,7 +14,7 @@ foreach ($fields as $f) {
 $category     = $this->responseTemplate->getCategory();
 $categoryName = self::escape($category->getName());
 
-$title = $id ? $this->_('labels.responseTemplate_edit') : $this->_('labels.responseTemplate_add');
+$title = $id ? $this->_('responseTemplate_edit') : $this->_('responseTemplate_add');
 ?>
 <section>
     <header>
@@ -26,7 +26,7 @@ $title = $id ? $this->_('labels.responseTemplate_edit') : $this->_('labels.respo
             <input name="category_id" type="hidden" value="<?= $category_id; ?>" />
 
             <table>
-                <tr><td><label   for="action_id"><?= $this->_('labels.action'); ?></label></td>
+                <tr><td><label   for="action_id"><?= $this->_('action'); ?></label></td>
                     <td><select name="action_id" id="action_id">
                         <?php
                             $existing = array_keys($category->getResponseTemplates());
@@ -49,23 +49,23 @@ $title = $id ? $this->_('labels.responseTemplate_edit') : $this->_('labels.respo
                 <?php
                     $autoRespondIsActive = $this->responseTemplate->autoRespondIsActive();
                 ?>
-                <tr><td><label><?= $this->_('labels.autoRespond'); ?></label></td>
+                <tr><td><label><?= $this->_('autoRespond'); ?></label></td>
                     <td><label>
                             <input name="autoRespond" type="radio" value="1" <?= $autoRespondIsActive ? 'checked="true"' : ''; ?> />
-                            <?= $this->_('labels.active_yes'); ?>
+                            <?= $this->_('active_yes'); ?>
                         </label>
                         <label>
                             <input name="autoRespond" type="radio" value="0" <?= $autoRespondIsActive ? '' : 'checked="true"'; ?> />
-                            <?= $this->_('labels.active_no'); ?>
+                            <?= $this->_('active_no'); ?>
                         </label>
                     </td>
                 </tr>
-                <tr><td><label  for="replyEmail"><?= $this->_('labels.replyEmail'); ?></label></td>
+                <tr><td><label  for="replyEmail"><?= $this->_('replyEmail'); ?></label></td>
                     <td><input name="replyEmail" id="replyEmail" value="<?= $replyEmail; ?>" />
             </table>
         </fieldset>
 
-        <fieldset><legend><?= $this->_('labels.responseTemplate'); ?></legend>
+        <fieldset><legend><?= $this->_('responseTemplate'); ?></legend>
             <div>
                 <textarea name="template"><?= $template; ?></textarea>
             </div>

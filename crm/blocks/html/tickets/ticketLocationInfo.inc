@@ -11,7 +11,7 @@ use Blossom\Classes\View;
 	<?php
 		$list = "
 		<div class=\"additionalLocationInfo\">
-			<h2>{$this->_('labels.info_location_additional')}</h2>
+			<h2>{$this->_('info_location_additional')}</h2>
 			<ul class=\"twoColumnlist\">
 		";
 		$locationFields = array('city','state','zip','latitude','longitude');
