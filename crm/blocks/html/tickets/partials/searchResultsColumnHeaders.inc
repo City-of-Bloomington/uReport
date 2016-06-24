@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\Person;
@@ -38,8 +37,7 @@ echo "
 		}
 		foreach ($_GET['fields'] as $name => $checked) {
 			// Make sure they're allowed to see this field
-			if (array_key_exists($name, $displayableFields)
-				&& (false === strpos($name, 'Person') || Person::isAllowed('people'))) {
+			if (array_key_exists($name, $displayableFields)) {
 
 				$label = $displayableFields[$name];
 

@@ -149,8 +149,7 @@ if (Person::isAllowed('tickets','add')) {
 				}
 
 				foreach (TicketTable::getDisplayableFields() as $field=>$name) {
-					if ((false === strpos($field,'Person') || Person::isAllowed('people', 'view'))
-						&& $field!='id') {
+					if ($field!='id') {
 
 						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
 						echo "

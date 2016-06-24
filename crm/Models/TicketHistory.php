@@ -199,15 +199,9 @@ class TicketHistory extends ActiveRecord
 	 */
 	public function renderVariables($message, Template $template, Person $person=null)
 	{
-        global $ZEND_ACL;
-
-        $userCanViewPeople = $person
-            ? $ZEND_ACL->isAllowed($person->getRole(), 'people', 'view')
-            : Person::isAllowed('people', 'view');
-
         $placeholders = [
-            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $userCanViewPeople ? $this->getEnteredByPerson()->getFullname() : $template->_('labels.someone') : '',
-            'actionPerson'   => $this->getActionPerson_id()    ? $userCanViewPeople ? $this->getActionPerson()   ->getFullname() : $template->_('labels.someone') : '',
+            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
+            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '',
             'ticket_id'      => $this->getTicket_id(),
             'issue_id'       => $this->getIssue_id(),
         ];

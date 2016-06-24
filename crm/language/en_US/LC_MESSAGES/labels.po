@@ -839,10 +839,10 @@ msgstr "New Contact Method"
 msgid "labels.create_issuetype"
 msgstr "New Issue Type"
 
-msgid "status.open"
+msgid "labels.open"
 msgstr "Open"
 
-msgid "status.closed"
+msgid "labels.closed"
 msgstr "Closed"
 
 msgid "labels.total"

@@ -16,19 +16,21 @@ $location  = $location
 	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"
 	: '';
 
-if (Person::isAllowed('people','view')) {
-	$url = new Url(BASE_URL.'/people/view.php');
-	$personFields = ['enteredBy', 'assigned'];
-	foreach ($personFields as $field) {
-		$$field = '';
-		$get = 'get'.ucfirst($field).'Person';
-		$person = $this->ticket->$get();
-		if ($person) {
-			$url->person_id = "{$person->getId()}";
-			$$field = "<a href=\"$url\">".self::escape($person->getFullname())."</a>";
-		}
+$userCanViewPeople = Person::isAllowed('people', 'view');
+$url = new Url(BASE_URL.'/people/view.php');
 
-	}
+$personFields = ['enteredBy', 'assigned'];
+foreach ($personFields as $field) {
+    $$field = '';
+    $get = 'get'.ucfirst($field).'Person';
+    $person = $this->ticket->$get();
+    if ($person) {
+        $$field = self::escape($person->getFullname());
+        if ($userCanViewPeople) {
+            $url->person_id = $person->getId();
+            $$field = "<a href=\"$url\">{$$field}</a>";
+        }
+    }
 }
 
 $status = $this->ticket->getStatus();
@@ -42,15 +44,18 @@ $changeCategoryButton = '';
 $changeLocationButton = '';
 $assignButton         = '';
 
-if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
+if (!$this->disableButtons) {
 	$helper = $this->template->getHelper('buttonLink');
-	$editStatusButton = $helper->buttonLink(
-		BASE_URI.'/tickets/changeStatus?ticket_id='.$ticket_id,
-		$this->_('labels.change_status'),
-		'edit',
-		ButtonLink::SIZE_ICON,
-		['data-callback'=>'changeStatus']
-	);
+
+	if (Person::isAllowed('tickets', 'changeStatus')) {
+        $editStatusButton = $helper->buttonLink(
+            BASE_URI.'/tickets/changeStatus?ticket_id='.$ticket_id,
+            $this->_('labels.change_status'),
+            'edit',
+            ButtonLink::SIZE_ICON,
+            ['data-callback'=>'changeStatus']
+        );
+    }
 	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = $helper->buttonLink(
 			BASE_URI.'/tickets/delete?ticket_id='.$ticket_id,
@@ -60,21 +65,25 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 	}
 
 	if ($this->ticket->getStatus()!='closed') {
-		$changeCategoryButton = $helper->buttonLink(
-			BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
-			$this->_('labels.change_category'),
-			'edit',
-			ButtonLink::SIZE_ICON,
-			['data-callback'=>'changeCategory']
-		);
-		$changeLocationButton = $helper->buttonLink(
-			BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
-			$this->_('labels.change_location'),
-			'edit',
-			ButtonLink::SIZE_ICON,
-			['data-callback'=>'changeLocation']
-		);
-		if (Person::isAllowed('people','view')) {
+        if (Person::isAllowed('tickets', 'changeCategory')) {
+            $changeCategoryButton = $helper->buttonLink(
+                BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
+                $this->_('labels.change_category'),
+                'edit',
+                ButtonLink::SIZE_ICON,
+                ['data-callback'=>'changeCategory']
+            );
+        }
+        if (Person::isAllowed('tickets', 'changeLocation')) {
+            $changeLocationButton = $helper->buttonLink(
+                BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
+                $this->_('labels.change_location'),
+                'edit',
+                ButtonLink::SIZE_ICON,
+                ['data-callback'=>'changeLocation']
+            );
+        }
+		if (Person::isAllowed('tickets', 'assign')) {
 			$assignButton = $helper->buttonLink(
 				BASE_URI.'/tickets/assign?ticket_id='.$ticket_id,
 				$this->_('labels.assign_ticket'),
@@ -94,30 +103,26 @@ echo "
 <div class=\"ticketInfo twoColumnlist\">
 	<h2><a href=\"{$this->ticket->getURL()}\">Case #{$ticket_id}</a> $deleteButton</h2>
 	<ul>
-		<li><label>Category:</label>
+		<li><label>{$this->_('fields.category_id')}:</label>
 			$category
 			$changeCategoryButton
 		</li>
-		<li><label>Location:</label>
+		<li><label>{$this->_('fields.location')}:</label>
 			$location
 			$changeLocationButton
 		</li>
-		<li><label>Status:</label>
+		<li><label>{$this->_('fields.status')}:</label>
 			$status
 			$editStatusButton
 		</li>
-";
-if (Person::isAllowed('people','view')) {
-	echo "
-		<li><label>Assigned To:</label>
+		<li><label>{$this->_('fields.assignedPerson_id')}:</label>
 			$assigned
 			$assignButton
 		</li>
-		<li><label>Created By:</label>
+		<li><label>{$this->_('fields.enteredByPerson_id')}:</label>
 			$enteredBy
 		</li>
 	";
-}
 	$client = $this->ticket->getClient();
 	if ($client) {
 		$name = self::escape($client->getName());
