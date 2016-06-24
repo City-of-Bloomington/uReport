@@ -12,8 +12,6 @@ use Application\Models\Person;
         <h1><?= $this->_('labels.history'); ?></h1>
     </header>
 	<?php
-        $userCanViewPeople = Person::isAllowed('people', 'view');
-
 		foreach ($this->history as $event) {
             $description = self::escape($event->getDescription($this->template));
 

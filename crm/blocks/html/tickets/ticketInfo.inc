@@ -8,11 +8,11 @@
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
-use Blossom\Classes\View;
 use Blossom\Classes\Url;
 
-$location = View::escape($this->ticket->getLocation());
-$location = $location
+$ticket_id = $this->ticket->getId();
+$location  = self::escape($this->ticket->getLocation());
+$location  = $location
 	? "<a href=\"".BASE_URL."/locations/view?location=".urlencode($location)."\">$location</a>"
 	: '';
 
@@ -25,7 +25,7 @@ if (Person::isAllowed('people','view')) {
 		$person = $this->ticket->$get();
 		if ($person) {
 			$url->person_id = "{$person->getId()}";
-			$$field = "<a href=\"$url\">".View::escape($person->getFullname())."</a>";
+			$$field = "<a href=\"$url\">".self::escape($person->getFullname())."</a>";
 		}
 
 	}
@@ -45,39 +45,39 @@ $assignButton         = '';
 if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 	$helper = $this->template->getHelper('buttonLink');
 	$editStatusButton = $helper->buttonLink(
-		BASE_URI.'/tickets/changeStatus?ticket_id='.$this->ticket->getId(),
-		$this->translate('labels.change_status'),
+		BASE_URI.'/tickets/changeStatus?ticket_id='.$ticket_id,
+		$this->_('labels.change_status'),
 		'edit',
 		ButtonLink::SIZE_ICON,
 		['data-callback'=>'changeStatus']
 	);
 	if (Person::isAllowed('tickets', 'delete')) {
 		$deleteButton = $helper->buttonLink(
-			BASE_URI.'/tickets/delete?ticket_id='.$this->ticket->getId(),
-			$this->translate('labels.delete_ticket'),
+			BASE_URI.'/tickets/delete?ticket_id='.$ticket_id,
+			$this->_('labels.delete_ticket'),
 			'delete'
 		);
 	}
 
 	if ($this->ticket->getStatus()!='closed') {
 		$changeCategoryButton = $helper->buttonLink(
-			BASE_URI.'/tickets/changeCategory?ticket_id='.$this->ticket->getId(),
-			$this->translate('labels.change_category'),
+			BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
+			$this->_('labels.change_category'),
 			'edit',
 			ButtonLink::SIZE_ICON,
 			['data-callback'=>'changeCategory']
 		);
 		$changeLocationButton = $helper->buttonLink(
-			BASE_URI.'/tickets/changeLocation?ticket_id='.$this->ticket->getId(),
-			$this->translate('labels.change_location'),
+			BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
+			$this->_('labels.change_location'),
 			'edit',
 			ButtonLink::SIZE_ICON,
 			['data-callback'=>'changeLocation']
 		);
 		if (Person::isAllowed('people','view')) {
 			$assignButton = $helper->buttonLink(
-				BASE_URI.'/tickets/assign?ticket_id='.$this->ticket->getId(),
-				$this->translate('labels.assign_ticket'),
+				BASE_URI.'/tickets/assign?ticket_id='.$ticket_id,
+				$this->_('labels.assign_ticket'),
 				'edit',
 				ButtonLink::SIZE_ICON,
 				['data-callback'=>'assign']
@@ -88,11 +88,11 @@ if (!$this->disableButtons && Person::isAllowed('tickets','update')) {
 }
 
 $category = $this->ticket->getCategory_id()
-	? View::escape($this->ticket->getCategory()->getName())
+	? self::escape($this->ticket->getCategory()->getName())
 	: '';
 echo "
 <div class=\"ticketInfo twoColumnlist\">
-	<h2><a href=\"{$this->ticket->getURL()}\">Case #{$this->ticket->getId()}</a> $deleteButton</h2>
+	<h2><a href=\"{$this->ticket->getURL()}\">Case #{$ticket_id}</a> $deleteButton</h2>
 	<ul>
 		<li><label>Category:</label>
 			$category
@@ -120,7 +120,7 @@ if (Person::isAllowed('people','view')) {
 }
 	$client = $this->ticket->getClient();
 	if ($client) {
-		$name = View::escape($client->getName());
+		$name = self::escape($client->getName());
 		echo "
 		<li>
 			<label>Received Via:</label>
