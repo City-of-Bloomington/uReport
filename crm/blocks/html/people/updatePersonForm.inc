@@ -7,22 +7,22 @@
  */
 use Blossom\Classes\View;
 
-$title = $this->person->getId() ? View::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
+$title = $this->person->getId() ? self::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
 // Let the template override the title, if it wants to
-$title = $this->title ? View::escape($this->title) : $title;
+$title = $this->title ? self::escape($this->title) : $title;
 ?>
 <div class="updatePersonForm">
-	<h2><?php echo $title; ?></h2>
-	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
+	<h2><?= $title; ?></h2>
+	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
 
 		<?php
 			include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc';
 		?>
 
-		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
+		<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?php echo $this->translate('labels.save'); ?>
+				<?= $this->_('labels.save'); ?>
 			</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
@@ -41,7 +41,7 @@ $title = $this->title ? View::escape($this->title) : $title;
 				echo "
 				<a class=\"btn\" href=\"$return_url\" $onclick>
 					<span class=\"fa fa-times\"></span>
-					{$this->translate('labels.cancel')}
+					{$this->_('labels.cancel')}
 				</a>
 				";
 			?>

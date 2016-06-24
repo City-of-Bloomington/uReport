@@ -12,7 +12,7 @@ echo "
 	<ul>
 ";
 	foreach ($this->results as $value) {
-		$value = View::escape($value);
+		$value = self::escape($value);
 		echo "<li>$value</li>";
 	}
 echo "

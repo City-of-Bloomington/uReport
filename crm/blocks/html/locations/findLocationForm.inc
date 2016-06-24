@@ -8,7 +8,7 @@
 use Blossom\Classes\View;
 ?>
 <div class="findLocationForm">
-	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate('labels.find_location'); ?></h2>
+	<h2><?= $this->title ? self::escape($this->title) : $this->_('labels.find_location'); ?></h2>
 	<?php
 		if (defined('ADDRESS_SERVICE')) {
 			include APPLICATION_HOME.'/blocks/html/locations/findAddressForm.inc';
@@ -31,7 +31,7 @@ use Blossom\Classes\View;
 			<div>
 				<button type=\"button\" onclick=\"self.close();\">
 					<span class=\"icon-remove\"></span>
-					{$this->translate('labels.cancel')}
+					{$this->_('labels.cancel')}
 				</button>
 			</div>
 			";

@@ -28,7 +28,7 @@ $ACTIVITY_DATA = [
 <style type="text/css">
 	.chart { width:100%; height:200px; }
 	.charts-tooltip div { color:infotext; }
-	
+
 	#pieCharts { overflow:auto; }
 
 	#pieCharts .chartData { float:left; width: 200px; height:240px; }
@@ -44,7 +44,7 @@ $ACTIVITY_DATA = [
 			<?php
                 $data = Report::currentOpenTickets();
                 foreach ($data as $r) {
-                    $name = View::escape($r['category']);
+                    $name = self::escape($r['category']);
                     $ACTIVITY_DATA['currentOpenTickets'][] = [$name, (int)$r['count']];
                 }
             ?>
@@ -55,7 +55,7 @@ $ACTIVITY_DATA = [
 			<?php
                 $data = Report::openedTickets();
                 foreach ($data as $r) {
-                    $name = View::escape($r['category']);
+                    $name = self::escape($r['category']);
                     $ACTIVITY_DATA['openedTickets'][] = [$name, (int)$r['count']];
                 }
             ?>
@@ -66,7 +66,7 @@ $ACTIVITY_DATA = [
             <?php
                 $data = Report::closedTickets();
                 foreach ($data as $r) {
-                    $name = View::escape($r['category']);
+                    $name = self::escape($r['category']);
                     $ACTIVITY_DATA['closedTickets'][] = [$name, (int)$r['count']];
                 }
             ?>
@@ -124,5 +124,5 @@ $ACTIVITY_DATA = [
     ?>
 </div>
 <script type="text/javascript">
-var ACTIVITY_DATA = <?php echo json_encode($ACTIVITY_DATA, JSON_PRETTY_PRINT); ?>
+var ACTIVITY_DATA = <?= json_encode($ACTIVITY_DATA, JSON_PRETTY_PRINT); ?>
 </script>

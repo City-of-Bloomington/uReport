@@ -6,25 +6,25 @@
  */
 use Blossom\Classes\View;
 
-$address = isset($_GET['location']['address']) ? View::escape($_GET['location']['address']) : '';
+$address = isset($_GET['location']['address']) ? self::escape($_GET['location']['address']) : '';
 ?>
 <div class="findAddressForm">
-	<form method="get" action="<?php echo BASE_URL; ?>/locations">
-		<fieldset><legend><?php echo $this->translate('labels.find_address'); ?></legend>
-			<input name="location[address]" id="location-address" value="<?php echo $address; ?>" />
+	<form method="get" action="<?= BASE_URL; ?>/locations">
+		<fieldset><legend><?= $this->_('labels.find_address'); ?></legend>
+			<input name="location[address]" id="location-address" value="<?= $address; ?>" />
 			<?php
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key != 'location') {
-						$key   = View::escape($key);
-						$value = View::escape($value);
+						$key   = self::escape($key);
+						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
 			?>
 			<button type="submit">
 				<span class="fa fa-search"></span>
-				<?php echo $this->translate('labels.search'); ?>
+				<?= $this->_('labels.search'); ?>
 			</button>
 		</fieldset>
 	</form>

@@ -16,21 +16,21 @@ use Blossom\Classes\View;
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/users/update',
-					$this->translate('labels.create_account'),
+					$this->_('labels.create_account'),
 					'add'
 				);
 			}
-			$this->translate(array('labels.user', 'labels.users', 2));
+			$this->_(array('labels.user', 'labels.users', 2));
 		?>
 	</h2>
 	<table>
 		<thead>
 			<tr>
-				<th><?php echo $this->translate('labels.username'); ?></th>
-				<th><?php echo $this->translate('labels.name'); ?></th>
-				<th><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></th>
-				<th><?php echo $this->translate('labels.authenticationMethod'); ?></th>
-				<th><?php echo $this->translate('labels.role'); ?></th>
+				<th><?= $this->_('labels.username'); ?></th>
+				<th><?= $this->_('labels.name'); ?></th>
+				<th><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></th>
+				<th><?= $this->_('labels.authenticationMethod'); ?></th>
+				<th><?= $this->_('labels.role'); ?></th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -43,23 +43,23 @@ use Blossom\Classes\View;
 				if (Person::isAllowed('users','update')) {
 					$editButton = $helper->buttonLink(
 						BASE_URI.'/users/update?person_id='.$user->getId(),
-						$this->translate('labels.edit'),
+						$this->_('labels.edit'),
 						'edit',
 						ButtonLink::SIZE_ICON
 					);
 					$deleteButton = $helper->buttonLink(
 						BASE_URI.'/users/delete?person_id='.$user->getId(),
-						$this->translate('labels.delete'),
+						$this->_('labels.delete'),
 						'delete',
 						ButtonLink::SIZE_ICON
 					);
 				}
 
-				$username = View::escape($user->getUsername());
-				$name     = View::escape("{$user->getFirstname()} {$user->getLastname()}");
+				$username = self::escape($user->getUsername());
+				$name     = self::escape("{$user->getFirstname()} {$user->getLastname()}");
 
 				$department = $user->getDepartment();
-				$departmentName = $department ? View::escape($department->getName()) : '';
+				$departmentName = $department ? self::escape($department->getName()) : '';
 				echo "
 				<tr>
 					<td>$username</td>

@@ -8,26 +8,26 @@ use Blossom\Classes\View;
 			$li = '<li><a href="%s">%s</a></li>';
 
 			if (Person::isAllowed('users')) {
-				echo sprintf($li, BASE_URI.'/admin', $this->translate('labels.admin'));
+				echo sprintf($li, BASE_URI.'/admin', $this->_('labels.admin'));
 			}
 			if (isset($_SESSION['USER'])) {
-				echo sprintf($li, BASE_URI.'/account', $this->translate('labels.my_account'));
-				echo sprintf($li, BASE_URI.'/login/logout', $this->translate('labels.logout'));
+				echo sprintf($li, BASE_URI.'/account', $this->_('labels.my_account'));
+				echo sprintf($li, BASE_URI.'/login/logout', $this->_('labels.logout'));
 
-				$name = View::escape($_SESSION['USER']->getFullname());
-				echo sprintf('<li>'.sprintf($this->translate('messages.signed_in_as'), $name).'</li>');
+				$name = self::escape($_SESSION['USER']->getFullname());
+				echo sprintf('<li>'.sprintf($this->_('messages.signed_in_as'), $name).'</li>');
 				echo sprintf($li,
 					'https://github.com/City-of-Bloomington/uReport/wiki/User-Guide',
-					$this->translate('labels.help'));
+					$this->_('labels.help'));
 			}
 			else {
-				$return_url = View::escape($_SERVER['REQUEST_URI']);
-				echo sprintf($li, BASE_URI.'/login?return_url='.$return_url, $this->translate('labels.login'));
+				$return_url = self::escape($_SERVER['REQUEST_URI']);
+				echo sprintf($li, BASE_URI.'/login?return_url='.$return_url, $this->_('labels.login'));
 			}
 		?>
 	</ul>
 	<div id="application_name">
-		<a href="<?php echo BASE_URI; ?>/"><?php echo APPLICATION_NAME; ?></a>
+		<a href="<?= BASE_URI; ?>/"><?= APPLICATION_NAME; ?></a>
 	</div>
-	<div id="location_name"><?php echo LOCATION_NAME; ?></div>
+	<div id="location_name"><?= LOCATION_NAME; ?></div>
 </div>

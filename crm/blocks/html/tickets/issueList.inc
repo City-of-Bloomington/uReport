@@ -16,13 +16,13 @@ if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')
 	$h = $this->template->getHelper('buttonLink');
 	$addButton = $h->buttonLink(
 		BASE_URL.'/issues/update?ticket_id='.$this->ticket->getId(),
-		$this->translate('labels.add_issue'),
+		$this->_('labels.add_issue'),
 		'add'
 	);
 }
 echo "
 <div class=\"issueList\">
-	<h2>{$this->translate('labels.ticket_issues')} $addButton</h2>
+	<h2>{$this->_('labels.ticket_issues')} $addButton</h2>
 ";
 	foreach ($this->issueList as $issue) {
 		$block = new Block(

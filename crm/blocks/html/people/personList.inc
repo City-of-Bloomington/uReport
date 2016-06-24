@@ -9,13 +9,13 @@ use Blossom\Classes\View;
 use Blossom\Classes\Url;
 ?>
 <div class="personList interfaceBox">
-	<h2><?php echo $this->translate(array('labels.person', 'labels.people', 2)); ?></h2>
+	<h2><?= $this->_(array('labels.person', 'labels.people', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th><?php echo $this->translate('labels.name'); ?></th>
-				<th><?php echo $this->translate(array('labels.email'  , 'labels.emails'   , 1)); ?></th>
-				<th><?php echo $this->translate(array('labels.address', 'labels.addresses', 1)); ?></th>
-				<th><?php echo $this->translate(array('labels.phone'  , 'labels.phones'   , 1)); ?></th>
+			<tr><th><?= $this->_('labels.name'); ?></th>
+				<th><?= $this->_(array('labels.email'  , 'labels.emails'   , 1)); ?></th>
+				<th><?= $this->_(array('labels.address', 'labels.addresses', 1)); ?></th>
+				<th><?= $this->_(array('labels.phone'  , 'labels.phones'   , 1)); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,15 +41,15 @@ use Blossom\Classes\Url;
 					$url = $person->getURL();
 				}
 
-				$name         = View::escape($person->getFullname());
-				$organization = View::escape($person->getOrganization());
+				$name         = self::escape($person->getFullname());
+				$organization = self::escape($person->getOrganization());
 
 				$emailList = '';
 				$emails = $person->getEmails();
 				if (count($emails)) {
 					$list = '<ul>';
 					foreach ($emails as $e) {
-						$email = View::escape($e->getEmail());
+						$email = self::escape($e->getEmail());
 						$list.= "<li>$email</li>";
 					}
 					$list.= '</ul>';
@@ -61,7 +61,7 @@ use Blossom\Classes\Url;
 				if (count($addresses)) {
 					$list = '<ul>';
 					foreach ($addresses as $a) {
-						$address = View::escape($a->getAddress());
+						$address = self::escape($a->getAddress());
 						$list.= "<li>$address</li>";
 					}
 					$list.= '</ul>';
@@ -73,7 +73,7 @@ use Blossom\Classes\Url;
 				if (count($phones)) {
 					$list = '<ul>';
 					foreach ($phones as $p) {
-						$number = View::escape($p->getNumber());
+						$number = self::escape($p->getNumber());
 						$list.= "<li>$number</li>";
 					}
 					$list.= '</ul>';

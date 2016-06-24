@@ -18,8 +18,8 @@ if (count($this->results)) {
 	echo "
 	<table>
 		<thead>
-			<tr><th>{$this->translate(array('labels.location', 'labels.locations', 1))}</th>
-				<th>{$this->translate(array('labels.ticket', 'labels.tickets', 2))}</th>
+			<tr><th>{$this->_(array('labels.location', 'labels.locations', 1))}</th>
+				<th>{$this->_(array('labels.ticket', 'labels.tickets', 2))}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,7 +37,7 @@ if (count($this->results)) {
 			$url->location = $location;
 		}
 
-		$location = View::escape($location);
+		$location = self::escape($location);
 		$city = isset($data['city']) ? ", $data[city]" : '';
 		$class = $data['addressId'] ? 'class="verified"' : '';
 		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
@@ -55,13 +55,13 @@ if (count($this->results)) {
 
 	<table>
 		<tr class=\"verified\">
-			<td>{$this->translate('messages.verified_locations')}</td>
+			<td>{$this->_('messages.verified_locations')}</td>
 		</tr>
 	</table>
 	";
 }
 else {
-	echo "<p>{$this->translate('messages.no_locations_found')}</p>";
+	echo "<p>{$this->_('messages.no_locations_found')}</p>";
 
 	// If they don't have a master address service they still need a way to add
 	// new locations.  However, once they have a master address system, users
@@ -77,15 +77,15 @@ else {
 		<form method=\"get\" action=\"$return_url\" onsubmit=\"$onsubmit\">
 			<fieldset>
 				<legend>
-					{$this->translate('labels.add')}
-					{$this->translate(array('labels.location', 'labels.locations', 1))}
+					{$this->_('labels.add')}
+					{$this->_(array('labels.location', 'labels.locations', 1))}
 				</legend>
 				<table>
-					<tr><th><label for=\"location\">{$this->translate(array('labels.location', 'labels.locations', 1))}</th>
+					<tr><th><label for=\"location\">{$this->_(array('labels.location', 'labels.locations', 1))}</th>
 						<td><input id=\"location\" name=\"location\" /></td>
 					</tr>
 				</table>
-				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->translate('labels.submit')}</button>
+				<button type=\"submit\"><span class=\"fa fa-plus\"></span> {$this->_('labels.submit')}</button>
 			</fieldset>
 		</form>
 		";

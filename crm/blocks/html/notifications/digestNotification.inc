@@ -7,11 +7,11 @@
  */
 use Blossom\Classes\View;
 
-$name = View::escape($this->person->getFullname());
+$name = self::escape($this->person->getFullname());
 ?>
 <p>
 <?php
-	echo sprintf($this->translate('text.digestNotification'),
+	echo sprintf($this->_('text.digestNotification'),
 		$name,
 		APPLICATION_NAME,
 		$this->person->getURL()

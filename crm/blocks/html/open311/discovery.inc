@@ -11,10 +11,10 @@ $lastModified = Category::getGlobalLastModifiedDate('c');
 <h1>Service Discovery</h1>
 <table>
 	<tr><th>changeset</th>
-		<td><?php echo $lastModified; ?></td>
+		<td><?= $lastModified; ?></td>
 	</tr>
 	<tr><th>contact</th>
-		<td>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></td>
+		<td>You can email for assistance <?= ADMINISTRATOR_EMAIL; ?></td>
 	</tr>
 	<tr><th>key_service</th>
 		<td>You can request a key at
@@ -31,10 +31,10 @@ $lastModified = Category::getGlobalLastModifiedDate('c');
 		<td>http://wiki.open311.org/GeoReport_v2</td>
 	</tr>
 	<tr><th>url</th>
-		<td><?php echo BASE_URL; ?>/open311/v2</td>
+		<td><?= BASE_URL; ?>/open311/v2</td>
 	</tr>
 	<tr><th>changeset</th>
-		<td><?php echo $lastModified; ?></td>
+		<td><?= $lastModified; ?></td>
 	</tr>
 	<tr><th>type</th><td>production</td></tr>
 	<tr><th>formats</th><td>text/xml,application/json</td></tr>
@@ -48,7 +48,7 @@ $lastModified = Category::getGlobalLastModifiedDate('c');
 		<td>https://bloomington.in.gov/test/open311/v2</td>
 	</tr>
 	<tr><th>changeset</th>
-		<td><?php echo $lastModified; ?></td>
+		<td><?= $lastModified; ?></td>
 	</tr>
 	<tr><th>type</th><td>test</td></tr>
 	<tr><th>formats</th><td>text/xml,application/json</td></tr>

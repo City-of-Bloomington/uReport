@@ -12,7 +12,7 @@ use Blossom\Classes\View;
 ?>
 <table>
 	<tr><td><label for="issueType_id" class="required">
-				<?php echo $this->translate('labels.type'); ?>
+				<?= $this->_('labels.type'); ?>
 				<span class="fa fa-asterisk"></span>
 			</label>
 		</td>
@@ -24,7 +24,7 @@ use Blossom\Classes\View;
 						$selected = $this->issue->getIssueType_id()==$type->getId()
 							? 'selected="selected"'
 							: '';
-						$name = View::escape($type->getName());
+						$name = self::escape($type->getName());
 						echo "<option value=\"{$type->getId()}\" $selected>$type</option>";
 					}
 				?>
@@ -33,7 +33,7 @@ use Blossom\Classes\View;
 	</tr>
 
 	<tr class="reportedByPerson">
-		<td><label for="reportedByPerson_id"><?php echo $this->translate('labels.reportedByPerson'); ?></label></td>
+		<td><label for="reportedByPerson_id"><?= $this->_('labels.reportedByPerson'); ?></label></td>
 		<td><?php
 				$reportedByPerson = $this->issue->getReportedByPerson();
 				$helper = $this->template->getHelper('personChooser');
@@ -43,7 +43,7 @@ use Blossom\Classes\View;
 	</tr>
 
 	<tr><td><label for="contactMethod_id">
-			<?php echo $this->translate(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
+			<?= $this->_(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
 			</label>
 		</td>
 		<td><select name="contactMethod_id" id="contactMethod_id">
@@ -56,7 +56,7 @@ use Blossom\Classes\View;
 						$selected = $this->issue->getContactMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						$name = View::escape($method->getName());
+						$name = self::escape($method->getName());
 						echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
 					}
 				?>
@@ -64,7 +64,7 @@ use Blossom\Classes\View;
 		</td>
 	</tr>
 
-	<tr><td><label for="responseMethod_id"><?php echo $this->translate('labels.responseMethod'); ?></label></td>
+	<tr><td><label for="responseMethod_id"><?= $this->_('labels.responseMethod'); ?></label></td>
 		<td><select name="responseMethod_id" id="responseMethod_id">
 				<option value=""></option>
 				<?php
@@ -73,7 +73,7 @@ use Blossom\Classes\View;
 						$selected = $this->issue->getResponseMethod_id()==$method->getId()
 							? 'selected="selected"'
 							: '';
-						$name = View::escape($method->getName());
+						$name = self::escape($method->getName());
 						echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
 					}
 				?>
@@ -83,7 +83,7 @@ use Blossom\Classes\View;
 
 </table>
 
-<div><label for="description"><?php echo $this->translate('labels.description'); ?></label></div>
+<div><label for="description"><?= $this->_('labels.description'); ?></label></div>
 <div>
-	<textarea name="description" id="description"><?php echo View::escape($this->issue->getDescription()); ?></textarea>
+	<textarea name="description" id="description"><?= self::escape($this->issue->getDescription()); ?></textarea>
 </div>

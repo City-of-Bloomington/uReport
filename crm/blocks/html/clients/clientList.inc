@@ -10,18 +10,18 @@ use Blossom\Classes\View;
 ?>
 <div class="clientList">
 	<h2><?php
-			echo $this->translate(array('labels.client', 'labels.clients', 2));
+			echo $this->_(array('labels.client', 'labels.clients', 2));
 			if (Person::isAllowed('clients','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/clients/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
 		?>
 	</h2>
-	<p><?php echo $this->translate('text.clients_description'); ?>	</p>
+	<p><?= $this->_('text.clients_description'); ?>	</p>
 	<?php
 		foreach ($this->clientList as $client) {
 			$editButton   = '';
@@ -29,33 +29,33 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('clients','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/clients/update?client_id='.$client->getId(),
-					$this->translate('labels.edit'),
+					$this->_('labels.edit'),
 					'edit'
 				);
 				$deleteButton = $helper->buttonLink(
 					BASE_URI.'/clients/delete?client_id='.$client->getId(),
-					$this->translate('labels.delete'),
+					$this->_('labels.delete'),
 					'delete'
 				);
 			}
 			$url         = $client->getURL();
 			$contact     = $client->getContactPerson();
-			$name        = View::escape($client->getName());
-			$contactName = View::escape($contact->getFullname());
+			$name        = self::escape($client->getName());
+			$contactName = self::escape($contact->getFullname());
 			echo "
 			<div>
 				<h3>$name $editButton $deleteButton</h3>
 				<table>
-					<tr><th>{$this->translate(array('labels.contactMethod','labels.contactMethods',1))}</th>
+					<tr><th>{$this->_(array('labels.contactMethod','labels.contactMethods',1))}</th>
 						<td>{$client->getContactMethod()}</td>
 					</tr>
-					<tr><th>{$this->translate('labels.api_key')}</th>
+					<tr><th>{$this->_('labels.api_key')}</th>
 						<td>{$client->getApi_key()}</td>
 					</tr>
-					<tr><th>{$this->translate('labels.url')}</th>
+					<tr><th>{$this->_('labels.url')}</th>
 						<td><a href=\"$url\">$url</a></td>
 					</tr>
-					<tr><th>{$this->translate('labels.contact')}</th>
+					<tr><th>{$this->_('labels.contact')}</th>
 						<td><a href=\"{$contact->getURL()}\">$contactName</a></td>
 					</tr>
 				</table>

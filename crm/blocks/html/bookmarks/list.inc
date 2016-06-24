@@ -9,8 +9,8 @@ use Blossom\Classes\View;
 use Application\Templates\Helpers\ButtonLink;
 
 $title = !empty($this->title)
-	? View::escape($this->title)
-	: $this->translate(array('labels.bookmark', 'labels.bookmarks', 2));
+	? self::escape($this->title)
+	: $this->_(array('labels.bookmark', 'labels.bookmarks', 2));
 if (count($this->bookmarks)) {
 	echo "
 	<div class=\"bookmarkList\">
@@ -18,12 +18,12 @@ if (count($this->bookmarks)) {
 		<ul>
  	";
 		foreach ($this->bookmarks as $bookmark) {
-			$name = View::escape($bookmark->getName());
+			$name = self::escape($bookmark->getName());
 
 			$h = $this->template->getHelper('buttonLink');
 			$button = $h->buttonLink(
 				BASE_URI."/bookmarks/delete?bookmark_id={$bookmark->getId()};return_url=$_SERVER[REQUEST_URI]",
-				$this->translate('labels.delete'),
+				$this->_('labels.delete'),
 				'delete',
 				ButtonLink::SIZE_ICON
 			);

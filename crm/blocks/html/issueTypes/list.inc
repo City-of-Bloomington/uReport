@@ -10,12 +10,12 @@ use Blossom\Classes\View;
 ?>
 <div>
 	<h2><?php
-			echo $this->translate(array('labels.issueType', 'labels.issueTypes', 2));
+			echo $this->_(array('labels.issueType', 'labels.issueTypes', 2));
 			if (Person::isAllowed('issueTypes','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/issueTypes/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
@@ -29,11 +29,11 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('issueTypes','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/issueTypes/update?issueType_id='.$type->getId(),
-					$this->translate('labels.edit'),
+					$this->_('labels.edit'),
 					'edit'
 				);
 			}
-			$name = View::escape($type->getName());
+			$name = self::escape($type->getName());
 			echo "<li>$editButton $name</li>";
 		}
 	?>

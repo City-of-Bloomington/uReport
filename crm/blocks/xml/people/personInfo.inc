@@ -7,9 +7,9 @@
 */
 use Blossom\Classes\View;
 
-$username     = View::escape($this->person->getUsername());
-$name         = View::escape($this->person->getFullname());
-$organization = View::escape($this->person->getOrganization());
+$username     = self::escape($this->person->getUsername());
+$name         = self::escape($this->person->getFullname());
+$organization = self::escape($this->person->getOrganization());
 echo "
 <person id=\"{$this->person->getId()}\">
 	<fullname>$name</fullname>
@@ -20,7 +20,7 @@ $list = $this->person->getEmails();
 if (count($list)) {
 	echo "<emails>";
 	foreach ($list as $email) {
-		$n = View::escape($email->getEmail());
+		$n = self::escape($email->getEmail());
 		echo "<email>$n</email>";
 	}
 	echo "</emails>";
@@ -29,7 +29,7 @@ $list = $this->person->getPhones();
 if (count($list)) {
 	echo "<phones>";
 	foreach ($list as $phone) {
-		$n = View::escape($phone->getNumber());
+		$n = self::escape($phone->getNumber());
 		echo "<phone>$n</phone>";
 	}
 	echo "</phones>";
@@ -40,7 +40,7 @@ if (count($list)) {
 	foreach ($list as $a) {
 		foreach(array('address','city','state','zip') as $field) {
 			$get = 'get'.ucfirst($field);
-			$value = View::escape($a->$get());
+			$value = self::escape($a->$get());
 			echo "<$field>$value</$field>";
 		}
 	}

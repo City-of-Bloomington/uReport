@@ -16,9 +16,9 @@ echo "
 	if ($customFields) {
 		foreach ($customFields as $i=>$d) {
 			$order = $i+1;
-			$code  = View::escape($d->name);
-			$datatype    = isset($d->type)     ? View::escape($d->type)  : 'string';
-			$description = isset($d->label)    ? View::escape($d->label) : $code;
+			$code  = self::escape($d->name);
+			$datatype    = isset($d->type)     ? self::escape($d->type)  : 'string';
+			$description = isset($d->label)    ? self::escape($d->label) : $code;
 			$required    = isset($d->required) ? $d->required            : false;
 			$required = $required ? "true" : "false";
 			echo "
@@ -34,7 +34,7 @@ echo "
 				if (isset($d->values)) {
 					echo '<values>';
 					foreach ($d->values as $value) {
-						$value = View::escape($value);
+						$value = self::escape($value);
 						echo "
 						<value>
 							<key>$value</key>

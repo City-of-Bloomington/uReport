@@ -10,7 +10,7 @@ use Blossom\Classes\View;
 echo "<service_requests>";
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
-	$service_name = $c ? View::escape($c->getName()) : '';
+	$service_name = $c ? self::escape($c->getName()) : '';
 	$service_code = $c ? $c->getId()   : '';
 
 	$history = $t->getHistory();
@@ -21,7 +21,7 @@ foreach ($this->ticketList as $t) {
 	if ($p) {
 		$d = $p->getDepartment();
 		if ($d) {
-			$agency_responsible = View::escape($d->getName());
+			$agency_responsible = self::escape($d->getName());
 		}
 	}
 
@@ -35,15 +35,15 @@ foreach ($this->ticketList as $t) {
 		<requested_datetime>{$t->getEnteredDate('c')}</requested_datetime>
 		<updated_datetime>{$h->getEnteredDate('c')}</updated_datetime>
 	";
-	if ($t->getLocation())  { echo '<address>'   .View::escape($t->getLocation()) .'</address>';    }
-	if ($t->getAddressId()) { echo '<address_id>'.View::escape($t->getAddressId()).'</address_id>'; }
-	if ($t->getZip())       { echo '<zipcode>'   .View::escape($t->getZip())      .'</zipcode>';    }
-	if ($t->getLatitude())  { echo '<lat>'       .View::escape($t->getLatitude()) .'</lat>';        }
-	if ($t->getLongitude()) { echo '<long>'      .View::escape($t->getLongitude()).'</long>';       }
+	if ($t->getLocation())  { echo '<address>'   .self::escape($t->getLocation()) .'</address>';    }
+	if ($t->getAddressId()) { echo '<address_id>'.self::escape($t->getAddressId()).'</address_id>'; }
+	if ($t->getZip())       { echo '<zipcode>'   .self::escape($t->getZip())      .'</zipcode>';    }
+	if ($t->getLatitude())  { echo '<lat>'       .self::escape($t->getLatitude()) .'</lat>';        }
+	if ($t->getLongitude()) { echo '<long>'      .self::escape($t->getLongitude()).'</long>';       }
 
 	$issue = $t->getIssue();
 	if ($issue) {
-		echo '<description>'.View::escape($issue->getDescription()).'</description>';
+		echo '<description>'.self::escape($issue->getDescription()).'</description>';
 
 		$media = $issue->getMedia();
 		if (count($media)) {

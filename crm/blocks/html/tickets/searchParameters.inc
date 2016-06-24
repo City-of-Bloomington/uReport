@@ -19,8 +19,8 @@ $helper = $this->template->getHelper('buttonLink');
 if (!empty($_GET['query'])
 	|| isset($this->solrObject->responseHeader->params->fq)) {
 	$q = !empty($_GET['query'])
-		? 'Results for: '.View::escape($_GET['query'])
-		: $this->translate('labels.search_current');
+		? 'Results for: '.self::escape($_GET['query'])
+		: $this->_('labels.search_current');
 	$fq = isset($this->solrObject->responseHeader->params->fq)
 		?       $this->solrObject->responseHeader->params->fq
 		: [];
@@ -36,7 +36,7 @@ if (!empty($_GET['query'])
 
 	if (count($fq)) {
 		echo "
-		<p>{$this->translate('text.search_parameters_description')}</p>
+		<p>{$this->_('text.search_parameters_description')}</p>
 		<span>
 		";
 		// There may only be one filterQuery
@@ -92,7 +92,7 @@ echo '<div id="resultFormatButtons">';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"fa fa-list-ul\"></span>
-		{$this->translate('labels.search_results_text')}
+		{$this->_('labels.search_results_text')}
 	</a>
 	";
 
@@ -101,7 +101,7 @@ echo '<div id="resultFormatButtons">';
 	echo "
 	<a class=\"btn$current\" href=\"$url\">
 		<span class=\"fa fa-map-marker\"></span>
-		{$this->translate('labels.search_results_map')}
+		{$this->_('labels.search_results_map')}
 	</a>
 	";
 
@@ -113,7 +113,7 @@ echo '<div id="resultFormatButtons">';
 		echo "
 		<a class=\"$current\" href=\"$url\">
 			<span class=\"fa fa-print\"></span>
-			{$this->translate('labels.search_results_print')}
+			{$this->_('labels.search_results_print')}
 		</a>
 		";
 	}

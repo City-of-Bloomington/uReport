@@ -9,21 +9,21 @@ use Application\Models\SubstatusTable;
 use Blossom\Classes\View;
 ?>
 <div class="changeStatusForm">
-	<form method="post" action="<?php echo BASE_URI; ?>/tickets/changeStatus">
-		<fieldset><legend><?php echo $this->translate('labels.change_status'); ?></legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+	<form method="post" action="<?= BASE_URI; ?>/tickets/changeStatus">
+		<fieldset><legend><?= $this->_('labels.change_status'); ?></legend>
+			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key = View::escape($key);
-						$value = View::escape($value);
+						$key = self::escape($key);
+						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
 			?>
 			<table>
-				<tr><td><label for="status"><?php echo $this->translate(array('labels.status', 'labels.statuses', 1)); ?></label></td>
+				<tr><td><label for="status"><?= $this->_(array('labels.status', 'labels.statuses', 1)); ?></label></td>
 					<td><select name="status" id="status">
 						<?php
 							foreach (array('open', 'closed') as $status) {
@@ -37,7 +37,7 @@ use Blossom\Classes\View;
 					</td>
 				</tr>
 
-				<tr><td><label for="substatus_id"><?php echo $this->translate(array('labels.substatus', 'labels.substatuses', 1)); ?></label></td>
+				<tr><td><label for="substatus_id"><?= $this->_(array('labels.substatus', 'labels.substatuses', 1)); ?></label></td>
 					<td><select name="substatus_id" id="substatus_id">
 						<?php
 							// Open tickets do not require substatus
@@ -52,7 +52,7 @@ use Blossom\Classes\View;
 								$selected = $this->ticket->getSubstatus_id()==$substatus->getId()
 									? 'selected="selected"'
 									: '';
-								$name = View::escape($substatus->getName());
+								$name = self::escape($substatus->getName());
 								echo "<option value=\"{$substatus->getId()}\" $selected>$name</option>";
 							}
 						?>
@@ -61,7 +61,7 @@ use Blossom\Classes\View;
 				</tr>
 
 				<tr><td><label id="notes" class="required">
-							<?php echo $this->translate(array('labels.comment', 'labels.comments', 1)); ?>
+							<?= $this->_(array('labels.comment', 'labels.comments', 1)); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>

@@ -9,13 +9,13 @@ use Application\Models\ContactMethodTable;
 use Blossom\Classes\View;
 ?>
 <div class="responseForm">
-	<h2><?php echo $this->translate('labels.add_response'); ?></h2>
-	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend><?php echo $this->translate('messages.how_did_you_respond'); ?></legend>
-			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
+	<h2><?= $this->_('labels.add_response'); ?></h2>
+	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
+		<fieldset><legend><?= $this->_('messages.how_did_you_respond'); ?></legend>
+			<input name="issue_id" type="hidden" value="<?= $this->issue->getId(); ?>" />
 			<table>
 				<tr><td><label for="contactMethod_id">
-						<?php echo $this->translate(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
+						<?= $this->_(array('labels.contactMethod', 'labels.contactMethods', 1)); ?>
 						</label>
 					</td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
@@ -23,7 +23,7 @@ use Blossom\Classes\View;
 							$table = new contactMethodTable();
 							$list = $table->find();
 							foreach ($list as $method) {
-								$name = View::escape($method->getName());
+								$name = self::escape($method->getName());
 								$selected = $method->getId() == $this->issue->getContactMethod_id()
 									? 'selected="selected"'
 									: '';
@@ -34,7 +34,7 @@ use Blossom\Classes\View;
 					</td>
 				</tr>
 			</table>
-			<div><label for="notes"><?php echo $this->translate(array('labels.comment', 'labels.comments', 2)); ?></label></div>
+			<div><label for="notes"><?= $this->_(array('labels.comment', 'labels.comments', 2)); ?></label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
 			<?php
 				$helper = $this->template->getHelper('saveAndCancelButtons');

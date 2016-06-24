@@ -8,9 +8,9 @@
 use Application\Models\Phone;
 use Blossom\Classes\View;
 ?>
-<fieldset><legend><?php echo $this->translate(array('labels.phone', 'labels.phones', 1)); ?></legend>
+<fieldset><legend><?= $this->_(array('labels.phone', 'labels.phones', 1)); ?></legend>
 	<label>
-		<?php echo $this->translate(array('labels.label', 'labels.label', 1)); ?>
+		<?= $this->_(array('labels.label', 'labels.label', 1)); ?>
 		<select name="label" id="label">
 		<?php
 			foreach (Phone::$LABELS as $label) {
@@ -22,5 +22,5 @@ use Blossom\Classes\View;
 		?>
 		</select>
 	</label>
-	<input name="number" value="<?php echo View::escape($this->phone->getNumber()); ?>" />
+	<input name="number" value="<?= self::escape($this->phone->getNumber()); ?>" />
 </fieldset>

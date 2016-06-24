@@ -8,35 +8,35 @@
 use Application\Models\ContactMethodTable;
 use Blossom\Classes\View;
 
-$name = View::escape($this->client->getName());
+$name = self::escape($this->client->getName());
 $url = $this->client->getURL();
-$api_key = View::escape($this->client->getApi_key());
+$api_key = self::escape($this->client->getApi_key());
 
 $title = $this->client->getId()
-	? $this->translate('labels.edit').' '.$this->translate(array('labels.client','labels.clients',1))
-	: $this->translate('labels.add' ).' '.$this->translate(array('labels.client','labels.clients',1));
+	? $this->_('labels.edit').' '.$this->_(array('labels.client','labels.clients',1))
+	: $this->_('labels.add' ).' '.$this->_(array('labels.client','labels.clients',1));
 ?>
 <div class="updateClientForm">
-	<h1><?php echo $title; ?></h1>
-	<form method="post" action="<?php echo BASE_URL; ?>/clients/update">
+	<h1><?= $title; ?></h1>
+	<form method="post" action="<?= BASE_URL; ?>/clients/update">
 		<fieldset>
 			<legend>
 				<?php
-					echo $this->translate(array('labels.client','labels.clients',1)).' '.$this->translate('labels.info');
+					echo $this->_(array('labels.client','labels.clients',1)).' '.$this->_('labels.info');
 				?>
 			</legend>
-			<input name="client_id" type="hidden" value="<?php echo $this->client->getId(); ?>" />
+			<input name="client_id" type="hidden" value="<?= $this->client->getId(); ?>" />
 			<table>
-				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
-					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
+				<tr><td><label for="name"><?= $this->_('labels.name'); ?></label></td>
+					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 				</tr>
-				<tr><td><label for="url"><?php echo $this->translate('labels.url'); ?></label></td>
-					<td><input name="url" id="url" value="<?php echo $url; ?>" /></td>
+				<tr><td><label for="url"><?= $this->_('labels.url'); ?></label></td>
+					<td><input name="url" id="url" value="<?= $url; ?>" /></td>
 				</tr>
-				<tr><td><label><?php echo $this->translate('labels.api_key'); ?></label></td>
-					<td><input name="api_key" id="api_key" value="<?php echo $api_key; ?>" /></td>
+				<tr><td><label><?= $this->_('labels.api_key'); ?></label></td>
+					<td><input name="api_key" id="api_key" value="<?= $api_key; ?>" /></td>
 				</tr>
-				<tr><td><label><?php echo $this->translate(array('labels.contactMethod','labels.contactMethods',1)); ?></label></td>
+				<tr><td><label><?= $this->_(array('labels.contactMethod','labels.contactMethods',1)); ?></label></td>
 					<td><select name="contactMethod_id" id="contactMethod_id">
 						<?php
 							$t = new ContactMethodTable();
@@ -45,7 +45,7 @@ $title = $this->client->getId()
 								$selected = $this->client->getContactMethod_id()==$method->getId()
 									? 'selected="selected"'
 									: '';
-								$name = View::escape($method->getName());
+								$name = self::escape($method->getName());
 								echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
 							}
 						?>
@@ -57,11 +57,11 @@ $title = $this->client->getId()
 		<fieldset>
 			<legend>
 				<?php
-					echo $this->translate('labels.contact').' '.$this->translate('labels.info');
+					echo $this->_('labels.contact').' '.$this->_('labels.info');
 				?>
 			</legend>
 			<table>
-				<tr><td><label for="contactPerson_id"><?php echo $this->translate('labels.contactPerson'); ?></label></td>
+				<tr><td><label for="contactPerson_id"><?= $this->_('labels.contactPerson'); ?></label></td>
 					<td><?php
 							$contactPerson = $this->client->getContactPerson();
 							$helper = $this->template->getHelper('personChooser');

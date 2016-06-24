@@ -15,7 +15,7 @@ if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$h = $this->template->getHelper('buttonLink');
 	$deleteButton = $h->buttonLink(
 		BASE_URI.'/media/delete?media_id='.$this->media->getId(),
-		$this->translate('labels.delete'),
+		$this->_('labels.delete'),
 		'delete',
 		ButtonLink::SIZE_ICON
 	);

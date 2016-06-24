@@ -11,8 +11,8 @@ $rows = '';
 foreach ($this->ticket->getIssues() as $issue) {
 	$person = $issue->getReportedByPerson();
 	if ($person) {
-		$name   = View::escape($person->getFullname());
-		$method = View::escape($issue->getResponseMethod());
+		$name   = self::escape($person->getFullname());
+		$method = self::escape($issue->getResponseMethod());
 		$rows.= "
 		<tr><td><a href=\"{$person->getURL()}\">$name</a></td>
 			<td>$method</td>
@@ -23,8 +23,8 @@ foreach ($this->ticket->getIssues() as $issue) {
 if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
-		<h2>{$this->translate('labels.contact_list')}</h2>
-		<p>{$this->translate('text.response_reminder')}</p>
+		<h2>{$this->_('labels.contact_list')}</h2>
+		<p>{$this->_('text.response_reminder')}</p>
 		<table>
 			$rows
 		</table>

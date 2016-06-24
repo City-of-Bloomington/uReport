@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'stackedPanels';
 	$dir = dirname(__FILE__);

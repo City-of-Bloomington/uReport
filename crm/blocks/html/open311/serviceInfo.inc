@@ -7,7 +7,7 @@
  */
 use Blossom\Classes\View;
 
-$name = View::escape($this->category->getName());
+$name = self::escape($this->category->getName());
 echo "
 <div class=\"serviceInfo\">
 	<h1>$name Service</h1>
@@ -31,10 +31,10 @@ echo "
 		if ($customFields) {
 			foreach ($customFields as $i=>$d) {
 				$order = $i+1;
-				$code        = isset($d->name)     ? View::escape($d->name)   : '';
-				$datatype    = isset($d->type)     ? View::escape($d->type)   : 'string';
-				$values      = isset($d->values)   ? View::escape($d->values) : array();
-				$description = isset($d->label)    ? View::escape($d->label)  : $code;
+				$code        = isset($d->name)     ? self::escape($d->name)   : '';
+				$datatype    = isset($d->type)     ? self::escape($d->type)   : 'string';
+				$values      = isset($d->values)   ? self::escape($d->values) : array();
+				$description = isset($d->label)    ? self::escape($d->label)  : $code;
 				$required    = isset($d->required) ? $d->required             : false;
 
 				$values = implode(',', $values);

@@ -19,8 +19,8 @@ use Zend\Paginator\Paginator;
 $c = $this->solrObject->response->numFound;
 if ($c) {
 	echo "
-	<h2>{$this->translate('labels.search_results')}</h2>
-	<div>{$this->translate('labels.search_results_count')}: $c</div>
+	<h2>{$this->_('labels.search_results')}</h2>
+	<div>{$this->_('labels.search_results_count')}: $c</div>
 	";
 
 	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('solrObject'=>$this->solrObject));
@@ -30,7 +30,7 @@ if ($c) {
 	echo $rows  ->render('html', $this->template);
 }
 else {
-	echo "<h2>{$this->translate('messages.no_tickets_found')}</h2>";
+	echo "<h2>{$this->_('messages.no_tickets_found')}</h2>";
 }
 
 // Raw results should not be paginated

@@ -16,7 +16,7 @@ use Blossom\Classes\Url;
 			if (isset($_REQUEST['category_id'])) {
 				try {
 					$c = new Category($_REQUEST['category_id']);
-					$name = View::escape($c->getName());
+					$name = self::escape($c->getName());
 					echo "<option value=\"{$c->getId()}\" selected=\"selected\">$name</option>";
 				}
 				catch (Exception $e) {
@@ -26,7 +26,7 @@ use Blossom\Classes\Url;
 
 			if ($_SESSION['USER']->getDepartment_id()) {
 				foreach ($_SESSION['USER']->getDepartment()->getCategories() as $c) {
-					$name = View::escape($c->getName());
+					$name = self::escape($c->getName());
 					echo "<option value=\"{$c->getId()}\">$name</option>";
 				}
 			}
@@ -45,7 +45,7 @@ use Blossom\Classes\Url;
 		$url->return_url = $this->return_url;
 		echo "
 		<a href=\"$url\" id=\"moreCategoriesLink\">
-			{$this->translate('labels.more_categories')}
+			{$this->_('labels.more_categories')}
 			<span class=\"fa fa-angle-double-right\"></span>
 		</a>
 		";

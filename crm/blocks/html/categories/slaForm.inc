@@ -8,26 +8,26 @@
 use Blossom\Classes\View;
 ?>
 <div class="slaForm">
-	<h2><?php echo $this->translate('labels.service_level_agreement'); ?></h2>
-	<p><?php echo $this->translate('text.service_level_agreement_description'); ?></p>
+	<h2><?= $this->_('labels.service_level_agreement'); ?></h2>
+	<p><?= $this->_('text.service_level_agreement_description'); ?></p>
 
-	<form method="post" action="<?php echo BASE_URI; ?>/categories/sla">
-		<fieldset><legend><?php echo $this->translate(array('labels.category','labels.categories', 2)); ?></legend>
+	<form method="post" action="<?= BASE_URI; ?>/categories/sla">
+		<fieldset><legend><?= $this->_(array('labels.category','labels.categories', 2)); ?></legend>
 			<table>
 				<thead>
-					<tr><th><?php echo $this->translate(array('labels.category', 'labels.categories', 1)); ?></th>
-						<th><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></th>
-						<th><?php echo $this->translate('labels.sla'); ?>
-							<?php echo $this->translate(array('labels.day', 'labels.days', 2)); ?>
+					<tr><th><?= $this->_(array('labels.category', 'labels.categories', 1)); ?></th>
+						<th><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></th>
+						<th><?= $this->_('labels.sla'); ?>
+							<?= $this->_(array('labels.day', 'labels.days', 2)); ?>
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php
 					foreach ($this->categoryList as $category) {
-						$name = View::escape($category->getName());
+						$name = self::escape($category->getName());
 						$d = $category->getDepartment();
-						$department = $d ? View::escape($d->getName()) : '';
+						$department = $d ? self::escape($d->getName()) : '';
 
 						$field = "categories[{$category->getId()}]";
 						echo "

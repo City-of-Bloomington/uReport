@@ -73,14 +73,14 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
                         {label: 'Date',  type: 'date'},
                         {label: 'Count', type: 'number'}
                     ],
-                    rows: [<?php echo implode(",\n", $o); ?>]
+                    rows: [<?= implode(",\n", $o); ?>]
                 },
                 slaPercentages: {
                     cols: [
                         {label: 'Date',    type: 'date'},
                         {label: 'Percent', type: 'number'}
                     ],
-                    rows: [<?php echo implode(",\n", $s); ?>]
+                    rows: [<?= implode(",\n", $s); ?>]
                 }
             };
         </script>

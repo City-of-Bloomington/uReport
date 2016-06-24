@@ -16,7 +16,7 @@
  */
 echo "
 <div class=\"categoryChoices\">
-	<h2>{$this->translate('messages.choose_category')}</h2>
+	<h2>{$this->_('messages.choose_category')}</h2>
 	<ul>
 ";
 	$return_url = $this->return_url;

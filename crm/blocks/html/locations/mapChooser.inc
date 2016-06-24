@@ -7,12 +7,12 @@
 ?>
 <div id="location_map"></div>
 <script type="text/javascript">
-	var DEFAULT_LATITUDE  = <?php echo DEFAULT_LATITUDE; ?>,
-		DEFAULT_LONGITUDE = <?php echo DEFAULT_LONGITUDE; ?>;
+	var DEFAULT_LATITUDE  = <?= DEFAULT_LATITUDE; ?>,
+		DEFAULT_LONGITUDE = <?= DEFAULT_LONGITUDE; ?>;
 </script>
 <button type="button" id="useThisLocation">
 	<span class="fa fa-check"></span>
-	<?php echo $this->translate('labels.use_location'); ?>
+	<?= $this->_('labels.use_location'); ?>
 </button>
 <?php
 $this->template->addToAsset('scripts', GOOGLE_MAPS);

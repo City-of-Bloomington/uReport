@@ -12,7 +12,7 @@ $issueHeader = new Block('tickets/partials/issueHeader.inc', array('disableButto
 $thumbnail   = new Block('media/thumbnail.inc');
 echo "
 <div class=\"thumbnails\">
-	<p><a href=\"{$this->ticket->getURL()}\">{$this->translate('labels.back_to_ticket')}</a></p>
+	<p><a href=\"{$this->ticket->getURL()}\">{$this->_('labels.back_to_ticket')}</a></p>
 ";
 foreach ($this->ticket->getIssues() as $issue) {
 	$html = '';
@@ -27,7 +27,7 @@ foreach ($this->ticket->getIssues() as $issue) {
 		$header = $issueHeader->render('html', $this->template);
 		echo "
 		<div class=\"issueInfo\">
-			<p>{$this->translate('messages.click_full_size')}</p>
+			<p>{$this->_('messages.click_full_size')}</p>
 			$header
 			$html
 		</div>

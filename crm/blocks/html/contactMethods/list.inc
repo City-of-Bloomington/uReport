@@ -11,18 +11,18 @@ use Blossom\Classes\View;
 ?>
 <div>
 	<h2><?php
-			echo $this->translate(array('labels.contactMethod','labels.contactMethods',2));
+			echo $this->_(array('labels.contactMethod','labels.contactMethods',2));
 			if (Person::isAllowed('contactMethods','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/contactMethods/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
 		?>
 	</h2>
-	<p><?php echo $this->translate('text.contactMethods_description'); ?></p>
+	<p><?= $this->_('text.contactMethods_description'); ?></p>
 	<ul>
 	<?php
 		$table = new ContactMethodTable();
@@ -31,11 +31,11 @@ use Blossom\Classes\View;
 			if (Person::isAllowed('contactMethods','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/contactMethods/update?contactMethod_id='.$method->getId(),
-					$this->translate('labels.edit'),
+					$this->_('labels.edit'),
 					'edit'
 				);
 			}
-			$name = View::escape($method->getName());
+			$name = self::escape($method->getName());
 			echo "<li>$editButton $name</li>";
 		}
 	?>

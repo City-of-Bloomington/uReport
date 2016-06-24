@@ -10,9 +10,9 @@ use Blossom\Classes\View;
 echo "<services>";
 foreach ($this->categoryList as $category) {
 	$service_code = "{$category->getId()}";
-	$service_name = View::escape($category->getName());
-	$group = View::escape($category->getCategoryGroup());
-	$description = View::escape($category->getDescription());
+	$service_name = self::escape($category->getName());
+	$group = self::escape($category->getCategoryGroup());
+	$description = self::escape($category->getDescription());
 	$metadata = count($category->getCustomFields()) ? 'true' : 'false';
 
 	echo "

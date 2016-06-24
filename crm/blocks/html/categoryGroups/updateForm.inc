@@ -8,18 +8,18 @@
 use Blossom\Classes\View;
 
 $title = $this->categoryGroup->getId()
-	? $this->translate('labels.edit').' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1))
-	: $this->translate('labels.add' ).' '.$this->translate(array('labels.categoryGroup','labels.categoryGroups',1));
-$name = View::escape($this->categoryGroup->getName());
+	? $this->_('labels.edit').' '.$this->_(array('labels.categoryGroup','labels.categoryGroups',1))
+	: $this->_('labels.add' ).' '.$this->_(array('labels.categoryGroup','labels.categoryGroups',1));
+$name = self::escape($this->categoryGroup->getName());
 ?>
 <div class="updateCategoryGroupForm">
-	<h2><?php echo $title; ?></h2>
-	<form method="post" action="<?php echo BASE_URI; ?>/categoryGroups/update">
+	<h2><?= $title; ?></h2>
+	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/update">
 		<fieldset>
-			<input name="categoryGroup_id" type="hidden" value="<?php echo $this->categoryGroup->getId(); ?>" />
+			<input name="categoryGroup_id" type="hidden" value="<?= $this->categoryGroup->getId(); ?>" />
 			<table>
-				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
-					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
+				<tr><td><label for="name"><?= $this->_('labels.name'); ?></label></td>
+					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 				</tr>
 			</table>
 			<?php

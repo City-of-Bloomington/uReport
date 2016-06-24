@@ -12,7 +12,7 @@ use Application\Models\RentalService;
 use Blossom\Classes\View;
 
 if ($this->location) {
-	$location = View::escape($this->location);
+	$location = self::escape($this->location);
 
 	echo "
 	<location>
@@ -23,7 +23,7 @@ if ($this->location) {
 		if (count($data)) {
 			echo '<address>';
 			foreach ($data as $key=>$value) {
-				$value = View::escape(trim($value));
+				$value = self::escape(trim($value));
 				if (array_key_exists($key,AddressService::$customFieldDescriptions)
 					&& $value) {
 					$label = AddressService::$customFieldDescriptions[$key]['description'];
@@ -39,7 +39,7 @@ if ($this->location) {
 		if (count($people)) {
 			echo '<people>';
 			foreach ($people as $person) {
-				$name = View::escape($person->getFullname());
+				$name = self::escape($person->getFullname());
 				echo "<name>$name</name>";
 			}
 			echo '</people>';
@@ -50,7 +50,7 @@ if ($this->location) {
 			if (count($owners)) {
 				echo '<owners>';
 				foreach ($owners as $name) {
-					$name = View::escape($name);
+					$name = self::escape($name);
 					echo "<owner>$name</owner>";
 				}
 				echo '</owners>';

@@ -28,7 +28,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 						$checked = !empty($_GET['categories'][$c->getId()])
 							? 'checked="checked"'
 							: '';
-						$name = View::escape($c->getName());
+						$name = self::escape($c->getName());
 						echo "
 						<li><label>
 								<input name=\"categories[{$c->getId()}]\" type=\"checkbox\" $checked />
@@ -50,7 +50,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 						$checked = !empty($_GET['departments'][$d->getId()])
 							? 'checked="checked"'
 							: '';
-						$name = View::escape($d->getName());
+						$name = self::escape($d->getName());
 						echo "
 						<li><label>
 								<input name=\"departments[{$d->getId()}]\" type=\"checkbox\" $checked />
@@ -67,12 +67,12 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 				<table class="bd">
 					<tr><td><label for="enteredDate-start">Start:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
-								value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />
+								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
 						</td>
 					</tr>
 					<tr><td><label for="enteredDate-end">End:</label></td>
 						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
-								value="<?php echo !empty($_GET['enteredDate']['end']) ? View::escape($_GET['enteredDate']['end']) : ''; ?>" />
+								value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
 						</td>
 					</tr>
 				</table>
@@ -96,7 +96,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                 </div>
 			</div>
             <div class="collapsible">
-                <h3 class="hd"><?php echo $this->_(['labels.client', 'labels.clients', 2]); ?></h3>
+                <h3 class="hd"><?= $this->_(['labels.client', 'labels.clients', 2]); ?></h3>
                 <div class="bd">
                 <?php
                     $table = new ClientTable();
@@ -105,7 +105,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                         $checked = !empty($_GET['clients'][$c->getId()])
                             ? 'checked="checked"'
                             : '';
-                        $name = View::escape($c->getName());
+                        $name = self::escape($c->getName());
                         echo "
                         <div><label>
                                 <input name=\"clients[{$c->getId()}]\" type=\"checkbox\" $checked />
@@ -123,7 +123,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 			?>
 			<button type="submit">
 				<span class="fa fa-check"></span>
-				<?php echo $this->template->translate('labels.submit'); ?>
+				<?= $this->template->translate('labels.submit'); ?>
 			</button>
 		</fieldset>
 	</form>

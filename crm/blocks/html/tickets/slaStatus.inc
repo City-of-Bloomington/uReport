@@ -14,6 +14,6 @@ if ($days) {
 	$daysPassed = $diff->format('%a');
 
 	$class = $daysPassed >= $days ? 'pastDue' : 'onTrack';
-	$notice = sprintf($this->translate('text.sla_status_notice'), $days, $daysPassed);
+	$notice = sprintf($this->_('text.sla_status_notice'), $days, $daysPassed);
 	echo "<div class=\"slaStatus $class\"><p>$notice</p></div>";
 }

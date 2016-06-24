@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'twoColumn_300-a';
 	$dir = dirname(__FILE__);
@@ -15,7 +15,7 @@
 	?>
 	<div id="panel-container">
 		<div id="left" class="panel">
-			<?php echo $this->includeBlocks('left'); ?>
+			<?= $this->includeBlocks('left'); ?>
 		</div>
 		<div id="right" class="panel">
 			<?php

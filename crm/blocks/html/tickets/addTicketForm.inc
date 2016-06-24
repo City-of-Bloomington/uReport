@@ -14,10 +14,10 @@ $category_id = $category ? $category->getId() : '';
 $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
 <div id="addTicketForm">
-	<h2><?php echo View::escape($title); ?></h2>
+	<h2><?= self::escape($title); ?></h2>
 	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/add">
-		<fieldset><legend><?php echo $this->translate(array('labels.category', 'labels.categories', 1)); ?></legend>
+	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
+		<fieldset><legend><?= $this->_(array('labels.category', 'labels.categories', 1)); ?></legend>
 		<?php
 			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
@@ -27,42 +27,42 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 		</fieldset>
 
 		<fieldset class="ticketFields">
-			<legend><?php echo $this->translate('labels.info_location'); ?></legend>
+			<legend><?= $this->_('labels.info_location'); ?></legend>
 			<table>
-				<tr><td><label for="location"><?php echo $this->translate(array('labels.location', 'labels.locations', 1)); ?></label></td>
+				<tr><td><label for="location"><?= $this->_(array('labels.location', 'labels.locations', 1)); ?></label></td>
 					<td><input name="location" id="location"
-							value="<?php echo View::escape($this->ticket->getLocation()); ?>" />
+							value="<?= self::escape($this->ticket->getLocation()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="city"><?php echo $this->translate('labels.city'); ?></label></td>
+				<tr><td><label for="city"><?= $this->_('labels.city'); ?></label></td>
 					<td><input name="city" id="city"
-							value="<?php echo View::escape($this->ticket->getCity()); ?>" />
+							value="<?= self::escape($this->ticket->getCity()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="state"><?php echo $this->translate('labels.state'); ?></label></td>
+				<tr><td><label for="state"><?= $this->_('labels.state'); ?></label></td>
 					<td><input name="state" id="state"
-							value="<?php echo View::escape($this->ticket->getState()); ?>" />
+							value="<?= self::escape($this->ticket->getState()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="zip"><?php echo $this->translate('labels.zip'); ?></label></td>
+				<tr><td><label for="zip"><?= $this->_('labels.zip'); ?></label></td>
 					<td><input name="zip" id="zip"
-							value="<?php echo View::escape($this->ticket->getZip()); ?>" />
+							value="<?= self::escape($this->ticket->getZip()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="latitude"><?php echo $this->translate('labels.latitude'); ?></label></td>
+				<tr><td><label for="latitude"><?= $this->_('labels.latitude'); ?></label></td>
 					<td><input name="latitude" id="latitude"
-							value="<?php echo $this->ticket->getLatitude(); ?>" />
+							value="<?= $this->ticket->getLatitude(); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="longitude"><?php echo $this->translate('labels.longitude'); ?></label></td>
+				<tr><td><label for="longitude"><?= $this->_('labels.longitude'); ?></label></td>
 					<td><input name="longitude" id="longitude"
-							value="<?php echo $this->ticket->getLongitude(); ?>" />
+							value="<?= $this->ticket->getLongitude(); ?>" />
 					</td>
 				</tr>
 			</table>
 		</fieldset>
 		<fieldset class="issueFields">
-			<legend><?php echo $this->translate('labels.info_issue'); ?></legend>
+			<legend><?= $this->_('labels.info_issue'); ?></legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
 
@@ -71,7 +71,7 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
-			<legend><?php echo $this->translate('labels.info_assignment'); ?></legend>
+			<legend><?= $this->_('labels.info_assignment'); ?></legend>
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
 			?>

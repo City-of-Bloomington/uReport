@@ -9,15 +9,15 @@ use Blossom\Classes\View;
 ?>
 <div class="categoryGroupReportForm">
 	<h2><?php
-			echo $this->translate('labels.reorder').' '.
-				 $this->translate(array('labels.categoryGroup', 'labels.categoryGroups', 2));
+			echo $this->_('labels.reorder').' '.
+				 $this->_(array('labels.categoryGroup', 'labels.categoryGroups', 2));
 		?>
 	</h2>
-	<form method="post" action="<?php echo BASE_URI; ?>/categoryGroups/reorder">
+	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
 		<table>
 			<thead>
-				<tr><th><?php echo $this->translate('labels.name' ); ?></th>
-					<th><?php echo $this->translate('labels.order'); ?></th>
+				<tr><th><?= $this->_('labels.name' ); ?></th>
+					<th><?= $this->_('labels.order'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -25,7 +25,7 @@ use Blossom\Classes\View;
 				$t = new CategoryGroupTable();
 				$groups = $t->find();
 				foreach ($groups as $group) {
-					$name = View::escape($group->getName());
+					$name = self::escape($group->getName());
 					$order = (int)$group->getOrdering();
 					echo "
 					<tr><td><label for=\"categoryGroups_{$group->getId()}\">$name</label></td>

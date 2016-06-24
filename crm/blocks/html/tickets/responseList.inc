@@ -14,22 +14,22 @@ if (Person::isAllowed('issues','update')
 	$h = $this->template->getHelper('buttonLink');
 	$responseButton = $h->buttonLink(
 		BASE_URL.'/issues/respond?issue_id='.$this->issue->getId(),
-		$this->translate('labels.add_response'),
+		$this->_('labels.add_response'),
 		'add'
 	);
 }
 ?>
 <div class="responseList">
 	<h2><?php
-			echo $this->translate(array('labels.response', 'labels.responses', 2)).' '.$responseButton;
+			echo $this->_(array('labels.response', 'labels.responses', 2)).' '.$responseButton;
 		?>
 	</h2>
 	<table>
 		<thead>
-			<tr><th><?php echo $this->translate('labels.date'); ?></th>
-				<th><?php echo $this->translate(array('labels.person', 'labels.people', 1)); ?></th>
-				<th><?php echo $this->translate(array('labels.contactMethod', 'labels.contactMethods', 1)); ?></th>
-				<th><?php echo $this->translate(array('labels.comment', 'labels.comments', 2)); ?></th>
+			<tr><th><?= $this->_('labels.date'); ?></th>
+				<th><?= $this->_(array('labels.person', 'labels.people', 1)); ?></th>
+				<th><?= $this->_(array('labels.contactMethod', 'labels.contactMethods', 1)); ?></th>
+				<th><?= $this->_(array('labels.comment', 'labels.comments', 2)); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,9 +37,9 @@ if (Person::isAllowed('issues','update')
 			foreach ($this->responses as $response) {
 				$person        = $response->getPerson();
 				$id            = $person->getId();
-				$name          = View::escape($person->getFullname());
-				$contactMethod = View::escape($response->getContactMethod());
-				$notes         = View::escape($response->getNotes());
+				$name          = self::escape($person->getFullname());
+				$contactMethod = self::escape($response->getContactMethod());
+				$notes         = self::escape($response->getNotes());
 				echo "
 				<tr><td>{$response->getDate(DATE_FORMAT)}</td>
 					<td><a href=\"".BASE_URL."/people/view?person_id=$id\">$name</a></td>

@@ -10,12 +10,12 @@ use Blossom\Classes\Block;
 ?>
 <div class="departmentList">
 	<h2><?php
-			echo $this->translate(array('labels.department', 'labels.departments', 2));
+			echo $this->_(array('labels.department', 'labels.departments', 2));
 			if (Person::isAllowed('departments','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/departments/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}

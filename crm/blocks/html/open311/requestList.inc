@@ -38,7 +38,7 @@ echo "
 
 		foreach ($this->ticketList as $t) {
 			$c = $t->getCategory();
-			$service_name = $c ? View::escape($c->getName()) : '';
+			$service_name = $c ? self::escape($c->getName()) : '';
 			$service_code = $c ? $c->getId()   : '';
 
 			$issue = $t->getIssue();
@@ -60,8 +60,8 @@ echo "
 			$history = $t->getHistory();
 			$latestHistory = end($history);
 
-			$address = View::escape($t->getLocation());
-			$zip = View::escape($t->getZip());
+			$address = self::escape($t->getLocation());
+			$zip = self::escape($t->getZip());
 
 			echo "
 			<tr><td>{$t->getId()}</td>

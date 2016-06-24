@@ -18,14 +18,14 @@ foreach ($this->ticketList as $ticket) {
 	if ($this->filterTicket && $this->filterTicket->getId()==$ticket->getId()) {
 		continue;
 	}
-	$status      = View::escape($ticket->getStatus());
-	$location    = View::escape($ticket->getLocation());
+	$status      = self::escape($ticket->getStatus());
+	$location    = self::escape($ticket->getLocation());
 	$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
 	$enteredBy = $ticket->getEnteredByPerson_id()
-		? View::escape($ticket->getEnteredByPerson()->getFullname())
+		? self::escape($ticket->getEnteredByPerson()->getFullname())
 		: '';
 	$category = $ticket->getCategory_id()
-		? View::escape($ticket->getCategory()->getName())
+		? self::escape($ticket->getCategory()->getName())
 		: '';
 	echo "
 	<ticket>

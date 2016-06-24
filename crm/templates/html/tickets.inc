@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'stackedPanels';
 	$dir = dirname(__FILE__);
@@ -15,7 +15,7 @@
 	<div id="panel-container">
 		<?php include BLOSSOM.'/errorMessages.php'; ?>
 		<div id="ticket-panel" class="panel">
-			<?php echo $this->includeBlocks('ticket-panel'); ?>
+			<?= $this->includeBlocks('ticket-panel'); ?>
 		</div>
 		<?php
 			// These panels should only show up for non-popup windows

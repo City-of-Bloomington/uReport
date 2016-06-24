@@ -15,14 +15,14 @@ $actions = $department->getActions();
 if (count($actions)) {
 ?>
 <div class="actionForm">
-	<h2><?php echo $this->translate(array('labels.action', 'labels.actions', 2)); ?></h2>
-	<p><?php echo $this->translate('messages.add_action'); ?></p>
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/recordAction">
+	<h2><?= $this->_(array('labels.action', 'labels.actions', 2)); ?></h2>
+	<p><?= $this->_('messages.add_action'); ?></p>
+	<form method="post" action="<?= BASE_URL; ?>/tickets/recordAction">
 		<fieldset>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<table>
 				<tr><td><label for="action_id" class="required">
-							<?php echo $this->translate(array('labels.action', 'labels.actions', 1)); ?>
+							<?= $this->_(array('labels.action', 'labels.actions', 1)); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
@@ -30,14 +30,14 @@ if (count($actions)) {
 							<option></option>
 							<?php
 								foreach ($actions as $action) {
-									$name = View::escape($action->getName());
+									$name = self::escape($action->getName());
 									echo "<option value=\"{$action->getId()}\">$name</option>";
 								}
 							?>
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="actionDate"><?php echo $this->translate('labels.date'); ?></label>
+				<tr><td><label for="actionDate"><?= $this->_('labels.date'); ?></label>
 						<p class="help">
 							<?php
 								// Create a human-readable version of the DATE_FORMAT
@@ -46,17 +46,17 @@ if (count($actions)) {
 							?>
 						</p>
 					</td>
-					<td><input name="actionDate" id="actionDate" value="<?php echo date(DATE_FORMAT); ?>" /></td>
+					<td><input name="actionDate" id="actionDate" value="<?= date(DATE_FORMAT); ?>" /></td>
 				</tr>
 			</table>
 		</fieldset>
 		<fieldset>
-			<div><label for="notes"><?php echo $this->translate(array('labels.comment', 'labels.comments', 2)); ?></label></div>
+			<div><label for="notes"><?= $this->_(array('labels.comment', 'labels.comments', 2)); ?></label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
 		</fieldset>
 		<fieldset class="buttons">
-			<button type="submit"><span class="fa fa-check"></span> <?php echo $this->translate('labels.submit'); ?></button>
-			<button type="reset" ><span class="fa fa-times"></span> <?php echo $this->translate('labels.cancel'); ?></button>
+			<button type="submit"><span class="fa fa-check"></span> <?= $this->_('labels.submit'); ?></button>
+			<button type="reset" ><span class="fa fa-times"></span> <?= $this->_('labels.cancel'); ?></button>
 		</fieldset>
 	</form>
 </div>

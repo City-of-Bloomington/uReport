@@ -12,63 +12,63 @@ $fields = array(
 );
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
-	$$field = View::escape($this->person->$get());
+	$$field = self::escape($this->person->$get());
 }
 ?>
 <fieldset>
 	<legend>
 	<?php
-		echo $this->translate(array('labels.person', 'labels.people', 1)).' '.$this->translate('labels.info');
+		echo $this->_(array('labels.person', 'labels.people', 1)).' '.$this->_('labels.info');
 	?>
 	</legend>
-	<input name="person_id" type="hidden" value="<?php echo $this->person->getId(); ?>" />
+	<input name="person_id" type="hidden" value="<?= $this->person->getId(); ?>" />
 	<?php
 		// Preserve any extra parameters passed in
 		foreach ($_REQUEST as $key=>$value) {
 			if (!in_array($key,$fields)) {
-				$key   = View::escape($key);
-				$value = View::escape($value);
+				$key   = self::escape($key);
+				$value = self::escape($value);
 				echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 			}
 		}
 	?>
 	<table>
 		<tr><td><label for="firstname" class="required">
-					<?php echo $this->translate('labels.firstname'); ?>
+					<?= $this->_('labels.firstname'); ?>
 					<span class="fa fa-asterisk"></span>
 				</label>
 			</td>
-			<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
+			<td><input name="firstname" id="firstname" value="<?= $firstname; ?>" /></td>
 		</tr>
 
-		<tr><td><label for="middlename"><?php echo $this->translate('labels.middlename'); ?></label></td>
-			<td><input name="middlename" id="middlename" value="<?php echo $middlename; ?>" /></td>
+		<tr><td><label for="middlename"><?= $this->_('labels.middlename'); ?></label></td>
+			<td><input name="middlename" id="middlename" value="<?= $middlename; ?>" /></td>
 		</tr>
 
 		<tr><td><label for="lastname" class="required">
-					<?php echo $this->translate('labels.lastname'); ?>
+					<?= $this->_('labels.lastname'); ?>
 					<span class="fa fa-asterisk"></span>
 				</label>
 			</td>
-			<td><input name="lastname" id="lastname" value="<?php echo $lastname; ?>" /></td>
+			<td><input name="lastname" id="lastname" value="<?= $lastname; ?>" /></td>
 		</tr>
 		<?php
 			// Email and Phone are only valid for new records
 			if (!$this->person->getId()) {
-				$email = !empty($_POST['email']) ? View::escape($_POST['email']) : '';
-				$phone = !empty($_POST['phone']) ? View::escape($_POST['phone']) : '';
+				$email = !empty($_POST['email']) ? self::escape($_POST['email']) : '';
+				$phone = !empty($_POST['phone']) ? self::escape($_POST['phone']) : '';
 				echo "
-				<tr><td><label for=\"email\">{$this->translate(array('labels.email', 'labels.emails', 1))}</label></td>
+				<tr><td><label for=\"email\">{$this->_(array('labels.email', 'labels.emails', 1))}</label></td>
 					<td><input name=\"email\" id=\"email\" value=\"$email\" /></td>
 				</tr>
-				<tr><td><label for=\"phone\">{$this->translate(array('labels.phone', 'labels.phones', 1))}</label></td>
+				<tr><td><label for=\"phone\">{$this->_(array('labels.phone', 'labels.phones', 1))}</label></td>
 					<td><input name=\"phone\" id=\"phone\" value=\"$phone\" /></td>
 				</tr>
 				";
 			}
 		?>
-		<tr><td><label for="organization"><?php echo $this->translate('labels.organization'); ?></label></td>
-			<td><input name="organization" id="organization" value="<?php echo $organization; ?>" /></td>
+		<tr><td><label for="organization"><?= $this->_('labels.organization'); ?></label></td>
+			<td><input name="organization" id="organization" value="<?= $organization; ?>" /></td>
 		</tr>
 	</table>
 </fieldset>

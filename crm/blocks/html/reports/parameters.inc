@@ -50,7 +50,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$d = new Department($id);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['departments'][$id]);
-					$name = View::escape($d->getName());
+					$name = self::escape($d->getName());
 					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
 				catch (\Exception $e) {
@@ -63,7 +63,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 					$c = new Category($id);
 					$deleteURL = clone $currentURL;
 					unset($deleteURL->parameters['categories'][$id]);
-					$name = View::escape($c->getName());
+					$name = self::escape($c->getName());
 					echo $helper->buttonLink($deleteURL, $name, 'delete');
 				}
 				catch (\Exception $e) {
@@ -73,7 +73,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		if (!empty($_GET['postingPermissionLevel'])) {
             $deleteURL = clone $currentURL;
             unset($deleteURL->parameters['postingPermissionLevel']);
-            $name = View::escape($_GET['postingPermissionLevel']);
+            $name = self::escape($_GET['postingPermissionLevel']);
             echo $helper->buttonLink($deleteURL, $name, 'delete');
 		}
 		if (!empty($_GET['clients'])) {
@@ -82,7 +82,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
                     $c = new Client($id);
                     $deleteURL = clone $currentURL;
                     unset($deleteURL->parameters['clients'][$id]);
-                    $name = View::escape($c->getName());
+                    $name = self::escape($c->getName());
                     echo $helper->buttonLink($deleteURL, $name, 'delete');
                 }
                 catch (\Exception $e) {

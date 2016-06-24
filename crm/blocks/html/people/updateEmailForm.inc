@@ -10,9 +10,9 @@ use Blossom\Classes\View;
 ?>
 <div class="updateEmailForm">
 	<form method="post">
-		<fieldset><legend><?php echo $this->translate(array('labels.email', 'labels.emails', 1)); ?></legend>
+		<fieldset><legend><?= $this->_(array('labels.email', 'labels.emails', 1)); ?></legend>
 			<table>
-				<tr><td><label><?php echo $this->translate(array('labels.label', 'labels.labels', 1)); ?>
+				<tr><td><label><?= $this->_(array('labels.label', 'labels.labels', 1)); ?>
 							<select name="label" id="label">
 							<?php
 								foreach (Email::$LABELS as $label) {
@@ -25,9 +25,9 @@ use Blossom\Classes\View;
 							</select>
 						</label>
 					</td>
-					<td><input name="email" value="<?php echo View::escape($this->email); ?>" /></td>
+					<td><input name="email" value="<?= self::escape($this->email); ?>" /></td>
 				</tr>
-				<tr><td><label for="usedForNotifications"><?php echo $this->translate('messages.usedForNotifications'); ?></label></td>
+				<tr><td><label for="usedForNotifications"><?= $this->_('messages.usedForNotifications'); ?></label></td>
 					<td><select name="usedForNotifications" id="usedForNotifications">
 						<?php
 							foreach (array('No', 'Yes') as $i=>$text) {

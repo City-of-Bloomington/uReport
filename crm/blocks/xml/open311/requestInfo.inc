@@ -8,19 +8,19 @@
 use Blossom\Classes\View;
 
 $c = $this->ticket->getCategory();
-$service_name = $c ? View::escape($c->getName()) : '';
+$service_name = $c ? self::escape($c->getName()) : '';
 $service_code = $c ? $c->getId() : '';
 
 $status = strtolower($this->ticket->getStatus());
 
 $issue = $this->ticket->getIssue();
-$description = View::escape($issue->getDescription());
+$description = self::escape($issue->getDescription());
 
 $h = $this->ticket->getHistory();
 $history = end($h);
 
-$address = View::escape($this->ticket->getLocation());
-$zipcode = View::escape($this->ticket->getZip());
+$address = self::escape($this->ticket->getLocation());
+$zipcode = self::escape($this->ticket->getZip());
 
 $media_url = '';
 $media = $issue->getMedia();
@@ -34,7 +34,7 @@ $p = $this->ticket->getAssignedPerson();
 if ($p) {
 	$d = $p->getDepartment();
 	if ($d) {
-		$agency_responsible = View::escape($d->getName());
+		$agency_responsible = self::escape($d->getName());
 	}
 }
 

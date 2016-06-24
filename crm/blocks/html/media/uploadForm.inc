@@ -7,19 +7,19 @@
  */
 ?>
 <div class="uploadForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/media/upload" enctype="multipart/form-data">
-		<fieldset><legend><?php echo $this->translate('labels.upload_media'); ?></legend>
-			<input name="issue_id"   type="hidden" value="<?php echo $this->issue->getId(); ?>" />
+	<form method="post" action="<?= BASE_URL; ?>/media/upload" enctype="multipart/form-data">
+		<fieldset><legend><?= $this->_('labels.upload_media'); ?></legend>
+			<input name="issue_id"   type="hidden" value="<?= $this->issue->getId(); ?>" />
 			<input name="attachment" type="file" />
 			<button type="submit">
 				<span class="fa fa-upload"></span>
-				<?php echo $this->translate('labels.upload'); ?>
+				<?= $this->_('labels.upload'); ?>
 			</button>
 			<?php
 				$h = $this->template->getHelper('buttonLink');
 				echo $h->buttonLink(
 					$this->issue->getTicket()->getURL(),
-					$this->translate('labels.cancel'),
+					$this->_('labels.cancel'),
 					'cancel'
 				);
 			?>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = '50-50';
 	$dir = dirname(__FILE__);
@@ -17,10 +17,10 @@
 			echo $this->includeBlocks();
 		?>
 		<div id="left">
-			<?php echo $this->includeBlocks('left'); ?>
+			<?= $this->includeBlocks('left'); ?>
 		</div>
 		<div id="right">
-			<?php echo $this->includeBlocks('right'); ?>
+			<?= $this->includeBlocks('right'); ?>
 		</div>
 	</div>
 	<?php include $dir.'/partials/footer.inc'; ?>

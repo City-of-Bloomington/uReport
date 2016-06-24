@@ -7,14 +7,14 @@
 $lastModified = '2012-09-18T15:37-05';
 ?>
 <discovery>
-	<changeset><?php echo $lastModified; ?></changeset>
-	<contact>You can email for assistance <?php echo ADMINISTRATOR_EMAIL; ?></contact>
-	<key_service>You can request a key at <?php echo OPEN311_KEY_SERVICE; ?></key_service>
+	<changeset><?= $lastModified; ?></changeset>
+	<contact>You can email for assistance <?= ADMINISTRATOR_EMAIL; ?></contact>
+	<key_service>You can request a key at <?= OPEN311_KEY_SERVICE; ?></key_service>
 	<endpoints>
 		<endpoint>
 			<specification>http://wiki.open311.org/GeoReport_v2</specification>
-			<url><?php echo BASE_URL; ?>/open311/v2</url>
-			<changeset><?php echo $lastModified; ?></changeset>
+			<url><?= BASE_URL; ?>/open311/v2</url>
+			<changeset><?= $lastModified; ?></changeset>
 			<type>production</type>
 			<formats>
 				<format>text/xml</format>
@@ -24,7 +24,7 @@ $lastModified = '2012-09-18T15:37-05';
 		<endpoint>
 			<specification>http://wiki.open311.org/GeoReport_v2</specification>
 			<url>https://bloomington.in.gov/test/open311/v2</url>
-			<changeset><?php echo $lastModified; ?></changeset>
+			<changeset><?= $lastModified; ?></changeset>
 			<type>test</type>
 			<formats>
 				<format>text/xml</format>

@@ -14,11 +14,11 @@ use Blossom\Classes\View;
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/substatus/update',
-					$this->translate('labels.add'),
+					$this->_('labels.add'),
 					'add'
 				);
 			}
-			$this->translate(array('labels.substatus', 'labels.substatuses', 2));
+			$this->_(array('labels.substatus', 'labels.substatuses', 2));
 		?>
 	</h2>
 	<table>
@@ -28,14 +28,14 @@ use Blossom\Classes\View;
 				if (Person::isAllowed('substatus','update')) {
 					$editButton = $helper->buttonLink(
 						BASE_URI."/substatus/update?substatus_id={$substatus->getId()}",
-						$this->translate('labels.edit'),
+						$this->_('labels.edit'),
 						'edit'
 					);
 				}
-				$status      = View::escape($substatus->getStatus());
-				$name        = View::escape($substatus->getName());
-				$description = View::escape($substatus->getDescription());
-				$default = $substatus->isDefault() ? $this->translate('labels.default') : '';
+				$status      = self::escape($substatus->getStatus());
+				$name        = self::escape($substatus->getName());
+				$description = self::escape($substatus->getDescription());
+				$default = $substatus->isDefault() ? $this->_('labels.default') : '';
 				echo "
 				<tr><td>$editButton</td>
 					<td>$status</td>

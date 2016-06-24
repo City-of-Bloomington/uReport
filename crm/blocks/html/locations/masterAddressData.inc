@@ -13,7 +13,7 @@ if (defined('ADDRESS_SERVICE')) {
 	if (count($data)) {
 		echo '<table class="masterAddressData">';
 		foreach ($data as $key=>$value) {
-			$value = View::escape(trim($value));
+			$value = self::escape(trim($value));
 			if (array_key_exists($key,AddressService::$customFieldDescriptions)
 				&& $value) {
 				$label = AddressService::$customFieldDescriptions[$key]['description'];

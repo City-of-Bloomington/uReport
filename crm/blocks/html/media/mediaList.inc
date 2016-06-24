@@ -17,7 +17,7 @@ if (count($this->mediaList)) {
 			$h = $this->template->getHelper('buttonLink');
 			$deleteButton = $h->buttonLink(
 				BASE_URI.'/media/delete?media_id='.$media->getId(),
-				$this->translate('labels.delete'),
+				$this->_('labels.delete'),
 				'delete',
 				ButtonLink::SIZE_ICON
 			);

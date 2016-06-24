@@ -7,18 +7,18 @@
  */
 use Blossom\Classes\View;
 
-$type = View::escape($this->type);
+$type = self::escape($this->type);
 ?>
-<form id="bookmark-updateForm" method="post" action="<?php echo BASE_URI; ?>/bookmarks/update">
+<form id="bookmark-updateForm" method="post" action="<?= BASE_URI; ?>/bookmarks/update">
 	<fieldset>
-		<input type="hidden" name="type" value="<?php echo $type; ?>" />
-		<input type="hidden" name="requestUri" value="<?php echo $_SERVER['REQUEST_URI']; ?>" />
+		<input type="hidden" name="type" value="<?= $type; ?>" />
+		<input type="hidden" name="requestUri" value="<?= $_SERVER['REQUEST_URI']; ?>" />
 		<label>
 			<?php
-				echo sprintf($this->translate('labels.save_as'), $type);
+				echo sprintf($this->_('labels.save_as'), $type);
 			?>:<input name="name" />
 		</label>
-		<button type="submit"><span class="fa fa-floppy-o"></span> <?php echo $this->translate('labels.save'  ); ?></button>
-		<button type="reset"> <span class="fa fa-times"></span> <?php echo $this->translate('labels.cancel'); ?></button>
+		<button type="submit"><span class="fa fa-floppy-o"></span> <?= $this->_('labels.save'  ); ?></button>
+		<button type="reset"> <span class="fa fa-times"></span> <?= $this->_('labels.cancel'); ?></button>
 	</fieldset>
 </form>

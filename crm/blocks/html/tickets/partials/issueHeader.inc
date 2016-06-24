@@ -15,12 +15,12 @@ if (!$this->disableButtons && Person::isAllowed('issues','update')) {
 	$helper = $this->template->getHelper('buttonLink');
 	$editButton = $helper->buttonLink(
 		BASE_URI.'/issues/update?issue_id='.$this->issue->getId(),
-		$this->translate('labels.edit_issue'),
+		$this->_('labels.edit_issue'),
 		'edit'
 	);
 }
 $url = BASE_URL."/issues?issue_id={$this->issue->getId()}";
-$type = View::escape($this->issue->getIssueType());
+$type = self::escape($this->issue->getIssueType());
 echo "
 <div class=\"issueHeader\">
 	<h2><span class=\"date\"><a href=\"$url\">{$this->issue->getDate(DATE_FORMAT)}</a></span>

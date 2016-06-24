@@ -6,17 +6,17 @@
  */
 ?>
 <div id="changePasswordForm">
-	<h2><?php echo $this->translate('labels.change_password'); ?></h2>
-	<form method="post" action="<?php echo BASE_URI; ?>/account/changePassword">
+	<h2><?= $this->_('labels.change_password'); ?></h2>
+	<form method="post" action="<?= BASE_URI; ?>/account/changePassword">
 		<fieldset>
 			<table>
-				<tr><td><label for="current_password" class="required"><?php echo $this->translate('labels.current_password'); ?></label></td>
+				<tr><td><label for="current_password" class="required"><?= $this->_('labels.current_password'); ?></label></td>
 					<td><input name="current_password" id="current_password" type="password" /></td>
 				</tr>
-				<tr><td><label for="new_password" class="required"><?php echo $this->translate('labels.new_password'); ?></label></td>
+				<tr><td><label for="new_password" class="required"><?= $this->_('labels.new_password'); ?></label></td>
 					<td><input name="new_password" id="new_password" type="password" /></td>
 				</tr>
-				<tr><td><label for="retype_password" class="required"><?php echo $this->translate('labels.retype_password'); ?></label></td>
+				<tr><td><label for="retype_password" class="required"><?= $this->_('labels.retype_password'); ?></label></td>
 					<td><input name="retype_password" id="retype_password" type="password" /></td>
 				</tr>
 			</table>

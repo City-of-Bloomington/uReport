@@ -104,7 +104,7 @@ foreach ($fields as $field) {
 					</select>
 				</td>
 			</tr>
-			<tr><td><label for="displayPermissionLevel"><?php echo $this->_('labels.displayPermissionLevel'); ?></label></td>
+			<tr><td><label for="displayPermissionLevel"><?= $this->_('labels.displayPermissionLevel'); ?></label></td>
 				<td><select name="displayPermissionLevel" id="displayPermissionLevel">
                     <?php
                         foreach ($ZEND_ACL->getRoles() as $role) {

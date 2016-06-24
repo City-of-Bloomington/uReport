@@ -17,10 +17,10 @@ $url = BASE_URL."/people?return_url=$return_url";
 echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
-		<h3>{$this->translate('labels.reportedByPerson')}</h3>
+		<h3>{$this->_('labels.reportedByPerson')}</h3>
 		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
 			<span class=\"fa fa-user\"></span>
-			{$this->translate('labels.find_person')}
+			{$this->_('labels.find_person')}
 		</a>
 	</div>
 	<div class=\"bd\">
@@ -41,7 +41,7 @@ echo "
 				'tickets/ticketList.inc',
 				array(
 					'ticketList'    => $reportedTickets,
-					'title'         => $this->translate('labels.tickets_reported'),
+					'title'         => $this->_('labels.tickets_reported'),
 					'disableButtons'=> true,
 					'disableLinks'  => true
 				)

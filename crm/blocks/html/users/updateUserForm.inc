@@ -12,18 +12,18 @@ use Blossom\Classes\View;
 $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 ?>
 <div class="updateUserForm">
-	<h2><?php echo $title; ?></h2>
-	<form method="post" action="<?php echo BASE_URL; ?>/users/update">
-		<fieldset><legend><?php echo $this->translate('labels.login'); ?></legend>
+	<h2><?= $title; ?></h2>
+	<form method="post" action="<?= BASE_URL; ?>/users/update">
+		<fieldset><legend><?= $this->_('labels.login'); ?></legend>
 			<table>
-				<tr><td><label for="department_id"><?php echo $this->translate(array('labels.department', 'labels.departments', 1)); ?></label></td>
+				<tr><td><label for="department_id"><?= $this->_(array('labels.department', 'labels.departments', 1)); ?></label></td>
 					<td><select name="department_id" id="department_id">
 							<option></option>
 						<?php
 							$table = new DepartmentTable();
 							$list = $table->find();
 							foreach ($list as $department) {
-								$name = View::escape($department->getName());
+								$name = self::escape($department->getName());
 								$selected = $this->person->getDepartment_id()==$department->getId()
 											? 'selected="selected"'
 											: '';
@@ -33,7 +33,7 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="authenticationMethod"><?php echo $this->translate('labels.authenticationMethod'); ?></label></td>
+				<tr><td><label for="authenticationMethod"><?= $this->_('labels.authenticationMethod'); ?></label></td>
 					<td><select name="authenticationMethod" id="authenticationMethod">
 						<?php
 							foreach (Person::getAuthenticationMethods() as $method) {
@@ -46,14 +46,14 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 						</select>
 					</td>
 				</tr>
-				<tr><td><label for="username"><?php echo $this->translate('labels.username'); ?></label></td>
-					<td><input name="username" id="username" value="<?php echo View::escape($this->person->getUsername()); ?>" />
+				<tr><td><label for="username"><?= $this->_('labels.username'); ?></label></td>
+					<td><input name="username" id="username" value="<?= self::escape($this->person->getUsername()); ?>" />
 					</td>
 				</tr>
-				<tr><td><label for="password"><?php echo $this->translate('labels.password'); ?></label></td>
+				<tr><td><label for="password"><?= $this->_('labels.password'); ?></label></td>
 					<td><input name="password" id="password" /></td>
 				</tr>
-				<tr><td><label for="role"><?php echo $this->translate('labels.role'); ?></label></td>
+				<tr><td><label for="role"><?= $this->_('labels.role'); ?></label></td>
 					<td><select name="role" id="role"><option></option>
 						<?php
 							global $ZEND_ACL;
@@ -69,12 +69,12 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 				</tr>
 			</table>
 
-			<p><?php echo $this->translate('text.employee_authentication_description'); ?></p>
+			<p><?= $this->_('text.employee_authentication_description'); ?></p>
 		</fieldset>
 
 		<?php include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc'; ?>
 
-		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
+		<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
 			<?php
 				$helper = $this->template->getHelper('saveAndCancelButtons');
 				echo $helper->saveAndCancelButtons(BASE_URI.'/users');

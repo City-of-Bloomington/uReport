@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <head>
 	<style>
 		/* SLA Status */
@@ -8,6 +8,6 @@
 	</style>
 </head>
 <body>
-	<?php echo $this->includeBlocks(); ?>
+	<?= $this->includeBlocks(); ?>
 </body>
 </html>

@@ -7,20 +7,20 @@
  */
 use Blossom\Classes\View;
 
-$name = View::escape($this->contactMethod->getName());
+$name = self::escape($this->contactMethod->getName());
 $title = $this->contactMethod->getId()
-	? $this->translate('labels.edit').' '.$this->translate(array('labels.contactMethod','labels.contactMethods',1))
-	: $this->translate('labels.add' ).' '.$this->translate(array('labels.contactMethod','labels.contactMethods',1));
+	? $this->_('labels.edit').' '.$this->_(array('labels.contactMethod','labels.contactMethods',1))
+	: $this->_('labels.add' ).' '.$this->_(array('labels.contactMethod','labels.contactMethods',1));
 ?>
 <div>
-	<h2><?php echo $title; ?></h2>
-	<form method="post" action="<?php echo BASE_URI; ?>/contactMethods/update">
-		<input type="hidden" name="contactMethod_id" value="<?php echo $this->contactMethod->getId(); ?>" />
+	<h2><?= $title; ?></h2>
+	<form method="post" action="<?= BASE_URI; ?>/contactMethods/update">
+		<input type="hidden" name="contactMethod_id" value="<?= $this->contactMethod->getId(); ?>" />
 
 		<fieldset>
 			<table>
-				<tr><td><label for="name"><?php echo $this->translate('labels.name'); ?></label></td>
-					<td><input name="name" id="name" value="<?php echo $name; ?>" /></td>
+				<tr><td><label for="name"><?= $this->_('labels.name'); ?></label></td>
+					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
 				</tr>
 			</table>
 			<?php

@@ -9,7 +9,7 @@
 use Blossom\Classes\View;
 ?>
 <div>
-<h2><?php echo View::escape($this->title); ?></h2>
+<h2><?= self::escape($this->title); ?></h2>
 <table>
     <thead>
         <tr><th>Category ID</th>
@@ -19,7 +19,7 @@ use Blossom\Classes\View;
     <tbody>
     <?php
         foreach ($this->data as $row) {
-            $name = View::escape($row['category']);
+            $name = self::escape($row['category']);
             echo "
             <tr><td>$row[category_id]</td>
                 <td>$name</td>

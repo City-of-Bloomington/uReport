@@ -11,13 +11,13 @@ use Blossom\Classes\View;
 	<?php
 		$list = "
 		<div class=\"additionalLocationInfo\">
-			<h2>{$this->translate('labels.info_location_additional')}</h2>
+			<h2>{$this->_('labels.info_location_additional')}</h2>
 			<ul class=\"twoColumnlist\">
 		";
 		$locationFields = array('city','state','zip','latitude','longitude');
 		foreach ($locationFields as $field) {
 			$get = 'get'.ucfirst($field);
-			$$field = View::escape($this->ticket->$get());
+			$$field = self::escape($this->ticket->$get());
 			if ($$field) {
 				$list.= "<li><label>$field: </label>{$$field}</li>";
 			}

@@ -8,27 +8,27 @@
  */
 ?>
 <div class="mergeForm">
-	<form method="post" action="<?php echo BASE_URI; ?>/tickets/merge">
+	<form method="post" action="<?= BASE_URI; ?>/tickets/merge">
 		<fieldset>
 			<div class="target_a">
 				<input name="targetTicket" id="targetTicket_a" type="radio" value="a" checked="checked" />
-				<input name="ticket_id_a" type="hidden" value="<?php echo $this->ticketA->getId(); ?>" />
+				<input name="ticket_id_a" type="hidden" value="<?= $this->ticketA->getId(); ?>" />
 				<label for="targetTicket_a">
 				<?php
-					echo $this->translate('labels.merge_into_ticket').' #'.$this->ticketA->getId();
+					echo $this->_('labels.merge_into_ticket').' #'.$this->ticketA->getId();
 				?>
 				</label>
 			</div>
 			<div class="target_b">
 				<label for="targetTicket_b">
 				<?php
-					echo $this->translate('labels.merge_into_ticket').' #'.$this->ticketB->getId();
+					echo $this->_('labels.merge_into_ticket').' #'.$this->ticketB->getId();
 				?>
 				</label>
 				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
-				<input name="ticket_id_b" type="hidden" value="<?php echo $this->ticketB->getId(); ?>" />
+				<input name="ticket_id_b" type="hidden" value="<?= $this->ticketB->getId(); ?>" />
 			</div>
-			<button type="submit"><span class="fa fa-check"></span> <?php echo $this->translate('labels.merge'); ?></button>
+			<button type="submit"><span class="fa fa-check"></span> <?= $this->_('labels.merge'); ?></button>
 		</fieldset>
 	</form>
 </div>

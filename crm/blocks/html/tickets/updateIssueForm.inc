@@ -9,11 +9,11 @@
 $title = is_null($this->issue->getId()) ? 'Add Issue' : 'Edit Issue';
 ?>
 <div class="updateIssueForm">
-	<h2><?php echo $title; ?></h2>
-	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
-		<fieldset><legend><?php echo $this->translate('labels.info_issue'); ?></legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
-			<input name="issue_id" type="hidden" value="<?php echo $this->issue->getId(); ?>" />
+	<h2><?= $title; ?></h2>
+	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
+		<fieldset><legend><?= $this->_('labels.info_issue'); ?></legend>
+			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
+			<input name="issue_id" type="hidden" value="<?= $this->issue->getId(); ?>" />
 			<?php
 				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
 

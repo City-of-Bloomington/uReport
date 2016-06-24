@@ -8,15 +8,15 @@
 use Blossom\Classes\View;
 ?>
 <div class="changeCategoryForm">
-	<form method="post" action="<?php echo BASE_URL; ?>/tickets/changeCategory">
-		<fieldset><legend><?php echo $this->translate('labels.change_category'); ?></legend>
-			<input name="ticket_id" type="hidden" value="<?php echo $this->ticket->getId(); ?>" />
+	<form method="post" action="<?= BASE_URL; ?>/tickets/changeCategory">
+		<fieldset><legend><?= $this->_('labels.change_category'); ?></legend>
+			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key   = View::escape($key);
-						$value = View::escape($value);
+						$key   = self::escape($key);
+						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}

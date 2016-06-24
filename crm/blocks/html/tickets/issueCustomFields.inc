@@ -17,7 +17,7 @@ if ($category) {
 		foreach ($customFields as $f) {
 			$name = $f->name;
 			$type = isset($f->type) ? $f->type : 'string';
-			$label = isset($f->label) ? View::escape($f->label) : View::escape($name);
+			$label = isset($f->label) ? self::escape($f->label) : self::escape($name);
 
 			$issueData = $this->issue->getCustomFields();
 			$value = isset($issueData->$name) ? $issueData->$name : null;
@@ -26,14 +26,14 @@ if ($category) {
 			$field_id   = "customFields-$name";
 			switch ($type) {
 				case 'singlevaluelist':
-					$value = View::escape($value);
+					$value = self::escape($value);
 					echo "
 					<tr><td><label for=\"$field_id\">$label</td>
 						<td><select name=\"$field_name\" id=\"$field_id\">
 								<option></option>
 					";
 							foreach ($f->values as $v) {
-								$v = View::escape($v);
+								$v = self::escape($v);
 								$selected = $v==$value ? 'selected="selected"' : '';
 								echo "<option value=\"$v\" $selected>$v</option>";
 							}
@@ -53,7 +53,7 @@ if ($category) {
 					";
 							foreach ($f->values as $v) {
 								$selected = in_array($v, $value) ? 'selected="selected"' : '';
-								$v = View::escape($v);
+								$v = self::escape($v);
 								echo "<option value=\"$v\" $selected>$v</option>";
 							}
 					echo "
@@ -63,7 +63,7 @@ if ($category) {
 					";
 					break;
 				case 'text':
-					$value = View::escape($value);
+					$value = self::escape($value);
 					echo "
 					<tr><td colspan=\"2\">
 							<div><label for=\"$field_id\">$label</label></div>
@@ -73,7 +73,7 @@ if ($category) {
 					";
 					break;
 				default:
-					$value = View::escape($value);
+					$value = self::escape($value);
 					echo "
 					<tr><td><label for=\"$field_id\">$label</label></td>
 						<td><input name=\"$field_name\" id=\"$field_id\" value=\"$value\" /></td>

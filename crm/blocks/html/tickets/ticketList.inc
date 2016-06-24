@@ -15,14 +15,14 @@ use Blossom\Classes\Url;
 use Blossom\Classes\View;
 ?>
 <div class="ticketList">
-	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate(array('labels.ticket', 'labels.tickets', 2)); ?></h2>
+	<h2><?= $this->title ? self::escape($this->title) : $this->_(array('labels.ticket', 'labels.tickets', 2)); ?></h2>
 	<table>
 		<thead>
-			<tr><th><?php echo $this->translate(array('labels.status', 'labels.statuses', 2)); ?></th>
-				<th><?php echo $this->translate('labels.enteredDate'); ?></th>
-				<th><?php echo $this->translate('labels.sla'); ?></th>
-				<th><?php echo $this->translate(array('labels.category', 'labels.categories', 2)); ?></th>
-				<th><?php echo $this->translate(array('labels.location', 'labels.locations', 2)); ?></th>
+			<tr><th><?= $this->_(array('labels.status', 'labels.statuses', 2)); ?></th>
+				<th><?= $this->_('labels.enteredDate'); ?></th>
+				<th><?= $this->_('labels.sla'); ?></th>
+				<th><?= $this->_(array('labels.category', 'labels.categories', 2)); ?></th>
+				<th><?= $this->_(array('labels.location', 'labels.locations', 2)); ?></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -33,8 +33,8 @@ use Blossom\Classes\View;
 					&& "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
 					continue;
 				}
-				$status      = View::escape($ticket->getStatus());
-				$location    = View::escape($ticket->getLocation());
+				$status      = self::escape($ticket->getStatus());
+				$location    = self::escape($ticket->getLocation());
 				$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
 				$sla         = $ticket->getSlaPercentage();
 				if ($sla) {
@@ -46,7 +46,7 @@ use Blossom\Classes\View;
 				}
 
 				$category = $ticket->getCategory_id()
-					? View::escape($ticket->getCategory()->getName())
+					? self::escape($ticket->getCategory()->getName())
 					: '';
 
 				if (!$this->disableLinks) {
@@ -81,7 +81,7 @@ use Blossom\Classes\View;
 						$helper = $this->template->getHelper('buttonLink');
 						echo $helper->buttonLink(
 							$url,
-							$this->translate('labels.add_issue'),
+							$this->_('labels.add_issue'),
 							'add'
 						);
 					}
@@ -98,7 +98,7 @@ use Blossom\Classes\View;
 			echo "
 			<div>
 				<a href=\"{$this->moreLink}\">
-					{$this->translate('labels.more')} <span class=\"fa fa-angle-double-right\"></span>
+					{$this->_('labels.more')} <span class=\"fa fa-angle-double-right\"></span>
 				</a>
 			</div>
 			";

@@ -12,15 +12,15 @@ if (!isset($_GET['setOfPeople'])) {
 }
 ?>
 <div class="findPeople">
-	<h2><?php echo $this->title ? View::escape($this->title) : $this->translate('labels.find_person'); ?></h2>
-	<form method="get" action="<?php echo BASE_URL; ?>/people">
+	<h2><?= $this->title ? self::escape($this->title) : $this->_('labels.find_person'); ?></h2>
+	<form method="get" action="<?= BASE_URL; ?>/people">
 		<fieldset>
 			<?php
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='setOfPeople' && !in_array($key,$fields)) {
-						$key   = View::escape($key);
-						$value = View::escape($value);
+						$key   = self::escape($key);
+						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
@@ -49,7 +49,7 @@ if (!isset($_GET['setOfPeople'])) {
 			<?php
 				foreach ($fields as $field) {
 					$label = ucfirst($field);
-					$value = isset($_GET[$field]) ? View::escape($_GET[$field]) : '';
+					$value = isset($_GET[$field]) ? self::escape($_GET[$field]) : '';
 					echo "
 					<tr><td><label for=\"$field\">$label</label></td>
 						<td><input name=\"$field\" id=\"$field\" value=\"$value\" /></td>
@@ -58,13 +58,13 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.search'); ?></button>
+			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('labels.search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
 					<button type=\"button\" onclick=\"self.close();\">
 						<span class=\"fa fa-times\"></span>
-						{$this->translate('labels.cancel')}
+						{$this->_('labels.cancel')}
 					</button>
 					";
 				}

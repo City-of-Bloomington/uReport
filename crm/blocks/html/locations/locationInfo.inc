@@ -12,14 +12,14 @@ use Blossom\Classes\Url;
 
 if ($this->location) {
 	$url = new Url(BASE_URL.'/locations/view?location='.$this->location);
-	$location = View::escape($this->location);
+	$location = self::escape($this->location);
 
 	$addTicketButton = '';
 	if (!$this->disableButtons && Person::isAllowed('tickets', 'add')) {
 		$h = $this->template->getHelper('buttonLink');
 		$addTicketButton = $h->buttonLink(
 			BASE_URI.'/tickets/add?location='.$this->location,
-			$this->translate('labels.add_new_ticket'),
+			$this->_('labels.add_new_ticket'),
 			'add'
 		);
 	}
