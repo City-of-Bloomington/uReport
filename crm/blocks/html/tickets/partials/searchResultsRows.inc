@@ -8,23 +8,21 @@ use Application\Models\Person;
 use Application\Models\Search;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\View;
-
 $tickets = Search::hydrateDocs($this->solrObject);
 echo '<div class="searchResultsRows">';
 foreach ($tickets as $ticket) {
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
 	$displayableFields = TicketTable::getDisplayableFields();
-	$additionalFields = $ticket->getAdditionalFields();
+	$additionalFields  = $ticket->getAdditionalFields();
 	// Create empty variables needed for the final markup
-	foreach (array( 'status', 'substatus_id',
-					'location', 'city', 'state', 'zip',
-					'category_id', 'description') as $k) {
+	foreach ([ 'status', 'substatus_id',
+               'location', 'city', 'state', 'zip',
+               'category_id', 'description'] as $k) {
 		$$k = '';
 	}
 
-	$dl = array();
+	$dl = [];
 
 	foreach ($_GET['fields'] as $field=>$value) {
 		// Make sure the user is allowed to see this field
@@ -39,14 +37,14 @@ foreach ($tickets as $ticket) {
 				case 'state':
 				case 'zip':
 				case 'description':
-					$$field = $ticket->$get() ? View::escape($ticket->$get()) : '';
+					$$field = $ticket->$get() ? self::escape($ticket->$get()) : '';
 					break;
 
 				case 'substatus_id':
 				case 'category_id':
 					$g = 'get'.ucfirst(substr($field, 0, -3));
 					$o = $ticket->$g();
-					$$field = $o ? View::escape($o->getName()) : '';
+					$$field = $o ? self::escape($o->getName()) : '';
 					break;
 
 				case 'enteredByPerson_id':
@@ -54,7 +52,7 @@ foreach ($tickets as $ticket) {
 					$get = 'get'.ucfirst(substr($field, 0, -3));
 					$person = $ticket->$get();
 					if ($person) {
-						$dl[$field] = View::escape($person->getFullname());
+						$dl[$field] = self::escape($person->getFullname());
 					}
 					break;
 
@@ -65,7 +63,7 @@ foreach ($tickets as $ticket) {
 
 				case 'department_id':
 					$department = $ticket->getDepartment();
-					$dl[$field] = $department ? View::escape($department->getName()) : '';
+					$dl[$field] = $department ? self::escape($department->getName()) : '';
 					break;
 
 				case 'latitude':
@@ -84,7 +82,7 @@ foreach ($tickets as $ticket) {
 				default:
 					// Anything else should be a custom field for the ticket
 					if (isset($additionalFields->$field)) {
-						$dl[$field] = View::escape($additionalFields->$field);
+						$dl[$field] = self::escape($additionalFields->$field);
 					}
 			}
 		}
@@ -92,7 +90,7 @@ foreach ($tickets as $ticket) {
 	echo "
 		<div>
 			<h3><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
-					{$this->translate(array('labels.ticket', 'labels.tickets', 1))}
+					{$this->_('labels.ticket')}
 					# {$ticket->getId()} $category_id $status $substatus_id
 				</a>
 			</h3>
