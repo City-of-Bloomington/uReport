@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  * @param bool  $this->disableButtons
  */
@@ -19,7 +18,7 @@ use Blossom\Classes\View;
 		$enteredBy = '';
 		$p = $this->issue->getEnteredByPerson();
 		if ($p) {
-			$enteredBy = View::escape($p->getFullname());
+			$enteredBy = self::escape($p->getFullname());
 
 			$href = BASE_URL."/people/view?person_id={$p->getId()}";
 			$enteredBy = "<a href=\"$href\">$enteredBy</a>";
@@ -28,30 +27,30 @@ use Blossom\Classes\View;
 		$reportedBy = '';
 		$p = $this->issue->getReportedByPerson();
 		if ($p) {
-			$reportedBy = View::escape($p->getFullname());
+			$reportedBy = self::escape($p->getFullname());
 
 			$href = BASE_URL."/people/view?person_id={$p->getId()}";
 			$reportedBy = "<a href=\"$href\">$reportedBy</a>";
 		}
 
-		$contactMethod  = View::escape($this->issue->getContactMethod());
-		$responseMethod = View::escape($this->issue->getResponseMethod());
-		$labels = View::escape(implode(', ',$this->issue->getLabels()));
+		$contactMethod  = self::escape($this->issue->getContactMethod());
+		$responseMethod = self::escape($this->issue->getResponseMethod());
+		$labels = self::escape(implode(', ',$this->issue->getLabels()));
 		echo "<ul class=\"twoColumnlist\">";
-		if ($enteredBy)      { echo "<li><label>{$this->translate('labels.enteredByPerson' )}:</label> $enteredBy     </li>"; }
-		if ($reportedBy)     { echo "<li><label>{$this->translate('labels.reportedByPerson')}:</label> $reportedBy    </li>"; }
-		if ($contactMethod)  { echo "<li><label>{$this->translate(array('labels.contactMethod', 'labels.contactMethods', 1))}:</label> $contactMethod </li>"; }
-		if ($responseMethod) { echo "<li><label>{$this->translate('labels.responseMethod'  )}:</label> $responseMethod</li>"; }
-		if ($labels)         { echo "<li><label>{$this->translate(array('labels.label', 'labels.labels', 2))}:</label> $labels</li>"; }
+		if ($enteredBy)      { echo "<li><label>{$this->_('labels.enteredByPerson' )}:</label> $enteredBy     </li>"; }
+		if ($reportedBy)     { echo "<li><label>{$this->_('labels.reportedByPerson')}:</label> $reportedBy    </li>"; }
+		if ($contactMethod)  { echo "<li><label>{$this->_('labels.contactMethod'   )}:</label> $contactMethod </li>"; }
+		if ($responseMethod) { echo "<li><label>{$this->_('labels.responseMethod'  )}:</label> $responseMethod</li>"; }
+		if ($labels)         { echo "<li><label>{$this->_('labels.labels')}:</label> $labels</li>"; }
 			$t = $this->issue->getTicket();
 			$customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
 			if ($customFields) {
 				$customFieldData = $this->issue->getCustomFields();
 				foreach ($customFields as $definition) {
 					$fieldname = $definition->name;
-					$label = isset($definition->label) ? View::escape($definition->label) : View::escape($fieldname);
+					$label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
 					$value = isset($customFieldData->$fieldname) ? $customFieldData->$fieldname : '';
-					$value = is_array($value) ? implode(', ',$value) : View::escape($value);
+					$value = is_array($value) ? implode(', ',$value) : self::escape($value);
 					if ($value) { echo "<li><label>$label:</label> $value</li>\n"; }
 				}
 			}
@@ -61,7 +60,7 @@ use Blossom\Classes\View;
 	}
 
 	if (!$this->disableComments) {
-		$description = View::escape($this->issue->getDescription());
+		$description = self::escape($this->issue->getDescription());
 		if ($description) { echo "<div class=\"notes\"><h2>Details:</h2>$description</div>"; }
 	}
 
