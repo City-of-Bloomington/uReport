@@ -38,7 +38,6 @@ class Search
 		'state'           => 'State',
 		'zip'             => 'Zip',
 		'issueType_id'    => 'Issue Type',
-		'label_id'        => 'Label',
 		'contactMethod_id'=> 'Received Via',
 		'enteredDate'     => 'Case Date',
 		'bbox'            => 'Bounding Box',
@@ -62,7 +61,6 @@ class Search
 			'department_id',
 			'status',
 			'client_id',
-			'label_id',
 			'issueType_id',
 			'contactMethod_id'
 		)
@@ -359,10 +357,6 @@ class Search
 						$document->addField($f, $issue->$get());
 						$document->addField(substr($f, 0, -3), self::sortableString($issue, $f));
 					}
-				}
-				foreach ($issue->getLabels() as $id=>$label) {
-					$document->addField('label_id', $id);
-					$document->addField('label', $label->getName());
 				}
 			}
 			if ($description) {

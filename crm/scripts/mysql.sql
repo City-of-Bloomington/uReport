@@ -198,11 +198,6 @@ insert into issueTypes set name='Report';
 insert into issueTypes set name='Request';
 insert into issueTypes set name='Violation';
 
-create table labels (
-	id int unsigned not null primary key auto_increment,
-	name varchar(128) not null
-);
-
 create table issues (
 	id                  int       unsigned not null primary key auto_increment,
 	ticket_id           int       unsigned not null,
@@ -220,14 +215,6 @@ create table issues (
 	foreign key (issueType_id)        references issueTypes    (id),
 	foreign key (enteredByPerson_id)  references people        (id),
 	foreign key (reportedByPerson_id) references people        (id)
-);
-
-create table issue_labels (
-	issue_id int unsigned not null,
-	label_id int unsigned not null,
-	primary key (issue_id, label_id),
-	foreign key (issue_id) references issues(id),
-	foreign key (label_id) references labels(id)
 );
 
 create table ticketHistory (

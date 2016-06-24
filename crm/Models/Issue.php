@@ -110,19 +110,13 @@ class Issue extends ActiveRecord
 
 	}
 
-	public function save()
-	{
-		parent::save();
-		if ($this->labelsModified) { $this->saveLabels(); }
-	}
-
+	public function save() { parent::save(); }
 	public function delete()
 	{
 		if ($this->getId()) {
 			foreach ($this->getMedia() as $m) { $m->delete(); }
 
 			$zend_db = Database::getConnection();
-			$zend_db->query('delete from issue_labels  where issue_id=?')->execute([$this->getId()]);
 			$zend_db->query('delete from ticketHistory where issue_id=?')->execute([$this->getId()]);
 			$zend_db->query('delete from responses     where issue_id=?')->execute([$this->getId()]);
 			parent::delete();
@@ -168,13 +162,10 @@ class Issue extends ActiveRecord
 	 */
 	public function handleUpdate($post)
 	{
-		if (!isset($post['labels'])) {
-			$post['labels'] = array();
-		}
-		$fields = array(
-			'issueType_id', 'description', 'customFields', 'labels',
+		$fields = [
+			'issueType_id', 'description', 'customFields',
 			'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
-		);
+		];
 		foreach ($fields as $field) {
 			$set = 'set'.ucfirst($field);
 			if (isset($post[$field])) {
@@ -200,64 +191,6 @@ class Issue extends ActiveRecord
 	public function setCustomFields($array)
 	{
 		$this->data['customFields'] = json_encode($array);
-	}
-
-	/**
-	 * Returns an array of Labels indexed by Id
-	 *
-	 * @return array
-	 */
-	public function getLabels()
-	{
-		if (!count($this->labels) && $this->getId()) {
-			$table = new LabelTable();
-			$list = $table->find(['issue_id' => $this->getId()]);
-			foreach ($list as $label) {
-				$this->labels[$label->getId()] = $label;
-			}
-		}
-		return $this->labels;
-	}
-
-	/**
-	 * Reads labels from POST array
-	 *
-	 * @param array $label_ids
-	 */
-	public function setLabels($label_ids)
-	{
-		$this->labelsModified = true;
-		$this->labels = array();
-		foreach ($label_ids as $id) {
-			$label = new Label($id);
-			$this->labels[$label->getId()] = $label;
-		}
-	}
-
-	/**
-	 * Writes the labels back out to the database
-	 */
-	private function saveLabels()
-	{
-		if ($this->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from issue_labels where issue_id=?')->execute([$this->getId()]);
-			$query = $zend_db->createStatement('insert into issue_labels (issue_id, label_id) values(?, ?)');
-			foreach ($this->labels as $id=>$label) {
-				$query->execute([$this->getId(), $label->getId()]);
-			}
-		}
-	}
-
-	/**
-	 * @param Label $l
-	 * @return bool
-	 */
-	public function hasLabel(Label $l)
-	{
-		if ($this->getId()) {
-			return in_array($l->getId(), array_keys($this->getLabels()));
-		}
 	}
 
 	/**

@@ -368,11 +368,6 @@ msgid_plural "labels.issueTypes"
 msgstr[0] "Meldsoort"
 msgstr[1] "Meldsoorten"
 
-msgid "labels.label"
-msgid_plural "labels.labels"
-msgstr[0] "Label"
-msgstr[1] "Labels"
-
 msgid "labels.address"
 msgid_plural "labels.addresses"
 msgstr[0] "Adres"

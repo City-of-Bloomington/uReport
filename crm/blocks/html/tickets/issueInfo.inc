@@ -38,13 +38,11 @@ use Application\Models\Person;
 
     $contactMethod  = self::escape($this->issue->getContactMethod());
     $responseMethod = self::escape($this->issue->getResponseMethod());
-    $labels = self::escape(implode(', ',$this->issue->getLabels()));
     echo "<ul class=\"twoColumnlist\">";
     if ($enteredBy)      { echo "<li><label>{$this->_('labels.enteredByPerson' )}:</label> $enteredBy     </li>"; }
     if ($reportedBy)     { echo "<li><label>{$this->_('labels.reportedByPerson')}:</label> $reportedBy    </li>"; }
     if ($contactMethod)  { echo "<li><label>{$this->_('labels.contactMethod'   )}:</label> $contactMethod </li>"; }
     if ($responseMethod) { echo "<li><label>{$this->_('labels.responseMethod'  )}:</label> $responseMethod</li>"; }
-    if ($labels)         { echo "<li><label>{$this->_('labels.labels')}:</label> $labels</li>"; }
 
     $t = $this->issue->getTicket();
     $customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;

@@ -31,7 +31,6 @@ $ZEND_ACL->addResource(new Resource('actions'));
 $ZEND_ACL->addResource(new Resource('categories'));
 $ZEND_ACL->addResource(new Resource('categoryGroups'));
 $ZEND_ACL->addResource(new Resource('responseTemplates'));
-$ZEND_ACL->addResource(new Resource('labels'));
 $ZEND_ACL->addResource(new Resource('issueTypes'));
 $ZEND_ACL->addResource(new Resource('substatus'));
 $ZEND_ACL->addResource(new Resource('contactMethods'));

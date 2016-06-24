@@ -10,7 +10,6 @@
 		<li><a href="<?= BASE_URL; ?>/substatus">     <?= $this->_(['labels.substatus'    ,'labels.substatuses'   ,2]); ?></a></li>
 		<li><a href="<?= BASE_URL; ?>/actions">       <?= $this->_(['labels.action'       ,'labels.actions'       ,2]); ?></a></li>
 		<li><a href="<?= BASE_URL; ?>/clients">       <?= $this->_(['labels.client'       ,'labels.clients'       ,2]); ?></a></li>
-		<li><a href="<?= BASE_URL; ?>/labels">        <?= $this->_(['labels.label'        ,'labels.labels'        ,2]); ?></a></li>
 		<li><a href="<?= BASE_URL; ?>/contactMethods"><?= $this->_(['labels.contactMethod','labels.contactMethods',2]); ?></a></li>
 		<li><a href="<?= BASE_URL; ?>/issueTypes">    <?= $this->_(['labels.issueType'    ,'labels.issueTypes'    ,2]); ?></a></li>
 	</ul>

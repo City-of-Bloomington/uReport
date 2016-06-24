@@ -58,3 +58,6 @@ drop table issueHistory;
 alter table ticketHistory add data text;
 insert actions (name,type,description) values('changeCategory', 'system', 'Changed category from {original:category_id} to {updated:category_id}');
 insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');
+
+drop table issue_labels;
+drop table labels;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
@@ -81,26 +81,6 @@ use Blossom\Classes\View;
 		</td>
 	</tr>
 
-	<tr><td><label><?php echo $this->translate(array('labels.label', 'labels.labels', 2)); ?></label></td>
-		<td>
-		<?php
-			$table = new LabelTable();
-			$list = $table->find();
-			foreach ($list as $label) {
-				$checked = $this->issue->hasLabel($label)
-					? 'checked="checked"'
-					: '';
-				$name = View::escape($label->getName());
-				echo "
-				<label>
-					<input type=\"checkbox\" name=\"labels[]\" value=\"{$label->getId()}\" $checked />
-					$name
-				</label>
-				";
-			}
-		?>
-		</td>
-	</tr>
 </table>
 
 <div><label for="description"><?php echo $this->translate('labels.description'); ?></label></div>
