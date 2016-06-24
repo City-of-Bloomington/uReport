@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\BookmarkTable;
@@ -11,7 +10,6 @@ use Application\Models\Search;
 use Application\Models\TicketTable;
 
 use Blossom\Classes\Block;
-use Blossom\Classes\View;
 use Blossom\Classes\Url;
 
 $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
@@ -21,22 +19,22 @@ if (Person::isAllowed('tickets','add')) {
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
 	<div class=\"quickSearches\">
-		<h2>{$this->translate('labels.quick_links')}</h2>
+		<h2>{$this->_('labels.quick_links')}</h2>
 		<form method=\"get\" action=\"".BASE_URI."/tickets\">
 			<fieldset>
 				<label>
-					{$this->translate(array('labels.ticket', 'labels.tickets', 1))}
+					{$this->_('labels.ticket')}
 					# <input name=\"id\" value=\"$id\" size=\"6\" />
 				</label>
 				<button type=\"submit\"><span class=\"fa fa-search\"></span> Go</button>
 			</fieldset>
 		</form>
 		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
-					{$this->translate('labels.tickets_open')}
+					{$this->_('labels.tickets_open')}
 				</a>
 			</li>
 			<li><a href=\"".BASE_URI."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
-					{$this->translate('labels.tickets_my')}
+					{$this->_('labels.tickets_my')}
 				</a>
 			</li>
 		";
@@ -44,7 +42,7 @@ if (Person::isAllowed('tickets','add')) {
 			$d = $_SESSION['USER']->getDepartment();
 			echo "
 			<li><a href=\"".BASE_URI."/tickets?status=open;department_id={$d->getId()}\">
-					{$this->translate('labels.tickets_my_department')}
+					{$this->_('labels.tickets_my_department')}
 				</a>
 			</li>
 			";
@@ -70,14 +68,14 @@ if (Person::isAllowed('tickets','add')) {
 }
 ?>
 <div>
-	<h2><?php echo $this->translate('labels.search'); ?></h2>
-	<form method="get" action="<?php echo BASE_URI; ?>/tickets">
+	<h2><?= $this->_('labels.search'); ?></h2>
+	<form method="get" action="<?= BASE_URI; ?>/tickets">
 		<fieldset>
-			<label><?php echo $this->translate('labels.search'); ?>
-				<input name="query" value="<?php if (!empty($_GET['query'])) echo View::escape($_GET['query']); ?>" />
+			<label><?= $this->_('labels.search'); ?>
+				<input name="query" value="<?php if (!empty($_GET['query'])) echo self::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.go'); ?></button>
-			<p class="help"><?php echo $this->translate('messages.ticket_search_query_description'); ?></p>
+			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('labels.go'); ?></button>
+			<p class="help"><?= $this->_('messages.ticket_search_query_description'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
 			<?php
@@ -125,16 +123,16 @@ if (Person::isAllowed('tickets','add')) {
 				}
 			?>
 			<div class="collapsible">
-				<h3 class="hd"><?php echo $this->translate('labels.enteredDate'); ?></h3>
+				<h3 class="hd"><?= $this->_('labels.enteredDate'); ?></h3>
 				<table class="bd">
-					<tr><td><label for="enteredDate-start"><?php echo $this->translate('labels.start'); ?>:</label></td>
+					<tr><td><label  for="enteredDate-start"><?= $this->_('labels.start'); ?>:</label></td>
 						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
-								value="<?php echo !empty($_GET['enteredDate']['start']) ? View::escape($_GET['enteredDate']['start']) : ''; ?>" />
+								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
 						</td>
 					</tr>
-					<tr><td><label for="enteredDate-end"><?php echo $this->translate('labels.end'); ?>:</label></td>
+					<tr><td><label  for="enteredDate-end"><?= $this->_('labels.end'); ?>:</label></td>
 						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
-								value="<?php echo !empty($_GET['enteredDate']['end']) ? View::escape($_GET['enteredDate']['end']) : ''; ?>" />
+								value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
 						</td>
 					</tr>
 				</table>
@@ -169,15 +167,15 @@ if (Person::isAllowed('tickets','add')) {
 		</fieldset>
 
 
-		<fieldset><legend><?php echo $this->translate('labels.submit'); ?></legend>
+		<fieldset><legend><?= $this->_('labels.submit'); ?></legend>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit"><span class="fa fa-search"></span> <?php echo $this->translate('labels.search'); ?></button>
+			<button type="submit"><i class="fa fa-search"></i> <?= $this->_('labels.search'); ?></button>
 		</fieldset>
 	</form>
 </div>
 <div>
-	<p><?php echo $this->translate('text.disclaimer'); ?></p>
+	<p><?= $this->_('text.disclaimer'); ?></p>
 </div>
