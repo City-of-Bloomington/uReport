@@ -1,17 +1,17 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\ContactMethodTable;
 use Application\Models\Person;
 
-use Blossom\Classes\View;
+$table = new ContactMethodTable();
+$list = $table->find();
 ?>
 <div>
 	<h2><?php
-			echo $this->_(array('contactMethod','contactMethods',2));
+			echo $this->_(['contactMethod', 'contactMethods', count($list)]);
 			if (Person::isAllowed('contactMethods','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
@@ -22,11 +22,9 @@ use Blossom\Classes\View;
 			}
 		?>
 	</h2>
-	<p><?= $this->_('text.contactMethods_description'); ?></p>
+	<p><?= $this->_('contactMethods_description', 'messages'); ?></p>
 	<ul>
 	<?php
-		$table = new ContactMethodTable();
-		$list = $table->find();
  		foreach ($list as $method) {
 			if (Person::isAllowed('contactMethods','update')) {
 				$editButton = $helper->buttonLink(

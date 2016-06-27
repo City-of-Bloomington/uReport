@@ -1,18 +1,16 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Email $this->email
  */
 use Application\Models\Email;
-use Blossom\Classes\View;
 ?>
 <div class="updateEmailForm">
 	<form method="post">
-		<fieldset><legend><?= $this->_(array('email', 'emails', 1)); ?></legend>
+		<fieldset><legend><?= $this->_('email'); ?></legend>
 			<table>
-				<tr><td><label><?= $this->_(array('label', 'labels', 1)); ?>
+				<tr><td><label><?= $this->_('label'); ?>
 							<select name="label" id="label">
 							<?php
 								foreach (Email::$LABELS as $label) {
@@ -27,10 +25,10 @@ use Blossom\Classes\View;
 					</td>
 					<td><input name="email" value="<?= self::escape($this->email); ?>" /></td>
 				</tr>
-				<tr><td><label for="usedForNotifications"><?= $this->_('messages.usedForNotifications'); ?></label></td>
+				<tr><td><label for="usedForNotifications"><?= $this->_('usedForNotifications', 'messages'); ?></label></td>
 					<td><select name="usedForNotifications" id="usedForNotifications">
 						<?php
-							foreach (array('No', 'Yes') as $i=>$text) {
+							foreach (['No', 'Yes'] as $i=>$text) {
 								$selected = $this->email->isUsedForNotifications()==$i
 									? 'selected="selected"'
 									: '';

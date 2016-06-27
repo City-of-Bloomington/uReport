@@ -2,16 +2,15 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2011-2015 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\Person;
 use Application\Models\Search;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
-use Blossom\Classes\View;
+
 $urlString = "http" . (($_SERVER['SERVER_PORT'] == 443) ? "s://" : "://" . $_SERVER['HTTP_HOST']) .  $_SERVER['REQUEST_URI'];
 $currentURL = new Url($urlString);
 $helper = $this->template->getHelper('buttonLink');
@@ -36,7 +35,7 @@ if (!empty($_GET['query'])
 
 	if (count($fq)) {
 		echo "
-		<p>{$this->_('text.search_parameters_description')}</p>
+		<p>{$this->_('search_parameters_description', 'messages')}</p>
 		<span>
 		";
 		// There may only be one filterQuery

@@ -1,6 +1,5 @@
 <?php
 use Application\Models\Person;
-use Blossom\Classes\View;
 ?>
 <div id="banner">
 	<ul id="utilityBar">
@@ -15,7 +14,7 @@ use Blossom\Classes\View;
 				echo sprintf($li, BASE_URI.'/login/logout', $this->_('logout'));
 
 				$name = self::escape($_SESSION['USER']->getFullname());
-				echo sprintf('<li>'.sprintf($this->_('messages.signed_in_as'), $name).'</li>');
+				echo sprintf('<li>'.sprintf($this->_('signed_in_as', 'messages'), $name).'</li>');
 				echo sprintf($li,
 					'https://github.com/City-of-Bloomington/uReport/wiki/User-Guide',
 					$this->_('help'));

@@ -13,13 +13,13 @@ $description = self::escape($this->action->getDescription());
 ?>
 <div class="updateActionForm">
 	<h2><?= $title; ?></h2>
-	<p><?= $this->_('text.actions_description'); ?></p>
+	<p><?= $this->_('actions_description', 'messages'); ?></p>
 	<table>
 		<tr><th>{enteredByPerson}</th>
-			<td><?= $this->_('text.actions_enteredByPerson'); ?></td>
+			<td><?= $this->_('actions_enteredByPerson', 'messages'); ?></td>
 		</tr>
 		<tr><th>{actionPerson}</th>
-			<td><?= $this->_('text.actions_actionPerson'); ?></td>
+			<td><?= $this->_('actions_actionPerson', 'messages'); ?></td>
 		</tr>
 	</table>
 	<form method="post" action="<?= BASE_URI; ?>/actions/update">

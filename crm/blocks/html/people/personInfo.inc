@@ -1,13 +1,12 @@
 <?php
 /**
- * @copyright 2009-2014 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  * @param bool $this->disableButtons
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
+
 // This screen is also used when a person views their own account.
 // When a person is viewing their own account, the URLs need to point
 // to the "account" versions of updating things.
@@ -25,7 +24,7 @@ else {
 $helper = $this->template->getHelper('buttonLink');
 
 $username = '';
-if (Person::isAllowed('people','view')) {
+if (Person::isAllowed('people', 'view')) {
 	$username = $this->person->getUsername();
 	if ($username && $resource=='account' && $_SESSION['USER']->getAuthenticationMethod()=='local') {
 		$username.= "
@@ -34,7 +33,7 @@ if (Person::isAllowed('people','view')) {
 		</a>
 		";
 	}
-	if (!$username && Person::isAllowed('users','add') && !$this->disableButtons) {
+	if (!$username && Person::isAllowed('users', 'add') && !$this->disableButtons) {
 		$username = $helper->buttonLink(
 			BASE_URI.'/users/update?person_id='.$this->person->getId(),
 			$this->_('create_account'),
@@ -45,7 +44,7 @@ if (Person::isAllowed('people','view')) {
 
 $editButton   = '';
 $deleteButton = '';
-if (Person::isAllowed($resource,'update') && !$this->disableButtons) {
+if (Person::isAllowed($resource, 'update') && !$this->disableButtons) {
 	$editButton = $helper->buttonLink(
 		BASE_URI."/$resource/update$person_param",
 		$this->_('edit'),
@@ -92,11 +91,13 @@ echo "
 	$buttonHelper = $this->template->getHelper('commonEditDeleteButtons');
 
 	$addressButtons = '';
+	$addressList    = $this->person->getAddresses();
+	$c              = count($addressList);
 	echo "
-	<h3>{$this->_(array('address', 'addresses', 2))}</h3>
+	<h3>{$this->_(['address', 'addresses', $c])}</h3>
 	<table>
 	";
-	foreach ($this->person->getAddresses() as $a) {
+	foreach ($addressList as $a) {
 		if ($editButton) {
 			$addressButtons = $buttonHelper->commonEditDeleteButtons($resource, 'address', $a);
 		}
@@ -155,12 +156,16 @@ echo "
 	}
 	echo "
 	</table>
+	";
 
-	<h3>{$this->_(array('phone', 'phones', 2))}</h3>
+	$phoneButtons = '';
+	$phones = $this->person->getPhones();
+	$c      = count($phones);
+	echo "
+	<h3>{$this->_(['phone', 'phones', $c])}</h3>
 	<table>
 	";
-	$phoneButtons = '';
-	foreach ($this->person->getPhones() as $p) {
+	foreach ($phones as $p) {
 		if ($editButton) {
 			$phoneButtons = $buttonHelper->commonEditDeleteButtons($resource, 'phone', $p);
 		}
@@ -176,7 +181,7 @@ echo "
 	if ($editButton) {
 		$addButton = $helper->buttonLink(
 			BASE_URI."/$resource/updatePhone$person_param",
-			"{$this->_('add')} {$this->_(array('phone', 'phones', 1))}",
+			"{$this->_('add')} {$this->_('phone')}",
 			'add'
 		);
 		echo "<tr><td colspan=\"3\">$addButton</td></tr>";
@@ -186,7 +191,7 @@ echo "
 </div>
 <table>
 	<tr class=\"usedForNotifications\">
-		<td>{$this->_('messages.usedForNotifications')}</td>
+		<td>{$this->_('usedForNotifications', 'messages')}</td>
 	</tr>
 </table>
 ";

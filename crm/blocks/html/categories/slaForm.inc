@@ -1,15 +1,14 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
 use Blossom\Classes\View;
 ?>
 <div class="slaForm">
 	<h2><?= $this->_('service_level_agreement'); ?></h2>
-	<p><?= $this->_('text.service_level_agreement_description'); ?></p>
+	<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
 
 	<form method="post" action="<?= BASE_URI; ?>/categories/sla">
 		<fieldset><legend><?= $this->_(array('category','categories', 2)); ?></legend>

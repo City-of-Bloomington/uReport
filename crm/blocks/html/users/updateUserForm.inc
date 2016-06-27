@@ -1,13 +1,11 @@
 <?php
 /**
- * @copyright 2006-2013 City of Bloomington, Indiana
+ * @copyright 2006-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
 use Application\Models\DepartmentTable;
 use Application\Models\Person;
-use Blossom\Classes\View;
 
 $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 ?>
@@ -69,7 +67,7 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 				</tr>
 			</table>
 
-			<p><?= $this->_('text.employee_authentication_description'); ?></p>
+			<p><?= $this->_('employee_authentication_description', 'messages'); ?></p>
 		</fieldset>
 
 		<?php include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc'; ?>

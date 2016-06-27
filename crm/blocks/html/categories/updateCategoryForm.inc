@@ -60,7 +60,7 @@ foreach ($fields as $field) {
 			<?= $this->_('sla'); ?>
 			(<?= $this->_('service_level_agreement'); ?>)
 		</legend>
-		<p><?= $this->_('text.service_level_agreement_description'); ?></p>
+		<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
 		<table>
 			<tr><td><label for="department_id" class="required">
 					<?= $this->_(['department','departments',1]); ?>
@@ -119,9 +119,9 @@ foreach ($fields as $field) {
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset><legend><?= $this->_('messages.usedForNotifications'); ?></legend>
+	<fieldset><legend><?= $this->_('usedForNotifications', 'messages'); ?></legend>
         <table>
-            <tr><td><label  for="notificationReplyEmail"><?= $htis->_('notificationReplyEmail'); ?></label></td>
+            <tr><td><label  for="notificationReplyEmail"><?= $this->_('notificationReplyEmail'); ?></label></td>
                 <td><input name="notificationReplyEmail" id="notificationReplyEmail" value="<?= $notificationReplyEmail; ?>" /></td>
             </tr>
             <tr><td><label><?= $this->_('autoCloseIsActive'); ?></label></td>

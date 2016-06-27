@@ -1,12 +1,9 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-use Blossom\Classes\View;
-
 $rows = '';
 foreach ($this->ticket->getIssues() as $issue) {
 	$person = $issue->getReportedByPerson();
@@ -24,7 +21,7 @@ if ($rows) {
 	echo "
 	<div class=\"responseReminder\">
 		<h2>{$this->_('contact_list')}</h2>
-		<p>{$this->_('text.response_reminder')}</p>
+		<p>{$this->_('response_reminder', 'messages')}</p>
 		<table>
 			$rows
 		</table>

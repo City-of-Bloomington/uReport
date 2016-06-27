@@ -2,9 +2,8 @@
 /**
  * Displays a list of Tickets from a Solr response
  *
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\Search;
@@ -23,14 +22,14 @@ if ($c) {
 	<div>{$this->_('search_results_count')}: $c</div>
 	";
 
-	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', array('solrObject'=>$this->solrObject));
-	$rows   = new Block('tickets/partials/searchResultsRows.inc',          array('solrObject'=>$this->solrObject));
+	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', ['solrObject'=>$this->solrObject]);
+	$rows   = new Block('tickets/partials/searchResultsRows.inc',          ['solrObject'=>$this->solrObject]);
 
 	echo $header->render('html', $this->template);
 	echo $rows  ->render('html', $this->template);
 }
 else {
-	echo "<h2>{$this->_('messages.no_tickets_found')}</h2>";
+	echo "<h2>{$this->_('no_tickets_found', 'messages')}</h2>";
 }
 
 // Raw results should not be paginated
@@ -41,7 +40,7 @@ if (empty($_GET['resultFormat']) || $_GET['resultFormat']!='raw') {
 	$paginator = new Paginator(new SolrPaginatorAdapter($this->solrObject));
 	$paginator->setItemCountPerPage(Search::ITEMS_PER_PAGE);
 	$paginator->setCurrentPageNumber($currentPage);
-	$block = new Block('pageNavigation.inc',array('paginator'=>$paginator));
+	$block = new Block('pageNavigation.inc', ['paginator'=>$paginator]);
 	echo $block->render('html', $this->template);
 }
 ?>

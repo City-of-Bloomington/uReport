@@ -1,12 +1,10 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Array $this->results
  */
 use Blossom\Classes\Url;
-use Blossom\Classes\View;
 ?>
 <div class="findLocationResults">
 <?php
@@ -14,12 +12,13 @@ $callback = isset($_REQUEST['callback'])
 	? preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback'])
 	: '';
 
-if (count($this->results)) {
+$count = count($this->results);
+if ($count) {
 	echo "
 	<table>
 		<thead>
-			<tr><th>{$this->_(array('location', 'locations', 1))}</th>
-				<th>{$this->_(array('ticket', 'tickets', 2))}</th>
+			<tr><th>{$this->_('location')}</th>
+				<th>{$this->_(['ticket', 'tickets', $count])}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -38,9 +37,9 @@ if (count($this->results)) {
 		}
 
 		$location = self::escape($location);
-		$city = isset($data['city']) ? ", $data[city]" : '';
-		$class = $data['addressId'] ? 'class="verified"' : '';
-		$count = isset($data['ticketCount']) ? $data['ticketCount'] : '';
+		$city     = isset($data['city'])        ? ", $data[city]"      : '';
+		$class    = $data['addressId']          ? 'class="verified"'   : '';
+		$count    = isset($data['ticketCount']) ? $data['ticketCount'] : '';
 		echo "
 		<tr $class>
 			<td><a href=\"$url\">$location$city</a></td>
@@ -55,13 +54,13 @@ if (count($this->results)) {
 
 	<table>
 		<tr class=\"verified\">
-			<td>{$this->_('messages.verified_locations')}</td>
+			<td>{$this->_('verified_locations', 'messages')}</td>
 		</tr>
 	</table>
 	";
 }
 else {
-	echo "<p>{$this->_('messages.no_locations_found')}</p>";
+	echo "<p>{$this->_('no_locations_found', 'messages')}</p>";
 
 	// If they don't have a master address service they still need a way to add
 	// new locations.  However, once they have a master address system, users

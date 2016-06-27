@@ -1,23 +1,22 @@
 <?php
 /**
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
  */
 use Application\Models\Person;
 use Application\Models\PersonTable;
 use Application\Models\RentalService;
-use Blossom\Classes\View;
 
-if (Person::isAllowed('people','view')) {
+if (Person::isAllowed('people', 'view')) {
 	echo '<div class="locationPeople">';
 	$table = new PersonTable();
 	$people = $table->find(['address' => $this->location]);
 	if (count($people)) {
+        $title = $this->_(['person', 'people', count($people)]);
 		echo "
-		<h3>{$this->_(array('person', 'people', 2))}</h3>
-		<p>{$this->_('text.locationPeople_description')}</p>
+		<h3>$title</h3>
+		<p>{$this->_('locationPeople_description', 'messages')}</p>
 		<ul>
 		";
 		foreach ($people as $person) {
@@ -31,7 +30,7 @@ if (Person::isAllowed('people','view')) {
 		$owners = RentalService::getOwnerNames($this->location);
 		$count = count($owners);
 		if ($count) {
-			echo "<h3>{$this->_(array('owner', 'owners', $count))}</h3><ul>";
+			echo "<h3>{$this->_(['owner', 'owners', $count])}</h3><ul>";
 			foreach ($owners as $name) {
 				$name = self::escape($name);
 				echo "<li>$name</li>";

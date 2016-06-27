@@ -1,12 +1,10 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param ClientList $this->clientList
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
 ?>
 <div class="clientList">
 	<h2><?php
@@ -21,7 +19,7 @@ use Blossom\Classes\View;
 			}
 		?>
 	</h2>
-	<p><?= $this->_('text.clients_description'); ?>	</p>
+	<p><?= $this->_('clients_description', 'messages'); ?></p>
 	<?php
 		foreach ($this->clientList as $client) {
 			$editButton   = '';

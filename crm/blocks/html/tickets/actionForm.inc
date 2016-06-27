@@ -1,28 +1,28 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 use Application\Models\Department;
-use Blossom\Classes\View;
 
 $department = $_SESSION['USER']->getDepartment_id()
 	? $_SESSION['USER']->getDepartment()
 	: new Department();
+
 $actions = $department->getActions();
-if (count($actions)) {
+$c       = count($actions);
+if ($c) {
 ?>
 <div class="actionForm">
-	<h2><?= $this->_(array('action', 'actions', 2)); ?></h2>
-	<p><?= $this->_('messages.add_action'); ?></p>
+	<h2><?= $this->_(['action', 'actions', $c]); ?></h2>
+	<p><?= $this->_('add_action', 'messages'); ?></p>
 	<form method="post" action="<?= BASE_URL; ?>/tickets/recordAction">
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<table>
 				<tr><td><label for="action_id" class="required">
-							<?= $this->_(array('action', 'actions', 1)); ?>
+							<?= $this->_('action'); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
@@ -51,7 +51,7 @@ if (count($actions)) {
 			</table>
 		</fieldset>
 		<fieldset>
-			<div><label for="notes"><?= $this->_(array('comment', 'comments', 2)); ?></label></div>
+			<div><label for="notes"><?= $this->_(['comment', 'comments', 2]); ?></label></div>
 			<div><textarea name="notes" id="notes"></textarea></div>
 		</fieldset>
 		<fieldset class="buttons">

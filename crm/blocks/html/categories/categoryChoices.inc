@@ -10,13 +10,12 @@
  *
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  * @param URL $this->return_url
  */
 echo "
 <div class=\"categoryChoices\">
-	<h2>{$this->_('messages.choose_category')}</h2>
+	<h2>{$this->_('choose_category', 'messages')}</h2>
 	<ul>
 ";
 	$return_url = $this->return_url;

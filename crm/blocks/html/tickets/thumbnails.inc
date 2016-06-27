@@ -1,14 +1,12 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 use Blossom\Classes\Block;
-use Blossom\Classes\View;
 
-$issueHeader = new Block('tickets/partials/issueHeader.inc', array('disableButtons'=>true));
+$issueHeader = new Block('tickets/partials/issueHeader.inc', ['disableButtons'=>true]);
 $thumbnail   = new Block('media/thumbnail.inc');
 echo "
 <div class=\"thumbnails\">
@@ -27,7 +25,7 @@ foreach ($this->ticket->getIssues() as $issue) {
 		$header = $issueHeader->render('html', $this->template);
 		echo "
 		<div class=\"issueInfo\">
-			<p>{$this->_('messages.click_full_size')}</p>
+			<p>{$this->_('click_full_size', 'messages')}</p>
 			$header
 			$html
 		</div>

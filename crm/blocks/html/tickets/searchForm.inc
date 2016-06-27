@@ -75,7 +75,7 @@ if (Person::isAllowed('tickets','add')) {
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo self::escape($_GET['query']); ?>" />
 			</label>
 			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('go'); ?></button>
-			<p class="help"><?= $this->_('messages.ticket_search_query_description'); ?></p>
+			<p class="help"><?= $this->_('ticket_search_query_description', 'messages'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
 			<?php
@@ -176,5 +176,5 @@ if (Person::isAllowed('tickets','add')) {
 	</form>
 </div>
 <div>
-	<p><?= $this->_('text.disclaimer'); ?></p>
+	<p><?= $this->_('disclaimer', 'messages'); ?></p>
 </div>
