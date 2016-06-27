@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Report;
 
@@ -26,7 +25,7 @@ $SLA_DATA = [
     ]
 ];
 
-include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
+$this->_include('reports/parameters.inc');
 $start = !empty($_REQUEST['enteredDate']['start'])
 	? strtotime($_REQUEST['enteredDate']['start'])
 	: strtotime('-1 month');

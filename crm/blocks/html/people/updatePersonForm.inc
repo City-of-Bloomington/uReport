@@ -1,12 +1,9 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
-use Blossom\Classes\View;
-
 $title = $this->person->getId() ? self::escape('Edit '.$this->person->getFirstname()) : 'Add Someone';
 // Let the template override the title, if it wants to
 $title = $this->title ? self::escape($this->title) : $title;
@@ -16,7 +13,7 @@ $title = $this->title ? self::escape($this->title) : $title;
 	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
 
 		<?php
-			include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc';
+			$this->_include('people/personInfoFields.inc');
 		?>
 
 		<fieldset><legend><?= $this->_('submit'); ?></legend>

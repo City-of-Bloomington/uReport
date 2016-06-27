@@ -1,20 +1,26 @@
 <?php
 /**
- * @copyright 2007-2011 City of Bloomington, Indiana
+ * @copyright 2007-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param array $this->errorMessages
  */
-$errors = array();
+$errors   = [];
+$errorDir = "/blocks/xml/errorMessages";
 foreach ($this->errorMessages as $e) {
-	ob_start();
-	$error = $e->getMessage();
-	if (file_exists(APPLICATION_HOME."/blocks/xml/errorMessages/$error.inc")) {
-		include APPLICATION_HOME."/blocks/xml/errorMessages/$error.inc";
-	}
-	else {
+    ob_start();
+    $error = $e->getMessage();
+    $file = "$errorDir/$error.inc";
+
+    if ($this->theme
+        && is_file($this->theme.$file)) {
+        include    $this->theme.$file;
+    }
+    elseif (is_file(APPLICATION_HOME.$file)) {
+        include     APPLICATION_HOME.$file;
+    }
+    else {
 		echo "<error><description>$error</description></error>";
-	}
-	$errors[] = ob_get_clean();
+    }
+    $errors[] = ob_get_clean();
 }
-echo '<errors>'.implode('',$errors).'</errors>';
+echo '<errors>'.implode('', $errors).'</errors>';

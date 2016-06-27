@@ -1,35 +1,32 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  * @param Issue $this->issue
  * @param Department $this->currentDepartment
  */
-use Blossom\Classes\View;
-
 $category    = $this->ticket->getCategory();
 $category_id = $category ? $category->getId() : '';
 $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
 <div id="addTicketForm">
 	<h2><?= self::escape($title); ?></h2>
-	<?php include APPLICATION_HOME.'/blocks/html/departments/chooseDepartmentForm.inc'; ?>
+	<?php $this->_include('departments/chooseDepartmentForm.inc'); ?>
 	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
 		<fieldset><legend><?= $this->_(array('category', 'categories', 1)); ?></legend>
 		<?php
 			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
 			$this->return_url = BASE_URL.'/tickets/add';
-			include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
+			$this->_include('tickets/partials/chooseCategoryFields.inc');
 		?>
 		</fieldset>
 
 		<fieldset class="ticketFields">
 			<legend><?= $this->_('info_location'); ?></legend>
 			<table>
-				<tr><td><label for="location"><?= $this->_(array('location', 'locations', 1)); ?></label></td>
+				<tr><td><label for="location"><?= $this->_('location'); ?></label></td>
 					<td><input name="location" id="location"
 							value="<?= self::escape($this->ticket->getLocation()); ?>" />
 					</td>
@@ -64,16 +61,16 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 		<fieldset class="issueFields">
 			<legend><?= $this->_('info_issue'); ?></legend>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/tickets/issueFields.inc';
+				$this->_include('tickets/issueFields.inc');
 
 				$this->category = $category;
-				include APPLICATION_HOME.'/blocks/html/tickets/issueCustomFields.inc';
+				$this->_include('tickets/issueCustomFields.inc');
 			?>
 		</fieldset>
 		<fieldset class="assignmentFields">
 			<legend><?= $this->_('info_assignment'); ?></legend>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
+				$this->_include('tickets/assignTicketFields.inc');
 			?>
 		</fieldset>
 

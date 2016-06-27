@@ -618,6 +618,9 @@ msgstr "Ingevoerd door"
 msgid "assignedPerson_id"
 msgstr "Toegewezen aan"
 
+msgid "label"
+msgstr "Labels"
+
 msgid "label_id"
 msgstr "Labels"
 

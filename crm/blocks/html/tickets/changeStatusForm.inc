@@ -1,12 +1,10 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
 use Application\Models\SubstatusTable;
-use Blossom\Classes\View;
 ?>
 <div class="changeStatusForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/changeStatus">
@@ -23,10 +21,10 @@ use Blossom\Classes\View;
 				}
 			?>
 			<table>
-				<tr><td><label for="status"><?= $this->_(array('status', 'statuses', 1)); ?></label></td>
+				<tr><td><label   for="status"><?= $this->_('status'); ?></label></td>
 					<td><select name="status" id="status">
 						<?php
-							foreach (array('open', 'closed') as $status) {
+							foreach (['open', 'closed'] as $status) {
 								$selected = ($this->ticket->getStatus()==$status)
 									? 'selected="selected"'
 									: '';
@@ -37,7 +35,7 @@ use Blossom\Classes\View;
 					</td>
 				</tr>
 
-				<tr><td><label for="substatus_id"><?= $this->_(array('substatus', 'substatuses', 1)); ?></label></td>
+				<tr><td><label   for="substatus_id"><?= $this->_('substatus'); ?></label></td>
 					<td><select name="substatus_id" id="substatus_id">
 						<?php
 							// Open tickets do not require substatus
@@ -47,7 +45,7 @@ use Blossom\Classes\View;
 							}
 
 							$table = new SubstatusTable();
-							$list = $table->find(array('status'=>$this->ticket->getStatus()));
+							$list = $table->find(['status'=>$this->ticket->getStatus()]);
 							foreach ($list as $substatus) {
 								$selected = $this->ticket->getSubstatus_id()==$substatus->getId()
 									? 'selected="selected"'
@@ -61,7 +59,7 @@ use Blossom\Classes\View;
 				</tr>
 
 				<tr><td><label id="notes" class="required">
-							<?= $this->_(array('comment', 'comments', 1)); ?>
+							<?= $this->_('comment'); ?>
 							<span class="fa fa-asterisk"></span>
 						</label>
 					</td>
@@ -69,8 +67,8 @@ use Blossom\Classes\View;
 				</tr>
 			</table>
 			<?php
-				include APPLICATION_HOME.'/blocks/html/errorMessages/tickets/missingClosingComment.inc';
-				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
+				$this->_include('errorMessages/tickets/missingClosingComment.inc');
+				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>
 		</fieldset>
 	</form>

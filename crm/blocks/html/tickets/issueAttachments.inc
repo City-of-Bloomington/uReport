@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  * @param boolean $this->disableButtons
  */
@@ -23,11 +22,11 @@ $this->mediaList = $this->issue->getMedia();
 if ($uploadButton || count($this->mediaList)) {
 	echo "
 	<div class=\"issueAttachments\">
-		<h2>{$this->_(array('media', 'medias', 2))} $uploadButton</h2>
+		<h2>{$this->_(['media', 'medias', 2])} $uploadButton</h2>
 	";
 		$profileImage = $this->issue->getProfileImage();
 		if ($profileImage) {
-			$thumbnail = new Block('media/thumbnail.inc', array('media'=>$profileImage));
+			$thumbnail = new Block('media/thumbnail.inc', ['media'=>$profileImage]);
 			echo "
 			<div>
 				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->issue->getTicket_id()}\">
@@ -37,6 +36,6 @@ if ($uploadButton || count($this->mediaList)) {
 			";
 			echo $thumbnail->render('html', $this->template);
 		}
-		include APPLICATION_HOME.'/blocks/html/media/mediaList.inc';
+		$this->_include('media/mediaList.inc');
 	echo "</div>";
 }

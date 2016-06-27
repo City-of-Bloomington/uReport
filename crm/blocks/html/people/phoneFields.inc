@@ -1,16 +1,14 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Phone $this->phone
  */
 use Application\Models\Phone;
-use Blossom\Classes\View;
 ?>
-<fieldset><legend><?= $this->_(array('phone', 'phones', 1)); ?></legend>
+<fieldset><legend><?= $this->_('phone'); ?></legend>
 	<label>
-		<?= $this->_(array('label', 'label', 1)); ?>
+		<?= $this->_('label'); ?>
 		<select name="label" id="label">
 		<?php
 			foreach (Phone::$LABELS as $label) {

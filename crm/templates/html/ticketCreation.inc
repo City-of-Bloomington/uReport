@@ -2,13 +2,12 @@
 <html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'threePanel';
-	$dir = dirname(__FILE__);
-	include $dir.'/partials/header.inc';
+	$this->_include('partials/header.inc');
 ?>
 <body>
 	<?php
-		include $dir.'/partials/banner.inc';
-		include $dir.'/partials/menubar.inc';
+		$this->_include('partials/banner.inc');
+		$this->_include('partials/menubar.inc');
 	?>
 	<div id="panel-container">
 		<?php include BLOSSOM.'/errorMessages.php'; ?>
@@ -22,9 +21,9 @@
 			<?= $this->includeBlocks('right-bottom'); ?>
 		</div>
 	</div>
-	<?php include $dir.'/partials/footer.inc'; ?>
+	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>
 <?php
-	include $dir.'/partials/garbageCollection.inc';
+	$this->_include('partials/garbageCollection.inc');
 ?>

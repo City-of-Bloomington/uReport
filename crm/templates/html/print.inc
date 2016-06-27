@@ -2,8 +2,7 @@
 <html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
 <?php
 	$this->layout = 'twoColumn_300-a';
-	$dir = dirname(__FILE__);
-	include $dir.'/partials/header.inc';
+	$this->_include('partials/header.inc');
 ?>
 <body>
 	<div id="panel-container">
@@ -17,5 +16,5 @@
 </body>
 </html>
 <?php
-	include $dir.'/partials/garbageCollection.inc';
+	$this->_include('partials/garbageCollection.inc');
 ?>

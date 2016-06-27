@@ -12,7 +12,7 @@
  */
 use Blossom\Classes\Url;
 
-include APPLICATION_HOME.'/blocks/html/reports/parameters.inc';
+$this->_include('reports/parameters.inc');
 $h = $this->template->getHelper('formatDuration');
 ?>
 <div class="searchResultsRows">

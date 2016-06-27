@@ -9,8 +9,8 @@ use Application\Models\Person;
 ?>
 <div class="issueInfo">
 <?php
-	include APPLICATION_HOME.'/blocks/html/tickets/partials/issueHeader.inc';
-	include APPLICATION_HOME.'/blocks/html/tickets/issueAttachments.inc';
+	$this->_include('tickets/partials/issueHeader.inc');
+	$this->_include('tickets/issueAttachments.inc');
 
 	// Don't display any personal information from the issue unless the user is authenticated
 	$userCanViewPeople = Person::isAllowed('people', 'view');
@@ -68,12 +68,12 @@ use Application\Models\Person;
 	// Don't display any personal information from the issue unless the user is authenticated
 	if ($userCanViewPeople && $this->issue->getReportedByPerson()) {
 		$this->responses = $this->issue->getResponses();
-		include APPLICATION_HOME.'/blocks/html/tickets/responseList.inc';
+		$this->_include('tickets/responseList.inc');
 	}
 
 	$this->history = $this->issue->getHistory();
 	if (count($this->history)) {
-		include APPLICATION_HOME.'/blocks/html/tickets/history.inc';
+		$this->_include('tickets/history.inc');
 	}
 ?>
 </div>

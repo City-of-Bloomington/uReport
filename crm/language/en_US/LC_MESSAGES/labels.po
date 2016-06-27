@@ -618,6 +618,9 @@ msgstr "Entered by"
 msgid "assignedPerson_id"
 msgstr "Assigned to"
 
+msgid "label"
+msgstr "Label"
+
 msgid "label_id"
 msgstr "Label"
 

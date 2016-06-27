@@ -1,12 +1,10 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>, W. Sibo <sibow@bloomington.in.gov>
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
-use Blossom\Classes\View;
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/assign">
@@ -21,8 +19,8 @@ use Blossom\Classes\View;
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
-				include APPLICATION_HOME.'/blocks/html/tickets/assignTicketFields.inc';
-				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
+				$this->_include('tickets/assignTicketFields.inc');
+				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>
 		</fieldset>
 	</form>

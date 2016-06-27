@@ -1,11 +1,9 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-use Blossom\Classes\View;
 ?>
 <div class="changeCategoryForm">
 	<form method="post" action="<?= BASE_URL; ?>/tickets/changeCategory">
@@ -21,8 +19,8 @@ use Blossom\Classes\View;
 					}
 				}
 				$this->return_url = BASE_URL."/tickets/changeCategory.php?ticket_id={$this->ticket->getId()}";
-				include APPLICATION_HOME.'/blocks/html/tickets/partials/chooseCategoryFields.inc';
-				include APPLICATION_HOME.'/blocks/html/tickets/partials/submitAndCancelButtons.inc';
+				$this->_include('tickets/partials/chooseCategoryFields.inc');
+				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>
 		</fieldset>
 	</form>

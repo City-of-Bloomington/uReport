@@ -1,18 +1,17 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->title
  */
-use Blossom\Classes\View;
 ?>
 <div class="findLocationForm">
 	<h2><?= $this->title ? self::escape($this->title) : $this->_('find_location'); ?></h2>
 	<?php
 		if (defined('ADDRESS_SERVICE')) {
-			include APPLICATION_HOME.'/blocks/html/locations/findAddressForm.inc';
-			include APPLICATION_HOME.'/blocks/html/locations/findStreetForm.inc';
+			$this->_include('locations/findAddressForm.inc');
+			$this->_include('locations/findStreetForm.inc');
 		}
 
 		// Don't allow searching for descriptive locations if they're in
@@ -24,7 +23,7 @@ use Blossom\Classes\View;
 		// this is the only way for employees to enter locations, so we need
 		// to make sure it's there if they need it.
 		if (!defined('ADDRESS_SERVICE') || isset($_REQUEST['return_url'])) {
-			include APPLICATION_HOME.'/blocks/html/locations/findDescriptiveLocationForm.inc';
+			$this->_include('locations/findDescriptiveLocationForm.inc');
 		}
 		if (isset($_REQUEST['callback'])) {
 			echo "

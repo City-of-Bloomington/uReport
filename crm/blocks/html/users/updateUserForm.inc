@@ -70,7 +70,7 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 			<p><?= $this->_('employee_authentication_description', 'messages'); ?></p>
 		</fieldset>
 
-		<?php include APPLICATION_HOME.'/blocks/html/people/personInfoFields.inc'; ?>
+		<?php $this->_include('people/personInfoFields.inc'); ?>
 
 		<fieldset><legend><?= $this->_('submit'); ?></legend>
 			<?php
