@@ -1,7 +1,7 @@
 "use strict";
 jQuery(function ($) {
     $('.collapsible').addClass('collapsed');
-    $('.collapsible h3').on('click', function (e) {
+    $('.collapsible h1').on('click', function (e) {
         var div = $(this).parent();
 
         if (div.hasClass('collapsed')) {

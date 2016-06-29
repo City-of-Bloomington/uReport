@@ -1,0 +1,43 @@
+body {
+    font-family: $font-family-default;
+
+    > header {
+        color: $color-link;
+        background-color: $color-content-background;
+        border-top: .4em solid $color-accent;
+        overflow:auto;
+        height:60px;
+
+        h1 {
+            height:2.25rem;
+            &:before {
+                background:url('images/logo.svg');
+                background-size:100% 100%;
+                content: '';
+                display:block;
+                float:left;
+                height:2.25rem;
+                width:2.25rem;
+            }
+        }
+
+        .menuLinks {
+            background: $color-content-background;
+            border: 1px solid $color-border-modal;
+            box-shadow: 0 0 1em 0 $color-shadow;
+            padding: .5em 0;
+
+            a {
+                padding: .5em 1em;
+                transition: background .25s, color .25s;
+
+                &:hover {
+                    background: $color-header;
+                    color: $color-content-background;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+#nav1 a { margin-right:1em; font-weight:bold; }

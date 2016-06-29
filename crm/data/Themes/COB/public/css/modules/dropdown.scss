@@ -1,0 +1,29 @@
+.dropdown {
+    display: inline-block;
+    margin: 0 .5em;
+    position: relative;
+    .launcher {
+        background: none;
+        border: none;
+    }
+
+    .links {
+        background: #fff;
+        box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.5);
+        min-width: 12rem;
+        padding: .5rem 0;
+        position: absolute;
+            top: 100%;
+            left: 0;
+        text-align: left; // In case a menu gets embedded in a parent that is right-aligned
+        transition: opacity .125s ease-in-out;
+        z-index: 20;
+    }
+    a {
+        padding: .25em .5em;
+        transition: background-color .25s ease-in-out, color .25s ease-in-out;
+        &:hover {
+            background-color: $color-table-background;
+        }
+    }
+}

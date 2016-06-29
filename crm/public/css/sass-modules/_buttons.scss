@@ -1,0 +1,23 @@
+/**
+ * Base styles for buttons and button links
+ */
+button, .button {
+    background-color:#ccc;
+    border:1px solid #000;
+    border-radius:.5em;
+    //color: $color-heading-2;
+    display:inline-block;
+    padding: .25em 1em;
+    //font-size: (14em/16);
+    //font-weight:bold;
+    vertical-align: middle;
+    &:hover {
+        cursor:pointer;
+    }
+}
+.add    {  }
+.edit   {  }
+.delete {  }
+.save   {  }
+.cancel {  }
+.login  {  }

@@ -1,0 +1,15 @@
+@import 'sass-modules/_normalize';
+@import 'sass-modules/_layout';
+@import 'sass-modules/_header';
+@import 'sass-modules/_menu';
+@import 'sass-modules/_content-section';
+@import 'sass-modules/_field';
+@import 'sass-modules/_buttons';
+@import 'sass-modules/_tables';
+
+.collapsible h1 { cursor: pointer; }
+.collapsed   h1 { background:url('images/plus.png')  95% center no-repeat; }
+.expanded    h1 { background:url('images/minus.png') 95% center no-repeat; }
+.collapsed   ul, .collapsed dl { display:none; }
+.expanded    ul, .expanded  dl { display:block; }
+

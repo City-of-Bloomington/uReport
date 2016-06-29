@@ -11,3 +11,4 @@ build
 dist
 *.mo
 vendor
+.sass-cache
