@@ -1,4 +1,4 @@
-<div id="footer">
+<footer>
 	<p>Copyright &#169; 2011-2013 City of Bloomington, Indiana. All rights reserved.</p>
 	<p> Powered by <a href="https://github.com/City-of-Bloomington/uReport">uReport</a>
 		version <?php include APPLICATION_HOME.'/VERSION'; ?>
@@ -16,7 +16,7 @@
 			echo "<!-- Process Time: $processTime -->";
 		?>
 	</p>
-</div>
+</footer>
 <?php
 	if (isset($this->assets['scripts'])) {
 		foreach ($this->assets['scripts'] as $url) {

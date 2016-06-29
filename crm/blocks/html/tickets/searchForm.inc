@@ -125,16 +125,23 @@ if (Person::isAllowed('tickets','add')) {
 			?>
 			<nav class="collapsible">
 				<h1><?= $this->_('enteredDate'); ?></h1>
-				<dl><dt><label  for="enteredDate-start"><?= $this->_('start'); ?>:</label></dt>
-                    <dd><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
-								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
-                    </dd>
-                </dl>
-                <dl><dt><label  for="enteredDate-end"><?= $this->_('end'); ?>:</label></dt>
-                    <dd><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
-                            value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
-                    </dd>
-                </dl>
+				<?php
+                    $helper = $this->template->getHelper('field');
+                    echo $helper->field([
+                        'label' => $this->_('start'),
+                        'name'  => 'enteredDate[start]',
+                        'id'    => 'enteredDate-start',
+                        'type'  => 'date',
+                        'value' => !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''
+                    ]);
+                    echo $helper->field([
+                        'label' => $this->_('end'),
+                        'name'  => 'enteredDate[end]',
+                        'id'    => 'enteredDate-end',
+                        'type'  => 'date',
+                        'value' => !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''
+                    ]);
+				?>
 			</nav>
 		</fieldset>
 

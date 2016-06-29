@@ -11,7 +11,8 @@ $list = $t->find();
 ?>
 <section>
     <header>
-        <h1>
+        <h1><?= $this->_(['action', 'actions', count($list)]); ?></h1>
+        <div class="tools">
         <?php
 			if (Person::isAllowed('actions', 'add')) {
 				$helper = $this->template->getHelper('buttonLink');
@@ -21,9 +22,8 @@ $list = $t->find();
 					'add'
 				);
 			}
-			echo $this->_(['action', 'actions', count($list)]);
 		?>
-		</h1>
+		</div>
     </header>
 	<table>
 		<thead>
