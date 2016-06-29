@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -61,21 +60,21 @@ class TicketsController extends Controller
 		$search = new Search();
 		$solrObject = $search->query($_GET, $format=='raw' ? true : false);
 
-		$this->template->blocks['left'][] = new Block(
+		$this->template->blocks['panel-one'][] = new Block(
 			'tickets/searchForm.inc',
-			array('solrObject'=>$solrObject)
+			['solrObject'=>$solrObject]
 		);
-		$this->template->blocks['right'][] = new Block(
+		$this->template->blocks[] = new Block(
 			'tickets/searchParameters.inc',
-			array('solrObject'=>$solrObject)
+			['solrObject'=>$solrObject]
 		);
 
 		$resultBlock = ($format == 'map')
 			? 'searchResultsMap.inc'
 			: 'searchResults.inc';
-		$this->template->blocks['right'][] = new Block(
+		$this->template->blocks[] = new Block(
 			"tickets/$resultBlock",
-			array('solrObject'=>$solrObject)
+			['solrObject'=>$solrObject]
 		);
 	}
 

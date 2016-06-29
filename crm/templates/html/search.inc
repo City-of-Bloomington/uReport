@@ -1,25 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE,0,2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'twoColumn_300-a';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="searchLayout">
 	<?php
-		$this->_include('partials/banner.inc');
-		$this->_include('partials/menubar.inc');
+		$this->_include('partials/header.inc');
 
 		$this->addToAsset('scripts', JQUERY.'/jquery.min.js');
 		$this->addToAsset('scripts', BASE_URI.'/js/slidingPanel.js');
 	?>
-	<div id="panel-container">
-		<div id="left" class="panel">
-			<?= $this->includeBlocks('left'); ?>
+	<main>
+		<div id="panel-one" class="panel">
+			<?= $this->includeBlocks('panel-one'); ?>
 		</div>
-		<div id="right" class="panel">
+		<div id="content-panel" class="panel">
 			<?php
 				include BLOSSOM.'/errorMessages.php';
-				echo $this->includeBlocks('right');
+				echo $this->includeBlocks();
 			?>
 		</div>
 	</div>

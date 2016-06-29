@@ -87,16 +87,17 @@ foreach ($tickets as $ticket) {
 		}
 	}
 	echo "
-		<div>
-			<h3><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
+		<article>
+            <header>
+			<h1><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
 					{$this->_('ticket')}
 					# {$ticket->getId()} $category_id $status $substatus_id
 				</a>
-			</h3>
+			</h1>
 			<span>$location $city $state $zip</span>
 	";
 	if (count($dl)) {
-		echo '<ul class="twoColumnlist">';
+		echo '<ul>';
 		foreach ($dl as $field=>$value) {
 			$dt = $displayableFields[$field];
 			$dd = $value;
@@ -105,8 +106,8 @@ foreach ($tickets as $ticket) {
 		echo '</ul>';
 	}
 	echo "
-		<p>$description</p>
-		</div>
+            <p>$description</p>
+		</article>
 	";
 }
 echo "</div>";

@@ -10,6 +10,17 @@ define('BASE_URL','http://localhost/crm');
 define('BASE_URI','/crm');
 
 /**
+ * Specify the theme directory
+ *
+ * Remember to create a symbolic link in public/css to the theme CSS
+ * that you declare here.
+ *
+ * A theme can consist of templates, blocks which will override core.
+ * The current theme's screen.css will be included in the HTML head.
+ */
+define('THEME', 'COB');
+
+/**
  * JavaScript Libraries
  */
 define('JQUERY',      BASE_URI.'/js/vendor/jquery-2.1.1');

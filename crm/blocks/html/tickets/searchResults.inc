@@ -13,15 +13,10 @@ use Blossom\Classes\SolrPaginatorAdapter;
 
 use Zend\Paginator\Paginator;
 ?>
-<div class="searchResults">
+<section class="searchResults">
 <?php
 $c = $this->solrObject->response->numFound;
 if ($c) {
-	echo "
-	<h2>{$this->_('search_results')}</h2>
-	<div>{$this->_('search_results_count')}: $c</div>
-	";
-
 	$header = new Block('tickets/partials/searchResultsColumnHeaders.inc', ['solrObject'=>$this->solrObject]);
 	$rows   = new Block('tickets/partials/searchResultsRows.inc',          ['solrObject'=>$this->solrObject]);
 
@@ -29,7 +24,7 @@ if ($c) {
 	echo $rows  ->render('html', $this->template);
 }
 else {
-	echo "<h2>{$this->_('no_tickets_found', 'messages')}</h2>";
+	echo "<header><h1>{$this->_('no_tickets_found', 'messages')}</h1></header>";
 }
 
 // Raw results should not be paginated
@@ -44,4 +39,4 @@ if (empty($_GET['resultFormat']) || $_GET['resultFormat']!='raw') {
 	echo $block->render('html', $this->template);
 }
 ?>
-</div>
+</section>

@@ -18,8 +18,10 @@ if (Person::isAllowed('tickets','add')) {
 	// Solr stores ticket_id as 'id'
 	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
 	echo "
-	<div class=\"quickSearches\">
-		<h2>{$this->_('quick_links')}</h2>
+	<section class=\"quickSearches\">
+        <header>
+            <h1>{$this->_('quick_links')}</h1>
+        </header>
 		<form method=\"get\" action=\"".BASE_URI."/tickets\">
 			<fieldset>
 				<label>
@@ -52,23 +54,24 @@ if (Person::isAllowed('tickets','add')) {
 	";
 	$table = new BookmarkTable();
 	$bookmarks = new Block(
-		'bookmarks/list.inc',
-		array(
-			'bookmarks' => $table->find(array(
-				'person_id'=>$_SESSION['USER']->getId(),
-				'type'=>'search'
-			))
-		)
+		'bookmarks/list.inc', [
+			'bookmarks' => $table->find([
+				'person_id' => $_SESSION['USER']->getId(),
+				'type'      => 'search'
+			])
+		]
 	);
 	echo $bookmarks->render('html', $this->template);
 
 	echo "
-	</div>
+	</section>
 	";
 }
 ?>
-<div>
-	<h2><?= $this->_('search'); ?></h2>
+<section id="ticketSearchForm">
+    <header>
+        <h1><?= $this->_('search'); ?></h1>
+    </header>
 	<form method="get" action="<?= BASE_URI; ?>/tickets">
 		<fieldset>
 			<label><?= $this->_('search'); ?>
@@ -102,10 +105,10 @@ if (Person::isAllowed('tickets','add')) {
 						if ($list) {
 							$displayName = Search::$searchableFields[$key];
 							echo "
-							<div class=\"collapsible\">
-								<h3 class=\"hd\">$displayName</h3>
-								<ul class=\"bd\">$list</ul>
-							</div>
+							<nav class=\"collapsible\">
+								<h1>$displayName</h1>
+								<ul>$list</ul>
+							</nav>
 							";
 						}
 					}
@@ -113,35 +116,32 @@ if (Person::isAllowed('tickets','add')) {
 					$url = clone $currentURL;
 					$url->sla = 'overdue';
 					echo "
-                    <div class=\"collapsible\">
-                        <h3 class=\"hd\">{$this->_('sla')}</h3>
-                        <ul class=\"bd\">
-                            <li><a href=\"$url\">{$this->_('overdue')}</a> ($value)</li>
-                        </ul>
-                    </div>
+                    <nav class=\"collapsible\">
+                        <h1>{$this->_('sla')}</h1>
+                        <ul><li><a href=\"$url\">{$this->_('overdue')}</a> ($value)</li></ul>
+                    </nav>
                     ";
 				}
 			?>
-			<div class="collapsible">
-				<h3 class="hd"><?= $this->_('enteredDate'); ?></h3>
-				<table class="bd">
-					<tr><td><label  for="enteredDate-start"><?= $this->_('start'); ?>:</label></td>
-						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
+			<nav class="collapsible">
+				<h1><?= $this->_('enteredDate'); ?></h1>
+				<dl><dt><label  for="enteredDate-start"><?= $this->_('start'); ?>:</label></dt>
+                    <dd><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
 								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
-						</td>
-					</tr>
-					<tr><td><label  for="enteredDate-end"><?= $this->_('end'); ?>:</label></td>
-						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
-								value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
-						</td>
-					</tr>
-				</table>
-			</div>
+                    </dd>
+                </dl>
+                <dl><dt><label  for="enteredDate-end"><?= $this->_('end'); ?>:</label></dt>
+                    <dd><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
+                            value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
+                    </dd>
+                </dl>
+			</nav>
 		</fieldset>
 
 
-		<fieldset><legend><?= $this->_('display_fields'); ?></legend>
-			<ul class="fields twoColumnlist">
+		<fieldset id="display_fields">
+            <legend><?= $this->_('display_fields'); ?></legend>
+			<ul>
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
@@ -174,7 +174,7 @@ if (Person::isAllowed('tickets','add')) {
 			<button type="submit"><i class="fa fa-search"></i> <?= $this->_('search'); ?></button>
 		</fieldset>
 	</form>
-</div>
+</section>
 <div>
 	<p><?= $this->_('disclaimer', 'messages'); ?></p>
 </div>
