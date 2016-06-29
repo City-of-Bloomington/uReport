@@ -1,26 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'threePanel';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="ticketCreation">
 	<?php
-		$this->_include('partials/banner.inc');
-		$this->_include('partials/menubar.inc');
+		$this->_include('partials/header.inc');
 	?>
-	<div id="panel-container">
-		<?php include BLOSSOM.'/errorMessages.php'; ?>
-		<div id="left" class="panel">
-			<?= $this->includeBlocks('left'); ?>
-		</div>
-		<div id="right-top" class="panel">
-			<?= $this->includeBlocks('right-top'); ?>
-		</div>
-		<div id="right-bottom" class="panel">
-			<?= $this->includeBlocks('right-bottom'); ?>
-		</div>
-	</div>
+	<main>
+        <div id="content-panel" class="panel">
+            <?php
+                include BLOSSOM.'/errorMessages.php';
+                echo $this->includeBlocks();
+            ?>
+        </div>
+        <div id="panel-one" class="panel">
+            <?= $this->includeBlocks('panel-one'); ?>
+        </div>
+        <div id="panel-two" class="panel">
+            <?= $this->includeBlocks('panel-two'); ?>
+        </div>
+	</main>
 	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>

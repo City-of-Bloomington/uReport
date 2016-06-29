@@ -14,19 +14,32 @@
     }
 }
 
-.two-column {
-    main { overflow:auto; }
-
-    #panel-one { float: left; width: 33.3333%; }
-    #content-panel { margin-left: 33.3333%;; }
+.backend {
+    #panel-one { float:left; width:172px; }
+    #content-panel { margin-left:182px; }
 }
 
-.three-column {
-    main { overflow:auto; }
+.stackedPanels {
+    #content-panel { overflow:auto; }
+    #bottom-left { width:400px; float:left; }
+    #bottom-right { margin-left:415px; }
+}
 
-    #panel-one { float:left; width:180px; }
-    #panel-two { float:right; width:180px; }
-    #content-panel { margin-left: 190px; margin-right: 190px; }
+.locations {
+    #panel-one { width:380px; float:left; }
+    #panel-two { margin-left:390px; }
+}
+
+.merging {
+    #left { width:48%; float:left; }
+    #right { width:48%; float:left; }
+}
+
+.ticketCreation {
+    #content-panel { width:380px; float:left; }
+    #panel-one, #panel-two {
+        margin-left: 400px; height:300px; overflow:auto;
+    }
 }
 
 footer { clear:both; }

@@ -1,28 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'twoColumn_200-a';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="backend">
 	<?php
-		$this->_include('partials/banner.inc');
-		$this->_include('partials/menubar.inc');
+		$this->_include('partials/header.inc');
 	?>
-
-	<div id="panel-container">
-		<div id="sidebar" class="panel">
-			<?php
-				$this->_include('partials/sidebar.inc');
-			?>
-		</div>
-		<div id="content" class="panel">
-			<?php
-				include BLOSSOM.'/errorMessages.php';
-				echo $this->includeBlocks();
-			?>
-		</div>
-	</div>
+	<main>
+        <div id="panel-one" class="panel">
+            <?= $this->includeBlocks('panel-one'); ?>
+        </div>
+        <div id="content-panel" class="panel">
+            <?php
+                include BLOSSOM.'/errorMessages.php';
+                echo $this->includeBlocks();
+            ?>
+        </div>
+	</main>
 	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>

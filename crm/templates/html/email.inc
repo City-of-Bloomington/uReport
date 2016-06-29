@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<html lang="<?= strtolower(substr(LOCALE, 0, 2)); ?>">
 <head>
 	<style>
 		/* SLA Status */

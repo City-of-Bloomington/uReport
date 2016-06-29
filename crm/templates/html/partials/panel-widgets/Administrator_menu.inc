@@ -25,6 +25,10 @@ foreach ($routes as $plural=>$singular) {
         $links.= "<a href=\"$url\">{$this->_([$singular, $plural, 2])}</a>";
     }
 }
+if (Person::isAllowed('categories', 'sla')) {
+    $url = BASE_URI.'/categories/sla';
+    $links.= "<a href=\"$url\">{$this->_('sla')}</a>";
+}
 
 if ($links) {
     echo "

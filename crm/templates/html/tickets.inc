@@ -1,20 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'stackedPanels';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="stackedPanels">
 	<?php
 		if (!isset($_REQUEST['popup'])) {
-			$this->_include('partials/banner.inc');
-			$this->_include('partials/menubar.inc');
+            $this->_include('partials/header.inc');
 		}
 	?>
-	<div id="panel-container">
-		<?php include BLOSSOM.'/errorMessages.php'; ?>
+	<main>
 		<div id="ticket-panel" class="panel">
-			<?= $this->includeBlocks('ticket-panel'); ?>
+			<?php
+                include BLOSSOM.'/errorMessages.php';
+                echo $this->includeBlocks('ticket-panel');
+            ?>
 		</div>
 		<?php
 			// These panels should only show up for non-popup windows

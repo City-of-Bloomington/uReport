@@ -195,20 +195,13 @@ class TicketsController extends Controller
 
 		// Display all the forms
 		$this->template->setFilename('ticketCreation');
-		$this->template->blocks['right-top'][] = new Block(
-			'tickets/chooseLocation.inc', array('ticket'=>$ticket)
-		);
-		$this->template->blocks['right-bottom'][] = new Block(
-			'tickets/chooseReportedByPerson.inc', array('issue'=>$issue)
-		);
-		$this->template->blocks['left'][] = new Block(
-			'tickets/addTicketForm.inc',
-			array(
-				'ticket'=>$ticket,
-				'issue'=>$issue,
-				'currentDepartment'=>$currentDepartment
-			)
-		);
+		$this->template->blocks['panel-one'][] = new Block('tickets/chooseLocation.inc',         ['ticket'=> $ticket]);
+		$this->template->blocks['panel-two'][] = new Block('tickets/chooseReportedByPerson.inc', ['issue' => $issue ]);
+		$this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
+            'ticket'=>$ticket,
+            'issue'=>$issue,
+            'currentDepartment'=>$currentDepartment
+        ]);
 	}
 
 	/**
@@ -372,11 +365,11 @@ class TicketsController extends Controller
 
 		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$this->template->setFilename('locations');
-		$this->template->blocks['left'][] = new Block(
-			'locations/findLocationForm.inc',
+		$this->template->blocks['panel-one'][] = new Block(
+            'locations/findLocationForm.inc',
 			['includeExternalResults' => true]
 		);
-		$this->template->blocks['right'][] = new Block('locations/mapChooser.inc');
+		$this->template->blocks['panel-two'][] = new Block('locations/mapChooser.inc');
 
 		$this->addStandardInfoBlocks($ticket);
 	}

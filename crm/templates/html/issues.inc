@@ -1,16 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'stackedPanels';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="stackedPanels">
 	<?php
-		$this->_include('partials/banner.inc');
-		$this->_include('partials/menubar.inc');
+		$this->_include('partials/header.inc');
 	?>
-
-	<div id="panel-container">
+	<main>
 		<div id="content-panel">
 			<?php
 				include BLOSSOM.'/errorMessages.php';
@@ -28,7 +27,6 @@
 				echo $this->includeBlocks();
 			?>
 		</div>
-	</div>
 	<?php
 		$this->_include('partials/footer.inc');
 	?>

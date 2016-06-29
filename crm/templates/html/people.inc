@@ -1,29 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = 'twoColumn_400-a';
-	$dir = dirname(__FILE__);
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="locations">
 	<?php
 		if (!isset($_REQUEST['popup'])) {
-			$this->_include('partials/banner.inc');
-			$this->_include('partials/menubar.inc');
-		}
+            $this->_include('partials/header.inc');
+        }
 	?>
-	<div id="panel-container">
-		<?php include BLOSSOM.'/errorMessages.php'; ?>
-		<div id="left" class="panel">
-			<?= $this->includeBlocks('left'); ?>
-		</div>
-		<div id="right" class="panel">
-			<?php
-				echo $this->includeBlocks('right');
-				echo $this->includeBlocks();
-			?>
-		</div>
-	</div>
+	<main>
+        <div id="content-panel" class="panel">
+            <?php include BLOSSOM.'/errorMessages.php'; ?>
+            <div id="panel-one" class="panel">
+                <?= $this->includeBlocks('panel-one'); ?>
+            </div>
+            <div id="panel-two" class="panel">
+                <?php
+                    echo $this->includeBlocks('panel-two');
+                    echo $this->includeBlocks();
+                ?>
+            </div>
+        </div>
+    </main>
 	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>

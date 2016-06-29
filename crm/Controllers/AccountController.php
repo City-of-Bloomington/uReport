@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -16,6 +15,7 @@ class AccountController extends Controller
 	{
 		parent::__construct($template);
 		$this->template->setFilename('backend');
+		$this->template->blocks['panel-one'][] = new Block('account/myAccount.inc');
 	}
 
 	private function redirectToErrorUrl(\Exception $e)
@@ -27,10 +27,7 @@ class AccountController extends Controller
 
 	public function index()
 	{
-		$this->template->blocks[] = new Block(
-			'people/personInfo.inc',
-			array('person'=>$_SESSION['USER'])
-		);
+		$this->template->blocks[] = new Block('people/personInfo.inc', ['person'=>$_SESSION['USER']]);
 	}
 
 	public function update()
@@ -47,13 +44,11 @@ class AccountController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block(
-			'people/updatePersonForm.inc',
-			array(
-				'person'=>$_SESSION['USER'],
-				'title'=>'Update my info',
-				'return_url'=>BASE_URI.'/account'
-			)
+		$this->template->blocks[] = new Block('people/updatePersonForm.inc', [
+				'person'     => $_SESSION['USER'],
+				'title'      => 'Update my info',
+				'return_url' => BASE_URI.'/account'
+			]
 		);
 	}
 
@@ -128,7 +123,7 @@ class AccountController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block("people/update{$class}Form.inc", array($item=>$object));
+		$this->template->blocks[] = new Block("people/update{$class}Form.inc", [$item=>$object]);
 	}
 	public function updateEmail()   { $this->updateLinkedItem('email',   'email');   }
 	public function updatePhone()   { $this->updateLinkedItem('phone',   'number');  }
@@ -161,14 +156,11 @@ class AccountController extends Controller
 		}
 
 		// Display the form
-		$this->template->blocks[] = new Block(
-			'departments/updateDepartmentForm.inc',
-			array(
-				'department'=>$department,
-				'action'=>BASE_URI.'/account/updateMyDepartment',
-				'return_url'=>BASE_URI.'/account'
-			)
-		);
+		$this->template->blocks[] = new Block('departments/updateDepartmentForm.inc', [
+            'department' => $department,
+            'action'     => BASE_URI.'/account/updateMyDepartment',
+            'return_url' => BASE_URI.'/account'
+        ]);
 	}
 
 	public function changePassword()

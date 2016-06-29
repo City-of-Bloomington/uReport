@@ -11,9 +11,11 @@ $title = $this->action->getId()
 $name        = self::escape($this->action->getName());
 $description = self::escape($this->action->getDescription());
 ?>
-<div class="updateActionForm">
-	<h2><?= $title; ?></h2>
-	<p><?= $this->_('actions_description', 'messages'); ?></p>
+<section class="updateActionForm">
+    <header>
+        <h1><?= $title; ?></h1>
+        <p><?= $this->_('actions_description', 'messages'); ?></p>
+    </header>
 	<table>
 		<tr><th>{enteredByPerson}</th>
 			<td><?= $this->_('actions_enteredByPerson', 'messages'); ?></td>
@@ -25,34 +27,37 @@ $description = self::escape($this->action->getDescription());
 	<form method="post" action="<?= BASE_URI; ?>/actions/update">
 		<fieldset><legend><?= $this->_('action'); ?></legend>
 			<input name="action_id" type="hidden" value="<?= $this->action->getId(); ?>" />
-			<table>
-
-				<tr><td><label for="name" class="required">
-							<?= $this->_('name'); ?>
-							<span class="fa fa-asterisk"></span>
-						</label>
-					</td>
-					<td>
-					<?php
-                        echo $this->action->getType() === 'system'
-                            ? $name
-                            : "<input name=\"name\" id=\"name\" value=\"$name\" />";
-					?>
-					</td>
-				</tr>
-
-				<tr><td><label for="description" class="required">
-							<?= $this->_('description'); ?>
-							<span class="fa fa-asterisk"></span>
-						</label>
-					</td>
-					<td><input name="description" id="description" value="<?= $description; ?>" /></td>
-				</tr>
-			</table>
 			<?php
+                $h = $this->template->getHelper('field');
+
+                if ($this->action->getType() === 'system') {
+                    echo "
+                    <dl><dt><label>{$this->_('name')}</label></dt>
+                        <dd>$name</dd>
+                    </dl>
+                    ";
+                }
+                else {
+                    echo $h->field([
+                        'label'    => $this->_('name'),
+                        'name'     => 'name',
+                        'id'       => 'name',
+                        'value'    => $name,
+                        'required' => true
+                    ]);
+                }
+
+                echo $h->field([
+                    'label'    => $this->_('description'),
+                    'name'     => 'description',
+                    'id'       => 'description',
+                    'value'    => $description,
+                    'required' => true
+                ]);
+
 				$helper = $this->template->getHelper('saveAndCancelButtons');
 				echo $helper->saveAndCancelButtons(BASE_URI.'/actions');
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>

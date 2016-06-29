@@ -4,7 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 ?>
-<div><h2><?= $this->_('my_account'); ?></h2>
+<nav>
+    <header>
+        <h1><?= $this->_('my_account'); ?></h1>
+    </header>
 	<ul><li><a href="<?= BASE_URL; ?>/account"><?= $this->_('my_info'); ?></a></li>
 		<li><a href="<?= $_SESSION['USER']->getURL(); ?>"><?= $this->_('my_profile'); ?></a></li>
 		<?php
@@ -15,4 +18,4 @@
 			}
 		?>
 	</ul>
-</div>
+</nav>

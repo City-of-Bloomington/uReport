@@ -13,3 +13,6 @@
 .collapsed   ul, .collapsed dl { display:none; }
 .expanded    ul, .expanded  dl { display:block; }
 
+#location_map {
+    width:98%; height:400px;
+}

@@ -1,16 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="<?= strtolower(substr(LOCALE,0,2)); ?>">
+<?php $lang = strtolower(substr(LOCALE, 0, 2)); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $lang; ?>" lang="<?= $lang; ?>">
 <?php
-	$this->layout = '50-50';
-	$this->_include('partials/header.inc');
+	$this->_include('partials/head.inc');
 ?>
-<body>
+<body class="merging">
 	<?php
-		$this->_include('partials/banner.inc');
-		$this->_include('partials/menubar.inc');
+		$this->_include('partials/header.inc');
 	?>
-
-	<div id="panel-container">
+	<main>
 		<?php
 			include BLOSSOM.'/errorMessages.php';
 			echo $this->includeBlocks();
@@ -21,7 +20,7 @@
 		<div id="right">
 			<?= $this->includeBlocks('right'); ?>
 		</div>
-	</div>
+	</main>
 	<?php $this->_include('partials/footer.inc'); ?>
 </body>
 </html>
