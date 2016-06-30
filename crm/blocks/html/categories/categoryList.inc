@@ -6,21 +6,24 @@
  */
 use Application\Models\Person;
 ?>
-<div class="categoryList">
-	<h2><?php
-			echo $this->_(['category', 'categories', 2]);
-			if (Person::isAllowed('categories','update')) {
-				$helper = $this->template->getHelper('buttonLink');
-				echo $helper->buttonLink(
-					BASE_URI.'/categories/update',
-					$this->_('add'),
-					'add'
-				);
-			}
-		?>
-	</h2>
+<section class="categoryList">
+    <header>
+        <h1><?= $this->_(['category', 'categories', 2]); ?></h1>
+        <div class="tools">
+            <?php
+                if (Person::isAllowed('categories','update')) {
+                    $helper = $this->template->getHelper('buttonLink');
+                    echo $helper->buttonLink(
+                        BASE_URI.'/categories/update',
+                        $this->_('add'),
+                        'add'
+                    );
+                }
+            ?>
+        </div>
+    </header>
 	<?php
-		$toc = '<div class="tableOfContents"><ul>';
+		$toc = '<nav class="tableOfContents"><ul>';
 		$html = '';
 		$previous = null;
 		foreach ($this->categoryList as $category) {
@@ -80,6 +83,8 @@ use Application\Models\Person;
 			</div>
 			";
 		}
+		$toc.= '</ul></nav>';
+
 		echo $toc;
 		echo $html;
 		echo '</div>'; // Close out the last Group div

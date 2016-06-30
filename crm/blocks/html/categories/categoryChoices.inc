@@ -14,8 +14,8 @@
  * @param URL $this->return_url
  */
 echo "
-<div class=\"categoryChoices\">
-	<h2>{$this->_('choose_category', 'messages')}</h2>
+<section class=\"categoryChoices\">
+    <header><h1>{$this->_('choose_category', 'messages')}</h1></header>
 	<ul>
 ";
 	$return_url = $this->return_url;
@@ -46,5 +46,5 @@ echo "
 	}
 echo "
 	</ul>
-</div>
+</section>
 ";

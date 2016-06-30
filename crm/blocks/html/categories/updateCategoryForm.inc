@@ -9,8 +9,8 @@ use Application\Models\DepartmentTable;
 use Application\Models\SubstatusTable;
 
 $title = $this->category->getId()
-	? $this->_('edit').' '.$this->_(['category','categories',1])
-	: $this->_('add' ).' '.$this->_(['category','categories',1]);
+	? $this->_('edit').' '.$this->_('category')
+	: $this->_('add' ).' '.$this->_('category');
 
 $fields = [
 	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
@@ -20,40 +20,31 @@ foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = isset($_POST[$field]) ? self::escape($_POST[$field]) : self::escape($this->category->$get());
 }
+
+$helper = $this->template->getHelper('field');
 ?>
-<h2><?= $title; ?></h2>
+<section><header><h1><?= $title; ?></h1></header>
 <form method="post" action="<?= BASE_URI; ?>/categories/update">
-	<fieldset><legend><?= $this->_(['category','categories',1]); ?></legend>
+	<fieldset><legend><?= $this->_('category'); ?></legend>
 		<input name="category_id" type="hidden" value="<?= $this->category->getId(); ?>" />
-		<table>
-			<tr><td><label for="name" class="required">
-						<?= $this->_('name'); ?>
-						<span class="fa fa-asterisk"></span>
-					</label>
-				</td>
-				<td><input name="name" id="name" value="<?= $name; ?>" /></td>
-			</tr>
-			<tr><td><label for="categoryGroup_id"><?= $this->_(['categoryGroup','categoryGroup',1]); ?></label></td>
-				<td><select name="categoryGroup_id" id="categoryGroup_id">
-					<?php
-						$t = new CategoryGroupTable();
-						$groups = $t->find();
-						foreach ($groups as $group) {
-							$selected = $categoryGroup_id==$group->getId()
-								? 'selected="selected"'
-								: '';
-							$name = self::escape($group->getName());
-							echo "<option value=\"{$group->getId()}\" $selected>$name</option>";
-						}
-					?>
-					</select>
-				</td>
-			</tr>
-			<tr><td><label for="description"><?= $this->_('description'); ?></label></td>
-				<td><textarea name="description" id="description" rows="3" cols="50"><?= $description; ?></textarea>
-				</td>
-			</tr>
-		</table>
+		<?php
+            echo $helper->field(['name'=>'name', 'id'=>'name', 'label'=>$this->_('name'), 'value'=>$name, 'required'=>true]);
+
+            $t = new CategoryGroupTable();
+            $list = $t->find();
+            $options = [];
+            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            echo $helper->field([
+                'name'    => 'categoryGroup_id',
+                'id'      => 'categoryGroup_id',
+                'label'   => $this->_('categoryGroup'),
+                'type'    => 'select',
+                'value'   => $categoryGroup_id,
+                'options' => $options
+            ]);
+
+            echo $helper->field(['name'=>'description', 'id'=>'description', 'label'=>$this->_('description'), 'value'=>$description, 'type'=>'textarea']);
+		?>
 	</fieldset>
 	<fieldset>
 		<legend>
@@ -61,100 +52,87 @@ foreach ($fields as $field) {
 			(<?= $this->_('service_level_agreement'); ?>)
 		</legend>
 		<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
-		<table>
-			<tr><td><label for="department_id" class="required">
-					<?= $this->_(['department','departments',1]); ?>
-					</label>
-				</td>
-				<td><select name="department_id" id="department_id">
-					<?php
-						$t = new DepartmentTable();
-						$list = $t->find();
-						foreach ($list as $department) {
-							$selected = $department->getId()==$department_id
-								? 'selected="selected"'
-								: '';
-							$name = self::escape($department->getName());
-							echo "<option value=\"{$department->getId()}\" $selected >$name</option>";
-						}
-					?>
-					</select>
-				</td>
-			</tr>
-			<tr><td><label for="slaDays"><?= $this->_(['day','days',2]); ?></label></td>
-				<td><input name="slaDays" id="slaDays" size="2" maxlength="2"
-						value="<?= $this->category->getSlaDays(); ?>" />
-				</td>
-			</tr>
-		</table>
+		<?php
+            $t = new DepartmentTable();
+            $list = $t->find();
+            $options = [];
+            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            echo $helper->field([
+                'name'    => 'department_id',
+                'id'      => 'department_id',
+                'label'   => $this->_('department'),
+                'type'    => 'select',
+                'value'   => $department_id,
+                'options' => $options
+            ]);
+            echo $helper->field([
+                'name'  => 'slaDays',
+                'id'    => 'slaDays',
+                'label' => $this->_(['day', 'days', 2]),
+                'value' => $this->category->getSlaDays(),
+                'type'  => 'number'
+            ]);
+		?>
 	</fieldset>
 	<fieldset><legend><?= $this->_('permissions_required'); ?></legend>
-		<table>
-			<tr><td><label for="postingPermissionLevel"><?= $this->_('postingPermissionLevel'); ?></label></td>
-				<td><select name="postingPermissionLevel" id="postingPermissionLevel">
-                    <?php
-                        global $ZEND_ACL;
-                        foreach ($ZEND_ACL->getRoles() as $role) {
-                            $label = "$role";
-                            $value = strtolower($label);
-                            $selected = $postingPermissionLevel===$value ? 'selected="selected"' : '';
-                            echo "<option value=\"$value\" $selected>$label</option>";
-                        }
-                    ?>
-					</select>
-				</td>
-			</tr>
-			<tr><td><label for="displayPermissionLevel"><?= $this->_('displayPermissionLevel'); ?></label></td>
-				<td><select name="displayPermissionLevel" id="displayPermissionLevel">
-                    <?php
-                        foreach ($ZEND_ACL->getRoles() as $role) {
-                            $label = "$role";
-                            $value = strtolower($label);
-                            $selected = $displayPermissionLevel===$value ? 'selected="selected"' : '';
-                            echo "<option value=\"$value\" $selected>$label</option>";
-                        }
-                    ?>
-					</select>
-				</td>
-			</tr>
-		</table>
+        <?php
+            global $ZEND_ACL;
+            $options = [];
+            foreach ($ZEND_ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
+            echo $helper->field([
+                'name'    => 'postingPermissionLevel',
+                'id'      => 'postingPermissionLevel',
+                'label'   => $this->_('postingPermissionLevel'),
+                'type'    => 'select',
+                'value'   => $postingPermissionLevel,
+                'options' => $options
+            ]);
+            $options = [];
+            foreach ($ZEND_ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
+            echo $helper->field([
+                'name'    => 'displayPermissionLevel',
+                'id'      => 'displayPermissionLevel',
+                'label'   => $this->_('displayPermissionLevel'),
+                'type'    => 'select',
+                'value'   => $displayPermissionLevel,
+                'options' => $options
+            ]);
+        ?>
 	</fieldset>
 	<fieldset><legend><?= $this->_('usedForNotifications', 'messages'); ?></legend>
-        <table>
-            <tr><td><label  for="notificationReplyEmail"><?= $this->_('notificationReplyEmail'); ?></label></td>
-                <td><input name="notificationReplyEmail" id="notificationReplyEmail" value="<?= $notificationReplyEmail; ?>" /></td>
-            </tr>
-            <tr><td><label><?= $this->_('autoCloseIsActive'); ?></label></td>
-                <td><label>
-                        <input name="autoCloseIsActive" type="radio" value="1"
-                            <?= $this->category->autoCloseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('active_yes'); ?>
-                    </label>
-                    <label>
-                        <input name="autoCloseIsActive" type="radio" value="0"
-                            <?= !$this->category->autoCloseIsActive() ? 'checked="checked"' : ''; ?> />
-                        <?= $this->_('active_no'); ?>
-                    </label>
-                </td>
-            </tr>
-            <tr><td><label   for="autoCloseSubstatus_id"><?= $this->_('autoCloseSubstatus_id'); ?></label></td>
-                <td><select name="autoCloseSubstatus_id" id="autoCloseSubstatus_id">
-                        <option value=""></option>
-                        <?php
-                            $table = new SubstatusTable();
-                            $list = $table->find(['status'=>'closed']);
-                            foreach ($list as $s) {
-                                $selected = $s->getId()===$this->category->getAutoCloseSubstatus_id()
-                                    ? 'selected="selected"'
-                                    : '';
-                                $name = self::escape($s->getName());
-                                echo "<option value=\"{$s->getId()}\" $selected>$name</option>";
-                            }
-                        ?>
-                    </select>
-                </td>
-            </tr>
-        </table>
+        <?php
+            echo $helper->field([
+                'name'  => 'notificationReplyEmail',
+                'id'    => 'notificationReplyEmail',
+                'label' => $this->_('notificationReplyEmail'),
+                'value' => $notificationReplyEmail
+            ]);
+
+            $options = [
+                ['value'=>1, 'label'=>$this->_('active_yes')],
+                ['value'=>0, 'label'=>$this->_('active_no' )],
+            ];
+            echo $helper->field([
+                'name'    => 'autoCloseIsActive',
+                'label'   => $this->_('autoCloseIsActive'),
+                'value'   => $this->category->getAutoCloseIsActive(),
+                'type'    => 'radio',
+                'options' => $options
+            ]);
+
+            $table = new SubstatusTable();
+            $list = $table->find(['status'=>'closed']);
+            $options = [['value'=>'', 'label'=>'']];
+            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            echo $helper->field([
+                'name'    => 'autoCloseSubstatus_id',
+                'id'      => 'autoCloseSubstatus_id',
+                'label'   => $this->_('autoCloseSubstatus_id'),
+                'value'   => $this->category->getAutoCloseSubstatus_id(),
+                'type'    => 'select',
+                'options' => $options
+            ]);
+        ?>
 	</fieldset>
 	<fieldset><legend><?= $this->_('custom_fields'); ?></legend>
 		<?php
@@ -171,8 +149,15 @@ foreach ($fields as $field) {
 					$customFields = json_encode($fields);
 				}
 			}
+
+			echo $helper->field([
+                'name'  => 'customFields',
+                'id'    => 'customFields',
+                'label' => $this->_('custom_fields'),
+                'value' => $customFields,
+                'type'  => 'textarea'
+			]);
 		?>
-		<textarea name="customFields" id="customFields" rows="30" cols="50"><?= $customFields; ?></textarea>
 		<div><p>Custom fields are defined in JSON.
 				Each field can have a name, label, type and values.
 				Each field requires at least a name.
@@ -200,3 +185,4 @@ foreach ($fields as $field) {
 		?>
 	</fieldset>
 </form>
+</section>

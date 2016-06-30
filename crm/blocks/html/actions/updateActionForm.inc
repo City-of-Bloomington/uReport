@@ -16,14 +16,14 @@ $description = self::escape($this->action->getDescription());
         <h1><?= $title; ?></h1>
         <p><?= $this->_('actions_description', 'messages'); ?></p>
     </header>
-	<table>
-		<tr><th>{enteredByPerson}</th>
-			<td><?= $this->_('actions_enteredByPerson', 'messages'); ?></td>
-		</tr>
-		<tr><th>{actionPerson}</th>
-			<td><?= $this->_('actions_actionPerson', 'messages'); ?></td>
-		</tr>
-	</table>
+
+	<dl><dt>{enteredByPerson}</dt>
+        <dd><?= $this->_('actions_enteredByPerson', 'messages'); ?></td>
+    </dl>
+    <dl><dt>{actionPerson}</th>
+        <dd><?= $this->_('actions_actionPerson', 'messages'); ?></dd>
+    </dl>
+
 	<form method="post" action="<?= BASE_URI; ?>/actions/update">
 		<fieldset><legend><?= $this->_('action'); ?></legend>
 			<input name="action_id" type="hidden" value="<?= $this->action->getId(); ?>" />

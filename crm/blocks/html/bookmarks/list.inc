@@ -1,20 +1,21 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param BookmarkList $this->bookmarks
  */
-use Blossom\Classes\View;
 use Application\Templates\Helpers\ButtonLink;
 
-$title = !empty($this->title)
+$c = count($this->bookmarks);
+
+$title =    !empty($this->title)
 	? self::escape($this->title)
-	: $this->_(array('bookmark', 'bookmarks', 2));
-if (count($this->bookmarks)) {
+	: $this->_(['bookmark', 'bookmarks', $c]);
+
+if ($c) {
 	echo "
-	<div class=\"bookmarkList\">
-		<h3>$title</h3>
+	<section class=\"bookmarkList\">
+        <header><h1>$title</h1></header>
 		<ul>
  	";
 		foreach ($this->bookmarks as $bookmark) {
@@ -32,6 +33,6 @@ if (count($this->bookmarks)) {
 		}
 	echo "
 		</ul>
-	</div>
+	</section>
 	";
 }

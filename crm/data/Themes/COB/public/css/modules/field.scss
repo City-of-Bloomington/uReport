@@ -1,5 +1,23 @@
-form dl {
+dl {
+    border-top: 1px solid;
+    display: block;
+    margin: 0;
     padding: .5em 0;
+    > dt {
+        font-size: .8em;
+        float: left;
+        margin: 0;
+        padding: .2em 0 0 0;
+        width: 8em;
+    }
+    > dd {
+        margin: 0 0 0 8em;
+        padding: 0;
+    }
+}
+
+form dl {
+    border:none;
 
     > dt {
         font-size: (12em/16);
@@ -8,7 +26,6 @@ form dl {
     }
     > dd {
         margin: 0;
-        padding: 0;
 
         > input {
             box-sizing: border-box;
@@ -24,9 +41,9 @@ form dl {
                 border-color: $color-border-input-highlight;
             }
         }
-        > .intl-tel-input > input[type="tel"] {
-            padding-left: 44px;
-        }
+        > input[type="tel"   ] { padding-left: 44px; }
+        > input[type="date"  ] { width:10em; }
+        > input[type="number"] { width:5em; }
     }
 
 
@@ -64,4 +81,9 @@ form dl {
             }
         }
     }
+}
+
+dl.checkbox > dd {
+    margin:0;
+    label { display:block; }
 }

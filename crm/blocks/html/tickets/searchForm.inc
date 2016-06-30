@@ -148,28 +148,27 @@ if (Person::isAllowed('tickets','add')) {
 
 		<fieldset id="display_fields">
             <legend><?= $this->_('display_fields'); ?></legend>
-			<ul>
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
 					$_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
 				}
 
+				$values  = [];
+				$options = [];
 				foreach (TicketTable::getDisplayableFields() as $field=>$name) {
-					if ($field!='id') {
-
-						$checked = isset($_GET['fields'][$field]) ? 'checked="checked"' : '';
-						echo "
-						<li><label>
-								<input name=\"fields[$field]\" id=\"fields-$field\" type=\"checkbox\" $checked />
-                                    {$this->_($field)}
-							  </label>
-						</li>
-						";
+					if ($field != 'id') {
+                        $options[] = ['value'=>$field, 'label'=>$this->_($field)];
+                        if (isset($_GET['fields'][$field])) { $values[] = $field; }
 					}
 				}
+				echo $helper->field([
+                    'name'    => 'fields',
+                    'type'    => 'checkbox',
+                    'value'   => $values,
+                    'options' => $options
+				]);
 			?>
-			</ul>
 		</fieldset>
 
 
