@@ -7,19 +7,20 @@
         cursor: pointer; display: inline-table;
 
         &[aria-expanded="true"] + .links {
-            opacity: 1;
+            display:block;
         }
         &[aria-expanded="false"] + .links {
-            opacity: 0;
+            display:none;
         }
     }
     .links {
         position:absolute;
-        display:inline-table;
         white-space:nowrap;
         transition: opacity .2s;
         z-index:7;
 
         a { display: block; }
+    }
+    .subgroup {
     }
 }

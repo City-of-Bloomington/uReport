@@ -26,4 +26,13 @@
             background-color: $color-table-background;
         }
     }
+    .subgroup {
+        &:not(:first-of-type):before {
+            background-color: $color-table-background;
+            content: '';
+            display: block;
+            height: 1px;
+            margin: .5rem;
+        }
+    }
 }
