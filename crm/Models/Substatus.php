@@ -60,7 +60,7 @@ class Substatus extends ActiveRecord
 	{
 		if ($this->isDefault()) {
 			$zend_db = Database::getConnection();
-			$zend_db->query('update substatus set isDefault=0 where status=?', $this->getStatus());
+			$zend_db->query('update substatus set isDefault=0 where status=?', [$this->getStatus()]);
 		}
 
 		parent::save();

@@ -1,29 +1,31 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryGroupList $this->categoryGroupList
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
 ?>
-<div class="categoryGroupList">
-	<h2><?php
-			echo $this->_(array('categoryGroup', 'categoryGroups', 2));
+<section class="categoryGroupList">
+    <header>
+        <h1><?= $this->_('categoryGroup'); ?></h1>
+        <div class="tools">
+        <?php
 			if (Person::isAllowed('categoryGroups','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/categoryGroups/update',
 					$this->_('add'),
 					'add'
-				) .  $helper->buttonLink(
+				);
+				echo $helper->buttonLink(
 					BASE_URI.'/categoryGroups/reorder',
 					$this->_('reorder'),
 					'reorder'
 				);
 			}
 		?>
+		</div>
 	</h2>
 	<table>
 		<thead>
@@ -36,7 +38,7 @@ use Blossom\Classes\View;
 		<tbody>
 		<?php
 			foreach ($this->categoryGroupList as $group) {
-				$editButton = '';
+				$editButton   = '';
 				$deleteButton = '';
 				if (Person::isAllowed('categoryGroups','update')) {
 					$editButton = $helper->buttonLink(
@@ -50,7 +52,7 @@ use Blossom\Classes\View;
 						'delete'
 					);
 				}
-				$name = self::escape($group->getName());
+				$name  = self::escape($group->getName());
 				$order = (int)$group->getOrdering();
 				echo "
 				<tr><td>$editButton</td>
@@ -63,4 +65,4 @@ use Blossom\Classes\View;
 		?>
 		</tbody>
 	</table>
-</div>
+</section>

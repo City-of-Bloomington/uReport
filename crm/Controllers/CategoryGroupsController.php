@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -15,20 +14,11 @@ use Blossom\Classes\Template;
 
 class CategoryGroupsController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$t = new CategoryGroupTable();
 		$list = $t->find();
-		$this->template->blocks[] = new Block(
-			'categoryGroups/list.inc',
-			array('categoryGroupList'=>$list)
-		);
+		$this->template->blocks[] = new Block('categoryGroups/list.inc', ['categoryGroupList'=>$list]);
 	}
 
 	public function update()
@@ -60,15 +50,12 @@ class CategoryGroupsController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block(
-			'categoryGroups/updateForm.inc',
-			array('categoryGroup'=>$group)
-		);
+		$this->template->blocks[] = new Block('categoryGroups/updateForm.inc', ['categoryGroup'=>$group]);
 	}
 
 	public function reorder()
 	{
-		if (isset($_POST['categoryGroups'])) {
+		if (isset(   $_POST['categoryGroups'])) {
 			foreach ($_POST['categoryGroups'] as $id=>$order) {
 				try {
 					$group = new CategoryGroup($id);

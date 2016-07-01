@@ -4,20 +4,22 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param CategoryList $this->categoryList
  */
-use Blossom\Classes\View;
 ?>
-<div class="slaForm">
-	<h2><?= $this->_('service_level_agreement'); ?></h2>
-	<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
+<section class="slaForm">
+    <header>
+        <h1><?= $this->_('service_level_agreement'); ?></h1>
+        <p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
+    </header>
 
 	<form method="post" action="<?= BASE_URI; ?>/categories/sla">
-		<fieldset><legend><?= $this->_(array('category','categories', 2)); ?></legend>
+		<fieldset>
+            <legend><?= $this->_(['category','categories', count($this->categoryList)]); ?></legend>
 			<table>
 				<thead>
-					<tr><th><?= $this->_(array('category', 'categories', 1)); ?></th>
-						<th><?= $this->_(array('department', 'departments', 1)); ?></th>
+					<tr><th><?= $this->_('category'); ?></th>
+						<th><?= $this->_('department'); ?></th>
 						<th><?= $this->_('sla'); ?>
-							<?= $this->_(array('day', 'days', 2)); ?>
+							<?= $this->_(['day', 'days', 2]); ?>
 						</th>
 					</tr>
 				</thead>
@@ -36,7 +38,7 @@ use Blossom\Classes\View;
 									name=\"{$field}[id]\"
 									value=\"{$category->getId()}\" />
 								<input name=\"{$field}[slaDays]\"
-									size=\"2\" maxlength=\"2\"
+									type=\"number\"
 									value=\"{$category->getSlaDays()}\" />
 							</td>
 						</tr>
@@ -51,4 +53,4 @@ use Blossom\Classes\View;
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>

@@ -6,9 +6,11 @@
  */
 use Application\Models\Person;
 ?>
-<div class="clientList">
-	<h2><?php
-			echo $this->_(array('client', 'clients', 2));
+<section class="clientList">
+    <header>
+        <h1><?= $this->_(array('client', 'clients', count($this->clientList))); ?></h1>
+        <div class="tools">
+        <?php
 			if (Person::isAllowed('clients','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
@@ -18,7 +20,8 @@ use Application\Models\Person;
 				);
 			}
 		?>
-	</h2>
+		</div>
+    </header>
 	<p><?= $this->_('clients_description', 'messages'); ?></p>
 	<?php
 		foreach ($this->clientList as $client) {
@@ -41,24 +44,28 @@ use Application\Models\Person;
 			$name        = self::escape($client->getName());
 			$contactName = self::escape($contact->getFullname());
 			echo "
-			<div>
-				<h3>$name $editButton $deleteButton</h3>
-				<table>
-					<tr><th>{$this->_(array('contactMethod','contactMethods',1))}</th>
-						<td>{$client->getContactMethod()}</td>
-					</tr>
-					<tr><th>{$this->_('api_key')}</th>
-						<td>{$client->getApi_key()}</td>
-					</tr>
-					<tr><th>{$this->_('url')}</th>
-						<td><a href=\"$url\">$url</a></td>
-					</tr>
-					<tr><th>{$this->_('contact')}</th>
-						<td><a href=\"{$contact->getURL()}\">$contactName</a></td>
-					</tr>
-				</table>
-			</div>
+			<article>
+                <header>
+                    <h1>$name</h1>
+                    <div class=\"tools\">
+                        $editButton $deleteButton
+                    </div>
+                </header>
+
+                <dl><dt>{$this->_('contactMethod')}</dt>
+                    <dd>{$client->getContactMethod()}</dd>
+                </dl>
+                <dl><dt>{$this->_('api_key')}</dt>
+                    <dd>{$client->getApi_key()}</dd>
+                </dl>
+                <dl><dt>{$this->_('url')}</dt>
+                    <dd><a href=\"$url\">$url</a></dd>
+                </dl>
+                <dl><dt>{$this->_('contact')}</dt>
+                    <dd><a href=\"{$contact->getURL()}\">$contactName</a></dd>
+                </dl>
+			</article>
 			";
 		}
 	?>
-</div>
+</section>

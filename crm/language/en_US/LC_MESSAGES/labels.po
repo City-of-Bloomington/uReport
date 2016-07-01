@@ -319,6 +319,9 @@ msgstr "Over SLA"
 msgid "replyEmail"
 msgstr "Reply To Email"
 
+msgid "notificationReplyEmail"
+msgstr "Reply To Email"
+
 msgid "autoRespond"
 msgstr "Auto Respond"
 

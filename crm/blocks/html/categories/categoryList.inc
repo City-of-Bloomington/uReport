@@ -36,7 +36,7 @@ use Application\Models\Person;
 				if ($previous) {
 					$html.= '</div>';
 				}
-				$html.= "<div class=\"group\"><h3><a id=\"$anchor\">$name</a></h3>";
+				$html.= "<div class=\"group\"><h2><a id=\"$anchor\">$name</a></h2>";
 				$toc .= "<li><a href=\"".BASE_URI."/categories#$anchor\">$name</a></li>";
 
 				$previous = "{$group->getId()}";
@@ -54,10 +54,10 @@ use Application\Models\Person;
 
 			$html.= "
 			<div class=\"category\">
-				<h4><a href=\"".BASE_URI."/categories/view?category_id={$category->getId()}\">
+				<h3><a href=\"".BASE_URI."/categories/view?category_id={$category->getId()}\">
 						$name
 					</a>
-				</h4>
+				</h3>
 				<p>$description</p>
 				<table>
 					<thead>

@@ -1,8 +1,14 @@
+input[type="tel"   ] { padding-left: 44px; }
+input[type="date"  ] { width:10em; }
+input[type="number"] { width:5em; }
+
 dl {
     border-top: 1px solid;
     display: block;
     margin: 0;
     padding: .5em 0;
+    overflow:auto;
+
     > dt {
         font-size: .8em;
         float: left;
@@ -41,9 +47,6 @@ form dl {
                 border-color: $color-border-input-highlight;
             }
         }
-        > input[type="tel"   ] { padding-left: 44px; }
-        > input[type="date"  ] { width:10em; }
-        > input[type="number"] { width:5em; }
     }
 
 

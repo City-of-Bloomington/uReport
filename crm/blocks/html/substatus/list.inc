@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param SubstatusList $this->substatusList
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
 ?>
-<div class="substatusList">
-	<h2><?php
-			if (Person::isAllowed('substatus','update')) {
+<section class="substatusList">
+    <header>
+        <h1><?= $this->_(['substatus', 'substatuses', count($this->substatusList)]); ?></h1>
+        <div class="tools">
+        <?php
+			if (Person::isAllowed('substatus', 'update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
 					BASE_URI.'/substatus/update',
@@ -18,9 +19,9 @@ use Blossom\Classes\View;
 					'add'
 				);
 			}
-			$this->_(array('substatus', 'substatuses', 2));
 		?>
-	</h2>
+		</div>
+    </header>
 	<table>
 		<?php
 			foreach ($this->substatusList as $substatus) {
@@ -47,4 +48,4 @@ use Blossom\Classes\View;
 			}
 		?>
 	</table>
-</div>
+</section>

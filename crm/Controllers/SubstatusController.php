@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -15,12 +14,6 @@ use Blossom\Classes\Template;
 
 class SubstatusController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$table = new SubstatusTable();
@@ -28,7 +21,7 @@ class SubstatusController extends Controller
 			? $table->find(array('status'=>$_REQUEST['status']))
 			: $table->find();
 
-		$this->template->blocks[] = new Block('substatus/list.inc',array('substatusList'=>$list));
+		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list]);
 	}
 
 	public function update()
@@ -61,9 +54,6 @@ class SubstatusController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block(
-			'substatus/updateForm.inc',
-			array('substatus'=>$substatus)
-		);
+		$this->template->blocks[] = new Block('substatus/updateForm.inc', ['substatus'=>$substatus]);
 	}
 }

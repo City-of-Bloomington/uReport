@@ -34,11 +34,6 @@ class Field extends Helper
 
         if (isset(  $params['type'])) {
             switch ($params['type']) {
-                case 'person':
-                    $h = $this->template->getHelper('personChooser');
-                    return $h->personChooser($params['name'], $params['id'], $params['value']);
-                break;
-
                 case 'date':
                     $params['value'] = !empty($params['value']) ? date(DATE_FORMAT, $params['value']) : '';
                     $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
@@ -49,6 +44,7 @@ class Field extends Helper
                 case 'textarea':
                 case 'radio':
                 case 'checkbox':
+                case 'person':
                     $class[]     = $params['type'];
                     $renderInput = $params['type'];
                 break;
@@ -197,7 +193,7 @@ class Field extends Helper
                     : '';
 
                 $name   = $params['name'].'['.$o['value'].']';
-                $inputs.= "<label><input name=\"$name\" type=\"radio\" value=\"$o[value]\" $checked/> $o[label]</label>";
+                $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $checked/> $o[label]</label>";
             }
         }
         return $inputs;
@@ -223,5 +219,24 @@ class Field extends Helper
         $value = !empty($params['value']) ? $params['value'] : '';
 
         return "<textarea name=\"$params[name]\" id=\"$params[id]\" $required $attr>$value</textarea>";
+    }
+
+    /**
+     * Parameters:
+     *
+     * label string
+     * name  string
+     * id    string
+     * value string
+     * type  string   HTML5 input tag type (text, email, date, etc.)
+     *
+     * @param array  $params
+     * @param string $required  The string for the attribute 'required="true"'
+     * @param string $attr      The string for any and all additional attributes
+     */
+    public function person(array $params, $required=null, $attr=null)
+    {
+        $h = $this->template->getHelper('personChooser');
+        return $h->personChooser($params['name'], $params['value']);
     }
 }

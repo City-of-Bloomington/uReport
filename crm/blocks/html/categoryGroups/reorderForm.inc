@@ -1,47 +1,33 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\CategoryGroupTable;
-use Blossom\Classes\View;
 ?>
-<div class="categoryGroupReportForm">
-	<h2><?php
-			echo $this->_('reorder').' '.
-				 $this->_(array('categoryGroup', 'categoryGroups', 2));
-		?>
-	</h2>
+<section class="categoryGroupReportForm">
+    <header><h1><?= $this->_('reorder'); ?></h1>
 	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
-		<table>
-			<thead>
-				<tr><th><?= $this->_('name' ); ?></th>
-					<th><?= $this->_('order'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-				$t = new CategoryGroupTable();
-				$groups = $t->find();
-				foreach ($groups as $group) {
-					$name = self::escape($group->getName());
-					$order = (int)$group->getOrdering();
-					echo "
-					<tr><td><label for=\"categoryGroups_{$group->getId()}\">$name</label></td>
-						<td><input name=\"categoryGroups[{$group->getId()}]\"
-								id=\"categoryGroups_{$group->getId()}\"
-								value=\"$order\" />
-						</td>
-					</tr>
-					";
-				}
-			?>
-			</tbody>
-		</table>
-		<?php
+        <?php
+            $helper = $this->template->getHelper('field');
+
+            $t = new CategoryGroupTable();
+            $groups = $t->find();
+            foreach ($groups as $group) {
+                $id    = $group->getId();
+                $name  = self::escape($group->getName());
+                $order = (int)$group->getOrdering();
+
+                echo $helper->field([
+                    'name'  => "categoryGroups[$id]",
+                    'id'    => "categoryGroups_$id",
+                    'label' => $name,
+                    'value' => $order,
+                    'type'  => 'number'
+                ]);
+            }
 			$helper = $this->template->getHelper('saveAndCancelButtons');
 			echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
 		?>
 	</form>
-</div>
+</section>

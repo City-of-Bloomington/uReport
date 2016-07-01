@@ -9,9 +9,11 @@ use Application\Models\Person;
 $table = new ContactMethodTable();
 $list = $table->find();
 ?>
-<div>
-	<h2><?php
-			echo $this->_(['contactMethod', 'contactMethods', count($list)]);
+<section>
+    <header>
+        <h1><?= $this->_(['contactMethod', 'contactMethods', count($list)]); ?></h1>
+        <div class="tools">
+        <?php
 			if (Person::isAllowed('contactMethods','update')) {
 				$helper = $this->template->getHelper('buttonLink');
 				echo $helper->buttonLink(
@@ -21,7 +23,8 @@ $list = $table->find();
 				);
 			}
 		?>
-	</h2>
+		</div>
+	</header>
 	<p><?= $this->_('contactMethods_description', 'messages'); ?></p>
 	<ul>
 	<?php

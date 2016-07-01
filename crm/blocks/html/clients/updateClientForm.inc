@@ -1,75 +1,60 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Client $this->client
  */
 use Application\Models\ContactMethodTable;
-use Blossom\Classes\View;
 
-$name = self::escape($this->client->getName());
-$url = $this->client->getURL();
-$api_key = self::escape($this->client->getApi_key());
+$fields = ['id', 'name', 'url', 'api_key', 'contactMethod_id', 'contactPerson_id'];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $$f = $this->client->$get();
+}
 
 $title = $this->client->getId()
-	? $this->_('edit').' '.$this->_(array('client','clients',1))
-	: $this->_('add' ).' '.$this->_(array('client','clients',1));
+	? $this->_('edit').' '.$this->_('client')
+	: $this->_('add' ).' '.$this->_('client');
 ?>
 <div class="updateClientForm">
 	<h1><?= $title; ?></h1>
 	<form method="post" action="<?= BASE_URL; ?>/clients/update">
 		<fieldset>
-			<legend>
-				<?php
-					echo $this->_(array('client','clients',1)).' '.$this->_('info');
-				?>
-			</legend>
+			<legend><?= $this->_('client').' '.$this->_('info'); ?></legend>
 			<input name="client_id" type="hidden" value="<?= $this->client->getId(); ?>" />
-			<table>
-				<tr><td><label for="name"><?= $this->_('name'); ?></label></td>
-					<td><input name="name" id="name" value="<?= $name; ?>" /></td>
-				</tr>
-				<tr><td><label for="url"><?= $this->_('url'); ?></label></td>
-					<td><input name="url" id="url" value="<?= $url; ?>" /></td>
-				</tr>
-				<tr><td><label><?= $this->_('api_key'); ?></label></td>
-					<td><input name="api_key" id="api_key" value="<?= $api_key; ?>" /></td>
-				</tr>
-				<tr><td><label><?= $this->_(array('contactMethod','contactMethods',1)); ?></label></td>
-					<td><select name="contactMethod_id" id="contactMethod_id">
-						<?php
-							$t = new ContactMethodTable();
-							$contactMethods = $t->find();
-							foreach ($contactMethods as $method) {
-								$selected = $this->client->getContactMethod_id()==$method->getId()
-									? 'selected="selected"'
-									: '';
-								$name = self::escape($method->getName());
-								echo "<option value=\"{$method->getId()}\" $selected>$method</option>";
-							}
-						?>
-						</select>
-					</td>
-				</tr>
-			</table>
+			<?php
+                $helper = $this->template->getHelper('field');
+                echo $helper->field(['name'=>'name',    'id'=>'name',    'label'=>$this->_('name'),    'value'=>$name,    'required'=>true]);
+                echo $helper->field(['name'=>'url',     'id'=>'url',     'label'=>$this->_('url'),     'value'=>$url]);
+                echo $helper->field(['name'=>'api_key', 'id'=>'api_key', 'label'=>$this->_('api_key'), 'value'=>$api_key, 'required'=>true]);
+
+                $t = new ContactMethodTable();
+                $contactMethods = $t->find();
+                $options = [];
+                foreach ($contactMethods as $m) {
+                    $options[] = ['value'=>$m->getId(), 'label'=>self::escape($m->getName())];
+                }
+                echo $helper->field([
+                    'name'    => 'contactMethod_id',
+                    'id'      => 'contactMethod_id',
+                    'label'   => $this->_('contactMethod'),
+                    'value'   => $contactMethod_id,
+                    'type'    => 'select',
+                    'options' => $options
+                ]);
+			?>
 		</fieldset>
 		<fieldset>
-			<legend>
-				<?php
-					echo $this->_('contact').' '.$this->_('info');
-				?>
-			</legend>
-			<table>
-				<tr><td><label for="contactPerson_id"><?= $this->_('contactPerson'); ?></label></td>
-					<td><?php
-							$contactPerson = $this->client->getContactPerson();
-							$helper = $this->template->getHelper('personChooser');
-							echo $helper->personChooser('contactPerson', $contactPerson);
-						?>
-					</td>
-				</tr>
-			</table>
+			<legend><?= $this->_('contact').' '.$this->_('info'); ?></legend>
+			<?php
+                echo $helper->field([
+                    'name'  => 'contactPerson',
+                    'id'    => 'contactPerson',
+                    'label' => $this->_('contactPerson'),
+                    'value' => $this->client->getContactPerson(),
+                    'type'  => 'person'
+                ]);
+			?>
 		</fieldset>
 		<fieldset>
 			<?php

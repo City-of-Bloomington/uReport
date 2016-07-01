@@ -319,6 +319,9 @@ msgstr "Verlopen"
 msgid "replyEmail"
 msgstr "Beantwoorden per e-mail"
 
+msgid "notificationReplyEmail"
+msgstr "Beantwoorden per e-mail"
+
 msgid "autoRespond"
 msgstr "Automatisch beantwoorden"
 

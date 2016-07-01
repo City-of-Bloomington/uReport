@@ -30,44 +30,35 @@ if (Person::isAllowed('categories', 'update')) {
         'edit'
     );
 }
-echo "
-<section class=\"categoryInfo\">
+?>
+<section class="categoryInfo">
     <header>
-        <h1>$name</h1>
-        <div class=\"tools\">$editButton</div>
+        <h1><?= $name; ?></h1>
+        <div class="tools"><?= $editButton; ?></div>
     </header>
-	<p>$description</p>
-	<table>
-		<tr><th>{$this->_('categoryGroup')}</th>
-			<td>$categoryGroup</td>
-		</tr>
-		<tr><th>{$this->_('department')}</th>
-			<td>$department</td>
-		</tr>
-		<tr><th>{$this->_('displayPermissionLevel')}</th>
-			<td>$displayPermissionLevel</td>
-		</tr>
-		<tr><th>{$this->_('postingPermissionLevel')}</th>
-			<td>$postingPermissionLevel</td>
-		</tr>
-        <tr><th>{$this->_('replyEmail')}</th>
-            <td>$notificationReplyEmail</td>
-        </tr>
-        <tr><th>{$this->_('autoCloseIsActive')}</th>
-            <td>$autoCloseActive</td>
-        </tr>
-	</table>
-";
-    $this->_include('responseTemplates/list.inc');
+	<p><?= $description; ?></p>
+	<?php
+        $fields = [
+            'categoryGroup', 'department', 'displayPermissionLevel', 'postingPermissionLevel',
+            'notificationReplyEmail', 'autoCloseActive'
+        ];
+        foreach ($fields as $f) {
+            echo "
+            <dl><dt>{$this->_($f)}</dt>
+                <dd>{$$f}</dd>
+            </dl>
+            ";
+        }
 
-echo "
-	<form method=\"get\">
-		<fieldset><legend>{$this->_('custom_fields')}</legend>
-";
+        $this->_include('responseTemplates/list.inc');
+    ?>
+
+	<form method="get">
+		<fieldset><legend><?= $this->_('custom_fields'); ?></legend>
+		<?php
 			$this->issue = new Issue();
 			$this->_include('tickets/issueCustomFields.inc');
-echo "
+        ?>
 		</fieldset>
 	</form>
 </section>
-";

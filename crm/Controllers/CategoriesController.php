@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -21,11 +20,7 @@ class CategoriesController extends Controller
 		$t = new CategoryTable;
 		$categoryList = $t->find();
 
-		$this->template->setFilename('backend');
-		$this->template->blocks[] = new Block(
-			'categories/categoryList.inc',
-			array('categoryList'=>$categoryList)
-		);
+		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$categoryList]);
 	}
 
 	public function view()
@@ -37,7 +32,7 @@ class CategoriesController extends Controller
 		if (!empty($_REQUEST['category_id'])) {
 			try {
 				$category = new Category($_REQUEST['category_id']);
-				$this->template->blocks[] = new Block('categories/info.inc', array('category'=>$category));
+				$this->template->blocks[] = new Block('categories/info.inc', ['category'=>$category]);
 			}
 			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -76,7 +71,7 @@ class CategoriesController extends Controller
 		}
 
 		$this->template->setFilename('backend');
-		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc',array('category'=>$category));
+		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc', ['category'=>$category]);
 	}
 
 	/**
@@ -93,10 +88,10 @@ class CategoriesController extends Controller
 		$t = new CategoryTable();
 		$categoryList = $t->find(null, 'categories.name');
 
-		$this->template->blocks[] = new Block(
-			'categories/categoryChoices.inc',
-			array('categoryList'=>$categoryList,'return_url'=>$return_url)
-		);
+		$this->template->blocks[] = new Block('categories/categoryChoices.inc',[
+            'categoryList' => $categoryList,
+            'return_url'   => $return_url
+        ]);
 	}
 
 	/**

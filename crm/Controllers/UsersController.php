@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -14,12 +13,6 @@ use Blossom\Classes\Template;
 
 class UsersController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$search = array('user_account'=>true);
@@ -29,7 +22,7 @@ class UsersController extends Controller
 		$table = new PersonTable();
 		$people = $table->find($search);
 
-		$this->template->blocks[] = new Block('users/userList.inc',array('userList'=>$people));
+		$this->template->blocks[] = new Block('users/userList.inc', ['userList'=>$people]);
 	}
 
 	public function update()
@@ -66,10 +59,10 @@ class UsersController extends Controller
 		if ($user->getId()) {
 			$this->template->blocks[] = new Block(
 				'people/personInfo.inc',
-				array('person'=>$user,'disableButtons'=>true)
+				['person'=>$user,'disableButtons'=>true]
 			);
 		}
-		$this->template->blocks[] = new Block('users/updateUserForm.inc',array('person'=>$user));
+		$this->template->blocks[] = new Block('users/updateUserForm.inc', ['person'=>$user]);
 	}
 
 	/**
