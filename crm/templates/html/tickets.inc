@@ -5,32 +5,27 @@
 <?php
 	$this->_include('partials/head.inc');
 ?>
-<body class="stackedPanels">
+<body class="tickets">
 	<?php
 		if (!isset($_REQUEST['popup'])) {
             $this->_include('partials/header.inc');
 		}
 	?>
 	<main>
-		<div id="ticket-panel" class="panel">
-			<?php
+        <div id="content-panel" class="panel">
+            <?php
                 include BLOSSOM.'/errorMessages.php';
-                echo $this->includeBlocks('ticket-panel');
+                echo $this->includeBlocks();
             ?>
-		</div>
-		<?php
-			// These panels should only show up for non-popup windows
-			// Also, only draw the divs if there is content for them
-			$panels = ['history-panel', 'issue-panel', 'bottom-left', 'bottom-right'];
-			foreach ($panels as $p) {
-				if (!isset($_REQUEST['popup']) && isset($this->blocks[$p])) {
-					echo "<div id=\"$p\" class=\"panel\">";
-					echo $this->includeBlocks($p);
-					echo "</div>";
-				}
-			}
-		?>
-	</div>
+        </div>
+        <?php
+            if (!isset($_REQUEST['popup'])) {
+                echo '<div id="panel-one" class="panel">';
+                echo $this->includeBlocks('panel-one');
+                echo '</div>';
+            }
+        ?>
+	</main>
 	<?php
 		$this->_include('partials/footer.inc');
 	?>

@@ -87,11 +87,8 @@ class TicketsController extends Controller
 
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->setFilename('tickets');
-			$this->template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
-			$this->template->blocks['ticket-panel'][] = new Block(
-				'tickets/slaStatus.inc',
-				array('ticket'=>$ticket)
-			);
+			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
+			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
 			#if (Person::isAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
 			#	$this->template->blocks['history-panel'][] = new Block(
 			#		'tickets/actionForm.inc',
@@ -496,7 +493,7 @@ class TicketsController extends Controller
 	 */
 	private function addStandardInfoBlocks(Ticket $ticket)
 	{
-		$this->template->blocks['history-panel'][] = new Block(
+		$this->template->blocks[] = new Block(
 			'tickets/history.inc',
 			['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
 		);
@@ -510,18 +507,23 @@ class TicketsController extends Controller
 		#	)
 		#);
 		if ($ticket->getLocation()) {
-			$locationBlocks = array('locationInfo', 'masterAddressData', 'locationPeople');
-			foreach ($locationBlocks as $b) {
-				$this->template->blocks['bottom-left'][] = new Block(
-					"locations/$b.inc",
-					array('location'=>$ticket->getLocation(), 'disableButtons'=>true)
-				);
-			}
+            $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
+                'location'       => $ticket->getLocation(),
+                'ticket'         => $ticket,
+                'disableButtons' => true
+            ]);
+			#$locationBlocks = array('locationInfo', 'masterAddressData', 'locationPeople');
+			#foreach ($locationBlocks as $b) {
+			#	$this->template->blocks['bottom-left'][] = new Block(
+			#		"locations/$b.inc",
+			#		array('location'=>$ticket->getLocation(), 'disableButtons'=>true)
+			#	);
+			#}
 
-			$this->template->blocks['bottom-right'][] = new Block(
-				'tickets/ticketLocationInfo.inc',
-				array('ticket'=>$ticket)
-			);
+			#$this->template->blocks['bottom-right'][] = new Block(
+			#	'tickets/ticketLocationInfo.inc',
+			#	array('ticket'=>$ticket)
+			#);
 
 			#$table = new TicketTable();
 			#$list = $table->find(array('location'=>$ticket->getLocation()));

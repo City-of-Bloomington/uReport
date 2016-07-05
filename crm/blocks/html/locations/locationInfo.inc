@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->location
- * @param bool $this->disableButtons
+ * @param bool   $this->disableButtons  (optional)
+ * @param Ticket $this->ticket          (optional)
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
 use Blossom\Classes\Url;
 
 if ($this->location) {
+    // This will properly encode the location string as a url parameter
 	$url = new Url(BASE_URL.'/locations/view?location='.$this->location);
+
 	$location = self::escape($this->location);
 
 	$addTicketButton = '';
@@ -25,9 +26,18 @@ if ($this->location) {
 	}
 
 	echo "
-	<div class=\"locationInfo\">
-		<h2><a href=\"$url\" class=\"location\">$location</a></h2>
-		$addTicketButton
-	</div>
+	<section class=\"locationInfo\">
+        <header>
+            <h1><a href=\"$url\" class=\"location\">$location</a></h1>
+            <div class=\"tools\">$addTicketButton</div>
+        </header>
+    ";
+        if ($this->ticket) {
+            $this->_include('tickets/ticketLocationInfo.inc');
+        }
+        $this->_include('locations/masterAddressData.inc');
+        $this->_include('locations/locationPeople.inc');
+    echo "
+	</section>
 	";
 }

@@ -13,12 +13,6 @@ use Blossom\Classes\Template;
 
 class ActionsController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$this->template->blocks[] = new Block('actions/actionList.inc');

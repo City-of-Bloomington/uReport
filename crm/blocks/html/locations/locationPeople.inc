@@ -15,7 +15,7 @@ if (Person::isAllowed('people', 'view')) {
 	if (count($people)) {
         $title = $this->_(['person', 'people', count($people)]);
 		echo "
-		<h3>$title</h3>
+		<h2>$title</h2>
 		<p>{$this->_('locationPeople_description', 'messages')}</p>
 		<ul>
 		";
@@ -30,7 +30,7 @@ if (Person::isAllowed('people', 'view')) {
 		$owners = RentalService::getOwnerNames($this->location);
 		$count = count($owners);
 		if ($count) {
-			echo "<h3>{$this->_(['owner', 'owners', $count])}</h3><ul>";
+			echo "<h2>{$this->_(['owner', 'owners', $count])}</h2><ul>";
 			foreach ($owners as $name) {
 				$name = self::escape($name);
 				echo "<li>$name</li>";

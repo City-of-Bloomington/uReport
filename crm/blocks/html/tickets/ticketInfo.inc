@@ -33,7 +33,7 @@ echo "
         </h1>
     </header>
     $description
-</div>
+</section>
 <script type=\"text/javascript\">
 	CRM.ticket_id = $ticket_id;
 </script>

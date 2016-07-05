@@ -35,7 +35,10 @@ use Blossom\Classes\Block;
 			$action   = $event->getAction();
 			$issue_id = $event->getIssue_id();
 			if ($action->getType() === 'system' && $issue_id) {
-                $block = new Block('tickets/issueInfo.inc', ['issue'=>$event->getIssue()]);
+                $block = new Block('tickets/issueInfo.inc', [
+                    'issue'          => $event->getIssue(),
+                    'disableButtons' => true
+                ]);
                 echo $block->render('html',$this->template);
 			}
 
