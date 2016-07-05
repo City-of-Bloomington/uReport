@@ -7,7 +7,7 @@
  */
 use Application\Models\Person;
 ?>
-<div class="issueInfo">
+<article class="issueInfo">
 <?php
 	$this->_include('tickets/partials/issueHeader.inc');
 	$this->_include('tickets/issueAttachments.inc');
@@ -15,34 +15,24 @@ use Application\Models\Person;
 	// Don't display any personal information from the issue unless the user is authenticated
 	$userCanViewPeople = Person::isAllowed('people', 'view');
 
-    $enteredBy = '';
-    $p = $this->issue->getEnteredByPerson();
-    if ($p) {
-        $enteredBy = self::escape($p->getFullname());
-        if ($userCanViewPeople) {
-            $href = BASE_URL."/people/view?person_id={$p->getId()}";
-            $enteredBy = "<a href=\"$href\">$enteredBy</a>";
+	foreach (['enteredByPerson', 'reportedByPerson'] as $person) {
+        $get = 'get'.ucfirst($person);
+        $p = $this->issue->$get();
+        if ($p) {
+            $$person = self::escape($p->getFullname());
+            if ($userCanViewPeople) {
+                $href = BASE_URI."/people/view?person_id={$p->getId()}";
+                $$person = "<a href=\"$href\">{$$person}</a>";
+            }
         }
-    }
-
-    $reportedBy = '';
-    $p = $this->issue->getReportedByPerson();
-    if ($p) {
-        $reportedBy = self::escape($p->getFullname());
-
-        if ($userCanViewPeople) {
-            $href = BASE_URL."/people/view?person_id={$p->getId()}";
-            $reportedBy = "<a href=\"$href\">$reportedBy</a>";
-        }
-    }
-
+	}
     $contactMethod  = self::escape($this->issue->getContactMethod());
     $responseMethod = self::escape($this->issue->getResponseMethod());
-    echo "<ul class=\"twoColumnlist\">";
-    if ($enteredBy)      { echo "<li><label>{$this->_('enteredByPerson' )}:</label> $enteredBy     </li>"; }
-    if ($reportedBy)     { echo "<li><label>{$this->_('reportedByPerson')}:</label> $reportedBy    </li>"; }
-    if ($contactMethod)  { echo "<li><label>{$this->_('contactMethod'   )}:</label> $contactMethod </li>"; }
-    if ($responseMethod) { echo "<li><label>{$this->_('responseMethod'  )}:</label> $responseMethod</li>"; }
+    foreach (['enteredByPerson', 'reportedByPerson', 'contactMethod', 'responseMethod'] as $f) {
+        if (!empty($$f)) {
+            echo "<dl><dt>{$this->_($f)}</dt><dd>{$$f}</dd></dl>";
+        }
+    }
 
     $t = $this->issue->getTicket();
     $customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
@@ -53,27 +43,24 @@ use Application\Models\Person;
             $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
             $value = isset($customFieldData->$fieldname) ? $customFieldData->$fieldname : '';
             $value = is_array($value) ? implode(', ',$value) : self::escape($value);
-            if ($value) { echo "<li><label>$label:</label> $value</li>\n"; }
+            if ($value) { echo "<dl><dt>$label</dt><dd>$value</dd>"; }
         }
     }
-    echo "
-    </ul>
-    ";
 
 	if (!$this->disableComments) {
 		$description = self::escape($this->issue->getDescription());
-		if ($description) { echo "<div class=\"notes\"><h2>Details:</h2>$description</div>"; }
+		if ($description) { echo "<div class=\"notes\">$description</div>"; }
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	if ($userCanViewPeople && $this->issue->getReportedByPerson()) {
-		$this->responses = $this->issue->getResponses();
-		$this->_include('tickets/responseList.inc');
-	}
+	#if ($userCanViewPeople && $this->issue->getReportedByPerson()) {
+	#	$this->responses = $this->issue->getResponses();
+	#	$this->_include('tickets/responseList.inc');
+	#}
 
-	$this->history = $this->issue->getHistory();
-	if (count($this->history)) {
-		$this->_include('tickets/history.inc');
-	}
+	#$this->history = $this->issue->getHistory();
+	#if (count($this->history)) {
+	#	$this->_include('tickets/history.inc');
+	#}
 ?>
-</div>
+</article>

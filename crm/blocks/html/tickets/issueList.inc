@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param IssueList $this->issueList
  * @param Ticket    $this->ticket
  * @param bool      $this->disableButtons
@@ -12,7 +11,7 @@ use Application\Models\Person;
 use Blossom\Classes\Block;
 
 $addButton = '';
-if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')) {
+if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues', 'add')) {
 	$h = $this->template->getHelper('buttonLink');
 	$addButton = $h->buttonLink(
 		BASE_URL.'/issues/update?ticket_id='.$this->ticket->getId(),
@@ -21,20 +20,19 @@ if (!$this->disableButtons && $this->ticket && Person::isAllowed('issues','add')
 	);
 }
 echo "
-<div class=\"issueList\">
-	<h2>{$this->_('ticket_issues')} $addButton</h2>
+<section class=\"issueList\">
+    <header>
+        <h1>{$this->_('ticket_issues')}</h1>
+        <div class=\"tools\">$addButton</div>
+    </header>
 ";
+    $block = new Block('tickets/issueInfo.inc');
 	foreach ($this->issueList as $issue) {
-		$block = new Block(
-			'tickets/issueInfo.inc',
-			array(
-				'issue'          => $issue,
-				'disableButtons' => $this->disableButtons,
-				'disableComments'=> $this->disableComments
-			)
-		);
+        $block->issue           = $issue;
+        $block->disableButtons  = $this->disableButtons;
+        $block->disableComments = $this->disableComments;
 		echo $block->render('html',$this->template);
 	}
 echo "
-</div>
+</section>
 ";

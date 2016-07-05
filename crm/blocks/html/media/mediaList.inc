@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons
  */
@@ -10,11 +9,13 @@ use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
 if (count($this->mediaList)) {
+    $userCanDelete = Person::isAllowed('media', 'delete');
+    $h             = $this->template->getHelper('buttonLink');
+
 	echo "<table class=\"mediaList\">";
 	foreach ($this->mediaList as $media) {
 		$deleteButton = '';
-		if (!$this->disableButtons && Person::isAllowed('media', 'delete')) {
-			$h = $this->template->getHelper('buttonLink');
+		if (!$this->disableButtons && $userCanDelete) {
 			$deleteButton = $h->buttonLink(
 				BASE_URI.'/media/delete?media_id='.$media->getId(),
 				$this->_('delete'),

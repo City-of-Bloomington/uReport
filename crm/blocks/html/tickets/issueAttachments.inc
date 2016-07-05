@@ -2,27 +2,32 @@
 /**
  * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Issue $this->issue
- * @param boolean $this->disableButtons
+ * @param Issue   $this->issue
+ * @param boolean $this->disableButtons (optional)
  */
 use Application\Models\Person;
 use Blossom\Classes\Block;
 
+$helper = $this->template->getHelper('buttonLink');
+
 $uploadButton = '';
 if (!$this->disableButtons && Person::isAllowed('media','upload')) {
-	$uploadButton = "
-	<a class=\"btn\"
-		href=\"".BASE_URL."/media/upload?issue_id={$this->issue->getId()}\">
-		<span class=\"fa fa-upload\"></span>
-		{$this->_('upload_media')}
-	</a>
-	";
+    $uploadButton = $helper->buttonLink(
+        BASE_URI.'/media/upload?issue_id='.$this->issue->getId(),
+        $this->_('upload_media'),
+        'upload'
+    );
 }
+
 $this->mediaList = $this->issue->getMedia();
+
 if ($uploadButton || count($this->mediaList)) {
 	echo "
 	<div class=\"issueAttachments\">
-		<h2>{$this->_(['media', 'medias', 2])} $uploadButton</h2>
+        <header>
+            <h2>{$this->_(['media', 'medias', 2])}</h2>
+            <div class=\"tools\">$uploadButton</div>
+        </header>
 	";
 		$profileImage = $this->issue->getProfileImage();
 		if ($profileImage) {

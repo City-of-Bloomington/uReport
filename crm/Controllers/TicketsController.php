@@ -87,20 +87,17 @@ class TicketsController extends Controller
 
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->setFilename('tickets');
-			$this->template->blocks['ticket-panel'][] = new Block(
-				'tickets/ticketInfo.inc',
-				array('ticket'=>$ticket)
-			);
+			$this->template->blocks['ticket-panel'][] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
 			$this->template->blocks['ticket-panel'][] = new Block(
 				'tickets/slaStatus.inc',
 				array('ticket'=>$ticket)
 			);
-			if (Person::isAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
-				$this->template->blocks['history-panel'][] = new Block(
-					'tickets/actionForm.inc',
-					array('ticket'=>$ticket)
-				);
-			}
+			#if (Person::isAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
+			#	$this->template->blocks['history-panel'][] = new Block(
+			#		'tickets/actionForm.inc',
+			#		array('ticket'=>$ticket)
+			#	);
+			#}
 			$this->addStandardInfoBlocks($ticket);
 		}
 		else {
@@ -501,17 +498,17 @@ class TicketsController extends Controller
 	{
 		$this->template->blocks['history-panel'][] = new Block(
 			'tickets/history.inc',
-			array('history'=>$ticket->getHistory())
+			['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
 		);
 
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueList.inc',
-			array(
-				'issueList'     => $ticket->getIssues(),
-				'ticket'        => $ticket,
-				'disableButtons'=> $ticket->getStatus()=='closed'
-			)
-		);
+		#$this->template->blocks['issue-panel'][] = new Block(
+		#	'tickets/issueList.inc',
+		#	array(
+		#		'issueList'     => $ticket->getIssues(),
+		#		'ticket'        => $ticket,
+		#		'disableButtons'=> $ticket->getStatus()=='closed'
+		#	)
+		#);
 		if ($ticket->getLocation()) {
 			$locationBlocks = array('locationInfo', 'masterAddressData', 'locationPeople');
 			foreach ($locationBlocks as $b) {
@@ -526,19 +523,19 @@ class TicketsController extends Controller
 				array('ticket'=>$ticket)
 			);
 
-			$table = new TicketTable();
-			$list = $table->find(array('location'=>$ticket->getLocation()));
-			if (count($list) > 1) {
-				$this->template->blocks['bottom-left'][] = new Block(
-					'tickets/ticketList.inc',
-					array(
-						'ticketList'    => $list,
-						'title'         => 'Other cases for this location',
-						'filterTicket'  => $ticket,
-						'disableButtons'=> true
-					)
-				);
-			}
+			#$table = new TicketTable();
+			#$list = $table->find(array('location'=>$ticket->getLocation()));
+			#if (count($list) > 1) {
+			#	$this->template->blocks['bottom-left'][] = new Block(
+			#		'tickets/ticketList.inc',
+			#		array(
+			#			'ticketList'    => $list,
+			#			'title'         => 'Other cases for this location',
+			#			'filterTicket'  => $ticket,
+			#			'disableButtons'=> true
+			#		)
+			#	);
+			#aoi}
 		}
 	}
 }

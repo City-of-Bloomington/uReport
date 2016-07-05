@@ -31,8 +31,17 @@ class Dropdown
 	{
         $html = '';
         foreach ($links as $l) {
+
+            $attrs = '';
+            if (!empty($l['attrs'])) {
+                $attrs = ' ';
+                foreach ($l['attrs'] as $key=>$value) {
+                    $attrs.= "$key=\"$value\"";
+                }
+            }
+
             $html.= empty($l['subgroup'])
-                ? "<a href=\"$l[url]\">$l[label]</a>"
+                ? "<a href=\"$l[url]\"$attrs>$l[label]</a>"
                 : "<div class=\"fn1-dropdown-subgroup\">{$this->renderLinks($l['subgroup'])}</div>";
         }
         return $html;
