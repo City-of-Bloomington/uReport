@@ -49,7 +49,8 @@ function getIconWidth(iconLevel) {
 }
 
 function getIconPath(iconLevel) {
-	return 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m' + iconLevel + '.png';
+    return 'js/images/m' + iconLevel + '.png';
+	//return 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m' + iconLevel + '.png';
 }
 
 function MarkerCluster(map, position, count) {
