@@ -2,19 +2,20 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Ticket $this->ticket
- * @param Issue $this->issue
+ * @param Ticket     $this->ticket
+ * @param Issue      $this->issue
  * @param Department $this->currentDepartment
  */
 $category    = $this->ticket->getCategory();
 $category_id = $category ? $category->getId() : '';
 $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 ?>
-<div id="addTicketForm">
-	<h2><?= self::escape($title); ?></h2>
-	<?php $this->_include('departments/chooseDepartmentForm.inc'); ?>
+<section id="addTicketForm">
+    <header>
+        <h1><?= self::escape($title); ?></h1>
+    </header>
 	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
-		<fieldset><legend><?= $this->_(array('category', 'categories', 1)); ?></legend>
+		<fieldset><legend><?= $this->_('category'); ?></legend>
 		<?php
 			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
@@ -82,4 +83,4 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>

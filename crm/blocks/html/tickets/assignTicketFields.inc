@@ -1,13 +1,15 @@
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Ticket $this->ticket
+ * @param Ticket     $this->ticket
  * @param Department $this->currentDepartment
  */
 use Application\Models\Department;
-use Blossom\Classes\View;
+use Application\Models\DepartmentTable;
+
+$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseDepartment.js');
 
 // There may not be a currentDepartment.
 // This can happen when the current user is not in a department
@@ -23,25 +25,37 @@ if (!$assignedPerson) {
 $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId()
 	? $assignedPerson->getId()
 	: $currentDepartment->getDefaultPerson_id();
-?>
-<table>
-	<tr><td><label for="assignedPerson_id">
-				<?= $this->_(array('person', 'people', 1)); ?>
-			</label>
-		</td>
-		<td><select name="assignedPerson_id" id="assignedPerson_id">
-			<?php
-				foreach ($currentDepartment->getPeople() as $person) {
-					$name = self::escape($person->getFullname());
-					$selected = $person->getId() == $selected_id
-						? 'selected="selected"'
-						: '';
-					echo "<option value=\"{$person->getId()}\" $selected>$name</option>";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
-</table>
-<div><label for="notes"><?= $this->_('assignment_notes'); ?></label></div>
-<div><textarea name="notes" id="notes"></textarea></div>
+
+
+$helper  = $this->template->getHelper('field');
+
+$table   = new DepartmentTable();
+$list    = $table->find();
+$options = [];
+foreach ($list as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
+echo $helper->field([
+    'name'    => 'department_id',
+    'id'      => 'department_id',
+    'label'   => $this->_('department'),
+    'type'    => 'select',
+    'value'   => $currentDepartment->getId(),
+    'options' => $options
+]);
+
+$options = [];
+foreach ($currentDepartment->getPeople() as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
+echo $helper->field([
+    'name'    => 'assignedPerson_id',
+    'id'      => 'assignedPerson_id',
+    'label'   => $this->_('person'),
+    'type'    => 'select',
+    'value'   => $selected_id,
+    'options' => $options
+]);
+
+echo $helper->field([
+    'name'  => 'notes',
+    'id'    => 'notes',
+    'label' => $this->_('assignment_notes'),
+    'type'  => 'textarea'
+]);

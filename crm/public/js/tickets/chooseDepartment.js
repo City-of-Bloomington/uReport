@@ -30,10 +30,5 @@ jQuery(function ($) {
             });
         };
 
-    $('#chooseDepartmentForm button').css('display', 'none');
-    $('#chooseDepartmentForm form').on('submit', function (e) {
-        e.preventDefault();
-        return false;
-    });
     $('#department_id').on('change', loadDepartmentData);
 });

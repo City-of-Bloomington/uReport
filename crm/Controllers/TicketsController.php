@@ -261,10 +261,6 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->blocks[] = new Block(
-			'departments/chooseDepartmentForm.inc',
-			['currentDepartment'=>$currentDepartment]
-		);
-		$this->template->blocks[] = new Block(
 			'tickets/assignTicketForm.inc',
 			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
 		);
