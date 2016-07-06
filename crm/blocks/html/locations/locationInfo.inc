@@ -7,6 +7,9 @@
  * @param Ticket $this->ticket          (optional)
  */
 use Application\Models\Person;
+use Application\Models\TicketTable;
+
+use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
 if ($this->location) {
@@ -37,6 +40,18 @@ if ($this->location) {
         }
         $this->_include('locations/masterAddressData.inc');
         $this->_include('locations/locationPeople.inc');
+
+        $table = new TicketTable();
+        $list = $table->find(['location'=>$this->location]);
+        if (count($list) > 1) {
+            $block = new Block('tickets/ticketList.inc', [
+                'ticketList'    => $list,
+                'title'         => 'Other cases for this location',
+                'disableButtons'=> true
+            ]);
+            if ($this->ticket) { $block->filterTicket = $this->ticket; }
+            echo $block->render('html', $this->template);
+        }
     echo "
 	</section>
 	";

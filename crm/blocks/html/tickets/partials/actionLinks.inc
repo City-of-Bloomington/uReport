@@ -49,6 +49,25 @@ use Application\Models\Person;
 		}
 	}
 
-	echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]));
+	if (isset($_SESSION['USER'])) {
+        $department = $_SESSION['USER']->getDepartment_id()
+            ? $_SESSION['USER']->getDepartment()
+            : new Department();
+
+        $actions = $department->getActions();
+        $c       = count($actions);
+        if ($c) {
+            foreach ($actions as $a) {
+                $links[] = [
+                    'url'   => BASE_URI."/tickets/recordAction?ticket_id=$ticket_id;action_id={$a->getId()}",
+                    'label' => $a->getName()
+                ];
+            }
+        }
+	}
+
+	if (count($links)) {
+        echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]));
+    }
 ?>
 </div>

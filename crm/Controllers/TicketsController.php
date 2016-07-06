@@ -89,12 +89,6 @@ class TicketsController extends Controller
 			$this->template->setFilename('tickets');
 			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
 			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
-			#if (Person::isAllowed('tickets', 'update') && $ticket->getStatus()!='closed') {
-			#	$this->template->blocks['history-panel'][] = new Block(
-			#		'tickets/actionForm.inc',
-			#		array('ticket'=>$ticket)
-			#	);
-			#}
 			$this->addStandardInfoBlocks($ticket);
 		}
 		else {
@@ -214,11 +208,11 @@ class TicketsController extends Controller
 
 		$this->template->blocks[] = new Block(
 			'confirmForm.inc',
-			array('title'=>'Confirm Delete','return_url'=>$ticket->getURL())
+			['title'=>'Confirm Delete', 'return_url'=>$ticket->getURL()]
 		);
 		$this->template->blocks[] = new Block(
 			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
+			['ticket'=>$ticket, 'disableButtons'=>true]
 		);
 	}
 
@@ -266,13 +260,13 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
+		$this->template->blocks[] = new Block(
 			'departments/chooseDepartmentForm.inc',
-			array('currentDepartment'=>$currentDepartment)
+			['currentDepartment'=>$currentDepartment]
 		);
-		$this->template->blocks['ticket-panel'][] = new Block(
+		$this->template->blocks[] = new Block(
 			'tickets/assignTicketForm.inc',
-			array('ticket'=>$ticket,'currentDepartment'=>$currentDepartment)
+			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
 		);
 		$this->addStandardInfoBlocks($ticket);
 	}
@@ -282,19 +276,32 @@ class TicketsController extends Controller
 	 */
 	public function recordAction()
 	{
-		if (!empty($_POST['ticket_id'])) {
-			$ticket = $this->loadTicket($_POST['ticket_id']);
+        if (!empty($_REQUEST['ticket_id'])) {
+            $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        }
+        if (!empty($_REQUEST['action_id'])) {
+            try { $action = new Action($_REQUEST['action_id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
 
-			$history = new TicketHistory();
-			try {
-				$history->handleUpdate($_POST);
-				$history->save();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-			$this->redirectToTicketView($ticket);
-		}
+        if (isset($ticket) && isset($action)) {
+            $history = new TicketHistory();
+            $history->setTicket($ticket);
+            $history->setAction($action);
+
+            if (isset($_POST['ticket_id'])) {
+                try {
+                    $history->handleUpdate($_POST);
+                    $history->save();
+                    $this->redirectToTicketView($ticket);
+                }
+                catch (\Exception $e) {
+                    $_SESSION['errorMessages'][] = $e;
+                }
+            }
+
+            $this->template->blocks[] = new Block('tickets/actionForm.inc', ['ticketHistory'=>$history]);
+        }
 		else {
 			header('Location: '.BASE_URL.'/tickets');
 			exit();
@@ -328,12 +335,8 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/changeStatusForm.inc', array('ticket'=>$ticket)
-		);
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/responseReminder.inc', array('ticket'=>$ticket)
-		);
+		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
+		$this->template->blocks[] = new Block('tickets/responseReminder.inc', ['ticket'=>$ticket]);
 
 		$this->addStandardInfoBlocks($ticket);
 	}
@@ -389,11 +392,7 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->title = 'Change Category';
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/changeCategoryForm.inc',
-			array('ticket'=>$ticket)
-		);
-
+		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
 		$this->addStandardInfoBlocks($ticket);
 	}
 
@@ -512,32 +511,6 @@ class TicketsController extends Controller
                 'ticket'         => $ticket,
                 'disableButtons' => true
             ]);
-			#$locationBlocks = array('locationInfo', 'masterAddressData', 'locationPeople');
-			#foreach ($locationBlocks as $b) {
-			#	$this->template->blocks['bottom-left'][] = new Block(
-			#		"locations/$b.inc",
-			#		array('location'=>$ticket->getLocation(), 'disableButtons'=>true)
-			#	);
-			#}
-
-			#$this->template->blocks['bottom-right'][] = new Block(
-			#	'tickets/ticketLocationInfo.inc',
-			#	array('ticket'=>$ticket)
-			#);
-
-			#$table = new TicketTable();
-			#$list = $table->find(array('location'=>$ticket->getLocation()));
-			#if (count($list) > 1) {
-			#	$this->template->blocks['bottom-left'][] = new Block(
-			#		'tickets/ticketList.inc',
-			#		array(
-			#			'ticketList'    => $list,
-			#			'title'         => 'Other cases for this location',
-			#			'filterTicket'  => $ticket,
-			#			'disableButtons'=> true
-			#		)
-			#	);
-			#aoi}
 		}
 	}
 }
