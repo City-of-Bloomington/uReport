@@ -67,7 +67,7 @@ use Application\Models\Person;
 	}
 
 	if (count($links)) {
-        echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]));
+        echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]), "ticketActions_$ticket_id");
     }
 ?>
 </div>

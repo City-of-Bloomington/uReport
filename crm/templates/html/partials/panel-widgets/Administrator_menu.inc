@@ -32,5 +32,5 @@ if (Person::isAllowed('categories', 'sla')) {
 
 if ($links) {
     $helper = $this->getHelper('dropdown');
-    echo $helper->dropdown($links, $this->_('admin'));
+    echo $helper->dropdown($links, $this->_('admin'), 'Administrator_menu');
 }

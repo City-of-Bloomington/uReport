@@ -2,6 +2,7 @@
 use Application\Models\Person;
 ?>
 <nav id="nav1">
+    <div class="container">
 	<?php
         $li = '<a href="%s">%s</a>';
         echo     sprintf($li, BASE_URI.'/tickets'  ,   $this->_(['ticket'  ,'tickets'  , 2]));
@@ -16,4 +17,5 @@ use Application\Models\Person;
             echo sprintf($li, BASE_URI.'/reports',     $this->_(['report', 'reports', 2]));
         }
     ?>
+    </div>
 </nav>

@@ -12,7 +12,7 @@ if (isset($_SESSION['USER'])) {
     ];
 
     $helper = $this->getHelper('dropdown');
-    echo $helper->dropdown($links, $name);
+    echo $helper->dropdown($links, $name, 'User_menu');
 }
 else {
     $return_url = self::escape($_SERVER['REQUEST_URI']);

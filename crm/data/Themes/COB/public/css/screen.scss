@@ -1,11 +1,14 @@
-@import 'modules/vars';
-@import 'modules/html-elements';
-@import 'modules/header';
-@import 'modules/button';
-@import 'modules/dropdown';
-@import 'modules/content-section';
-@import 'modules/field';
-
+/**
+ * City of Bloomington Theme
+ *
+ * This stylesheet extends the default Factory Number One CSS.
+ * @see https://github.com/City-of-Bloomington/factory-number-one
+ *
+ * To use this stylesheet, make sure to include a link to the factory-number-one
+ * stylesheet in the template head.
+ *
+ * This CSS should only include properties that are not include in fn1.
+ */
 #ticketSearchForm #display_fields ul { margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
 .pageNavigation          { margin:.5em; }
 .pageNavigation li       { display:inline; margin:.5em; }

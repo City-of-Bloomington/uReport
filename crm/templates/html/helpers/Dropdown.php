@@ -14,12 +14,12 @@ class Dropdown
 		$this->template = $template;
 	}
 
-	public function dropdown(array $links, $title, $class=null)
+	public function dropdown(array $links, $title, $id, $class=null)
 	{
         $html = "
         <nav class=\"dropdown $class\">
-            <button class=\"launcher\" aria-haspopup=\"true\" aria-expanded=\"false\">$title</button>
-            <div class=\"links\">
+            <button id=\"$id\" class=\"launcher\" aria-haspopup=\"true\" aria-expanded=\"false\">$title</button>
+            <div class=\"links\" aria-labeledby=\"$id\">
                 {$this->renderLinks($links)}
             </div>
         </nav>
