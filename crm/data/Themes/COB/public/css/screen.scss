@@ -10,6 +10,9 @@
  * This CSS should only include properties that are not include in fn1.
  */
 #ticketSearchForm #display_fields ul { margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
+.icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
+.btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
+
 .pageNavigation          { margin:.5em; }
 .pageNavigation li       { display:inline; margin:.5em; }
 a.current { border:2px solid green; }
