@@ -97,9 +97,7 @@ use Blossom\Classes\View;
 		if ($this->moreLink) {
 			echo "
 			<div>
-				<a href=\"{$this->moreLink}\">
-					{$this->_('more')} <span class=\"fa fa-angle-double-right\"></span>
-				</a>
+				<a href=\"{$this->moreLink}\" class=\"more\">{$this->_('more')}</a>
 			</div>
 			";
 		}

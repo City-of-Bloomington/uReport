@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Templates\Helpers;
 
@@ -21,11 +20,8 @@ class SaveAndCancelButtons
 	{
 		$helper = $this->template->getHelper('buttonLink');
 
-		$buttons = "
-		<button type=\"submit\"><span class=\"fa fa-floppy-o\"></span>
-			{$this->template->translate('save')}
-		</button>
-		".$helper->buttonLink(
+		$buttons = "<button type=\"submit\" class=\"save\">{$this->template->translate('save')}</button>";
+		$buttons.=$helper->buttonLink(
 			$cancelURL,
 			$this->template->translate('cancel'),
 			'cancel'

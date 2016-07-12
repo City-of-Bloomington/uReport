@@ -87,33 +87,18 @@ echo '<div id="resultFormatButtons">';
 	$resultFormat = (isset($_GET['resultFormat'])) ? trim($_GET['resultFormat']) : 'text';
 
 	unset($url->resultFormat);
-	$current = $resultFormat=='text' ? ' current' : '';
-	echo "
-	<a class=\"btn$current\" href=\"$url\">
-		<span class=\"fa fa-list-ul\"></span>
-		{$this->_('search_results_text')}
-	</a>
-	";
+	$type = $resultFormat === 'text' ? 'text current' : 'text';
+	echo $helper->buttonLink($url, $this->_('search_results_text'), $type);
 
 	$url->resultFormat = 'map';
-	$current = $resultFormat=='map' ? ' current' : '';
-	echo "
-	<a class=\"btn$current\" href=\"$url\">
-		<span class=\"fa fa-map-marker\"></span>
-		{$this->_('search_results_map')}
-	</a>
-	";
+	$type = $resultFormat === 'map' ? 'map current' : 'map';
+	echo $helper->buttonLink($url, $this->_('search_results_map'), $type);
 
 	// Users should filter the results somehow before they are allowed to
 	// call for the full, raw results
 	if (isset($fq) && count($fq) && Person::isAllowed('tickets', 'print')) {
 		$url->resultFormat = 'raw';
-		$current = $resultFormat=='raw' ? ' current' : '';
-		echo "
-		<a class=\"$current\" href=\"$url\">
-			<span class=\"fa fa-print\"></span>
-			{$this->_('search_results_print')}
-		</a>
-		";
+		$type = $resultFormat === 'raw' ? 'print current' : 'print';
+		echo $helper->buttonLink($url, $this->_('search_results_print'), $type);
 	}
 echo "</div>";

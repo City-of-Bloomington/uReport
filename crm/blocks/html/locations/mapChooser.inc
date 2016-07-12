@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 ?>
 <div id="location_map"></div>
@@ -10,10 +9,7 @@
 	var DEFAULT_LATITUDE  = <?= DEFAULT_LATITUDE; ?>,
 		DEFAULT_LONGITUDE = <?= DEFAULT_LONGITUDE; ?>;
 </script>
-<button type="button" id="useThisLocation">
-	<span class="fa fa-check"></span>
-	<?= $this->_('use_location'); ?>
-</button>
+<button type="button" id="useThisLocation" class="submit"><?= $this->_('use_location'); ?></button>
 <?php
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
 $this->template->addToAsset('scripts', BASE_URL.'/js/locations/mapChooser.js');

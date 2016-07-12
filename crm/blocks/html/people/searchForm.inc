@@ -58,12 +58,11 @@ if (!isset($_GET['setOfPeople'])) {
 				}
 			?>
 			</table>
-			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('search'); ?></button>
+			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
 					echo "
-					<button type=\"button\" onclick=\"self.close();\">
-						<span class=\"fa fa-times\"></span>
+					<button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
 						{$this->_('cancel')}
 					</button>
 					";

@@ -57,11 +57,11 @@ $c = $this->solrObject->response->numFound;
                                 : array($name=>'asc');
                             $icon = '';
                             if ($name == $currentSort['field']) {
-                                $icon = $currentSort['order'] == 'desc'
-                                    ? '<span class="fa fa-angle-down"></span>'
-                                    : '<span class="fa fa-angle-up"></span>';
+                                $class = $currentSort['order'] == 'desc'
+                                    ? 'desc'
+                                    : 'asc';
                             }
-                            echo "<li><a href=\"$url\">$label $icon</li>";
+                            echo "<li><a href=\"$url\" class=\"$class\">$label</a></li>";
                         }
                     }
                 }

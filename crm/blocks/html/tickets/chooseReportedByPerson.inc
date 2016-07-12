@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Issue $this->issue
  */
 use Application\Models\TicketTable;
@@ -18,8 +17,7 @@ echo "
 <div id=\"reportedByPersonChooser\">
 	<div class=\"hd\">
 		<h3>{$this->_('reportedByPerson')}</h3>
-		<a id=\"findPersonButton\" class=\"btn\" href=\"$url\">
-			<span class=\"fa fa-user\"></span>
+		<a id=\"findPersonButton\" class=\"user btn\" href=\"$url\">
 			{$this->_('find_person')}
 		</a>
 	</div>
@@ -27,25 +25,19 @@ echo "
 ";
 	$person = $this->issue->getReportedByPerson();
 	if ($person) {
-		$block = new Block(
-			'people/personInfo.inc',
-			array('person'=>$person, 'disableButtons'=>true)
-		);
+		$block = new Block('people/personInfo.inc', ['person'=>$person, 'disableButtons'=>true]);
 		echo $block->render('html', $this->template);
 
 
 		$table = new TicketTable();
-		$reportedTickets = $table->find(array('reportedByPerson_id'=>$person->getId()), null, 10);
+		$reportedTickets = $table->find(['reportedByPerson_id'=>$person->getId()], null, 10);
 		if (count($reportedTickets)) {
-			$block = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'    => $reportedTickets,
-					'title'         => $this->_('tickets_reported'),
-					'disableButtons'=> true,
-					'disableLinks'  => true
-				)
-			);
+			$block = new Block('tickets/ticketList.inc', [
+                'ticketList'    => $reportedTickets,
+                'title'         => $this->_('tickets_reported'),
+                'disableButtons'=> true,
+                'disableLinks'  => true
+            ]);
 			if (count($reportedTickets) >= 10) {
 				$block->moreLink = BASE_URL."/tickets?reportedByPerson_id={$person->getId()}";
 			}

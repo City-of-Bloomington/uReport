@@ -28,7 +28,7 @@ if (Person::isAllowed('tickets','add')) {
 					{$this->_('ticket')}
 					# <input name=\"id\" value=\"$id\" size=\"6\" />
 				</label>
-				<button type=\"submit\"><span class=\"fa fa-search\"></span> Go</button>
+				<button type=\"submit\" class=\"search\">{$this->_('go')}</button>
 			</fieldset>
 		</form>
 		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
@@ -77,7 +77,7 @@ if (Person::isAllowed('tickets','add')) {
 			<label><?= $this->_('search'); ?>
 				<input name="query" value="<?php if (!empty($_GET['query'])) echo self::escape($_GET['query']); ?>" />
 			</label>
-			<button type="submit"><span class="fa fa-search"></span> <?= $this->_('go'); ?></button>
+			<button type="submit" class="search"><?= $this->_('go'); ?></button>
 			<p class="help"><?= $this->_('ticket_search_query_description', 'messages'); ?></p>
 		</fieldset>
 		<fieldset id="advanced-search">
@@ -177,7 +177,7 @@ if (Person::isAllowed('tickets','add')) {
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('query', 'fields'));
 			?>
-			<button type="submit"><i class="fa fa-search"></i> <?= $this->_('search'); ?></button>
+			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 		</fieldset>
 	</form>
 </section>

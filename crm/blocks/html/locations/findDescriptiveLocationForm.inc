@@ -1,11 +1,8 @@
 <?php
 /**
- * @copyright 2011-2013 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
-use Blossom\Classes\View;
-
 $text = isset($_GET['location']['text']) ? self::escape($_GET['location']['text']) : '';
 ?>
 <div class="findDescriptiveLocationForm">
@@ -22,10 +19,7 @@ $text = isset($_GET['location']['text']) ? self::escape($_GET['location']['text'
 					}
 				}
 			?>
-			<button type="submit">
-				<span class="fa fa-search"></span>
-				<?= $this->_('search'); ?>
-			</button>
+			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 		</fieldset>
 	</form>
 </div>

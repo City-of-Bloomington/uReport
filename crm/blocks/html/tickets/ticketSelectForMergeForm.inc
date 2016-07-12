@@ -11,7 +11,7 @@ $this->template->addToAsset('scripts', BASE_URL.'/js/merge.js');
 		<div>
 			<input name="ticket_id_a" id="ticket_id_a" ondragover="MERGE.drag(event);" ondrop="MERGE.drop(event);" />
 			<input name="ticket_id_b" id="ticket_id_b" ondragover="MERGE.drag(event);" ondrop="MERGE.drop(event);" />
-			<button type="submit"><span class="fa fa-check"></span> <?= $this->_('merge'); ?></button>
+			<button type="submit" class="submit"><?= $this->_('merge'); ?></button>
 		</div>
 	</fieldset>
 </form>

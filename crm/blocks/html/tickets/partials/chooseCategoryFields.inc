@@ -43,11 +43,6 @@ use Blossom\Classes\Url;
 			}
 		}
 		$url->return_url = $this->return_url;
-		echo "
-		<a href=\"$url\" id=\"moreCategoriesLink\">
-			{$this->_('more_categories')}
-			<span class=\"fa fa-angle-double-right\"></span>
-		</a>
-		";
+		echo "<a href=\"$url\" id=\"moreCategoriesLink\" class=\"more\">{$this->_('more_categories')}</a>";
 	?>
 </div>

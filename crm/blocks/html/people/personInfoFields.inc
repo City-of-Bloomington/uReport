@@ -1,26 +1,17 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
  */
-use Blossom\Classes\View;
-
-$fields = array(
-	'firstname','middlename','lastname','organization'
-);
+$fields = ['firstname','middlename','lastname','organization'];
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = self::escape($this->person->$get());
 }
 ?>
 <fieldset>
-	<legend>
-	<?php
-		echo $this->_(array('person', 'people', 1)).' '.$this->_('info');
-	?>
-	</legend>
+	<legend><?= $this->_('person').' '.$this->_('info');?></legend>
 	<input name="person_id" type="hidden" value="<?= $this->person->getId(); ?>" />
 	<?php
 		// Preserve any extra parameters passed in
@@ -31,44 +22,20 @@ foreach ($fields as $field) {
 				echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 			}
 		}
-	?>
-	<table>
-		<tr><td><label for="firstname" class="required">
-					<?= $this->_('firstname'); ?>
-					<span class="fa fa-asterisk"></span>
-				</label>
-			</td>
-			<td><input name="firstname" id="firstname" value="<?= $firstname; ?>" /></td>
-		</tr>
 
-		<tr><td><label for="middlename"><?= $this->_('middlename'); ?></label></td>
-			<td><input name="middlename" id="middlename" value="<?= $middlename; ?>" /></td>
-		</tr>
+		$helper = $this->template->getHelper('field');
+		echo $helper->field(['name'=>'firstname',  'id'=>'firstname',  'label'=>$this->_('firstname'),  'value'=>$firstname, 'required'=>true]);
+		echo $helper->field(['name'=>'middlename', 'id'=>'middlename', 'label'=>$this->_('middlename'), 'value'=>$middlename]);
+		echo $helper->field(['name'=>'lastname',   'id'=>'lastname',   'label'=>$this->_('lastname'),   'value'=>$lastname,  'required'=>true]);
 
-		<tr><td><label for="lastname" class="required">
-					<?= $this->_('lastname'); ?>
-					<span class="fa fa-asterisk"></span>
-				</label>
-			</td>
-			<td><input name="lastname" id="lastname" value="<?= $lastname; ?>" /></td>
-		</tr>
-		<?php
-			// Email and Phone are only valid for new records
-			if (!$this->person->getId()) {
-				$email = !empty($_POST['email']) ? self::escape($_POST['email']) : '';
-				$phone = !empty($_POST['phone']) ? self::escape($_POST['phone']) : '';
-				echo "
-				<tr><td><label for=\"email\">{$this->_(array('email', 'emails', 1))}</label></td>
-					<td><input name=\"email\" id=\"email\" value=\"$email\" /></td>
-				</tr>
-				<tr><td><label for=\"phone\">{$this->_(array('phone', 'phones', 1))}</label></td>
-					<td><input name=\"phone\" id=\"phone\" value=\"$phone\" /></td>
-				</tr>
-				";
-			}
-		?>
-		<tr><td><label for="organization"><?= $this->_('organization'); ?></label></td>
-			<td><input name="organization" id="organization" value="<?= $organization; ?>" /></td>
-		</tr>
-	</table>
+        // Email and Phone are only valid for new records
+        if (!$this->person->getId()) {
+            $email = !empty($_POST['email']) ? self::escape($_POST['email']) : '';
+            $phone = !empty($_POST['phone']) ? self::escape($_POST['phone']) : '';
+            echo $helper->field(['name'=>'email', 'id'=>'email', 'label'=>$this->_('email'), 'value'=>$email]);
+            echo $helper->field(['name'=>'phone', 'id'=>'phone', 'label'=>$this->_('phone'), 'value'=>$phone]);
+        }
+
+		echo $helper->field(['name'=>'organization', 'id'=>'organization', 'label'=>$this->_('organization'), 'value'=>$organization]);
+    ?>
 </fieldset>

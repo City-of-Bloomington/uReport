@@ -14,9 +14,8 @@
  * page redirection to the href provided.  The people search will return the user
  * to the current url once they've chosen a person.
  *
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Templates\Helpers;
 
@@ -24,7 +23,6 @@ use Application\Models\Person;
 
 use Blossom\Classes\Template;
 use Blossom\Classes\Url;
-use Blossom\Classes\View;
 
 class PersonChooser
 {
@@ -49,7 +47,7 @@ class PersonChooser
 		$name = '';
 		if ($person) {
 			$id   = $person->getId();
-			$name = View::escape($person->getFullname());
+			$name = self::escape($person->getFullname());
 		}
 		$return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$personChooser = BASE_URI.'/people?return_url='.$return_url;
@@ -57,10 +55,9 @@ class PersonChooser
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}_id\" id=\"{$fieldname}_id\" value=\"$id\" />
 		<span id=\"{$fieldname}-name\">$name</span>
-		<a class=\"btn\"
+		<a class=\"user btn\"
 			href=\"$personChooser\"
-			onclick=\"PERSON_CHOOSER.open('$fieldname');return false;\">
-			<span class=\"fa fa-user\"></span>
+			onclick=\"PERSON_CHOOSER.test('$fieldname'); return false;\">
 			Change Person
 		</a>
 		";

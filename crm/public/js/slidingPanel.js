@@ -5,7 +5,7 @@
  * See: twoColumn_300-a.css
  */
 jQuery(function ($) {
-    $('#panel-one').prepend('<button class="fa fa-angle-left" id="slideButton"><span class="hidden-label">Slide</span></button>');
+    $('#panel-one').prepend('<a class="slide icon" id="slideButton">Slide</a>');
     $('#slideButton').on('click', function () {
         $('main').toggleClass('hideLeft');
     });

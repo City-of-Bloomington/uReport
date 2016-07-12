@@ -121,10 +121,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('enteredDate'));
 			?>
-			<button type="submit">
-				<span class="fa fa-check"></span>
-				<?= $this->template->translate('submit'); ?>
-			</button>
+			<button type="submit" class="submit"><?= $this->template->_('submit'); ?></button>
 		</fieldset>
 	</form>
 </div>

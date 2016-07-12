@@ -18,7 +18,7 @@ $type = self::escape($this->type);
 				echo sprintf($this->_('save_as'), $type);
 			?>:<input name="name" />
 		</label>
-		<button type="submit"><span class="fa fa-floppy-o"></span> <?= $this->_('save'  ); ?></button>
-		<button type="reset"> <span class="fa fa-times"></span> <?= $this->_('cancel'); ?></button>
+		<button type="submit" class="save"><?= $this->_('save'  ); ?></button>
+		<button type="reset"  class="cancel"><?= $this->_('cancel'); ?></button>
 	</fieldset>
 </form>

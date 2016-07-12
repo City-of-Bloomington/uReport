@@ -8,8 +8,10 @@ $title = $this->person->getId() ? self::escape('Edit '.$this->person->getFirstna
 // Let the template override the title, if it wants to
 $title = $this->title ? self::escape($this->title) : $title;
 ?>
-<div class="updatePersonForm">
-	<h2><?= $title; ?></h2>
+<section class="updatePersonForm">
+    <header>
+        <h1><?= $title; ?></h1>
+    </header>
 	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
 
 		<?php
@@ -17,10 +19,7 @@ $title = $this->title ? self::escape($this->title) : $title;
 		?>
 
 		<fieldset><legend><?= $this->_('submit'); ?></legend>
-			<button type="submit">
-				<span class="fa fa-check"></span>
-				<?= $this->_('save'); ?>
-			</button>
+			<button type="submit" class="save"><?= $this->_('save'); ?></button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = urlencode($_REQUEST['return_url']);
@@ -36,12 +35,11 @@ $title = $this->title ? self::escape($this->title) : $title;
 					? 'onclick="self.close();"'
 					: '';
 				echo "
-				<a class=\"btn\" href=\"$return_url\" $onclick>
-					<span class=\"fa fa-times\"></span>
+				<a class=\"cancel btn\" href=\"$return_url\" $onclick>
 					{$this->_('cancel')}
 				</a>
 				";
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>
