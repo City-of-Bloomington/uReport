@@ -25,44 +25,50 @@ $title = $id ? $this->_('responseTemplate_edit') : $this->_('responseTemplate_ad
             <input name="id" type="hidden" value="<?= $id; ?>" />
             <input name="category_id" type="hidden" value="<?= $category_id; ?>" />
 
-            <table>
-                <tr><td><label   for="action_id"><?= $this->_('action'); ?></label></td>
-                    <td><select name="action_id" id="action_id">
-                        <?php
-                            $existing = array_keys($category->getResponseTemplates());
+            <dl><dt><label   for="action_id"><?= $this->_('action'); ?></label></dt>
+                <dd><select name="action_id" id="action_id">
+                    <?php
 
-                            $table = new ActionTable();
-                            $list = $table->find();
-                            foreach ($list as $a) {
-                                if (!in_array($a->getId(), $existing)) {
-                                    $name = self::escape($a->getName());
-                                    $selected = $a->getId() == $action_id
-                                        ? 'selected="true"'
-                                        : '';
-                                    echo "<option value=\"{$a->getId()}\" $selected>$name</option>";
-                                }
+                        $existing = array_keys($category->getResponseTemplates());
+
+                        $options = [];
+                        $table = new ActionTable();
+                        $list = $table->find();
+                        foreach ($list as $a) {
+                            if (!in_array($a->getId(), $existing)) {
+                                $name = self::escape($a->getName());
+                                $selected = $a->getId() == $action_id
+                                    ? 'selected="true"'
+                                    : '';
+                                echo "<option value=\"{$a->getId()}\" $selected>$name</option>";
                             }
-                        ?>
-                        </select>
-                    </td>
-                </tr>
-                <?php
-                    $autoRespondIsActive = $this->responseTemplate->autoRespondIsActive();
-                ?>
-                <tr><td><label><?= $this->_('autoRespond'); ?></label></td>
-                    <td><label>
-                            <input name="autoRespond" type="radio" value="1" <?= $autoRespondIsActive ? 'checked="true"' : ''; ?> />
-                            <?= $this->_('active_yes'); ?>
-                        </label>
-                        <label>
-                            <input name="autoRespond" type="radio" value="0" <?= $autoRespondIsActive ? '' : 'checked="true"'; ?> />
-                            <?= $this->_('active_no'); ?>
-                        </label>
-                    </td>
-                </tr>
-                <tr><td><label  for="replyEmail"><?= $this->_('replyEmail'); ?></label></td>
-                    <td><input name="replyEmail" id="replyEmail" value="<?= $replyEmail; ?>" />
-            </table>
+                        }
+                    ?>
+                    </select>
+                </dd>
+            </dl>
+            <?php
+                $helper = $this->template->getHelper('field');
+
+                $autoRespondIsActive = $this->responseTemplate->autoRespondIsActive() ? 1 : 0;
+                echo $helper->field([
+                    'name'    => 'autoRespond',
+                    'label'   => $this->_('autoRespond'),
+                    'value'   => $autoRespondIsActive,
+                    'type'    => 'radio',
+                    'options' => [
+                        ['value'=>1, 'label'=>$this->_('active_yes')],
+                        ['value'=>0, 'label'=>$this->_('active_no' )]
+                    ]
+                ]);
+
+                echo $helper->field([
+                    'name'  => 'replyEmail',
+                    'id'    => 'replyEmail',
+                    'label' => $this->_('replyEmail'),
+                    'value' => $replyEmail
+                ]);
+            ?>
         </fieldset>
 
         <fieldset><legend><?= $this->_('responseTemplate'); ?></legend>

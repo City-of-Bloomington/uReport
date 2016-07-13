@@ -1,19 +1,19 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param string $this->title (optional)
  */
-use Blossom\Classes\View;
 
-$fields = array('firstname','lastname','email','organization');
-if (!isset($_GET['setOfPeople'])) {
-	$_GET['setOfPeople'] = 'all';
-}
+
+$title = $this->title ? self::escape($this->title) : $this->_('find_person');
 ?>
-<div class="findPeople">
-	<h2><?= $this->title ? self::escape($this->title) : $this->_('find_person'); ?></h2>
-	<form method="get" action="<?= BASE_URL; ?>/people">
+<section class="findPeople">
+    <header>
+        <h1><?= $title; ?></h1>
+    </header>
+	<form method="get" action="<?= BASE_URI; ?>/people">
 		<fieldset>
 			<?php
 				// Preserve any extra parameters passed in
@@ -24,40 +24,35 @@ if (!isset($_GET['setOfPeople'])) {
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
+
+				$helper = $this->template->getHelper('field');
+
+				$roles = ['all', 'staff', 'public'];
+				$options = [];
+                foreach ($roles as $v) { $options[] = ['value'=>$v, 'label'=>$this->_($v)]; }
+                $value = !empty($_GET['setOfPeople']) ? $_GET['setOfPeople'] : 'all';
+
+                echo $helper->field([
+                    'name'    => 'setOfPeople',
+                    'label'   => $this->_(['role', 'roles', count($roles)]),
+                    'type'    => 'radio',
+                    'value'   => $value,
+                    'options' => $options
+                ]);
 			?>
-			<div><label>
-					<input type="radio" name="setOfPeople" value="all"
-						<?php if ($_GET['setOfPeople']=='all') echo 'checked="checked"'; ?> />
-					All
-				</label>
-			</div>
-			<div><label>
-					<input type="radio" name="setOfPeople" value="staff"
-						<?php if ($_GET['setOfPeople']=='staff') echo 'checked="checked"'; ?> />
-					Staff Only
-				</label>
-			</div>
-			<div><label>
-					<input type="radio" name="setOfPeople" value="public"
-						<?php if ($_GET['setOfPeople']=='public') echo 'checked="checked"'; ?> />
-					Public Only
-				</label>
-			</div>
 		</fieldset>
 		<fieldset>
-			<table>
 			<?php
-				foreach ($fields as $field) {
-					$label = ucfirst($field);
-					$value = isset($_GET[$field]) ? self::escape($_GET[$field]) : '';
-					echo "
-					<tr><td><label for=\"$field\">$label</label></td>
-						<td><input name=\"$field\" id=\"$field\" value=\"$value\" /></td>
-					</tr>
-					";
+                $fields = ['firstname', 'lastname', 'email', 'organization'];
+				foreach ($fields as $f) {
+					echo $helper->field([
+                        'name'  => $f,
+                        'id'    => $f,
+                        'label' => $this->_($f),
+                        'value' => isset($_GET[$f]) ? self::escape($_GET[$f]) : ''
+					]);
 				}
 			?>
-			</table>
 			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 			<?php
 				if (isset($_REQUEST['callback'])) {
@@ -70,7 +65,7 @@ if (!isset($_GET['setOfPeople'])) {
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>
 <?php
 	$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 	$this->template->addToAsset('scripts', JQUERY_UI.'/jquery-ui.min.js');

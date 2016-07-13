@@ -173,7 +173,9 @@ msgid "authenticationMethod"
 msgstr "Authentication"
 
 msgid "role"
-msgstr "Role"
+msgid_plural "roles"
+msgstr[0] "Role"
+msgstr[1] "Roles"
 
 msgid "change_password"
 msgstr "Change Password"

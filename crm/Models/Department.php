@@ -274,14 +274,17 @@ class Department extends ActiveRecord
 	}
 
 	/**
-	 * @return PersonList
+	 * @return array An array of Person objects
 	 */
 	public function getPeople()
 	{
+        $people = [];
 		if ($this->getId()) {
             $table = new PersonTable();
-			return $table->find( ['department_id'=>$this->getId()] );
+			$list  = $table->find(['department_id' => $this->getId()]);
+            foreach ($list as $p) { $people[] = $p; }
 		}
+		return $people;
 	}
 
 	/**

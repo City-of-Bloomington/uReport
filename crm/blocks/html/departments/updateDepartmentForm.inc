@@ -1,120 +1,84 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
- * @param Department this->department
- * @param string $this->action The URL for posting the form
- * @param string $this->return_url
+ * @param Department $this->department
+ * @param string     $this->action      The URL for posting the form
+ * @param string     $this->return_url
  */
 use Application\Models\ActionTable;
 use Application\Models\CategoryTable;
-use Blossom\Classes\View;
 
 $title = $this->department->getId()
 	? $this->_('edit')
 	: $this->_('add');
 $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
-<div class="updateDepartmentForm">
-<h2><?= $title.' '.$this->_(array('department', 'departments', 1)); ?></h2>
-<form method="post" action="<?= $this->action; ?>">
-	<fieldset>
-		<legend>
-		<?php
-			echo $this->_(array('department', 'departments', 1)).' '.
-				 $this->_('info')
-		?>
-		</legend>
-		<input name="department_id" type="hidden" value="<?= $this->department->getId(); ?>" />
-		<table>
-			<tr><td><label for="name" class="required">
-						<?= $this->_('name'); ?>
-						<span class="fa fa-asterisk"></span>
-					</label>
-				</td>
-				<td><input name="name" id="name"
-						value="<?= self::escape($this->department->getName()); ?>" />
-				</td>
-			</tr>
+<section class="updateDepartmentForm">
+    <header>
+        <h1><?= $title.' '.$this->_('department'); ?></h1>
+    </header>
+    <form method="post" action="<?= $this->action; ?>">
+        <fieldset>
+            <legend><?= $this->_('department').' '.$this->_('info'); ?></legend>
+            <input name="department_id" type="hidden" value="<?= $this->department->getId(); ?>" />
+            <?php
+                $helper = $this->template->getHelper('field');
 
-			<tr><td><label for="defaultPerson_id"><?= $this->_('defaultPerson'); ?></label></td>
-				<td><select name="defaultPerson_id" id="defaultPerson_id">
-						<option value=""></option>
-						<?php
-							$defaultPerson = $this->department->getDefaultPerson();
-							if ($defaultPerson) {
-								$name = self::escape($defaultPerson->getFullname());
-								echo "<option value=\"{$defaultPerson->getId()}\" selected=\"selected\">$name</option>";
-							}
-							$people = $this->department->getPeople();
-							if ($people) {
-								foreach ($people as $person) {
-									$name = self::escape($person->getFullname());
-									if ($name) {
-										echo "<option value=\"{$person->getId()}\">$name</option>";
-									}
-								}
-							}
-						?>
-					</select>
-				</td>
-			</tr>
-		</table>
-	</fieldset>
-	<fieldset class="actions">
-		<legend><?= $this->_(array('action', 'actions', 2)); ?></legend>
-		<ul>
-		<?php
-			$t = new ActionTable();
-			$list = $t->find();
-			foreach ($list as $action) {
-				if ($action->getType()=='department') {
-					$id = $action->getId();
-					$name = self::escape($action->getName());
-					$checked = $this->department->hasAction($action)
-						? 'checked="checked"'
-						: '';
-					echo "
-					<li><label>
-							<input name=\"actions[$id]\" type=\"checkbox\" $checked />
-							$name
-						</label>
-					</li>
-					";
-				}
-			}
-		?>
-		</ul>
-	</fieldset>
-	<fieldset class="categories">
-		<legend><?= $this->_(array('category', 'categories', 2)); ?></legend>
-		<ul>
-		<?php
-			$t = new CategoryTable();
-			$list = $t->find();
-			foreach ($list as $category) {
-				$id = $category->getId();
-				$name = self::escape($category->getName());
-				$checked = $this->department->hasCategory($category)
-					? 'checked="checked"'
-					: '';
-				echo "
-				<li><label>
-						<input name=\"categories[$id]\" type=\"checkbox\" $checked />
-						$name
-					</label>
-				</li>
-				";
-			}
-		?>
-		</ul>
-	</fieldset>
-	<fieldset>
-		<?php
-			$helper = $this->template->getHelper('saveAndCancelButtons');
-			echo $helper->saveAndCancelButtons($return_url);
-		?>
-	</fieldset>
-</form>
-</div>
+                echo $helper->field([
+                    'name'     => 'name',
+                    'id'       => 'name',
+                    'label'    => $this->_('name'),
+                    'required' => true,
+                    'value'    => self::escape($this->department->getName())
+                ]);
+
+                $options = [];
+                $people  = $this->department->getPeople();
+                foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
+                $helper->field([
+                    'name'     => 'defaultPerson_id',
+                    'id'       => 'defaultPerson_id',
+                    'label'    => $this->_('defaultPerson'),
+                    'value'    => $this->department->getDefaultPerson_id(),
+                    'required' => true,
+                    'type'     => 'select',
+                    'options'  => $options
+                ]);
+
+                $options = [];
+                $table   = new ActionTable();
+                $list    = $table->find(['type'=>'department']);
+                foreach ($list as $a) { $options[] = ['value'=>$a->getId(), 'label'=>self::escape($a->getName())]; }
+                echo $helper->field([
+                    'name'    => 'actions',
+                    'id'      => 'actions',
+                    'label'   => $this->_(['action', 'actions', 2]),
+                    'value'   => array_keys($this->department->getActions()),
+                    'type'    => 'checkbox',
+                    'options' => $options
+
+                ]);
+
+                $options = [];
+                $table   = new CategoryTable();
+                $list    = $table->find();
+                foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+                echo $helper->field([
+                    'name'    => 'categories',
+                    'id'      => 'categories',
+                    'label'   => $this->_(['category', 'categories', 2]),
+                    'value'   => array_keys($this->department->getCategories()),
+                    'type'    => 'checkbox',
+                    'options' => $options
+                ]);
+            ?>
+        </fieldset>
+        <fieldset>
+            <?php
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons($return_url);
+            ?>
+        </fieldset>
+    </form>
+</section>

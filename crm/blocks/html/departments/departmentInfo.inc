@@ -8,19 +8,22 @@
 use Application\Models\Person;
 use Blossom\Classes\View;
 
+$id = $this->department->getId();
+
 $editButton   = '';
 $deleteButton = '';
 if (Person::isAllowed('departments','update')) {
 	$helper = $this->template->getHelper('buttonLink');
+
 	$editButton = $helper->buttonLink(
-		BASE_URI.'/departments/update?department_id='.$this->department->getId(),
+		BASE_URI.'/departments/update?department_id='.$id,
 		$this->_('edit'),
 		'edit'
 	);
 	// Make sure this would not violate any foreign keys
 	if ($this->department->isSafeToDelete()) {
 		$deleteButton = $helper->buttonLink(
-			BASE_URI.'/departments/delete?department_id='.$this->department->getId(),
+			BASE_URI.'/departments/delete?department_id='.$id,
 			$this->_('delete'),
 			'delete'
 		);
@@ -33,32 +36,35 @@ if ($defaultPerson) {
 	$defaultPerson = self::escape($defaultPerson->getFullname());
 }
 
-$categories = array();
+$categories = [];
 foreach ($this->department->getCategories() as $category) {
 	$categories[] = self::escape($category->getName());
 }
 $categories = implode(', ',$categories);
 
-$actions = array();
+$actions = [];
 foreach ($this->department->getActions() as $action) {
 	$actions[] = self::escape($action->getName());
 }
 $actions = implode(', ',$actions);
 
-echo "
-<div class=\"department\">
-	<h3><a href=\"".BASE_URI."/departments/view?department_id={$this->department->getId()}\">
-			$name
-		</a>
-		$editButton $deleteButton
-	</h3>
-	<table>
-		<tr><th>{$this->_('defaultPerson')}</th>
-			<td>$defaultPerson</td></tr>
-		<tr><th>{$this->_(array('category', 'categories', 2))}</th>
-			<td>$categories</td></tr>
-		<tr><th>{$this->_(array('action', 'actions', 2))}</th>
-			<td>$actions</td></tr>
-	</table>
-</div>
-";
+$uri = BASE_URI."/departments/view?department_id=$id";
+?>
+<article class="department">
+    <header>
+        <h1><a href="<?= $uri; ?>"><?= $name; ?></a></h1>
+        <div class="tools">
+            <?= "$editButton $deleteButton"; ?>
+        </div>
+    </header>
+
+    <dl><dt><?= $this->_('defaultPerson'); ?></dt>
+        <dd><?= $defaultPerson; ?></dd>
+    </dl>
+    <dl><dt><?= $this->_(['category', 'categories', 2]); ?></dt>
+        <dd><?= $categories; ?></dd>
+    </dl>
+    <dl><dt><?= $this->_(['action', 'actions', 2]); ?></dt>
+        <dd><?= $actions; ?></dd>
+    </dl>
+</article>

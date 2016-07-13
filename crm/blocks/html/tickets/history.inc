@@ -24,7 +24,9 @@ use Blossom\Classes\Block;
 
 			echo "
 			<article class=\"historyItem\">
-				<h1>{$event->getActionDate(DATE_FORMAT)} $description</h1>
+                <header>
+                    <h1>{$event->getActionDate(DATE_FORMAT)} $description</h1>
+                </header>
 			";
 
 			if (!$this->disableComments) {
