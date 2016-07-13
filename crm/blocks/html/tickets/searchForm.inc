@@ -15,70 +15,45 @@ use Blossom\Classes\Url;
 $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 if (Person::isAllowed('tickets','add')) {
-	// Solr stores ticket_id as 'id'
-	$id = isset($_GET['id']) ? (int)$_GET['id'] : '';
-	echo "
-	<section class=\"quickSearches\">
-        <header>
-            <h1>{$this->_('quick_links')}</h1>
-        </header>
-		<form method=\"get\" action=\"".BASE_URI."/tickets\">
-			<fieldset>
-				<label>
-					{$this->_('ticket')}
-					# <input name=\"id\" value=\"$id\" size=\"6\" />
-				</label>
-				<button type=\"submit\" class=\"search\">{$this->_('go')}</button>
-			</fieldset>
-		</form>
-		<ul><li><a href=\"".BASE_URI."/tickets?status=open\">
-					{$this->_('tickets_open')}
-				</a>
-			</li>
-			<li><a href=\"".BASE_URI."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}\">
-					{$this->_('tickets_my')}
-				</a>
-			</li>
-		";
-		if ($_SESSION['USER']->getDepartment_id()) {
-			$d = $_SESSION['USER']->getDepartment();
-			echo "
-			<li><a href=\"".BASE_URI."/tickets?status=open;department_id={$d->getId()}\">
-					{$this->_('tickets_my_department')}
-				</a>
-			</li>
-			";
-		}
-	echo "
-		</ul>
-	";
-	$table = new BookmarkTable();
-	$bookmarks = new Block(
-		'bookmarks/list.inc', [
-			'bookmarks' => $table->find([
-				'person_id' => $_SESSION['USER']->getId(),
-				'type'      => 'search'
-			])
-		]
-	);
-	echo $bookmarks->render('html', $this->template);
+    $links = [
+        ['label'=>$this->_('tickets_open'), 'url'=>BASE_URI.'/tickets?status=open'],
+        ['label'=>$this->_('tickets_my'),   'url'=>BASE_URI."/tickets?status=open;assignedPerson_id={$_SESSION['USER']->getId()}"]
+    ];
 
-	echo "
-	</section>
-	";
+    if ($_SESSION['USER']->getDepartment_id()) {
+        $d = $_SESSION['USER']->getDepartment();
+        $links[] = ['label'=>$this->_('tickets_my_department'), 'url'=>BASE_URI."/tickets?status=open;department_id={$d->getId()}"];
+    }
+
+	$table = new BookmarkTable();
+	$list  = $table->find(['person_id'=>$_SESSION['USER']->getId(), 'type'=>'search']);
+	$c     = count($list);
+	if ($c) {
+        $bookmarks = [
+            ['label'=>$this->_(['bookmark', 'bookmarks', $c]), 'url'=>BASE_URI.'/bookmarks']
+        ];
+        foreach ($list as $b) {
+            $bookmarks[] = ['label'=>self::escape($b->getName()), 'url'=>$b->getRequestUri()];
+        }
+        $links[] = ['subgroup'=>$bookmarks];
+	}
 }
 ?>
 <section id="ticketSearchForm">
     <header>
         <h1><?= $this->_('search'); ?></h1>
+        <div class="tools">
+        <?php
+            if (!empty($links)) {
+                $helper = $this->template->getHelper('dropdown');
+                echo $helper->dropdown($links, $this->_('quick_links'), 'quick_links');
+            }
+        ?>
+        </div>
     </header>
 	<form method="get" action="<?= BASE_URI; ?>/tickets">
 		<fieldset>
-			<label><?= $this->_('search'); ?>
-				<input name="query" value="<?php if (!empty($_GET['query'])) echo self::escape($_GET['query']); ?>" />
-			</label>
-			<button type="submit" class="search"><?= $this->_('go'); ?></button>
-			<p class="help"><?= $this->_('ticket_search_query_description', 'messages'); ?></p>
+            <input name="query" value="<?= !empty($_GET['query']) ? self::escape($_GET['query']) : ''; ?>" />
 		</fieldset>
 		<fieldset id="advanced-search">
 			<?php
@@ -175,7 +150,7 @@ if (Person::isAllowed('tickets','add')) {
 		<fieldset><legend><?= $this->_('submit'); ?></legend>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
-				echo $h->renderInputs($_GET, null, array('query', 'fields'));
+				echo $h->renderInputs($_GET, null, ['query', 'fields']);
 			?>
 			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 		</fieldset>

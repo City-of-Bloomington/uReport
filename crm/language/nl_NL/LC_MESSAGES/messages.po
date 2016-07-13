@@ -63,9 +63,6 @@ msgstr ""
 msgid "usedForNotifications"
 msgstr "Communicatie"
 
-msgid "ticket_search_query_description"
-msgstr "Alleen zoeken in de omschrijving"
-
 #. Describe to the user what "Clients" are.
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
 msgid "clients_description"

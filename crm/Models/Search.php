@@ -144,8 +144,16 @@ class Search
 	 * @param BOOL $raw
 	 * @return SolrObject
 	 */
-	public function query(&$get, $raw=false)
+	public function query($get, $raw=false)
 	{
+        if (!empty($get['query'])) {
+            $get['query'] = trim($get['query']);
+            if (is_numeric($get['query'])) {
+                $get['id'] = (int)$get['query'];
+                unset($get['query']);
+            }
+        }
+
 		// Start with all the default query values
 		$query = !empty($get['query'])
 			? "{!df=description}$get[query]"
