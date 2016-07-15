@@ -44,7 +44,8 @@ $sql = "select  t.id            as ticket_id,
         left join categories  c on t.category_id=c.id
         left join people      p on t.assignedPerson_id=p.id
         left join departments d on p.department_id=d.id
-        left join contactMethods m on i.contactMethod_id=m.id";
+        left join contactMethods m on i.contactMethod_id=m.id
+        where c.displayPermissionLevel = 'anonymous'";
 $result = $zend_db->query($sql)->execute();
 foreach ($result as $row) {
     $enteredDate  = new \DateTime($row['enteredDate']);
