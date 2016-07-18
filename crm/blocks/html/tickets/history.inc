@@ -31,7 +31,9 @@ use Blossom\Classes\Block;
 
 			if (!$this->disableComments) {
                 $notes = self::escape($event->getNotes());
-				echo "<p>$notes</p>";
+                if ($notes) {
+                    echo "<p>$notes</p>";
+                }
 			}
 
 			$action   = $event->getAction();

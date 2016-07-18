@@ -5,6 +5,7 @@ body > header {
     margin-bottom: 0;
     padding:0;
 
+    button { background-color:transparent; }
     a { color:$color-header; }
 
     > .container {

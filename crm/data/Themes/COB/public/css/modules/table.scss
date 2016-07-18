@@ -1,0 +1,18 @@
+table {
+    thead th {
+        background: $color-table-header-background;
+        color: $color-table-background;
+
+        a { color: $color-content-background; }
+    }
+    tbody {
+        th, td {
+            border-top: 1px solid $color-border-table;
+        }
+    }
+    tr:hover {
+        th, td {
+            background: $color-content-background;
+        }
+    }
+}

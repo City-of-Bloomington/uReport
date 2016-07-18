@@ -11,10 +11,21 @@
  */
 @import 'modules/vars.scss';
 @import 'modules/header.scss';
+@import 'modules/table.scss';
+
+footer { background-color:$color-background-footer; color:$color-heading-1; }
 
 h1 { font-size:1.5rem; }
 
+main .dropdown .launcher {
+    background-color:$green;
+    border-bottom: .25em solid $green-light;
+    color: $color-content-background;
+}
+
+
 #ticketSearchForm {
+    ul { list-style-type:none; padding:0 1rem; }
     #display_fields {
         dl {
             margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2;
@@ -29,3 +40,13 @@ h1 { font-size:1.5rem; }
 .pageNavigation          { margin:.5em; }
 .pageNavigation li       { display:inline; margin:.5em; }
 a.current { border:2px solid green; }
+
+.ticketInfo header {
+    h1 { display:block; margin-bottom:0; }
+    .status { float:right; }
+}
+.history article {
+    padding-left:1rem;
+
+    h1 { font-size:1rem; }
+}

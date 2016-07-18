@@ -29,9 +29,7 @@ if (Person::isAllowed('tickets','add')) {
 	$list  = $table->find(['person_id'=>$_SESSION['USER']->getId(), 'type'=>'search']);
 	$c     = count($list);
 	if ($c) {
-        $bookmarks = [
-            ['label'=>$this->_(['bookmark', 'bookmarks', $c]), 'url'=>BASE_URI.'/bookmarks']
-        ];
+        $bookmarks = [['label'=>$this->_(['bookmark', 'bookmarks', $c]), 'url'=>BASE_URI.'/bookmarks']];
         foreach ($list as $b) {
             $bookmarks[] = ['label'=>self::escape($b->getName()), 'url'=>$b->getRequestUri()];
         }

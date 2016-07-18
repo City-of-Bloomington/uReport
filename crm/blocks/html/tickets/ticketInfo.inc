@@ -29,8 +29,8 @@ echo "
     <header>
         <h1><span class=\"status\">$status</span>
             <a href=\"{$this->ticket->getURL()}\" class=\"ticket_id\">#{$ticket_id}</a>
-            <span class=\"category\">$category</span>
         </h1>
+        <h2><span class=\"category\">$category</span></h2>
     </header>
     $description
 </section>
