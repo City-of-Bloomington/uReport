@@ -1,3 +1,3 @@
 <?php
-	echo $this->includeBlocks('search-results');
-?>
+header('Content-type: text/csv; charset=utf-8');
+echo $this->includeBlocks();
