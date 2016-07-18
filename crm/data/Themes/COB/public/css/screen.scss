@@ -9,7 +9,20 @@
  *
  * This CSS should only include properties that are not include in fn1.
  */
-#ticketSearchForm #display_fields ul { margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2; }
+@import 'modules/vars.scss';
+@import 'modules/header.scss';
+
+h1 { font-size:1.5rem; }
+
+#ticketSearchForm {
+    #display_fields {
+        dl {
+            margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2;
+            background-color:$color-content-background;
+        }
+        dd { margin:0; font-size:.8rem; }
+    }
+}
 .icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
 .btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
 

@@ -1,0 +1,44 @@
+body > header {
+    background-color: #fff;
+    border-top: .4em solid $color-accent;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding:0;
+
+    a { color:$color-header; }
+
+    > .container {
+        &:before {
+            background: url('images/logo.svg');
+            background-size: 100% 100%;
+            content: '';
+            display: block;
+            float: left;
+            height: 2.25rem;
+            margin: 0 .5rem .25rem .5rem;
+            width: 2.25rem;
+        }
+
+        h1 { font-size:1rem; font-weight:normal; margin:0; }
+        h2 { font-size:.8rem; margin:0; }
+    }
+
+    @media screen and (min-width: $viewport-med) {
+        position: relative;
+
+        > .container { }
+    }
+
+    @include largeViewport {
+        > .container { }
+    }
+    @media screen and (max-height: $viewport-notTall) {
+        border-top: 0;
+    }
+
+    #nav1 {
+        background-color: $color-accent;
+
+        a { background:none; color:$color-content-background; }
+    }
+}

@@ -1,0 +1,59 @@
+@import 'color-palette';
+$font-family-default: "Open Sans", "Helvetica Neue", Arial, sans-serif;
+
+$color-text-default: $gray-darkest;
+$color-content-background: #fff;
+
+$color-link:   $blue-dark;
+$color-nav1:   $blue-dark;
+$color-header: $blue-dark;
+$color-accent: $blue-dark;
+
+$color-heading-1: $gray;
+$color-heading-2: $gray-dark;
+$color-heading-3: $gray-darkest;
+
+
+$color-background-field:           #f4f4f4;
+$color-background-field-highlight: #fafafa;
+$color-border-input:           #e0e0e0;
+$color-border-input-highlight: #a0a0a0;
+$color-border-modal:           #f3f3f3;
+$color-border-table:           #c0c0c0;
+
+$color-table-background:        #edf0f5;
+$color-table-header-background: $blue-dark;
+
+$color-shadow: rgba(0, 0, 0, 0.5);
+
+$font-weight-heading: 600;
+
+$viewport-med: 46em;
+$viewport-large: 70em;
+$viewport-notTall: 40rem;
+
+// Breakpoint mixins
+@mixin smallViewport {
+    @media screen and (min-width: #{$viewport-small}) {
+        @content;
+    }
+}
+@mixin mediumViewport {
+    @media screen and (min-width: $viewport-medium) {
+        @content;
+    }
+}
+@mixin largeViewport {
+    @media screen and (min-width: $viewport-large) {
+        @content;
+    }
+}
+
+
+@mixin clearfix {
+    &:after {
+        clear: both;
+        content: '';
+        display: table;
+    }
+}
