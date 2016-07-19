@@ -1,12 +1,11 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->return_url
  */
 use Application\Models\Category;
-use Blossom\Classes\View;
+use Application\Models\CategoryTable;
 use Blossom\Classes\Url;
 ?>
 <div>
@@ -30,19 +29,25 @@ use Blossom\Classes\Url;
 					echo "<option value=\"{$c->getId()}\">$name</option>";
 				}
 			}
+			echo '<option value="">----</option>';
+
+			$table = new CategoryTable();
+			$list  = $table->find(null, 'categories.name');
+			$options = [];
+			foreach ($list as $c) {
+                $name = self::escape($c->getName());
+                $d    = $c->getDepartment();
+                $dept = self::escape($d->getName());
+                $options[$dept][] = ['id'=>$c->getid(), 'name'=>self::escape($c->getName())];
+			}
+			ksort($options);
+			foreach (array_keys($options) as $d) {
+                echo "<optgroup label=\"$d\">";
+                foreach ($options[$d] as $c) {
+                    echo "<option value=\"$c[id]\">$c[name]</option>";
+                }
+                echo "</optgroup>";
+			}
 		?>
 	</select>
-</div>
-<div>
-	<?php
-		$url = new Url(BASE_URL.'/categories/choose');
-		// Preserve any extra parameters passed in
-		foreach ($_REQUEST as $key=>$value) {
-			if ($key!='ticket_id' && $key!='return_url') {
-				$url->$key = $value;
-			}
-		}
-		$url->return_url = $this->return_url;
-		echo "<a href=\"$url\" id=\"moreCategoriesLink\" class=\"more\">{$this->_('more_categories')}</a>";
-	?>
 </div>

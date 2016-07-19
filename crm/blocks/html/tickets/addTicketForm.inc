@@ -26,38 +26,15 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 
 		<fieldset class="ticketFields">
 			<legend><?= $this->_('info_location'); ?></legend>
-			<table>
-				<tr><td><label for="location"><?= $this->_('location'); ?></label></td>
-					<td><input name="location" id="location"
-							value="<?= self::escape($this->ticket->getLocation()); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="city"><?= $this->_('city'); ?></label></td>
-					<td><input name="city" id="city"
-							value="<?= self::escape($this->ticket->getCity()); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="state"><?= $this->_('state'); ?></label></td>
-					<td><input name="state" id="state"
-							value="<?= self::escape($this->ticket->getState()); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="zip"><?= $this->_('zip'); ?></label></td>
-					<td><input name="zip" id="zip"
-							value="<?= self::escape($this->ticket->getZip()); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="latitude"><?= $this->_('latitude'); ?></label></td>
-					<td><input name="latitude" id="latitude"
-							value="<?= $this->ticket->getLatitude(); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="longitude"><?= $this->_('longitude'); ?></label></td>
-					<td><input name="longitude" id="longitude"
-							value="<?= $this->ticket->getLongitude(); ?>" />
-					</td>
-				</tr>
-			</table>
+			<?php
+                $helper = $this->template->getHelper('field');
+                foreach(['location', 'city', 'state', 'zip', 'latitude', 'longitude'] as $f) {
+                    $get = 'get'.ucfirst($f);
+                    $$f = self::escape($this->ticket->$get());
+
+                    echo $helper->field(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f]);
+                }
+			?>
 		</fieldset>
 		<fieldset class="issueFields">
 			<legend><?= $this->_('info_issue'); ?></legend>

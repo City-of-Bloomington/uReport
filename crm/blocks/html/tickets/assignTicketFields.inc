@@ -6,10 +6,6 @@
  * @param Department $this->currentDepartment
  */
 use Application\Models\Department;
-use Application\Models\DepartmentTable;
-
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseDepartment.js');
 
 // There may not be a currentDepartment.
 // This can happen when the current user is not in a department
@@ -28,19 +24,6 @@ $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId(
 
 
 $helper  = $this->template->getHelper('field');
-
-$table   = new DepartmentTable();
-$list    = $table->find();
-$options = [];
-foreach ($list as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
-echo $helper->field([
-    'name'    => 'department_id',
-    'id'      => 'department_id',
-    'label'   => $this->_('department'),
-    'type'    => 'select',
-    'value'   => $currentDepartment->getId(),
-    'options' => $options
-]);
 
 $options = [];
 foreach ($currentDepartment->getPeople() as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }

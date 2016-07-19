@@ -1,43 +1,5 @@
 "use strict";
 var CATEGORY_CHOOSER = {
-	popup: {},
-    /**
-     * Selects the chosen category in the categories drop down
-     *
-     * If the chosen category is not already in the drop down,
-     * the category is added.
-     * @param int category_id
-     */
-	setCategory: function (category_id) {
-        var selectHasCategory = false,
-            select = document.getElementById('category_id'),
-            url = CRM.BASE_URL + '/categories/view?format=json;category_id=' + category_id,
-            len = select.options.length,
-            i   = 0;
-
-        CATEGORY_CHOOSER.updateCustomFields(category_id);
-
-        for (i=0; i<len; i++) {
-            if (select.options[i].value == category_id) {
-                selectHasCategory=true;
-                break;
-            }
-        }
-
-        if (!selectHasCategory) {
-            jQuery.ajax(url, {
-                dataType: 'json',
-                success: function (json) {
-                    var o = document.createElement('option');
-                    o.setAttribute('value', json.id);
-                    o.innerHTML = json.name;
-                    select.appendChild(o);
-                    select.selectedIndex = len; // New element index is the same as the previous length
-                }
-            });
-        }
-		CATEGORY_CHOOSER.popup.close();
-	},
     /**
      * Load the custom fields HTML for the chosen category
      *
@@ -51,26 +13,40 @@ var CATEGORY_CHOOSER = {
                 jQuery('#customFields').replaceWith(jQuery(o).find('#customFields'));
             }
         });
-	}
+	},
+    loadDepartmentData: function (category_id) {
+        $.ajax(CRM.BASE_URL + '/departments/view?format=json;category_id=' + category_id, {
+            dataType: 'json',
+            success: function (department, status, xhr) {
+                CATEGORY_CHOOSER.reloadAssignedPersonOptions(department);
+            }
+        });
+    },
+    reloadAssignedPersonOptions: function (department) {
+        var url = CRM.BASE_URL + '/people?format=json;department_id=' + department.id;
+        $.ajax(url, {
+            dataType: 'json',
+            success: function (people, status, xhr) {
+                var select = document.getElementById('assignedPerson_id'),
+               options  = '',
+               selected = '',
+               len = people.length,
+               i   = 0;
+
+               for (i=0; i<len; i++) {
+                   selected = (people[i].id == department.defaultPerson_id)
+                   ? ' selected="selected"'
+                   : '';
+                   options += '<option value="' + people[i].id + '"' + selected + '>' + people[i].name + '</option>';
+               }
+               select.innerHTML = options;
+            }
+        });
+    }
 };
 jQuery(function ($) {
-    $('#chooseCategoryForm button').css('display', 'none');
-    $('#chooseCategoryForm form').on('submit', function (e) {
-        e.preventDefault();
-        return false;
-    });
-
     $('#category_id').on('change', function (e) {
         CATEGORY_CHOOSER.updateCustomFields(e.target.value);
-    });
-
-    $('#moreCategoriesLink').on('click', function (e) {
-        e.preventDefault();
-        CATEGORY_CHOOSER.popup = window.open(
-            CRM.BASE_URL + '/categories/choose?popup=1;callback=CATEGORY_CHOOSER.setCategory',
-            'popup',
-            'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
-        );
-        return false;
+        CATEGORY_CHOOSER.loadDepartmentData(e.target.value);
     });
 });

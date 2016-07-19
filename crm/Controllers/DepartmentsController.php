@@ -5,6 +5,7 @@
  */
 namespace Application\Controllers;
 
+use Application\Models\Category;
 use Application\Models\Department;
 use Application\Models\DepartmentTable;
 
@@ -24,9 +25,21 @@ class DepartmentsController extends Controller
 
 	public function view()
 	{
-		$department = new Department($_GET['department_id']);
+        if (!empty($_GET['department_id'])) {
+            $department = new Department($_GET['department_id']);
+        }
+        elseif (!empty($_GET['category_id'])) {
+            $category = new Category($_GET['category_id']);
+            $department = $category->getDepartment();
+        }
 
-		$this->template->blocks[] = new Block('departments/departmentInfo.inc', ['department'=>$department]);
+        if (isset($department)) {
+            $this->template->blocks[] = new Block('departments/departmentInfo.inc', ['department'=>$department]);
+        }
+        else {
+            header('HTTP/1.1 404 Not Found', true, 404);
+            $this->template->blocks[] = new Block('404.inc');
+        }
 	}
 
 	public function update()
