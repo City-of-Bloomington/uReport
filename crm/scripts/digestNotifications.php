@@ -18,27 +18,19 @@ $sql = "select distinct assignedPerson_id
 		where status='open'";
 $ids = $zend_db->fetchCol($sql);
 foreach ($ids as $id) {
-	$person = new Person($id);
+	$person  = new Person($id);
 
-	$tickets = new TicketList();
-	$tickets->find(
-		array('assignedPerson_id'=>$person->getId(), 'status'=>'open'),
-		't.enteredDate'
-	);
+	$table   = new TicketTable();
+	$tickets = $table->find(['assignedPerson_id'=>$person->getId(), 'status'=>'open']);
 
 	$template = new Template('email', 'txt');
-	$template->blocks[] = new Block(
-		'notifications/digestNotification.inc',
-		array('person'=>$person)
-	);
-	$template->blocks[] = new Block(
-		'tickets/ticketList.inc',
-		array(
-			'ticketList'    => $tickets,
-			'title'         => 'Outstanding cases',
-			'disableButtons'=> true
-		)
-	);
+	$template->blocks[] = new Block('notifications/digestNotification.inc', ['person'=>$person]);
+	$template->blocks[] = new Block('tickets/ticketList.inc', [
+        'ticketList'    => $tickets,
+        'title'         => 'Outstanding cases',
+        'disableButtons'=> true,
+        'fields'        => ['status', 'enteredDate', 'slaPercentage', 'category', 'location']
+    ]);
 
 	$text = $template->render();
 

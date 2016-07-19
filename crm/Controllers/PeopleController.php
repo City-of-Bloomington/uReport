@@ -150,15 +150,13 @@ class PeopleController extends Controller
 
 		$numPages = count($tickets);
 		if ($numPages) {
-			$block = new Block(
-				'tickets/ticketList.inc',
-				array(
-					'ticketList'    => $tickets,
-					'title'         => $title,
-					'disableLinks'  => $disableLinks,
-					'disableButtons'=> $disableButtons
-				)
-			);
+			$block = new Block('tickets/ticketList.inc', [
+                'ticketList'    => $tickets,
+                'title'         => $title,
+                'disableLinks'  => $disableLinks,
+                'disableButtons'=> $disableButtons,
+                'fields'        => ['status', 'enteredDate', 'category', 'location']
+            ]);
 			if ($numPages > 1) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}

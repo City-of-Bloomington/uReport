@@ -315,6 +315,9 @@ msgstr "Afhandeling"
 msgid "sla"
 msgstr "Afhandeling"
 
+msgid "slaPercentage"
+msgstr "Afhandeling"
+
 msgid "overdue"
 msgstr "Verlopen"
 
@@ -607,9 +610,6 @@ msgstr "Afdeling"
 
 msgid "substatus_id"
 msgstr "Resolutie"
-
-msgid "slaPercentage"
-msgstr "Afhandeling"
 
 msgid "neighborhoodAssociation"
 msgstr "Wijk of buurt"

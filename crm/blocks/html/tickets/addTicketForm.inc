@@ -24,9 +24,11 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 		?>
 		</fieldset>
 
-		<fieldset class="ticketFields">
+		<fieldset class="locationFields">
 			<legend><?= $this->_('info_location'); ?></legend>
 			<?php
+                $this->_include('tickets/chooseLocation.inc');
+
                 $helper = $this->template->getHelper('field');
                 foreach(['location', 'city', 'state', 'zip', 'latitude', 'longitude'] as $f) {
                     $get = 'get'.ucfirst($f);

@@ -62,19 +62,11 @@ class LocationsController extends Controller
 
 		$this->template->setFilename('locations');
 
-		$blocks = ['locationInfo', 'masterAddressData', 'locationPeople'];
-		foreach ($blocks as $b) {
-			$this->template->blocks['panel-one'][] = new Block("locations/$b.inc", [
-                'location'       => $location,
-                'disableButtons' => isset($_GET['disableButtons'])
-            ]);
-		}
-		$this->template->blocks['panel-two'][] = new Block('tickets/ticketList.inc', [
-            'ticketList'     => $ticketList,
-            'title'          => 'Cases Associated with this Location',
-            'disableLinks'   => isset($_GET['disableLinks']),
+        $this->template->blocks['panel-one'][] = new Block("locations/locationInfo.inc", [
+            'location'       => $location,
             'disableButtons' => isset($_GET['disableButtons'])
         ]);
+
 		if (Person::isAllowed('tickets','merge') && !isset($_GET['disableLinks']) && count($ticketList)>1) {
 			$this->template->blocks['panel-two'][] = new Block('tickets/ticketSelectForMergeForm.inc');
 		}

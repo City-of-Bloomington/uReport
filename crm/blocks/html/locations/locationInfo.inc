@@ -47,7 +47,8 @@ if ($this->location) {
             $block = new Block('tickets/ticketList.inc', [
                 'ticketList'    => $list,
                 'title'         => 'Other cases for this location',
-                'disableButtons'=> true
+                'disableButtons'=> $this->disableButtons,
+                'fields'        => ['status', 'enteredDate', 'category']
             ]);
             if ($this->ticket) { $block->filterTicket = $this->ticket; }
             echo $block->render('html', $this->template);

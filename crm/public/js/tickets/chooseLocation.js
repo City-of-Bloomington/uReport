@@ -25,15 +25,9 @@ var LOCATION_CHOOSER = {
         }
 
         // Draw location information into the LocationChooser body
-        var bd = jQuery('#locationChooser .bd');
-        bd.html('<img src="' + CRM.BASE_URL + '/skins/local/images/busy.gif" />');
-        jQuery.ajax(CRM.BASE_URL + '/locations/view?partial=locations/locationInfo.inc,tickets/ticketList.inc;disableLinks=1;location=' + location, {
-            dataType: 'html',
-            success: function (html, status, xhr) {
-                bd.html(html);
-                LOCATION_CHOOSER.popup.close();
-            }
-        });
+        var bd = jQuery('#locationChooser h1');
+        bd.html(location);
+        LOCATION_CHOOSER.popup.close();
 	}
 };
 document.getElementById('findAddressButton').addEventListener('click', function (e) {

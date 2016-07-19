@@ -315,6 +315,9 @@ msgstr "Service Level Agreement"
 msgid "sla"
 msgstr "SLA"
 
+msgid "slaPercentage"
+msgstr "SLA"
+
 msgid "overdue"
 msgstr "Over SLA"
 
@@ -607,9 +610,6 @@ msgstr "Department"
 
 msgid "substatus_id"
 msgstr "Substatus"
-
-msgid "slaPercentage"
-msgstr "SLA"
 
 msgid "neighborhoodAssociation"
 msgstr "Neighborhood Association"

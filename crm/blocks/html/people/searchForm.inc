@@ -16,9 +16,11 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 	<form method="get" action="<?= BASE_URI; ?>/people">
 		<fieldset>
 			<?php
+                $fields = ['firstname', 'lastname', 'email', 'organization'];
+
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
-					if ($key!='setOfPeople' && !in_array($key,$fields)) {
+					if ($key!='setOfPeople' && !in_array($key, $fields)) {
 						$key   = self::escape($key);
 						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
@@ -43,7 +45,6 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 		</fieldset>
 		<fieldset>
 			<?php
-                $fields = ['firstname', 'lastname', 'email', 'organization'];
 				foreach ($fields as $f) {
 					echo $helper->field([
                         'name'  => $f,
