@@ -42,7 +42,7 @@ class Dropdown
 
             $html.= empty($l['subgroup'])
                 ? "<a href=\"$l[url]\"$attrs>$l[label]</a>"
-                : "<div class=\"fn1-dropdown-subgroup\">{$this->renderLinks($l['subgroup'])}</div>";
+                : "<div class=\"subgroup\">{$this->renderLinks($l['subgroup'])}</div>";
         }
         return $html;
 	}

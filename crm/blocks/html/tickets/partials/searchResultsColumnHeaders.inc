@@ -12,12 +12,11 @@ use Blossom\Classes\Url;
 $c = $this->solrObject->response->numFound;
 ?>
 <header>
-    <h1><?= $this->_('search_results'); ?></h1>
-    <p><?= "{$this->_('search_results_count')}: $c"; ?></p>
-    <nav id="sortingLinks">
-        <h2><?= $this->_('sort_by'); ?>:</h2>
-        <ul>
+    <h1><?= "{$this->_('search_results')}: ($c)"; ?></h1>
+    <div class="tools">
         <?php
+            $sortingLinks = [];
+
             $c = $this->solrObject->response->numFound;
             if ($c) {
                 $currentSort = Search::$defaultSort;
@@ -61,12 +60,16 @@ $c = $this->solrObject->response->numFound;
                                     ? 'desc'
                                     : 'asc';
                             }
-                            echo "<li><a href=\"$url\" class=\"$class\">$label</a></li>";
+                            $sortingLinks[] = ['url'=>$url, 'label'=>$label, 'attrs'=>['class'=>$class]];
                         }
                     }
                 }
             }
+
+            if (count($sortingLinks)) {
+                $helper = $this->template->getHelper('dropdown');
+                echo $helper->dropdown($sortingLinks, $this->_('sort_by'), 'sortingLinks');
+            }
         ?>
-        </ul>
-    </nav>
+    </div>
 </header>
