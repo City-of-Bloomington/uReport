@@ -27,6 +27,7 @@
 				echo $this->includeBlocks();
 			?>
 		</div>
+    </main>
 	<?php
 		$this->_include('partials/footer.inc');
 	?>

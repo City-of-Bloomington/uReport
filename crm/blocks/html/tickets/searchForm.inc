@@ -154,6 +154,3 @@ if (Person::isAllowed('tickets','add')) {
 		</fieldset>
 	</form>
 </section>
-<div>
-	<p><?= $this->_('disclaimer', 'messages'); ?></p>
-</div>
