@@ -183,7 +183,6 @@ class TicketsController extends Controller
 
 		// Display all the forms
 		$this->template->setFilename('ticketCreation');
-		$this->template->blocks['panel-two'][] = new Block('tickets/chooseReportedByPerson.inc', ['issue' => $issue ]);
 		$this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
             'ticket'=>$ticket,
             'issue'=>$issue,

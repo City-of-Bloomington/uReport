@@ -57,7 +57,7 @@ class PersonChooser
 		<span id=\"{$fieldname}-name\">$name</span>
 		<a class=\"user btn\"
 			href=\"$personChooser\"
-			onclick=\"PERSON_CHOOSER.test('$fieldname'); return false;\">
+			onclick=\"PERSON_CHOOSER.open(event, '$fieldname');\">
 			Change Person
 		</a>
 		";

@@ -28,6 +28,7 @@ echo $helper->field([
 echo $helper->field([
     'name'  => 'reportedByPerson',
     'id'    => 'reportedByPerson_id',
+    'label' => $this->_('reportedByPerson'),
     'type'  => 'person',
     'value' => $this->issue->getReportedByPerson()
 ]);

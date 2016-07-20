@@ -24,13 +24,16 @@
 var PERSON_CHOOSER = {
 	fieldname: '',
 	popup: {},
-	open: function (fieldname) {
+	open: function (e, fieldname) {
+        e.preventDefault();
+
 		PERSON_CHOOSER.fieldname = fieldname;
 		PERSON_CHOOSER.popup = window.open(
 			CRM.BASE_URL + '/people?popup=1;callback=PERSON_CHOOSER.setPerson',
 			'popup',
 			'menubar=no,location=no,status=no,toolbar=no,width=800,height=600,resizeable=yes,scrollbars=yes'
 		);
+        return false;
 	},
 	setPerson: function (person_id) {
         jQuery.ajax(CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id, {
