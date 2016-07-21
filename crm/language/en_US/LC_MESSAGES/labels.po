@@ -278,6 +278,9 @@ msgid_plural "clients"
 msgstr[0] "Application"
 msgstr[1] "Applications"
 
+msgid "client_id"
+msgstr "Application"
+
 msgid "action"
 msgid_plural "actions"
 msgstr[0] "Action"
