@@ -396,6 +396,9 @@ msgstr "Latitude"
 msgid "longitude"
 msgstr "Longitude"
 
+msgid "bbox"
+msgstr "Bounding Box"
+
 msgid "enteredDate"
 msgstr "Case Date"
 

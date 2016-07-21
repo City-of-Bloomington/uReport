@@ -1,12 +1,9 @@
 <?php
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param string $this->type
  */
-use Blossom\Classes\View;
-
 $type = self::escape($this->type);
 ?>
 <form id="bookmark-updateForm" method="post" action="<?= BASE_URI; ?>/bookmarks/update">

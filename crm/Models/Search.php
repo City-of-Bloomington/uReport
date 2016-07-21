@@ -5,6 +5,8 @@
  */
 namespace Application\Models;
 
+use Blossom\Classes\Url;
+
 class Search
 {
 	public $solrClient;
@@ -25,24 +27,24 @@ class Search
 	 * Use __construct() to add fields that should be kept hidden
 	 * unless a person is authorized to see them.
 	 */
-	public static $searchableFields = array(
-		'id'              => 'Case #',
-		'department_id'   => 'Department',
-		'category_id'     => 'Category',
-		'client_id'       => 'Client',
-		'status'          => 'Status',
-		'substatus_id'    => 'Substatus',
-		'addressId'       => 'Adress ID',
-		'location'        => 'Location',
-		'city'            => 'City',
-		'state'           => 'State',
-		'zip'             => 'Zip',
-		'issueType_id'    => 'Issue Type',
-		'contactMethod_id'=> 'Received Via',
-		'enteredDate'     => 'Case Date',
-		'bbox'            => 'Bounding Box',
-		'sla'             => 'SLA'
-	);
+	public static $searchableFields = [
+		'id',
+		'department_id',
+		'category_id',
+		'client_id',
+		'status',
+		'substatus_id',
+		'addressId',
+		'location',
+		'city',
+		'state',
+		'zip',
+		'issueType_id',
+		'contactMethod_id',
+		'enteredDate',
+		'bbox',
+		'sla'
+	];
 
 	/**
 	 * These are the base facets
@@ -98,15 +100,15 @@ class Search
 
 		// Add facets for the AddressService custom fields
 		foreach (AddressService::$customFieldDescriptions as $key=>$desc) {
-			self::$searchableFields[$key] = $desc['description'];
+            self::$searchableFields[] = $key;
 			self::$facetFields['ticket'][] = $key;
 			self::$sortableFields['ticket'][] = $key;
 		}
 		// Add facets that are only to be used if the current user is authorized
 		if (Person::isAllowed('people', 'view')) {
-			self::$searchableFields['enteredByPerson_id']  = 'Entered By';
-			self::$searchableFields['assignedPerson_id']   = 'Assigned To';
-			self::$searchableFields['reportedByPerson_id'] = 'Reported By';
+			self::$searchableFields[] =  'enteredByPerson_id';
+			self::$searchableFields[] =   'assignedPerson_id';
+			self::$searchableFields[] = 'reportedByPerson_id';
 
 			self::$facetFields['ticket'][] = 'assignedPerson_id';
 
@@ -190,7 +192,7 @@ class Search
 		$additionalParameters['facet.field'] = self::$facetFields['ticket'];
 
 		// Search Parameters
-		foreach (self::$searchableFields as $field=>$displayName) {
+		foreach (self::$searchableFields as $field) {
 			if (substr($field, -3) == '_id' && isset($get[$field])) {
 				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
 			}
@@ -434,7 +436,7 @@ class Search
 	 */
 	public static function getDisplayName($fieldname, $value)
 	{
-		if (isset(self::$searchableFields[$fieldname])) {
+        if (in_array($fieldname, self::$searchableFields)) {
 			if (false !== strpos($fieldname, 'Date')) {
 				// Reformat Solr date ranges
 				// enteredDate:[2011-06-15T00:00:00Z TO 2011-06-30T00:00:00Z]
@@ -466,5 +468,56 @@ class Search
 				return $value;
 			}
 		}
+	}
+
+	/**
+	 * @param Apache_Solr_Response $solrObject
+	 * @return array
+	 */
+	public static function getCurrentFilters(\Apache_Solr_Response $solrObject)
+	{
+        $currentFilters = [];
+
+        if (isset($solrObject->responseHeader->params->fq)) {
+            $fq = $solrObject->responseHeader->params->fq;
+
+            if (count($fq)) {
+                // It might happen that there is only one filterQuery
+                if (!is_array($fq)) { $fq = [$fq]; }
+
+
+                $currentUrl = new Url(Url::current_url());
+                foreach ($fq as $filter) {
+                    $deleteUrl = clone $currentUrl;
+
+                    if (preg_match('/([^:]+):(.+)/', $filter, $matches)) {
+                        $key   = $matches[1];
+                        $value = $matches[2];
+
+                        // The input and output syntax for bounding box definitions are different
+                        // The query gets sent to search using "bbox"; however,
+                        // when the parameters come back from SOLR, the "bbox" has been
+                        // renamed to "coordinates".
+                        if ($key === 'coordinates') {
+                            $key = 'bbox';
+                            if (isset($deleteUrl->zoom)) { unset($deleteUrl->zoom); }
+                        }
+                    }
+                    else {
+                        if ($filter == Search::SLA_OVERDUE_FUNCTION) {
+                            $key   = 'sla';
+                            $value = 'overdue';
+                        }
+                    }
+
+                    if (in_array($key, Search::$searchableFields)) {
+                        if (isset($deleteUrl->$key)) { unset($deleteUrl->$key); }
+
+                        $currentFilters[$key] = ['value'=>$value, 'deleteUrl'=>$deleteUrl->__toString()];
+                    }
+                }
+            }
+        }
+        return $currentFilters;
 	}
 }

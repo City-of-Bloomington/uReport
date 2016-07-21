@@ -60,22 +60,9 @@ class TicketsController extends Controller
 		$search = new Search();
 		$solrObject = $search->query($_GET, $format=='raw' ? true : false);
 
-		$this->template->blocks['panel-one'][] = new Block(
-			'tickets/searchForm.inc',
-			['solrObject'=>$solrObject]
-		);
-		$this->template->blocks[] = new Block(
-			'tickets/searchParameters.inc',
-			['solrObject'=>$solrObject]
-		);
-
-		$resultBlock = ($format == 'map')
-			? 'searchResultsMap.inc'
-			: 'searchResults.inc';
-		$this->template->blocks[] = new Block(
-			"tickets/$resultBlock",
-			['solrObject'=>$solrObject]
-		);
+		$resultBlock = ($format == 'map') ? 'searchResultsMap.inc' : 'searchResults.inc';
+		$this->template->blocks['panel-one'][] = new Block('tickets/searchForm.inc', ['solrObject'=>$solrObject]);
+		$this->template->blocks[]              = new Block("tickets/$resultBlock",   ['solrObject'=>$solrObject]);
 	}
 
 	/**

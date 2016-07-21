@@ -396,6 +396,9 @@ msgstr "Latitude"
 msgid "longitude"
 msgstr "Longitude"
 
+msgid "bbox"
+msgstr "Selectiekader"
+
 msgid "enteredDate"
 msgstr "Melddatum"
 

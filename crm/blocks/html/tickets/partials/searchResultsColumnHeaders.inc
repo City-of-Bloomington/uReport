@@ -28,7 +28,7 @@ $c = $this->solrObject->response->numFound;
                         : 'desc';
                 }
 
-                $url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+                $url = new Url(Url::current_url());
                 $displayableFields = TicketTable::getDisplayableFields();
                 $sortableFields = Search::$sortableFields['ticket'];
 

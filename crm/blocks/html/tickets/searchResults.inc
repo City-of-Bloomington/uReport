@@ -12,6 +12,8 @@ use Blossom\Classes\Block;
 use Blossom\Classes\SolrPaginatorAdapter;
 
 use Zend\Paginator\Paginator;
+
+$this->_include('tickets/partials/searchResultsFormatButtons.inc');
 ?>
 <section class="searchResults">
 <?php
