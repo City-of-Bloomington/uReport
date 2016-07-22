@@ -55,6 +55,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 		<fieldset id="advanced-search">
             <?php
                 $currentUrl = new Url(Url::current_url());
+                $html       = '';
 
                 /**
                  * While we're iterating over all possible facets, we'll look
@@ -99,7 +100,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 						if ($list) {
 							$label = $this->_($key);
 							$list  = implode('', $list);
-							echo "
+							$html.= "
 							<nav $class>
 								<h1>$label</h1>
 								<ul>$list</ul>
@@ -120,8 +121,9 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                             $url      = clone $currentUrl;
                             $url->sla = 'overdue';
                             $label    = "<a href=\"$url\">{$this->_('overdue')}</a>";
+                            $class    = 'class="collapsible"';
                         }
-                        echo "
+                        $html.= "
                         <nav $class>
                             <h1>{$this->_('sla')}</h1>
                             <ul><li>$label ($value)</li></ul>
@@ -137,7 +139,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                         $class = '';
                         unset($currentFilters['enteredDate']);
                     }
-                    echo "
+                    $html.= "
                     <nav $class>
                         <h1>{$this->_('enteredDate')}</h1>
                     ";
@@ -148,7 +150,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                             $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
                             $$d = $date->format('U');
                         }
-                        echo $fieldHelper->field([
+                        $html.= $fieldHelper->field([
                             'name'  => "enteredDate[$d]",
                             'id'    => "enteredDate-$d",
                             'label' => $this->_($d),
@@ -156,7 +158,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                             'value' => $$d
                         ]);
                     }
-                    echo "
+                    $html.= "
                     </nav>
                     ";
 				}
@@ -165,13 +167,15 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 				 * Any additional filters that are not being displayed as facets
 				 */
 				foreach ($currentFilters as $key=>$f) {
-                    echo $helper->buttonLink($f['deleteUrl'], $this->_($key), 'delete');
+                    $label = $key === 'bbox' ? $this->_($key) : $this->_($key).':'.$f['value'];
+                    echo $helper->buttonLink($f['deleteUrl'], $label, 'delete');
 				}
+				echo $html;
 			?>
 		</fieldset>
 
 
-		<fieldset id="display_fields">
+		<fieldset id="display_fields" class="collapsible">
             <legend><?= $this->_('display_fields'); ?></legend>
 			<?php
 				// Default columns to display

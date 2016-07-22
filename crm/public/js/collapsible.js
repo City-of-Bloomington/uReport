@@ -1,9 +1,6 @@
 "use strict";
 jQuery(function ($) {
-    $('.collapsible').addClass('collapsed');
-    $('.collapsible h1').on('click', function (e) {
-        var div = $(this).parent();
-
+    var toggle = function (div) {
         if (div.hasClass('collapsed')) {
             div.removeClass('collapsed');
             div.addClass('expanded');
@@ -12,5 +9,9 @@ jQuery(function ($) {
             div.removeClass('expanded');
             div.addClass('collapsed');
         }
-    });
+    };
+
+    $('.collapsible').addClass('collapsed');
+    $('.collapsible h1')     .on('click', function (e) { toggle($(this).parent()); });
+    $('fieldset.collapsible').on('click', function (e) { toggle($(this));          });
 });

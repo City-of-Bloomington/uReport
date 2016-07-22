@@ -494,6 +494,16 @@ class Search
                         $key   = $matches[1];
                         $value = $matches[2];
 
+                        // String values come back with double quotes around them.
+                        // We need to strip the quotes to get the raw values.
+                        if (substr($value, 0, 1) === '"' && substr($value, -1) === '"') {
+                            $value = substr($value, 1, -1);
+                        }
+
+                        if (substr($key, -3) === '_id') {
+                            $value = self::getDisplayName($key, $value);
+                        }
+
                         // The input and output syntax for bounding box definitions are different
                         // The query gets sent to search using "bbox"; however,
                         // when the parameters come back from SOLR, the "bbox" has been

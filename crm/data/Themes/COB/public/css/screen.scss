@@ -14,7 +14,6 @@
 @import 'modules/table.scss';
 
 footer { background-color:$color-background-footer; color:$color-heading-1; }
-
 h1 { font-size:1.5rem; }
 
 main .dropdown .launcher {
@@ -36,6 +35,8 @@ main .dropdown .launcher {
 }
 .icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
 .btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
+
+#advanced-search > .btn.delete { display:block; }
 
 .searchResults {
     article { border:1px solid $color-border-table; padding:.5em; }
