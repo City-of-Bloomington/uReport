@@ -37,6 +37,11 @@ main .dropdown .launcher {
 .icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
 .btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
 
+.searchResults {
+    article { border:1px solid $color-border-table; padding:.5em; }
+    dl      { border:none; }
+}
+
 .pageNavigation          { margin:.5em; }
 .pageNavigation li       { display:inline; margin:.5em; }
 a.current { border:2px solid green; }

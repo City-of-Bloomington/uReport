@@ -89,21 +89,21 @@ foreach ($tickets as $ticket) {
 	echo "
 		<article>
             <header>
-			<h1><a href=\"".BASE_URI."/tickets/view?ticket_id={$ticket->getId()}\">
-					{$this->_('ticket')}
-					# {$ticket->getId()} $category_id $status $substatus_id
-				</a>
-			</h1>
-			<span>$location $city $state $zip</span>
+                <h1><span class=\"status\">$status $substatus_id</span>
+                    <a href=\"{$ticket->getURL()}\" class=\"ticket_id\">#{$ticket->getId()}</a>
+                </h1>
+                <h2 class=\"category\">$category_id</h2>
+                <h2>$location $city $state $zip</h2>
+            </header>
 	";
 	if (count($dl)) {
-		echo '<ul>';
+		echo '<dl>';
 		foreach ($dl as $field=>$value) {
 			$dt = $displayableFields[$field];
 			$dd = $value;
-			echo "<li><label>$dt:</label> $dd</li>\n";
+			echo "<dt>$dt:</dt><dd>$dd</dd>";
 		}
-		echo '</ul>';
+		echo '</dl>';
 	}
 	echo "
             <p>$description</p>

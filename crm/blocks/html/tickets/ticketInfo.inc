@@ -30,7 +30,7 @@ echo "
         <h1><span class=\"status\">$status</span>
             <a href=\"{$this->ticket->getURL()}\" class=\"ticket_id\">#{$ticket_id}</a>
         </h1>
-        <h2><span class=\"category\">$category</span></h2>
+        <h2 class=\"category\">$category</h2>
     </header>
     $description
 </section>
