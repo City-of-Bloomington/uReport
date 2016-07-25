@@ -704,5 +704,11 @@ msgstr "open"
 msgid "closed"
 msgstr "gesloten"
 
+msgid "ticket_open"
+msgstr "Melding heropenen"
+
+msgid "ticket_close"
+msgstr "Melding sluiten"
+
 msgid "total"
 msgstr "totaal"

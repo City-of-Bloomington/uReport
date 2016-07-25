@@ -13,9 +13,17 @@ use Application\Models\Person;
     $links     = [];
 
 	if (Person::isAllowed('tickets', 'changeStatus')) {
+        if ($this->ticket->getStatus() === 'open') {
+            $status = 'closed';
+            $label  = $this->_('ticket_close');
+        }
+        else {
+            $status = 'open';
+            $label = $this->_('ticket_open');
+        }
         $links[] = [
-            'url'   => BASE_URI.'/tickets/changeStatus?ticket_id='.$ticket_id,
-            'label' => $this->_('change_status'),
+            'url'   => BASE_URI."/tickets/changeStatus?ticket_id=$ticket_id;status=$status",
+            'label' => $label,
             'attrs' => ['data-callback'=>'changeStatus']
         ];
     }
@@ -49,7 +57,7 @@ use Application\Models\Person;
 		}
 	}
 
-	if (isset($_SESSION['USER'])) {
+	if (isset($_SESSION['USER']) && $this->ticket->getStatus() != 'closed') {
         $department = $_SESSION['USER']->getDepartment_id()
             ? $_SESSION['USER']->getDepartment()
             : new Department();
