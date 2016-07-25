@@ -1,6 +1,6 @@
 body > header {
     background-color: #fff;
-    border-top: .4em solid $color-accent;
+    border-top: .4em solid $color-header;
     box-shadow: none;
     margin-bottom: 0;
     padding:0;
@@ -9,19 +9,24 @@ body > header {
     a { color:$color-header; }
 
     > .container {
-        &:before {
-            background: url('images/logo.svg');
-            background-size: 100% 100%;
-            content: '';
-            display: block;
-            float: left;
-            height: 2.25rem;
-            margin: 0 .5rem .25rem .5rem;
-            width: 2.25rem;
+        h1, h2 { display:inline-block; }
+        h1 a, h2 a {
+            display:inline-block;
+            height:2.5rem; line-height:2.5rem;
+            vertical-align:middle;
         }
-
-        h1 { font-size:1rem; font-weight:normal; margin:0; }
-        h2 { font-size:.8rem; margin:0; }
+        h1 a {
+            background:url('images/logo.svg') no-repeat left center;
+            font-size:1rem; font-weight:normal; margin:0;
+            padding-left:3rem;
+            background-size:2.5rem 2.5rem;
+        }
+        h2 {
+            font-size:.8rem;
+            margin: 0 0 0 2em;
+            padding:0 0 0 2em;
+            border-left:1px solid $color-border-table;
+        }
     }
 
     @media screen and (min-width: $viewport-med) {
@@ -38,7 +43,7 @@ body > header {
     }
 
     #nav1 {
-        background-color: $color-accent;
+        background-color: $color-header;
 
         a { background:none; color:$color-content-background; }
     }

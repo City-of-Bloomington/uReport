@@ -3,7 +3,7 @@
 }
 .searchLayout {
     #panel-one { float:left; width:300px; }
-    #content-panel { margin-left:310px; }
+    #content-panel { margin-left:300px; }
 
     .hideLeft #panel-one { position:absolute; left:-280px; }
     .hideLeft #content-panel { margin-left: 20px; }
@@ -16,35 +16,35 @@
 
 .backend {
     #panel-one { float:left; width:172px; }
-    #content-panel { margin-left:182px; }
+    #content-panel { margin-left:172px; }
 }
 
 .stackedPanels {
     #content-panel { overflow:auto; }
     #bottom-left { width:400px; float:left; }
-    #bottom-right { margin-left:415px; }
+    #bottom-right { margin-left:400px; }
 }
 
 .locations {
     #panel-one { width:380px; float:left; }
-    #panel-two { margin-left:390px; }
+    #panel-two { margin-left:380px; }
 }
 
 .merging {
-    #left { width:48%; float:left; }
+    #left  { width:48%; float:left; }
     #right { width:48%; float:left; }
 }
 
 .ticketCreation {
     #content-panel { width:380px; float:left; }
     #panel-one, #panel-two {
-        margin-left: 400px; height:300px; overflow:auto;
+        margin-left: 380px; height:300px; overflow:auto;
     }
 }
 
 .tickets {
     #content-panel { width:500px; float:left; }
-    #panel-one { margin-left:510px; }
+    #panel-one { margin-left:500px; }
 }
 
 footer { clear:both; }
