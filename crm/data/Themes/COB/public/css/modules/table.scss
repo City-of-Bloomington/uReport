@@ -10,9 +10,4 @@ table {
             border-top: 1px solid $color-border-table;
         }
     }
-    tr:hover {
-        th, td {
-            background: $color-content-background;
-        }
-    }
 }

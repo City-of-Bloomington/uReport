@@ -25,11 +25,11 @@ main .dropdown .launcher {
 
 
 #ticketSearchForm {
+    margin-left:.5em;
     ul { list-style-type:none; padding:0 1rem; }
     #display_fields {
         dl {
             margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2;
-            background-color:$color-content-background;
         }
         dd { margin:0; font-size:.8rem; }
     }
@@ -43,6 +43,8 @@ main .dropdown .launcher {
         color:#fff;
 
         h1, h2, legend { color:#fff; }
+        dl { background-color:$color-heading-2; }
+        dt { color:#fff; }
     }
 }
 #advanced-search > .btn.delete { display:block; }
