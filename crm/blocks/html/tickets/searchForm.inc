@@ -80,7 +80,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 								try {
 									$displayValue = Search::getDisplayName($key, $value);
 
-									if (array_key_exists($key, $currentFilters) && $currentFilters[$key]['value'] == $value) {
+									if (array_key_exists($key, $currentFilters) && $currentFilters[$key]['value'] === $displayValue) {
                                         $url   = $currentFilters[$key]['deleteUrl'];
                                         $label = $helper->buttonLink($url, $displayValue, 'delete');
                                         $class = '';
