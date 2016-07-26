@@ -65,8 +65,8 @@ msgstr "Current Search"
 msgid "search_results_count"
 msgstr "# cases in current search"
 
-msgid "quick_links"
-msgstr "Quick Links"
+msgid "search_saved"
+msgstr "Saved Searches"
 
 msgid "upload"
 msgstr "Upload"

@@ -43,7 +43,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                     $links[] = ['subgroup'=>$bookmarks];
                 }
                 $helper = $this->template->getHelper('dropdown');
-                echo $helper->dropdown($links, $this->_('quick_links'), 'quick_links');
+                echo $helper->dropdown($links, $this->_('search_saved'), 'search_saved');
             }
         ?>
         </div>

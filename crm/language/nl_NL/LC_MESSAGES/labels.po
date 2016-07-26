@@ -65,7 +65,7 @@ msgstr "Filter"
 msgid "search_results_count"
 msgstr "# resultaten op basis van de zoekopdracht"
 
-msgid "quick_links"
+msgid "search_saved"
 msgstr "Snelkoppelingen"
 
 msgid "upload"
