@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -174,7 +173,7 @@ class Open311Controller extends Controller
 			$tickets = $table->find($search, null, true);
 			$tickets->setCurrentPageNumber($page);
 			$tickets->setItemCountPerPage($pageSize);
-			$this->template->blocks[] = new Block('open311/requestList.inc',array('ticketList'=>$tickets));
+			$this->template->blocks[] = new Block('open311/requestList.inc',['ticketList'=>$tickets]);
 			if ($this->template->outputFormat == 'html') {
 				$this->template->blocks[] = new Block('pageNavigation.inc', ['paginator'=>$tickets]);
 			}

@@ -2,13 +2,11 @@
 /**
  * Displays a list of Tickets using Open311 terminology
  *
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
 use Blossom\Classes\Block;
-use Blossom\Classes\View;
 
 echo "
 <div class=\"requestList\">
@@ -91,5 +89,5 @@ echo "
 echo "
 </div>
 ";
-$block = new Block('pageNavigation.inc',array('paginator'=>$this->ticketList->getPaginator()));
+$block = new Block('pageNavigation.inc', ['paginator'=>$this->ticketList]);
 echo $block->render('html',$this->template);

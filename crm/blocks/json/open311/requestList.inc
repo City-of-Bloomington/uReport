@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
 $service_requests = array();
@@ -29,8 +28,9 @@ foreach ($this->ticketList as $t) {
 		'service_name'      =>$service_name,
 		'service_code'      =>$service_code,
 		'agency_responsible'=>$agency_responsible,
-		'requested_datetime'=>$t->getEnteredDate('c'),
-		'updated_datetime'  =>$h->getEnteredDate('c')
+		'requested_datetime'=>$t->getEnteredDate ('c'),
+		'updated_datetime'  =>$h->getLastModified('c'),
+		'expected_datetime' =>$t->getExpectedDate('c')
 	);
 	if ($t->getLocation())  { $sr['address']    = $t->getLocation();  }
 	if ($t->getAddressId()) { $sr['address_id'] = $t->getAddressId(); }
