@@ -5,25 +5,14 @@
 <?php
 	$this->_include('partials/head.inc');
 ?>
-<body class="stackedPanels">
+<body class="full-width">
 	<?php
 		$this->_include('partials/header.inc');
 	?>
 	<main>
-		<div id="content-panel">
+		<div id="content-panel" class="panel">
 			<?php
 				include BLOSSOM.'/errorMessages.php';
-
-				$panels = [
-					'ticket-panel', 'person-panel', 'issue-panel', 'bottom-left', 'bottom-right'
-				];
-				foreach ($panels as $p) {
-					if (isset($this->blocks[$p])) {
-						echo "<div id=\"$p\" class=\"panel\">";
-						echo $this->includeBlocks($p);
-						echo "</div>";
-					}
-				}
 				echo $this->includeBlocks();
 			?>
 		</div>

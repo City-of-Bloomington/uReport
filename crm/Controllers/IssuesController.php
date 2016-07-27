@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -36,23 +35,8 @@ class IssuesController extends Controller
 		}
 
 		$this->template->setFilename('issues');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',array('ticket'=>$ticket)
-		);
-
-		if (Person::isAllowed('people', 'view')) {
-			$person = $issue->getReportedByPerson();
-			if ($person) {
-				$this->template->blocks['person-panel'][] = new Block(
-					'people/personInfo.inc',
-					array('person'=>$person,'disableButtons'=>true)
-				);
-			}
-		}
-
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueInfo.inc', array('issue'=>$issue)
-		);
+		$this->template->blocks[] = new Block('tickets/issueInfo.inc',  ['issue'  => $issue ]);
+		$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket' => $ticket]);
 	}
 
 	/**
@@ -103,11 +87,6 @@ class IssuesController extends Controller
 			try {
 				$issue->save();
 
-				$history = new TicketHistory();
-				$history->setIssue($issue);
-				$history->setAction(new Action(Action::UPDATED));
-				$history->save();
-
 				// Update the search index
 				// Make sure the ticket uses the latest issue information
 				$ticket = new Ticket($issue->getTicket_id());
@@ -127,19 +106,8 @@ class IssuesController extends Controller
 		$ticket = $issue->getTicket();
 
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket,'disableButtons'=>true)
-		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory())
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/updateIssueForm.inc', array('issue'=>$issue, 'ticket'=>$ticket)
-		);
-
-		$this->addLocationInfoBlocks($ticket);
+		$this->template->blocks[] = new Block('tickets/updateIssueForm.inc', ['issue'=>$issue, 'ticket'=>$ticket]);
+		$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket,'disableButtons'=>true]);
 	}
 
 	/**

@@ -103,9 +103,9 @@ create table actions (
 insert actions (name,type,description) values('open',           'system', 'Opened by {actionPerson}');
 insert actions (name,type,description) values('assignment',     'system', '{enteredByPerson} assigned this case to {actionPerson}');
 insert actions (name,type,description) values('closed',         'system', 'Closed by {actionPerson}');
-insert actions (name,type,description) values('update',         'system', 'Updated by {enteredByPerson}');
 insert actions (name,type,description) values('changeCategory', 'system', 'Changed category from {original:category_id} to {updated:category_id}');
 insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');
+insert actions (name,type,description) values('response',       'system', '{actionPerson} contacted {reportedByPerson_id}');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
