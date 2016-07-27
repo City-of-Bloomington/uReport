@@ -249,7 +249,7 @@ class TicketsController extends Controller
 			'tickets/assignTicketForm.inc',
 			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
 		);
-		$this->addStandardInfoBlocks($ticket);
+		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -295,6 +295,9 @@ class TicketsController extends Controller
 	public function changeStatus()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		if (!empty($_GET['status'])) {
+            $ticket->setStatus($_GET['status'] === 'closed' ? 'closed' : 'open');
+		}
 
 		if (isset($_POST['status'])) {
 			try {
@@ -319,7 +322,7 @@ class TicketsController extends Controller
 		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
 		$this->template->blocks[] = new Block('tickets/responseReminder.inc', ['ticket'=>$ticket]);
 
-		$this->addStandardInfoBlocks($ticket);
+		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -349,7 +352,7 @@ class TicketsController extends Controller
 		);
 		$this->template->blocks['panel-two'][] = new Block('locations/mapChooser.inc');
 
-		$this->addStandardInfoBlocks($ticket);
+		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -374,7 +377,7 @@ class TicketsController extends Controller
 		$this->template->setFilename('tickets');
 		$this->template->title = 'Change Category';
 		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
-		$this->addStandardInfoBlocks($ticket);
+		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**

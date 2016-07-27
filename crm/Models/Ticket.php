@@ -277,7 +277,7 @@ class Ticket extends ActiveRecord
 			$zend_db = Database::getConnection();
 			$result = $zend_db->query('select * from substatus where status=? and isDefault=1')->execute([$this->getStatus()]);
 			if (count($result)) {
-				$this->setSubstatus(new Substatus($result->fetch()));
+				$this->setSubstatus(new Substatus($result->current()));
 			}
 		}
 
@@ -481,7 +481,7 @@ class Ticket extends ActiveRecord
 
 			$history = new TicketHistory();
 			$history->setTicket($this);
-			$history->setAction(new Action(Action::UPDATED));
+			$history->setAction(new Action(Action::MERGED));
 			$history->save();
 		}
 	}
@@ -630,6 +630,7 @@ class Ticket extends ActiveRecord
         // Create the entry in the history log
         $history = new TicketHistory();
         $history->setTicket($this);
+        $history->setIssue($issue);
         $history->setAction(new Action(Action::OPENED));
         if ($this->getEnteredByPerson_id()) {
             $history->setEnteredByPerson_id($this->getEnteredByPerson_id());
@@ -776,6 +777,22 @@ class Ticket extends ActiveRecord
 			$daysPassed = $diff->format('%a');
 			return round($daysPassed/$days*100);
 		}
+	}
+
+	/**
+	 * @param string       $f  Desired date format
+	 * @param DateTimeZone $tz
+	 * @return string          Formatted date string
+	 */
+	public function getExpectedDate($f='c', \DateTimeZone $tz=null)
+	{
+        $days = $this->getSlaDays();
+        if ($days) {
+            $date = new \DateTime(parent::get('enteredDate'));
+            $date->add(new \DateInterval("P{$days}D"));
+            if ($tz) { $date->setTimezone($tz); }
+            return $date->format($f);
+        }
 	}
 
 	/**
