@@ -5,15 +5,10 @@
  */
 namespace Application\Templates\Helpers;
 
-use Blossom\Classes\Template;
+use Blossom\Classes\Helper;
 
-class Dropdown
+class Dropdown extends Helper
 {
-	public function __construct(Template $template)
-	{
-		$this->template = $template;
-	}
-
 	public function dropdown(array $links, $title, $id, $class=null)
 	{
         $html = "

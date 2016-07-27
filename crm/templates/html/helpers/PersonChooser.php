@@ -21,18 +21,14 @@ namespace Application\Templates\Helpers;
 
 use Application\Models\Person;
 
+use Blossom\Classes\Helper;
 use Blossom\Classes\Template;
 use Blossom\Classes\Url;
+use Blossom\Classes\View;
 
-class PersonChooser
+
+class PersonChooser extends Helper
 {
-	private $template;
-
-	public function __construct(Template $template)
-	{
-		$this->template = $template;
-	}
-
 	/**
 	 * @param string $fieldname The name of the person field
 	 * @param Person $person The currently selected Person object
@@ -47,7 +43,7 @@ class PersonChooser
 		$name = '';
 		if ($person) {
 			$id   = $person->getId();
-			$name = self::escape($person->getFullname());
+			$name = View::escape($person->getFullname());
 		}
 		$return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$personChooser = BASE_URI.'/people?return_url='.$return_url;
