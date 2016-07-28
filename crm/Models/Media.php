@@ -5,11 +5,11 @@
  * Files will be stored as /data/media/YYYY/MM/DD/$media_id.ext
  * User provided filenames will be stored in the database
  *
- * @copyright 2006-2014 City of Bloomington, Indiana
+ * @copyright 2006-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -23,30 +23,30 @@ class Media extends ActiveRecord
 	/**
 	 * Whitelist of accepted file types
 	 */
-	public static $extensions = array(
-		'jpg' =>array('mime_type'=>'image/jpeg','media_type'=>'image'),
-		'gif' =>array('mime_type'=>'image/gif','media_type'=>'image'),
-		'png' =>array('mime_type'=>'image/png','media_type'=>'image'),
-		'tiff'=>array('mime_type'=>'image/tiff','media_type'=>'image'),
-		'pdf' =>array('mime_type'=>'application/pdf','media_type'=>'attachment'),
-		'rtf' =>array('mime_type'=>'application/rtf','media_type'=>'attachment'),
-		'doc' =>array('mime_type'=>'application/msword','media_type'=>'attachment'),
-		'xls' =>array('mime_type'=>'application/msexcel','media_type'=>'attachment'),
-		'gz'  =>array('mime_type'=>'application/x-gzip','media_type'=>'attachment'),
-		'zip' =>array('mime_type'=>'application/zip','media_type'=>'attachment'),
-		'txt' =>array('mime_type'=>'text/plain','media_type'=>'attachment'),
-		'wmv' =>array('mime_type'=>'video/x-ms-wmv','media_type'=>'video'),
-		'mov' =>array('mime_type'=>'video/quicktime','media_type'=>'video'),
-		'rm'  =>array('mime_type'=>'application/vnd.rn-realmedia','media_type'=>'video'),
-		'ram' =>array('mime_type'=>'audio/vnd.rn-realaudio','media_type'=>'audio'),
-		'mp3' =>array('mime_type'=>'audio/mpeg','media_type'=>'audio'),
-		'mp4' =>array('mime_type'=>'video/mp4','media_type'=>'video'),
-		'flv' =>array('mime_type'=>'video/x-flv','media_type'=>'video'),
-		'wma' =>array('mime_type'=>'audio/x-ms-wma','media_type'=>'audio'),
-		'kml' =>array('mime_type'=>'application/vnd.google-earth.kml+xml','media_type'=>'attachment'),
-		'swf' =>array('mime_type'=>'application/x-shockwave-flash','media_type'=>'attachment'),
-		'eps' =>array('mime_type'=>'application/postscript','media_type'=>'attachment')
-	);
+	public static $extensions = [
+		'jpg' =>['mime_type'=>'image/jpeg',                          'media_type'=>'image'],
+		'gif' =>['mime_type'=>'image/gif',                           'media_type'=>'image'],
+		'png' =>['mime_type'=>'image/png',                           'media_type'=>'image'],
+		'tiff'=>['mime_type'=>'image/tiff',                          'media_type'=>'image'],
+		'pdf' =>['mime_type'=>'application/pdf',                     'media_type'=>'attachment'],
+		'rtf' =>['mime_type'=>'application/rtf',                     'media_type'=>'attachment'],
+		'doc' =>['mime_type'=>'application/msword',                  'media_type'=>'attachment'],
+		'xls' =>['mime_type'=>'application/msexcel',                 'media_type'=>'attachment'],
+		'gz'  =>['mime_type'=>'application/x-gzip',                  'media_type'=>'attachment'],
+		'zip' =>['mime_type'=>'application/zip',                     'media_type'=>'attachment'],
+		'txt' =>['mime_type'=>'text/plain',                          'media_type'=>'attachment'],
+		'wmv' =>['mime_type'=>'video/x-ms-wmv',                      'media_type'=>'video'],
+		'mov' =>['mime_type'=>'video/quicktime',                     'media_type'=>'video'],
+		'rm'  =>['mime_type'=>'application/vnd.rn-realmedia',        'media_type'=>'video'],
+		'ram' =>['mime_type'=>'audio/vnd.rn-realaudio',              'media_type'=>'audio'],
+		'mp3' =>['mime_type'=>'audio/mpeg',                          'media_type'=>'audio'],
+		'mp4' =>['mime_type'=>'video/mp4',                           'media_type'=>'video'],
+		'flv' =>['mime_type'=>'video/x-flv',                         'media_type'=>'video'],
+		'wma' =>['mime_type'=>'audio/x-ms-wma',                      'media_type'=>'audio'],
+		'kml' =>['mime_type'=>'application/vnd.google-earth.kml+xml','media_type'=>'attachment'],
+		'swf' =>['mime_type'=>'application/x-shockwave-flash',       'media_type'=>'attachment'],
+		'eps' =>['mime_type'=>'application/postscript',              'media_type'=>'attachment']
+	];
 
 	/**
 	 * Populates the object with data
