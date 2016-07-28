@@ -17,7 +17,7 @@ class Media extends ActiveRecord
 {
 	protected $tablename = 'media';
 
-	protected $issue;
+	protected $ticket;
 	protected $person;
 
 	/**
@@ -109,7 +109,7 @@ class Media extends ActiveRecord
     {
         parent::exchangeArray($data);
 
-        $this->issue  = null;
+        $this->ticket = null;
         $this->person = null;
     }
 
@@ -120,10 +120,10 @@ class Media extends ActiveRecord
 	public function validate()
 	{
 		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->data['filename'])   { throw new \Exception('media/missingFilename');  }
-		if (!$this->data['mime_type'])  { throw new \Exception('media/missingMimeType');  }
+		if (!$this->data['filename'  ]) { throw new \Exception('media/missingFilename' ); }
+		if (!$this->data['mime_type' ]) { throw new \Exception('media/missingMimeType' ); }
 		if (!$this->data['media_type']) { throw new \Exception('media/missingMediaType'); }
-		if (!$this->data['issue_id'])   { throw new \Exception('media/missingIssue_id');  }
+		if (!$this->data['ticket_id' ]) { throw new \Exception('media/missingTicket_id'); }
 	}
 
 	public function save() { parent::save(); }
@@ -140,19 +140,19 @@ class Media extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function getId()         { return parent::get('id');         }
-	public function getIssue_id()   { return parent::get('issue_id');   }
+	public function getTicket_id()  { return parent::get('ticket_id');  }
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getMedia_type() { return parent::get('media_type'); }
 	public function getPerson_id()  { return parent::get('person_id');  }
 	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
 
-	public function getIssue()  { return   parent::getForeignKeyObject(__namespace__.'\Issue',  'issue_id');  }
+	public function getTicket() { return   parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
 	public function getPerson() { return   parent::getForeignKeyObject(__namespace__.'\Person', 'person_id'); }
 
-	public function setIssue_id ($id)    { parent::setForeignKeyField (__namespace__.'\Issue',  'issue_id',  $id); }
+	public function setTicket_id($id)    { parent::setForeignKeyField (__namespace__.'\Ticket', 'ticket_id', $id); }
 	public function setPerson_id($id)    { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
-	public function setIssue (Issue  $o) { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o);  }
+	public function setTicket(Ticket $o) { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o);  }
 	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o);  }
 	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 

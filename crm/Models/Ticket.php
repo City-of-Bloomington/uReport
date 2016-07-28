@@ -15,7 +15,11 @@ class Ticket extends ActiveRecord
 	protected $category;
 	protected $client;
 	protected $enteredByPerson;
+	protected $reportedByPerson;
 	protected $assignedPerson;
+	protected $contactMethod;
+	protected $responseMethod;
+	protected $issueType;
 
 	private $issues;
 	private $needToUpdateClusters = false;
@@ -74,11 +78,15 @@ class Ticket extends ActiveRecord
     {
         parent::exchangeArray($data);
 
-        $this->substatus       = null;
-        $this->category        = null;
-        $this->client          = null;
-        $this->enteredByPerson = null;
-        $this->assignedPerson  = null;
+        $this->substatus        = null;
+        $this->category         = null;
+        $this->issueType        = null;
+        $this->client           = null;
+        $this->enteredByPerson  = null;
+        $this->reportedByPerson = null;
+        $this->assignedPerson   = null;
+        $this->contactMethod    = null;
+        $this->responseMethod   = null;
 
         $this->issues = null;
         $this->needToUpdateClusters = false;
@@ -93,11 +101,6 @@ class Ticket extends ActiveRecord
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->getCategory()) {
 			throw new \Exception('tickets/missingCategory');
-		}
-
-		$issue = $this->getIssue();
-		if (!$issue) {
-			throw new \Exception('tickets/missingIssue');
 		}
 
 		// We need at least a location (address or lat/long) or a description
@@ -176,8 +179,11 @@ class Ticket extends ActiveRecord
 
 	public function delete()
 	{
-		foreach ($this->getIssues()  as $i) { $i->delete(); }
-		foreach ($this->getHistory() as $h) { $h->delete(); }
+        foreach ($this->getMedia() as $m) { $m->delete(); }
+
+        $zend_db = Database::getConnection();
+        $zend_db->query('delete from ticketHistory where ticket_id=?')->execute([$this->getId()]);
+        $zend_db->query('delete from responses     where ticket_id=?')->execute([$this->getId()]);
 
 		$search = new Search();
 		$search->delete($this);
@@ -199,37 +205,55 @@ class Ticket extends ActiveRecord
 	public function getEnteredDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
 	public function getLastModified($f=null, \DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
 	public function getClosedDate  ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
-	public function getSubstatus_id()       { return parent::get('substatus_id');       }
-	public function getCategory_id()        { return parent::get('category_id');        }
-	public function getClient_id()          { return parent::get('client_id');          }
-	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
-	public function getAssignedPerson_id()  { return parent::get('assignedPerson_id');  }
-	public function getSubstatus()       { return parent::getForeignKeyObject(__namespace__.'\Substatus',  'substatus_id');       }
-	public function getCategory()        { return parent::getForeignKeyObject(__namespace__.'\Category',   'category_id');        }
-	public function getClient()          { return parent::getForeignKeyObject(__namespace__.'\Client',     'client_id');          }
-	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',     'enteredByPerson_id'); }
-	public function getAssignedPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',     'assignedPerson_id');  }
+	public function getSubstatus_id()        { return parent::get('substatus_id');        }
+	public function getCategory_id()         { return parent::get('category_id');         }
+	public function getIssueType_id()        { return parent::get('issueType_id');        }
+	public function getClient_id()           { return parent::get('client_id');           }
+	public function getEnteredByPerson_id()  { return parent::get('enteredByPerson_id');  }
+	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
+	public function getAssignedPerson_id()   { return parent::get('assignedPerson_id');   }
+	public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
+	public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
+	public function getDescription()         { return parent::get('description');         }
+	public function getSubstatus()        { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'substatus_id');        }
+	public function getCategory()         { return parent::getForeignKeyObject(__namespace__.'\Category',      'category_id');         }
+	public function getIssueType()        { return parent::getForeignKeyObject(__namespace__.'\IssueType',     'issueType_id');        }
+	public function getClient()           { return parent::getForeignKeyObject(__namespace__.'\Client',        'client_id');           }
+	public function getEnteredByPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id');  }
+	public function getReportedByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id'); }
+	public function getAssignedPerson()   { return parent::getForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id');   }
+	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
+	public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
     public function getLatitude()  { return (float)parent::get('latitude' ); }
     public function getLongitude() { return (float)parent::get('longitude'); }
 
-	public function setAddressId($s)  { parent::set('addressId', $s); }
-	public function setLocation ($s)  { parent::set('location',  $s); }
-	public function setCity     ($s)  { parent::set('city',      $s); }
-	public function setState    ($s)  { parent::set('state',     $s); }
-	public function setZip      ($s)  { parent::set('zip',       $s); }
+	public function setAddressId  ($s) { parent::set('addressId',   $s); }
+	public function setLocation   ($s) { parent::set('location',    $s); }
+	public function setCity       ($s) { parent::set('city',        $s); }
+	public function setState      ($s) { parent::set('state',       $s); }
+	public function setZip        ($s) { parent::set('zip',         $s); }
+	public function setDescription($s) { parent::set('description', $s); }
 	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
 	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
 	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
-	public function setSubstatus_id      ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',  'substatus_id',       $id); }
-	public function setCategory_id       ($id) { parent::setForeignKeyField(__namespace__.'\Category',   'category_id',        $id); }
-	public function setClient_id         ($id) { parent::setForeignKeyField(__namespace__.'\Client',     'client_id',          $id); }
-	public function setEnteredByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',     'enteredByPerson_id', $id); }
-	public function setAssignedPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',     'assignedPerson_id',  $id); }
-	public function setSubstatus      (Substatus  $o) { parent::setForeignKeyObject(__namespace__.'\Substatus','substatus_id',       $o); }
-	public function setCategory       (Category   $o) { parent::setForeignKeyObject(__namespace__.'\Category', 'category_id',        $o); }
-	public function setClient         (Client     $o) { parent::setForeignKeyObject(__namespace__.'\Client',   'client_id',          $o); }
-	public function setEnteredByPerson(Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'enteredByPerson_id', $o); }
-	public function setAssignedPerson (Person     $o) { parent::setForeignKeyObject(__namespace__.'\Person',   'assignedPerson_id',  $o); }
+	public function setSubstatus_id       ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',     'substatus_id',        $id); }
+	public function setCategory_id        ($id) { parent::setForeignKeyField(__namespace__.'\Category',      'category_id',         $id); }
+	public function setIssueType_id       ($id) { parent::setForeignKeyField(__namespace__.'\IssueType',     'issueType_id',        $id); }
+	public function setClient_id          ($id) { parent::setForeignKeyField(__namespace__.'\Client',        'client_id',           $id); }
+	public function setEnteredByPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'enteredByPerson_id',  $id); }
+	public function setReportedByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',        'reportedByPerson_id', $id); }
+	public function setAssignedPerson_id  ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'assignedPerson_id',   $id); }
+	public function setContactMethod_id   ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id',    $id); }
+	public function setResponseMethod_id  ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'responseMethod_id',   $id); }
+	public function setSubstatus       (Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'substatus_id',       $o); }
+	public function setCategory        (Category      $o) { parent::setForeignKeyObject(__namespace__.'\Category',      'category_id',        $o); }
+	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject(__namespace__.'\IssueType',     'issueType_id',       $o); }
+	public function setClient          (Client        $o) { parent::setForeignKeyObject(__namespace__.'\Client',        'client_id',          $o); }
+	public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id', $o); }
+	public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id',$o); }
+	public function setAssignedPerson  (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id',  $o); }
+	public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id',   $o); }
+	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',  $o); }
 
 	public function setLatitude ($s)  {
 		if (!empty($s) && $this->getLatitude() != (float)$s) {
@@ -313,6 +337,22 @@ class Ticket extends ActiveRecord
 		$this->data['additionalFields'] = json_encode($array);
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getCustomFields()
+	{
+		return json_decode(parent::get('customFields'));
+	}
+
+	/**
+	 * @param array $array
+	 */
+	public function setCustomFields($array)
+	{
+		$this->data['customFields'] = json_encode($array);
+	}
+
 	//----------------------------------------------------------------
 	// Custom functions
 	//----------------------------------------------------------------
@@ -368,48 +408,37 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return array  An array of Issues
+	 * @return Zend\Db\ResultSet
 	 */
-	public function getIssues()
+	public function getMedia()
 	{
-		if (!$this->issues) {
-			$this->issues = array();
+		$table = new MediaTable();
+		return $table->find(['ticket_id' => $this->getId()]);
+	}
 
-			$zend_db = Database::getConnection();
-			$sql = 'select * from issues where ticket_id=?';
-			$result = $zend_db->query($sql)->execute([$this->getId()]);
-			foreach ($result as $row) {
-				$this->issues[] = new Issue($row);
+	/**
+	 * Returns the profile picture for this issue
+	 *
+	 * Currently the profile picture is the first image that was uploaded
+	 *
+	 * @return Media
+	 */
+	public function getProfileImage()
+	{
+		foreach ($this->getMedia() as $media) {
+			if ($media->getMedia_type() == 'image') {
+				return $media;
 			}
 		}
-		return $this->issues;
 	}
 
 	/**
-	 * Returns a single issue
-	 *
-	 * Defaults to the first issue, if you don't provide an index
-	 *
-	 * @param int $index
-	 * @return Issue
+	 * @return Zend\Db\ResultSet
 	 */
-	public function getIssue($index=0)
+	public function getResponses()
 	{
-		$list = $this->getIssues();
-		if (isset($list[$index])) {
-			return $list[$index];
-		}
-	}
-
-	/**
-	 * Returns the description of the first issue in this ticket
-	 *
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		$issue = $this->getIssue();
-		return $issue ? $issue->getDescription() : '';
+		$table = new ResponseTable();
+		return $table->find(['ticket_id' => $this->getId()]);
 	}
 
 	/**
@@ -559,10 +588,12 @@ class Ticket extends ActiveRecord
 	public function handleUpdate($post)
 	{
 		// Set all the location information using any fields the user posted
-		$fields = array(
+		$fields = [
 			'category_id', 'client_id', 'assignedPerson_id',
-			'location', 'latitude', 'longitude', 'city', 'state', 'zip'
-		);
+			'location', 'latitude', 'longitude', 'city', 'state', 'zip',
+			'issueType_id', 'description', 'customFields',
+			'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
+		];
 		foreach ($fields as $field) {
 			if (isset($post[$field])) {
 				$set = 'set'.ucfirst($field);
@@ -599,20 +630,7 @@ class Ticket extends ActiveRecord
 		$zend_db->getDriver()->getConnection()->beginTransaction();
 		try {
 			$this ->handleUpdate($post);
-
-			// We must add an issue to the ticket for validation to pass
-			$issue = new Issue();
-			$issue->handleUpdate($post);
-			$this->issues = [$issue];
-
-			if (!$this->getEnteredByPerson_id() && $issue->getReportedByPerson_id()) {
-				$this->setEnteredByPerson_id($issue->getReportedByPerson_id());
-			}
-
 			$this->save();
-
-			$issue->setTicket($this);
-			$issue->save();
 
 			$this->getCategory()->onTicketAdd($this);
 		}
@@ -630,7 +648,6 @@ class Ticket extends ActiveRecord
         // Create the entry in the history log
         $history = new TicketHistory();
         $history->setTicket($this);
-        $history->setIssue($issue);
         $history->setAction(new Action(Action::OPENED));
         if ($this->getEnteredByPerson_id()) {
             $history->setEnteredByPerson_id($this->getEnteredByPerson_id());

@@ -2,8 +2,8 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Issue $this->issue
- * @param bool  $this->disableButtons
+ * @param Ticket $this->ticket
+ * @param bool   $this->disableButtons
  */
 use Application\Models\Person;
 ?>
@@ -17,7 +17,7 @@ use Application\Models\Person;
 
 	foreach (['enteredByPerson', 'reportedByPerson'] as $person) {
         $get = 'get'.ucfirst($person);
-        $p = $this->issue->$get();
+        $p = $this->ticket->$get();
         if ($p) {
             $$person = self::escape($p->getFullname());
             if ($userCanViewPeople) {
@@ -26,18 +26,17 @@ use Application\Models\Person;
             }
         }
 	}
-    $contactMethod  = self::escape($this->issue->getContactMethod());
-    $responseMethod = self::escape($this->issue->getResponseMethod());
+    $contactMethod  = self::escape($this->ticket->getContactMethod());
+    $responseMethod = self::escape($this->ticket->getResponseMethod());
     foreach (['enteredByPerson', 'reportedByPerson', 'contactMethod', 'responseMethod'] as $f) {
         if (!empty($$f)) {
             echo "<dl><dt>{$this->_($f)}</dt><dd>{$$f}</dd></dl>";
         }
     }
 
-    $t = $this->issue->getTicket();
-    $customFields = $t->getCategory_id() ? $t->getCategory()->getCustomFields() : null;
+    $customFields = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
     if ($customFields) {
-        $customFieldData = $this->issue->getCustomFields();
+        $customFieldData = $this->ticket->getCustomFields();
         foreach ($customFields as $definition) {
             $fieldname = $definition->name;
             $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
@@ -48,17 +47,17 @@ use Application\Models\Person;
     }
 
 	if (!$this->disableComments) {
-		$description = self::escape($this->issue->getDescription());
+		$description = self::escape($this->ticket->getDescription());
 		if ($description) { echo "<div class=\"notes\">$description</div>"; }
 	}
 
 	// Don't display any personal information from the issue unless the user is authenticated
-	#if ($userCanViewPeople && $this->issue->getReportedByPerson()) {
-	#	$this->responses = $this->issue->getResponses();
+	#if ($userCanViewPeople && $this->ticket->getReportedByPerson()) {
+	#	$this->responses = $this->ticket->getResponses();
 	#	$this->_include('tickets/responseList.inc');
 	#}
 
-	#$this->history = $this->issue->getHistory();
+	#$this->history = $this->ticket->getHistory();
 	#if (count($this->history)) {
 	#	$this->_include('tickets/history.inc');
 	#}

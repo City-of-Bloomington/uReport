@@ -163,25 +163,31 @@ create table department_categories (
 );
 
 create table tickets (
-	id                 int         unsigned not null primary key auto_increment,
-	parent_id          int         unsigned,
-	category_id        int         unsigned,
-	client_id          int         unsigned,
-	enteredByPerson_id int         unsigned,
-	assignedPerson_id  int         unsigned,
-	enteredDate        datetime    not null default now(),
-	lastModified       timestamp   not null default CURRENT_TIMESTAMP,
-	addressId          int         unsigned,
-	latitude           float(17, 14),
-	longitude          float(17, 14),
-	location           varchar(128),
-	city               varchar(128),
-	state              varchar(128),
-	zip                varchar(40),
-	status             varchar(20) not null default 'open',
-	closedDate         timestamp   null,
-	substatus_id       int         unsigned,
-	additionalFields   varchar(255),
+	id                  int         unsigned not null primary key auto_increment,
+	parent_id           int         unsigned,
+	category_id         int         unsigned,
+	issueType_id        int         unsigned,
+	client_id           int         unsigned,
+	enteredByPerson_id  int         unsigned,
+	reportedByPerson_id int         unsigned,
+	assignedPerson_id   int         unsigned,
+	contactMethod_id    int         unsigned,
+	responseMethod_id   int         unsigned,
+	enteredDate         datetime    not null default now(),
+	lastModified        timestamp   not null default CURRENT_TIMESTAMP,
+	addressId           int         unsigned,
+	latitude            float(17, 14),
+	longitude           float(17, 14),
+	location            varchar(128),
+	city                varchar(128),
+	state               varchar(128),
+	zip                 varchar(40),
+	status              varchar(20) not null default 'open',
+	closedDate          timestamp   null,
+	substatus_id        int         unsigned,
+	additionalFields    varchar(255),  -- Extra location fields from AddressService
+	customFields        text,          -- Custom user-provided data defined in the Category
+	description         text,
 	foreign key (parent_id)          references tickets    (id),
 	foreign key (category_id)        references categories (id),
 	foreign key (client_id)          references clients    (id),
@@ -240,15 +246,15 @@ create table ticketHistory (
 
 create table media (
 	id         int          unsigned not null primary key auto_increment,
-	issue_id   int          unsigned not null,
+	ticket_id  int          unsigned not null,
 	filename   varchar(128) not null,
 	internalFilename varchar(50) not null,
 	mime_type  varchar(128),
 	media_type varchar(50),
 	uploaded   timestamp    not null default CURRENT_TIMESTAMP,
 	person_id  int          unsigned,
-	foreign key (issue_id)  references issues(id),
-	foreign key (person_id) references people(id)
+	foreign key (ticket_id) references tickets(id),
+	foreign key (person_id) references people (id)
 );
 
 create table responses (

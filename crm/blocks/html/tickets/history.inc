@@ -36,5 +36,6 @@ use Blossom\Classes\Block;
 			}
 			echo "</article>";
 		}
+
 	?>
 </section>

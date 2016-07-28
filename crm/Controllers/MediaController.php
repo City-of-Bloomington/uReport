@@ -1,12 +1,11 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
-use Application\Models\Issue;
+use Application\Models\Ticket;
 use Application\Models\Media;
 
 use Blossom\Classes\Block;
@@ -16,14 +15,11 @@ class MediaController extends Controller
 {
 	/**
 	 * @param string $id
-	 * @return Issue
+	 * @return Ticket
 	 */
-	private function loadIssue($id)
+	private function loadTicket($id)
 	{
-		try {
-			$issue = new Issue($id);
-			return $issue;
-		}
+		try { return new Ticket($id); }
 		catch (\Exception $e) {
 			$_SESSION['errorMessages'][] = $e;
 			header('Location: '.BASE_URL);
@@ -41,7 +37,7 @@ class MediaController extends Controller
 	public function delete()
 	{
 		$media = new Media($_GET['media_id']);
-		$ticket = $media->getIssue()->getTicket();
+		$ticket = $media->getTicket();
 		$media->delete();
 
 		header('Location: '.$ticket->getURL());
@@ -54,13 +50,12 @@ class MediaController extends Controller
 	 */
 	public function upload()
 	{
-		$issue = $this->loadIssue($_REQUEST['issue_id']);
-		$ticket = $issue->getTicket();
+        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		if (isset($_FILES['attachment'])) {
 			try {
 				$media = new Media();
-				$media->setIssue($issue);
+				$media->setTicket($ticket);
 				$media->setFile($_FILES['attachment']);
 				$media->save();
 			}
@@ -76,21 +71,9 @@ class MediaController extends Controller
 		}
 
 		$this->template->setFilename('tickets');
-		$this->template->blocks['ticket-panel'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticket, 'disableButtons'=>1)
-		);
-		$this->template->blocks['history-panel'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticket->getHistory())
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'media/uploadForm.inc', array('issue'=>$issue)
-		);
-		$this->template->blocks['issue-panel'][] = new Block(
-			'tickets/issueInfo.inc',
-			array('issue'=>$issue, 'disableButtons'=>1)
-		);
+		$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'  => $ticket, 'disableButtons'=>1]);
+		$this->template->blocks[] = new Block('media/uploadForm.inc',   ['ticket'  => $ticket]);
+		$this->template->blocks[] = new Block('tickets/history.inc',    ['history' => $ticket->getHistory()]);
 	}
 
 	/**
@@ -105,10 +88,7 @@ class MediaController extends Controller
 		try {
 			$media = new Media($_REQUEST['media_id']);
 			$size = !empty($_REQUEST['size']) ? (int)$_REQUEST['size'] : null;
-			$this->template->blocks[] = new Block(
-				'media/image.inc',
-				array('media'=>$media, 'size'=>$size)
-			);
+			$this->template->blocks[] = new Block('media/image.inc', ['media'=>$media, 'size'=>$size]);
 		}
 		catch (\Exception $e) {
 			header('HTTP/1.1 404 Not Found', true, 404);

@@ -2,7 +2,7 @@
 /**
  * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Issue   $this->issue
+ * @param Ticket   $this->ticket
  * @param boolean $this->disableButtons (optional)
  */
 use Application\Models\Person;
@@ -13,13 +13,13 @@ $helper = $this->template->getHelper('buttonLink');
 $uploadButton = '';
 if (!$this->disableButtons && Person::isAllowed('media','upload')) {
     $uploadButton = $helper->buttonLink(
-        BASE_URI.'/media/upload?issue_id='.$this->issue->getId(),
+        BASE_URI.'/media/upload?ticket_id='.$this->ticket->getId(),
         $this->_('upload_media'),
         'upload'
     );
 }
 
-$this->mediaList = $this->issue->getMedia();
+$this->mediaList = $this->ticket->getMedia();
 
 if ($uploadButton || count($this->mediaList)) {
 	echo "
@@ -29,12 +29,12 @@ if ($uploadButton || count($this->mediaList)) {
             <div class=\"tools\">$uploadButton</div>
         </header>
 	";
-		$profileImage = $this->issue->getProfileImage();
+		$profileImage = $this->ticket->getProfileImage();
 		if ($profileImage) {
 			$thumbnail = new Block('media/thumbnail.inc', ['media'=>$profileImage]);
 			echo "
 			<div>
-				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->issue->getTicket_id()}\">
+				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->ticket->getId()}\">
 					{$this->_('see_all_thumbnails')}
 				</a>
 			</div>

@@ -92,10 +92,7 @@ class TicketsController extends Controller
 	{
 		$ticket = $this->loadTicket($_GET['ticket_id']);
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
-			$this->template->blocks[] = new Block(
-				'tickets/thumbnails.inc',
-				array('ticket'=>$ticket)
-			);
+			$this->template->blocks[] = new Block('tickets/thumbnails.inc', ['ticket'=>$ticket]);
 		}
 		else {
 			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
