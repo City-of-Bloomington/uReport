@@ -20,8 +20,7 @@ use Blossom\Classes\Block;
     </header>
 	<?php
 		foreach ($this->history as $event) {
-            $description = self::escape($event->getDescription($this->template));
-
+            $description = $event->getDescription($this->template);
 			echo "
 			<article class=\"historyItem\">
                 <header>
@@ -35,17 +34,6 @@ use Blossom\Classes\Block;
                     echo "<p>$notes</p>";
                 }
 			}
-
-			$action   = $event->getAction();
-			$issue_id = $event->getIssue_id();
-			if ($action->getType() === 'system' && $issue_id) {
-                $block = new Block('tickets/issueInfo.inc', [
-                    'issue'          => $event->getIssue(),
-                    'disableButtons' => true
-                ]);
-                echo $block->render('html',$this->template);
-			}
-
 			echo "</article>";
 		}
 	?>

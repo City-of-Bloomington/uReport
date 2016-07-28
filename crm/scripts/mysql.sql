@@ -106,6 +106,7 @@ insert actions (name,type,description) values('closed',         'system', 'Close
 insert actions (name,type,description) values('changeCategory', 'system', 'Changed category from {original:category_id} to {updated:category_id}');
 insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');
 insert actions (name,type,description) values('response',       'system', '{actionPerson} contacted {reportedByPerson_id}');
+insert actions (name,type,description) values('duplicate',      'system', '{duplicate:ticket_id} marked as a duplicate of this case.');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
@@ -163,6 +164,7 @@ create table department_categories (
 
 create table tickets (
 	id                 int         unsigned not null primary key auto_increment,
+	parent_id          int         unsigned,
 	category_id        int         unsigned,
 	client_id          int         unsigned,
 	enteredByPerson_id int         unsigned,
@@ -180,6 +182,7 @@ create table tickets (
 	closedDate         timestamp   null,
 	substatus_id       int         unsigned,
 	additionalFields   varchar(255),
+	foreign key (parent_id)          references tickets    (id),
 	foreign key (category_id)        references categories (id),
 	foreign key (client_id)          references clients    (id),
 	foreign key (enteredByPerson_id) references people     (id),

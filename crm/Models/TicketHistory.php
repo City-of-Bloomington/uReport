@@ -204,15 +204,36 @@ class TicketHistory extends ActiveRecord
             'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '',
             'ticket_id'      => $this->getTicket_id(),
             'issue_id'       => $this->getIssue_id(),
+            'enteredDate'    => $this->getEnteredDate(DATE_FORMAT),
+            'actionDate'     => $this->getActionDate (DATE_FORMAT)
         ];
         $data = $this->getData();
         if ($data) {
-            foreach (['original', 'updated'] as $type) {
+            $dataGroups = [];
+            $actionName = $this->getAction()->getName();
+            switch ($actionName) {
+                case Action::DUPLICATED:
+                    $dataGroups[] = Action::DUPLICATED;
+                break;
+
+                case Action::CHANGED_CATEGORY:
+                    $dataGroups[] = 'original';
+                    $dataGroups[] = 'updated';
+                break;
+            }
+
+            #$dataGroups = ['original', 'updated'];
+
+            foreach ($dataGroups as $type) {
                 if (!empty(  $data[$type])) {
                     foreach ($data[$type] as $key => $value) {
                         // Convert any _id values
-                        if (false !== strpos($key, '_id')) {
-                            $value = Search::getDisplayName($key, $value);
+                        if ($key === 'ticket_id') {
+                            $uri = BASE_URI."/tickets/view?ticket_id=$value";
+                            $value = "<a href=\"$uri\">$value</a>";
+                        }
+                        elseif (false !== strpos($key, '_id')) {
+                            $value = $template::escape(Search::getDisplayName($key, $value));
                         }
                         $placeholders["$type:$key"] = $value;
                     }

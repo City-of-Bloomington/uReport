@@ -10,12 +10,12 @@ use Blossom\Classes\Database;
 class Action extends ActiveRecord
 {
     // Pre-defined system level actions
-    const OPENED    = 'open';
-    const CLOSED    = 'closed';
-    const ASSIGNED  = 'assignment';
-    const UPDATED   = 'update';
-    const RESPONDED = 'response';
-    const MERGED    = 'merge';
+    const OPENED     = 'open';
+    const CLOSED     = 'closed';
+    const ASSIGNED   = 'assignment';
+    const UPDATED    = 'update';
+    const RESPONDED  = 'response';
+    const DUPLICATED = 'duplicate';
     const CHANGED_CATEGORY = 'changeCategory';
     const CHANGED_LOCATION = 'changeLocation';
 
