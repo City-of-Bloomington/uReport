@@ -9,12 +9,12 @@ use Application\Models\Action;
 use Application\Models\AddressService;
 use Application\Models\Person;
 use Application\Models\Category;
-use Application\Models\Issue;
 use Application\Models\Department;
 use Application\Models\Ticket;
 use Application\Models\TicketHistory;
 use Application\Models\TicketTable;
 use Application\Models\Search;
+use Application\Models\Response;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
@@ -375,6 +375,35 @@ class TicketsController extends Controller
 		$this->template->title = 'Change Category';
 		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
 		#$this->addStandardInfoBlocks($ticket);
+	}
+
+	/**
+	 * Saves a response log entry
+	 *
+	 * This creates a history entry that a staff person communicated
+	 * with someone.  Thist action does not actually send any messages.
+	 * This is only the logging action.
+	 *
+	 * @param REQUEST ticket_id
+	 */
+	public function respond()
+	{
+        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+
+		if (isset($_POST['contactMethod_id'])) {
+			try {
+                $ticket->handleResponse($_POST);
+				header('Location: '.$ticket->getURL());
+				exit();
+			}
+			catch (\Exception $e) {
+				$_SESSION['errorMessages'][] = $e;
+			}
+		}
+
+		// Display the view
+		$this->template->setFilename('tickets');
+		$this->template->blocks[] = new Block('tickets/responseForm.inc', ['ticket'=>$ticket]);
 	}
 
 	/**

@@ -256,18 +256,6 @@ create table media (
 	constraint FK_media_person_id foreign key (person_id) references people (id)
 );
 
-create table responses (
-	id               int       unsigned not null primary key auto_increment,
-	issue_id         int       unsigned not null,
-	date             timestamp not null default CURRENT_TIMESTAMP,
-	contactMethod_id int       unsigned,
-	notes            text,
-	person_id        int       unsigned,
-	constraint FK_responses_issue_id         foreign key (issue_id)         references issues        (id),
-	constraint FK_responses_contactMethod_id foreign key (contactMethod_id) references contactMethods(id),
-	constraint FK_responses_person_id        foreign key (person_id)        references people        (id)
-);
-
 create table bookmarks (
 	id          int unsigned not null primary key auto_increment,
 	person_id   int unsigned not null,

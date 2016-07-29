@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -757,6 +758,26 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
+	 * Does all the database work for creating a reponse history
+	 *
+	 * This function calls save() as needed.  After using this function,
+	 * there's no need to make an additional save() call.
+	 *
+	 * @param array $post
+	 */
+	public function handleResponse($post)
+	{
+        $history = new TicketHistory();
+        $history->setTicket($this);
+        $history->setAction(new Action(Action::RESPONDED));
+        $history->setData(['contactMethod_id'=>(int)$post['contactMethod_id']]);
+        $history->setEnteredByPerson($_SESSION['USER']);
+        $history->setActionPerson_id($post['person_id']);
+        $history->setNotes($post['notes']);
+        $history->save();
+	}
+
+	/**
 	 * Checks whether the user is supposed to be allowed to see this ticket
 	 *
 	 * @param Person $person
@@ -813,6 +834,38 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
+	 * Returns an array of Tickets that are children of this ticket
+	 *
+	 * @return array
+	 */
+	public function getChildren()
+	{
+        $tickets = [];
+        $table   = new TicketTable();
+        $list    = $table->find(['parent_id'=>$this->getId()]);
+        foreach ($list as $t) { $tickets[] = $t; }
+        return $tickets;
+	}
+
+	/**
+	 * Returns an array of all the people involved with this ticket
+	 *
+	 * @return array  An array of Person objects
+	 */
+	public function getPeople()
+	{
+        $people = [];
+        foreach (['enteredByPerson', 'assignedPerson', 'reportedByPerson'] as $p) {
+            $get = 'get'.ucfirst($p);
+            $person = $this->$get();
+            if ($person && !array_key_exists($person->getId(), $people)) {
+                $people[$person->getId()] = $person;
+            }
+        }
+        return $people;
+	}
+
+	/**
 	 * Returns the notification email addresses for everyone involved with this ticket
 	 *
 	 * @return array An array of Email objects
@@ -825,9 +878,7 @@ class Ticket extends ActiveRecord
                     union
                     select assignedPerson_id   id from tickets where id=? and assignedPerson_id  is not null
                     union
-                    select reportedByPerson_id id from tickets
-                    join issues on tickets.id=issues.ticket_id
-                    where tickets.id=? and reportedByPerson_id is not null
+                    select reportedByPerson_id id from tickets where id=? and reportedByPerson_id is not null
                 ) as p
                 join peopleEmails e on p.id=e.person_id
                 where usedForNotifications=1";

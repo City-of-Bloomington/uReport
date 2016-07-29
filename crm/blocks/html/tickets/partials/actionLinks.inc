@@ -55,6 +55,12 @@ use Application\Models\Person;
                 'attrs' => ['data-callback'=>'assign']
             ];
 		}
+		if (Person::isAllowed('tickets', 'respond')) {
+            $links[] = [
+                'url'   => BASE_URI.'/tickets/respond?ticket_id='.$ticket_id,
+                'label' => $this->_('add_response')
+            ];
+		}
 	}
 
 	if (isset($_SESSION['USER']) && $this->ticket->getStatus() != 'closed') {

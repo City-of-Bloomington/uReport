@@ -2,42 +2,55 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Issue $this->issue
+ * @param Ticket $this->ticket
  */
 use Application\Models\ContactMethodTable;
 ?>
-<div class="responseForm">
-	<h2><?= $this->_('add_response'); ?></h2>
-	<form method="post" action="<?= $_SERVER['REDIRECT_URL']; ?>">
+<section class="responseForm">
+    <header>
+        <h1><?= $this->_('add_response'); ?></h1>
+    </header>
+	<form method="post" action="<?= BASE_URI; ?>/tickets/respond">
 		<fieldset><legend><?= $this->_('how_did_you_respond', 'messages'); ?></legend>
-			<input name="issue_id" type="hidden" value="<?= $this->issue->getId(); ?>" />
-			<table>
-				<tr><td><label for="contactMethod_id">
-						<?= $this->_('contactMethod'); ?>
-						</label>
-					</td>
-					<td><select name="contactMethod_id" id="contactMethod_id">
-						<?php
-							$table = new contactMethodTable();
-							$list = $table->find();
-							foreach ($list as $method) {
-								$name = self::escape($method->getName());
-								$selected = $method->getId() == $this->issue->getContactMethod_id()
-									? 'selected="selected"'
-									: '';
-								echo "<option value=\"{$method->getId()}\" $selected>$name</option>";
-							}
-						?>
-						</select>
-					</td>
-				</tr>
-			</table>
-			<div><label for="notes"><?= $this->_(['comment', 'comments', 2]); ?></label></div>
-			<div><textarea name="notes" id="notes"></textarea></div>
+			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
 			<?php
+                $helper = $this->template->getHelper('field');
+
+                $options = [];
+                $people = $this->ticket->getPeople();
+                foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
+                echo $helper->field([
+                    'name'    => 'person_id',
+                    'id'      => 'person_id',
+                    'label'   => $this->_('person'),
+                    'type'    => 'select',
+                    'options' => $options
+                ]);
+
+                $options = [];
+                $table   = new contactMethodTable();
+                $list    = $table->find();
+                foreach ($list as $m) { $options[] = ['value'=>$m->getId(), 'label'=>self::escape($m->getName())]; }
+                echo $helper->field([
+                    'name'     => 'contactMethod_id',
+                    'id'       => 'contactMethod_id',
+                    'label'    => $this->_('contactMethod'),
+                    'value'    => $this->ticket->getContactMethod_id(),
+                    'required' => true,
+                    'type'     => 'select',
+                    'options'  => $options
+                ]);
+
+                echo $helper->field([
+                    'name'  => 'notes',
+                    'id'    => 'notes',
+                    'label' => $this->_(['comment', 'comments', 2]),
+                    'type'  => 'textarea'
+                ]);
+
 				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons($this->issue->getTicket()->getURL());
+				echo $helper->saveAndCancelButtons($this->ticket->getURL());
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>
