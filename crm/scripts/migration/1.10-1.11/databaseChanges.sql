@@ -1,9 +1,3 @@
-update ticketHistory set actionDate=enteredDate where actionDate=0;
-update issueHistory  set actionDate=enteredDate where actionDate=0;
-alter table tickets       modify enteredDate datetime not null default now();
-alter table ticketHistory modify actionDate  datetime not null default now();
-alter table issueHistory  modify actionDate  datetime not null default now();
-
 --
 -- This section should be reworked before release
 -- These changes occurred in development versions over time
@@ -22,8 +16,8 @@ create table category_action_responses (
     template    text,
     autoRespond bool,
     replyEmail  varchar(128),
-    foreign key (category_id) references categories(id),
-    foreign key (action_id)   references actions   (id)
+    constraint FK_category_action_responses_category_id foreign key (category_id) references categories(id),
+    constraint FK_category_action_responses_action_id   foreign key (action_id)   references actions   (id)
 );
 
 insert into category_action_responses (category_id, action_id, template, autoRespond, replyEmail)
@@ -40,14 +34,14 @@ join actions b on b.name='assignment'
 set h.action_id=b.id
 where a.name='referral';
 
-alter table tickets drop foreign key tickets_ibfk_5;
+alter table tickets drop foreign key FK_tickets_referredPerson_id;
 alter table tickets drop referredPerson_id;
 
 delete from actions where name='referral';
 
 
 alter table ticketHistory add issue_id int unsigned after ticket_id;
-alter table ticketHistory add foreign key (issue_id) references issues(id);
+alter table ticketHistory add constraint FK_ticketHistory_issue_id foreign key (issue_id) references issues(id);
 insert ticketHistory
     (    ticket_id,   issue_id,   enteredByPerson_id,   actionPerson_id,   action_id,   enteredDate,   actionDate,   notes)
 select x.ticket_id, i.issue_id, i.enteredByPerson_id, i.actionPerson_id, i.action_id, i.enteredDate, i.actionDate, i.notes
@@ -72,7 +66,7 @@ drop table labels;
 -- 2.0 Stuff
 -- ---------------------------
 alter table tickets add parent_id int unsigned after id;
-alter table tickets add foreign key (parent_id) references tickets(id);
+alter table tickets add constraint FK_tickets_parent_id foreign key (parent_id) references tickets(id);
 
 -- Move all merged issues onto seperate tickets, so that tickets
 -- only have one issue per ticket;
@@ -100,8 +94,16 @@ set t.issueType_id       = i.issueType_id,
     t.description        = i.description;
 
 alter table media add ticket_id int unsigned after issue_id;
-alter table media add foreign key (ticket_id) references tickets(id);
+alter table media add constraint FK_media_ticket_id foreign key (ticket_id) references tickets(id);
 update media m join issues i on m.issue_id=i.id set m.ticket_id=i.ticket_id;
 alter table media modify ticket_id int unsigned not null;
-alter table media drop foreign key media_ibfk_1;
+alter table media drop foreign key FK_media_issue_id;
 alter table media drop issue_id;
+
+
+alter table responses add ticket_id int unsigned after issue_id;
+alter table responses add constraint FK_responses_ticket_id foreign key (ticket_id) references tickets(id);
+update responses r join issues i on r.issue_id=i.id set r.ticket_id=i.ticket_id;
+alter table responses modify ticket_id int unsigned not null;
+alter table responses drop foreign key FK_responses_issue_id;
+alter table responses drop issue_id;
