@@ -308,17 +308,15 @@ class Search
 		// Note: enteredDate, latitude, longitude are indexed as well, even
 		// though they are not in this list.
 		// They are just handled slightly differently from the generic fields listed
-		$ticketFields = array(
+		$ticketFields = [
 			'id', 'category_id', 'client_id',
 			'enteredByPerson_id', 'assignedPerson_id',
 			'addressId', 'location', 'city', 'state', 'zip',
-			'status', 'substatus_id'
+			'status', 'substatus_id',
+			'contactMethod_id', 'issueType_id', 'reportedByPerson_id',
+			'description'
 			// enteredDate, latitude, longitude
-		);
-		// These are the fields from the issues table that we're indexing
-		$issueFields = array(
-			'contactMethod_id', 'issueType_id', 'reportedByPerson_id'
-		);
+		];
 
 		if ($record instanceof Ticket) {
 			$document = new \Apache_Solr_Document();
@@ -355,22 +353,6 @@ class Search
 			if ($person && $person->getDepartment_id()) {
 				$document->addField('department_id', $person->getDepartment_id());
 				$document->addField('department', self::sortableString($person, 'department_id'));
-			}
-
-			// Issue information indexing
-			$description = '';
-			foreach ($record->getIssues() as $issue) {
-				$description.= $issue->getDescription();
-				foreach ($issueFields as $f) {
-					$get = 'get'.ucfirst($f);
-					if ($issue->$get()) {
-						$document->addField($f, $issue->$get());
-						$document->addField(substr($f, 0, -3), self::sortableString($issue, $f));
-					}
-				}
-			}
-			if ($description) {
-				$document->addField('description', $description);
 			}
 
 			// Index extra fields provided by the AddressService

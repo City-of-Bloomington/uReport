@@ -191,12 +191,10 @@
 	<field name="cluster_id_6"  type="int"   indexed="true" stored="true" />
 
 	<!-- Issue Related Fields
-		Since tickets have multiple issues, all these need to be multiValued
 	-->
-	<field name="issueType_id"        type="int" indexed="true" stored="true"  multiValued="true" />
-	<field name="label_id"            type="int" indexed="true" stored="true"  multiValued="true" />
-	<field name="contactMethod_id"    type="int" indexed="true" stored="true"  multiValued="true" />
-	<field name="reportedByPerson_id" type="int" indexed="true" stored="false" multiValued="true" />
+	<field name="issueType_id"        type="int" indexed="true" stored="true"  />
+	<field name="contactMethod_id"    type="int" indexed="true" stored="true"  />
+	<field name="reportedByPerson_id" type="int" indexed="true" stored="false" />
 
    <!-- Sortable string values for *_id fields -->
    <field name="department"       type="string" indexed="true" stored="false" />
@@ -206,10 +204,9 @@
    <field name="enteredByPerson"  type="string" indexed="true" stored="false" />
    <field name="assignedPerson"   type="string" indexed="true" stored="false" />
 
-   <field name="issueType"        type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="label"            type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="contactMethod"    type="string" indexed="true" stored="false" multiValued="true" />
-   <field name="reportedByPerson" type="string" indexed="true" stored="false" multiValued="true" />
+   <field name="issueType"        type="string" indexed="true" stored="false" />
+   <field name="contactMethod"    type="string" indexed="true" stored="false" />
+   <field name="reportedByPerson" type="string" indexed="true" stored="false" />
 
    <dynamicField name="*"    type="string" indexed="true" stored="true" />
 </fields>

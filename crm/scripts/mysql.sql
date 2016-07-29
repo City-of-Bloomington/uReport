@@ -1,17 +1,16 @@
--- @copyright 2006-2013 City of Bloomington, Indiana
+-- @copyright 2006-2016 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
--- @author Cliff Ingham <inghamn@bloomington.in.gov>
 set foreign_key_checks=0;
 create table version (
 	version varchar(8) not null primary key
 );
-insert version set version='1.9';
+insert version set version='1.11';
 
 create table departments (
 	id               int          unsigned not null primary key auto_increment,
 	name             varchar(128) not null,
 	defaultPerson_id int          unsigned,
-	foreign key (defaultPerson_id) references people(id)
+	constraint FK_departments_defaultPerson_id foreign key (defaultPerson_id) references people(id)
 );
 insert departments set name='Information Services';
 
@@ -30,7 +29,7 @@ create table people (
 	password             varchar(40),
 	authenticationMethod varchar(40),
 	role varchar(30),
-	foreign key (department_id) references departments(id)
+	constraint FK_people_department_id foreign key (department_id) references departments(id)
 );
 set foreign_key_checks=1;
 
@@ -40,7 +39,7 @@ create table peopleEmails (
 	email     varchar(255) not null,
 	label enum('Home','Work','Other') not null default 'Other',
 	usedForNotifications tinyint(1) unsigned not null default 0,
-	foreign key (person_id) references people(id)
+	constraint FK_peopleEmails_person_id foreign key (person_id) references people(id)
 );
 
 create table peoplePhones (
@@ -49,7 +48,7 @@ create table peoplePhones (
 	number    varchar(20),
 	deviceId  varchar(128),
 	label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other',
-	foreign key (person_id) references people(id)
+	constraint FK_peoplePhones_person_id foreign key (person_id) references people(id)
 );
 
 create table peopleAddresses (
@@ -60,7 +59,7 @@ create table peopleAddresses (
 	state     varchar(128),
 	zip       varchar(20),
 	label enum('Home', 'Business', 'Rental') not null default 'Home',
-	foreign key (person_id) references people(id)
+	constraint FK_peopleAddresses_person_id foreign key (person_id) references people(id)
 );
 
 create table contactMethods (
@@ -79,8 +78,8 @@ create table clients (
 	api_key          varchar(50)  not null,
 	contactPerson_id int          unsigned not null,
 	contactMethod_id int          unsigned,
-	foreign key (contactPerson_id) references people(id),
-	foreign key (contactMethod_id) references contactMethods(id)
+	constraint FK_clients_contactPerson_id foreign key (contactPerson_id) references people(id),
+	constraint FK_clients_contactMethod_id foreign key (contactMethod_id) references contactMethods(id)
 );
 
 create table substatus (
@@ -131,8 +130,8 @@ create table categories (
 	notificationReplyEmail varchar(128),
 	autoCloseIsActive      bool,
 	autoCloseSubstatus_id  int          unsigned,
-	foreign key (department_id)    references departments   (id),
-	foreign key (categoryGroup_id) references categoryGroups(id)
+	constraint FK_categories_department_id    foreign key (department_id)    references departments   (id),
+	constraint FK_categories_categoryGroup_id foreign key (categoryGroup_id) references categoryGroups(id)
 );
 
 create table category_action_responses (
@@ -142,24 +141,24 @@ create table category_action_responses (
     template    text,
     autoRespond bool,
     replyEmail  varchar(128),
-    foreign key (category_id) references categories(id),
-    foreign key (action_id)   references actions   (id)
+    constraint FK_category_action_responses_category_id foreign key (category_id) references categories(id),
+    constraint FK_category_action_responses_action_id   foreign key (action_id)   references actions   (id)
 );
 
 create table department_actions (
 	department_id int unsigned not null,
 	action_id     int unsigned not null,
 	primary key (department_id, action_id),
-	foreign key (department_id) references departments(id),
-	foreign key (action_id)     references actions    (id)
+	constraint FK_department_actions_department_id foreign key (department_id) references departments(id),
+	constraint FK_department_actions_action_id     foreign key (action_id)     references actions    (id)
 );
 
 create table department_categories (
 	department_id int unsigned not null,
 	category_id   int unsigned not null,
 	primary key (department_id, category_id),
-	foreign key (department_id) references departments(id),
-	foreign key (category_id)   references categories (id)
+	constraint FK_department_categories_department_id foreign key (department_id) references departments(id),
+	constraint FK_department_categories_category_id   foreign key (category_id)   references categories (id)
 );
 
 create table tickets (
@@ -188,12 +187,12 @@ create table tickets (
 	additionalFields    varchar(255),  -- Extra location fields from AddressService
 	customFields        text,          -- Custom user-provided data defined in the Category
 	description         text,
-	foreign key (parent_id)          references tickets    (id),
-	foreign key (category_id)        references categories (id),
-	foreign key (client_id)          references clients    (id),
-	foreign key (enteredByPerson_id) references people     (id),
-	foreign key (assignedPerson_id)  references people     (id),
-	foreign key (substatus_id)       references substatus  (id)
+	constraint FK_tickets_parent_id          foreign key (parent_id)          references tickets    (id),
+	constraint FK_tickets_category_id        foreign key (category_id)        references categories (id),
+	constraint FK_tickets_client_id          foreign key (client_id)          references clients    (id),
+	constraint FK_tickets_enteredByPerson_id foreign key (enteredByPerson_id) references people     (id),
+	constraint FK_tickets_assignedPerson_id  foreign key (assignedPerson_id)  references people     (id),
+	constraint FK_tickets_substatus_id       foreign key (substatus_id)       references substatus  (id)
 );
 
 create table issueTypes (
@@ -218,12 +217,12 @@ create table issues (
 	date                timestamp not null default CURRENT_TIMESTAMP,
 	description         text,
 	customFields        text,
-	foreign key (ticket_id)           references tickets       (id),
-	foreign key (contactMethod_id)    references contactMethods(id),
-	foreign key (responseMethod_id)   references contactMethods(id),
-	foreign key (issueType_id)        references issueTypes    (id),
-	foreign key (enteredByPerson_id)  references people        (id),
-	foreign key (reportedByPerson_id) references people        (id)
+	constraint FK_issues_ticket_id           foreign key (ticket_id)           references tickets       (id),
+	constraint FK_issues_contactMethod_id    foreign key (contactMethod_id)    references contactMethods(id),
+	constraint FK_issues_responseMethod_id   foreign key (responseMethod_id)   references contactMethods(id),
+	constraint FK_issues_issueType_id        foreign key (issueType_id)        references issueTypes    (id),
+	constraint FK_issues_enteredByPerson_id  foreign key (enteredByPerson_id)  references people        (id),
+	constraint FK_issues_reportedByPerson_id foreign key (reportedByPerson_id) references people        (id)
 );
 
 create table ticketHistory (
@@ -237,11 +236,11 @@ create table ticketHistory (
 	actionDate         datetime     not null default now(),
 	notes              text,
 	data               text,
-	foreign key (ticket_id)          references tickets(id),
-	foreign key (issue_id)           references issues (id),
-	foreign key (enteredByPerson_id) references people (id),
-	foreign key (actionPerson_id)    references people (id),
-	foreign key (action_id)          references actions(id)
+	constraint FK_ticketHistory_ticket_id          foreign key (ticket_id)          references tickets(id),
+	constraint FK_ticketHistory_issue_id           foreign key (issue_id)           references issues (id),
+	constraint FK_ticketHistory_enteredByPerson_id foreign key (enteredByPerson_id) references people (id),
+	constraint FK_ticketHistory_actionPerson_id    foreign key (actionPerson_id)    references people (id),
+	constraint FK_ticketHistory_action_id          foreign key (action_id)          references actions(id)
 );
 
 create table media (
@@ -253,8 +252,8 @@ create table media (
 	media_type varchar(50),
 	uploaded   timestamp    not null default CURRENT_TIMESTAMP,
 	person_id  int          unsigned,
-	foreign key (ticket_id) references tickets(id),
-	foreign key (person_id) references people (id)
+	constraint FK_media_ticket_id foreign key (ticket_id) references tickets(id),
+	constraint FK_media_person_id foreign key (person_id) references people (id)
 );
 
 create table responses (
@@ -264,9 +263,9 @@ create table responses (
 	contactMethod_id int       unsigned,
 	notes            text,
 	person_id        int       unsigned,
-	foreign key (issue_id)         references issues        (id),
-	foreign key (contactMethod_id) references contactMethods(id),
-	foreign key (person_id)        references people        (id)
+	constraint FK_responses_issue_id         foreign key (issue_id)         references issues        (id),
+	constraint FK_responses_contactMethod_id foreign key (contactMethod_id) references contactMethods(id),
+	constraint FK_responses_person_id        foreign key (person_id)        references people        (id)
 );
 
 create table bookmarks (
@@ -275,7 +274,7 @@ create table bookmarks (
 	`type`      varchar(128) not null default 'search',
 	name        varchar(128),
 	requestUri  varchar(255) not null,
-	foreign key (person_id) references people(id)
+	constraint FK_bookmarks_person_id foreign key (person_id) references people(id)
 );
 
 create table geoclusters (
