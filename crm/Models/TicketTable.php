@@ -35,10 +35,6 @@ class TicketTable extends TableGateway
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {
-						case 'reportedByPerson_id':
-							$select->join(['i'=>'issues'], 'tickets.id=i.ticket_id', [], $select::JOIN_LEFT);
-							$select->where(["i.$key"=>$value]);
-							break;
 						case 'start_date':
 							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
 							$select->where("tickets.enteredDate>='$d'");

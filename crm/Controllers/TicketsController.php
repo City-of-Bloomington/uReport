@@ -415,23 +415,14 @@ class TicketsController extends Controller
 	public function merge()
 	{
 		// Load the two tickets
-		$ticketA = $this->loadTicket($_REQUEST['ticket_id_a']);
-		$ticketB = $this->loadTicket($_REQUEST['ticket_id_b']);
+		$parent = $this->loadTicket($_REQUEST['parent_ticket_id']);
+		$child  = $this->loadTicket($_REQUEST[ 'child_ticket_id']);
 
-		// When the user chooses a target, merge the other ticket into the target
-		if (isset($_POST['targetTicket'])) {
-			try {
-				if ($_POST['targetTicket']=='a') {
-					$ticketA->mergeFrom($ticketB);
-					$targetTicket = $ticketA;
-				}
-				else {
-					$ticketB->mergeFrom($ticketA);
-					$targetTicket = $ticketB;
-				}
-
-				$this->redirectToTicketView($targetTicket);
-			}
+		if (!empty($_POST['confirm']) && $_POST['confirm']) {
+            try {
+                $parent->mergeFrom($child);
+                $this->redirectToTicketView($parent);
+            }
 			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
 			}
@@ -439,46 +430,13 @@ class TicketsController extends Controller
 
 		// Display the form
 		$this->template->setFilename('merging');
-		$this->template->blocks[] = new Block(
-			'tickets/mergeForm.inc',
-			array('ticketA'=>$ticketA,'ticketB'=>$ticketB)
-		);
+		$this->template->blocks[] = new Block('tickets/mergeForm.inc', ['parent'=>$parent, 'child'=>$child]);
 
-		$this->template->blocks['left'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticketA,'disableButtons'=>true)
-		);
-		$this->template->blocks['left'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticketA->getHistory(),'disableComments'=>true)
-		);
-		$this->template->blocks['left'][] = new Block(
-			'tickets/issueList.inc',
-			array(
-				'issueList'=>$ticketA->getIssues(),
-				'ticket'=>$ticketA,
-				'disableButtons'=>true,
-				'disableComments'=>true
-			)
-		);
+		$this->template->blocks['left' ][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$parent,'disableButtons'=>true]);
+		$this->template->blocks['left' ][] = new Block('tickets/history.inc',    ['history'=>$parent->getHistory(), 'disableComments'=>true]);
 
-		$this->template->blocks['right'][] = new Block(
-			'tickets/ticketInfo.inc',
-			array('ticket'=>$ticketB,'disableButtons'=>true)
-		);
-		$this->template->blocks['right'][] = new Block(
-			'tickets/history.inc',
-			array('history'=>$ticketB->getHistory(),'disableComments'=>true)
-		);
-		$this->template->blocks['right'][] = new Block(
-			'tickets/issueList.inc',
-			array(
-				'issueList'=>$ticketB->getIssues(),
-				'ticket'=>$ticketB,
-				'disableButtons'=>true,
-				'disableComments'=>true
-			)
-		);
+		$this->template->blocks['right'][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$child, 'disableButtons'=>true]);
+		$this->template->blocks['right'][] = new Block('tickets/history.inc',    ['history'=>$child->getHistory(), 'disableComments'=>true]);
 	}
 
 	/**
@@ -507,19 +465,11 @@ class TicketsController extends Controller
 			['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
 		);
 
-		#$this->template->blocks['issue-panel'][] = new Block(
-		#	'tickets/issueList.inc',
-		#	array(
-		#		'issueList'     => $ticket->getIssues(),
-		#		'ticket'        => $ticket,
-		#		'disableButtons'=> $ticket->getStatus()=='closed'
-		#	)
-		#);
 		if ($ticket->getLocation()) {
             $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
                 'location'       => $ticket->getLocation(),
                 'ticket'         => $ticket,
-                'disableButtons' => true
+                'disableButtons' => false
             ]);
 		}
 	}

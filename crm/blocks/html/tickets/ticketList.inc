@@ -66,22 +66,15 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
 				}
 				echo "<td>";
 					if (!$this->disableButtons
-							&& Person::isAllowed('issues', 'update')
-							&& $ticket->getStatus() !== 'closed') {
+                        #&& $ticket->getStatus() !== 'closed'
+                        && $this->filterTicket
+                        && !$ticket->getParent_id()
+                        && Person::isAllowed('tickets', 'merge')) {
 
-						$url = new Url(BASE_URL.'/issues/update');
-						$url->ticket_id = $ticket->getId();
-						if (isset($_GET['person_id'])) {
-							try {
-								$person = new Person($_GET['person_id']);
-								$url->person_id = "{$person->getId()}";
-							}
-							catch (Exception $e) {
-								// Just ignore invalid people
-							}
-						}
+                        $uri = BASE_URI."/tickets/merge?parent_ticket_id={$this->filterTicket->getId()};child_ticket_id={$ticket->getId()}";
+
 						$helper = $this->template->getHelper('buttonLink');
-						echo $helper->buttonLink($url, $this->_('add_issue'), 'add');
+						echo $helper->buttonLink($uri, $this->_('merge'), '');
 					}
 				echo "</td>";
 				echo "</tr>";

@@ -17,7 +17,6 @@ class TicketHistory extends ActiveRecord
 	protected $actionPerson;
 
 	protected $ticket;
-	protected $issue;
 	protected $action;
 
 	/**
@@ -63,7 +62,6 @@ class TicketHistory extends ActiveRecord
         $this->enteredByPerson = null;
         $this->actionPerson    = null;
         $this->ticket          = null;
-        $this->issue           = null;
         $this->action          = null;
     }
 
@@ -79,14 +77,8 @@ class TicketHistory extends ActiveRecord
 		}
 
 		if (!$this->getTicket_id()) {
-            if ($this->getIssue_id()) {
-                $issue = $this->getIssue();
-                $this->setTicket_id($issue->getTicket_id());
-            }
-            else {
-                throw new \Exception('missingRequiredFields');
-            }
-		}
+            throw new \Exception('missingRequiredFields');
+        }
 
 		if (!$this->data['enteredDate']) { $this->setEnteredDate('now'); }
 		if (!$this->data['actionDate'] ) { $this->setActionDate ('now'); }
@@ -134,15 +126,10 @@ class TicketHistory extends ActiveRecord
 	public function setAction         (Action $o) { parent::setForeignKeyObject(__namespace__.'\Action', 'action_id',          $o);  }
 	public function setData(array $data=null) { parent::set('data', json_encode($data)); }
 
-	// History is either for a Ticket or an Issue
 	public function getTicket_id() { return parent::get('ticket_id');          }
-	public function getIssue_id () { return parent::get('issue_id');           }
 	public function getTicket()    { return parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
-	public function getIssue ()    { return parent::getForeignKeyObject(__namespace__.'\Issue',  'issue_id' ); }
 	public function setTicket_id($id)     { parent::setForeignKeyField( __namespace__.'\Ticket', 'ticket_id', $id); }
-	public function setIssue_id ($id)     { parent::setForeignKeyField( __namespace__.'\Issue',  'issue_id',  $id); }
 	public function setTicket(Ticket $o)  { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o); }
-	public function setIssue (Issue  $o)  { parent::setForeignKeyObject(__namespace__.'\Issue',  'issue_id',  $o); }
 
 	/**
 	 * @param array $post
@@ -154,9 +141,7 @@ class TicketHistory extends ActiveRecord
 		$this->setNotes     ($post['notes']     );
 		$this->setEnteredByPerson($_SESSION['USER']);
 		$this->setActionPerson   ($_SESSION['USER']);
-
-		if (!empty($post['ticket_id'])) { $this->setTicket_id($post['ticket_id']); }
-		if (!empty($post['issue_id' ])) { $this->setIssue_id ($post['issue_id' ]); }
+		$this->setTicket_id($post['ticket_id']);
 	}
 
 	//----------------------------------------------------------------
@@ -203,7 +188,6 @@ class TicketHistory extends ActiveRecord
             'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
             'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '',
             'ticket_id'      => $this->getTicket_id(),
-            'issue_id'       => $this->getIssue_id(),
             'enteredDate'    => $this->getEnteredDate(DATE_FORMAT),
             'actionDate'     => $this->getActionDate (DATE_FORMAT)
         ];

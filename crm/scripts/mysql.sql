@@ -228,7 +228,6 @@ create table issues (
 create table ticketHistory (
 	id                 int unsigned not null primary key auto_increment,
 	ticket_id          int unsigned not null,
-	issue_id           int unsigned,
 	enteredByPerson_id int unsigned,
 	actionPerson_id    int unsigned,
 	action_id          int unsigned,
@@ -237,7 +236,6 @@ create table ticketHistory (
 	notes              text,
 	data               text,
 	constraint FK_ticketHistory_ticket_id          foreign key (ticket_id)          references tickets(id),
-	constraint FK_ticketHistory_issue_id           foreign key (issue_id)           references issues (id),
 	constraint FK_ticketHistory_enteredByPerson_id foreign key (enteredByPerson_id) references people (id),
 	constraint FK_ticketHistory_actionPerson_id    foreign key (actionPerson_id)    references people (id),
 	constraint FK_ticketHistory_action_id          foreign key (action_id)          references actions(id)

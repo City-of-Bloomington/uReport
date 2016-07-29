@@ -206,6 +206,7 @@ class Ticket extends ActiveRecord
 	public function getEnteredDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
 	public function getLastModified($f=null, \DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
 	public function getClosedDate  ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
+	public function getParent_id()           { return parent::get('parent_id');           }
 	public function getSubstatus_id()        { return parent::get('substatus_id');        }
 	public function getCategory_id()         { return parent::get('category_id');         }
 	public function getIssueType_id()        { return parent::get('issueType_id');        }
@@ -216,6 +217,7 @@ class Ticket extends ActiveRecord
 	public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
 	public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
 	public function getDescription()         { return parent::get('description');         }
+	public function getParent()           { return parent::getForeignKeyObject(__namespace__.'\Ticket',        'ticket_id');           }
 	public function getSubstatus()        { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'substatus_id');        }
 	public function getCategory()         { return parent::getForeignKeyObject(__namespace__.'\Category',      'category_id');         }
 	public function getIssueType()        { return parent::getForeignKeyObject(__namespace__.'\IssueType',     'issueType_id');        }
@@ -237,6 +239,7 @@ class Ticket extends ActiveRecord
 	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
 	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
 	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
+	public function setParent_id          ($id) { parent::setForeignKeyField(__namespace__.'\Ticket',        'ticket_id',           $id); }
 	public function setSubstatus_id       ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',     'substatus_id',        $id); }
 	public function setCategory_id        ($id) { parent::setForeignKeyField(__namespace__.'\Category',      'category_id',         $id); }
 	public function setIssueType_id       ($id) { parent::setForeignKeyField(__namespace__.'\IssueType',     'issueType_id',        $id); }
@@ -246,6 +249,7 @@ class Ticket extends ActiveRecord
 	public function setAssignedPerson_id  ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'assignedPerson_id',   $id); }
 	public function setContactMethod_id   ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id',    $id); }
 	public function setResponseMethod_id  ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'responseMethod_id',   $id); }
+	public function setParent          (Ticket        $o) { parent::setForeignKeyObject(__namespace__.'\Ticket',        'ticket_id',          $o); }
 	public function setSubstatus       (Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'substatus_id',       $o); }
 	public function setCategory        (Category      $o) { parent::setForeignKeyObject(__namespace__.'\Category',      'category_id',        $o); }
 	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject(__namespace__.'\IssueType',     'issueType_id',       $o); }
@@ -434,33 +438,11 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return Zend\Db\ResultSet
-	 */
-	public function getResponses()
-	{
-		$table = new ResponseTable();
-		return $table->find(['ticket_id' => $this->getId()]);
-	}
-
-	/**
-	 * Records that someone responded to an issue
-	 *
-	 * @param int $index The issue index
-	 * @param Response $response
-	 */
-	public function addResponse($index, Response $response)
-	{
-		$response->validate();
-
-		$this->data['issues'][$index]['responses'][] = $response->getData();
-	}
-
-	/**
 	 * @return array
 	 */
 	public function getHistory()
 	{
-		$history = array();
+		$history = [];
 
 		$zend_db = Database::getConnection();
 		$sql = 'select * from ticketHistory where ticket_id=?';
@@ -492,26 +474,14 @@ class Ticket extends ActiveRecord
 	{
 		if ($this->getId()) {
 			$zend_db = Database::getConnection();
-			$zend_db->getDriver()->getConnection()->beginTransaction();
-			try {
-				$zend_db->query('update ticketHistory set ticket_id=? where ticket_id=?')->execute([$this->getId(), $ticket->getId()]);
-				$zend_db->query('update issues        set ticket_id=? where ticket_id=?')->execute([$this->getId(), $ticket->getId()]);
-				$zend_db->query('delete from tickets where id=?')->execute([$ticket->getId()]);
-			}
-			catch (\Exception $e) {
-				$zend_db->getDriver()->getConnection()->rollback();
-				throw $e;
-			}
-			$zend_db->getDriver()->getConnection()->commit();
 
-			$search = new Search();
-			$search->delete($ticket);
-			$search->add($this);
-			$search->solrClient->commit();
+			$zend_db->query('update tickets set parent_id=? where id=?')
+                    ->execute([$this->getId(), $ticket->getId()]);
 
 			$history = new TicketHistory();
 			$history->setTicket($this);
-			$history->setAction(new Action(Action::MERGED));
+			$history->setAction(new Action(Action::DUPLICATED));
+			$history->setData(['duplicate'=>['ticket_id'=>$ticket->getId()]]);
 			$history->save();
 		}
 	}

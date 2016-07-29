@@ -5,17 +5,16 @@
  * @param Ticket $this->ticket
  */
 $rows = '';
-foreach ($this->ticket->getIssues() as $issue) {
-	$person = $issue->getReportedByPerson();
-	if ($person) {
-		$name   = self::escape($person->getFullname());
-		$method = self::escape($issue->getResponseMethod());
-		$rows.= "
-		<tr><td><a href=\"{$person->getURL()}\">$name</a></td>
-			<td>$method</td>
-		</tr>
-		";
-	}
+$person = $this->ticket->getReportedByPerson();
+
+if ($person) {
+    $name   = self::escape($person->getFullname());
+    $method = self::escape($this->ticket->getResponseMethod());
+    $rows.= "
+    <tr><td><a href=\"{$person->getURL()}\">$name</a></td>
+        <td>$method</td>
+    </tr>
+    ";
 }
 if ($rows) {
 	echo "

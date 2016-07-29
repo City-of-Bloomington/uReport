@@ -61,5 +61,3 @@ echo "
 	CRM.ticket_id = $ticket_id;
 </script>
 ";
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/actionForms.js');

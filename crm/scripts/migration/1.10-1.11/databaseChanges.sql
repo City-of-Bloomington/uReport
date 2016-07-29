@@ -64,6 +64,10 @@ drop table labels;
 
 -- ---------------------------
 -- 2.0 Stuff
+--
+-- This is mostly work done to remove issues and just store
+-- everything in tickets.  Tickets will now be able to have parent
+-- tickets, in order to show that tickets duplicate other tickets.
 -- ---------------------------
 alter table tickets add parent_id int unsigned after id;
 alter table tickets add constraint FK_tickets_parent_id foreign key (parent_id) references tickets(id);
@@ -72,6 +76,8 @@ alter table tickets add constraint FK_tickets_parent_id foreign key (parent_id) 
 -- only have one issue per ticket;
 --
 -- The migration has a PHP script that does this
+-- moveIssuesToDuplicateTickets.php
+-- This select should return 0 results before moving on
 select ticket_id, count(*) as c from issues group by ticket_id having c>1;
 
 
@@ -121,3 +127,8 @@ from responses r
 join tickets t on r.ticket_id=t.id;
 
 drop table responses;
+
+alter table ticketHistory drop foreign key FK_ticketHistory_issue_id;
+alter table ticketHistory drop issue_id;
+
+drop table issues;

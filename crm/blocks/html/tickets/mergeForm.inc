@@ -2,32 +2,24 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Ticket $this->ticketA
- * @param Ticket $this->ticketB
+ * @param Ticket $this->parent
+ * @param Ticket $this->child
  */
 ?>
-<div class="mergeForm">
+<section class="mergeForm">
+    <header>
+        <h1><?= $this->_('merge_into_ticket').' #'.$this->parent->getId(); ?></h1>
+    </header>
 	<form method="post" action="<?= BASE_URI; ?>/tickets/merge">
 		<fieldset>
-			<div class="target_a">
-				<input name="targetTicket" id="targetTicket_a" type="radio" value="a" checked="checked" />
-				<input name="ticket_id_a" type="hidden" value="<?= $this->ticketA->getId(); ?>" />
-				<label for="targetTicket_a">
-				<?php
-					echo $this->_('merge_into_ticket').' #'.$this->ticketA->getId();
-				?>
-				</label>
-			</div>
-			<div class="target_b">
-				<label for="targetTicket_b">
-				<?php
-					echo $this->_('merge_into_ticket').' #'.$this->ticketB->getId();
-				?>
-				</label>
-				<input name="targetTicket" id="targetTicket_b" type="radio" value="b" />
-				<input name="ticket_id_b" type="hidden" value="<?= $this->ticketB->getId(); ?>" />
-			</div>
-			<button type="submit" class="submit"><?= $this->_('merge'); ?></button>
+            <input name="parent_ticket_id" type="hidden" value="<?= $this->parent->getId(); ?>" />
+            <input name= "child_ticket_id" type="hidden" value="<?= $this->child ->getId(); ?>" />
+            <input name="confirm" type="hidden" value="1" />
+
+            <?php
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons(BASE_URI.'/tickets/view?ticket_id='.$this->parent->getId());
+            ?>
 		</fieldset>
 	</form>
-</div>
+</section>
