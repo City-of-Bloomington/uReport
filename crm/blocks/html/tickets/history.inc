@@ -6,8 +6,7 @@
  * @param Ticket $this->ticket          (optional)
  * @param bool   $this->disableComments (optional)
  */
-use Application\Models\Person;
-use Blossom\Classes\Block;
+use Application\Models\Action;
 ?>
 <section class="history">
     <header>
@@ -33,6 +32,11 @@ use Blossom\Classes\Block;
                 if ($notes) {
                     echo "<p>$notes</p>";
                 }
+			}
+			switch ($event->getAction()->getName()) {
+                case Action::UPDATED:
+                    if ($event->getData()) { echo json_encode($event->getData()); }
+                break;
 			}
 			echo "</article>";
 		}

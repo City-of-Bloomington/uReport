@@ -66,9 +66,7 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
 				}
 				echo "<td>";
 					if (!$this->disableButtons
-                        #&& $ticket->getStatus() !== 'closed'
-                        && $this->filterTicket
-                        && !$ticket->getParent_id()
+                        && $this->filterTicket && $this->filterTicket->permitsMerge($ticket)
                         && Person::isAllowed('tickets', 'merge')) {
 
                         $uri = BASE_URI."/tickets/merge?parent_ticket_id={$this->filterTicket->getId()};child_ticket_id={$ticket->getId()}";

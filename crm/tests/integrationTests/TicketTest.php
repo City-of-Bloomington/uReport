@@ -54,6 +54,10 @@ class TicketTest extends PHPUnit_Framework_TestCase
 		$ticket = new Ticket();
 		$ticket->setLatitude (0);
 		$ticket->setLongitude(0);
+		$v = $ticket->getLatitude();
+		echo '*';
+		print_r($v);
+		echo "*\n";
 
 		$this->assertNull($ticket->getLatitude ());
 		$this->assertNull($ticket->getLongitude());

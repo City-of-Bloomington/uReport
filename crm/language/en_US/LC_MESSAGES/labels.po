@@ -547,6 +547,9 @@ msgstr "Refer Case"
 msgid "delete_ticket"
 msgstr "Delete Case"
 
+msgid "update_ticket"
+msgstr "Update Case"
+
 msgid "change_category"
 msgstr "Change Category"
 

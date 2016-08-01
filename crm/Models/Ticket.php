@@ -225,8 +225,16 @@ class Ticket extends ActiveRecord
 	public function getAssignedPerson()   { return parent::getForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id');   }
 	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
 	public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
-    public function getLatitude()  { return (float)parent::get('latitude' ); }
-    public function getLongitude() { return (float)parent::get('longitude'); }
+    public function getLatitude()
+    {
+        $l = parent::get('latitude');
+        return $l ? (float)$l : null;
+    }
+    public function getLongitude()
+    {
+        $l = parent::get('longitude');
+        return $l ? (float)$l : null;
+    }
 
 	public function setAddressId  ($s) { parent::set('addressId',   $s); }
 	public function setLocation   ($s) { parent::set('location',    $s); }
@@ -259,16 +267,24 @@ class Ticket extends ActiveRecord
 	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',  $o); }
 
 	public function setLatitude ($s)  {
-		if (!empty($s) && $this->getLatitude() != (float)$s) {
-			$this->needToUpdateClusters = true;
-		}
+        if (!empty($s)) {
+            if ($this->getLatitude() != (float)$s) { $this->needToUpdateClusters = true; }
+        }
+        else {
+            $s = null;
+            if ($this->getLatitude()) { $this->needToUpdateClusters = true; }
+        }
 		parent::set('latitude',  $s);
 	}
 
 	public function setLongitude($s)  {
-		if (!empty($s) && $this->getLongitude() != (float)$s) {
-			$this->needToUpdateClusters = true;
-		}
+        if (!empty($s)) {
+            if ($this->getLongitude() != (float)$s) { $this->needToUpdateClusters = true; }
+        }
+        else {
+            $s = null;
+            if ($this->getLongitude()) { $this->needToUpdateClusters = true; }
+        }
 		parent::set('longitude', $s);
 	}
 
@@ -461,13 +477,36 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
+	 * @param  Ticket $ticket
+	 * @return bool
+	 */
+	public function permitsMerge(Ticket $ticket)
+	{
+        // Both tickets need to be open
+        if ($this->getStatus() == 'closed' || $ticket->getStatus() == 'closed') { return false; }
+
+        // Cannot already have another parent
+        if ($ticket->getParent_id()) { return false; }
+
+        // Cannot be the same ticket
+        if ($this->getId() == $ticket->getId()) { return false; }
+
+        // This ticket cannot be a descendant of the merging ticket
+        foreach ($ticket->getChildren(true) as $t) {
+            if ($this->getId() == $t->getId()) { return false; }
+        }
+
+        return true;
+	}
+
+	/**
 	 * Marks another ticket as a duplicate of this one
 	 *
 	 * @param Ticket $ticket
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
-		if ($this->getId()) {
+		if ($this->getId() && $this->permitsMerge($ticket)) {
 			$zend_db = Database::getConnection();
 
 			$zend_db->query('update tickets set parent_id=? where id=?')
@@ -547,36 +586,39 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * Populates available fields from the given array
-	 *
 	 * @param array $post
 	 */
 	public function handleUpdate($post)
 	{
-		// Set all the location information using any fields the user posted
-		$fields = [
-			'category_id', 'client_id', 'assignedPerson_id',
-			'location', 'latitude', 'longitude', 'city', 'state', 'zip',
-			'issueType_id', 'description', 'customFields',
-			'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
-		];
-		foreach ($fields as $field) {
-			if (isset($post[$field])) {
-				$set = 'set'.ucfirst($field);
-				$this->$set($post[$field]);
-			}
-		}
+        $changed = false;
+        $data    = [];
+        $fields  = [
+            'issueType_id', 'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id', 'description'
+        ];
 
-		// If they gave us an address, and we don't have any additional info,
-		// try and get the data from Master Address
-		if ($this->getLocation()
-			&& (!$this->getLatitude() || !$this->getLongitude()
-				|| !$this->getCity() || !$this->getState() || !$this->getZip())) {
-			$data = AddressService::getLocationData($this->getLocation());
-			if ($data) {
-				$this->setAddressServiceData($data);
-			}
-		}
+        foreach ($fields as $f) {
+            $get = 'get'.ucfirst($f);
+            $set = 'set'.ucfirst($f);
+
+            $current = $this->$get();
+            $new     = $post[$f];
+            if ($current != $new) {
+                $changed = true;
+                $this->$set($new);
+                $data['original'][$f] = $current;
+                $data['updated' ][$f] = $new;
+            }
+        }
+        if ($changed) {
+            $this->save();
+
+            $history = new TicketHistory();
+            $history->setTicket($this);
+            $history->setAction(new Action(Action::UPDATED));
+            $history->setEnteredByPerson($_SESSION['USER']);
+            $history->setData($data);
+            $history->save();
+        }
 	}
 
 	/**
@@ -595,7 +637,30 @@ class Ticket extends ActiveRecord
 		$zend_db = Database::getConnection();
 		$zend_db->getDriver()->getConnection()->beginTransaction();
 		try {
-			$this ->handleUpdate($post);
+            // Set all the location information using any fields the user posted
+            $fields = [
+                'category_id', 'client_id', 'assignedPerson_id',
+                'location', 'latitude', 'longitude', 'city', 'state', 'zip',
+                'issueType_id', 'description', 'customFields',
+                'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
+            ];
+            foreach ($fields as $field) {
+                if (isset($post[$field])) {
+                    $set = 'set'.ucfirst($field);
+                    $this->$set($post[$field]);
+                }
+            }
+
+            // If they gave us an address, and we don't have any additional info,
+            // try and get the data from Master Address
+            if ($this->getLocation()
+                && (!$this->getLatitude() || !$this->getLongitude()
+                    || !$this->getCity() || !$this->getState() || !$this->getZip())) {
+                $data = AddressService::getLocationData($this->getLocation());
+                if ($data) {
+                    $this->setAddressServiceData($data);
+                }
+            }
 			$this->save();
 
 			$this->getCategory()->onTicketAdd($this);
@@ -632,6 +697,7 @@ class Ticket extends ActiveRecord
         }
         $history->save();
 	}
+
 
 	/**
 	 * Does all the database work for TicketController::changeStatus

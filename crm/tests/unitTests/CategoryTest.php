@@ -13,15 +13,7 @@ class CategoryTest extends PHPUnit_Framework_TestCase
     public function testAutoResponseFields()
     {
         $category = new Category();
-        $this->assertFalse($category->autoResponseIsActive());
         $this->assertFalse($category->autoCloseIsActive());
-
-        $category->setAutoResponseIsActive(false);
-        $this->assertFalse($category->autoResponseIsActive());
-
-        $category->setAutoResponseIsActive(true);
-        $this->assertEquals(1, $category->getAutoResponseIsActive());
-        $this->assertTrue  ($category->autoResponseIsActive());
 
         $category->setAutoCloseIsActive(false);
         $this->assertFalse($category->autoCloseIsActive());
@@ -29,9 +21,6 @@ class CategoryTest extends PHPUnit_Framework_TestCase
         $category->setAutoCloseIsActive(true);
         $this->assertEquals(1, $category->getAutoCloseIsActive());
         $this->assertTrue($category->autoCloseIsActive());
-
-        $category->setAutoResponseText('test message');
-        $this->assertEquals('test message', $category->getAutoResponseText());
 
         $category->setNotificationReplyEmail('test@somewhere');
         $this->assertEquals('test@somewhere', $category->getNotificationReplyEmail());
@@ -43,7 +32,7 @@ class CategoryTest extends PHPUnit_Framework_TestCase
             'name'=>'Name', 'description'=>'Description',
             'postingPermissionLevel'=>'test permission', 'displayPermissionLevel'=>'testing display',
             'slaDays'=>2, 'notificationReplyEmail'=>'test@somewhere',
-            'autoResponseIsActive'=>1,'autoResponseText'=>'auto response','autoCloseIsActive'=>1,
+            'autoCloseIsActive'=>1,
             // The rest of these fields would cause hits to the database if we set values for them
             // We have left them empty so we can do clean unit tests.
             // These fields would need to be tested in the database tests.

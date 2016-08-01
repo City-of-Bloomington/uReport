@@ -14,7 +14,7 @@ class AddressServiceTest extends PHPUnit_Framework_TestCase
 	{
 		$result = AddressService::parseAddress('410 W 4th');
 		$this->assertEquals('410',  $result->street_number);
-		$this->assertEquals('WEST', $result->direction);
+		$this->assertEquals('W',    $result->direction);
 		$this->assertEquals('4th',  $result->street_name);
 	}
 

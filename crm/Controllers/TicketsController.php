@@ -174,6 +174,27 @@ class TicketsController extends Controller
         ]);
 	}
 
+	public function update()
+	{
+        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+
+		if (isset($_REQUEST['person_id'])) {
+			$issue->setReportedByPerson_id($_REQUEST['person_id']);
+		}
+
+        if (isset($_POST['ticket_id'])) {
+            try {
+                $ticket->handleUpdate($_POST);
+                header('Location: '.$ticket->getURL());
+                exit();
+            }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+		$this->template->blocks[] = new Block('tickets/updateIssueForm.inc', ['ticket'=>$ticket]);
+		$this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
+	}
+
 	/**
 	 * @param REQUEST ticket_id
 	 * @param REQUEST confirm

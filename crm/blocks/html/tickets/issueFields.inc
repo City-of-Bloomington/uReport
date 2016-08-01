@@ -2,13 +2,12 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Issue $this->issue
+ * @param Ticket $this->ticket
  */
 use Application\Models\ContactMethodTable;
 use Application\Models\IssueTypeTable;
-use Application\Models\LabelTable;
 
-$helper = $this->template->getHelper('field');
+$helper  = $this->template->getHelper('field');
 $table   = new IssueTypeTable();
 $list    = $table->find();
 $options = [];
@@ -19,7 +18,7 @@ echo $helper->field([
     'name'     => 'issueType_id',
     'id'       => 'issueType_id',
     'label'    => $this->_('type'),
-    'value'    => $this->issue->getIssueType_id(),
+    'value'    => $this->ticket->getIssueType_id(),
     'required' => true,
     'type'     => 'select',
     'options'  => $options
@@ -30,7 +29,7 @@ echo $helper->field([
     'id'    => 'reportedByPerson_id',
     'label' => $this->_('reportedByPerson'),
     'type'  => 'person',
-    'value' => $this->issue->getReportedByPerson()
+    'value' => $this->ticket->getReportedByPerson()
 ]);
 
 $options = [];
@@ -44,7 +43,7 @@ echo $helper->field([
     'name'    => 'contactMethod_id',
     'id'      => 'contactMethod_id',
     'label'   => $this->_('contactMethod'),
-    'value'   => $this->issue->getContactMethod_id(),
+    'value'   => $this->ticket->getContactMethod_id(),
     'type'    => 'select',
     'options' => $options
 ]);
@@ -53,7 +52,7 @@ echo $helper->field([
     'name'    => 'responseMethod_id',
     'id'      => 'responseMethod_id',
     'label'   => $this->_('responseMethod'),
-    'value'   => $this->issue->getResponseMethod_id(),
+    'value'   => $this->ticket->getResponseMethod_id(),
     'type'    => 'select',
     'options' => $options
 
@@ -63,5 +62,6 @@ echo $helper->field([
     'name'  => 'description',
     'id'    => 'description',
     'label' => $this->_('description'),
-    'value' => self::escape($this->issue->getDescription())
+    'type'  => 'textarea',
+    'value' => self::escape($this->ticket->getDescription())
 ]);

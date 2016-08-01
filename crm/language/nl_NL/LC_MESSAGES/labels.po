@@ -547,6 +547,9 @@ msgstr "Relatie"
 msgid "delete_ticket"
 msgstr "Melding verwijderen"
 
+msgid "update_ticket"
+msgstr "Melding aanpassen"
+
 msgid "change_category"
 msgstr "Categorie veranderen"
 

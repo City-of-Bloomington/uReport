@@ -54,6 +54,7 @@ insert actions (name,type,description) values('changeCategory', 'system', 'Chang
 insert actions (name,type,description) values('changeLocation', 'system', 'Changed location from {original:location} to {updated:location}');
 insert actions (name,type,description) values('response',       'system', '{actionPerson} contacted {reportedByPerson_id}');
 insert actions (name,type,description) values('duplicate',      'system', '{duplicate:ticket_id} marked as a duplicate of this case.');
+insert actions (name,type,description) values('update',         'system', '{enteredByPerson} updated this case.');
 
 delete h.* from ticketHistory h join actions a on h.action_id=a.id where a.name='update';
 delete r.* from category_action_responses r join actions a on r.action_id=a.id where a.name='update';
