@@ -30,7 +30,16 @@ $description = $contactMethod || $description
     : '';
 $description = $description ? "<p>$description</p>" : '';
 
-$customFields = '';
+$fields = '';
+$person = $this->ticket->getReportedByPerson();
+if ($person) {
+    $name = $person->getFullname();
+    if (Person::isAllowed('people', 'view')) {
+        $uri = BASE_URI.'/people/view?person_id='.$person->getId();
+        $name = "<a href=\"$uri\">$name</a>";
+    }
+    $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
+}
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();
@@ -39,7 +48,7 @@ if ($cf) {
         $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
         $value = isset($data->$fieldname)  ? $data->$fieldname : '';
         $value = is_array($value) ? implode(', ',$value) : self::escape($value);
-        if ($value) { $customFields.= "<dl><dt>$label</dt><dd>$value</dd></dl>"; }
+        if ($value) { $fields.= "<dl><dt>$label</dt><dd>$value</dd></dl>"; }
     }
 }
 
@@ -52,7 +61,7 @@ echo "
         <h2 class=\"category\">$category: $issueType</h2>
     </header>
     $description
-    $customFields
+    $fields
 ";
     $this->_include('tickets/issueAttachments.inc');
 echo "

@@ -40,7 +40,7 @@ class PersonTable extends TableGateway
 			$this->select->join(['address'=>'peopleAddresses'], 'people.id=address.person_id', [], Select::JOIN_LEFT);
 		}
 		if (in_array('reportedTicket_id', $keys)) {
-			$this->select->join(['i'=>'issues'], 'people.id=i.reportedByPerson_id', [], Select::JOIN_LEFT);
+			$this->select->join(['t'=>'tickets'], 'people.id=t.reportedByPerson_id', [], Select::JOIN_LEFT);
 		}
 	}
 
@@ -86,7 +86,7 @@ class PersonTable extends TableGateway
 							break;
 
 						case 'reportedTicket_id':
-							$this->select->where(['i.ticket_id' => $value]);
+							$this->select->where(['t.id' => $value]);
 							break;
 
 						default:
@@ -112,7 +112,7 @@ class PersonTable extends TableGateway
 	public function search($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
 	{
 		$this->select = new Select('people');
-		$search = array();
+		$search = [];
 		if (isset($fields['query'])) {
 			$value = trim($fields['query']).'%';
 			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
@@ -156,7 +156,7 @@ class PersonTable extends TableGateway
 						break;
 
 					case 'reportedTicket_id':
-						$this->select->where(['i.reportedByPerson_id' => $value]);
+						$this->select->where(['t.reportedByPerson_id' => $value]);
 						break;
 
 					default:

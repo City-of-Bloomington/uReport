@@ -17,7 +17,7 @@ use Application\Models\ContactMethodTable;
                 $helper = $this->template->getHelper('field');
 
                 $options = [];
-                $people = $this->ticket->getPeople();
+                $people = $this->ticket->getPeople(true);
                 foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
                 echo $helper->field([
                     'name'    => 'person_id',

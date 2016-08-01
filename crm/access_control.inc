@@ -38,7 +38,6 @@ $ZEND_ACL->addResource(new Resource('neighborhoodAssociations'));
 
 $ZEND_ACL->addResource(new Resource('locations'));
 $ZEND_ACL->addResource(new Resource('tickets'));
-$ZEND_ACL->addResource(new Resource('issues'));
 $ZEND_ACL->addResource(new Resource('media'));
 $ZEND_ACL->addResource(new Resource('solr'));
 
@@ -50,7 +49,7 @@ $ZEND_ACL->addResource(new Resource('bookmarks'));
 // Permissions for non-authenticated web browsing
 $ZEND_ACL->allow(null,['callback','login','open311']);
 $ZEND_ACL->allow(null,
-				['index','tickets','issues','locations'],
+				['index','tickets','locations'],
 				['index','view', 'thumbnails']);
 $ZEND_ACL->allow(null, 'media', 'resize');
 $ZEND_ACL->allow(null, 'solr', 'index');
@@ -58,7 +57,7 @@ $ZEND_ACL->allow(null, 'solr', 'index');
 // Staff permission
 // Staff has full permission to these controllers
 $ZEND_ACL->allow('Staff', [
-	'account','people','issues','media','reports','bookmarks'
+	'account','people','media','reports','bookmarks'
 ]);
 // Staff has limited permission to these controllers
 $ZEND_ACL->allow('Staff','departments',['index', 'view', 'choose']);

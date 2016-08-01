@@ -2,16 +2,15 @@
 /**
  * HTML for displaying a thumbnail
  *
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Media $this->media
  */
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
 $deleteButton = '';
-if (!$this->disableButtons && Person::isAllowed('issues','update')) {
+if (!$this->disableButtons && Person::isAllowed('media', 'delete')) {
 	$h = $this->template->getHelper('buttonLink');
 	$deleteButton = $h->buttonLink(
 		BASE_URI.'/media/delete?media_id='.$this->media->getId(),

@@ -406,8 +406,9 @@ class Person extends ActiveRecord
 			// This query is written as a Union for speed
 			// A Union is the only way to use the indexes for this query
 			$sql = "(select t.id from tickets t
-					where t.enteredByPerson_id=$id
-					   or t.assignedPerson_id=$id
+					where t.enteredByPerson_id =$id
+					   or t.assignedPerson_id  =$id
+					   or t.reportedByPerson_id=$id
 					limit 1)
 					union all
 					(select h.ticket_id from ticketHistory h
@@ -415,16 +416,7 @@ class Person extends ActiveRecord
 					   or h.actionPerson_id=$id
 					limit 1)
 					union all
-					(select i.ticket_id from issues i
-					where i.enteredByPerson_id=$id
-					   or i.reportedByPerson_id=$id
-					limit 1)
-					union all
-					(select r.issue_id from responses r
-					where r.person_id=$id
-					limit 1)
-					union all
-					(select m.issue_id from media m
+					(select m.ticket_id from media m
 					where m.person_id=$id
 					limit 1)";
 			$result = $zend_db->createStatement($sql)->execute();
@@ -560,14 +552,11 @@ class Person extends ActiveRecord
 			$id = (int)$person->getId();
 			$sql = "select distinct t.id from tickets t
 					left join ticketHistory th on t.id=th.ticket_id
-					left join issues         i on t.id= i.ticket_id
-					left join media          m on i.id= m.issue_id
-					left join responses      r on i.id= r.issue_id
-					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id)
+					left join media          m on i.id= m.ticket_id
+					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or th.actionPerson_id=$id)
-					   or ( i.enteredByPerson_id=$id or i.reportedByPerson_id=$id)
 					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
-					   or m.person_id=$id or r.person_id=$id";
+					   or m.person_id=$id";
 			$result = $zend_db->query($sql)->execute();
 			$ticketIds = [];
 			foreach ($result as $row) {
@@ -577,10 +566,8 @@ class Person extends ActiveRecord
 			$zend_db->getDriver()->getConnection()->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$zend_db->query('update responses     set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update issues        set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update issues        set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$zend_db->query('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
 				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);

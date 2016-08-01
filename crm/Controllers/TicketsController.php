@@ -84,7 +84,7 @@ class TicketsController extends Controller
 	}
 
 	/**
-	 * Displays thumbnails for all image media attached to issues
+	 * Displays thumbnails for all image media attached to tickets
 	 *
 	 * @param GET ticket_id
 	 */

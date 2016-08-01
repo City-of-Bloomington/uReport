@@ -35,19 +35,16 @@ foreach ($this->ticketList as $row) {
 					}
 					break;
 
-				case 'description':
-					$value = isset($row['issues'][0]['description']) ? $row['issues'][0]['description'] : '';
-					$value = preg_replace('/\s+/',' ',$value);
-					break;
 				case 'category':
 					$value = isset($row['category']['name']) ? $row['category']['name'] : '';
 					break;
 
 				case 'department':
 					$value = isset($row['assignedPerson']['department']['name'])
-						? $row['assignedPerson']['department']['name']
-						: '';
+						         ? $row['assignedPerson']['department']['name']
+                                : '';
 					break;
+
 				case 'latitude':
 				case 'longitude':
 					$value = isset($row['coordinates'][$field]) ? $row['coordinates'][$field] : '';
@@ -55,8 +52,8 @@ foreach ($this->ticketList as $row) {
 
 				default:
 					$value = isset($row[$displayableFields[$field]['index']])
-						? $row[$displayableFields[$field]['index']]
-						: '';
+						         ? $row[$displayableFields[$field]['index']]
+						         : '';
 			}
 			$line[] = $value;
 		}

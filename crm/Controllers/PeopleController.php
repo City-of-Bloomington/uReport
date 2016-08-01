@@ -116,12 +116,6 @@ class PeopleController extends Controller
 			foreach ($lists as $listType=>$title) {
 				$count += $this->addTicketList('panel-two', $listType, $title, $person, $disableLinks);
 			}
-
-			if (Person::isAllowed('tickets','merge') && !isset($_GET['disableLinks']) && $count>1) {
-				$this->template->blocks['panel-two'][] = new Block(
-					'tickets/ticketSelectForMergeForm.inc'
-				);
-			}
 		}
 		else {
 			$this->template->blocks[] = $block;

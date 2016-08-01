@@ -22,7 +22,6 @@ class Ticket extends ActiveRecord
 	protected $responseMethod;
 	protected $issueType;
 
-	private $issues;
 	private $needToUpdateClusters = false;
 
 	/**
@@ -89,7 +88,6 @@ class Ticket extends ActiveRecord
         $this->contactMethod    = null;
         $this->responseMethod   = null;
 
-        $this->issues = null;
         $this->needToUpdateClusters = false;
     }
 
@@ -108,7 +106,7 @@ class Ticket extends ActiveRecord
 		// an empty ticket does us no good
 		$lat  = $this->getLatitude();
 		$long = $this->getLongitude();
-		if (!$issue->getDescription() && !$this->getLocation() && !($lat && $long)) {
+		if (!$this->getDescription() && !$this->getLocation() && !($lat && $long)) {
 			throw new \Exception('missingRequiredFields');
 		}
 		if (($this->getLatitude() && $this->getLongitude())
@@ -463,10 +461,7 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * Transfers issues and history from another ticket into this one
-	 *
-	 * We're only migrating the issue and history
-	 * Once we're done we delete the other ticket
+	 * Marks another ticket as a duplicate of this one
 	 *
 	 * @param Ticket $ticket
 	 */
@@ -806,32 +801,42 @@ class Ticket extends ActiveRecord
 	/**
 	 * Returns an array of Tickets that are children of this ticket
 	 *
+	 * @param  bool  $recursive
 	 * @return array
 	 */
-	public function getChildren()
+	public function getChildren($recursive=false)
 	{
         $tickets = [];
         $table   = new TicketTable();
         $list    = $table->find(['parent_id'=>$this->getId()]);
-        foreach ($list as $t) { $tickets[] = $t; }
+        foreach ($list as $t) {
+            if ($recursive) { $tickets = array_merge($tickets, $t->getChildren($recursive)); }
+            $tickets[] = $t;
+        }
         return $tickets;
 	}
 
 	/**
 	 * Returns an array of all the people involved with this ticket
 	 *
-	 * @return array  An array of Person objects
+	 * @param  bool  $recursive
+	 * @return array             An array of Person objects
 	 */
-	public function getPeople()
+	public function getPeople($recursive=false)
 	{
         $people = [];
-        foreach (['enteredByPerson', 'assignedPerson', 'reportedByPerson'] as $p) {
-            $get = 'get'.ucfirst($p);
-            $person = $this->$get();
-            if ($person && !array_key_exists($person->getId(), $people)) {
-                $people[$person->getId()] = $person;
+        $add    = function (Ticket $t) use (&$people) {
+            foreach (['enteredByPerson', 'assignedPerson', 'reportedByPerson'] as $p) {
+                $get = 'get'.ucfirst($p);
+                $person = $t->$get();
+                if ($person && !array_key_exists($person->getId(), $people)) {
+                    $people[$person->getId()] = $person;
+                }
             }
-        }
+        };
+
+        if ($recursive) { foreach ($this->getChildren() as $t) { $add($t); }}
+        $add($this);
         return $people;
 	}
 

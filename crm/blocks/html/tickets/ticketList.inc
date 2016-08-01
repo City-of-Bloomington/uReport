@@ -38,7 +38,7 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
 					continue;
 				}
 
-				echo "<tr draggable=\"true\" ondragstart=\"event.dataTransfer.setData('text/plain', '{$ticket->getId()}');\">";
+				echo "<tr>";
 				foreach ($this->fields as $f) {
                     switch ($f) {
                         case 'enteredDate':

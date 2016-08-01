@@ -36,7 +36,7 @@ class ClientsController extends Controller
 	 * at a different url.  Once the user has chosen a new person, they will
 	 * return here, passing in the person_id they have chosen
 	 *
-	 * @param REQUEST client_id   Existing issues are edited by passing in an Issue
+	 * @param REQUEST client_id
 	 * @param REQUEST person_id  The new contactPerson
 	 */
 	public function update()
