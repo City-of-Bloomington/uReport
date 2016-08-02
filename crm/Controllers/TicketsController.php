@@ -428,6 +428,41 @@ class TicketsController extends Controller
 	}
 
 	/**
+	 * Sends an email to the chosen person
+	 */
+	public function message()
+	{
+        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+
+        if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
+            if (isset($_POST['message'])) {
+                try {
+                    $person = new Person($_POST['person_id']);
+                    $person->sendNotification($_POST['message']);
+
+                    $history = new TicketHistory();
+                    $history->setTicket($ticket);
+                    $history->setEnteredByPerson($_SESSION['USER']);
+                    $history->setActionPerson($person);
+                    $history->setNotes($_POST['message']);
+                    $history->setAction(new Action(Action::RESPONDED));
+                    $history->save();
+
+                    header('Location: '.$ticket->getURL());
+                    exit();
+                }
+                catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+            }
+
+            $this->template->setFilename('tickets');
+            $this->template->blocks[] = new Block('tickets/messageForm.inc', ['ticket'=>$ticket]);
+        }
+        else {
+            $_SESSION['errorMessages'][] = new \Exception('notificationsDisabled');
+        }
+	}
+
+	/**
 	 * Copies all data from one ticket to another, then deletes the empty ticket
 	 *
 	 * @param GET ticket_id_a

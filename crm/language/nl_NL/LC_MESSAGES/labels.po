@@ -330,6 +330,14 @@ msgstr "Beantwoorden per e-mail"
 msgid "notificationReplyEmail"
 msgstr "Beantwoorden per e-mail"
 
+msgid "message"
+msgid_plural "messages"
+msgstr[0] "Bericht"
+msgstr[1] "Berichten"
+
+msgid "message_send"
+msgstr "Stuur een bericht"
+
 msgid "autoRespond"
 msgstr "Automatisch beantwoorden"
 

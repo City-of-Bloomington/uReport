@@ -892,10 +892,17 @@ class Ticket extends ActiveRecord
 	{
         $people = [];
         $add    = function (Ticket $t) use (&$people) {
-            foreach (['enteredByPerson', 'assignedPerson', 'reportedByPerson'] as $p) {
-                $get = 'get'.ucfirst($p);
-                $person = $t->$get();
-                if ($person && !array_key_exists($person->getId(), $people)) {
+            $id  = (int)$t->getId();
+            $sql = "select p.* from tickets       t join people p on t. enteredByPerson_id = p.id and t.id=$id
+              union select p.* from tickets       t join people p on t.  assignedPerson_id = p.id and t.id=$id
+              union select p.* from tickets       t join people p on t.reportedByPerson_id = p.id and t.id=$id
+              union select p.* from ticketHistory t join people p on t. enteredByPerson_id = p.id and t.ticket_id=$id
+              union select p.* from ticketHistory t join people p on t.    actionPerson_id = p.id and t.ticket_id=$id";
+            $zend_db = Database::getConnection();
+            $result = $zend_db->query($sql)->execute();
+            foreach ($result as $row) {
+                $person = new Person($row);
+                if (!array_key_exists($person->getId(), $people)) {
                     $people[$person->getId()] = $person;
                 }
             }

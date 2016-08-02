@@ -67,6 +67,12 @@ use Application\Models\Person;
                 'label' => $this->_('add_response')
             ];
 		}
+		if (Person::isAllowed('tickets', 'message')) {
+            $links[] = [
+                'url'   => BASE_URI.'/tickets/message?ticket_id='.$ticket_id,
+                'label' => $this->_('message_send')
+            ];
+		}
 	}
 
 	if (isset($_SESSION['USER']) && $this->ticket->getStatus() != 'closed') {

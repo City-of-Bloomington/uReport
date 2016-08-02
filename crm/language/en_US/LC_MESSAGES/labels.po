@@ -330,6 +330,14 @@ msgstr "Reply To Email"
 msgid "notificationReplyEmail"
 msgstr "Reply To Email"
 
+msgid "message"
+msgid_plural "messages"
+msgstr[0] "Message"
+msgstr[1] "Messages"
+
+msgid "message_send"
+msgstr "Send Message"
+
 msgid "autoRespond"
 msgstr "Auto Respond"
 
