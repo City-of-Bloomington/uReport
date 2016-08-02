@@ -107,6 +107,7 @@ insert actions (name,type,description) values('changeLocation', 'system', 'Chang
 insert actions (name,type,description) values('response',       'system', '{actionPerson} contacted {reportedByPerson_id}');
 insert actions (name,type,description) values('duplicate',      'system', '{duplicate:ticket_id} marked as a duplicate of this case.');
 insert actions (name,type,description) values('update',         'system', '{enteredByPerson} updated this case.');
+insert actions (name,type,description) values('comment',        'system', '{enteredByPerson} commented on this case.');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,

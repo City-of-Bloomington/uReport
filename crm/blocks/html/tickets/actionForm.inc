@@ -7,7 +7,7 @@
 ?>
 <section class="actionForm">
     <header>
-        <h1><?= $this->ticketHistory->getAction()->getName(); ?></h1>
+        <h1><?= $this->_($this->ticketHistory->getAction()->getName()); ?></h1>
     </header>
 	<form method="post" action="<?= BASE_URL; ?>/tickets/recordAction">
 		<fieldset>

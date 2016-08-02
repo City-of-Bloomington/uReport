@@ -16,6 +16,7 @@ class Action extends ActiveRecord
     const UPDATED    = 'update';
     const RESPONDED  = 'response';
     const DUPLICATED = 'duplicate';
+    const COMMENTED  = 'comment';
     const CHANGED_CATEGORY = 'changeCategory';
     const CHANGED_LOCATION = 'changeLocation';
 

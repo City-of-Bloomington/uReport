@@ -5,6 +5,7 @@
  * @param Ticket $this->ticket
  */
 use Application\Models\Person;
+use Application\Models\Action;
 ?>
 <div class="tools">
 <?php
@@ -73,9 +74,19 @@ use Application\Models\Person;
                 'label' => $this->_('message_send')
             ];
 		}
+		if (Person::isAllowed('tickets', 'recordAction')) {
+            $action  = new Action(Action::COMMENTED);
+            $links[] = [
+                'url'   => BASE_URI."/tickets/recordAction?ticket_id=$ticket_id;action_id={$action->getId()}",
+                'label' => $this->_('comment')
+            ];
+		}
 	}
 
-	if (isset($_SESSION['USER']) && $this->ticket->getStatus() != 'closed') {
+	if (isset($_SESSION['USER'])
+        && $this->ticket->getStatus() != 'closed'
+        && Person::isAllowed('tickets', 'recordAction')) {
+
         $department = $_SESSION['USER']->getDepartment_id()
             ? $_SESSION['USER']->getDepartment()
             : new Department();
