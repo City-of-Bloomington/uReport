@@ -46,7 +46,7 @@ class Open311Controller extends Controller
 			try {
 				$category = new Category($_REQUEST['service_code']);
 				if ($category->allowsPosting($this->person)) {
-					$this->template->blocks[] = new Block('open311/serviceInfo.inc',array('category'=>$category));
+					$this->template->blocks[] = new Block('open311/serviceInfo.inc', ['category'=>$category]);
 				}
 				else {
 					// Not allowed to post to this category
@@ -64,7 +64,7 @@ class Open311Controller extends Controller
 		else {
 			$table = new CategoryTable();
 			$categoryList = $table->find();
-			$this->template->blocks[] = new Block('open311/serviceList.inc',array('categoryList'=>$categoryList));
+			$this->template->blocks[] = new Block('open311/serviceList.inc', ['categoryList'=>$categoryList]);
 		}
 	}
 
@@ -89,7 +89,7 @@ class Open311Controller extends Controller
 			try {
 				$ticket = new Ticket($_REQUEST['service_request_id']);
 				if ($ticket->allowsDisplay($this->person)) {
-					$this->template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
+					$this->template->blocks[] = new Block('open311/requestInfo.inc', ['ticket'=>$ticket]);
 				}
 				else {
 					header('HTTP/1.0 403 Forbidden', true, 403);
@@ -112,10 +112,9 @@ class Open311Controller extends Controller
 				// Media can only be attached after the ticket is saved
 				// It uses the issue_id in the directory structure
 				if (isset($_FILES['media'])) {
-					$issue = $ticket->getIssue();
 					try {
 						$media = new Media();
-						$media->setIssue($issue);
+						$media->setTicket($ticket);
 						$media->setFile($_FILES['media']);
 						$media->save();
 					}
@@ -123,7 +122,7 @@ class Open311Controller extends Controller
 						// Just ignore any media errors for now
 					}
 				}
-				$this->template->blocks[] = new Block('open311/requestInfo.inc',array('ticket'=>$ticket));
+				$this->template->blocks[] = new Block('open311/requestInfo.inc', ['ticket'=>$ticket]);
 			}
 			catch (\Exception $e) {
 				$_SESSION['errorMessages'][] = $e;
@@ -139,7 +138,7 @@ class Open311Controller extends Controller
 		}
 		// Do a search for requests
 		else {
-			$search = array();
+			$search = [];
 			if (isset($category)) {
 				if ($category->allowsDisplay($this->person)) {
 					$search['category_id'] = $category->getId();

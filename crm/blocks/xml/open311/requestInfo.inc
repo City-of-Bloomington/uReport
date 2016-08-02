@@ -1,20 +1,16 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Ticket $this->ticket
  */
-use Blossom\Classes\View;
-
 $c = $this->ticket->getCategory();
 $service_name = $c ? self::escape($c->getName()) : '';
 $service_code = $c ? $c->getId() : '';
 
 $status = strtolower($this->ticket->getStatus());
 
-$issue = $this->ticket->getIssue();
-$description = self::escape($issue->getDescription());
+$description = self::escape($this->ticket->getDescription());
 
 $h = $this->ticket->getHistory();
 $history = end($h);
@@ -23,7 +19,7 @@ $address = self::escape($this->ticket->getLocation());
 $zipcode = self::escape($this->ticket->getZip());
 
 $media_url = '';
-$media = $issue->getMedia();
+$media = $this->ticket->getMedia();
 if (count($media)) {
 	$m = $media->current();
 	$media_url = $m->getURL();
