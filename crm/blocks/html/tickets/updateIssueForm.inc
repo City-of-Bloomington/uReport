@@ -16,7 +16,7 @@
 				$this->_include('tickets/issueFields.inc');
 
 				$this->category = $this->ticket->getCategory();
-				$this->_include('tickets/issueCustomFields.inc');
+				$this->_include('tickets/customFieldsForm.inc');
 
 				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>

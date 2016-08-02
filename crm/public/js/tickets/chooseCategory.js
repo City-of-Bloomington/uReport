@@ -6,11 +6,11 @@ var CATEGORY_CHOOSER = {
      * @param int category_id
      */
 	updateCustomFields: function (category_id) {
-		var url = CRM.BASE_URL + '/tickets/add?partial=tickets/addTicketForm.inc;category_id=' + category_id;
+		var url = CRM.BASE_URL + '/tickets/add?partial=tickets/customFieldsForm.inc;category_id=' + category_id;
         jQuery.ajax(url, {
             dataType: 'html',
             success: function (o, status, xhr) {
-                jQuery('#customFields').replaceWith(jQuery(o).find('#customFields'));
+                document.getElementById('customFields').innerHTML = o;
             }
         });
 	},

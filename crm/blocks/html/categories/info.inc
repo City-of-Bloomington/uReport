@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Category $this->category
  */
-use Application\Models\Issue;
+use Application\Models\Ticket;
 use Application\Models\Person;
 
 $fields = [
@@ -54,11 +54,12 @@ if (Person::isAllowed('categories', 'update')) {
     ?>
 
 	<form method="get">
-		<fieldset><legend><?= $this->_('custom_fields'); ?></legend>
-		<?php
-			$this->issue = new Issue();
-			$this->_include('tickets/issueCustomFields.inc');
-        ?>
+		<fieldset id="customFields">
+            <legend><?= $this->_('custom_fields'); ?></legend>
+            <?php
+                $this->ticket = new Ticket();
+                $this->_include('tickets/customFieldsForm.inc');
+            ?>
 		</fieldset>
 	</form>
 </section>

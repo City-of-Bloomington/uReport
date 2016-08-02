@@ -40,12 +40,14 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 		</fieldset>
 		<fieldset class="issueFields">
 			<legend><?= $this->_('info_issue'); ?></legend>
-			<?php
-				$this->_include('tickets/issueFields.inc');
+			<?php $this->_include('tickets/issueFields.inc'); ?>
 
-				$this->category = $category;
-				$this->_include('tickets/issueCustomFields.inc');
-			?>
+            <div id="customFields">
+            <?php
+                $this->category = $category;
+                $this->_include('tickets/customFieldsForm.inc');
+            ?>
+            </div>
 		</fieldset>
 		<fieldset class="assignmentFields">
 			<legend><?= $this->_('info_assignment'); ?></legend>

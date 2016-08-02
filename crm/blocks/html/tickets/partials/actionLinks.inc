@@ -34,12 +34,6 @@ use Application\Models\Action;
             'label' => $this->_('delete_ticket')
         ];
 	}
-	if (Person::isAllowed('tickets', 'update')) {
-        $links[] = [
-            'url'   => BASE_URI.'/tickets/update?ticket_id='.$ticket_id,
-            'label' => $this->_('update_ticket')
-        ];
-	}
 	if ($this->ticket->getStatus() != 'closed') {
         if (Person::isAllowed('tickets', 'changeCategory')) {
             $links[] = [
@@ -81,6 +75,12 @@ use Application\Models\Action;
                 'label' => $this->_('comment')
             ];
 		}
+        if (Person::isAllowed('tickets', 'update')) {
+            $links[] = [
+                'url'   => BASE_URI.'/tickets/update?ticket_id='.$ticket_id,
+                'label' => $this->_('update_ticket')
+            ];
+        }
 	}
 
 	if (isset($_SESSION['USER'])

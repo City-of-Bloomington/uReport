@@ -258,11 +258,13 @@ class TicketHistory extends ActiveRecord
                 }
 
                 $description = $this->getDescription($template, $emailTo);
-                $emailTo->sendNotification(
-                    "$url\n\n$description\n\n$response\n\n$notes",
-                    APPLICATION_NAME.' '.$action,
-                    $emailReply
-                );
+                $block = new \Blossom\Classes\Block('notifications/history.inc', [
+                    'ticket'            => $ticket,
+                    'actionDescription' => $description,
+                    'autoResponse'      => $response,
+                    'userComments'      => $notes
+                ]);
+                $emailTo->sendNotification($block->render('txt', $template), APPLICATION_NAME.' '.$action, $emailReply);
             }
         }
 	}

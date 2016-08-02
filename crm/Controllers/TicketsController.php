@@ -105,7 +105,6 @@ class TicketsController extends Controller
 	public function add()
 	{
 		$ticket = new Ticket();
-		$issue  = new Issue();
 
 		// Categories are required before starting the process
 		// Handle any Category choice passed in
@@ -165,13 +164,22 @@ class TicketsController extends Controller
 			}
 		}
 
-		// Display all the forms
-		$this->template->setFilename('ticketCreation');
-		$this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
-            'ticket'=>$ticket,
-            'issue'=>$issue,
-            'currentDepartment'=>$currentDepartment
-        ]);
+		if (!empty($_REQUEST['partial']) && $_REQUEST['partial'] === 'tickets/customFieldsForm.inc'
+            && $ticket->getCategory_id()) {
+
+            $this->template->blocks[] = new Block('tickets/customFieldsForm.inc', [
+                'ticket'   => $ticket,
+                'category' => $ticket->getCategory()
+            ]);
+		}
+		else {
+            // Display all the forms
+            $this->template->setFilename('ticketCreation');
+            $this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
+                'ticket'           => $ticket,
+                'currentDepartment'=> $currentDepartment
+            ]);
+        }
 	}
 
 	public function update()
@@ -436,9 +444,14 @@ class TicketsController extends Controller
 
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (isset($_POST['message'])) {
+                $template = new Template('email', 'txt');
+                $block = new Block('notifications/history.inc', [
+                    'ticket'       => $ticket,
+                    'userComments' => $_POST['message']
+                ]);
                 try {
                     $person = new Person($_POST['person_id']);
-                    $person->sendNotification($_POST['message']);
+                    $person->sendNotification($block->render('txt', $template));
 
                     $history = new TicketHistory();
                     $history->setTicket($ticket);
