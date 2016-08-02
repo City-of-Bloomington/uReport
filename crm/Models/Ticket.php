@@ -732,6 +732,14 @@ class Ticket extends ActiveRecord
 
         $history->save();
         $this->save();
+
+        if ($action->getName() === 'closed') {
+            foreach ($this->getChildren() as $t) {
+                if ($t->getStatus() !== $this->getStatus()) {
+                    $t->handleChangeStatus($post);
+                }
+            }
+        }
 	}
 
 	/**
