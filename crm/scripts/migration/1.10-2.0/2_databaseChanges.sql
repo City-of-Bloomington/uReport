@@ -137,3 +137,6 @@ alter table ticketHistory drop issue_id;
 drop table issues;
 
 alter table media drop media_type;
+
+truncate table version;
+insert version set version='2.0';

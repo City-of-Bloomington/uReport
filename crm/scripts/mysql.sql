@@ -4,7 +4,7 @@ set foreign_key_checks=0;
 create table version (
 	version varchar(8) not null primary key
 );
-insert version set version='1.11';
+insert version set version='2.0';
 
 create table departments (
 	id               int          unsigned not null primary key auto_increment,
