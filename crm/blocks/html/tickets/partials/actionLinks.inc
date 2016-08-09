@@ -81,6 +81,12 @@ use Application\Models\Action;
                 'label' => $this->_('update_ticket')
             ];
         }
+        if (Person::isAllowed('media', 'upload')) {
+            $links[] = [
+                'url'   => BASE_URI.'/media/upload?ticket_id='.$ticket_id,
+                'label' => $this->_('upload_media')
+            ];
+        }
 	}
 
 	if (isset($_SESSION['USER'])

@@ -19,6 +19,7 @@ class Action extends ActiveRecord
     const COMMENTED  = 'comment';
     const CHANGED_CATEGORY = 'changeCategory';
     const CHANGED_LOCATION = 'changeLocation';
+    const UPLOADED_MEDIA   = 'upload_media';
 
 	protected $tablename = 'actions';
 	public static $types = ['system', 'department'];

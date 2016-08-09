@@ -5,12 +5,17 @@
  * @param array $this->errorMessages
  */
 ?>
-<section id="errorMessages">
-	<h1><?= $this->_('error'); ?></h1>
+<section id="alert">
 	<?php
         $errorDir = "/blocks/html/errorMessages";
 
 		foreach ($this->errorMessages as $e) {
+            echo "
+            <article>
+                <header>
+                    <h1>{$this->_('error')}</h1>
+                </header>
+            ";
 			$error = $e->getMessage();
 			$file = "$errorDir/$error.inc";
 
@@ -24,6 +29,10 @@
 			else {
 				echo "<p>{$this->_($error, 'errors')}</p>";
 			}
+
+			echo "
+			</article>
+			";
 		}
 	?>
 </section>

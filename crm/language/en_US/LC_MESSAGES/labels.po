@@ -723,3 +723,6 @@ msgstr "Close Case"
 
 msgid "total"
 msgstr "Total"
+
+msgid "error"
+msgstr "Sorry"

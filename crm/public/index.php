@@ -32,7 +32,7 @@ if (false !== strpos($_SERVER['REQUEST_URI'],'open311')) {
 }
 // Check for Media thumbnail requests
 elseif (preg_match(
-			'#'.BASE_URI.'/media/\d{4}/\d{1,2}/\d{1,2}/(\d+)/([a-f0-9]+\.[a-z]+)#',
+			'#'.BASE_URI.'/media/\d{4}/\d{1,2}/\d{1,2}/(\d+)/([a-f0-9]{13})#',
 			$_SERVER['REQUEST_URI'],
 			$matches)) {
 			$resource = 'media';

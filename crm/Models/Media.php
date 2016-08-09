@@ -1,8 +1,8 @@
 <?php
 /**
- * Media will be attached to Issues
+ * Media is attached to Tickets
  *
- * Files will be stored as /data/media/YYYY/MM/DD/$media_id.ext
+ * Files will be stored as /data/media/YYYY/MM/DD/$unique_id
  * User provided filenames will be stored in the database
  *
  * @copyright 2006-2016 City of Bloomington, Indiana
@@ -23,29 +23,29 @@ class Media extends ActiveRecord
 	/**
 	 * Whitelist of accepted file types
 	 */
-	public static $extensions = [
-		'jpg' =>['mime_type'=>'image/jpeg',                          'media_type'=>'image'],
-		'gif' =>['mime_type'=>'image/gif',                           'media_type'=>'image'],
-		'png' =>['mime_type'=>'image/png',                           'media_type'=>'image'],
-		'tiff'=>['mime_type'=>'image/tiff',                          'media_type'=>'image'],
-		'pdf' =>['mime_type'=>'application/pdf',                     'media_type'=>'attachment'],
-		'rtf' =>['mime_type'=>'application/rtf',                     'media_type'=>'attachment'],
-		'doc' =>['mime_type'=>'application/msword',                  'media_type'=>'attachment'],
-		'xls' =>['mime_type'=>'application/msexcel',                 'media_type'=>'attachment'],
-		'gz'  =>['mime_type'=>'application/x-gzip',                  'media_type'=>'attachment'],
-		'zip' =>['mime_type'=>'application/zip',                     'media_type'=>'attachment'],
-		'txt' =>['mime_type'=>'text/plain',                          'media_type'=>'attachment'],
-		'wmv' =>['mime_type'=>'video/x-ms-wmv',                      'media_type'=>'video'],
-		'mov' =>['mime_type'=>'video/quicktime',                     'media_type'=>'video'],
-		'rm'  =>['mime_type'=>'application/vnd.rn-realmedia',        'media_type'=>'video'],
-		'ram' =>['mime_type'=>'audio/vnd.rn-realaudio',              'media_type'=>'audio'],
-		'mp3' =>['mime_type'=>'audio/mpeg',                          'media_type'=>'audio'],
-		'mp4' =>['mime_type'=>'video/mp4',                           'media_type'=>'video'],
-		'flv' =>['mime_type'=>'video/x-flv',                         'media_type'=>'video'],
-		'wma' =>['mime_type'=>'audio/x-ms-wma',                      'media_type'=>'audio'],
-		'kml' =>['mime_type'=>'application/vnd.google-earth.kml+xml','media_type'=>'attachment'],
-		'swf' =>['mime_type'=>'application/x-shockwave-flash',       'media_type'=>'attachment'],
-		'eps' =>['mime_type'=>'application/postscript',              'media_type'=>'attachment']
+	public static $mime_types = [
+		 'image/jpeg'                          => 'jpg',
+		 'image/gif'                           => 'gif',
+		 'image/png'                           => 'png',
+		 'image/tiff'                          => 'tiff',
+		 'application/pdf'                     => 'pdf',
+		 'application/rtf'                     => 'rtf',
+		 'application/msword'                  => 'doc',
+		 'application/msexcel'                 => 'xls',
+		 #'application/x-gzip'                  => 'gz',
+		 #'application/zip'                     => 'zip',
+		 #'text/plain'                          => 'txt',
+		 #'video/x-ms-wmv'                      => 'wmv',
+		 'video/quicktime'                     => 'mov',
+		 #'application/vnd.rn-realmedia'        => 'rm',
+		 #'audio/vnd.rn-realaudio'              => 'ram',
+		 #'audio/mpeg'                          => 'mp3',
+		 #'video/mp4'                           => 'mp4',
+		 #'video/x-flv'                         => 'flv',
+		 #'audio/x-ms-wma'                      => 'wma',
+		 #'application/vnd.google-earth.kml+xml'=> 'kml',
+		 #'application/x-shockwave-flash'       => 'swf',
+		 #'application/postscript'              => 'eps'
 	];
 
 	/**
@@ -71,15 +71,16 @@ class Media extends ActiveRecord
 				if (ActiveRecord::isId($id)) {
 					$sql = 'select * from media where id=?';
 				}
-				else {
-					// Media internalFilenames include the original file extensions
-					// However, the filename being requested may be for a generated thumbnail
-					// We need to chop off the extension and do a wildcard search
-					$filename = preg_replace('/[^.]+$/','',$id);
-					$id = "$filename%";
-					$sql = 'select * from media where internalFilename like ?';
+				// Internal filename without extension
+				elseif (ctype_xdigit($id)) {
+					$sql = 'select * from media where internalFilename=?';
 				}
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+
+				$result = null;
+				if (isset($sql)) {
+                    $result = $zend_db->createStatement($sql)->execute([$id]);
+				}
+
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -122,7 +123,6 @@ class Media extends ActiveRecord
 		// Check for required fields here.  Throw an exception if anything is missing.
 		if (!$this->data['filename'  ]) { throw new \Exception('media/missingFilename' ); }
 		if (!$this->data['mime_type' ]) { throw new \Exception('media/missingMimeType' ); }
-		if (!$this->data['media_type']) { throw new \Exception('media/missingMediaType'); }
 		if (!$this->data['ticket_id' ]) { throw new \Exception('media/missingTicket_id'); }
 	}
 
@@ -143,7 +143,6 @@ class Media extends ActiveRecord
 	public function getTicket_id()  { return parent::get('ticket_id');  }
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
-	public function getMedia_type() { return parent::get('media_type'); }
 	public function getPerson_id()  { return parent::get('person_id');  }
 	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
 
@@ -156,13 +155,19 @@ class Media extends ActiveRecord
 	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o);  }
 	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 
-
-	public function getType() { return $this->getMedia_type(); }
 	public function getModified($f=null, \DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
 
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
+	/**
+	 * Returns the root portion of the mime_type
+	 *
+	 * @return string
+	 */
+	public function getMedia_type() { return dirname($this->getMime_type()); }
+	public function getType()       { return dirname($this->getMime_type()); }
+
 	/**
 	 * Populates this object by reading information on a file
 	 *
@@ -177,31 +182,33 @@ class Media extends ActiveRecord
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
 		$filename = is_array($file) ? basename($file['name']) : basename($file);
 		if (!$tempFile) {
-			throw new \Exception('media/uploadFailed');
+            if (!empty($file['error'])) {
+                throw new \Exception('media/uploadFailed', $file['error']);
+            }
+            else {
+                throw new \Exception('media/uploadFailed');
+            }
 		}
 
-		// Clean all bad characters from the filename
-		$filename = $this->createValidFilename($filename);
-		$this->data['filename'] = $filename;
-		$extension = $this->getExtension();
-
 		// Find out the mime type for this file
-		if (array_key_exists(strtolower($extension),Media::$extensions)) {
-			$this->data['mime_type']  = Media::$extensions[$extension]['mime_type'];
-			$this->data['media_type'] = Media::$extensions[$extension]['media_type'];
-
+		$this->data['mime_type'] = mime_content_type($tempFile);
+		if (array_key_exists($this->data['mime_type'], self::$mime_types)) {
+            $extension = self::$mime_types[$this->data['mime_type']];
 		}
 		else {
 			throw new \Exception('media/unknownFileType');
 		}
 
+		// Clean all bad characters from the filename
+		$filename = $this->createValidFilename($filename, $extension);
+		$this->data['filename'] = $filename;
 
 		// Move the file where it's supposed to go
-		$directory = $this->getDirectory();
-		if (!is_dir(SITE_HOME."/media/$directory")) {
-			mkdir  (SITE_HOME."/media/$directory",0777,true);
+		$newFile   = $this->getFullPath();
+		$directory = dirname($newFile);
+		if (!is_dir($directory)) {
+			mkdir  ($directory, 0777, true);
 		}
-		$newFile  = SITE_HOME."/media/$directory/{$this->getInternalFilename()}";
 		rename($tempFile, $newFile);
 		chmod($newFile, 0666);
 
@@ -209,6 +216,16 @@ class Media extends ActiveRecord
 		if (!is_file($newFile)) {
 			throw new \Exception('media/badServerPermissions');
 		}
+	}
+
+	/**
+	 * Returns the full path to the file or derivative
+	 *
+	 * @return string
+	 */
+	public function getFullPath()
+	{
+        return SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
 	}
 
 	/**
@@ -222,8 +239,7 @@ class Media extends ActiveRecord
 	 */
 	public function getDirectory()
 	{
-		$d = getdate($this->getUploaded('U'));
-		return "$d[year]/$d[mon]/$d[mday]";
+        return $this->getUploaded('Y/n/j');
 	}
 
 	/**
@@ -240,7 +256,7 @@ class Media extends ActiveRecord
 	{
 		$filename = parent::get('internalFilename');
 		if (!$filename) {
-			$filename = uniqid().'.'.$this->getExtension();
+			$filename = uniqid();
 			parent::set('internalFilename', $filename);
 		}
 		return $filename;
@@ -251,8 +267,7 @@ class Media extends ActiveRecord
 	 */
 	public function getExtension()
 	{
-		preg_match("/[^.]+$/",$this->data['filename'],$matches);
-		return strtolower($matches[0]);
+        return self::$mime_types[$this->data['mime_type']];
 	}
 
 	/**
@@ -265,9 +280,6 @@ class Media extends ActiveRecord
 		$url = BASE_URL."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }
 		$url.= "/{$this->getInternalFilename()}";
-		if ($size) {
-			$url = preg_replace('/[^.]+$/', 'png', $url);
-		}
 		return $url;
 	}
 
@@ -276,7 +288,7 @@ class Media extends ActiveRecord
 	 */
 	public function getFilesize()
 	{
-		return filesize(SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+        return filesize($this->getFullPath());
 	}
 
 	/**

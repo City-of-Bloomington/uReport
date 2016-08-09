@@ -723,3 +723,6 @@ msgstr "Melding sluiten"
 
 msgid "total"
 msgstr "totaal"
+
+msgid "error"
+msgstr "Excuses"

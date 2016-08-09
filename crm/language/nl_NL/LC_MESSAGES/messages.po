@@ -133,3 +133,9 @@ msgstr ""
 "Wanneer gebruik wordt gemaakt van externe authenticatie, dan wordt deze informatie "
 "automatisch gevuld. Indien dit niet het geval is, vul dan tenminste "
 "een voor en achternaam in."
+
+msgid "file_max_size"
+msgstr "Max Bestandsgrootte: %s"
+
+msgid "file_type_accept"
+msgstr "Geaccepteerd Bestandstype: %s"

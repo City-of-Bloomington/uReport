@@ -7,6 +7,8 @@ namespace Application\Controllers;
 
 use Application\Models\Ticket;
 use Application\Models\Media;
+use Application\Models\Action;
+use Application\Models\TicketHistory;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
@@ -58,12 +60,21 @@ class MediaController extends Controller
 				$media->setTicket($ticket);
 				$media->setFile($_FILES['attachment']);
 				$media->save();
+
+				$history = new TicketHistory();
+				$history->setTicket($media->getTicket());
+				$history->setAction(new Action(Action::UPLOADED_MEDIA));
+				$history->setData(['media_id'=>$media->getId()]);
+				$history->save();
 			}
 			catch (\Exception $e) {
-				// Clean out any file that might have been saved
-				$media->delete();
-
 				$_SESSION['errorMessages'][] = $e;
+				// Clean out any file that might have been saved
+				try {
+                    $media->delete();
+                }
+                catch (\Exception $e) {
+                }
 			}
 
 			header('Location: '.$ticket->getURL());

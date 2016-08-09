@@ -5,6 +5,7 @@
  * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Media $this->media
+ * @param bool  $this->disableButtons (optional)
  */
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;

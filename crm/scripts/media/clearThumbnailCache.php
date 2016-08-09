@@ -5,7 +5,7 @@
  */
 require_once '../../bootstrap.inc';
 
-$files = glob(APPLICATION_HOME.'/data/media/*/*/*/*/*/');
+$files = glob(APPLICATION_HOME.'/data/media/*/*/*/*/*');
 foreach ($files as $file) {
 	unlink($file);
 	echo "Removed $file\n";

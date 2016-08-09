@@ -108,6 +108,7 @@ insert actions (name,type,description) values('response',       'system', '{acti
 insert actions (name,type,description) values('duplicate',      'system', '{duplicate:ticket_id} marked as a duplicate of this case.');
 insert actions (name,type,description) values('update',         'system', '{enteredByPerson} updated this case.');
 insert actions (name,type,description) values('comment',        'system', '{enteredByPerson} commented on this case.');
+insert actions (name,type,description) values('upload_media',   'system', '{enteredByPerson} uploaded an attachment.');
 
 create table categoryGroups (
 	id       int         unsigned not null primary key auto_increment,
@@ -249,7 +250,6 @@ create table media (
 	filename   varchar(128) not null,
 	internalFilename varchar(50) not null,
 	mime_type  varchar(128),
-	media_type varchar(50),
 	uploaded   timestamp    not null default CURRENT_TIMESTAMP,
 	person_id  int          unsigned,
 	constraint FK_media_ticket_id foreign key (ticket_id) references tickets(id),

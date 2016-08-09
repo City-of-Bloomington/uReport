@@ -8,6 +8,8 @@
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
+use Blossom\Classes\Block;
+
 $ticket_id = $this->ticket->getId();
 
 $status = $this->ticket->getStatus();
@@ -63,7 +65,8 @@ echo "
     $description
     $fields
 ";
-    $this->_include('tickets/issueAttachments.inc');
+    $block = new Block('tickets/issueAttachments.inc', ['ticket'=>$this->ticket, 'disableButtons'=>true]);
+    echo $block->render('html', $this->template);
 echo "
 </section>
 <script type=\"text/javascript\">

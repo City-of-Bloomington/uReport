@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2007-2014 City of Bloomington, Indiana. All rights reserved.
+ * @copyright 2007-2016 City of Bloomington, Indiana. All rights reserved.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -27,23 +27,20 @@ class Image extends Media
 	public function output($size)
 	{
 		// If they don't specify size, just output the opriginal file
-		$directory    = SITE_HOME."/media/{$this->getDirectory()}";
-		$original = $this->getInternalFilename();
+		$path     = $this->getFullPath();
+		$filename = $this->getInternalFilename();
 		if (!$size) {
-			readfile("$directory/$original");
+            readfile($path);
 		}
 		else {
 			$size = (int)$size;
-			$thumbnailDirectory = "$directory/$size";
+			$thumbnailDirectory = dirname($path)."/$size";
 
-			preg_match('/(^.*)\.([^\.]+)$/', $original, $matches);
-			$resizedFile = $matches[1].'.png';
-
-			if (!is_file("$thumbnailDirectory/$resizedFile")) {
-				self::resize("$directory/$original", $size);
+			if (!is_file("$thumbnailDirectory/$filename")) {
+				self::resize($path, $size);
 			}
 
-			readfile("$thumbnailDirectory/$resizedFile");
+			readfile("$thumbnailDirectory/$filename");
 		}
 	}
 
@@ -62,15 +59,13 @@ class Image extends Media
 	{
 		$size = (int)$size;
 		$directory = dirname($inputFile)."/$size";
-
-		preg_match('/(^.*)\.([^\.]+)$/',basename($inputFile),$matches);
-		$filename = $matches[1];
+		$filename  = basename($inputFile);
 
 		if (!is_dir($directory)) { mkdir($directory, 0777, true); }
 
 		$dimensions = $size.'x'.$size;
-		$newFile = "$directory/$filename.png";
-		exec(IMAGEMAGICK."/convert $inputFile -resize '$dimensions' $newFile");
+		$newFile = "$directory/$filename";
+		exec(IMAGEMAGICK."/convert $inputFile -auto-orient -resize '$dimensions' png:$newFile");
 	}
 
 	/**
@@ -78,28 +73,28 @@ class Image extends Media
 	 */
 	public function clearCache()
 	{
-		$uniqid = preg_replace('/[^.]+$/', '', $this->getInternalFilename());
-		$pattern = SITE_HOME."/media/{$this->getDirectory()}/*/$uniqid*";
+		$uniqid  = $this->getInternalFilename();
+		$dir     = dirname($this->getFullPath());
+		$pattern = "$dir/*/$uniqid";
 
 		foreach(glob($pattern) as $file) {
 			unlink($file);
 		}
 	}
 
+	/**
+	 * @param int $size
+	 * @return string
+	 */
 	public function getFullPathForSize($size=null)
 	{
-		$size = (int)$size;
+		$size     = (int)$size;
+		$dir      = dirname($this->getFullPath());
+		$filename = $this->getInternalFilename();
 
-		preg_match('/(^.*)\.([^\.]+)$/',$this->getInternalFilename(), $matches);
-		$filename = $matches[1];
-
-		if ($size) {
-			return SITE_HOME."/media/{$this->getDirectory()}/$size/$filename.png";
-		}
-		else {
-			// Return the size of the original
-			return SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
-		}
+		return $size
+            ? "$dir/$size/$filename"
+            : "$dir/$filename";
 	}
 
 	/**

@@ -126,3 +126,9 @@ msgstr ""
 "If you are using Employee authentication, the rest of this information will "
 "be filled in automatically from the directory.  Otherwise, you must provide "
 "at least a first and last name."
+
+msgid "file_max_size"
+msgstr "Max Filesize: %s"
+
+msgid "file_type_accept"
+msgstr "Accepted Filetypes: %s"
