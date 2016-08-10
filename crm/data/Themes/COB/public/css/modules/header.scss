@@ -9,7 +9,7 @@ body > header {
     a { color:$color-header; }
 
     > .container {
-        h1, h2 { display:inline-block; }
+        h1, h2 { display:inline-block; height:2.5rem; margin:0; vertical-align:middle; }
         h1 a, h2 a {
             display:inline-block;
             height:2.5rem; line-height:2.5rem;
