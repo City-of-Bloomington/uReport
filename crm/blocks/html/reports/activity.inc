@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Report;
 use Blossom\Classes\ActiveRecord;
@@ -35,11 +34,13 @@ $ACTIVITY_DATA = [
 	#activityThisWeek { width:600px; clear:both; }
 	#categoryActivity .original { display:none; }
 </style>
-<div id="activityReport">
-	<h2>Activity Report</h2>
+<section id="activityReport">
+    <header>
+        <h1>Activity Report</h1>
+    </header>
 	<div id="pieCharts">
 		<div id="currentOpenTickets" class="chartData">
-			<h3>Tickets currently open</h3>
+			<h2>Tickets currently open</h2>
 			<div class="chart" id="currentOpenTickets_chart"></div>
 			<?php
                 $data = Report::currentOpenTickets();
@@ -50,7 +51,7 @@ $ACTIVITY_DATA = [
             ?>
 		</div>
 		<div id="openedTickets" class="chartData">
-			<h3>Tickets Opened Today</h3>
+			<h2>Tickets Opened Today</h2>
 			<div class="chart" id="openedTickets_chart"></div>
 			<?php
                 $data = Report::openedTickets();
@@ -61,7 +62,7 @@ $ACTIVITY_DATA = [
             ?>
 		</div>
 		<div id="closedTickets" class="chartData">
-			<h3>Tickets closed today</h3>
+			<h2>Tickets closed today</h2>
 			<div class="chart" id="closedTickets_chart"></div>
             <?php
                 $data = Report::closedTickets();
@@ -73,7 +74,7 @@ $ACTIVITY_DATA = [
 		</div>
 	</div>
 	<div id="activityThisMonth" class="chartData">
-		<h3>Activity the past month</h3>
+		<h2>Activity the past month</h2>
 		<div class="chart" id="activityThisMonth_chart"></div>
         <?php
             $d = [];
@@ -99,30 +100,30 @@ $ACTIVITY_DATA = [
             }
         ?>
 	</div>
-</div>
-<div id="categoryActivity" class="yui3-skin-sam">
-	<p>* Average Days spent open is calculated as how long tickets stayed open during the entire
-		history of the data.
-	</p>
-	<div id="categoryActivity_chart"></div>
-    <?php
-        $data = Report::categoryActivity();
-        foreach ($data as $r) {
-            $ACTIVITY_DATA['categoryActivity'][] = [
-                $r['name'],
-                (int)$r['slaDays'],
-                (int)$r['days'],
-                (int)$r['currentopen'],
-                (int)$r['openedday'],
-                (int)$r['openedweek'],
-                (int)$r['openedmonth'],
-                (int)$r['closedday'],
-                (int)$r['closedweek'],
-                (int)$r['closedmonth']
-            ];
-        }
-    ?>
-</div>
+    <div id="categoryActivity" class="yui3-skin-sam">
+        <p>* Average Days spent open is calculated as how long tickets stayed open during the entire
+            history of the data.
+        </p>
+        <div id="categoryActivity_chart"></div>
+        <?php
+            $data = Report::categoryActivity();
+            foreach ($data as $r) {
+                $ACTIVITY_DATA['categoryActivity'][] = [
+                    $r['name'],
+                    (int)$r['slaDays'],
+                    (int)$r['days'],
+                    (int)$r['currentopen'],
+                    (int)$r['openedday'],
+                    (int)$r['openedweek'],
+                    (int)$r['openedmonth'],
+                    (int)$r['closedday'],
+                    (int)$r['closedweek'],
+                    (int)$r['closedmonth']
+                ];
+            }
+        ?>
+    </div>
+</section>
 <script type="text/javascript">
 var ACTIVITY_DATA = <?= json_encode($ACTIVITY_DATA, JSON_PRETTY_PRINT); ?>
 </script>

@@ -23,6 +23,19 @@ main .dropdown .launcher {
     color: $color-content-background;
 }
 
+.searchLayout {
+    #panel-one {
+    background-color:$color-heading-2;
+    color:$color-content-background;
+
+    h1, h2, legend, dt { color:$color-content-background; }
+    dl { background-color:$color-heading-2; }
+
+    input { color: $color-text-default; }
+    }
+}
+.icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
+.btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
 
 #ticketSearchForm {
     margin-left:.5em;
@@ -34,20 +47,11 @@ main .dropdown .launcher {
         dd { margin:0; font-size:.8rem; }
     }
 }
-.icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
-.btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
-
-.searchLayout {
-    #panel-one {
-        background-color:$color-heading-2;
-        color:#fff;
-
-        h1, h2, legend { color:#fff; }
-        dl { background-color:$color-heading-2; }
-        dt { color:#fff; }
-    }
-}
 #advanced-search > .btn.delete { display:block; }
+#reportSearchForm {
+    ul { padding:0 1rem; }
+    dd { margin:0; }
+}
 
 .searchResults {
     padding:0 1em;
@@ -69,7 +73,6 @@ main .dropdown .launcher {
             background-color: $color-nav1;
         }
     }
-
 }
 
 .pageNavigation          { margin:.5em; }

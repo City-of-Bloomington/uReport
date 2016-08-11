@@ -2,9 +2,8 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2012-2013 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\Category;
 use Application\Models\Client;
@@ -12,7 +11,6 @@ use Application\Models\Department;
 use Application\Models\Person;
 
 use Blossom\Classes\Block;
-use Blossom\Classes\View;
 use Blossom\Classes\Url;
 
 $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
@@ -26,7 +24,7 @@ $currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 			|| !empty($_GET['postingPermissionLevel'])
 			|| !empty($_GET['clients'])) {
 			if (Person::isAllowed('bookmarks', 'update')) {
-				$bookmarkForm = new Block('bookmarks/updateForm.inc',array('type'=>'report'));
+				$bookmarkForm = new Block('bookmarks/updateForm.inc', ['type'=>'report']);
 				echo $bookmarkForm->render('html', $this->template);
 			}
 		}

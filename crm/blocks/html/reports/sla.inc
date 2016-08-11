@@ -37,13 +37,15 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
 	.chart { width:100%; height:250px; }
 	.charts-tooltip div { color:infotext; }
 </style>
-<div id="slaReport">
-	<h2>SLA</h2>
+<section id="slaReport">
+    <header>
+        <h1><?= $this->_('sla'); ?></h1>
+    </h1>
 	<div class="chartData">
-		<h3>Outstanding Open Cases</h3>
+		<h2>Outstanding Open Cases</h2>
 		<div id="openTicketCounts" class="chart"></div>
 
-		<h3>SLA Percentages</h3>
+		<h2>SLA Percentages</h2>
 		<div id="slaPercentages" class="chart"></div>
 
         <script type="text/javascript">
@@ -84,4 +86,4 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
             };
         </script>
 	</div>
-</div>
+</section>

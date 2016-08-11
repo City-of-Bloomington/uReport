@@ -156,11 +156,10 @@ class Field extends Helper
         $radioButtons = '';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $checked = $value == $o['value']
-                    ? 'checked="true"'
-                    : '';
+                $label   = !empty($o['label'])   ? $o['label']      : $o['value'];
+                $checked = $value == $o['value'] ? 'checked="true"' : '';
 
-                $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $checked/> $o[label]</label>";
+                $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $checked/> $label</label>";
             }
         }
         return $radioButtons;
@@ -188,12 +187,11 @@ class Field extends Helper
         $inputs = '';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $checked = in_array($o['value'], $values)
-                    ? 'checked="true"'
-                    : '';
+                $label   = !empty($o['label'])            ? $o['label']      : $o['value'];
+                $checked = in_array($o['value'], $values) ? 'checked="true"' : '';
 
                 $name   = $params['name'].'['.$o['value'].']';
-                $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $checked/> $o[label]</label>";
+                $inputs.= "<label><input name=\"$name\" type=\"checkbox\" value=\"$o[value]\" $checked/> $label</label>";
             }
         }
         return $inputs;

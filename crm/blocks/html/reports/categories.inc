@@ -15,8 +15,10 @@ use Blossom\Classes\Url;
 $this->_include('reports/parameters.inc');
 $h = $this->template->getHelper('formatDuration');
 ?>
-<div class="searchResultsRows">
-	<h2>Categories Report</h2>
+<section class="searchResultsRows">
+    <header>
+        <h1>Categories Report</h1>
+    </header>
 	<?php
         $current_url = new Url(Url::current_url());
         $search_url  = new Url(BASE_URL.'/tickets');
@@ -29,7 +31,7 @@ $h = $this->template->getHelper('formatDuration');
 			$closed = 0;
 			$search_url->category_id = $category_id;
 			echo "
-			<div><h3>$category</h3>
+			<div><h2>$category</h2>
 				<table>
 					<thead>
 						<tr><th></th>
@@ -83,4 +85,4 @@ $h = $this->template->getHelper('formatDuration');
 			";
 		}
 	?>
-</div>
+</section>

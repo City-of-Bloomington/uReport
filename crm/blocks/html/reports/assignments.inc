@@ -10,8 +10,10 @@ $this->_include('reports/parameters.inc');
 $h = $this->template->getHelper('formatDuration');
 
 ?>
-<div class="searchResultsRows">
-	<h2>Assignments Report</h2>
+<section class="searchResultsRows">
+    <header>
+        <h1>Assignments Report</h1>
+    </header>
 	<p>List people and their assigned tickets.</p>
 	<?php
         $current_url = new Url(Url::current_url());
@@ -25,7 +27,7 @@ $h = $this->template->getHelper('formatDuration');
 			$closed = 0;
 			$search_url->assignedPerson_id = $assignedPerson_id;
 			echo "
-			<div><h3>$person</h3>
+			<div><h2>$person</h2>
 				<table>
 					<thead>
 						<tr><th></th>
@@ -79,4 +81,4 @@ $h = $this->template->getHelper('formatDuration');
 			";
 		}
 	?>
-</div>
+</section>
