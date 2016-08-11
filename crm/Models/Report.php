@@ -139,7 +139,9 @@ class Report
 	{
         try {
             $d = \DateTime::createFromFormat(DATE_FORMAT, $string);
-            return $d->format(ActiveRecord::MYSQL_DATE_FORMAT);
+            if ($d) {
+                return $d->format(ActiveRecord::MYSQL_DATE_FORMAT);
+            }
         }
         catch (\Exception $e) {
         }

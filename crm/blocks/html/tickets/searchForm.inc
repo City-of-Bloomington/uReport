@@ -92,7 +92,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 
 									$list[] = "<li>$label ($count)</li>";
 								}
-								catch (Exception $e) {
+								catch (\Exception $e) {
 									// Don't bother displaying any facets that are no longer in the system
 								}
 							}
@@ -147,8 +147,13 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                     foreach (['start', 'end'] as $d) {
                         $$d = '';
                         if (!empty($_GET['enteredDate'][$d])) {
-                            $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
-                            $$d = $date->format('U');
+                            try {
+                                $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
+                                $$d = $date->format('U');
+                            }
+                            catch (\Exception $e) {
+                                // Ignore incorrectly formatted dates
+                            }
                         }
                         $html.= $fieldHelper->field([
                             'name'  => "enteredDate[$d]",

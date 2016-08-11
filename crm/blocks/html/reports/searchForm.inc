@@ -1,122 +1,121 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\CategoryTable;
 use Application\Models\Department;
 use Application\Models\DepartmentTable;
 use Application\Models\ClientTable;
 
-use Blossom\Classes\View;
+use Blossom\Classes\ActiveRecord;
 
 $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
+
+$helper = $this->template->getHelper('field');
 ?>
-<div>
-    <h2>Filters</h2>
+<section id="reportSearchForm">
+    <header>
+        <h1><?= $this->_('search'); ?></h1>
+    </header>
 	<form method="get">
 		<fieldset>
-			<div class="collapsible">
-				<h3 class="hd">Category</h3>
-				<ul class="bd">
+			<nav class="collapsible">
+				<h1><?= $this->_('category'); ?></h1>
 				<?php
-					$t = new CategoryTable();
-					$list = $t->find();
-					foreach ($list as $c) {
-						$checked = !empty($_GET['categories'][$c->getId()])
-							? 'checked="checked"'
-							: '';
-						$name = self::escape($c->getName());
-						echo "
-						<li><label>
-								<input name=\"categories[{$c->getId()}]\" type=\"checkbox\" $checked />
-								$name
-							</label>
-						</li>
-						";
-					}
+					$table   = new CategoryTable();
+					$list    = $table->find();
+                    $options = [];
+                    $values  = (!empty($_GET['categories']) && is_array($_GET['categories']))
+                                ? array_keys($_GET['categories'])
+                                : [];
+					foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+					echo $helper->field([
+                        'name'    => 'categories',
+                        'type'    => 'checkbox',
+                        'value'   => $values,
+                        'options' => $options
+					]);
+
 				?>
-				</ul>
-			</div>
-			<div class="collapsible">
-				<h3 class="hd">Department</h3>
-				<ul class="bd">
+			</nav>
+			<nav class="collapsible">
+                <h1><?= $this->_('department'); ?></h1>
 				<?php
-					$t = new DepartmentTable();
-					$list = $t->find();
-					foreach ($list as $d) {
-						$checked = !empty($_GET['departments'][$d->getId()])
-							? 'checked="checked"'
-							: '';
-						$name = self::escape($d->getName());
-						echo "
-						<li><label>
-								<input name=\"departments[{$d->getId()}]\" type=\"checkbox\" $checked />
-								$name
-							</label>
-						</li>
-						";
-					}
+					$table   = new DepartmentTable();
+					$list    = $table->find();
+					$options = [];
+					$values  = (!empty($_GET['departments']) && is_array($_GET['departments']))
+                                ? array_keys($_GET['departments'])
+                                : [];
+					foreach ($list as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
+					echo $helper->field([
+                        'name'    => 'departments',
+                        'type'    => 'checkbox',
+                        'value'   => $values,
+                        'options' => $options
+					]);
 				?>
-				</ul>
-			</div>
-			<div class="collapsible">
-				<h3 class="hd">Case Date</h3>
-				<table class="bd">
-					<tr><td><label for="enteredDate-start">Start:</label></td>
-						<td><input name="enteredDate[start]" id="enteredDate-start" size="10" maxlength="10"
-								value="<?= !empty($_GET['enteredDate']['start']) ? self::escape($_GET['enteredDate']['start']) : ''; ?>" />
-						</td>
-					</tr>
-					<tr><td><label for="enteredDate-end">End:</label></td>
-						<td><input name="enteredDate[end]" id="enteredDate-end" size="10" maxlength="10"
-								value="<?= !empty($_GET['enteredDate']['end']) ? self::escape($_GET['enteredDate']['end']) : ''; ?>" />
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="collapsible">
-                <h3 class="hd">Reportable By:</h3>
-                <div class="bd">
-                    <?php
-                        foreach (['anonymous', 'staff'] as $v) {
-                            $checked = (!empty($_GET['postingPermissionLevel']) && $_GET['postingPermissionLevel']==$v)
-                                ? 'checked="checked"'
-                                : '';
-                            echo "
-                            <div><label>$v
-                                    <input name=\"postingPermissionLevel\" type=\"radio\" value=\"$v\" $checked/>
-                                </label>
-                            </div>
-                            ";
-                        }
-                    ?>
-                </div>
-			</div>
-            <div class="collapsible">
-                <h3 class="hd"><?= $this->_(['client', 'clients', 2]); ?></h3>
-                <div class="bd">
+			</nav>
+			<nav class="collapsible">
+                <h1><?= $this->_('enteredDate'); ?></h1>
                 <?php
-                    $table = new ClientTable();
-                    $list = $table->find();
-                    foreach ($list as $c) {
-                        $checked = !empty($_GET['clients'][$c->getId()])
-                            ? 'checked="checked"'
-                            : '';
-                        $name = self::escape($c->getName());
-                        echo "
-                        <div><label>
-                                <input name=\"clients[{$c->getId()}]\" type=\"checkbox\" $checked />
-                                $name
-                            </label>
-                        </div>
-                        ";
+                    foreach (['start', 'end'] as $d) {
+                        $$d = '';
+                        if (!empty($_GET['enteredDate'][$d])) {
+                            try {
+                                $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
+                                $$d = $date->format('U');
+                            }
+                            catch (\Exception $e) { }
+                        }
+                        echo $helper->field([
+                            'name'  => "enteredDate[$d]",
+                            'id'    => "enteredDate-$d",
+                            'label' => $this->_($d),
+                            'type'  => 'date',
+                            'value' => $$d
+                        ]);
                     }
                 ?>
-                </div>
-            </div>
+            </nav>
+			<nav class="collapsible">
+                <h1><?= $this->_('postingPermissionLevel'); ?></h1>
+                <?php
+                    $value   = !empty($_GET['postingPermissionLevel'])
+                                ? $_GET['postingPermissionLevel']
+                                : '';
+                    $options = [
+                        ['value' => 'anonymous'],
+                        ['value' => 'staff']
+                    ];
+                    echo $helper->field([
+                        'name'    => 'postingPermissionLevel',
+                        'type'    => 'radio',
+                        'value'   => $value,
+                        'options' => $options
+                    ]);
+                ?>
+			</nav>
+            <nav class="collapsible">
+                <h1><?= $this->_('client'); ?></h1>
+                <?php
+                    $table   = new ClientTable();
+                    $list    = $table->find();
+                    $options = [];
+                    $value   = (!empty($_GET['clients']) && is_array($_GET['clients']))
+                                ? array_keys($_GET['clients'])
+                                : [];
+                    foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+                    echo $helper->field([
+                        'name'    => 'clients',
+                        'type'    => 'checkbox',
+                        'value'   => $value,
+                        'options' => $options
+                    ]);
+                ?>
+            </nav>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, array('enteredDate'));
@@ -124,4 +123,4 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 			<button type="submit" class="submit"><?= $this->template->_('submit'); ?></button>
 		</fieldset>
 	</form>
-</div>
+</section>
