@@ -36,7 +36,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
                 $options = [];
                 $people  = $this->department->getPeople();
                 foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
-                $helper->field([
+                echo $helper->field([
                     'name'     => 'defaultPerson_id',
                     'id'       => 'defaultPerson_id',
                     'label'    => $this->_('defaultPerson'),

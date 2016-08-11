@@ -75,26 +75,6 @@ class CategoriesController extends Controller
 	}
 
 	/**
-	 * Displays the list of all the categories
-	 *
-	 * Each category will be linked back to $return_url
-	 */
-	public function choose()
-	{
-		$return_url = !empty($_GET['return_url'])
-			? new Url($_GET['return_url'])
-			: new Url(BASE_URL.'/categories/view');
-
-		$t = new CategoryTable();
-		$categoryList = $t->find(null, 'categories.name');
-
-		$this->template->blocks[] = new Block('categories/categoryChoices.inc',[
-            'categoryList' => $categoryList,
-            'return_url'   => $return_url
-        ]);
-	}
-
-	/**
 	 * A form for updating the SLA times for all categories at once
 	 */
 	public function sla()

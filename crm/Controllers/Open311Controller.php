@@ -63,7 +63,7 @@ class Open311Controller extends Controller
 		// Provide the full service list
 		else {
 			$table = new CategoryTable();
-			$categoryList = $table->find();
+			$categoryList = $table->find(['active'=>true]);
 			$this->template->blocks[] = new Block('open311/serviceList.inc', ['categoryList'=>$categoryList]);
 		}
 	}

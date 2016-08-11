@@ -12,3 +12,5 @@ dist
 *.mo
 vendor
 .sass-cache
+screen.css
+screen.css.map

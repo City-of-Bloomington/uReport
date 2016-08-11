@@ -8,27 +8,39 @@ use Application\Models\CategoryGroupTable;
 use Application\Models\DepartmentTable;
 use Application\Models\SubstatusTable;
 
-$title = $this->category->getId()
-	? $this->_('edit').' '.$this->_('category')
-	: $this->_('add' ).' '.$this->_('category');
-
 $fields = [
-	'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
-	'categoryGroup_id', 'department_id', 'notificationReplyEmail'
+	'id', 'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
+	'categoryGroup_id', 'department_id', 'notificationReplyEmail', 'active'
 ];
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
 	$$field = isset($_POST[$field]) ? self::escape($_POST[$field]) : self::escape($this->category->$get());
 }
 
+$title = $id
+	? $this->_('edit').' '.$this->_('category')
+	: $this->_('add' ).' '.$this->_('category');
+
 $helper = $this->template->getHelper('field');
 ?>
 <section><header><h1><?= $title; ?></h1></header>
 <form method="post" action="<?= BASE_URI; ?>/categories/update">
 	<fieldset><legend><?= $this->_('category'); ?></legend>
-		<input name="category_id" type="hidden" value="<?= $this->category->getId(); ?>" />
+		<input name="category_id" type="hidden" value="<?= $id; ?>" />
 		<?php
             echo $helper->field(['name'=>'name', 'id'=>'name', 'label'=>$this->_('name'), 'value'=>$name, 'required'=>true]);
+
+            echo $helper->field([
+                'name'    => 'active',
+                'id'      => 'active',
+                'label'   => $this->_('status'),
+                'type'    => 'select',
+                'value'   => $active,
+                'options' => [
+                    ['value'=>1, 'label'=>$this->_('active_yes')],
+                    ['value'=>0, 'label'=>$this->_('active_no' )]
+                ]
+            ]);
 
             $t = new CategoryGroupTable();
             $list = $t->find();
@@ -181,7 +193,7 @@ $helper = $this->template->getHelper('field');
 	<fieldset><legend><?= $this->_('submit'); ?></legend>
 		<?php
 			$helper = $this->template->getHelper('saveAndCancelButtons');
-			echo $helper->saveAndCancelButtons(BASE_URI.'/categories');
+			echo $helper->saveAndCancelButtons(BASE_URI.'/categories/view?categorye_id='.$id);
 		?>
 	</fieldset>
 </form>

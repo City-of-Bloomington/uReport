@@ -27,23 +27,6 @@ class DepartmentTest extends DatabaseTestCase
 		$this->assertEquals(2, count($categories));
 	}
 
-	public function testSetActions()
-	{
-        $test       = new Action('test');
-        $attempt    = new Action('attempt');
-        $department = new Department($this->unusedDepartment);
-
-        $department->setActions([$test->getId(), $attempt->getId()]);
-        $actions = $department->getActions();
-        $this->assertEquals(2, count($actions));
-        $this->assertTrue(in_array($test->getId(),    array_keys($actions)));
-        $this->assertTrue(in_array($attempt->getId(), array_keys($actions)));
-
-        $department->setActions([]);
-        $actions = $department->getActions();
-        $this->assertEquals(0, count($actions));
-	}
-
 	public function testSaveActions()
 	{
         $test       = new Action('test');
@@ -62,24 +45,6 @@ class DepartmentTest extends DatabaseTestCase
         $department = new Department($this->unusedDepartment);
         $actions = $department->getActions();
         $this->assertEquals(0, count($actions));
-	}
-
-	public function testSetCategories()
-	{
-		$test    = new Category('Test Category');
-		$another = new Category('Another Category');
-
-		$department = new Department($this->unusedDepartment);
-
-		$department->setCategories([$test->getId(), $another->getId()]);
-		$categories = $department->getCategories();
-		$this->assertEquals(2, count($categories));
-		$this->assertTrue(in_array($test->getId(),    array_keys($categories)));
-		$this->assertTrue(in_array($another->getId(), array_keys($categories)));
-
-		$department->setCategories([]);
-		$categories = $department->getCategories();
-		$this->assertEquals(0, count($categories));
 	}
 
 	public function testSaveCategories()

@@ -31,6 +31,10 @@ class CategoryTable extends TableGateway
 		if (count($fields)) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
+                    case 'active':
+                        $select->where(['categories.active'=>$value ? 1 : 0]);
+                        break;
+
 					case 'postableBy':
 						// If they're authenticated, but they are not staff
 						if ($value instanceof Person) {

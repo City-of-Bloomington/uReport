@@ -61,6 +61,7 @@ class DepartmentsController extends Controller
 
 		if (isset($_POST['name'])) {
 			try {
+                // The department will call save() as needed
 				$department->handleUpdate($_POST);
 				$department->save();
 

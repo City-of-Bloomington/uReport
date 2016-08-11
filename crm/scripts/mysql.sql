@@ -125,6 +125,7 @@ create table categories (
 	description            varchar(128),
 	department_id          int          unsigned not null,
 	categoryGroup_id       int          unsigned,
+	active                 boolean,
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	postingPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	customFields           text,

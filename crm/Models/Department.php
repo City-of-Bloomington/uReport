@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -13,11 +13,7 @@ class Department extends ActiveRecord
 	protected $tablename = 'departments';
 
 	protected $defaultPerson;
-	private $categories = array();
-	private $actions    = array();
 
-	private $categoriesUpdated = false;
-	private $actionsUpdated    = false;
 	/**
 	 * Populates the object with data
 	 *
@@ -90,13 +86,7 @@ class Department extends ActiveRecord
 		}
 	}
 
-	public function save()
-	{
-		parent::save();
-		if ($this->categoriesUpdated) $this->saveCategories(array_keys($this->getCategories()));
-		if ($this->actionsUpdated)    $this->saveActions   (array_keys($this->getActions()));
-	}
-
+	public function save() { parent::save(); }
 
 	public function delete()
 	{
@@ -126,6 +116,9 @@ class Department extends ActiveRecord
 	/**
 	 * Handler for Controller::update action
 	 *
+	 * This function calls save() automatically.  There is no
+	 * need to call save() after calling this function.
+	 *
 	 * @param array $post
 	 */
 	public function handleUpdate($post)
@@ -134,14 +127,15 @@ class Department extends ActiveRecord
 		if ($_POST['defaultPerson_id']) {
 			$this->setDefaultPerson_id($post['defaultPerson_id']);
 		}
+		$this->save();
 
 		isset($post['categories'])
-			? $this->setCategories(array_keys($post['categories']))
-			: $this->setCategories(array());
+			? $this->saveCategories(array_keys($post['categories']))
+			: $this->saveCategories([]);
 
 		isset($post['actions'])
-			? $this->setActions(array_keys($post['actions']))
-			: $this->setActions(array());
+			? $this->saveActions(array_keys($post['actions']))
+			: $this->saveActions([]);
 	}
 
 	//----------------------------------------------------------------
@@ -149,33 +143,25 @@ class Department extends ActiveRecord
 	//----------------------------------------------------------------
 	/**
 	 * Returns an array of Category objects, indexed by Id
-	 * @return array
-	 */
-	public function getCategories()
-	{
-		if (!count($this->categories) && $this->getId()) {
-			$table = new CategoryTable();
-			$list = $table->find(['department_id'=>$this->getId()]);
-			foreach ($list as $c) {
-				$this->categories[$c->getId()] = $c;
-			}
-		}
-		return $this->categories;
-	}
-
-	/**
-	 * Updates the categories, but does not save them to the database
 	 *
-	 * @param array $category_ids
+	 * @param  array $search  Additional fields to search on
+	 * @return array          An array of Category objects
 	 */
-	public function setCategories($category_ids)
+	public function getCategories(array $search=[])
 	{
-		$this->categoriesUpdated = true;
-		$this->categories = array();
-		foreach ($category_ids as $id) {
-			$c = new Category($id);
-			$this->categories[$c->getId()] = $c;
+        $id         = $this->getId();
+        $categories = [];
+
+        if ($id) {
+            $search['department_id'] = $id;
+
+			$table   = new CategoryTable();
+			$list    = $table->find($search);
+			foreach ($list as $c) {
+                $categories[$c->getId()] = $c;
+            }
 		}
+		return $categories;
 	}
 
 	/**
@@ -185,31 +171,15 @@ class Department extends ActiveRecord
 	 */
 	public function saveCategories($category_ids)
 	{
-		if ($this->getId()) {
-			$this->categories = array();
+        $department_id = $this->getId();
+		if ($department_id) {
 			$zend_db = Database::getConnection();
-			$zend_db->query('delete from department_categories where department_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from department_categories where department_id=?')->execute([$department_id]);
 
 			$query = $zend_db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
 			foreach ($category_ids as $id) {
-				$query->execute([$this->getId(), $id]);
-				try {
-				}
-				catch (\Exception $e) {
-					// Just ignore the bad ones
-				}
+				$query->execute([$department_id, $id]);
 			}
-		}
-	}
-
-	/**
-	 * @param Category $category
-	 * @return bool
-	 */
-	public function hasCategory(Category $category)
-	{
-		if ($this->getId()) {
-			return in_array($category->getId(), array_keys($this->getCategories()));
 		}
 	}
 
@@ -220,29 +190,17 @@ class Department extends ActiveRecord
 	 */
 	public function getActions()
 	{
-		if (!count($this->actions)  && $this->getId()) {
-            $table = new ActionTable();
-			$list = $table->find(['department_id'=>$this->getId()]);
-			foreach ($list as $action) {
-				$this->actions[$action->getId()] = $action;
-			}
-		}
-		return $this->actions;
-	}
+        $department_id = $this->getId();
+        $actions       = [];
 
-	/**
-	 * Updates the actions, but does not save them to the database
-	 *
-	 * @param array $action_ids
-	 */
-	public function setActions($action_ids)
-	{
-		$this->actionsUpdated = true;
-		$this->actions = array();
-		foreach ($action_ids as $id) {
-			$a = new Action($id);
-			$this->actions[$a->getId()] = $a;
+        if ($department_id) {
+            $table = new ActionTable();
+			$list  = $table->find(['department_id'=>$department_id]);
+			foreach ($list as $a) {
+                $actions[$a->getId()] = $a;
+            }
 		}
+		return $actions;
 	}
 
 	/**
@@ -252,25 +210,16 @@ class Department extends ActiveRecord
 	 */
 	public function saveActions($action_ids)
 	{
-		if ($this->getId()) {
-			$this->actions = array();
+        $department_id = $this->getId();
+		if ($department_id) {
 			$zend_db = Database::getConnection();
-			$zend_db->query('delete from department_actions where department_id=?')->execute([$this->getId()]);
+			$zend_db->query('delete from department_actions where department_id=?')->execute([$department_id]);
 
 			$query = $zend_db->createStatement('insert into department_actions set department_id=?, action_id=?');
 			foreach ($action_ids as $id) {
                 $query->execute([$this->getId(), (int)$id]);
 			}
 		}
-	}
-
-	/**
-	 * @param Action $action
-	 * @return bool
-	 */
-	public function hasAction(Action $action)
-	{
-		return in_array($action->getId(), array_keys($this->getActions()));
 	}
 
 	/**

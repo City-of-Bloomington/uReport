@@ -61,7 +61,7 @@ $ZEND_ACL->allow('Staff', [
 ]);
 // Staff has limited permission to these controllers
 $ZEND_ACL->allow('Staff','departments',['index', 'view', 'choose']);
-$ZEND_ACL->allow('Staff','categories', ['index', 'view', 'choose']);
+$ZEND_ACL->allow('Staff','categories', ['index', 'view']);
 $ZEND_ACL->allow('Staff','substatus',  ['index']);
 $ZEND_ACL->allow('Staff','tickets', [
 	'add', 'update', 'merge', 'delete','assign', 'print', 'respond', 'message',

@@ -53,6 +53,7 @@ class Category extends ActiveRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
+			$this->setActive(true);
 		}
 	}
 
@@ -105,6 +106,7 @@ class Category extends ActiveRecord
 	public function getDepartment_id()          { return parent::get('department_id');          }
 	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
 	public function getDescription()            { return parent::get('description');            }
+	public function getActive()                 { return parent::get('active');                 }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
@@ -118,6 +120,7 @@ class Category extends ActiveRecord
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
+	public function setActive                ($s) { parent::set('active',        $s ? 1 : 0); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
 	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
@@ -168,6 +171,8 @@ class Category extends ActiveRecord
             $set = 'set'.ucfirst($f);
             $this->$set($post[$f]);
         }
+
+        $this->setActive(!empty($post['active']) ? $post['active'] : false);
 	}
 
 	//----------------------------------------------------------------
@@ -176,7 +181,8 @@ class Category extends ActiveRecord
 	/**
 	 * @return bool
 	 */
-	public function autoCloseIsActive   () { return $this->getAutoCloseIsActive   () ? true : false; }
+	public function autoCloseIsActive() { return $this->getAutoCloseIsActive() ? true : false; }
+	public function isActive()          { return $this->getActive()            ? true : false; }
 
 	/**
 	 * Event handler called from Ticket::handleAdd()

@@ -50,7 +50,8 @@ use Application\Models\Person;
 			$d = $category->getDepartment();
 			$department = $d ? self::escape($d->getName()) : '';
 
-            $autoCloseActive    = $category->autoCloseIsActive   () ? $this->_('active_yes') : $this->_('active_no');
+            $autoCloseActive    = $category->autoCloseIsActive() ? $this->_('active_yes') : $this->_('active_no');
+            $active             = $category->isActive()          ? $this->_('active_yes') : $this->_('active_no');
 
 			$html.= "
 			<div class=\"category\">
@@ -67,6 +68,7 @@ use Application\Models\Person;
 							</th>
 							<th>{$this->_('postingPermissionLevel')}</th>
 							<th>{$this->_('displayPermissionLevel')}</th>
+							<th>{$this->_('status')}</th>
 							<th>{$this->_('autoCloseIsActive')}</th>
 						</tr>
 					</thead>
@@ -76,6 +78,7 @@ use Application\Models\Person;
 							<td>{$category->getSlaDays()}</td>
 							<td>$postPermission</td>
 							<td>$displayPermission</td>
+							<td>$active</td>
 							<td>$autoCloseActive</td>
 						</tr>
 					</tbody>

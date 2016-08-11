@@ -16,11 +16,6 @@ foreach ($fields as $f) {
     $$f  = self::escape($this->category->$get());
 }
 
-$autoCloseActive = $this->category->autoCloseIsActive()
-    ? $this->_('active_yes')
-    : $this->_('active_no');
-
-
 $editButton = '';
 if (Person::isAllowed('categories', 'update')) {
     $helper = $this->template->getHelper('buttonLink');
@@ -38,8 +33,11 @@ if (Person::isAllowed('categories', 'update')) {
     </header>
 	<p><?= $description; ?></p>
 	<?php
+        $autoCloseActive = $this->category->autoCloseIsActive() ? $this->_('active_yes') : $this->_('active_no');
+        $status          = $this->category->isActive()          ? $this->_('active_yes') : $this->_('active_no');
+
         $fields = [
-            'categoryGroup', 'department', 'displayPermissionLevel', 'postingPermissionLevel',
+            'status', 'categoryGroup', 'department', 'displayPermissionLevel', 'postingPermissionLevel',
             'notificationReplyEmail', 'autoCloseActive'
         ];
         foreach ($fields as $f) {

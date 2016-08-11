@@ -23,8 +23,9 @@ use Blossom\Classes\Url;
 				}
 			}
 
-			if ($_SESSION['USER']->getDepartment_id()) {
-				foreach ($_SESSION['USER']->getDepartment()->getCategories() as $c) {
+			$department = $_SESSION['USER']->getDepartment();
+			if ($department) {
+				foreach ($department->getCategories(['active'=>true]) as $c) {
 					$name = self::escape($c->getName());
 					echo "<option value=\"{$c->getId()}\">$name</option>";
 				}
@@ -32,7 +33,7 @@ use Blossom\Classes\Url;
 			echo '<option value="">----</option>';
 
 			$table = new CategoryTable();
-			$list  = $table->find(null, 'categories.name');
+			$list  = $table->find(['active'=>true], 'categories.name');
 			$options = [];
 			foreach ($list as $c) {
                 $name = self::escape($c->getName());
