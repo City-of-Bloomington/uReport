@@ -9,6 +9,8 @@ alter table categories add autoResponseText       text;
 alter table categories add autoCloseIsActive      bool;
 alter table categories add autoCloseSubstatus_id  int unsigned;
 alter table categories add active                 boolean after categoryGroup_id;
+alter table categories add defaultPerson_id       int unsigned;
+alter table categories add constraint FK_categories_defaultPerson_id foreign key (defaultPerson_id) references people(id);
 update categories set active=1;
 
 create table category_action_responses (

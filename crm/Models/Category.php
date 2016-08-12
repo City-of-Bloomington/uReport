@@ -12,6 +12,7 @@ class Category extends ActiveRecord
 	protected $tablename = 'categories';
 
 	protected $department;
+	protected $defaultPerson;
 	protected $categoryGroup;
 
 	private $displayPermissionLevelHasChanged = false;
@@ -104,6 +105,7 @@ class Category extends ActiveRecord
 	public function getId()                     { return parent::get('id');                     }
 	public function getName()                   { return parent::get('name');                   }
 	public function getDepartment_id()          { return parent::get('department_id');          }
+	public function getDefaultPerson_id()       { return parent::get('defaultPerson_id');       }
 	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
 	public function getDescription()            { return parent::get('description');            }
 	public function getActive()                 { return parent::get('active');                 }
@@ -114,8 +116,9 @@ class Category extends ActiveRecord
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
 	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
 	public function getAutoCloseSubstatus() { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id'); }
-	public function getDepartment()         { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id');    }
-	public function getCategoryGroup()      { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'); }
+	public function getDepartment()         { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id'        ); }
+	public function getDefaultPerson()      { return parent::getForeignKeyObject(__namespace__.'\Person',        'defaultPerson_id'     ); }
+	public function getCategoryGroup()      { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'     ); }
 	public function getLastModified($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
@@ -126,9 +129,11 @@ class Category extends ActiveRecord
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
 	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
 	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
+	public function setDefaultPerson_id     ($id)           { parent::setForeignKeyField( __namespace__.'\Person',        'defaultPerson_id',      $id); }
 	public function setCategoryGroup_id     ($id)           { parent::setForeignKeyField( __namespace__.'\CategoryGroup', 'categoryGroup_id',      $id); }
 	public function setAutoCloseSubstatus(Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'autoCloseSubstatus_id', $o);  }
 	public function setDepartment        (Department    $o) { parent::setForeignKeyObject(__namespace__.'\Department',    'department_id',         $o);  }
+	public function setDefaultPerson     (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'defaultPerson_id',      $o);  }
 	public function setCategoryGroup     (CategoryGroup $o) { parent::setForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id',      $o);  }
 	public function setLastModified($d) { parent::setDateData('lastModified', $d); }
 
@@ -162,7 +167,7 @@ class Category extends ActiveRecord
 	public function handleUpdate($post)
 	{
         $fields = [
-            'name', 'description', 'department_id', 'categoryGroup_id',
+            'name', 'description', 'department_id', 'defaultPerson_id', 'categoryGroup_id',
             'postingPermissionLevel', 'displayPermissionLevel',
             'customFields', 'slaDays', 'notificationReplyEmail',
             'autoCloseIsActive', 'autoCloseSubstatus_id'

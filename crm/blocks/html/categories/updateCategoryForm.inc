@@ -10,7 +10,7 @@ use Application\Models\SubstatusTable;
 
 $fields = [
 	'id', 'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
-	'categoryGroup_id', 'department_id', 'notificationReplyEmail', 'active'
+	'categoryGroup_id', 'department_id', 'defaultPerson_id', 'notificationReplyEmail', 'active'
 ];
 foreach ($fields as $field) {
 	$get = 'get'.ucfirst($field);
@@ -65,6 +65,9 @@ $helper = $this->template->getHelper('field');
 		</legend>
 		<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
 		<?php
+			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+			$this->template->addToAsset('scripts', BASE_URI.'/js/categories/chooseDepartment.js');
+
             $t = new DepartmentTable();
             $list = $t->find();
             $options = [];
@@ -77,6 +80,19 @@ $helper = $this->template->getHelper('field');
                 'value'   => $department_id,
                 'options' => $options
             ]);
+
+            $options = [['value'=>'']];
+            $people  = $this->category->getDepartment()->getPeople();
+            foreach ($people as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getFullname())]; }
+            echo $helper->field([
+                'name'    => 'defaultPerson_id',
+                'id'      => 'defaultPerson_id',
+                'label'   => $this->_('person'),
+                'type'    => 'select',
+                'value'   => $defaultPerson_id,
+                'options' => $options
+            ]);
+
             echo $helper->field([
                 'name'  => 'slaDays',
                 'id'    => 'slaDays',

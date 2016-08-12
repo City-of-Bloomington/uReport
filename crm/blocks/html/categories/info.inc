@@ -15,6 +15,8 @@ foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
     $$f  = self::escape($this->category->$get());
 }
+$p             = $this->category->getDefaultPerson();
+$defaultPerson = $p ? self::escape($p->getFullname()) : '';
 
 $editButton = '';
 if (Person::isAllowed('categories', 'update')) {
@@ -37,7 +39,8 @@ if (Person::isAllowed('categories', 'update')) {
         $status          = $this->category->isActive()          ? $this->_('active_yes') : $this->_('active_no');
 
         $fields = [
-            'status', 'categoryGroup', 'department', 'displayPermissionLevel', 'postingPermissionLevel',
+            'status', 'categoryGroup', 'department', 'defaultPerson',
+            'displayPermissionLevel', 'postingPermissionLevel',
             'notificationReplyEmail', 'autoCloseActive'
         ];
         foreach ($fields as $f) {

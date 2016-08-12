@@ -124,10 +124,9 @@ class Field extends Helper
         $select = "<select name=\"$params[name]\" id=\"$params[id]\" $required $attr>";
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $selected =     $value == $o['value']
-                    ? 'selected="true"'
-                    : '';
-                $select.= "<option value=\"$o[value]\" $selected>$o[label]</option>";
+                $label    = !empty($o['label'])   ? $o['label']       : $o['value'];
+                $selected = $value == $o['value'] ? 'selected="true"' : '';
+                $select.= "<option value=\"$o[value]\" $selected>$label</option>";
             }
         }
         $select.= "</select>";

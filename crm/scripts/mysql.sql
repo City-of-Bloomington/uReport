@@ -124,6 +124,7 @@ create table categories (
 	name                   varchar(50)  not null,
 	description            varchar(128),
 	department_id          int          unsigned not null,
+	defaultPerson_id       int          unsigned,
 	categoryGroup_id       int          unsigned,
 	active                 boolean,
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
@@ -135,6 +136,7 @@ create table categories (
 	autoCloseIsActive      bool,
 	autoCloseSubstatus_id  int          unsigned,
 	constraint FK_categories_department_id    foreign key (department_id)    references departments   (id),
+	constraint FK_categories_defaultPerson_id foreign key (defaultPerson_id) references people        (id),
 	constraint FK_categories_categoryGroup_id foreign key (categoryGroup_id) references categoryGroups(id)
 );
 

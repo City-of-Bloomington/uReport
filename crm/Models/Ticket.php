@@ -145,7 +145,10 @@ class Ticket extends ActiveRecord
 		if (!$this->getAssignedPerson_id()) {
 			$category = $this->getCategory();
 			$person   = null;
-			if ($category->getDepartment_id()) {
+			if ($category->getDefaultPerson_id()) {
+                $person = $category->getDefaultPerson();
+			}
+			elseif ($category->getDepartment_id()) {
 				$person = $category->getDepartment()->getDefaultPerson();
 			}
 
