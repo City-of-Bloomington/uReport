@@ -15,127 +15,127 @@ msgstr ""
 "Report-Msgid-Bugs-To: ureport@googlegroups.com\n"
 "POT-Creation-Date: 2013-09-20 16:33-0400\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
-"Language-Team: City of Bloomington <ureport@googlegroups.com>\n"
+"Last-Translator: Maxime Gauthier <maxime.gauthier88@gmail.com>\n"
+"Language-Team: Center for Technological Research and Innovative Entreprenneurship (CRTL) <info@crtl.ca>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: en_US\n"
+"Language: fr_CA\n"
 
 msgid "add"
-msgstr "Add"
+msgstr "Ajouter"
 
 msgid "edit"
-msgstr "Edit"
+msgstr "Modifier"
 
 msgid "delete"
-msgstr "Delete"
+msgstr "Supprimer"
 
 msgid "submit"
-msgstr "Submit"
+msgstr "Envoyer"
 
 msgid "save"
-msgstr "Save"
+msgstr "Sauvegarder"
 
 msgid "save_as"
-msgstr "Save %s as"
+msgstr "Sauvegarder %s sous"
 
 msgid "cancel"
-msgstr "Cancel"
+msgstr "Annuler"
 
 msgid "search"
-msgstr "Search"
+msgstr "Rechercher"
 
 msgid "search_results"
-msgstr "Search Results"
+msgstr "Résultats de la rechercher"
 
 msgid "search_results_text"
-msgstr "Text Results"
+msgstr "Résultats textuels"
 
 msgid "search_results_map"
-msgstr "Map Results"
+msgstr "Résultats cartes"
 
 msgid "search_results_print"
-msgstr "Printable Results"
+msgstr "Résultats imprimables"
 
 msgid "search_current"
-msgstr "Current Search"
+msgstr "Recherche courante"
 
 msgid "search_results_count"
-msgstr "# cases in current search"
+msgstr "nombre de cas dans la recherche courante"
 
 msgid "quick_links"
-msgstr "Quick Links"
+msgstr "Liens rapides"
 
 msgid "upload"
-msgstr "Upload"
+msgstr "Téléverser"
 
 msgid "new"
-msgstr "New"
+msgstr "Nouveau"
 
 msgid "go"
-msgstr "Go"
+msgstr "Aller"
 
 msgid "start"
-msgstr "Start"
+msgstr "Démarer"
 
 msgid "end"
-msgstr "End"
+msgstr "Terminer"
 
 msgid "more"
-msgstr "More"
+msgstr "Plus"
 
 msgid "top"
-msgstr "Back to Top"
+msgstr "Retour au haut de la page"
 
 msgid "more_categories"
-msgstr "More Categories"
+msgstr "Plus de catégories"
 
 msgid "sort_by"
-msgstr "Sort by"
+msgstr "Trier par"
 
 #. The current sorting of a list.  Alpabetical order, Numerical order, etc.
 msgid "order"
-msgstr "Order"
+msgstr "Ordonner"
 
 #. To change the sorting of a list
 msgid "reorder"
-msgstr "Reorder"
+msgstr "Réordonner"
 
 #. This is the short form for "Information".  This should be an abbreviation
 msgid "info"
-msgstr "Info"
+msgstr "Inf."
 
 #. This is the short form for "Administrator".  This should be an abbreviation
 msgid "admin"
-msgstr "Admin"
+msgstr "Adm."
 
 msgid "my_account"
-msgstr "My Account"
+msgstr "Mon compte"
 
 msgid "my_profile"
-msgstr "My Profile"
+msgstr "Mon profil"
 
 msgid "my_info"
-msgstr "Personal Info"
+msgstr "Informations personnelles"
 
 msgid "login"
-msgstr "Login"
+msgstr "Se connecter"
 
 msgid "logout"
-msgstr "Logout"
+msgstr "Se déconnecter"
 
 msgid "help"
-msgstr "Help"
+msgstr "Aide"
 
 msgid "default"
-msgstr "Default"
+msgstr "Par défaut"
 
 msgid "contactMethod"
 msgid_plural "contactMethods"
-msgstr[0] "Contact Method"
-msgstr[1] "Contact Methods"
+msgstr[0] "Contact"
+msgstr[1] "Contacts"
 
 msgid "response"
 msgid_plural "responses"
