@@ -23,11 +23,8 @@ use Blossom\Classes\Url;
 
 			// Preserve any extra parameters passed in
 			$url = new Url(BASE_URL.'/people/update');
-			$fields = ['firstname', 'lastname', 'email', 'organization', 'setOfPeople'];
 			foreach ($_REQUEST as $key=>$value) {
-				if (!in_array($key,$fields)) {
-					$url->$key = $value;
-				}
+                $url->$key = $value;
 			}
 			$h = $this->template->getHelper('buttonLink');
 			echo $h->buttonLink(

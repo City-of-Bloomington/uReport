@@ -175,6 +175,7 @@ class PeopleController extends Controller
 		}
 		else {
 			$person = new Person();
+			if (isset($_GET)) { $person->handleUpdate($_GET); }
 		}
 
 		if (isset($_POST['firstname'])) {

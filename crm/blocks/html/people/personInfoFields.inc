@@ -30,8 +30,8 @@ foreach ($fields as $field) {
 
         // Email and Phone are only valid for new records
         if (!$this->person->getId()) {
-            $email = !empty($_POST['email']) ? self::escape($_POST['email']) : '';
-            $phone = !empty($_POST['phone']) ? self::escape($_POST['phone']) : '';
+            $email = !empty($_REQUEST['email']) ? self::escape($_REQUEST['email']) : '';
+            $phone = !empty($_REQUEST['phone']) ? self::escape($_REQUEST['phone']) : '';
             echo $helper->field(['name'=>'email', 'id'=>'email', 'label'=>$this->_('email'), 'value'=>$email]);
             echo $helper->field(['name'=>'phone', 'id'=>'phone', 'label'=>$this->_('phone'), 'value'=>$phone]);
         }
