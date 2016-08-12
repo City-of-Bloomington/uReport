@@ -176,7 +176,7 @@ create table tickets (
 	assignedPerson_id   int         unsigned,
 	contactMethod_id    int         unsigned,
 	responseMethod_id   int         unsigned,
-	enteredDate         datetime    not null default now(),
+	enteredDate         datetime,
 	lastModified        timestamp   not null default CURRENT_TIMESTAMP,
 	addressId           int         unsigned,
 	latitude            float(17, 14),
@@ -198,6 +198,7 @@ create table tickets (
 	constraint FK_tickets_assignedPerson_id  foreign key (assignedPerson_id)  references people     (id),
 	constraint FK_tickets_substatus_id       foreign key (substatus_id)       references substatus  (id)
 );
+/*!50700 alter table tickets modify enteredDate datetime not null default CURRENT_TIMESTAMP */;
 
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
@@ -210,25 +211,6 @@ insert into issueTypes set name='Report';
 insert into issueTypes set name='Request';
 insert into issueTypes set name='Violation';
 
-create table issues (
-	id                  int       unsigned not null primary key auto_increment,
-	ticket_id           int       unsigned not null,
-	contactMethod_id    int       unsigned,
-	responseMethod_id   int       unsigned,
-	issueType_id        int       unsigned,
-	enteredByPerson_id  int       unsigned,
-	reportedByPerson_id int       unsigned,
-	date                timestamp not null default CURRENT_TIMESTAMP,
-	description         text,
-	customFields        text,
-	constraint FK_issues_ticket_id           foreign key (ticket_id)           references tickets       (id),
-	constraint FK_issues_contactMethod_id    foreign key (contactMethod_id)    references contactMethods(id),
-	constraint FK_issues_responseMethod_id   foreign key (responseMethod_id)   references contactMethods(id),
-	constraint FK_issues_issueType_id        foreign key (issueType_id)        references issueTypes    (id),
-	constraint FK_issues_enteredByPerson_id  foreign key (enteredByPerson_id)  references people        (id),
-	constraint FK_issues_reportedByPerson_id foreign key (reportedByPerson_id) references people        (id)
-);
-
 create table ticketHistory (
 	id                 int unsigned not null primary key auto_increment,
 	ticket_id          int unsigned not null,
@@ -236,7 +218,7 @@ create table ticketHistory (
 	actionPerson_id    int unsigned,
 	action_id          int unsigned,
 	enteredDate        timestamp    not null default CURRENT_TIMESTAMP,
-	actionDate         datetime     not null default now(),
+	actionDate         datetime,
 	notes              text,
 	data               text,
 	constraint FK_ticketHistory_ticket_id          foreign key (ticket_id)          references tickets(id),
@@ -244,6 +226,7 @@ create table ticketHistory (
 	constraint FK_ticketHistory_actionPerson_id    foreign key (actionPerson_id)    references people (id),
 	constraint FK_ticketHistory_action_id          foreign key (action_id)          references actions(id)
 );
+/*!50700 alter table ticketHistory modify actionDate datetime not null default CURRENT_TIMESTAMP */;
 
 create table media (
 	id         int          unsigned not null primary key auto_increment,
