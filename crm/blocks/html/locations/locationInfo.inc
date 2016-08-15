@@ -29,16 +29,13 @@ if ($this->location) {
 	}
 
 	echo "
-	<section class=\"locationInfo\">
+	<section id=\"locationInfo\">
         <header>
             <h1><a href=\"$url\" class=\"location\">$location</a></h1>
             <div class=\"tools\">$addTicketButton</div>
         </header>
     ";
-        if ($this->ticket) {
-            $this->_include('tickets/ticketLocationInfo.inc');
-        }
-        $this->_include('locations/masterAddressData.inc');
+        $this->_include('locations/geodata.inc');
         $this->_include('locations/locationPeople.inc');
 
         $table = new TicketTable();

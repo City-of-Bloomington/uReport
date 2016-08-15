@@ -88,3 +88,6 @@ a.current { border:2px solid green; }
 
     h1 { font-size:1rem; }
 }
+
+#location_map dd { width:16em; }
+#locationInfo .geodata { overflow:auto; height:0; }
