@@ -233,6 +233,8 @@ class TicketHistory extends ActiveRecord
 
 	/**
 	 * Send a notification to all people involved with the ticket
+	 *
+	 * Right now, this is only via email
 	 */
 	public function sendNotifications()
 	{
@@ -246,10 +248,12 @@ class TicketHistory extends ActiveRecord
         if ($message || $notes) {
             $template = new Template('email', 'txt');
 
+            $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
+
             foreach ($ticket->getNotificationEmails() as $email) {
-                $emailTo = $email->getPerson();
+                $person = $email->getPerson();
                 if ($message) {
-                    $response   = $this->renderVariables($message->getTemplate(), $template, $emailTo);
+                    $response   = $this->renderVariables($message->getTemplate(), $template, $person);
                     $emailReply = $message->getReplyEmail();
                 }
                 else {
@@ -257,14 +261,14 @@ class TicketHistory extends ActiveRecord
                     $emailReply = $category->getNotificationReplyEmail();
                 }
 
-                $description = $this->getDescription($template, $emailTo);
+                $description = $this->getDescription($template, $person);
                 $block = new \Blossom\Classes\Block('notifications/history.inc', [
                     'ticket'            => $ticket,
                     'actionDescription' => $description,
                     'autoResponse'      => $response,
                     'userComments'      => $notes
                 ]);
-                $emailTo->sendNotification($block->render('txt', $template), APPLICATION_NAME.' '.$action, $emailReply);
+                $person->sendNotification($block->render('txt', $template), $subject, $emailReply);
             }
         }
 	}

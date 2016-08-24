@@ -209,7 +209,7 @@ $helper = $this->template->getHelper('field');
 	<fieldset><legend><?= $this->_('submit'); ?></legend>
 		<?php
 			$helper = $this->template->getHelper('saveAndCancelButtons');
-			echo $helper->saveAndCancelButtons(BASE_URI.'/categories/view?categorye_id='.$id);
+			echo $helper->saveAndCancelButtons(BASE_URI.'/categories/view?category_id='.$id);
 		?>
 	</fieldset>
 </form>
