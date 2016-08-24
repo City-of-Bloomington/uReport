@@ -76,7 +76,18 @@ class TicketsController extends Controller
 			$this->template->setFilename('tickets');
 			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
 			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
-			$this->addStandardInfoBlocks($ticket);
+            $this->template->blocks[] = new Block(
+                'tickets/history.inc',
+                ['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
+            );
+
+            if ($ticket->getLocation()) {
+                $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
+                    'location'       => $ticket->getLocation(),
+                    'ticket'         => $ticket,
+                    'disableButtons' => true
+                ]);
+            }
 		}
 		else {
 			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
@@ -275,7 +286,6 @@ class TicketsController extends Controller
 			'tickets/assignTicketForm.inc',
 			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
 		);
-		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -347,8 +357,6 @@ class TicketsController extends Controller
 		$this->template->setFilename('tickets');
 		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
 		$this->template->blocks[] = new Block('tickets/responseReminder.inc', ['ticket'=>$ticket]);
-
-		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -377,8 +385,6 @@ class TicketsController extends Controller
 			['includeExternalResults' => true]
 		);
 		$this->template->blocks['panel-two'][] = new Block('locations/mapChooser.inc');
-
-		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -403,7 +409,6 @@ class TicketsController extends Controller
 		$this->template->setFilename('tickets');
 		$this->template->title = 'Change Category';
 		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
-		#$this->addStandardInfoBlocks($ticket);
 	}
 
 	/**
@@ -522,24 +527,5 @@ class TicketsController extends Controller
 		}
 		header("Location: $return_url");
 		exit();
-	}
-
-	/**
-	 * @param Ticket $ticket
-	 */
-	private function addStandardInfoBlocks(Ticket $ticket)
-	{
-		$this->template->blocks[] = new Block(
-			'tickets/history.inc',
-			['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
-		);
-
-		if ($ticket->getLocation()) {
-            $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
-                'location'       => $ticket->getLocation(),
-                'ticket'         => $ticket,
-                'disableButtons' => false
-            ]);
-		}
 	}
 }
