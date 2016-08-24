@@ -44,10 +44,11 @@ $ZEND_ACL->addResource(new Resource('solr'));
 $ZEND_ACL->addResource(new Resource('open311'));
 $ZEND_ACL->addResource(new Resource('clients'));
 $ZEND_ACL->addResource(new Resource('reports'));
+$ZEND_ACL->addResource(new Resource('metrics'));
 $ZEND_ACL->addResource(new Resource('bookmarks'));
 
 // Permissions for non-authenticated web browsing
-$ZEND_ACL->allow(null,['callback','login','open311']);
+$ZEND_ACL->allow(null,['callback', 'login', 'open311', 'metrics']);
 $ZEND_ACL->allow(null,
 				['index','tickets','locations'],
 				['index','view', 'thumbnails']);
