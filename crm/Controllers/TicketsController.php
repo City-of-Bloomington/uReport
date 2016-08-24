@@ -326,26 +326,18 @@ class TicketsController extends Controller
 	}
 
 	/**
-	 * @param REQUEST ticket_id
+	 * @param string $status
 	 */
-	public function changeStatus()
+	private function changeStatus($status)
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
-		if (!empty($_GET['status'])) {
-            $ticket->setStatus($_GET['status'] === 'closed' ? 'closed' : 'open');
-		}
+		$ticket->setStatus($status);
+		$_POST['status'] = $ticket->getStatus();
 
-		if (isset($_POST['status'])) {
+		if (isset($_POST['ticket_id'])) {
 			try {
                 // This function will call $ticket->save() internally
                 $ticket->handleChangeStatus($_POST);
-
-                // Display an alert, reminding them to respond to any citizens
-                #$citizens = $ticket->getReportedByPeople();
-                #if (count($citizens)) {
-                #    $_SESSION['errorMessages'][] = new \Exception('tickets/closingResponseReminder');
-                #}
-
 				$this->redirectToTicketView($ticket);
 			}
 			catch (\Exception $e) {
@@ -356,8 +348,9 @@ class TicketsController extends Controller
 		// Display the view
 		$this->template->setFilename('tickets');
 		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
-		$this->template->blocks[] = new Block('tickets/responseReminder.inc', ['ticket'=>$ticket]);
 	}
+	public function close() { $this->changeStatus('closed'); }
+	public function open () { $this->changeStatus('open'  ); }
 
 	/**
 	 * @param REQUEST ticket_id

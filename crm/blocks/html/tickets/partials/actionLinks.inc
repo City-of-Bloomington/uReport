@@ -13,20 +13,21 @@ use Application\Models\Action;
     $ticket_id = $this->ticket->getId();
     $links     = [];
 
-	if (Person::isAllowed('tickets', 'changeStatus')) {
-        if ($this->ticket->getStatus() === 'open') {
-            $status = 'closed';
-            $label  = $this->_('ticket_close');
+    if ($this->ticket->getStatus() === 'open') {
+        if (Person::isAllowed('tickets', 'close')) {
+            $links[] = [
+                'url'   => BASE_URI."/tickets/close?ticket_id=$ticket_id;status=closed",
+                'label' => $this->_('ticket_close')
+            ];
         }
-        else {
-            $status = 'open';
-            $label = $this->_('ticket_open');
+    }
+    else {
+        if (Person::isAllowed('tickets', 'open')) {
+            $links[] = [
+                'url'   => BASE_URI."/tickets/open?ticket_id=$ticket_id;status=open",
+                'label' => $this->_('ticket_open')
+            ];
         }
-        $links[] = [
-            'url'   => BASE_URI."/tickets/changeStatus?ticket_id=$ticket_id;status=$status",
-            'label' => $label,
-            'attrs' => ['data-callback'=>'changeStatus']
-        ];
     }
 	if (Person::isAllowed('tickets', 'delete')) {
         $links[] = [

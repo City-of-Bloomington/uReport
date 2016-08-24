@@ -1,50 +1,52 @@
 <?php
 /**
+ * Form for finalizing a status change.
+ *
+ * The ticket will already have the new status set.
+*
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Ticket $this->ticket
  */
+use Application\Models\Action;
+use Application\Models\Person;
 use Application\Models\SubstatusTable;
 
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseStatus.js');
+$fields = ['id', 'status', 'substatus_id'];
+foreach ($fields as $f) {
+    $get = 'get'.ucfirst($f);
+    $$f = $this->ticket->$get();
+}
+$title = $status === 'closed' ? $this->_('ticket_close') : $this->_('ticket_open');
 ?>
-<div class="changeStatusForm">
+<section class="changeStatusForm">
+    <header>
+        <h1><?= $title ?></h1>
+    </header>
 	<form method="post" action="<?= BASE_URI; ?>/tickets/changeStatus">
-		<fieldset><legend><?= $this->_('change_status'); ?></legend>
-			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
+		<fieldset>
+			<input name="ticket_id" type="hidden" value="<?= $id; ?>" />
 			<?php
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
 					if ($key!='ticket_id' && $key!='return_url') {
-						$key = self::escape($key);
+						$key   = self::escape($key);
 						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
 
-				$helper = $this->template->getHelper('field');
+				$this->_include('errorMessages/tickets/missingClosingComment.inc');
 
-				echo $helper->field([
-                    'name'     => 'status',
-                    'id'       => 'status',
-                    'label'    => $this->_('status'),
-                    'value'    => $this->ticket->getStatus(),
-                    'required' => true,
-                    'type'     => 'select',
-                    'options'  => [
-                        ['value' => 'open',   'label'=>$this->_('open'  )],
-                        ['value' => 'closed', 'label'=>$this->_('closed')]
-                    ]
-				]);
+				$helper = $this->template->getHelper('field');
 
                 $options = [];
                 // Open tickets do not require substatus
                 // Closed tickets must have a substatus
-                if ($this->ticket->getStatus() === 'open') { $options[] = ['value'=>'', 'label'=>'']; }
+                if ($status === 'open') { $options[] = ['value'=>'', 'label'=>'']; }
 
                 $table = new SubstatusTable();
-                $list  = $table->find(['status'=>$this->ticket->getStatus()]);
+                $list  = $table->find(['status'=>$status]);
                 foreach ($list as $s) {
                     $options[] = ['value'=>$s->getId(), 'label'=>self::escape($s->getName())];
                 }
@@ -52,10 +54,43 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseStatus.js');
                     'name'    => 'substatus_id',
                     'id'      => 'substatus_id',
                     'label'   => $this->_('substatus'),
-                    'value'   => $this->ticket->getSubstatus_id(),
+                    'value'   => $substatus_id,
                     'type'    => 'select',
                     'options' => $options
                 ]);
+
+                $responseTemplate  = $this->ticket->getCategory()->responseTemplateForAction(new Action($status));
+                $people            = $this->ticket->getPeople(true);
+                $recipients        = [];
+                $userCanViewPeople = Person::isAllowed('people', 'view');
+                if ($responseTemplate) {
+                    $t = self::escape($responseTemplate->getTemplate());
+                    echo "
+                    <dl><dt>{$this->_('responseTemplate')}</dt>
+                        <dd>$t</dd>
+                    </dl>
+                    ";
+
+                    foreach ($people as $person) {
+                        $name   = self::escape($person->getFullname());
+                        $emails = $person->getNotificationEmails();
+
+                        if (count($emails)) {
+                            if ($userCanViewPeople) {
+                                $name = "<a href=\"{$person->getURL()}\">$name</a>";
+                            }
+                            $recipients[$person->getId()] = "<li>$name</li>";
+                        }
+                    }
+                    if (count($recipients)) {
+                        $list = implode('', $recipients);
+                        echo "
+                        <dl><dt>{$this->_('recipients')}</dt>
+                            <dd><ul>$list</ul></dd>
+                        </dl>
+                        ";
+                    }
+                }
 
                 echo $helper->field([
                     'name'     => 'notes',
@@ -65,9 +100,30 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseStatus.js');
                     'type'     => 'textarea'
                 ]);
 
-				$this->_include('errorMessages/tickets/missingClosingComment.inc');
 				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>
 		</fieldset>
 	</form>
-</div>
+	<?php
+        $contacts = [];
+        foreach ($people as $person) {
+            if (!array_key_exists($person->getId(), $recipients)) {
+                $name = self::escape($person->getFullname());
+                if ($userCanViewPeople) {
+                    $name = "<a href=\"{$person->getURL()}\">$name</a>";
+                }
+                $contacts[] = "<li>$name</li>";
+            }
+        }
+        if (count($contacts)) {
+            $contacts = implode('', $contacts);
+            echo "
+            <div class=\"responseReminder\">
+                <h2>{$this->_('contact_list')}</h2>
+                <p>{$this->_('response_reminder', 'messages')}</p>
+                <ul>$contacts</ul>
+            </div>
+            ";
+        }
+	?>
+</section>

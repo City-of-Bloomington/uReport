@@ -50,18 +50,6 @@ $title = $id ? $this->_('responseTemplate_edit') : $this->_('responseTemplate_ad
             <?php
                 $helper = $this->template->getHelper('field');
 
-                $autoRespondIsActive = $this->responseTemplate->autoRespondIsActive() ? 1 : 0;
-                echo $helper->field([
-                    'name'    => 'autoRespond',
-                    'label'   => $this->_('autoRespond'),
-                    'value'   => $autoRespondIsActive,
-                    'type'    => 'radio',
-                    'options' => [
-                        ['value'=>1, 'label'=>$this->_('active_yes')],
-                        ['value'=>0, 'label'=>$this->_('active_no' )]
-                    ]
-                ]);
-
                 echo $helper->field([
                     'name'  => 'replyEmail',
                     'id'    => 'replyEmail',

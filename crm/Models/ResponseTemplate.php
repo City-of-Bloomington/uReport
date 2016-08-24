@@ -67,7 +67,6 @@ class ResponseTemplate extends ActiveRecord
 	//----------------------------------------------------------------
 	public function getId         () { return parent::get('id'         ); }
 	public function getTemplate   () { return parent::get('template'   ); }
-	public function getAutoRespond() { return parent::get('autoRespond'); }
 	public function getReplyEmail () { return parent::get('replyEmail' ); }
 	public function getCategory_id() { return parent::get('category_id'); }
 	public function getAction_id  () { return parent::get('action_id'  ); }
@@ -75,7 +74,6 @@ class ResponseTemplate extends ActiveRecord
 	public function getAction     () { return parent::getForeignKeyObject(__namespace__.'\Action',   'action_id'  ); }
 
 	public function setTemplate    ($s) { parent::set('template',    $s); }
-	public function setAutoRespond ($b) { parent::set('autoRespond', $b ? 1 : 0); }
 	public function setReplyEmail  ($s) { parent::set('replyEmail',  $s); }
 	public function setCategory_id ($i) { parent::setForeignKeyField(__namespace__.'\Category', 'category_id', $i); }
 	public function setAction_id   ($i) { parent::setForeignKeyField(__namespace__.'\Action',   'action_id',   $i); }
@@ -84,18 +82,10 @@ class ResponseTemplate extends ActiveRecord
 
 	public function handleUpdate(array $post)
 	{
-        $fields = ['category_id', 'action_id', 'template', 'autoRespond', 'replyEmail'];
+        $fields = ['category_id', 'action_id', 'template', 'replyEmail'];
         foreach ($fields as $f) {
             $set = 'set'.ucfirst($f);
             $this->$set($post[$f]);
         }
 	}
-
-	//----------------------------------------------------------------
-	// Custom functions
-	//----------------------------------------------------------------
-    /**
-     * @return bool
-     */
-    public function autoRespondIsActive() { return $this->getAutoRespond() ? true : false; }
 }

@@ -18,7 +18,6 @@ create table category_action_responses (
     category_id int unsigned not null,
     action_id   int unsigned not null,
     template    text,
-    autoRespond bool,
     replyEmail  varchar(128),
     constraint FK_category_action_responses_category_id foreign key (category_id) references categories(id),
     constraint FK_category_action_responses_action_id   foreign key (action_id)   references actions   (id)

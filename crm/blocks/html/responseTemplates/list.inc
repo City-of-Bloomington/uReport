@@ -28,7 +28,6 @@ if (Person::isAllowed('responseTemplates', 'add')) {
         <thead>
             <tr><th><?= $this->_('action'    ); ?></th>
                 <th><?= $this->_('replyEmail'); ?></th>
-                <th><?= $this->_('autoRespond'); ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -55,11 +54,9 @@ if (Person::isAllowed('responseTemplates', 'add')) {
                 }
                 $action      = self::escape($t->getAction());
                 $replyEmail  = self::escape($t->getReplyEmail());
-                $autoRespond = $t->autoRespondIsActive() ? $this->_('active_yes') : $this->_('active_no');
                 echo "
                 <tr><td>$action</td>
                     <td>$replyEmail</td>
-                    <td>$autoRespond</td>
                     <td>$editButton $deleteButton</td>
                 </tr>
                 ";
