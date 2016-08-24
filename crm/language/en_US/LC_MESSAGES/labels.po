@@ -556,7 +556,7 @@ msgid "delete_ticket"
 msgstr "Delete Case"
 
 msgid "update_ticket"
-msgstr "Update Case"
+msgstr "Update Case Details"
 
 msgid "change_category"
 msgstr "Change Category"
