@@ -39,21 +39,14 @@ echo "
 			$service_name = $c ? self::escape($c->getName()) : '';
 			$service_code = $c ? $c->getId()   : '';
 
-			$issue = $t->getIssue();
-			if ($issue) {
-				$description = $issue->getDescription();
+            $description = $t->getDescription();
 
-				$media_url = '';
-				$media = $issue->getMedia();
-				if (count($media)) {
-					$m = $media->current();
-					$media_url = $m->getURL();
-				}
-			}
-			else {
-				$description = '';
-				$media_url   = '';
-			}
+            $media_url = '';
+            $media = $t->getMedia();
+            if (count($media)) {
+                $m = $media->current();
+                $media_url = $m->getURL();
+            }
 
 			$history = $t->getHistory();
 			$latestHistory = end($history);

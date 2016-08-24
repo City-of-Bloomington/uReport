@@ -1,12 +1,9 @@
 <?php
 /**
- * @copyright 2011-2012 City of Bloomington, Indiana
+ * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */
-use Blossom\Classes\View;
-
 echo "<service_requests>";
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
@@ -41,16 +38,13 @@ foreach ($this->ticketList as $t) {
 	if ($t->getLatitude())  { echo '<lat>'       .self::escape($t->getLatitude()) .'</lat>';        }
 	if ($t->getLongitude()) { echo '<long>'      .self::escape($t->getLongitude()).'</long>';       }
 
-	$issue = $t->getIssue();
-	if ($issue) {
-		echo '<description>'.self::escape($issue->getDescription()).'</description>';
+    echo '<description>'.self::escape($t->getDescription()).'</description>';
 
-		$media = $issue->getMedia();
-		if (count($media)) {
-            $first = $media->current();
-			echo "<media_url>{$first->getURL()}</media_url>";
-		}
-	}
+    $media = $t->getMedia();
+    if (count($media)) {
+        $first = $media->current();
+        echo "<media_url>{$first->getURL()}</media_url>";
+    }
 	echo "</request>";
 }
 echo "</service_requests>";

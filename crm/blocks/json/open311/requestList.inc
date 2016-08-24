@@ -38,16 +38,13 @@ foreach ($this->ticketList as $t) {
 	if ($t->getLatitude())  { $sr['lat']        = $t->getLatitude();  }
 	if ($t->getLongitude()) { $sr['long']       = $t->getLongitude(); }
 
-	$issue = $t->getIssue();
-	if ($issue) {
-		$sr['description'] = $issue->getDescription();
+    $sr['description'] = $t->getDescription();
 
-		$media = $issue->getMedia();
-		if (count($media)) {
-            $first = $media->current();
-			$sr['media_url'] = $first->getURL();
-		}
-	}
+    $media = $t->getMedia();
+    if (count($media)) {
+        $first = $media->current();
+        $sr['media_url'] = $first->getURL();
+    }
 
 	$service_requests[] = $sr;
 }

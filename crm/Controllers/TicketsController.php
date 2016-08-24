@@ -139,7 +139,7 @@ class TicketsController extends Controller
 
 		// Handle any Person choice passed in
 		if (!empty($_REQUEST['reportedByPerson_id'])) {
-			$issue->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
+			$ticket->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
 		}
 
 		// Handle any Department choice passed in
@@ -198,7 +198,7 @@ class TicketsController extends Controller
         $ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['person_id'])) {
-			$issue->setReportedByPerson_id($_REQUEST['person_id']);
+			$ticket->setReportedByPerson_id($_REQUEST['person_id']);
 		}
 
         if (isset($_POST['ticket_id'])) {
