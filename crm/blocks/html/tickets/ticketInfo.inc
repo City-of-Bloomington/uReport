@@ -53,23 +53,28 @@ if ($cf) {
         if ($value) { $fields.= "<dl><dt>$label</dt><dd>$value</dd></dl>"; }
     }
 }
+?>
 
-echo "
-<section class=\"ticketInfo\">
+<section class="ticketInfo">
     <header>
-        <h1><span class=\"status\">$status</span>
-            <a href=\"{$this->ticket->getURL()}\" class=\"ticket_id\">#{$ticket_id}</a>
+        <h1><span class="status"><?= $status; ?></span>
+            <a href="<?= $this->ticket->getURL(); ?>" class="ticket_id">#<?= $ticket_id; ?></a>
         </h1>
-        <h2 class=\"category\">$category: $issueType</h2>
+        <?php
+            if (!$this->disableButtons && $this->ticket) {
+                $this->_include('tickets/partials/actionLinks.inc');
+            }
+        ?>
+        <h2 class="category"><?= $category; ?>: <?= $issueType; ?></h2>
     </header>
-    $description
-    $fields
-";
-    $block = new Block('tickets/issueAttachments.inc', ['ticket'=>$this->ticket, 'disableButtons'=>true]);
-    echo $block->render('html', $this->template);
-echo "
+    <?php
+        echo $description;
+        echo $fields;
+
+        $block = new Block('tickets/issueAttachments.inc', ['ticket'=>$this->ticket, 'disableButtons'=>true]);
+        echo $block->render('html', $this->template);
+    ?>
 </section>
-<script type=\"text/javascript\">
-	CRM.ticket_id = $ticket_id;
+<script type="text/javascript">
+	CRM.ticket_id = <?= $ticket_id; ?>;
 </script>
-";

@@ -20,7 +20,7 @@ class SaveAndCancelButtons
 	{
 		$helper = $this->template->getHelper('buttonLink');
 
-		$buttons = "<button type=\"submit\" class=\"save\">{$this->template->translate('save')}</button>";
+		$buttons = "<button type=\"submit\" class=\"save\">{$this->template->translate('save')}</button>\n";
 		$buttons.=$helper->buttonLink(
 			$cancelURL,
 			$this->template->translate('cancel'),

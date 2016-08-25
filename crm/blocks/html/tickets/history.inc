@@ -11,11 +11,6 @@ use Application\Models\Action;
 <section class="history">
     <header>
         <h1><?= $this->_('history'); ?></h1>
-        <?php
-            if (!$this->disableButtons && $this->ticket) {
-                $this->_include('tickets/partials/actionLinks.inc');
-            }
-        ?>
     </header>
 	<?php
 		foreach ($this->history as $event) {

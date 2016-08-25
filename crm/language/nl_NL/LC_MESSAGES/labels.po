@@ -549,9 +549,6 @@ msgstr "Nieuwe Melding"
 msgid "assign_ticket"
 msgstr "Melding toewijzen"
 
-msgid "refer_ticket"
-msgstr "Relatie"
-
 msgid "delete_ticket"
 msgstr "Melding verwijderen"
 

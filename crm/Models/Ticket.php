@@ -462,7 +462,7 @@ class Ticket extends ActiveRecord
 		$history = [];
 
 		$zend_db = Database::getConnection();
-		$sql = 'select * from ticketHistory where ticket_id=?';
+		$sql = 'select * from ticketHistory where ticket_id=? order by enteredDate desc';
 		$result = $zend_db->query($sql)->execute([$this->getId()]);
 		foreach ($result as $row) {
 			$history[] = new TicketHistory($row);

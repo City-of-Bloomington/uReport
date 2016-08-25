@@ -37,10 +37,12 @@ main {
         background-color:$color-heading-2;
         color:$color-content-background;
 
-        h1, h2, legend, dt { color:$color-content-background; }
+        h1, h2, legend, dt, a { color:$color-content-background; }
         dl { background-color:$color-heading-2; }
 
         input { color: $color-text-default; }
+
+        a { font-size:$font-size-small; }
     }
 
     #content-panel {

@@ -547,10 +547,7 @@ msgid "add_new_ticket"
 msgstr "New Case"
 
 msgid "assign_ticket"
-msgstr "Assign Case"
-
-msgid "refer_ticket"
-msgstr "Refer Case"
+msgstr "Reassign Case"
 
 msgid "delete_ticket"
 msgstr "Delete Case"
