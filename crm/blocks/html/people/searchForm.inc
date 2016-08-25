@@ -17,6 +17,7 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 		<fieldset>
 			<?php
                 $fields = ['firstname', 'lastname', 'email', 'organization'];
+				$helper = $this->template->getHelper('field');
 
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
@@ -27,24 +28,18 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 					}
 				}
 
-				$helper = $this->template->getHelper('field');
-
-				$roles = ['all', 'staff', 'public'];
+				$roles   = ['all', 'staff', 'public'];
 				$options = [];
                 foreach ($roles as $v) { $options[] = ['value'=>$v, 'label'=>$this->_($v)]; }
-                $value = !empty($_GET['setOfPeople']) ? $_GET['setOfPeople'] : 'all';
-
                 echo $helper->field([
                     'name'    => 'setOfPeople',
+                    'id'      => 'setOfPeople',
                     'label'   => $this->_(['role', 'roles', count($roles)]),
-                    'type'    => 'radio',
-                    'value'   => $value,
+                    'type'    => 'select',
+                    'value'   => !empty($_GET['setOfPeople']) ? $_GET['setOfPeople'] : 'all',
                     'options' => $options
                 ]);
-			?>
-		</fieldset>
-		<fieldset>
-			<?php
+
 				foreach ($fields as $f) {
 					echo $helper->field([
                         'name'  => $f,
@@ -53,6 +48,7 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
                         'value' => isset($_GET[$f]) ? self::escape($_GET[$f]) : ''
 					]);
 				}
+
 			?>
 			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 			<?php

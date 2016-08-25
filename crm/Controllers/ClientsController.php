@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -15,18 +14,12 @@ use Blossom\Classes\Template;
 
 class ClientsController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$t = new ClientTable();
 		$clients = $t->find();
 
-		$this->template->blocks[] = new Block('clients/clientList.inc',array('clientList'=>$clients));
+		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$clients]);
 	}
 
 	/**
@@ -73,7 +66,7 @@ class ClientsController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('clients/updateClientForm.inc',array('client'=>$client));
+		$this->template->blocks[] = new Block('clients/updateClientForm.inc', ['client'=>$client]);
 	}
 
 	public function delete()

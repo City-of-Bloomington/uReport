@@ -7,7 +7,9 @@
 ?>
 <body class="full-width">
 	<?php
-		$this->_include('partials/header.inc');
+		if (!isset($_REQUEST['popup'])) {
+            $this->_include('partials/header.inc');
+        }
 	?>
 	<main>
         <div id="content-panel" class="panel">
@@ -17,7 +19,11 @@
             ?>
         </div>
 	</main>
-	<?php $this->_include('partials/footer.inc'); ?>
+	<?php
+		if (!isset($_REQUEST['popup'])) {
+            $this->_include('partials/footer.inc');
+        }
+	?>
 </body>
 </html>
 <?php

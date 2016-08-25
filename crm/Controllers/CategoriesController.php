@@ -25,10 +25,6 @@ class CategoriesController extends Controller
 
 	public function view()
 	{
-		if ($this->template->outputFormat == 'html') {
-			$this->template->setFilename('backend');
-		}
-
 		if (!empty($_REQUEST['category_id'])) {
 			try {
 				$category = new Category($_REQUEST['category_id']);
@@ -70,7 +66,6 @@ class CategoriesController extends Controller
 			}
 		}
 
-		$this->template->setFilename('backend');
 		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc', ['category'=>$category]);
 	}
 
@@ -79,8 +74,6 @@ class CategoriesController extends Controller
 	 */
 	public function sla()
 	{
-		$this->template->setFilename('backend');
-
 		if (isset($_POST['categories'])) {
 			try {
 				foreach ($_POST['categories'] as $id=>$post) {

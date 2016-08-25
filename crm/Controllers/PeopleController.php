@@ -36,7 +36,6 @@ class PeopleController extends Controller
 	 */
 	public function index()
 	{
-		$this->template->setFilename('people');
 		if (isset($_REQUEST['callback'])) {
 			$this->template->title = 'Choose Person';
 		}
@@ -56,7 +55,7 @@ class PeopleController extends Controller
 		// Display the search form and any results
 		if ($this->template->outputFormat == 'html') {
 			$searchForm = new Block('people/searchForm.inc');
-			$this->template->blocks['panel-one'][] = $searchForm;
+			$this->template->blocks[] = $searchForm;
 		}
 
 		if (count($search)) {

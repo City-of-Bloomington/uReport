@@ -1,11 +1,10 @@
 <footer>
-    <p> uReport is provided for and driven by the community.
-        uReport content may be posted by third parties unaffiliated with the City.
-        The City makes no warranty as to the accuracy and completeness of
-        third party content and takes no responsibility and disclaims all liability
-        for third party content.
-        Reports submitted by the community are addressed on the basis of priority
-        and available resources.
+    <p> Disclaimer: Content submitted to uReport is considered to be a public record
+        and may be published by the City as public open data or be subject to public
+        records requests. uReport content may be submitted by third parties unaffiliated
+        with the City and the City takes no responsibility and disclaims all liability
+        for such third party content. Requests submitted by the community are addressed
+        on the basis of priority and available resources.
     </p>
 	<p>Copyright &#169; 2011-2016 City of Bloomington, Indiana. All rights reserved.</p>
 	<p> Powered by <a href="https://github.com/City-of-Bloomington/uReport">uReport</a>

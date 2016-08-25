@@ -143,7 +143,7 @@ msgstr[0] "Reactie"
 msgstr[1] "Reacties"
 
 msgid "responseMethod"
-msgstr "Methode van reactie"
+msgstr "Gewenste methode van reactie"
 
 msgid "api_key"
 msgstr "API sleutel"

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -14,12 +13,6 @@ use Blossom\Classes\Template;
 
 class IssueTypesController extends Controller
 {
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->template->setFilename('backend');
-	}
-
 	public function index()
 	{
 		$this->template->blocks[] = new Block('issueTypes/list.inc');
@@ -53,6 +46,6 @@ class IssueTypesController extends Controller
 			}
 		}
 
-		$this->template->blocks[] = new Block('issueTypes/updateForm.inc',array('issueType'=>$type));
+		$this->template->blocks[] = new Block('issueTypes/updateForm.inc', ['issueType'=>$type]);
 	}
 }

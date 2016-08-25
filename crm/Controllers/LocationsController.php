@@ -60,9 +60,7 @@ class LocationsController extends Controller
 		$table      = new TicketTable();
 		$ticketList = $table->find(['location'=>$location]);
 
-		$this->template->setFilename('locations');
-
-        $this->template->blocks['panel-one'][] = new Block("locations/locationInfo.inc", [
+        $this->template->blocks[] = new Block('locations/locationInfo.inc', [
             'location'       => $location,
             'disableButtons' => isset($_GET['disableButtons'])
         ]);

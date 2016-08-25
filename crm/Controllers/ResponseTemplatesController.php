@@ -13,12 +13,6 @@ use Blossom\Classes\Template;
 
 class ResponseTemplatesController extends Controller
 {
-	public function __construct(Template &$template)
-	{
-        parent::__construct($template);
-        $this->template->setFilename('backend');
-	}
-
     public function index() { }
 
     public function update()

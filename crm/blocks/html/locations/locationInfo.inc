@@ -35,11 +35,19 @@ if ($this->location) {
             <div class=\"tools\">$addTicketButton</div>
         </header>
     ";
-        $this->_include('locations/geodata.inc');
-        $this->_include('locations/locationPeople.inc');
-
         $table = new TicketTable();
         $list = $table->find(['location'=>$this->location]);
+
+        if ($this->ticket || count($list)) {
+            $block = new Block('locations/geodata.inc', [
+                'location'=>$this->location,
+                'ticket'  => $this->ticket ? $this->ticket : $list->current()
+            ]);
+            echo $block->render('html', $this->template);
+        }
+
+        $this->_include('locations/locationPeople.inc');
+
         if (count($list) > 1) {
             $block = new Block('tickets/ticketList.inc', [
                 'ticketList'    => $list,

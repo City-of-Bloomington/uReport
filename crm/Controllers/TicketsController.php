@@ -185,7 +185,6 @@ class TicketsController extends Controller
 		}
 		else {
             // Display all the forms
-            $this->template->setFilename('ticketCreation');
             $this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
                 'ticket'           => $ticket,
                 'currentDepartment'=> $currentDepartment
