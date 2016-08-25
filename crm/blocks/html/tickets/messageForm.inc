@@ -18,7 +18,12 @@ use Application\Models\ContactMethodTable;
 
                 $options = [];
                 $people = $this->ticket->getPeople(true);
-                foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
+                foreach ($people as $p) {
+                    $email = $p->getNotificationEmails();
+                    if (count($email)) {
+                        $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())];
+                    }
+                }
                 echo $helper->field([
                     'name'    => 'person_id',
                     'id'      => 'person_id',
