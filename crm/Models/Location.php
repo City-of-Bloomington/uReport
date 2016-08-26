@@ -34,8 +34,14 @@ class Location
 				$results[$row['location']] = $row;
 			}
 
+            $sql = $zend_db->createStatement('select count(*) as ticketCount from tickets where addressId=?');
             foreach (AddressService::searchAddresses($query) as $location=>$data) {
                 if (!isset($results[$location])) {
+
+                    $r = $sql->execute([$data['addressId']]);
+                    $t = $r->current();
+                    $data['ticketCount'] = $t['ticketCount'];
+
                     $results[$location] = $data;
                 }
                 else {

@@ -23,6 +23,7 @@
 		if (!isset($_REQUEST['popup'])) {
             $this->_include('partials/footer.inc');
         }
+		$this->_include('partials/assets.inc');
 	?>
 </body>
 </html>

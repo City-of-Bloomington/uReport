@@ -531,6 +531,9 @@ msgstr "Zoek een locatie"
 msgid "use_location"
 msgstr "Gebruik deze locatie"
 
+msgid "use_person"
+msgstr "Gebruik deze persoon"
+
 msgid "upload_media"
 msgstr "Bijlage bijwerken"
 

@@ -20,11 +20,9 @@ class LocationsController extends Controller
 	 */
 	public function index()
 	{
-		$this->template->setFilename('locations');
-
 		if ($this->template->outputFormat=='html') {
 			$findForm = new Block('locations/findLocationForm.inc');
-			$this->template->blocks['panel-one'][] = $findForm;
+			$this->template->blocks[] = $findForm;
 		}
 
 		if (isset($_GET['location'])) {
@@ -34,15 +32,10 @@ class LocationsController extends Controller
 				$results->return_url = $_GET['return_url'];
 			}
 
-			if ($this->template->outputFormat === 'html') {
-				$this->template->blocks['panel-two'][] = $results;
-			}
-			else {
-				$this->template->blocks[] = $results;
-			}
+            $this->template->blocks[] = $results;
 		}
 		else {
-			$this->template->blocks['panel-two'][] = new Block('locations/mapChooser.inc');
+			$this->template->blocks[] = new Block('locations/mapChooser.inc');
 		}
 	}
 
@@ -57,8 +50,6 @@ class LocationsController extends Controller
 			header('Location: '.BASE_URL.'/locations');
 			exit();
 		}
-		$table      = new TicketTable();
-		$ticketList = $table->find(['location'=>$location]);
 
         $this->template->blocks[] = new Block('locations/locationInfo.inc', [
             'location'       => $location,

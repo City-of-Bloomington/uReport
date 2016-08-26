@@ -531,6 +531,9 @@ msgstr "Find a location"
 msgid "use_location"
 msgstr "Use this location"
 
+msgid "use_person"
+msgstr "Use this person"
+
 msgid "upload_media"
 msgstr "Upload an attachment"
 

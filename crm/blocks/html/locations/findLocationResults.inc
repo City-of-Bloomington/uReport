@@ -2,7 +2,7 @@
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Array $this->results
+ * @param array $this->results
  */
 use Blossom\Classes\Url;
 ?>
@@ -29,20 +29,28 @@ if ($count) {
 		: new Url(BASE_URL.'/locations/view');
 
 	foreach ($this->results as $location=>$data) {
-		if ($callback) {
-			$url = "javascript:self.opener.$callback('$location');";
-		}
-		else {
-			$url->location = $location;
-		}
+        $url->location = $location;
 
 		$location = self::escape($location);
-		$city     = isset($data['city'])        ? ", $data[city]"      : '';
-		$class    = $data['addressId']          ? 'class="verified"'   : '';
-		$count    = isset($data['ticketCount']) ? $data['ticketCount'] : '';
+		$city     = isset($data['city'])         ? ", $data[city]"      : '';
+		$class    = $data['addressId']           ? 'class="verified"'   : '';
+		$count    = !empty($data['ticketCount']) ? $data['ticketCount'] : '';
+
+		if ($callback) {
+			$locationLink = "
+                <button type=\"button\" onclick=\"self.opener.$callback('$location');\">
+                    {$this->_('use_location')}
+                </button>
+                $location$city
+			";
+		}
+		else {
+			$locationLink = "<a href=\"$url\">$location$city</a>";
+		}
+
 		echo "
 		<tr $class>
-			<td><a href=\"$url\">$location$city</a></td>
+			<td>$locationLink</td>
 			<td>$count</td>
 		</tr>
 		";

@@ -92,6 +92,13 @@ main {
     }
 }
 
+tr.verified, tr.usedForNotifications {
+    td {
+        background-color:$color-calltoaction-background;
+        a { color: $color-content-background; }
+    }
+}
+
 .pageNavigation          { margin: $size-gutter; }
 .pageNavigation li       { display:inline; margin: $size-gutter; }
 a.current { border:2px solid $color-calltoaction-background; }

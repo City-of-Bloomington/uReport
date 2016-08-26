@@ -25,7 +25,10 @@
             </div>
         </div>
     </main>
-	<?php $this->_include('partials/footer.inc'); ?>
+	<?php
+        $this->_include('partials/footer.inc');
+		$this->_include('partials/assets.inc');
+    ?>
 </body>
 </html>
 <?php

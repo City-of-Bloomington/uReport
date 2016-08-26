@@ -1,46 +1,31 @@
 <?php
 /**
- * @copyright 2009-2014 City of Bloomington, Indiana
+ * @copyright 2009-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param PersonList $this->personList
  */
-use Blossom\Classes\View;
 use Blossom\Classes\Url;
+
+$callback = !empty($_REQUEST['callback'])
+    ? preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback'])
+    : '';
 ?>
-<div class="personList interfaceBox">
-	<h2><?= $this->_(array('person', 'people', 2)); ?></h2>
+<div class="personList">
+	<h2><?= $this->_(['person', 'people', count($this->personList)]); ?></h2>
+
 	<table>
 		<thead>
-			<tr><th><?= $this->_('name'); ?></th>
-				<th><?= $this->_(array('email'  , 'emails'   , 1)); ?></th>
-				<th><?= $this->_(array('address', 'addresses', 1)); ?></th>
-				<th><?= $this->_(array('phone'  , 'phones'   , 1)); ?></th>
+			<tr><?= $callback ? '<th></th>' : ''; ?>
+                <th><?= $this->_('name'   ); ?></th>
+				<th><?= $this->_('email'  ); ?></th>
+				<th><?= $this->_('address'); ?></th>
+				<th><?= $this->_('phone'  ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
+
 			foreach ($this->personList as $person) {
-				if (isset($_REQUEST['return_url'])) {
-					$url = new Url($_REQUEST['return_url']);
-					$url->person_id = "{$person->getId()}";
-					foreach ($_REQUEST as $key=>$value) {
-						if ($value && $key!='ticket_id' && $key!='return_url') {
-							$url->$key = $value;
-						}
-					}
-				}
-				elseif (isset($_REQUEST['callback'])) {
-					$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson.js');
-
-					$callback = preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback']);
-					$url = "javascript:self.opener.$callback('{$person->getId()}');";
-				}
-				else {
-					$url = $person->getURL();
-				}
-
 				$name         = self::escape($person->getFullname());
 				$organization = self::escape($person->getOrganization());
 
@@ -79,9 +64,40 @@ use Blossom\Classes\Url;
 					$list.= '</ul>';
 					$phoneList = $list;
 				}
+
+                $person_id = $person->getId();
+				if ($callback) {
+					$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
+					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson.js');
+
+					$personLink = "
+					<td><button type=\"button\" onclick=\"self.opener.$callback('$person_id');\">
+                            {$this->_('use_person')}
+                        </button>
+                    </td>
+                    <td>$name</td>
+					";
+				}
+				else {
+                    if (isset($_REQUEST['return_url'])) {
+                        $url = new Url($_REQUEST['return_url']);
+                        $url->person_id = $person_id;
+
+                        foreach ($_REQUEST as $key=>$value) {
+                            if ($value && $key!='ticket_id' && $key!='return_url') {
+                                $url->$key = $value;
+                            }
+                        }
+                    }
+                    else {
+                        $url = $person->getURL();
+                    }
+                    $personLink = "<td><a href=\"$url\">$name</a></td>";
+				}
+
 				echo "
-				<tr draggable=\"true\" ondragstart=\"event.dataTransfer.setData('text/plain', '{$person->getId()}');\">
-                    <td><a href=\"$url\">$name</a></td>
+				<tr draggable=\"true\" ondragstart=\"event.dataTransfer.setData('text/plain', '$person_id');\">
+                    $personLink
 					<td>$emailList</td>
 					<td>$addressList</td>
 					<td>$phoneList</td>
