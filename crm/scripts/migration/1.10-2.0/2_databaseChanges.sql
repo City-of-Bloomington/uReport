@@ -61,10 +61,6 @@ insert actions (name,type,description) values('update',         'system', '{ente
 insert actions (name,type,description) values('comment',        'system', '{enteredByPerson} commented on this case.');
 insert actions (name,type,description) values('upload_media',   'system', '{enteredByPerson} uploaded an attachment.');
 
-delete h.* from ticketHistory h join actions a on h.action_id=a.id where a.name='update';
-delete r.* from category_action_responses r join actions a on r.action_id=a.id where a.name='update';
-delete from actions where name='update';
-
 drop table issue_labels;
 drop table labels;
 

@@ -32,7 +32,7 @@ echo $helper->field([
     'value' => $this->ticket->getReportedByPerson()
 ]);
 
-$options = [];
+$options = [['value'=>'']];
 $table = new ContactMethodTable();
 $contactMethods = $table->find();
 $contactMethods->buffer();
@@ -54,8 +54,8 @@ echo $helper->field([
     'label'   => $this->_('responseMethod'),
     'value'   => $this->ticket->getResponseMethod_id(),
     'type'    => 'select',
-    'options' => $options
-
+    'options' => $options,
+    'help'    => $this->_('responseMethod_help', 'messages')
 ]);
 
 echo $helper->field([
