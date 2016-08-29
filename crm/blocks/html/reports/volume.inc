@@ -8,7 +8,7 @@ $this->_include('reports/parameters.inc');
 
 $departmentData = Report::VolumeByDepartment($_GET);
 ?>
-<section id="volumeReport">
+<section id="volumeReport" class="searchResults">
     <header>
         <h1><?= "{$this->_(['ticket', 'tickets', $departmentData['totalCount']])} ($departmentData[totalCount] total)"; ?></h1>
     </header>

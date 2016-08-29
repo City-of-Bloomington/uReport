@@ -15,6 +15,7 @@
 
 footer {
     background-color: $color-background-footer; color: $color-heading-1;
+    margin-top: ($size-gutter*2);
     padding: $size-gutter;
     font-size: $font-size-small;
 }
@@ -93,10 +94,15 @@ main {
 }
 
 tr.verified, tr.usedForNotifications {
-    td {
-        background-color:$color-calltoaction-background;
-        a { color: $color-content-background; }
+    td:first-child {
+        padding-left:1.7em;
+        background-repeat: no-repeat;
+        background-position: $size-gutter center;
+        background-size: ($size-gutter*2) ($size-gutter*2);
+        background-image:url('images/fa-svg/check.svg');
     }
+
+    td { background-color: $color-table-background; }
 }
 
 .pageNavigation          { margin: $size-gutter; }
@@ -106,6 +112,7 @@ a.current { border:2px solid $color-calltoaction-background; }
 .ticketInfo header {
     h1 { display:block; margin-bottom:0; }
     .status { float:right; }
+    .tools { position:relative; top:-1.8em; left:7em; }
 }
 .history article {
     padding-left:1rem;

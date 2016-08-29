@@ -529,10 +529,10 @@ msgid "find_location"
 msgstr "Find a location"
 
 msgid "use_location"
-msgstr "Use this location"
+msgstr "Choose"
 
 msgid "use_person"
-msgstr "Use this person"
+msgstr "Choose"
 
 msgid "upload_media"
 msgstr "Upload an attachment"

@@ -34,7 +34,7 @@ $ACTIVITY_DATA = [
 	#activityThisWeek { width:600px; clear:both; }
 	#categoryActivity .original { display:none; }
 </style>
-<section id="activityReport">
+<section id="activityReport" class="searchResults">
     <header>
         <h1>Activity Report</h1>
     </header>

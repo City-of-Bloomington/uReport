@@ -82,6 +82,9 @@ msgstr ""
 "for how the citizen contacted the city and for how the citizen would like to "
 "be contacted."
 
+msgid "responseMethod_help"
+msgstr "How this person wants to be contacted"
+
 msgid "response_reminder"
 msgstr ""
 "When a case is closed it is your responsibility to contact constituents who "

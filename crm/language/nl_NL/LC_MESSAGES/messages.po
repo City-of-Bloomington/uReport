@@ -89,6 +89,9 @@ msgstr ""
 "aan te geven welke methode van contact de voorkeur heeft. Dit kan worden ingegeven door burgers en "
 "instanties."
 
+msgid "responseMethod_help"
+msgstr "Hoe werkt deze persoon wil worden gecontacteerd?"
+
 msgid "response_reminder"
 msgstr ""
 "Wanneer een melding is afgehandeld is het uw verantwoordelijkheid contact op te nemen met de melder. "

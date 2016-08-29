@@ -75,7 +75,7 @@ $callback = !empty($_REQUEST['callback'])
                             {$this->_('use_person')}
                         </button>
                     </td>
-                    <td>$name</td>
+                    <td><a href=\"javascript:self.opener.$callback('$person_id');\">$name</a></td>
 					";
 				}
 				else {

@@ -41,7 +41,7 @@ if ($count) {
                 <button type=\"button\" onclick=\"self.opener.$callback('$location');\">
                     {$this->_('use_location')}
                 </button>
-                $location$city
+                <a href=\"javascript:self.opener.$callback('$location');\">$location$city</a>
 			";
 		}
 		else {

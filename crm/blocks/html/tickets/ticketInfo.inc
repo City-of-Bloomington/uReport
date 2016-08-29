@@ -60,11 +60,13 @@ if ($cf) {
         <h1><span class="status"><?= $status; ?></span>
             <a href="<?= $this->ticket->getURL(); ?>" class="ticket_id">#<?= $ticket_id; ?></a>
         </h1>
+        <div class="tools">
         <?php
             if (!$this->disableButtons && $this->ticket) {
                 $this->_include('tickets/partials/actionLinks.inc');
             }
         ?>
+        </div>
         <h2 class="category"><?= $category; ?>: <?= $issueType; ?></h2>
     </header>
     <?php

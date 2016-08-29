@@ -6,9 +6,7 @@
  */
 use Application\Models\Person;
 use Application\Models\Action;
-?>
-<div class="tools">
-<?php
+
     $helper    = $this->template->getHelper('dropdown');
     $ticket_id = $this->ticket->getId();
     $links     = [];
@@ -119,10 +117,8 @@ use Application\Models\Action;
             'label' => $this->_('delete_ticket')
         ];
 	}
-	if (count($subgroup)) { $link[] = ['subgroup'=>$subgroup]; }
+	if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
 	if (count($links)) {
         echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]), "ticketActions_$ticket_id");
     }
-?>
-</div>

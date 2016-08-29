@@ -6,7 +6,7 @@
  * @param string         $this->title
  */
 ?>
-<section>
+<section class="searchResults">
     <header>
         <h1><?= self::escape($this->title); ?></h1>
     </header>

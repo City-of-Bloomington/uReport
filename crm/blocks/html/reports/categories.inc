@@ -15,7 +15,7 @@ use Blossom\Classes\Url;
 $this->_include('reports/parameters.inc');
 $h = $this->template->getHelper('formatDuration');
 ?>
-<section class="searchResultsRows">
+<section class="searchResults">
     <header>
         <h1>Categories Report</h1>
     </header>

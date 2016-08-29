@@ -37,7 +37,7 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
 	.chart { width:100%; height:250px; }
 	.charts-tooltip div { color:infotext; }
 </style>
-<section id="slaReport">
+<section id="slaReport" class="searchResults">
     <header>
         <h1><?= $this->_('sla'); ?></h1>
     </h1>
