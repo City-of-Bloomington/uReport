@@ -1,0 +1,693 @@
+# uReport Translation
+# Copyright (C) 2013-2016 City of Bloomington
+# This file is distributed under the same license as the uReport package.
+#
+# The msgid's in this file should be names of database columns and code variables.
+# Since the code is written in US English, the variable names will be en_US.
+#
+# However, we do not want to use the en_US translation as the msgid.
+# The en_US translation will change over time as we find better words for things.
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 1.11\n"
+"Report-Msgid-Bugs-To: ureport@googlegroups.com\n"
+"POT-Creation-Date: 2013-09-20 16:33-0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
+"Language-Team: CRTL <info@crtl.ca>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_CA\n"
+"X-Generator: Poedit 1.8.8\n"
+
+msgid "add"
+msgstr "+"
+
+msgid "edit"
+msgstr "Éditer"
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "submit"
+msgstr "Envoyer"
+
+msgid "save"
+msgstr "Enregistrer"
+
+msgid "save_as"
+msgstr "Enregistrer sous..."
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "search"
+msgstr "Rechercher..."
+
+msgid "search_results"
+msgstr "Résultat de recherche"
+
+msgid "search_results_text"
+msgstr "Résultat de votre recherche textuelle"
+
+msgid "search_results_map"
+msgstr "Résultat cartographique"
+
+msgid "search_results_print"
+msgstr "Imprimer vos résultats"
+
+msgid "search_current"
+msgstr "Recherche courante"
+
+msgid "search_results_count"
+msgstr "# nombre de cas résultant de la recherche"
+
+msgid "quick_links"
+msgstr "Liens rapide"
+
+msgid "upload"
+msgstr "Télécharger"
+
+msgid "new"
+msgstr "Nouveau"
+
+msgid "go"
+msgstr "Procéder"
+
+msgid "start"
+msgstr "Démarrer"
+
+msgid "end"
+msgstr "Fin"
+
+msgid "more"
+msgstr "Plus"
+
+msgid "top"
+msgstr "Retour vers le haut"
+
+msgid "more_categories"
+msgstr "Plus de catégories"
+
+msgid "sort_by"
+msgstr "Trier par"
+
+#. The current sorting of a list.  Alpabetical order, Numerical order, etc.
+msgid "order"
+msgstr "Commander"
+
+#. To change the sorting of a list
+msgid "reorder"
+msgstr "Réorganiser"
+
+#. This is the short form for "Information".  This should be an abbreviation
+msgid "info"
+msgstr "Info"
+
+#. This is the short form for "Administrator".  This should be an abbreviation
+msgid "admin"
+msgstr "Admin"
+
+msgid "my_account"
+msgstr "Mon compte"
+
+msgid "my_profile"
+msgstr "Mon profil"
+
+msgid "my_info"
+msgstr "Mon info"
+
+msgid "login"
+msgstr "Ouvrir une session "
+
+msgid "logout"
+msgstr "Se déconnecter"
+
+msgid "help"
+msgstr "Aide"
+
+msgid "default"
+msgstr "Valeur par défaut"
+
+msgid "contactMethod"
+msgid_plural "contactMethods"
+msgstr[0] "Communiquer par"
+msgstr[1] "Communiquer par"
+
+msgid "response"
+msgid_plural "responses"
+msgstr[0] "Réponse"
+msgstr[1] "Réponses"
+
+msgid "responseMethod"
+msgstr "RépondrePar"
+
+msgid "api_key"
+msgstr "Clé API"
+
+msgid "url"
+msgstr "URL"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "firstname"
+msgstr "Prénom"
+
+msgid "middlename"
+msgstr "Deuxième nom"
+
+msgid "lastname"
+msgstr "Nom de famille"
+
+msgid "username"
+msgstr "Nom d'utilisateur"
+
+msgid "password"
+msgstr "Mot de passe"
+
+msgid "authenticationMethod"
+msgstr "Méthode d'authentification"
+
+msgid "role"
+msgstr "Rôle"
+
+msgid "change_password"
+msgstr "Changer le mot de passe"
+
+msgid "current_password"
+msgstr "Mot de passe courrant"
+
+msgid "new_password"
+msgstr "Nouveau mot de passe"
+
+msgid "retype_password"
+msgstr "Retaper le mot de passe"
+
+#. The generic term for a where a person works or is associated with
+#. What "organization" is someone affiliated with?
+msgid "organization"
+msgstr "Organisme"
+
+msgid "email"
+msgid_plural "emails"
+msgstr[0] "Courriel"
+msgstr[1] "Courriels"
+
+msgid "phone"
+msgid_plural "phones"
+msgstr[0] "Téléphone"
+msgstr[1] "Téléphones"
+
+msgid "description"
+msgstr "Description"
+
+msgid "comment"
+msgid_plural "comments"
+msgstr[0] "Commentaire"
+msgstr[1] "Commentaires"
+
+msgid "type"
+msgstr "Type"
+
+msgid "media"
+msgid_plural "medias"
+msgstr[0] "Média"
+msgstr[1] "Médias"
+
+msgid "custom_fields"
+msgstr "Champs personnalisés"
+
+msgid "display_fields"
+msgstr "Champs à afficher"
+
+msgid "date"
+msgstr "Date"
+
+msgid "day"
+msgid_plural "days"
+msgstr[0] "Jour"
+msgstr[1] "Jours"
+
+msgid "permissions_required"
+msgstr "Autorisation requise"
+
+#. Posting permission level determines who is allowed to post new reports
+#. in a given category to the system
+msgid "postingPermissionLevel"
+msgstr "Niveau d'autorisation pour affichage"
+
+#. Display permission level determines who is allowed to view tickets of a
+#. given category
+msgid "displayPermissionLevel"
+msgstr "Niveau d'autorisation pour voir"
+
+#. Label for a person when you have a phone number for them
+msgid "contact"
+msgstr "Contact"
+
+msgid "contact_list"
+msgstr "Liste de Contact"
+
+#. Label for someone to contact when there is a problem
+msgid "contactPerson"
+msgstr "Personne  ressource"
+
+msgid "defaultPerson"
+msgstr "personne par défault"
+
+#. What to call people who possess a piece of property
+msgid "owner"
+msgid_plural "owners"
+msgstr[0] "Propriétaire"
+msgstr[1] "Propriétaires"
+
+msgid "someone"
+msgstr "Individu"
+
+# We are using the word "Application" in english because we think it
+# makes more sense to end users.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "client"
+msgid_plural "clients"
+msgstr[0] "Application"
+msgstr[1] "Applications"
+
+msgid "action"
+msgid_plural "actions"
+msgstr[0] "Action"
+msgstr[1] "Actions"
+
+msgid "bookmark"
+msgid_plural "bookmarks"
+msgstr[0] "Signet"
+msgstr[1] "Signets"
+
+#. These are the categories of things users can report to city
+#. Some example "categories" are Potholes and Graffiti
+msgid "category"
+msgid_plural "categories"
+msgstr[0] "Catégorie"
+msgstr[1] "Catégories"
+
+#. Categories are grouped.  This is what you call those groups
+msgid "categoryGroup"
+msgid_plural "categoryGroups"
+msgstr[0] "Groupe"
+msgstr[1] "Groupes"
+
+msgid "department"
+msgid_plural "departments"
+msgstr[0] "Départment"
+msgstr[1] "Départments"
+
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "service_level_agreement"
+msgstr "Accord sur les niveaux de service"
+
+#. The abbreviation for "Service Level Agreement"
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "sla"
+msgstr "SLA"
+
+msgid "overdue"
+msgstr "SLA en retard"
+
+msgid "replyEmail"
+msgstr "Répondre au courriel"
+
+msgid "autoRespond"
+msgstr "Réponse automatique"
+
+msgid "responseTemplate"
+msgid_plural "responseTemplates"
+msgstr[0] "Gabarit de message de réponse automatique"
+msgstr[1] "Gabarits de messages de réponse automatique"
+
+msgid "responseTemplate_add"
+msgstr "Nouveau message de réponse automatique"
+
+msgid "responseTemplate_edit"
+msgstr "Modifier le message de réponse automatique"
+
+msgid "autoCloseIsActive"
+msgstr "Fermeture automatique"
+
+msgid "autoCloseSubstatus_id"
+msgstr "Statut de fermeture automatique"
+
+msgid "active_yes"
+msgstr "Actif"
+
+msgid "active_no"
+msgstr "Désactiver"
+
+#. Reports that users send in are organized into Tickets
+#. A ticket can contain multiple issue reports that are related, usually by location
+msgid "ticket"
+msgid_plural "tickets"
+msgstr[0] "Cas"
+msgstr[1] "Cas"
+
+msgid "ticket_issues"
+msgstr "Questions connexes"
+
+#. These are the problem reports that users send in
+msgid "issue"
+msgid_plural "issues"
+msgstr[0] "Billet"
+msgstr[1] "Billets"
+
+#. Issues are organized by Type.
+#. Example types are Complaint, Request, Violation, etc.
+msgid "issueType"
+msgid_plural "issueTypes"
+msgstr[0] "Type de billet"
+msgstr[1] "Types de billet"
+
+msgid "address"
+msgid_plural "addresses"
+msgstr[0] "Adresse"
+msgstr[1] "Adresses"
+
+msgid "city"
+msgstr "Ville"
+
+msgid "state"
+msgstr "Province"
+
+msgid "zip"
+msgstr "Code postal"
+
+msgid "latitude"
+msgstr "Latitude"
+
+msgid "longitude"
+msgstr "Longitude"
+
+msgid "enteredDate"
+msgstr "Date du cas"
+
+msgid "enteredByPerson"
+msgstr "Entré par"
+
+msgid "reportedByPerson"
+msgstr "Rapporté par"
+
+msgid "history"
+msgstr "Historique"
+
+msgid "general"
+msgstr "Général"
+
+#. We use the word Location here, which is different from Address
+#. Locations refer to general descriptions of places that are not a street address
+#. Examples: "Behind the post office", "In front of the court house"
+msgid "location"
+msgid_plural "locations"
+msgstr[0] "Emplacement"
+msgstr[1] "Emplacements"
+
+msgid "change_location"
+msgstr "Changement d'emplacement"
+
+msgid "person"
+msgid_plural "people"
+msgstr[0] "Personne"
+msgstr[1] "Personnes"
+
+msgid "user"
+msgid_plural "users"
+msgstr[0] "Compte d'utilisateur"
+msgstr[1] "Comptes utilisateur"
+
+#. Detailed analysis of ticket data presented to Staff
+msgid "report"
+msgid_plural "reports"
+msgstr[0] "Rapports"
+msgstr[1] "Rapports"
+
+msgid "assignment"
+msgid_plural "assignments"
+msgstr[0] "Affectation"
+msgstr[1] "Affectations"
+
+msgid "activity"
+msgstr "Activité"
+
+msgid "status"
+msgid_plural "statuses"
+msgstr[0] "Statut"
+msgstr[1] "Statuts"
+
+msgid "substatus"
+msgid_plural "substatuses"
+msgstr[0] "Substatus"
+msgstr[1] "Status inférieur"
+
+#. This is a special type of substatus
+msgid "resolution"
+msgstr "Résolution"
+
+msgid "add_issue"
+msgstr "Ajouter un problème"
+
+msgid "add_person"
+msgstr "Ajouter une personne"
+
+msgid "create_account"
+msgstr "Créer un compte"
+
+msgid "edit_account"
+msgstr "Modifier un compte"
+
+msgid "edit_issue"
+msgstr "Modifier le problème"
+
+msgid "delete_issue"
+msgstr "Supprimer le problème"
+
+msgid "info_client"
+msgstr "Information du client"
+
+msgid "info_person"
+msgstr "Information de la personne"
+
+msgid "info_department"
+msgstr "Information du département"
+
+msgid "info_location"
+msgstr "Information sur l'emplacement"
+
+msgid "info_location_additional"
+msgstr "Informations supplémentaires sur l'emplacement"
+
+msgid "info_issue"
+msgstr "Problème d'information"
+
+msgid "info_assignment"
+msgstr "Information sur l'affectation"
+
+msgid "find_person"
+msgstr "Trouver une personne"
+
+msgid "find_user"
+msgstr "Filtre pour les usagers"
+
+msgid "find_address"
+msgstr "Trouver une adresse"
+
+msgid "find_street"
+msgstr "Trouver une rue"
+
+msgid "find_location"
+msgstr "Trouver un emplacement"
+
+msgid "use_location"
+msgstr "Utiliser cet emplacement"
+
+msgid "upload_media"
+msgstr "Ajouter une pièce jointe"
+
+msgid "see_all_thumbnails"
+msgstr "Voir toutes les vignettes"
+
+msgid "back_to_ticket"
+msgstr "Retour au cas"
+
+msgid "change_department"
+msgstr "Changer de département"
+
+msgid "add_new_ticket"
+msgstr "Nouveau cas"
+
+msgid "assign_ticket"
+msgstr "Assigner le Cas"
+
+msgid "refer_ticket"
+msgstr "Reférer le cas"
+
+msgid "delete_ticket"
+msgstr "Éffacer le cas"
+
+msgid "change_category"
+msgstr "Changer la categorie"
+
+msgid "change_status"
+msgstr "Changer le status"
+
+msgid "add_response"
+msgstr "Enregistrer une réponse"
+
+msgid "assignment_notes"
+msgstr "Remarque au titulaire"
+
+msgid "merge"
+msgstr "Fusionner"
+
+msgid "merge_people"
+msgstr "Fusionner les personnes"
+
+msgid "merge_tickets"
+msgstr "Fusionner les cas"
+
+#. Used during the process of merging people records.
+#. This label is placed on each person, so the user can choose which record will be the master copy
+msgid "merge_into_person"
+msgstr "Fusionner dans les personnes"
+
+#. Used during the process of merging ticket records.
+#. This label is placed on each ticket, so the user can choose which record will be the master copy
+msgid "merge_into_ticket"
+msgstr "Fusionner dans les personnes"
+
+#. Tickets that are currently assigned to the user
+msgid "tickets_open_assigned"
+msgstr "Cas présentement affectés"
+
+#. Tickets that the user has reported that are still open
+msgid "tickets_open_reported"
+msgstr "Cas restant"
+
+msgid "tickets_reported"
+msgstr "Cas déclarés"
+
+msgid "tickets_open"
+msgstr "Cas ouverts"
+
+msgid "tickets_my"
+msgstr "Mes cas"
+
+msgid "tickets_my_department"
+msgstr "Cas de mon département"
+
+msgid "tickets_for_location"
+msgstr "Les cas liés à cet emplacement"
+
+#. Ticket that have been referred to the user
+msgid "tickets_open_referred"
+msgstr "Cas visés présentement"
+
+msgid "id"
+msgstr "#"
+
+msgid "category_id"
+msgstr "Catégorie"
+
+msgid "department_id"
+msgstr "Départment"
+
+msgid "substatus_id"
+msgstr "Status secondaire"
+
+msgid "slaPercentage"
+msgstr "SLA"
+
+msgid "neighborhoodAssociation"
+msgstr "Association de quartier"
+
+msgid "township"
+msgstr "Canton"
+
+msgid "enteredByPerson_id"
+msgstr "Entré par"
+
+msgid "assignedPerson_id"
+msgstr "Assigné à"
+
+msgid "label_id"
+msgstr "Étiquette"
+
+msgid "issueType_id"
+msgstr "Type de problème"
+
+msgid "contactMethod_id"
+msgstr "méthode de contact"
+
+msgid "referredPerson_id"
+msgstr "Personne référée"
+
+msgid "are_you_sure"
+msgstr "Êtes-vous certain?"
+
+msgid "disclaimer"
+msgstr "Avertissement"
+
+msgid "volume"
+msgstr "Volume"
+
+msgid "open_current"
+msgstr "Billets présentement ouverts"
+
+msgid "open_today"
+msgstr "Billets ouverts aujourd'hui"
+
+msgid "closed_today"
+msgstr "Billets fermés aujourd'hui"
+
+msgid "past_month"
+msgstr "Activité du mois passé"
+
+msgid "activity_report"
+msgstr "Rapport d'activité"
+
+msgid "text.activity_description"
+msgstr "* Moyenne des journées passées ouvert est calculé comme combien de temps les billets sont restés ouverts pendant toute l'histoire des données."
+
+msgid "create_department"
+msgstr "Nouveau département"
+
+msgid "create_category"
+msgstr "Nouvelle catégorie"
+
+msgid "create_categorygroup"
+msgstr "Nouvelle catégorie de groupe"
+
+msgid "create_substatus"
+msgstr "New Substatus"
+
+msgid "create_action"
+msgstr "Nouvelle action"
+
+msgid "create_client"
+msgstr "Nouveau client"
+
+msgid "create_label"
+msgstr "Nouvelle étiquette"
+
+msgid "create_contactmethod"
+msgstr "Créer une méthode pour contacter"
+
+msgid "create_issuetype"
+msgstr "Créer un nouveau type"
+
+msgid "open"
+msgstr "Ouvert"
+
+msgid "closed"
+msgstr "Fermé"
+
+msgid "total"
+msgstr "Total"
