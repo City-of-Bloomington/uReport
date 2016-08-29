@@ -334,14 +334,26 @@ class Category extends ActiveRecord
 	}
 
 	/**
-	 * @param Action $action
+	 * @param  Action           $action
 	 * @return ResponseTemplate
 	 */
 	public function responseTemplateForAction(Action $action)
 	{
         $table = new ResponseTemplateTable();
         $list = $table->find(['category_id'=>$this->getId(), 'action_id'=>$action->getId()]);
-        return $list->current();
+        if (count($list)) {
+            return $list->current();
+        }
+        else {
+            if ($action->getTemplate()) {
+                $response = new ResponseTemplate();
+                $response->setCategory($this);
+                $response->setAction    ($action);
+                $response->setTemplate  ($action->getTemplate());
+                $response->setReplyEmail($action->getReplyEmail());
+                return $response;
+            }
+        }
 	}
 }
 

@@ -18,6 +18,22 @@ class ActionsController extends Controller
 		$this->template->blocks[] = new Block('actions/actionList.inc');
 	}
 
+	public function view()
+	{
+        if (!empty($_GET['action_id'])) {
+            try { $action = new Action($_GET['action_id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
+
+        if (isset($action)) {
+            $this->template->blocks[] = new Block('actions/info.inc', ['action'=>$action]);
+        }
+        else {
+            header('HTTP/1.1 404 Not Found', true, 404);
+            $this->template->blocks[] = new Block('404.inc');
+        }
+	}
+
 	public function update()
 	{
 		// Load the $action for editing

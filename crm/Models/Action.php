@@ -90,9 +90,13 @@ class Action extends ActiveRecord
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
 	public function getType()        { return parent::get('type');        }
+	public function getTemplate   () { return parent::get('template'   ); }
+	public function getReplyEmail () { return parent::get('replyEmail' ); }
 
 	public function setName($s)        { parent::set('name',        $s); }
 	public function setDescription($s) { parent::set('description', $s); }
+	public function setTemplate   ($s) { parent::set('template',    $s); }
+	public function setReplyEmail ($s) { parent::set('replyEmail',  $s); }
 
 	/**
 	 * @param string $string
@@ -112,5 +116,7 @@ class Action extends ActiveRecord
             $this->setName($post['name']);
         }
 		$this->setDescription($post['description']);
+		$this->setTemplate   ($post['template'   ]);
+		$this->setReplyEmail ($post['replyEmail' ]);
 	}
 }

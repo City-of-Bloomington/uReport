@@ -27,31 +27,21 @@ $list = $t->find();
     </header>
 	<table>
 		<thead>
-			<tr><th></th>
-				<th><?= $this->_('action'); ?></th>
+			<tr><th><?= $this->_('action'); ?></th>
 				<th><?= $this->_('description'); ?></th>
 				<th><?= $this->_('type'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php
-            $userCanEdit = Person::isAllowed('actions', 'update');
 
 			foreach ($list as $action) {
-				$editButton = '';
-				if ($userCanEdit) {
-					$editButton = $helper->buttonLink(
-						BASE_URI.'/actions/update?action_id='.$action->getId(),
-						$this->_('edit'),
-						'edit'
-					);
-				}
+                $uri         = BASE_URI.'/actions/view?action_id='.$action->getId();
 				$name        = self::escape($action->getName());
 				$description = self::escape($action->getDescription());
 				$type        = self::escape($action->getType());
 				echo "
-				<tr><td>$editButton</td>
-					<td>$name</td>
+				<tr><td><a href=\"$uri\">$name</a></td>
 					<td>$description</td>
 					<td>$type</td>
 				</tr>

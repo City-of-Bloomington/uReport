@@ -61,5 +61,8 @@ drop table issues;
 
 alter table media drop media_type;
 
+alter table actions add template   text;
+alter table actions add replyEmail varchar(128);
+
 truncate table version;
 insert version set version='2.0';

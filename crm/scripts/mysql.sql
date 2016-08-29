@@ -97,7 +97,9 @@ create table actions (
 	id          int          unsigned not null primary key auto_increment,
 	name        varchar(25)  not null,
 	description varchar(128) not null,
-	type        enum('system', 'department') not null default 'department'
+	type        enum('system', 'department') not null default 'department',
+	template    text,
+	replyEmail  varchar(128)
 );
 insert actions (name,type,description) values('open',           'system', 'Opened by {actionPerson}');
 insert actions (name,type,description) values('assignment',     'system', '{enteredByPerson} assigned this case to {actionPerson}');
