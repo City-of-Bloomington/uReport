@@ -23,8 +23,8 @@ create table category_action_responses (
     constraint FK_category_action_responses_action_id   foreign key (action_id)   references actions   (id)
 );
 
-insert into category_action_responses (category_id, action_id, template, autoRespond, replyEmail)
-select id, 5, autoResponseText, autoResponseIsActive, notificationReplyEmail
+insert into category_action_responses (category_id, action_id, template, replyEmail)
+select id, 5, autoResponseText, notificationReplyEmail
 from categories where autoResponseText is not null;
 
 alter table categories drop autoResponseIsActive;
