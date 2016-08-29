@@ -1,8 +1,6 @@
 # Translation
 # Copyright (C) 2013-2016 City of Bloomington
 # This file is distributed under the same license as the Blossom package.
-domain "messages"
-
 msgid ""
 msgstr ""
 "Project-Id-Version: Blossom\n"
@@ -13,128 +11,141 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_CA\n"
+"POT-Creation-Date: \n"
+"X-Generator: Poedit 1.8.8\n"
 
 msgid "signed_in_as"
-msgstr "Signed in as %s"
+msgstr "Signé en tant que %s"
 
 msgid "add_action"
-msgstr "Update the history log with actions performed on this case"
+msgstr ""
+"Mettre à jour le journal de l'historique des actions effectuées sur ce cas"
 
 msgid "merge_people_description"
-msgstr "Merge two people by dragging rows or typing in the person IDs."
+msgstr ""
+"Fusionner deux personnes en faisant glisser et en déposant la rangée ou en "
+"écrivant l'identifiant de la personne."
 
 msgid "merge_tickets_description"
 msgstr ""
-"Merge two cases by dragging one of the rows or typing in the IDs to compare "
-"cases and move data between them."
+"Fusionner deux cas en faisant glisser l'une des rangées ou en saisissant "
+"l'identifiant et en comparant les deux cas et par la suite en déplaçant des "
+"données entre eux."
 
 msgid "how_did_you_respond"
-msgstr "How did you respond to the person?"
+msgstr "Comment avez-vous répondu à la personne?"
 
 msgid "click_full_size"
-msgstr "Click the thumbnail for the full size"
+msgstr "Cliquez sur la vignette pour obtenir la taille complète"
 
 msgid "choose_category"
-msgstr "Choose a category"
+msgstr "Choisissez une catégorie"
 
 msgid "close_this_ticket"
-msgstr "Close this case"
+msgstr "Fermer cette cas"
 
 msgid "verified_locations"
-msgstr "Indicates verified locations"
+msgstr "Indique les emplacements vérifiés"
 
 msgid "no_tickets_found"
-msgstr "No cases found"
+msgstr "Aucun cas trouvé"
 
 msgid "no_locations_found"
 msgstr ""
-"No locations found. Please try your search again or contact an administrator "
-"if you believe a location is missing from our database."
+"Aucun emplacement trouvé. S'il vous plaît essayer de nouveau votre recherche "
+"ou contacter un administrateur si vous croyez un emplacement est absent de "
+"notre base de données."
 
 msgid "usedForNotifications"
-msgstr "Used for notifications"
+msgstr "Utilisé pour les notifications"
 
 msgid "ticket_search_query_description"
-msgstr "Only searches a case's description"
+msgstr "Recherche uniquement la description d'un cas"
 
 #. Describe to the user what "Clients" are.
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
 msgid "clients_description"
 msgstr ""
-"These are authorized clients that are allowed to POST tickets via web "
-"services.  The only web service interface we have right now is Open311."
+"Ceux-ci sont les clients autorisés  à poster des billets via les services "
+"Web. La seule interface de service Web que nous avons présentement est "
+"Open311."
 
 #. Explain to the user that string substitution will happen for action descriptions
 msgid "actions_description"
 msgstr ""
-"You can customize the message displayed for this action in the history log.  "
-"In the message, the system will substitute the appropriate person's name for "
-"these keys in the string."
+"Vous pouvez personnaliser ce message pour cette commande dans le journal de "
+"l'histoire. Dans le message, le système remplacera les clés dans la chaîne "
+"par le nom de la bonne personne ."
 
 msgid "actions_enteredByPerson"
-msgstr "The person who entered the action"
+msgstr "La personne qui est entré dans l'action"
 
 msgid "actions_actionPerson"
-msgstr "The person the action is about"
+msgstr "La personne qui est dans l'action"
 
 msgid "contactMethods_description"
 msgstr ""
-"These are the available contact methods for the system.  They are used both "
-"for how the citizen contacted the city and for how the citizen would like to "
-"be contacted."
+"Ce sont les méthodes de contact disponibles dans le système. Ils sont "
+"utilisés aussi bien pour contacter la ville par le citoyen que pour le  "
+"citoyen de contacter la ville."
 
 msgid "response_reminder"
 msgstr ""
-"When a case is closed it is your responsibility to contact constituents who "
-"reported this issue to the City.  Log those contacts in the responses below."
+"Lorsqu'un cas est fermé, il est de votre responsabilité de communiquer avec "
+"les mandataires qui ont signalé ce problème à la Ville. Notez ces contacts "
+"dans les réponses ci-dessous."
 
 msgid "search_parameters_description"
 msgstr ""
-"Your current search parameters.  Click on one of the labels to delete that "
-"parameter from your search."
+"Vos paramètres de recherche courant. Cliquez sur l'une des étiquettes pour "
+"supprimer ce paramètre de votre recherche."
 
 msgid "labels_description"
-msgstr "These are the predefined labels users can apply to issues."
+msgstr ""
+"Ce sont les étiquettes prédéfinies que les utilisateurs peuvent attacher aux "
+"problèmes."
 
 msgid "locationPeople_description"
 msgstr ""
-"A list of people who've listed this as their address.  Note: it might not be "
-"their current address."
+"Une liste de personnes qui ont déclaré cette adresse comme la leur. "
+"Remarque : Cette adresse pourrait ne pas être leur adresse actuelle."
 
 #. %1$s A person's name
 #. %2$s The name of your website
 #. %3$s A Url
 msgid "digestNotification"
 msgstr ""
-"%1$s, here is your weekly summary of open cases in %2$s.  Please <a href="
-"\"%3$s\">visit your profile</a> or click a case below to edit or update your "
-"cases."
+"%1$s, voici votre résumé hebdomadaire des cas ouverts en%2$s. S'il vous "
+"plaît <a href=\"%3$s\"> visiter votre profil </a> ou cliquez sur un des cas "
+"ci-dessous pour le modifier ou le mettre à jour."
 
 #. Explain to the user what the Service Level Agreement specifies
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "service_level_agreement_description"
-msgstr "Departments agree to handle new cases within the time specified."
+msgstr ""
+"Les départements acceptent de traiter de nouveaux cas dans le délai prescrit."
 
 #. %1$d The number of days the case, after which the case is due
 #. %2$d The number of days that have already passed
 msgid "sla_status_notice"
 msgstr ""
-"Most tickets of this type should be closed within %1$d days, although some "
-"cases may be longer.  %2$d days have already passed."
+"La plupart des billets de ce type devraient être fermés dans les%1$ d jours, "
+"bien que dans certains cas ça peut être plus longs. %2$ d jours se sont déjà "
+"écoulés."
 
 msgid "employee_authentication_description"
 msgstr ""
-"If you are using Employee authentication, the rest of this information will "
-"be filled in automatically from the directory.  Otherwise, you must provide "
-"at least a first and last name."
+"Si vous utilisez le système d'authentification de l'employé, le reste de "
+"cette information sera automatiquement rempli à partir du répertoire. Sinon, "
+"vous devez fournir au moins un prénom et un nom."
 
 msgid "disclaimer"
 msgstr ""
-"Disclaimer: uReport is provided for and driven by the community. uReport "
-"content may be posted by third parties unaffiliated with the City. The City "
-"makes no warranty as to the accuracy and completeness of third party content "
-"and takes no responsibility and disclaims all liability for third party "
-"content. Reports submitted by the community are addressed on the basis of "
-"priority and available resources."
+"Note d'avertissement: uReport est fourni et géré par la communauté. La Ville "
+"et ses affiliés ne donnent aucune garantie quant à l'exactitude et "
+"l'intégrité des contenus de tiers et ne prennent aucune responsabilité et "
+"décline toute responsabilité pour le contenu de tiers. Les rapports "
+"présentés par la communauté sont traités sur la base des priorités et des "
+"ressources disponibles."
