@@ -1,8 +1,3 @@
---
--- This section should be reworked before release
--- These changes occurred in development versions over time
--- We can probably simplify this to just add the new table
--- in it's final form
 alter table categories add notificationReplyEmail varchar(128);
 alter table categories add autoResponseIsActive   bool;
 alter table categories add autoResponseText       text;
@@ -64,13 +59,6 @@ insert actions (name,type,description) values('upload_media',   'system', '{ente
 drop table issue_labels;
 drop table labels;
 
--- ---------------------------
--- 2.0 Stuff
---
--- This is mostly work done to remove issues and just store
--- everything in tickets.  Tickets will now be able to have parent
--- tickets, in order to show that tickets duplicate other tickets.
--- ---------------------------
 alter table tickets add parent_id int unsigned after id;
 alter table tickets add constraint FK_tickets_parent_id foreign key (parent_id) references tickets(id);
 
