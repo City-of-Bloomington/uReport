@@ -41,9 +41,12 @@ main {
         h1, h2, legend, dt, a { color:$color-content-background; }
         dl { background-color:$color-heading-2; }
 
+        .dropdown a { color:$color-link; }
+
         input { color: $color-text-default; }
 
         a { font-size:$font-size-small; }
+        a.btn { color: $color-text-default; }
     }
 
     #content-panel {

@@ -35,22 +35,26 @@ if ($this->location) {
             <div class=\"tools\">$addTicketButton</div>
         </header>
     ";
-        $table = new TicketTable();
-        $list = $table->find(['location'=>$this->location]);
+        $table   = new TicketTable();
+        $list    = $table->find(['location'=>$this->location]);
+        $tickets = [];
+        foreach ($list as $t) { $tickets[] = $t; }
 
-        if ($this->ticket || count($list)) {
+        if ($this->ticket || count($tickets)) {
             $block = new Block('locations/geodata.inc', [
-                'location'=>$this->location,
-                'ticket'  => $this->ticket ? $this->ticket : $list->current()
+                'location'=> $this->location,
+                'ticket'  => $this->ticket ? $this->ticket : $tickets[0]
             ]);
             echo $block->render('html', $this->template);
         }
 
         $this->_include('locations/locationPeople.inc');
 
-        if (count($list) > 1) {
+        $t = $this->ticket ? 1 : 0;
+
+        if (count($tickets) > 0) {
             $block = new Block('tickets/ticketList.inc', [
-                'ticketList'    => $list,
+                'ticketList'    => $tickets,
                 'title'         => 'Other cases for this location',
                 'disableButtons'=> false,
                 'fields'        => ['status', 'enteredDate', 'category']
