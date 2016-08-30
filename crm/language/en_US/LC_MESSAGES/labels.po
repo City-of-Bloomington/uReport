@@ -336,7 +336,7 @@ msgstr[0] "Message"
 msgstr[1] "Messages"
 
 msgid "message_send"
-msgstr "Send Message"
+msgstr "Send Email"
 
 msgid "autoRespond"
 msgstr "Auto Respond"
@@ -535,7 +535,7 @@ msgid "use_person"
 msgstr "Choose"
 
 msgid "upload_media"
-msgstr "Upload an attachment"
+msgstr "Upload a photo/file"
 
 msgid "see_all_thumbnails"
 msgstr "See all thumbnails"

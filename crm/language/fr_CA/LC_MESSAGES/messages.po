@@ -1,20 +1,21 @@
 # Translation
 # Copyright (C) 2013-2016 City of Bloomington
 # This file is distributed under the same license as the Blossom package.
+domain "messages"
+
 msgid ""
 msgstr ""
 "Project-Id-Version: Blossom\n"
 "Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
-"Language-Team: City of Bloomington <dev@bloomington.in.gov>\n"
+"Last-Translator: Maxime Gauthier <maxime.gauthier88@gmail.com>\n"
+"Language-Team: CRTL <info@crtl.ca>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language: fr_CA\n"
 "POT-Creation-Date: \n"
-"X-Generator: Poedit 1.8.8\n"
 
 msgid "signed_in_as"
 msgstr "Signé en tant que %s"

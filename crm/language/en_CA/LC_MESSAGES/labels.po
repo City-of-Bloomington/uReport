@@ -7,6 +7,8 @@
 #
 # However, we do not want to use the en_US translation as the msgid.
 # The en_US translation will change over time as we find better words for things.
+domain "labels"
+
 msgid ""
 msgstr ""
 "Project-Id-Version: uReport 1.11\n"
@@ -20,7 +22,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_CA\n"
-"X-Generator: Poedit 1.8.8\n"
 
 msgid "add"
 msgstr "Add"
