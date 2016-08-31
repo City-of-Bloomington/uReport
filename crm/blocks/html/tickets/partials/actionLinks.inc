@@ -31,29 +31,31 @@ use Application\Models\Action;
             ];
 		}
 		if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+    }
 
-		#---
-		$subgroup = [];
-		if (Person::isAllowed('tickets', 'message')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/tickets/message?ticket_id='.$ticket_id,
-                'label' => $this->_('message_send')
-            ];
-		}
-		if (Person::isAllowed('tickets', 'respond')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/tickets/respond?ticket_id='.$ticket_id,
-                'label' => $this->_('add_response')
-            ];
-		}
-        if (Person::isAllowed('tickets', 'close')) {
-            $subgroup[] = [
-                'url'   => BASE_URI."/tickets/close?ticket_id=$ticket_id;status=closed",
-                'label' => $this->_('ticket_close')
-            ];
-        }
-        if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+    #---
+    $subgroup = [];
+    if (Person::isAllowed('tickets', 'message')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/message?ticket_id='.$ticket_id,
+            'label' => $this->_('message_send')
+        ];
+    }
+    if (Person::isAllowed('tickets', 'respond')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/respond?ticket_id='.$ticket_id,
+            'label' => $this->_('add_response')
+        ];
+    }
+    if ($status === 'open' && Person::isAllowed('tickets', 'close')) {
+        $subgroup[] = [
+            'url'   => BASE_URI."/tickets/close?ticket_id=$ticket_id;status=closed",
+            'label' => $this->_('ticket_close')
+        ];
+    }
+    if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
+    if ($status === 'open') {
 		#---
 		$subgroup = [];
         if (Person::isAllowed('tickets', 'update')) {
