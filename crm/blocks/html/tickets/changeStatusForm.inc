@@ -17,13 +17,14 @@ foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
     $$f = $this->ticket->$get();
 }
-$title = $status === 'closed' ? $this->_('ticket_close') : $this->_('ticket_open');
+$title  = $status === 'closed' ? $this->_('ticket_close') : $this->_('ticket_open');
+$action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
 ?>
 <section class="changeStatusForm">
     <header>
         <h1><?= $title ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URI; ?>/tickets/changeStatus">
+	<form method="post" action="<?= BASE_URI; ?>/tickets/<?= $action; ?>">
 		<fieldset>
 			<input name="ticket_id" type="hidden" value="<?= $id; ?>" />
 			<?php
