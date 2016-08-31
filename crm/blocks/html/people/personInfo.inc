@@ -141,7 +141,7 @@ echo "
 		echo "
 		<tr $class>
 			<th>$label</th>
-			<td>$email</td>
+			<td><a href=\"mailto:$email\">$email</a></td>
 			<td>$emailButtons</td>
 		</tr>
 		";
