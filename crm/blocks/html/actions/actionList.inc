@@ -2,16 +2,13 @@
 /**
  * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->actions
  */
-use Application\Models\ActionTable;
 use Application\Models\Person;
-
-$t    = new ActionTable();
-$list = $t->find();
 ?>
 <section>
     <header>
-        <h1><?= $this->_(['action', 'actions', count($list)]); ?></h1>
+        <h1><?= $this->_(['action', 'actions', count($this->actions)]); ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('actions', 'add')) {
@@ -35,7 +32,7 @@ $list = $t->find();
 		<tbody>
 		<?php
 
-			foreach ($list as $action) {
+			foreach ($this->actions as $action) {
                 $uri         = BASE_URI.'/actions/view?action_id='.$action->getId();
 				$name        = self::escape($action->getName());
 				$description = self::escape($action->getDescription());

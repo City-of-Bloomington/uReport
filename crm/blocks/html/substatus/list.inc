@@ -8,7 +8,7 @@ use Application\Models\Person;
 ?>
 <section class="substatusList">
     <header>
-        <h1><?= $this->_(['substatus', 'substatuses', count($this->substatusList)]); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('substatus', 'update')) {

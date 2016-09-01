@@ -17,13 +17,9 @@ foreach ($fields as $field) {
 	$$field = isset($_POST[$field]) ? self::escape($_POST[$field]) : self::escape($this->category->$get());
 }
 
-$title = $id
-	? $this->_('edit').' '.$this->_('category')
-	: $this->_('add' ).' '.$this->_('category');
-
 $helper = $this->template->getHelper('field');
 ?>
-<section><header><h1><?= $title; ?></h1></header>
+<section><header><h1><?= $this->template->title; ?></h1></header>
 <form method="post" action="<?= BASE_URI; ?>/categories/update">
 	<fieldset><legend><?= $this->_('category'); ?></legend>
 		<input name="category_id" type="hidden" value="<?= $id; ?>" />

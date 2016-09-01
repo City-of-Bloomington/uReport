@@ -2,7 +2,6 @@
 /**
  * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 use Application\Models\BookmarkTable;
 use Blossom\Classes\Block;
@@ -10,23 +9,23 @@ use Blossom\Classes\Block;
 <div>
     <section>
         <header>
-            <h1>Reports</h1>
+            <h1><?= $this->_(['report', 'reports', 4]); ?></h1>
         </header>
-        <ul><li><a href="<?= BASE_URI; ?>/reports/assignments">Assignments</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/categories">Categories</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/sla">SLA</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports">Activity</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/volume">Volume</a></li>
+        <ul><li><a href="<?= BASE_URI; ?>/reports/assignments"><?= $this->_(['assignment', 'assignments', 4]); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/categories"><?=  $this->_(['category',   'categories',  4]); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/sla"><?= $this->_('sla'); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports"><?= $this->_('activity'); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/volume"><?= $this->_('volume'); ?></a></li>
         </ul>
 	</section>
 	<section>
         <header>
-            <h1>Activity</h1>
+            <h1><?= $this->_('activity'); ?></h1>
         </header>
-        <ul><li><a href="<?= BASE_URI; ?>/reports/currentOpenTickets">Currently Open</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/openedTickets">Opened Today</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/closedTickets">Closed Today</a></li>
-            <li><a href="<?= BASE_URI; ?>/reports/">Past Month</a></li>
+        <ul><li><a href="<?= BASE_URI; ?>/reports/currentOpenTickets"><?= $this->_('open_current'); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/openedTickets"><?= $this->_('open_today'); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/closedTickets"><?= $this->_('closed_today'); ?></a></li>
+            <li><a href="<?= BASE_URI; ?>/reports/"><?= $this->_('past_month'); ?></a></li>
         </ul>
 	</section>
 	<?php

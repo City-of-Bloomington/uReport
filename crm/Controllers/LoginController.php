@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -54,7 +53,8 @@ class LoginController extends Controller
 			$_SESSION['errorMessages'][] = $e;
 		}
 
-		$this->template->blocks[] = new Block('loginForm.inc',array('return_url'=>$this->return_url));
+		$this->template->title = $this->template->_('login');
+		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
 	}
 
 	/**
@@ -78,7 +78,9 @@ class LoginController extends Controller
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		$this->template->blocks[] = new Block('loginForm.inc',array('return_url'=>$this->return_url));
+
+		$this->template->title = $this->template->_('login');
+		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
 	}
 
 	public function logout()

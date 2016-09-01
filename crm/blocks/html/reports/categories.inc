@@ -17,7 +17,7 @@ $h = $this->template->getHelper('formatDuration');
 ?>
 <section class="searchResults">
     <header>
-        <h1>Categories Report</h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
 	<?php
         $current_url = new Url(Url::current_url());

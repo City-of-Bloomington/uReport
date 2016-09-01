@@ -10,5 +10,5 @@
 			BASE_URL: '<?= BASE_URL; ?>'
 		};
 	</script>
-    <title><?= isset($this->title) ? self::escape($this->title) : APPLICATION_NAME; ?></title>
+    <title><?= APPLICATION_NAME; ?>: <?= self::escape($this->title); ?></title>
 </head>

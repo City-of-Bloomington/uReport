@@ -6,7 +6,7 @@
 use Application\Models\CategoryGroupTable;
 ?>
 <section class="categoryGroupReportForm">
-    <header><h1><?= $this->_('reorder'); ?></h1>
+    <header><h1><?= $this->template->title; ?></h1>
 	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
         <?php
             $helper = $this->template->getHelper('field');

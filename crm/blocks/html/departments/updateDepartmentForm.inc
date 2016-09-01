@@ -9,14 +9,11 @@
 use Application\Models\ActionTable;
 use Application\Models\CategoryTable;
 
-$title = $this->department->getId()
-	? $this->_('edit')
-	: $this->_('add');
 $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
 ?>
 <section class="updateDepartmentForm">
     <header>
-        <h1><?= $title.' '.$this->_('department'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
     <form method="post" action="<?= $this->action; ?>">
         <fieldset>

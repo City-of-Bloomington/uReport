@@ -12,7 +12,7 @@ $h = $this->template->getHelper('formatDuration');
 ?>
 <section class="searchResults">
     <header>
-        <h1>Assignments Report</h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
 	<p>List people and their assigned tickets.</p>
 	<?php

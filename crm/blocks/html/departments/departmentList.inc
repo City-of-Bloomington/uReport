@@ -8,7 +8,7 @@ use Application\Models\Person;
 ?>
 <section class="departmentList">
     <header>
-        <h1><?= $this->_(['department', 'departments', count($this->departmentList)]); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('departments','update')) {

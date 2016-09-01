@@ -8,7 +8,7 @@ use Application\Models\ContactMethodTable;
 ?>
 <section class="responseForm">
     <header>
-        <h1><?= $this->_('add_response'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
 	<form method="post" action="<?= BASE_URI; ?>/tickets/respond">
 		<fieldset><legend><?= $this->_('how_did_you_respond', 'messages'); ?></legend>

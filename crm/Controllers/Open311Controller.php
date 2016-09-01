@@ -33,6 +33,7 @@ class Open311Controller extends Controller
 
 	public function discovery()
 	{
+        $this->template->title = 'Open311 Discovery';
 		$this->template->blocks[] = new Block('open311/discovery.inc');
 	}
 

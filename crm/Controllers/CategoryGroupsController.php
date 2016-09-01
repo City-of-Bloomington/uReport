@@ -16,15 +16,16 @@ class CategoryGroupsController extends Controller
 {
 	public function index()
 	{
-		$t = new CategoryGroupTable();
-		$list = $t->find();
+		$table = new CategoryGroupTable();
+		$list  = $table->find();
+		$this->template->title = $this->template->_(['categoryGroup', 'categoryGroups', count($list)]);
 		$this->template->blocks[] = new Block('categoryGroups/list.inc', ['categoryGroupList'=>$list]);
 	}
 
 	public function update()
 	{
 		// Load the $client for editing
-		if (isset($_REQUEST['categoryGroup_id']) && $_REQUEST['categoryGroup_id']) {
+		if (!empty($_REQUEST['categoryGroup_id'])) {
 			try {
 				$group = new CategoryGroup($_REQUEST['categoryGroup_id']);
 			}
@@ -50,6 +51,9 @@ class CategoryGroupsController extends Controller
 			}
 		}
 
+		$this->template->title = $group->getId()
+            ? $this->template->_('categoryGroup_edit')
+            : $this->template->_('categoryGroup_add');
 		$this->template->blocks[] = new Block('categoryGroups/updateForm.inc', ['categoryGroup'=>$group]);
 	}
 
@@ -70,6 +74,7 @@ class CategoryGroupsController extends Controller
 			exit();
 		}
 
+		$this->template->title = $this->template->_('reorder');
 		$this->template->blocks[] = new Block('categoryGroups/reorderForm.inc');
 	}
 

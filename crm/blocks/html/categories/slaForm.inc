@@ -7,7 +7,7 @@
 ?>
 <section class="slaForm">
     <header>
-        <h1><?= $this->_('service_level_agreement'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
     </header>
 

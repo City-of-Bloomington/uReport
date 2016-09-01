@@ -39,7 +39,7 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
 </style>
 <section id="slaReport" class="searchResults">
     <header>
-        <h1><?= $this->_('sla'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
     </h1>
 	<div class="chartData">
 		<h2>Outstanding Open Cases</h2>

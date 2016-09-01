@@ -17,10 +17,11 @@ class CategoriesController extends Controller
 {
 	public function index()
 	{
-		$t = new CategoryTable;
-		$categoryList = $t->find();
+		$table = new CategoryTable;
+		$list  = $table->find();
 
-		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$categoryList]);
+		$this->template->title = $this->template->_(['category', 'categories', count($list)]);
+		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$list]);
 	}
 
 	public function view()
@@ -28,6 +29,7 @@ class CategoriesController extends Controller
 		if (!empty($_REQUEST['category_id'])) {
 			try {
 				$category = new Category($_REQUEST['category_id']);
+				$this->template->title = $category->getName();
 				$this->template->blocks[] = new Block('categories/info.inc', ['category'=>$category]);
 			}
 			catch (\Exception $e) {
@@ -66,6 +68,9 @@ class CategoriesController extends Controller
 			}
 		}
 
+		$this->template->title = $category->getId()
+            ? $this->template->_('category_edit')
+            : $this->template->_('category_add');
 		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc', ['category'=>$category]);
 	}
 
@@ -92,6 +97,7 @@ class CategoriesController extends Controller
 		$t = new CategoryTable();
 		$list = $t->find();
 
+		$this->template->title = $this->template->_('service_level_agreement');
 		$this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$list]);
 	}
 }

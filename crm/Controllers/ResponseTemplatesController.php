@@ -41,6 +41,9 @@ class ResponseTemplatesController extends Controller
                 catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
             }
 
+            $this->template->title = $responseTemplate->getId()
+                ? $this->template->_('responseTemplate_edit')
+                : $this->template->_('responseTemplate_add');
             $this->template->blocks[] = new Block('responseTemplates/updateForm.inc', ['responseTemplate'=>$responseTemplate]);
         }
         else {

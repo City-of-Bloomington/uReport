@@ -6,6 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\Action;
+use Application\Models\ActionTable;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
@@ -15,7 +16,10 @@ class ActionsController extends Controller
 {
 	public function index()
 	{
-		$this->template->blocks[] = new Block('actions/actionList.inc');
+        $table = new ActionTable();
+        $list  = $table->find();
+		$this->template->blocks[] = new Block('actions/actionList.inc', ['actions'=>$list]);
+		$this->template->title = $this->template->_(['action', 'actions', count($list)]);
 	}
 
 	public function view()
@@ -27,6 +31,7 @@ class ActionsController extends Controller
 
         if (isset($action)) {
             $this->template->blocks[] = new Block('actions/info.inc', ['action'=>$action]);
+            $this->template->title = $action->getName();
         }
         else {
             header('HTTP/1.1 404 Not Found', true, 404);
@@ -64,6 +69,9 @@ class ActionsController extends Controller
 			}
 		}
 
+		$this->template->title = $action->getId()
+            ? $this->template->_('action_edit')
+            : $this->template->_('action_add' );
 		$this->template->blocks[] = new Block('actions/updateActionForm.inc', ['action'=>$action]);
 	}
 }

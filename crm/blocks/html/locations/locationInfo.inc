@@ -23,7 +23,7 @@ if ($this->location) {
 		$h = $this->template->getHelper('buttonLink');
 		$addTicketButton = $h->buttonLink(
 			BASE_URI.'/tickets/add?location='.$this->location,
-			$this->_('add_new_ticket'),
+			$this->_('add_ticket'),
 			'add'
 		);
 	}

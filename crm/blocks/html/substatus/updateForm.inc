@@ -4,12 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Substatus $this->substatus
  */
-$title = $this->substatus->getId() ? $this->_('edit') : $this->_('add');
 $name        = self::escape($this->substatus->getName());
 $description = self::escape($this->substatus->getDescription());
 ?>
 <section>
-<header><h1><?= $title; ?></h1></header>
+<header><h1><?= $this->template->title  ; ?></h1></header>
 <form method="post" action="<?= BASE_URL; ?>/substatus/update">
 	<fieldset><legend><?= $this->_('substatus'); ?></legend>
 		<input name="substatus_id" type="hidden" value="<?= "{$this->substatus->getId()}"; ?>" />

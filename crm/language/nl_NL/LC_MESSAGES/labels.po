@@ -137,6 +137,12 @@ msgid_plural "contactMethods"
 msgstr[0] "Contactmethode"
 msgstr[1] "Contactmethoden"
 
+msgid "contactMethod_add"
+msgstr "Contactmethode toevoegen"
+
+msgid "contactMethod_edit"
+msgstr "Contactmethode wijzigen"
+
 msgid "response"
 msgid_plural "responses"
 msgstr[0] "Reactie"
@@ -199,10 +205,22 @@ msgid_plural "emails"
 msgstr[0] "E-mail"
 msgstr[1] "E-mailadres"
 
+msgid "email_add"
+msgstr "E-mail toevoegen"
+
+msgid "email_edit"
+msgstr "E-mail wijzigen"
+
 msgid "phone"
 msgid_plural "phones"
 msgstr[0] "Telefoon"
 msgstr[1] "Telefoonnummers"
+
+msgid "phone_add"
+msgstr "Telefoon toevoegen"
+
+msgid "phone_edit"
+msgstr "Telefoon wijzigen"
 
 msgid "description"
 msgstr "Omschrijving"
@@ -267,9 +285,6 @@ msgid_plural "owners"
 msgstr[0] "Eigenaar"
 msgstr[1] "Eigenaren"
 
-msgid "someone"
-msgstr "Iemand"
-
 # We are using the word "Application" in english because we think it
 # makes more sense to end users.
 #. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
@@ -278,18 +293,33 @@ msgid_plural "clients"
 msgstr[0] "Applicatie"
 msgstr[1] "Applicaties"
 
-msgid "client_id"
-msgstr "Applicatie"
+msgid "client_add"
+msgstr "Applicatie toevoegen"
+
+msgid "client_edit"
+msgstr "Applicatie wijzigen"
 
 msgid "action"
 msgid_plural "actions"
 msgstr[0] "Actie"
 msgstr[1] "Acties"
 
+msgid "action_add"
+msgstr "Actie toevoegen"
+
+msgid "action_edit"
+msgstr "Actie wijzigen"
+
 msgid "bookmark"
 msgid_plural "bookmarks"
 msgstr[0] "Favoriet"
 msgstr[1] "Favorieten"
+
+msgid "bookmark_add"
+msgstr "Favoriet toevoegen"
+
+msgid "bookmark_edit"
+msgstr "Favoriet wijzigen"
 
 #. These are the categories of things users can report to city
 #. Some example "categories" are Potholes and Graffiti
@@ -298,16 +328,34 @@ msgid_plural "categories"
 msgstr[0] "Categorie"
 msgstr[1] "Categorieën"
 
+msgid "category_add"
+msgstr "Categorie toevoegen"
+
+msgid "category_edit"
+msgstr "Categorie wijzigen"
+
 #. Categories are grouped.  This is what you call those groups
 msgid "categoryGroup"
 msgid_plural "categoryGroups"
 msgstr[0] "Thema"
 msgstr[1] "Thema's"
 
+msgid "categoryGroup_add"
+msgstr "Thema toevoegen"
+
+msgid "categoryGroup_edit"
+msgstr "Thema wijzigen"
+
 msgid "department"
 msgid_plural "departments"
 msgstr[0] "Afdeling"
 msgstr[1] "Afdelingen"
+
+msgid "department_add"
+msgstr "Afdeling toevoegen"
+
+msgid "department_edit"
+msgstr "Afdeling wijzigen"
 
 #. http://en.wikipedia.org/wiki/Service-level_agreement
 msgid "service_level_agreement"
@@ -387,10 +435,22 @@ msgid_plural "issueTypes"
 msgstr[0] "Meldsoort"
 msgstr[1] "Meldsoorten"
 
+msgid "issueType_add"
+msgstr "Meldsoort toevoegen"
+
+msgid "issueType_edit"
+msgstr "Meldsoort wijzigen"
+
 msgid "address"
 msgid_plural "addresses"
 msgstr[0] "Adres"
 msgstr[1] "Adressen"
+
+msgid "address_add"
+msgstr "Adres toevoegen"
+
+msgid "address_edit"
+msgstr "Adres wijzigen"
 
 msgid "city"
 msgstr "Gemeente/Instelling"
@@ -441,6 +501,12 @@ msgid_plural "people"
 msgstr[0] "Persoon"
 msgstr[1] "Personen"
 
+msgid "person_add"
+msgstr "Persoon toevoegen"
+
+msgid "person_edit"
+msgstr "Persoon wijzigen"
+
 msgid "user"
 msgid_plural "users"
 msgstr[0] "Gebruikersaccount"
@@ -474,23 +540,11 @@ msgstr[1] "Oplossingen"
 msgid "resolution"
 msgstr "Resolutie"
 
-msgid "add_issue"
-msgstr "Melding toevoegen"
-
-msgid "add_person"
-msgstr "Persoon toevoegen"
-
 msgid "create_account"
 msgstr "Nieuwe gebruiker"
 
 msgid "edit_account"
 msgstr "Gebruiker wijzigen"
-
-msgid "edit_issue"
-msgstr "Melding aanpassen"
-
-msgid "delete_issue"
-msgstr "Melding verwijderen"
 
 msgid "info_client"
 msgstr "Subjectinformatie"
@@ -546,7 +600,7 @@ msgstr "Terug"
 msgid "change_department"
 msgstr "Afdeling veranderen"
 
-msgid "add_new_ticket"
+msgid "add_ticket"
 msgstr "Nieuwe Melding"
 
 msgid "assign_ticket"

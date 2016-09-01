@@ -29,7 +29,7 @@ use Blossom\Classes\Url;
 			$h = $this->template->getHelper('buttonLink');
 			echo $h->buttonLink(
 				$url,
-				$this->_('add_person'),
+				$this->_('person_add'),
 				'add'
 			);
 		}

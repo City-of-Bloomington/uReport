@@ -74,6 +74,7 @@ class TicketsController extends Controller
 
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->setFilename('tickets');
+			$this->template->title = $this->template->_('ticket').' #'.$ticket->getId();
 			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
 			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
             $this->template->blocks[] = new Block(
@@ -175,6 +176,7 @@ class TicketsController extends Controller
 			}
 		}
 
+		$this->template->title = $this->template->_('add_ticket');
 		if (!empty($_REQUEST['partial']) && $_REQUEST['partial'] === 'tickets/customFieldsForm.inc'
             && $ticket->getCategory_id()) {
 
@@ -209,6 +211,7 @@ class TicketsController extends Controller
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
 
+		$this->template->title = $this->template->_('update_ticket');
 		$this->template->blocks[] = new Block('tickets/updateIssueForm.inc', ['ticket'=>$ticket]);
 		$this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
 	}
@@ -281,6 +284,7 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
+		$this->template->title = $this->template->_('assign_ticket');
 		$this->template->blocks[] = new Block(
 			'tickets/assignTicketForm.inc',
 			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
@@ -316,6 +320,7 @@ class TicketsController extends Controller
                 }
             }
 
+            $this->template->title = $action->getName();
             $this->template->blocks[] = new Block('tickets/actionForm.inc', ['ticketHistory'=>$history]);
         }
 		else {
@@ -348,8 +353,8 @@ class TicketsController extends Controller
 		$this->template->setFilename('tickets');
 		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
 	}
-	public function close() { $this->changeStatus('closed'); }
-	public function open () { $this->changeStatus('open'  ); }
+	public function close() { $this->template->title = $this->template->_('ticket_close'); $this->changeStatus('closed'); }
+	public function open () { $this->template->title = $this->template->_('ticket_open' ); $this->changeStatus('open'  ); }
 
 	/**
 	 * @param REQUEST ticket_id
@@ -371,7 +376,7 @@ class TicketsController extends Controller
 		}
 
 		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		$this->template->setFilename('locations');
+		$this->template->title = $this->template->_('change_location');
 		$this->template->blocks['panel-one'][] = new Block(
             'locations/findLocationForm.inc',
 			['includeExternalResults' => true]
@@ -399,6 +404,7 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
+		$this->template->title = $this->template->_('change_category');
 		$this->template->title = 'Change Category';
 		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
 	}
@@ -429,6 +435,7 @@ class TicketsController extends Controller
 
 		// Display the view
 		$this->template->setFilename('tickets');
+		$this->template->title = $this->template->_('add_response');
 		$this->template->blocks[] = new Block('tickets/responseForm.inc', ['ticket'=>$ticket]);
 	}
 
@@ -465,6 +472,7 @@ class TicketsController extends Controller
             }
 
             $this->template->setFilename('tickets');
+            $this->template->title = $this->template->_('message_send');
             $this->template->blocks[] = new Block('tickets/messageForm.inc', ['ticket'=>$ticket]);
         }
         else {
@@ -496,6 +504,7 @@ class TicketsController extends Controller
 
 		// Display the form
 		$this->template->setFilename('merging');
+		$this->template->title = $this->template->_('merge_tickets');
 		$this->template->blocks[] = new Block('tickets/mergeForm.inc', ['parent'=>$parent, 'child'=>$child]);
 
 		$this->template->blocks['left' ][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$parent,'disableButtons'=>true]);

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -17,9 +16,10 @@ class BookmarksController extends Controller
 {
 	public function index()
 	{
-		$t = new BookmarkTable();
-		$list = $t->find(['person_id' => $_SESSION['USER']->getId()]);
-		$this->template->blocks[] = new Block('bookmarks/list.inc', array('bookmarks'=>$list));
+		$table = new BookmarkTable();
+		$list  = $table->find(['person_id' => $_SESSION['USER']->getId()]);
+		$this->template->title = $this->template->_(['bookmark', 'bookmarks', count($list)]);
+		$this->template->blocks[] = new Block('bookmarks/list.inc', ['bookmarks'=>$list]);
 	}
 
 	public function update()
@@ -37,6 +37,7 @@ class BookmarksController extends Controller
 		else {
 			$bookmark = new Bookmark();
 		}
+
 		if (isset($_POST['requestUri'])) {
 			$bookmark->handleUpdate($_POST);
 			try {
@@ -52,7 +53,11 @@ class BookmarksController extends Controller
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		$this->template->blocks[] = new Block('bookmarks/updateForm.inc', array('bookmark'=>$bookmark));
+
+		$this->template->title = $bookmark->getId()
+            ? $this->template->_('bookmark_edit')
+            : $this->template->_('bookmark_add' );
+		$this->template->blocks[] = new Block('bookmarks/updateForm.inc', ['bookmark'=>$bookmark]);
 	}
 
 	public function delete()

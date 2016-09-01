@@ -4,10 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Action $this->action
  */
-$title = $this->action->getId()
-	? $this->_('edit').' '.$this->_('action')
-	: $this->_('add' ).' '.$this->_('action');
-
 $fields = ['id', 'name', 'description', 'template', 'replyEmail'];
 foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
@@ -16,7 +12,7 @@ foreach ($fields as $f) {
 ?>
 <section class="updateActionForm">
     <header>
-        <h1><?= $title; ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <p><?= $this->_('actions_description', 'messages'); ?></p>
     </header>
 

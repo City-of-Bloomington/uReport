@@ -7,10 +7,11 @@
 use Application\Models\DepartmentTable;
 use Application\Models\Person;
 
-$title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 ?>
-<div class="updateUserForm">
-	<h2><?= $title; ?></h2>
+<section class="updateUserForm">
+    <header>
+        <h1><?= $this->template->title; ?></h1>
+    </header>
 	<form method="post" action="<?= BASE_URL; ?>/users/update">
 		<fieldset><legend><?= $this->_('login'); ?></legend>
 			<table>
@@ -79,4 +80,4 @@ $title = $this->person->getUsername() ? 'Edit Account' : 'Create Account';
 			?>
 		</fieldset>
 	</form>
-</div>
+</section>

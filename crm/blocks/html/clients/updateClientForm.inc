@@ -11,13 +11,9 @@ foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
     $$f = $this->client->$get();
 }
-
-$title = $this->client->getId()
-	? $this->_('edit').' '.$this->_('client')
-	: $this->_('add' ).' '.$this->_('client');
 ?>
 <div class="updateClientForm">
-	<h1><?= $title; ?></h1>
+	<h1><?= $this->template->title; ?></h1>
 	<form method="post" action="<?= BASE_URL; ?>/clients/update">
 		<fieldset>
 			<legend><?= $this->_('client').' '.$this->_('info'); ?></legend>

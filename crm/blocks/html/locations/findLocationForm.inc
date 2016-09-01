@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param string $this->title
  */
-$title    = $this->title ? self::escape($this->title) : $this->_('find_location');
+$title    = $this->title ? self::escape($this->title) : $this->template->title;
 $location = isset($_GET['location']) ? self::escape($_GET['location']) : '';
 ?>
 <section class="findLocationForm">

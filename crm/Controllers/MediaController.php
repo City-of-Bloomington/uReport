@@ -82,6 +82,7 @@ class MediaController extends Controller
 		}
 
 		$this->template->setFilename('tickets');
+		$this->template->title = $this->template->_('upload_media');
 		$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'  => $ticket, 'disableButtons'=>1]);
 		$this->template->blocks[] = new Block('media/uploadForm.inc',   ['ticket'  => $ticket]);
 		$this->template->blocks[] = new Block('tickets/history.inc',    ['history' => $ticket->getHistory()]);

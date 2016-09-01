@@ -18,9 +18,10 @@ class SubstatusController extends Controller
 	{
 		$table = new SubstatusTable();
 		$list = !empty($_REQUEST['status'])
-			? $table->find(array('status'=>$_REQUEST['status']))
+			? $table->find(['status'=>$_REQUEST['status']])
 			: $table->find();
 
+        $this->template->title = $this->template->_(['substatus', 'substatuses', count($list)]);
 		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list]);
 	}
 
@@ -54,6 +55,9 @@ class SubstatusController extends Controller
 			}
 		}
 
+		$this->template->title = $substatus->getId()
+            ? $this->template->_('edit')
+            : $this->template->_('add');
 		$this->template->blocks[] = new Block('substatus/updateForm.inc', ['substatus'=>$substatus]);
 	}
 }

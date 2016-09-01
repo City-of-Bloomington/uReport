@@ -13,15 +13,13 @@ foreach ($fields as $f) {
 }
 $category     = $this->responseTemplate->getCategory();
 $categoryName = self::escape($category->getName());
-
-$title = $id ? $this->_('responseTemplate_edit') : $this->_('responseTemplate_add');
 ?>
 <section>
     <header>
         <h1><?= $categoryName; ?></h1>
     </header>
     <form method="post" action="<?= BASE_URI; ?>/responseTemplates/update">
-        <fieldset><legend><?= $title; ?></legend>
+        <fieldset><legend><?= $this->template->title; ?></legend>
             <input name="id" type="hidden" value="<?= $id; ?>" />
             <input name="category_id" type="hidden" value="<?= $category_id; ?>" />
 

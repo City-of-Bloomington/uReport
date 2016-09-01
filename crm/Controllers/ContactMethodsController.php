@@ -6,6 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\ContactMethod;
+use Application\Models\ContactMethodTable;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
@@ -15,7 +16,10 @@ class ContactMethodsController extends Controller
 {
 	public function index()
 	{
-		$this->template->blocks[] = new Block('contactMethods/list.inc');
+        $table = new ContactMethodTable();
+        $list  = $table->find();
+        $this->template->title = $this->template->_(['contactMethod', 'contactMethods', count($list)]);
+		$this->template->blocks[] = new Block('contactMethods/list.inc', ['contactMethods'=>$list]);
 	}
 
 	public function update()
@@ -46,6 +50,9 @@ class ContactMethodsController extends Controller
 			}
 		}
 
+		$this->template->title = $method->getId()
+            ? $this->template->_('contactMethod_edit')
+            : $this->template->_('contactMethod_add');
 		$this->template->blocks[] = new Block('contactMethods/updateForm.inc', ['contactMethod'=>$method]);
 	}
 }

@@ -18,9 +18,10 @@ class DepartmentsController extends Controller
 	public function index()
 	{
 		$table = new DepartmentTable();
-		$departmentList = $table->find();
+		$list = $table->find();
 
-		$this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$departmentList]);
+		$this->template->title = $this->template->_(['department', 'departments', count($list)]);
+		$this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$list]);
 	}
 
 	public function view()
@@ -34,6 +35,7 @@ class DepartmentsController extends Controller
         }
 
         if (isset($department)) {
+            $this->template->title = $department->getName();
             $this->template->blocks[] = new Block('departments/departmentInfo.inc', ['department'=>$department]);
         }
         else {
@@ -73,6 +75,9 @@ class DepartmentsController extends Controller
 			}
 		}
 
+		$this->template->title = $department->getId()
+            ? $this->template->_('department_edit')
+            : $this->template->_('department_add');
 		$this->template->blocks[] = new Block('departments/updateDepartmentForm.inc', [
             'department' => $department,
             'action'     => BASE_URI.'/departments/update',

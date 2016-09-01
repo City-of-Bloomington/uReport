@@ -27,6 +27,7 @@ class AccountController extends Controller
 
 	public function index()
 	{
+        $this->template->title = $this->template->_('my_account');
 		$this->template->blocks[] = new Block('people/personInfo.inc', ['person'=>$_SESSION['USER']]);
 	}
 

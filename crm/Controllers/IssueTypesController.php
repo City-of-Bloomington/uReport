@@ -6,6 +6,7 @@
 namespace Application\Controllers;
 
 use Application\Models\IssueType;
+use Application\Models\IssueTypeTable;
 
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
@@ -15,7 +16,10 @@ class IssueTypesController extends Controller
 {
 	public function index()
 	{
-		$this->template->blocks[] = new Block('issueTypes/list.inc');
+        $table = new IssueTypeTable();
+        $list  = $table->find();
+        $this->template->title = $this->template->_(['issueType', 'issueTypes', count($list)]);
+		$this->template->blocks[] = new Block('issueTypes/list.inc', ['issueTypes'=>$list]);
 	}
 
 	public function update()
@@ -46,6 +50,9 @@ class IssueTypesController extends Controller
 			}
 		}
 
+		$this->template->title = $type->getId()
+            ? $this->template->_('issueType_edit')
+            : $this->template->_('issueType_add');
 		$this->template->blocks[] = new Block('issueTypes/updateForm.inc', ['issueType'=>$type]);
 	}
 }

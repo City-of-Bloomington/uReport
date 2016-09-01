@@ -37,7 +37,7 @@ class PeopleController extends Controller
 	public function index()
 	{
 		if (isset($_REQUEST['callback'])) {
-			$this->template->title = 'Choose Person';
+			$this->template->title = $this->template->_('use_person');
 		}
 
 		// Look for anything that the user searched for
@@ -86,24 +86,20 @@ class PeopleController extends Controller
 		if (!isset($_GET['person_id'])) {
 			$this->redirectToErrorUrl(new \Exception('people/unknownPerson'));
 		}
-		try {
-			$person = new Person($_GET['person_id']);
-		}
-		catch (\Exception $e) {
-			$this->redirectToErrorUrl($e);
-		}
-		$this->template->title = $person->getFullname();
 
+		try { $person = new Person($_GET['person_id']); }
+		catch (\Exception $e) { $this->redirectToErrorUrl($e); }
+		$this->template->title = $person->getFullname();
 
 		$disableButtons = isset($_REQUEST['disableButtons']) ? (bool)$_REQUEST['disableButtons'] : false;
 		$block = new Block(
 			'people/personInfo.inc',
-			array('person'=>$person,'disableButtons'=>$disableButtons)
+			['person'=>$person,'disableButtons'=>$disableButtons]
 		);
 
 		if ($this->template->outputFormat == 'html') {
 			$this->template->blocks['panel-one'][] = $block;
-			$this->template->blocks['panel-two'][] = new Block('people/stats.inc',array('person'=>$person));
+			$this->template->blocks['panel-two'][] = new Block('people/stats.inc', ['person'=>$person]);
 
 			$lists = [
 				'reportedBy'=>'Reported Cases',
@@ -220,7 +216,10 @@ class PeopleController extends Controller
 		}
 
 		$this->template->title = 'Update a person';
-		$this->template->blocks[] = new Block('people/updatePersonForm.inc',array('person'=>$person));
+		$this->template->title = $person->getId()
+            ? $this->template->_('person_edit')
+            : $this->template->_('person_add');
+		$this->template->blocks[] = new Block('people/updatePersonForm.inc', ['person'=>$person]);
 	}
 
 	public function delete()
@@ -314,6 +313,8 @@ class PeopleController extends Controller
 			}
 		}
 
+		$a = $object->getId() ? 'edit' : 'add';
+		$this->template->title = $this->template->_("{$item}_{$a}");
 		$this->template->blocks['panel-one'][] = new Block('people/personInfo.inc', ['person'=>$object->getPerson(), 'disableButtons'=>true]);
 		$this->template->blocks['panel-two'][] = new Block("people/update{$basename}Form.inc", [$item=>$object]);
 	}
@@ -358,31 +359,18 @@ class PeopleController extends Controller
 
 
 		$this->template->setFilename('merging');
-		$this->template->blocks[] = new Block(
-			'people/mergeForm.inc',
-			array('personA'=>$personA,'personB'=>$personB)
-		);
+		$this->template->title = $this->template->_('merge_people');
+		$this->template->blocks[]          = new Block('people/mergeForm.inc',  ['personA'=>$personA, 'personB'=>$personB]);
+		$this->template->blocks['left' ][] = new Block('people/personInfo.inc', ['person' =>$personA, 'disableButtons'=>true]);
+		$this->template->blocks['right'][] = new Block('people/personInfo.inc', ['person' =>$personB, 'disableButtons'=>true]);
 
-		$this->template->blocks['left'][] = new Block(
-			'people/personInfo.inc',
-			array('person'=>$personA,'disableButtons'=>true)
-		);
-		$lists = array(
+		$lists = [
 			'reportedBy'=>'Reported Cases',
 			'assigned'  =>'Assigned Cases',
 			'enteredBy' =>'Entered Cases'
-		);
-		foreach ($lists as $listType=>$title) {
-			$this->addTicketList('left', $listType, $title, $personA, true, true);
-		}
-
-		$this->template->blocks['right'][] = new Block(
-			'people/personInfo.inc',
-			array('person'=>$personB,'disableButtons'=>true)
-		);
-		foreach ($lists as $listType=>$title) {
-			$this->addTicketList('right', $listType, $title, $personB, true, true);
-		}
+		];
+		foreach ($lists as $listType=>$title) { $this->addTicketList('left',  $listType, $title, $personA, true, true); }
+		foreach ($lists as $listType=>$title) { $this->addTicketList('right', $listType, $title, $personB, true, true); }
 	}
 
 	/**
@@ -395,8 +383,8 @@ class PeopleController extends Controller
 	 */
 	public function distinct()
 	{
-		$this->template->blocks[] = new Block(
-			'people/distinctFieldValues.inc',
-			array('results'=>Person::getDistinct($_GET['field'], $_GET['term'])));
+		$this->template->blocks[] = new Block('people/distinctFieldValues.inc', [
+            'results' => Person::getDistinct($_GET['field'], $_GET['term'])
+        ]);
 	}
 }

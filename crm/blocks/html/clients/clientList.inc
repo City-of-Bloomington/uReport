@@ -8,7 +8,7 @@ use Application\Models\Person;
 ?>
 <section class="clientList">
     <header>
-        <h1><?= $this->_(array('client', 'clients', count($this->clientList))); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('clients','update')) {

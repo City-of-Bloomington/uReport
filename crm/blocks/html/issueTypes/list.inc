@@ -2,17 +2,13 @@
 /**
  * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->issueTypes
  */
-use Application\Models\IssueTypeTable;
 use Application\Models\Person;
-
-$t = new IssueTypeTable();
-$list = $t->find();
-$count = count($list);
 ?>
 <section>
     <header>
-        <h1><?= $this->_(['issueType', 'issueTypes', $count]); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('issueTypes','update')) {
@@ -27,10 +23,10 @@ $count = count($list);
 		</div>
     </header>
     <?php
-        if ($count) {
+        if (count($this->issueTypes)) {
             echo '<ul>';
             $editButton = '';
-            foreach ($list as $type) {
+            foreach ($this->issueTypes as $type) {
                 if (Person::isAllowed('issueTypes','update')) {
                     $editButton = $helper->buttonLink(
                         BASE_URI.'/issueTypes/update?issueType_id='.$type->getId(),

@@ -15,13 +15,13 @@ class UsersController extends Controller
 {
 	public function index()
 	{
-		$search = array('user_account'=>true);
+		$search = ['user_account'=>true];
 		if (!empty($_GET['department_id'])) {
 			$search['department_id'] = $_GET['department_id'];
 		}
-		$table = new PersonTable();
+		$table  = new PersonTable();
 		$people = $table->find($search);
-
+		$this->template->title = $this->template->_(['user', 'users', count($people)]);
 		$this->template->blocks[] = new Block('users/userList.inc', ['userList'=>$people]);
 	}
 
@@ -62,6 +62,9 @@ class UsersController extends Controller
 				['person'=>$user,'disableButtons'=>true]
 			);
 		}
+		$this->template->title = $user->getId()
+            ? $this->template->_('create_account')
+            : $this->template->_('edit_account');
 		$this->template->blocks[] = new Block('users/updateUserForm.inc', ['person'=>$user]);
 	}
 

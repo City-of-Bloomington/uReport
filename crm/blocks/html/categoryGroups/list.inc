@@ -8,7 +8,7 @@ use Application\Models\Person;
 ?>
 <section class="categoryGroupList">
     <header>
-        <h1><?= $this->_('categoryGroup'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('categoryGroups','update')) {

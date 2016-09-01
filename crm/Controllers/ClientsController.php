@@ -16,10 +16,11 @@ class ClientsController extends Controller
 {
 	public function index()
 	{
-		$t = new ClientTable();
-		$clients = $t->find();
+		$table = new ClientTable();
+		$list  = $table->find();
 
-		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$clients]);
+		$this->template->title = $this->template->_(['client', 'clients', count($list)]);
+		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list]);
 	}
 
 	/**
@@ -66,6 +67,9 @@ class ClientsController extends Controller
 			}
 		}
 
+		$this->template->title = $client->getId()
+            ? $this->template->_('client_edit')
+            : $this->template->_('client_add');
 		$this->template->blocks[] = new Block('clients/updateClientForm.inc', ['client'=>$client]);
 	}
 

@@ -8,14 +8,10 @@ use Application\Templates\Helpers\ButtonLink;
 
 $c = count($this->bookmarks);
 
-$title =    !empty($this->title)
-	? self::escape($this->title)
-	: $this->_(['bookmark', 'bookmarks', $c]);
-
 if ($c) {
 	echo "
 	<section class=\"bookmarkList\">
-        <header><h1>$title</h1></header>
+        <header><h1>{$this->template->title}</h1></header>
 		<ul>
  	";
 		foreach ($this->bookmarks as $bookmark) {

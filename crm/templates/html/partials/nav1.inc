@@ -11,7 +11,7 @@ use Application\Models\Person;
             echo sprintf($li, BASE_URI.'/people',      $this->_(['person'  ,'people'   ,2]));
         }
         if (Person::isAllowed('tickets', 'add')) {
-            echo sprintf($li, BASE_URI.'/tickets/add', $this->_('add_new_ticket'));
+            echo sprintf($li, BASE_URI.'/tickets/add', $this->_('add_ticket'));
         }
         if (Person::isAllowed('reports')) {
             echo sprintf($li, BASE_URI.'/reports',     $this->_(['report', 'reports', 2]));

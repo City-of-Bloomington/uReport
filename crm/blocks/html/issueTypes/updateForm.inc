@@ -5,12 +5,9 @@
  * @param IssueType $this->issueType
  */
 $name = self::escape($this->issueType->getName());
-$title = $this->issueType->getId()
-	? $this->_('edit').' '.$this->_('issueType')
-	: $this->_('add' ).' '.$this->_('issueType');
 ?>
 <section>
-    <header><h1><?= $title; ?></h1></header>
+    <header><h1><?= $this->template->title; ?></h1></header>
 	<form method="post" action="<?= BASE_URI; ?>/issueTypes/update">
 		<input type="hidden" name="issueType_id" value="<?= $this->issueType->getId(); ?>" />
 

@@ -4,14 +4,10 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param CategoryGroup $this->categoryGroup
  */
-
-$title = $this->categoryGroup->getId()
-	? $this->_('edit').' '.$this->_('categoryGroup')
-	: $this->_('add' ).' '.$this->_('categoryGroup');
 $name = self::escape($this->categoryGroup->getName());
 ?>
 <section class="updateCategoryGroupForm">
-    <header><h1><?= $title; ?></h1></header>
+    <header><h1><?= $this->template->title; ?></h1></header>
 	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/update">
 		<fieldset>
 			<input name="categoryGroup_id" type="hidden" value="<?= $this->categoryGroup->getId(); ?>" />

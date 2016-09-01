@@ -5,12 +5,9 @@
  * @param Label $this->contactMethod
  */
 $name = self::escape($this->contactMethod->getName());
-$title = $this->contactMethod->getId()
-	? $this->_('edit').' '.$this->_('contactMethod')
-	: $this->_('add' ).' '.$this->_('contactMethod');
 ?>
 <section>
-    <header><h1><?= $title; ?></h1></header>
+    <header><h1><?= $this->template->title; ?></h1></header>
 	<form method="post" action="<?= BASE_URI; ?>/contactMethods/update">
 		<input type="hidden" name="contactMethod_id" value="<?= $this->contactMethod->getId(); ?>" />
 

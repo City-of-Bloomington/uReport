@@ -8,7 +8,7 @@ use Application\Models\ContactMethodTable;
 ?>
 <section class="messageForm">
     <header>
-        <h1><?= $this->_('message_send'); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
 	<form method="post" action="<?= BASE_URI; ?>/tickets/message">
 		<fieldset>

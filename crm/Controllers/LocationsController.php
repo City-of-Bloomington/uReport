@@ -22,6 +22,7 @@ class LocationsController extends Controller
 	{
 		if ($this->template->outputFormat=='html') {
 			$findForm = new Block('locations/findLocationForm.inc');
+			$this->template->title = $this->template->_('find_location');
 			$this->template->blocks[] = $findForm;
 		}
 
@@ -51,6 +52,7 @@ class LocationsController extends Controller
 			exit();
 		}
 
+        $this->template->title = $location;
         $this->template->blocks[] = new Block('locations/locationInfo.inc', [
             'location'       => $location,
             'disableButtons' => isset($_GET['disableButtons'])

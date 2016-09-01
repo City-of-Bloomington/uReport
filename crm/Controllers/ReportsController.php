@@ -23,9 +23,8 @@ class ReportsController extends Controller
 
 	public function index()
 	{
-		$this->template->blocks[] = new Block(
-			'reports/activity.inc'
-		);
+        $this->template->title = $this->template->_('activity');
+		$this->template->blocks[] = new Block('reports/activity.inc');
 		// Turn off the searchForm
 		unset($this->template->blocks['panel-one'][1]);
 	}
@@ -33,47 +32,54 @@ class ReportsController extends Controller
 	public function assignments()
 	{
 		$data = Report::assignments($_GET);
+		$this->template->title = $this->template->_(['assignment', 'assignments', count($data)]);
 		$this->template->blocks[] = new Block('reports/assignments.inc', ['data'=>$data]);
 	}
 
 	public function categories()
 	{
 		$data = Report::categories($_GET);
+		$this->template->title = $this->template->_(['category', 'categories', count($data)]);
 		$this->template->blocks[] = new Block('reports/categories.inc', ['data'=>$data]);
 	}
 
 	public function sla()
 	{
+        $this->template->title = $this->template->_('sla');
 		$this->template->blocks[] = new Block('reports/sla.inc');
 	}
 
 	public function volume()
 	{
+        $this->template->title = $this->template->_('volume');
         $this->template->blocks[] = new Block('reports/volume.inc');
 	}
 
 	public function currentOpenTickets()
 	{
         $data = Report::currentOpenTickets();
+        $this->template->title = $this->template->_('open_current');
         $this->template->blocks[] = new Block(
             'reports/ticketCounts.inc',
-            ['data'=>$data, 'title'=>'Tickets currently open']
+            ['data'=>$data, 'title'=>$this->template->_('open_current')]
         );
 	}
 
 	public function openedTickets()
 	{
+        $this->template->title = $this->template->_('open_today');
         $this->template->blocks[] = new Block(
             'reports/ticketCounts.inc',
-            ['data'=>Report::openedTickets(), 'title'=>'Tickets opened today']
+            ['data'=>Report::openedTickets(), 'title'=>$this->template->_('open_today')]
         );
 	}
 
 	public function closedTickets()
 	{
+        $this->template->title = $this->template->_('closed_today');
         $this->template->blocks[] = new Block(
             'reports/ticketCounts.inc',
-            ['data'=>Report::closedTickets(), 'title'=>'Tickets closed today']
+            ['data'=>Report::closedTickets(), 'title'=>$this->template->_('closed_today')]
         );
 	}
 }

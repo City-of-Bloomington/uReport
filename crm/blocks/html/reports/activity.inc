@@ -36,11 +36,11 @@ $ACTIVITY_DATA = [
 </style>
 <section id="activityReport" class="searchResults">
     <header>
-        <h1>Activity Report</h1>
+        <h1><?= $this->template->title; ?></h1>
     </header>
 	<div id="pieCharts">
 		<div id="currentOpenTickets" class="chartData">
-			<h2>Tickets currently open</h2>
+			<h2><?= $this->_('open_current'); ?></h2>
 			<div class="chart" id="currentOpenTickets_chart"></div>
 			<?php
                 $data = Report::currentOpenTickets();
@@ -51,7 +51,7 @@ $ACTIVITY_DATA = [
             ?>
 		</div>
 		<div id="openedTickets" class="chartData">
-			<h2>Tickets Opened Today</h2>
+			<h2><?= $this->_('open_today'); ?></h2>
 			<div class="chart" id="openedTickets_chart"></div>
 			<?php
                 $data = Report::openedTickets();
@@ -62,7 +62,7 @@ $ACTIVITY_DATA = [
             ?>
 		</div>
 		<div id="closedTickets" class="chartData">
-			<h2>Tickets closed today</h2>
+			<h2><?= $this->_('closed_today'); ?></h2>
 			<div class="chart" id="closedTickets_chart"></div>
             <?php
                 $data = Report::closedTickets();
@@ -74,7 +74,7 @@ $ACTIVITY_DATA = [
 		</div>
 	</div>
 	<div id="activityThisMonth" class="chartData">
-		<h2>Activity the past month</h2>
+		<h2><?= $this->_('past_month'); ?></h2>
 		<div class="chart" id="activityThisMonth_chart"></div>
         <?php
             $d = [];

@@ -2,16 +2,13 @@
 /**
  * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @param array $this->contactMethods
  */
-use Application\Models\ContactMethodTable;
 use Application\Models\Person;
-
-$table = new ContactMethodTable();
-$list = $table->find();
 ?>
 <section>
     <header>
-        <h1><?= $this->_(['contactMethod', 'contactMethods', count($list)]); ?></h1>
+        <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
 			if (Person::isAllowed('contactMethods','update')) {
@@ -28,7 +25,7 @@ $list = $table->find();
 	<p><?= $this->_('contactMethods_description', 'messages'); ?></p>
 	<ul>
 	<?php
- 		foreach ($list as $method) {
+ 		foreach ($this->contactMethods as $method) {
 			if (Person::isAllowed('contactMethods','update')) {
 				$editButton = $helper->buttonLink(
 					BASE_URI.'/contactMethods/update?contactMethod_id='.$method->getId(),
