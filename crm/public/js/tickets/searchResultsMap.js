@@ -1,25 +1,20 @@
 /**
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Quan Zhang <quanzhang@acm.org>
  */
 'use strict';
 
 google.maps.event.addDomListener(window, 'load', function () {
-	var initCenter = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
-		zoomLevel = ZOOM,
-		map = new google.maps.Map(document.getElementById('location_map'), {
-			zoom: zoomLevel,
-			center: initCenter,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		}),
-
-		// Array to store the individual markers that will be shown
-		indivMarkers = [],
-		// Array to store the clusters with no less than 5 tickets.
-		largeClusters = [],
-		// Array to store the ids of clusters with less than 5 tickets.
-		smallClusters = [],
+	var initCenter    = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
+		zoomLevel     = ZOOM,
+        indivMarkers  = [], // Array to store the individual markers that will be shown
+        largeClusters = [], // Array to store the clusters with no less than 5 tickets.
+        smallClusters = [], // Array to store the ids of clusters with less than 5 tickets.
+        map           = new google.maps.Map(document.getElementById('location_map'), {
+                            zoom: zoomLevel,
+                            center: initCenter,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        }),
 		// Tool in solving markers overlapping problem
 		oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true}),
 		// coordinates format: [xx.xxxxxx,xx.xxxxxx TO xx.xxxxxx,xx.xxxxxx]
@@ -128,16 +123,15 @@ google.maps.event.addDomListener(window, 'load', function () {
 				coordinates  = generateCoordinates(bounds),
 				clusterLevel = getClusterLevel(zoomLevel),
                 url          = statsUrl(coordinates, clusterLevel),
-                updateBBox   = function (i) {
-                    var href = jQuery(this).attr('href');
-                    href = URL.replaceParam(href, 'bbox', bbox);
-                    href = URL.replaceParam(href, 'zoom', zoomLevel);
-                    jQuery(this).attr('href', href);
+                updateBBox   = function (link) {
+                    var url  = link.getAttribute('href');
+
+                    url = URL.replaceParam(url, 'bbox', bbox);
+                    url = URL.replaceParam(url, 'zoom', zoomLevel);
+                    link.setAttribute('href', url);
                 };
 
-            jQuery('#resultFormatButtons a').each(updateBBox);
-            jQuery('.searchParameters .btn').each(updateBBox);
-            jQuery('#advanced-search a')    .each(updateBBox);
+            updateBBox(document.getElementById('apply_bbox_button'));
 
 			// Correspond with Solr Server
             jQuery.ajax(url, {
@@ -149,22 +143,29 @@ google.maps.event.addDomListener(window, 'load', function () {
                         centroidLat,
                         centroidLng,
                         clusterLatLng,
-                        count,
+                        count             = 0,
+                        total             = 0,
                         largeClusterIndex = 0,
                         smallClusterIndex = 0,
-                        len = 0,
-                        i   = 0;
-                    len = largeClusterIndex.length;
-                    for (i=0; i<len; i++) {
-                        largeClusters[i].setMap(null);
-                    }
+                        len               = 0,
+                        i                 = 0;
+
+                    // Remove all the markers from the map
+                    len = largeClusterIndex.length; for (i=0; i<len; i++) { largeClusters[i].setMap(null); }
+                    len =      indivMarkers.length; for (i=0; i<len; i++) {  indivMarkers[i].setMap(null); }
                     largeClusters = [];
                     smallClusters = [];
+                    indivMarkers  = [];
+
+                    // Create markers for the clusters returned from SOLR
                     for (clusterId in latStats) {
-                        centroidLat = latStats[clusterId].mean;
-                        centroidLng = lngStats[clusterId].mean;
+                        count         = latStats[clusterId].count;
+                        centroidLat   = latStats[clusterId].mean;
+                        centroidLng   = lngStats[clusterId].mean;
                         clusterLatLng = new google.maps.LatLng(centroidLat, centroidLng);
-                        count = latStats[clusterId].count;
+
+                        if (bounds.contains(clusterLatLng)) { total += count; }
+
                         if (count >= 5) {
                             largeClusters[largeClusterIndex] = new MarkerCluster(map, clusterLatLng, count);
                             largeClusterIndex += 1;
@@ -174,30 +175,30 @@ google.maps.event.addDomListener(window, 'load', function () {
                             smallClusterIndex += 1;
                         }
                     }
-                    len = indivMarkers.length;
-                    for (i=0; i<len; i++) {
-                        indivMarkers[i].setMap(null);
-                    }
-                    indivMarkers = [];
+                    document.getElementById('search_results_total').innerHTML = total;
+
+                    // If we have any small clusters, look up the data for each individual ticket
                     if (smallClusters.length > 0) {
                         jQuery.ajax(ticketsUrl(coordinates, clusterLevel, smallClusters), {
                             dataType: 'json',
                             success: function (json, status, xhr) {
-                                var tickets = json.response.docs,
-                                coordinates,
-                                latlng,
-                                markerLatLng;
+                                var tickets      = json.response.docs,
+                                    coordinates  = {},
+                                    latlng       = [],
+                                    markerLatLng = {},
+                                    len          = 0,
+                                    i            = 0;
 
                                 len = tickets.length;
                                 for (i=0; i<len; i++) {
-                                    coordinates = tickets[i].coordinates;
-                                    latlng = coordinates.split(",");
+                                    coordinates     = tickets[i].coordinates;
+                                    latlng          = coordinates.split(",");
                                     markerLatLng    = new google.maps.LatLng(latlng[0],latlng[1]);
                                     indivMarkers[i] = new google.maps.Marker({
-                                        position: markerLatLng,
-                                        map: map,
-                                        title: tickets[i].id.toString()
-                                    });
+                                                          position: markerLatLng,
+                                                               map: map,
+                                                             title: tickets[i].id.toString()
+                                                      });
                                 }
                                 len = indivMarkers.length;
                                 for (i = 0; i<len; i++) {

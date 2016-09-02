@@ -47,6 +47,9 @@ msgstr "Annuleren"
 msgid "search"
 msgstr "Zoeken"
 
+msgid "apply"
+msgstr "Toepassen"
+
 msgid "search_results"
 msgstr "Gevonden"
 
@@ -299,6 +302,9 @@ msgstr "Applicatie toevoegen"
 msgid "client_edit"
 msgstr "Applicatie wijzigen"
 
+msgid "client_id"
+msgstr "Applicatie"
+
 msgid "action"
 msgid_plural "actions"
 msgstr[0] "Actie"
@@ -468,7 +474,7 @@ msgid "longitude"
 msgstr "Longitude"
 
 msgid "bbox"
-msgstr "Selectiekader"
+msgstr "Locatie filter"
 
 msgid "enteredDate"
 msgstr "Melddatum"

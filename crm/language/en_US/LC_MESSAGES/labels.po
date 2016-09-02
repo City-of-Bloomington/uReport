@@ -47,6 +47,9 @@ msgstr "Cancel"
 msgid "search"
 msgstr "Search"
 
+msgid "apply"
+msgstr "Apply"
+
 msgid "search_results"
 msgstr "Search Results"
 
@@ -299,6 +302,9 @@ msgstr "New Application"
 msgid "client_edit"
 msgstr "Edit Application"
 
+msgid "client_id"
+msgstr "Application"
+
 msgid "action"
 msgid_plural "actions"
 msgstr[0] "Action"
@@ -468,7 +474,7 @@ msgid "longitude"
 msgstr "Longitude"
 
 msgid "bbox"
-msgstr "Bounding Box"
+msgstr "Map Filter"
 
 msgid "enteredDate"
 msgstr "Case Date"

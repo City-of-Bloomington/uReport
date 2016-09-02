@@ -123,5 +123,6 @@ a.current { border:2px solid $color-calltoaction-background; }
     h1 { font-size:1rem; }
 }
 
+#location_map { margin-top:$size-gutter; }
 #location_map dd { width:16em; }
 #locationInfo .geodata { overflow:auto; height:0; }

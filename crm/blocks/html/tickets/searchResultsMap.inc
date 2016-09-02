@@ -7,13 +7,23 @@
  * @param Apache_Solr_Response $this->solrObject
  */
 use Blossom\Classes\Block;
+use Blossom\Classes\Url;
 
 $this->_include('tickets/partials/searchResultsFormatButtons.inc');
 $c = $this->solrObject->response->numFound;
 ?>
 <section class="searchResults">
     <header>
-        <h1><?= "{$this->_('search_results')}: ($c)"; ?></h1>
+        <h1><?= "{$this->_('bbox')}: (<span id=\"search_results_total\">$c</span>)"; ?></h1>
+        <div class="tools">
+        <?php
+            $url = new Url(URl::current_url());
+            unset($url->resultFormat);
+
+            $helper = $this->template->getHelper('buttonLink');
+            echo $helper->buttonLink($url, $this->_('apply'), 'apply', null, ['id'=>'apply_bbox_button']);
+        ?>
+        </div>
     </header>
     <?php
 
@@ -21,12 +31,12 @@ $c = $this->solrObject->response->numFound;
         // Use the json_encode() to convert php variable to javascript variable.
         $centerLatitude  = DEFAULT_LATITUDE;
         $centerLongitude = DEFAULT_LONGITUDE;
-        if(isset($_GET['bbox'])) {
+        if (isset($_GET['bbox'])) {
             list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $_GET['bbox']);
             $centerLatitude  = ((float)$minLat + (float)$maxLat) / 2;
             $centerLongitude = ((float)$minLng + (float)$maxLng) / 2;
         }
-        $zoom = isset($_GET['zoom']) ? (int)$_GET['zoom'] : 15;
+        $zoom = isset($_GET['zoom']) ? (int)$_GET['zoom'] : 12;
 
         $solr_params = isset($this->solrObject->responseHeader->params)
             ?    json_encode($this->solrObject->responseHeader->params)
