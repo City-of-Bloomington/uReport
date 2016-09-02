@@ -5,14 +5,13 @@
 'use strict';
 
 google.maps.event.addDomListener(window, 'load', function () {
-	var initCenter    = new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
-		zoomLevel     = ZOOM,
+	var map_div       = document.getElementById('location_map'),
         indivMarkers  = [], // Array to store the individual markers that will be shown
         largeClusters = [], // Array to store the clusters with no less than 5 tickets.
         smallClusters = [], // Array to store the ids of clusters with less than 5 tickets.
-        map           = new google.maps.Map(document.getElementById('location_map'), {
-                            zoom: zoomLevel,
-                            center: initCenter,
+        map           = new google.maps.Map(map_div, {
+                                 zoom: ZOOM,
+                               center: new google.maps.LatLng(CENTER_LATITUDE, CENTER_LONGITUDE),
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         }),
 		// Tool in solving markers overlapping problem
@@ -108,14 +107,11 @@ google.maps.event.addDomListener(window, 'load', function () {
 				'&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')' +
 				'&start=0&rows=1000';
 		},
-		getClusterLevel = function (zoomLevel) {
-			if (zoomLevel < 10) {
-				return 6;
-			}
-			else {
-				return 10 - (Math.floor(zoomLevel / 2));
-			}
-		},
+		getClusterLevel = function (zoom) {
+            return (zoom < 10)
+                ? 6
+                : 10 - (Math.floor(zoom / 2));
+        },
 		refreshMap = function () {
 			var zoomLevel    = map.getZoom(),
 				bounds       = map.getBounds(),
@@ -211,5 +207,6 @@ google.maps.event.addDomListener(window, 'load', function () {
             });
 		};
 
+    map_div.style.height = Math.floor(document.getElementById('panel-one').getBoundingClientRect().bottom - map_div.getBoundingClientRect().top) + 'px'
 	google.maps.event.addListener(map, 'idle', refreshMap);
 });
