@@ -129,6 +129,7 @@ create table categories (
 	defaultPerson_id       int          unsigned,
 	categoryGroup_id       int          unsigned,
 	active                 boolean,
+	featured               boolean,
 	displayPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	postingPermissionLevel enum('staff', 'public', 'anonymous') not null default 'staff',
 	customFields           text,

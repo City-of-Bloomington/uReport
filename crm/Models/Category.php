@@ -109,6 +109,7 @@ class Category extends ActiveRecord
 	public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
 	public function getDescription()            { return parent::get('description');            }
 	public function getActive()                 { return parent::get('active');                 }
+	public function getFeatured()               { return parent::get('featured');               }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
 	public function getSlaDays()                { return parent::get('slaDays');                }
@@ -124,6 +125,7 @@ class Category extends ActiveRecord
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
 	public function setActive                ($s) { parent::set('active',        $s ? 1 : 0); }
+	public function setFeatured              ($s) { parent::set('featured',      $s ? 1 : 0); }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
 	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
 	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
@@ -177,7 +179,8 @@ class Category extends ActiveRecord
             $this->$set($post[$f]);
         }
 
-        $this->setActive(!empty($post['active']) ? $post['active'] : false);
+        $this->setActive  (!empty($post['active'  ]) ? $post['active'  ] : false);
+        $this->setFeatured(!empty($post['featured']) ? $post['featured'] : false);
 	}
 
 	//----------------------------------------------------------------
@@ -188,6 +191,7 @@ class Category extends ActiveRecord
 	 */
 	public function autoCloseIsActive() { return $this->getAutoCloseIsActive() ? true : false; }
 	public function isActive()          { return $this->getActive()            ? true : false; }
+	public function isFeatured()        { return $this->getFeatured()          ? true : false; }
 
 	/**
 	 * Event handler called from Ticket::handleAdd()

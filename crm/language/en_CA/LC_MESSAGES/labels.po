@@ -402,6 +402,9 @@ msgstr "Active"
 msgid "active_no"
 msgstr "Disabled"
 
+msgid "featured"
+msgstr "Featured"
+
 #. Reports that users send in are organized into Tickets
 #. A ticket can contain multiple issue reports that are related, usually by location
 msgid "ticket"

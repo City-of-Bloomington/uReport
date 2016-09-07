@@ -82,19 +82,6 @@ google.maps.event.addDomListener(window, 'load', function () {
 				'&stats=true&stats.field=latitude&stats.field=longitude&stats.facet=cluster_id_' + clusterLevel +
 				'&start=0&rows=0';
 		},
-		generateClusterIdString = function (smallClusters) {
-			var i,
-				clusterIdString = '';
-			for (i = 0; i < smallClusters.length; i += 1) {
-				if (i == 0) {
-					clusterIdString += smallClusters[i];
-				}
-				else {
-					clusterIdString += ' OR ' + smallClusters[i];
-				}
-			}
-			return clusterIdString;
-		},
 		/**
 		 * Creates the solr query url for individual tickets matching
 		 * @param string coordinates
@@ -104,7 +91,7 @@ google.maps.event.addDomListener(window, 'load', function () {
 		 */
 		ticketsUrl = function (coordinates, clusterLevel, smallClusters) {
 			return getSolrBaseUrl(coordinates) +
-				'&fq=cluster_id_' + clusterLevel + ':(' + generateClusterIdString(smallClusters) +')' +
+				'&fq=cluster_id_' + clusterLevel + ':(' + smallClusters.join(' OR ') +')' +
 				'&start=0&rows=1000';
 		},
 		getClusterLevel = function (zoom) {

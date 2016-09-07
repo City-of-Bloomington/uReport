@@ -125,7 +125,7 @@ class Field extends Helper
         $select = "<select name=\"$params[name]\" id=\"$params[id]\" $required $attr>";
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $label    = !empty($o['label'])   ? $o['label']       : $o['value'];
+                $label    = isset($o['label'])    ? $o['label']       : $o['value'];
                 $selected = $value == $o['value'] ? 'selected="true"' : '';
                 $select.= "<option value=\"$o[value]\" $selected>$label</option>";
             }
@@ -156,7 +156,7 @@ class Field extends Helper
         $radioButtons = '';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $label   = !empty($o['label'])   ? $o['label']      : $o['value'];
+                $label   = isset($o['label'])    ? $o['label']      : $o['value'];
                 $checked = $value == $o['value'] ? 'checked="true"' : '';
 
                 $radioButtons.= "<label><input name=\"$params[name]\" type=\"radio\" value=\"$o[value]\" $checked/> $label</label>";
@@ -187,7 +187,7 @@ class Field extends Helper
         $inputs = '';
         if (!empty(  $params['options'])) {
             foreach ($params['options'] as $o) {
-                $label   = !empty($o['label'])            ? $o['label']      : $o['value'];
+                $label   = isset($o['label'])             ? $o['label']      : $o['value'];
                 $checked = in_array($o['value'], $values) ? 'checked="true"' : '';
 
                 $name   = $params['name'].'['.$o['value'].']';

@@ -6,7 +6,7 @@
  */
 $services = [];
 foreach ($this->categoryList as $category) {
-	$services[] = array(
+	$s = [
 		'service_code' => "{$category->getId()}",
 		'service_name' => $category->getName(),
 		'type'         => 'realtime',
@@ -14,6 +14,8 @@ foreach ($this->categoryList as $category) {
 		'metadata'     => count($category->getCustomFields()) ? true : false,
 		'keywords'     => "",
 		'group'        => "{$category->getCategoryGroup()}"
-	);
+	];
+	if ($category->isFeatured()) { $s['featured'] = 1; }
+	$services[] = $s;
 }
 echo json_encode($services);

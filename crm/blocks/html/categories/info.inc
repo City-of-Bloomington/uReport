@@ -37,6 +37,8 @@ if (Person::isAllowed('categories', 'update')) {
 	<?php
         $autoCloseActive = $this->category->autoCloseIsActive() ? $this->_('active_yes') : $this->_('active_no');
         $status          = $this->category->isActive()          ? $this->_('active_yes') : $this->_('active_no');
+        $featured        = $this->category->isFeatured()        ? $this->_('featured')   : '';
+        $status = "$status $featured";
 
         $fields = [
             'status', 'categoryGroup', 'department', 'defaultPerson',
