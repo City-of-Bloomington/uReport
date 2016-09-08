@@ -38,9 +38,15 @@ use Application\Models\ContactMethodTable;
                     'label' => $this->_('message'),
                     'type'  => 'textarea'
                 ]);
-
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons($this->ticket->getURL());
+			?>
+			<button type="submit" class="submit"><?= $this->_('message_send'); ?></button>
+			<?php
+                $helper = $this->template->getHelper('buttonLink');
+                echo $helper->buttonLink(
+                    $this->ticket->getURL(),
+                    $this->_('cancel'),
+                    'cancel'
+                );
 			?>
 		</fieldset>
 	</form>
