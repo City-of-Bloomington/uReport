@@ -26,7 +26,6 @@ from categories where autoResponseText is not null;
 alter table categories drop autoResponseIsActive;
 alter table categories drop autoResponseText;
 
-
 update ticketHistory h
 join actions a on h.action_id=a.id
 join actions b on b.name='assignment'
@@ -37,7 +36,6 @@ alter table tickets drop foreign key FK_tickets_referredPerson_id;
 alter table tickets drop referredPerson_id;
 
 delete from actions where name='referral';
-
 
 alter table ticketHistory add issue_id int unsigned after ticket_id;
 alter table ticketHistory add constraint FK_ticketHistory_issue_id foreign key (issue_id) references issues(id);
@@ -56,6 +54,11 @@ insert actions (name,type,description) values('duplicate',      'system', '{dupl
 insert actions (name,type,description) values('update',         'system', '{enteredByPerson} updated this case.');
 insert actions (name,type,description) values('comment',        'system', '{enteredByPerson} commented on this case.');
 insert actions (name,type,description) values('upload_media',   'system', '{enteredByPerson} uploaded an attachment.');
+
+delete from ticketHistory where action_id is null and notes is null;
+delete from ticketHistory where action_id is null and notes='[data cleanup] Dates were missing and have been set to 1970';
+update ticketHistory set action_id=(select id from actions where name='comment') where action_id is null;
+alter table ticketHistory modify action_id int unsigned not null;
 
 drop table issue_labels;
 drop table labels;

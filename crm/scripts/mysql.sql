@@ -220,7 +220,7 @@ create table ticketHistory (
 	ticket_id          int unsigned not null,
 	enteredByPerson_id int unsigned,
 	actionPerson_id    int unsigned,
-	action_id          int unsigned,
+	action_id          int unsigned not null,
 	enteredDate        timestamp    not null default CURRENT_TIMESTAMP,
 	actionDate         datetime,
 	notes              text,
