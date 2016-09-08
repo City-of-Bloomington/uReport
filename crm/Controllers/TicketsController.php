@@ -377,11 +377,11 @@ class TicketsController extends Controller
 
 		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 		$this->template->title = $this->template->_('change_location');
-		$this->template->blocks['panel-one'][] = new Block(
+		$this->template->blocks[] = new Block(
             'locations/findLocationForm.inc',
 			['includeExternalResults' => true]
 		);
-		$this->template->blocks['panel-two'][] = new Block('locations/mapChooser.inc');
+		$this->template->blocks[] = new Block('locations/mapChooser.inc');
 	}
 
 	/**

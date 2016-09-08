@@ -201,6 +201,7 @@ class TicketHistory extends ActiveRecord
                 break;
 
                 case Action::CHANGED_CATEGORY:
+                case Action::CHANGED_LOCATION:
                     $dataGroups[] = 'original';
                     $dataGroups[] = 'updated';
                 break;
