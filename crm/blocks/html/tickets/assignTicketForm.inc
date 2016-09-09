@@ -5,6 +5,9 @@
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
+use Application\Models\DepartmentTable;
+
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/assignForm.js');
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/assign">
@@ -19,6 +22,23 @@
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 					}
 				}
+
+                $helper  = $this->template->getHelper('field');
+                $table   = new DepartmentTable();
+                $list    = $table->find();
+                $options = [];
+                foreach ($list as $d) {
+                    $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())];
+                }
+                echo $helper->field([
+                    'name'    => 'department_id',
+                    'id'      => 'department_id',
+                    'label'   => $this->_(['department', 'departments', count($list)]),
+                    'value'   => $this->currentDepartment ? $this->currentDepartment->getId() : null,
+                    'type'    => 'select',
+                    'options' => $options
+                ]);
+
 				$this->_include('tickets/assignTicketFields.inc');
 				$this->_include('tickets/partials/submitAndCancelButtons.inc');
 			?>

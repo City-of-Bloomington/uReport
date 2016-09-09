@@ -36,7 +36,6 @@ class PersonChooser extends Helper
 	 */
 	public function personChooser($fieldname, Person $person=null)
 	{
-		$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser.js');
 
 		$id   = '';

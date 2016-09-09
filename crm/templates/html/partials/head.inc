@@ -5,10 +5,9 @@
         $this->_include('partials/stylesheets.inc');
         $this->addToAsset('scripts', BASE_URI.'/js/menus.js');
     ?>
+    <script type="text/javascript" src="<?= BASE_URI; ?>/js/crm.js"></script>
     <script type="text/javascript">
-		var CRM = {
-			BASE_URL: '<?= BASE_URL; ?>'
-		};
+        CRM.BASE_URL = '<?= BASE_URL; ?>';
 	</script>
     <title><?= APPLICATION_NAME; ?>: <?= self::escape($this->title); ?></title>
 </head>

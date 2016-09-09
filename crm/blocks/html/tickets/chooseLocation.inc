@@ -6,7 +6,6 @@
  */
 use Blossom\Classes\Url;
 
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseLocation.js');
 
 $return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);

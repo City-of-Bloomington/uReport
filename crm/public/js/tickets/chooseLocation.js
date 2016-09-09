@@ -9,13 +9,15 @@
  * Any link or action that can be considered selecting a person should
  * use the callback function, instead of it's normal href.
  *
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 var LOCATION_CHOOSER = {
 	popup: {},
 	setLocation: function (location, latitude, longitude) {
+        var bd = document.querySelector('#locationChooser h1');
+        bd.innerHTML = location;
+
         // Update the hidden inputs
         // Clear out any previous lat/long
         document.getElementById('location').value = location;
@@ -24,9 +26,6 @@ var LOCATION_CHOOSER = {
             document.getElementById('longitude').value = longitude;
         }
 
-        // Draw location information into the LocationChooser body
-        var bd = jQuery('#locationChooser h1');
-        bd.html(location);
         LOCATION_CHOOSER.popup.close();
 	}
 };

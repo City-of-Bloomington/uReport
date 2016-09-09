@@ -17,15 +17,15 @@
  * <span  id="reportedByPerson-name"></span>
  * <a onclick=\"PERSON_CHOOSER.open('reportedByPerson');\">Change Person</a>
  *
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 var PERSON_CHOOSER = {
 	fieldname: '',
 	popup: {},
 	open: function (e, fieldname) {
         e.preventDefault();
+        e.stopPropagation();
 
 		PERSON_CHOOSER.fieldname = fieldname;
 		PERSON_CHOOSER.popup = window.open(
@@ -36,15 +36,15 @@ var PERSON_CHOOSER = {
         return false;
 	},
 	setPerson: function (person_id) {
-        jQuery.ajax(CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id, {
-            dataType: 'json',
-            success: function (person, status, xhr) {
+        CRM.ajax(
+            CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id,
+            function (request) {
                 var id   = PERSON_CHOOSER.fieldname + '_id',
-                    name = PERSON_CHOOSER.fieldname + '-name';
-                document.getElementById(id).value       = person.id;
-                document.getElementById(name).innerHTML = person.fullname;
-                PERSON_CHOOSER.popup.close();
+                 name = PERSON_CHOOSER.fieldname + '-name';
+                 document.getElementById(id).value       = person.id;
+                 document.getElementById(name).innerHTML = person.fullname;
+                 PERSON_CHOOSER.popup.close();
             }
-        });
+        );
 	}
 }

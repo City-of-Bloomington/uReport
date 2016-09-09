@@ -5,48 +5,25 @@ var CATEGORY_CHOOSER = {
      *
      * @param int category_id
      */
-	updateCustomFields: function (category_id) {
-		var url = CRM.BASE_URL + '/tickets/add?partial=tickets/customFieldsForm.inc;category_id=' + category_id;
-        jQuery.ajax(url, {
-            dataType: 'html',
-            success: function (o, status, xhr) {
-                document.getElementById('customFields').innerHTML = o;
+	updateCustomFields: function (e) {
+		var category_id = e.target.value;
+
+        CRM.ajax(
+            CRM.BASE_URL + '/tickets/add?partial=tickets/customFieldsForm.inc;category_id=' + category_id,
+            function (request) {
+                document.getElementById('customFields').innerHTML = request.responseText;
+                CATEGORY_CHOOSER.loadDepartmentData(category_id);
             }
-        });
+        );
 	},
     loadDepartmentData: function (category_id) {
-        $.ajax(CRM.BASE_URL + '/departments/view?format=json;category_id=' + category_id, {
-            dataType: 'json',
-            success: function (department, status, xhr) {
-                CATEGORY_CHOOSER.reloadAssignedPersonOptions(department);
+        CRM.ajax(
+            CRM.BASE_URL + '/departments/view?format=json;category_id=' + category_id,
+            function (request) {
+                CRM.reloadPersonOptions(JSON.parse(request.responseText), document.getElementById('assignedPerson_id'));
             }
-        });
-    },
-    reloadAssignedPersonOptions: function (department) {
-        var url = CRM.BASE_URL + '/people?format=json;department_id=' + department.id;
-        $.ajax(url, {
-            dataType: 'json',
-            success: function (people, status, xhr) {
-                var select = document.getElementById('assignedPerson_id'),
-               options  = '',
-               selected = '',
-               len = people.length,
-               i   = 0;
+        );
 
-               for (i=0; i<len; i++) {
-                   selected = (people[i].id == department.defaultPerson_id)
-                   ? ' selected="selected"'
-                   : '';
-                   options += '<option value="' + people[i].id + '"' + selected + '>' + people[i].name + '</option>';
-               }
-               select.innerHTML = options;
-            }
-        });
     }
 };
-jQuery(function ($) {
-    $('#category_id').on('change', function (e) {
-        CATEGORY_CHOOSER.updateCustomFields(e.target.value);
-        CATEGORY_CHOOSER.loadDepartmentData(e.target.value);
-    });
-});
+document.getElementById('category_id').addEventListener('change', CATEGORY_CHOOSER.updateCustomFields, false);

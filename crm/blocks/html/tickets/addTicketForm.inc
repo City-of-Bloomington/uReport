@@ -17,7 +17,6 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
 		<fieldset><legend><?= $this->_('category'); ?></legend>
 		<?php
-			$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
 			$this->return_url = BASE_URL.'/tickets/add';
 			$this->_include('tickets/partials/chooseCategoryFields.inc');
