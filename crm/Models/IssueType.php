@@ -40,7 +40,7 @@ class IssueType extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('issueTypes/unknownIssueType');
+					throw new \Exception('issueTypes/unknown');
 				}
 			}
 		}

@@ -2,11 +2,11 @@
 /**
  * Represents a saved URL for a user
  *
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -41,7 +41,7 @@ class Bookmark extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('bookmarks/unknownBookmark');
+					throw new \Exception('bookmarks/unknown');
 				}
 			}
 		}

@@ -1,1 +1,0 @@
-<p>You must provide some information about the issue.</p>

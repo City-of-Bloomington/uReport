@@ -39,7 +39,7 @@ class GeoCluster extends ActiveRecord
                     $this->exchangeArray($result->current());
                 }
 				else {
-					throw new \Exception('geoclusters/unknownCluster');
+					throw new \Exception('geoclusters/unknown');
 				}
 			}
 		}

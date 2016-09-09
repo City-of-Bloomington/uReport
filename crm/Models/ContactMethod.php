@@ -39,7 +39,7 @@ class ContactMethod extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('contactMethods/unknownContactMethod');
+					throw new \Exception('contactMethods/unknown');
 				}
 			}
 		}

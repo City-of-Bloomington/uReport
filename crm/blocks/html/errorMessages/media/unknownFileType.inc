@@ -1,1 +1,0 @@
-<p>You are not allowed to upload files of that type.</p>

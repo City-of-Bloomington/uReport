@@ -31,7 +31,7 @@ class Open311Client
 	{
 		// Make sure we have a valid api_key
 		if (!empty($open311Post['api_key'])) { $client = Client::loadByApiKey($open311Post['api_key']); }
-		else { throw new \Exception('clients/unknownClient'); }
+		else { throw new \Exception('clients/unknown'); }
 
 		$ticketPost = array(
 			'client_id'       => $client->getId(),

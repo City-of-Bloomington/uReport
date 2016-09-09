@@ -52,7 +52,7 @@ class Person extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('people/unknownPerson');
+					throw new \Exception('people/unknown');
 				}
 			}
 		}
@@ -120,9 +120,9 @@ class Person extends ActiveRecord
 	 */
 	public function deleteUserAccount()
 	{
-		$userAccountFields = array(
+		$userAccountFields = [
 			'username', 'password', 'authenticationMethod', 'role', 'department_id'
-		);
+		];
 		foreach ($userAccountFields as $f) {
 			$this->data[$f] = null;
 		}
@@ -229,7 +229,7 @@ class Person extends ActiveRecord
 				}
 			}
 			else {
-				throw new \Exception('wrongPassword');
+				throw new \Exception('users/wrongPassword');
 			}
 		}
 		else {
@@ -542,7 +542,7 @@ class Person extends ActiveRecord
 		if ($this->getId() && $person->getId()) {
 			if($this->getId() == $person->getId()){
 				// can not merge same person throw exception
-				throw new \Exception('mergerNotAllowed');
+				throw new \Exception('people/mergerNotAllowed');
 			}
 
 			$zend_db = Database::getConnection();

@@ -39,7 +39,7 @@ class Substatus extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('substatus/unknownSubstatus');
+					throw new \Exception('substatus/unknown');
 				}
 			}
 		}

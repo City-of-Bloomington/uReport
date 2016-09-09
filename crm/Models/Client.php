@@ -26,7 +26,7 @@ class Client extends ActiveRecord
 			return new Client($result->current());
 		}
 		else {
-			throw new \Exception('clients/unknownClient');
+			throw new \Exception('clients/unknownApiKey');
 		}
 	}
 
@@ -57,7 +57,7 @@ class Client extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('clients/unknownClient');
+					throw new \Exception('clients/unknown');
 				}
 			}
 		}

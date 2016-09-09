@@ -41,7 +41,7 @@ class Email extends ActiveRecord
                     $this->exchangeArray($result->current());
                 }
                 else {
-                    throw new \Exception('emails/unknownEmail');
+                    throw new \Exception('emails/unknown');
                 }
 			}
 		}
@@ -69,7 +69,7 @@ class Email extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getLabel()) { $this->setLabel('Other'); }
-		if (!$this->getPerson_id()) { throw new \Exception('phones/missingPerson'); }
+		if (!$this->getPerson_id()) { throw new \Exception('missingRequiredFields'); }
 
 		// Make sure there's at least one email used for notifications
 		$notificationEmails = $this->getPerson()->getNotificationEmails();

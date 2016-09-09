@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Blossom\Classes\ActiveRecord;
 use Blossom\Classes\Database;
 
@@ -40,7 +40,7 @@ class Address extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('addresses/unknownAddress');
+					throw new \Exception('addresses/unknown');
 				}
 			}
 		}
@@ -67,8 +67,9 @@ class Address extends ActiveRecord
 
 	public function validate()
 	{
-		if (!$this->getAddress())   { throw new \Exception('addresses/missingRequiredFields'); }
-		if (!$this->getPerson_id()) { throw new \Exception('addresses/missingPerson'); }
+		if (!$this->getAddress() || !$this->getPerson_id()) {
+            throw new \Exception('missingRequiredFields');
+        }
 		if (!$this->getLabel()) { $this->setLabel('Home'); }
 	}
 
@@ -98,7 +99,7 @@ class Address extends ActiveRecord
 
 	public function handleUpdate($post)
 	{
-		$fields = array('label', 'address', 'city', 'state', 'zip', 'person_id');
+		$fields = ['label', 'address', 'city', 'state', 'zip', 'person_id'];
 		foreach ($fields as $key) {
 			if (isset($post[$key])) {
 				$set = 'set'.ucfirst($key);

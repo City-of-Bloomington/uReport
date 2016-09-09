@@ -47,7 +47,7 @@ class Category extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('categories/unknownCategory');
+					throw new \Exception('categories/unknown');
 				}
 			}
 		}

@@ -36,7 +36,7 @@ class TicketHistory extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('history/unknownHistory');
+					throw new \Exception('ticketHistory/unknown');
 				}
 			}
 		}
@@ -72,13 +72,8 @@ class TicketHistory extends ActiveRecord
 	 */
 	public function validate()
 	{
-		if (!$this->getAction()) {
-			throw new \Exception('history/missingAction');
-		}
-
-		if (!$this->getTicket_id()) {
-            throw new \Exception('missingRequiredFields');
-        }
+		if (!$this->getAction())    { throw new \Exception('ticketHistory/missingAction'); }
+		if (!$this->getTicket_id()) { throw new \Exception('missingRequiredFields'); }
 
 		if (!$this->data['enteredDate']) { $this->setEnteredDate('now'); }
 		if (!$this->data['actionDate'] ) { $this->setActionDate ('now'); }

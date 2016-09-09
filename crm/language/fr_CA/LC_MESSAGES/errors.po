@@ -1,0 +1,156 @@
+# Translation
+# Copyright (C) 2016 City of Bloomington
+# This file is distributed under the same license as the Blossom package.
+#
+domain "errors"
+
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 2.0\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
+"Report-Msgid-Bugs-To: ureport@googlegroups.com\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "invalidDate"
+msgstr "You provided an invalid date."
+
+msgid "invalidEndDate"
+msgstr "The end date must come after the start date"
+
+msgid "invalidLogin"
+msgstr "The username and password combination you entered is not correct."
+
+msgid "missingRequiredFields"
+msgstr "You did not include all the required fields."
+
+msgid "noAccessAllowed"
+msgstr "Sorry, you're not allowed to go there."
+
+msgid "notLoggedIn"
+msgstr "You are not logged into this site anymore."
+
+msgid "passwordCorrupted"
+msgstr "Your password is corrupted.  Please contact a system administrator for help."
+
+msgid "ldap/unknownUser"
+msgstr "That username is not in LDAP.  You cannot set LDAP authentication if the user is not in LDAP."
+
+msgid "actions/unknown"
+msgstr "That action is not in the system"
+
+msgid "addresses/unknown"
+msgstr "That address is not nin the system"
+
+msgid "bookmarks/unknown"
+msgstr "That saved search is not in the system"
+
+msgid "categories/unknown"
+msgstr "That category is not in the system"
+
+msgid "categories/missingName"
+msgstr "You must provide a name"
+
+msgid "categories/missingGroup"
+msgstr "You must provide a group"
+
+msgid "categories/missingDepartment"
+msgstr "You must provide a department"
+
+msgid "categoryGroups/unknown"
+msgstr "That group is not in the system"
+
+msgid "clients/unknownApiKey"
+msgstr "You must provide a valid api_key"
+
+msgid "clients/unknown"
+msgstr "That client is not in the system"
+
+msgid "contactMethods/unknown"
+msgstr "That contact method is not in the system"
+
+msgid "departments/unknown"
+msgstr "That department is not in the system"
+
+msgid "departments/foreignKeyViolation"
+msgstr "Could not delete the department because of a foreign key"
+
+msgid "emails/unknown"
+msgstr "That email is not in the system"
+
+msgid "issueTypes/unknown"
+msgstr "That type is not in the system"
+
+msgid "media/unknown"
+msgstr "That file is not in the system"
+
+msgid "media/uploadFailed"
+msgstr "The file you attempted to upload never made it to the server."
+
+msgid "media/fileTooBig"
+msgstr "Your file was too big"
+
+msgid "media/networkProblem"
+msgstr "There was a network communication problem."
+
+msgid "media/unknownProblem"
+msgstr "There was a problem with the server.  You might try contacting the server admin."
+
+msgid "media/invalidFileType"
+msgstr "You are not allowed to upload files of that type."
+
+msgid "media/badServerPermissions"
+msgstr "Your upload succeeded, but the server failed to save the file. Have your System Admin check the server permissions."
+
+msgid "people/unknown"
+msgstr "That person is not in our system"
+
+msgid "people/personStillHasTickets"
+msgstr "That person still has cases associated with them"
+
+msgid "people/mergerNotAllowed"
+msgstr "Not allowed to merge people with usernames"
+
+msgid "phones/unknown"
+msgstr "That phone number is not in the system"
+
+msgid "responseTemplates/unknown"
+msgstr "That response message is not in the system"
+
+msgid "substatus/unknown"
+msgstr "That substatus is not in the system"
+
+msgid "tickets/unknown"
+msgstr "That case is not in the system"
+
+msgid "tickets/missingCategory"
+msgstr "Cases must have a category"
+
+msgid "tickets/locationOutOfBounds"
+msgstr "That location is outside of our jurisdiction"
+
+msgid "tickets/statusMismatch"
+msgstr "That substatus is not applicable"
+
+msgid "tickets/missingResolution"
+msgstr "A closed case must have a substatus"
+
+msgid "tickets/missingClosingComment"
+msgstr "The Mayor's Office requires that the resolution be documented when a case is closed.  This message should be understandable by anyone reading it, and explain how the case was resolved and how constituents were informed."
+
+msgid "ticketHistory/unknown"
+msgstr "That history entry is not in the system"
+
+msgid "ticketHistory/missingAction"
+msgstr "You must choose an Action to update the history log"
+
+msgid "users/wrongPassword"
+msgstr "The password you entered is not correct"
+
+msgid "users/passwordsDontMatch"
+msgstr "The new passwords you typed do not match"

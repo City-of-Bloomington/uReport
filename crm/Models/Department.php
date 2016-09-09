@@ -42,7 +42,7 @@ class Department extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('departments/unknownDepartment');
+					throw new \Exception('departments/unknown');
 				}
 			}
 		}

@@ -53,7 +53,7 @@ class Action extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('actions/unknownAction');
+					throw new \Exception('actions/unknown');
 				}
 			}
 
@@ -72,7 +72,7 @@ class Action extends ActiveRecord
 	public function validate()
 	{
 		if (!$this->getName() || !$this->getDescription()) {
-			throw new Exception('missingRequiredFields');
+			throw new \Exception('missingRequiredFields');
 		}
 
 		if (!$this->getType()) {

@@ -1,1 +1,0 @@
-<p>A closed ticket must have a substatus (resolution).</p>

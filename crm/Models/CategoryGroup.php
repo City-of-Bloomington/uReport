@@ -40,7 +40,7 @@ class CategoryGroup extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('categoryGroups/unknownGroup');
+					throw new \Exception('categoryGroups/unknown');
 				}
 			}
 		}

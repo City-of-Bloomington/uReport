@@ -1,1 +1,0 @@
-<p>You must choose an Action to update the history log.</p>

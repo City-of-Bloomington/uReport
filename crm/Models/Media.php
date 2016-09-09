@@ -85,7 +85,7 @@ class Media extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('media/unknownMedia');
+					throw new \Exception('media/unknown');
 				}
 			}
 		}
@@ -196,7 +196,7 @@ class Media extends ActiveRecord
             $extension = self::$mime_types[$this->data['mime_type']];
 		}
 		else {
-			throw new \Exception('media/unknownFileType');
+			throw new \Exception('media/invalidFileType');
 		}
 
 		// Clean all bad characters from the filename

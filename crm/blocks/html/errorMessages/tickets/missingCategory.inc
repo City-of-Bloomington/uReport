@@ -1,1 +1,0 @@
-<p>Tickets must have a category</p>

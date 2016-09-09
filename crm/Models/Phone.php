@@ -40,7 +40,7 @@ class Phone extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('phones/unknownPhone');
+					throw new \Exception('phones/unknown');
 				}
 			}
 		}

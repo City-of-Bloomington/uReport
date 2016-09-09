@@ -50,7 +50,7 @@ class Ticket extends ActiveRecord
                     $this->exchangeArray($result->current());
                 }
 				else {
-					throw new \Exception('tickets/unknownTicket');
+					throw new \Exception('tickets/unknown');
 				}
 			}
 		}
