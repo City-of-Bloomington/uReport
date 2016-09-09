@@ -34,17 +34,16 @@ $sql = "select  t.id            as ticket_id,
                 t.status,
                 m.name          as contactMethod,
                 c.name          as category,
-                i.description,
+                t.description,
                 d.name          as department,
                 t.location, t.city, t.state, t.zip,
                 t.latitude,
                 t.longitude
-        from issues           i
-        join tickets          t on i.ticket_id=t.id
-        left join categories  c on t.category_id=c.id
-        left join people      p on t.assignedPerson_id=p.id
-        left join departments d on p.department_id=d.id
-        left join contactMethods m on i.contactMethod_id=m.id
+        from tickets             t
+        left join categories     c on t.category_id       = c.id
+        left join people         p on t.assignedPerson_id = p.id
+        left join departments    d on p.department_id     = d.id
+        left join contactMethods m on t.contactMethod_id  = m.id
         where c.displayPermissionLevel = 'anonymous'";
 $result = $zend_db->query($sql)->execute();
 foreach ($result as $row) {
@@ -54,7 +53,7 @@ foreach ($result as $row) {
 
     $location = '';
     if (!empty($row['location'])) {
-        $l = [$row['location']];
+        $l = [ $row['location'] ];
         if (!empty($row['city' ])) { $l[] = $row['city' ]; }
         if (!empty($row['state'])) { $l[] = $row['state']; }
         if (!empty($row['zip'  ])) { $l[] = $row['zip'  ]; }
