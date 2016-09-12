@@ -689,6 +689,7 @@ class Ticket extends ActiveRecord
 
         $history = new TicketHistory();
         $history->setTicket($this);
+        $history->setEnteredDate('+2 seconds');
         $history->setAction(new Action(Action::ASSIGNED));
         $history->setActionPerson_id($this->getAssignedPerson_id());
         if (!empty($post['notes'])) {
