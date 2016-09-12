@@ -59,6 +59,7 @@ $ZEND_ACL->allow(null, 'solr', 'index');
 $ZEND_ACL->allow('Staff', [
 	'account','people','media','reports','bookmarks'
 ]);
+
 // Staff has limited permission to these controllers
 $ZEND_ACL->allow('Staff','departments',['index', 'view', 'choose']);
 $ZEND_ACL->allow('Staff','categories', ['index', 'view']);

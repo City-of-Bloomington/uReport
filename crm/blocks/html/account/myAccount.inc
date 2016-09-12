@@ -9,7 +9,7 @@
         <h1><?= $this->_('my_account'); ?></h1>
     </header>
 	<ul><li><a href="<?= BASE_URL; ?>/account"><?= $this->_('my_info'); ?></a></li>
-		<li><a href="<?= $_SESSION['USER']->getURL(); ?>"><?= $this->_('my_profile'); ?></a></li>
+		<li><a href="<?= BASE_URI; ?>/bookmarks"><?= $this->_(['bookmark', 'bookmarks', 4]); ?></a></li>
 		<?php
 			if ($_SESSION['USER']->getDepartment_id()) {
 				echo "

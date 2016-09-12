@@ -36,14 +36,14 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                 $list  = $table->find(['person_id'=>$_SESSION['USER']->getId(), 'type'=>'search']);
                 $c     = count($list);
                 if ($c) {
-                    $bookmarks = [['label'=>$this->_(['bookmark', 'bookmarks', $c]), 'url'=>BASE_URI.'/bookmarks']];
+                    $bookmarks = [];
                     foreach ($list as $b) {
                         $bookmarks[] = ['label'=>self::escape($b->getName()), 'url'=>$b->getRequestUri()];
                     }
                     $links[] = ['subgroup'=>$bookmarks];
                 }
                 $helper = $this->template->getHelper('dropdown');
-                echo $helper->dropdown($links, $this->_('search_saved'), 'search_saved');
+                echo $helper->dropdown($links, $this->_(['bookmark', 'bookmarks', count($links)]), 'search_saved');
             }
         ?>
         </div>

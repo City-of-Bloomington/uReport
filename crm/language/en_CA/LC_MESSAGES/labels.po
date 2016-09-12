@@ -316,14 +316,14 @@ msgstr "Edit Action"
 
 msgid "bookmark"
 msgid_plural "bookmarks"
-msgstr[0] "Bookmark"
-msgstr[1] "Bookmarks"
+msgstr[0] "Saved Search"
+msgstr[1] "Saved Searches"
 
 msgid "bookmark_add"
-msgstr "New Bookmark"
+msgstr "New Saved Search"
 
 msgid "bookmark_edit"
-msgstr "Edit Bookmark"
+msgstr "Edit Saved Search"
 
 #. These are the categories of things users can report to city
 #. Some example "categories" are Potholes and Graffiti

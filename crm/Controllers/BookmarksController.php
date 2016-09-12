@@ -14,6 +14,13 @@ use Blossom\Classes\Template;
 
 class BookmarksController extends Controller
 {
+	public function __construct(Template $template)
+	{
+		parent::__construct($template);
+		$this->template->setFilename('backend');
+		$this->template->blocks['panel-one'][] = new Block('account/myAccount.inc');
+	}
+
 	public function index()
 	{
 		$table = new BookmarkTable();
