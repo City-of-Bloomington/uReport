@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR=`pwd`
 BUILD=./build
-DIST=./dist
+DIST=$BUILD/dist
 
 if [ ! -d $BUILD ]
 	then mkdir $BUILD

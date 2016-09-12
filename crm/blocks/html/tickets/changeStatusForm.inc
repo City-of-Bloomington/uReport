@@ -37,7 +37,7 @@ $action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
 					}
 				}
 
-				echo $this->_('tickets/missingClosingComment.inc', 'errors');
+				echo $this->_('tickets/missingClosingComment', 'errors');
 
 				$helper = $this->template->getHelper('field');
 

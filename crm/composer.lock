@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/City-of-Bloomington/blossom-lib.git",
-                "reference": "63e3c82343b977ff1d4cf0c6f9935b4b7e943d4e"
+                "reference": "c8416ddcab96c0d4f7a7f244c911a0aa2bdadbd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/City-of-Bloomington/blossom-lib/zipball/63e3c82343b977ff1d4cf0c6f9935b4b7e943d4e",
-                "reference": "63e3c82343b977ff1d4cf0c6f9935b4b7e943d4e",
+                "url": "https://api.github.com/repos/City-of-Bloomington/blossom-lib/zipball/c8416ddcab96c0d4f7a7f244c911a0aa2bdadbd5",
+                "reference": "c8416ddcab96c0d4f7a7f244c911a0aa2bdadbd5",
                 "shasum": ""
             },
             "require": {
@@ -38,7 +38,7 @@
                 "source": "https://github.com/City-of-Bloomington/blossom-lib/tree/master",
                 "issues": "https://github.com/City-of-Bloomington/blossom-lib/issues"
             },
-            "time": "2016-08-01 17:13:40"
+            "time": "2016-09-12 14:39:04"
         },
         {
             "name": "aura/router",
