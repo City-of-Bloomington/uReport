@@ -205,7 +205,7 @@ class Person extends ActiveRecord
 
 		$method = $this->getAuthenticationMethod();
 		if ($this->getUsername() && $method && $method != 'local') {
-			$class = "Blossom\\Classes\\$method";
+            $class = $DIRECTORY_CONFIG[$method]['classname'];
 			$identity = new $class($this->getUsername());
 			$this->populateFromExternalIdentity($identity);
 		}
@@ -267,6 +267,8 @@ class Person extends ActiveRecord
 	 */
 	public function authenticate($password)
 	{
+        global $DIRECTORY_CONFIG;
+
 		if ($this->getUsername()) {
 			switch($this->getAuthenticationMethod()) {
 				case "local":
@@ -274,8 +276,9 @@ class Person extends ActiveRecord
 				break;
 
 				default:
-					$method = 'Blossom\\Classes\\'.$this->getAuthenticationMethod();
-					return $method::authenticate($this->getUsername(),$password);
+					$method = $this->getAuthenticationMethod();
+					$class = $DIRECTORY_CONFIG[$method]['classname'];
+					return $class::authenticate($this->getUsername(),$password);
 			}
 		}
 	}
