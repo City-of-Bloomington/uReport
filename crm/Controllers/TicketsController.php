@@ -379,7 +379,7 @@ class TicketsController extends Controller
 			}
 		}
 
-		$_REQUEST['return_url'] = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+		$_REQUEST['return_url'] = BASE_URI.'/tickets/view?ticket_id='.$ticket->getId();
 		$this->template->title = $this->template->_('change_location');
 		$this->template->blocks[] = new Block(
             'locations/findLocationForm.inc',

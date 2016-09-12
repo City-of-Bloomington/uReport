@@ -29,10 +29,14 @@ $location = isset($_GET['location']) ? self::escape($_GET['location']) : '';
             <?php
                 if (isset($_REQUEST['callback'])) {
                     echo "
-                    <button type=\"cancel button\" onclick=\"self.close();\">
+                    <button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
                         {$this->_('cancel')}
                     </button>
                     ";
+                }
+                elseif (isset($_REQUEST['return_url'])) {
+                    $url = self::escape($_REQUEST['return_url']);
+                    echo "<a href=\"$url\" class=\"cancel btn\">{$this->_('cancel')}</a>";
                 }
             ?>
         </fieldset>
