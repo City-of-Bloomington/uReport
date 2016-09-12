@@ -39,8 +39,10 @@ var PERSON_CHOOSER = {
         CRM.ajax(
             CRM.BASE_URL + '/people/view?format=json;person_id=' + person_id,
             function (request) {
-                var id   = PERSON_CHOOSER.fieldname + '_id',
-                 name = PERSON_CHOOSER.fieldname + '-name';
+                var id     = PERSON_CHOOSER.fieldname + '_id',
+                    name   = PERSON_CHOOSER.fieldname + '-name',
+                    person = JSON.parse(request.responseText);
+
                  document.getElementById(id).value       = person.id;
                  document.getElementById(name).innerHTML = person.fullname;
                  PERSON_CHOOSER.popup.close();

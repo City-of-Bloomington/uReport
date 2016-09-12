@@ -185,7 +185,6 @@ class Ticket extends ActiveRecord
 
         $zend_db = Database::getConnection();
         $zend_db->query('delete from ticketHistory where ticket_id=?')->execute([$this->getId()]);
-        $zend_db->query('delete from responses     where ticket_id=?')->execute([$this->getId()]);
 
 		$search = new Search();
 		$search->delete($this);
