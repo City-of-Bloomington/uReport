@@ -42,6 +42,16 @@ if ($person) {
     }
     $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
 }
+$person = $this->ticket->getAssignedPerson();
+if ($person) {
+    $name = $person->getFullname();
+    if (Person::isAllowed('people', 'view')) {
+        $uri = BASE_URI.'/people/view?person_id='.$person->getId();
+        $name = "<a href=\"$uri\">$name</a>";
+    }
+    $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
+}
+
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();

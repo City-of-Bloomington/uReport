@@ -250,14 +250,18 @@ class TicketsController extends Controller
 
 		// Handle any Department choice passed in
 		if (isset($_GET['department_id'])) {
-			try {
-				$currentDepartment = new Department($_GET['department_id']);
-			}
-			catch (\Exception $e) {
-			}
+			try { $currentDepartment = new Department($_GET['department_id']); }
+			catch (\Exception $e) { }
 		}
 		if (!isset($currentDepartment)) {
-			$currentDepartment = $_SESSION['USER']->getDepartment();
+            $person = $ticket->getAssignedPerson();
+            if ($person) {
+                $d = $person->getDepartment();
+                if ($d) { $currentDepartment = $d; }
+            }
+		}
+		if (!isset($currentDepartment)) {
+            $currentDepartment = $_SESSION['USER']->getDepartment();
 		}
 
 		// Handle any stuff the user posts
