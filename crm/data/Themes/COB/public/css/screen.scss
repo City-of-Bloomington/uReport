@@ -55,8 +55,8 @@ main {
         dl { padding:0; }
     }
 }
-.icon.slide { background-image:url('images/fa-svg/angle-left.svg'); padding-left:1.7em; }
-.btn.text   { background-image:url('images/fa-svg/reorder.svg'   ); padding-left:1.7em; }
+.icon.slide { background-image:url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
+.btn.text   { background-image:url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
 
 #ticketSearchForm {
     margin-left: $size-gutter;
@@ -102,10 +102,13 @@ tr.verified, tr.usedForNotifications {
         background-repeat: no-repeat;
         background-position: $size-gutter center;
         background-size: ($size-gutter*2) ($size-gutter*2);
-        background-image:url('images/fa-svg/check.svg');
+        background-image:url('images/fa-svg/green/check.svg');
     }
 
     td { background-color: $color-table-background; }
+
+    .edit   { background-image:url('images/fa-svg/white/pencil.svg'); }
+    .delete { background-image:url('images/fa-svg/white/times.svg' ); }
 }
 
 .pageNavigation          { margin: $size-gutter; }
