@@ -4,14 +4,11 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param TicketList $this->ticketList
  */
-$service_requests = array();
+$service_requests = [];
 foreach ($this->ticketList as $t) {
 	$c = $t->getCategory();
 	$service_name = $c ? $c->getName() : '';
 	$service_code = $c ? $c->getId()   : '';
-
-	$history = $t->getHistory();
-	$h = end($history);
 
 	$agency_responsible = '';
 	$p = $t->getAssignedPerson();
@@ -22,16 +19,16 @@ foreach ($this->ticketList as $t) {
 		}
 	}
 
-	$sr = array(
+	$sr = [
 		'service_request_id'=>$t->getId(),
 		'status'            =>$t->getStatus(),
 		'service_name'      =>$service_name,
 		'service_code'      =>$service_code,
 		'agency_responsible'=>$agency_responsible,
 		'requested_datetime'=>$t->getEnteredDate ('c'),
-		'updated_datetime'  =>$h->getLastModified('c'),
+		'updated_datetime'  =>$t->getLastModified('c'),
 		'expected_datetime' =>$t->getExpectedDate('c')
-	);
+	];
 	if ($t->getLocation())  { $sr['address']    = $t->getLocation();  }
 	if ($t->getAddressId()) { $sr['address_id'] = $t->getAddressId(); }
 	if ($t->getZip())       { $sr['zipcode']    = $t->getZip();       }

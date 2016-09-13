@@ -48,11 +48,8 @@ echo "
                 $media_url = $m->getURL();
             }
 
-			$history = $t->getHistory();
-			$latestHistory = end($history);
-
 			$address = self::escape($t->getLocation());
-			$zip = self::escape($t->getZip());
+			$zip     = self::escape($t->getZip());
 
 			echo "
 			<tr><td>{$t->getId()}</td>
@@ -61,7 +58,7 @@ echo "
 				<td>$service_code</td>
 				<td>$description</td>
 				<td>{$t->getEnteredDate('c')}</td>
-				<td>{$latestHistory->getActionDate('c')}</td>
+				<td>{$t->getLastModified('c')}</td>
 				<td>$address</td>
 				<td>{$t->getAddressId()}</td>
 				<td>{$zip}</td>
@@ -77,7 +74,7 @@ echo "
 		";
 	}
 	else {
-		echo "<p>No cases found<p>";
+		echo "<p>{$this->_('no_tickets_found', 'messages')}<p>";
 	}
 echo "
 </div>

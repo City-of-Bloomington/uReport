@@ -10,9 +10,6 @@ foreach ($this->ticketList as $t) {
 	$service_name = $c ? self::escape($c->getName()) : '';
 	$service_code = $c ? $c->getId()   : '';
 
-	$history = $t->getHistory();
-	$h = end($history);
-
 	$agency_responsible = '';
 	$p = $t->getAssignedPerson();
 	if ($p) {
@@ -30,7 +27,7 @@ foreach ($this->ticketList as $t) {
 		<service_code>$service_code</service_code>
 		<agency_responsible>$agency_responsible</agency_responsible>
 		<requested_datetime>{$t->getEnteredDate('c')}</requested_datetime>
-		<updated_datetime>{$h->getEnteredDate('c')}</updated_datetime>
+		<updated_datetime>{$t->getLastModified('c')}</updated_datetime>
 	";
 	if ($t->getLocation())  { echo '<address>'   .self::escape($t->getLocation()) .'</address>';    }
 	if ($t->getAddressId()) { echo '<address_id>'.self::escape($t->getAddressId()).'</address_id>'; }
