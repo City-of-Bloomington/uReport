@@ -644,6 +644,12 @@ msgstr "Outstanding reported cases"
 msgid "tickets_reported"
 msgstr "Reported Cases"
 
+msgid "tickets_assigned"
+msgstr "Assigned Cases"
+
+msgid "tickets_entered"
+msgstr "Entered Cases"
+
 msgid "tickets_open"
 msgstr "Open Cases"
 

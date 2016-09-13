@@ -658,7 +658,13 @@ msgid "tickets_open_reported"
 msgstr "Open meldingen"
 
 msgid "tickets_reported"
-msgstr "Meldingen"
+msgstr "Gemeld meldingen"
+
+msgid "tickets_assigned"
+msgstr "Toegewezen meldingen"
+
+msgid "tickets_entered"
+msgstr "Aangemaakt meldingen"
 
 msgid "tickets_open"
 msgstr "Open meldingen"

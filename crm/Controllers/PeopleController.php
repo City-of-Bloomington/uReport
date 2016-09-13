@@ -102,9 +102,9 @@ class PeopleController extends Controller
 			$this->template->blocks['panel-two'][] = new Block('people/stats.inc', ['person'=>$person]);
 
 			$lists = [
-				'reportedBy'=>'Reported Cases',
-				'assigned'  =>'Assigned Cases',
-				'enteredBy' =>'Entered Cases'
+				'reportedBy'=> $this->template->_('tickets_reported'),
+				'assigned'  => $this->template->_('tickets_assigned'),
+				'enteredBy' => $this->template->_('tickets_entered')
 			];
 			$disableLinks = isset($_REQUEST['disableLinks']) ? (bool)$_REQUEST['disableLinks'] : false;
 			$count = 0;
@@ -364,11 +364,11 @@ class PeopleController extends Controller
 		$this->template->blocks['left' ][] = new Block('people/personInfo.inc', ['person' =>$personA, 'disableButtons'=>true]);
 		$this->template->blocks['right'][] = new Block('people/personInfo.inc', ['person' =>$personB, 'disableButtons'=>true]);
 
-		$lists = [
-			'reportedBy'=>'Reported Cases',
-			'assigned'  =>'Assigned Cases',
-			'enteredBy' =>'Entered Cases'
-		];
+        $lists = [
+            'reportedBy'=> $this->template->_('tickets_reported'),
+            'assigned'  => $this->template->_('tickets_assigned'),
+            'enteredBy' => $this->template->_('tickets_entered')
+        ];
 		foreach ($lists as $listType=>$title) { $this->addTicketList('left',  $listType, $title, $personA, true, true); }
 		foreach ($lists as $listType=>$title) { $this->addTicketList('right', $listType, $title, $personB, true, true); }
 	}

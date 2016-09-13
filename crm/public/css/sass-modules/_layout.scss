@@ -26,8 +26,8 @@
 }
 
 .merging {
-    #left  { width:48%; float:left; }
-    #right { width:48%; float:left; }
+    #left,  .target_a { width:48%; float:left; }
+    #right, .target_b { width:48%; float:left; }
 }
 
 .tickets {

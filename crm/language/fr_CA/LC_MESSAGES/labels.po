@@ -644,6 +644,12 @@ msgstr "Cas restant"
 msgid "tickets_reported"
 msgstr "Cas déclarés"
 
+msgid "tickets_assigned"
+msgstr "Cas affectés"
+
+msgid "tickets_entered"
+msgstr "Cas entré"
+
 msgid "tickets_open"
 msgstr "Cas ouverts"
 
