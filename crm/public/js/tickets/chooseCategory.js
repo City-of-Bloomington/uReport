@@ -18,6 +18,13 @@ var CATEGORY_CHOOSER = {
 	},
     loadDepartmentData: function (category_id) {
         CRM.ajax(
+            CRM.BASE_URL + '/categories/view?format=json;category_id=' + category_id,
+            function (request) {
+                var category = JSON.parse(request.responseText);
+                document.getElementById('category_description').innerHTML = category.description;
+            }
+        );
+        CRM.ajax(
             CRM.BASE_URL + '/departments/view?format=json;category_id=' + category_id,
             function (request) {
                 CRM.reloadPersonOptions(JSON.parse(request.responseText), document.getElementById('assignedPerson_id'));

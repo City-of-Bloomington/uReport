@@ -14,8 +14,9 @@ use Blossom\Classes\Url;
 		<?php
 			if (isset($_REQUEST['category_id'])) {
 				try {
-					$c = new Category($_REQUEST['category_id']);
-					$name = self::escape($c->getName());
+					$c           = new Category($_REQUEST['category_id']);
+					$name        = self::escape($c->getName());
+					$description = self::escape($c->getDescription());
 					echo "<option value=\"{$c->getId()}\" selected=\"selected\">$name</option>";
 				}
 				catch (Exception $e) {
@@ -51,4 +52,6 @@ use Blossom\Classes\Url;
 			}
 		?>
 	</select>
+	<p id="category_description"><?= isset($description) ? $description : ''; ?></p>
+
 </div>
