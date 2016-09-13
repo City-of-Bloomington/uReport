@@ -555,10 +555,9 @@ class Person extends ActiveRecord
 			$id = (int)$person->getId();
 			$sql = "select distinct t.id from tickets t
 					left join ticketHistory th on t.id=th.ticket_id
-					left join media          m on i.id= m.ticket_id
+					left join media          m on t.id= m.ticket_id
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
-					   or (th.enteredByPerson_id=$id or th.actionPerson_id=$id)
-					   or (ih.enteredByPerson_id=$id or ih.actionPerson_id=$id)
+					   or (th.enteredByPerson_id=$id or  th.actionPerson_id=$id)
 					   or m.person_id=$id";
 			$result = $zend_db->query($sql)->execute();
 			$ticketIds = [];

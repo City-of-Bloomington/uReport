@@ -246,8 +246,7 @@ class TicketHistory extends ActiveRecord
 
             $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
 
-            foreach ($ticket->getNotificationEmails() as $email) {
-                $person = $email->getPerson();
+            foreach ($ticket->getNotificationPeople() as $person) {
                 if ($message) {
                     $response   = $this->renderVariables($message->getTemplate(), $template, $person);
                     $emailReply = $message->getReplyEmail();

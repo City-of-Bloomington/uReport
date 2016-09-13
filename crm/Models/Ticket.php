@@ -925,26 +925,27 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * Returns the notification email addresses for everyone involved with this ticket
+	 * Returns everyone involved with this ticket who has an email address
 	 *
-	 * @return array An array of Email objects
+	 * @return array An array of Person objects
 	 */
-	public function getNotificationEmails()
+	public function getNotificationPeople()
 	{
-        $emails = [];
-        $sql = "select distinct e.* from (
-                    select enteredByPerson_id  id from tickets where id=? and enteredByPerson_id is not null
+        $people = [];
+        $sql = "select distinct p.* from (
+                    select enteredByPerson_id  person_id from tickets where id=? and enteredByPerson_id  is not null
                     union
-                    select assignedPerson_id   id from tickets where id=? and assignedPerson_id  is not null
+                    select assignedPerson_id   person_id from tickets where id=? and assignedPerson_id   is not null
                     union
-                    select reportedByPerson_id id from tickets where id=? and reportedByPerson_id is not null
-                ) as p
+                    select reportedByPerson_id person_id from tickets where id=? and reportedByPerson_id is not null
+                ) as t
+                join people       p on t.person_id=p.id
                 join peopleEmails e on p.id=e.person_id
                 where usedForNotifications=1";
         $id      = $this->getId();
         $zend_db = Database::getConnection();
         $result  = $zend_db->createStatement($sql)->execute([$id, $id, $id]);
-        foreach ($result as $row) { $emails[] = new Email($row); }
-        return $emails;
+        foreach ($result as $row) { $people[] = new Person($row); }
+        return $people;
 	}
 }
