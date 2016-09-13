@@ -261,7 +261,7 @@ class Category extends ActiveRecord
 			}
 		}
 		else {
-			unset($this->data['customFields']);
+			$this->data['customFields'] = null;
 		}
 	}
 
