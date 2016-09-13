@@ -150,8 +150,8 @@ class Search
 	{
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
-            if (is_numeric($get['query'])) {
-                $get['id'] = (int)$get['query'];
+            if (preg_match('|^#?([0-9]+)|', $get['query'], $matches)) {
+                $get['id'] = (int)$matches[1];
                 unset($get['query']);
             }
         }
