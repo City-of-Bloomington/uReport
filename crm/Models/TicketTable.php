@@ -14,9 +14,9 @@ class TicketTable extends TableGateway
 	/**
 	 * The set of fields we want to display in search results by default
 	 */
-	public static $defaultFieldsToDisplay = array(
-		'enteredDate'=>'on', 'location'=>'on', 'description'=>'on', 'category_id'=>'on'
-	);
+	public static $defaultFieldsToDisplay = [
+		'enteredDate'=>'on', 'location'=>'on', 'description'=>'on', 'category_id'=>'on', 'status'=>'on'
+	];
 
 	public function __construct() { parent::__construct('tickets', __namespace__.'\Ticket'); }
 

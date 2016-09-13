@@ -609,7 +609,7 @@ msgid "change_status"
 msgstr "Change Status"
 
 msgid "add_response"
-msgstr "Record a response"
+msgstr "Log a call"
 
 msgid "assignment_notes"
 msgstr "Notes to the assignee"

@@ -89,7 +89,7 @@ foreach ($tickets as $ticket) {
 	echo "
 		<article>
             <header>
-                <h1><span class=\"status\">$status $substatus_id</span>
+                <h1><span class=\"status $status\">$status $substatus_id</span>
                     <a href=\"{$ticket->getURL()}\" class=\"ticket_id\">#{$ticket->getId()}</a>
                 </h1>
                 <h2 class=\"category\">$category_id</h2>

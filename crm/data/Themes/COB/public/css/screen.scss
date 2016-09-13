@@ -112,9 +112,12 @@ tr.verified, tr.usedForNotifications {
 .pageNavigation li       { display:inline; margin: $size-gutter; }
 a.current { border:2px solid $color-calltoaction-background; }
 
-.ticketInfo header {
+.searchResultsRows header, .ticketInfo header {
     h1 { display:block; margin-bottom:0; }
-    .status { float:right; }
+    .status {
+        float:right;
+        &.open { color:$color-status-open; }
+    }
     .tools { position:relative; top:-1.8em; left:7em; }
 }
 .history article {

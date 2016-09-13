@@ -67,7 +67,7 @@ if ($cf) {
 
 <section class="ticketInfo">
     <header>
-        <h1><span class="status"><?= $status; ?></span>
+        <h1><span class="status <?= $status; ?>"><?= $status; ?></span>
             <a href="<?= $this->ticket->getURL(); ?>" class="ticket_id">#<?= $ticket_id; ?></a>
         </h1>
         <div class="tools">
