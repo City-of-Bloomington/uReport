@@ -55,7 +55,9 @@ class Category extends ActiveRecord
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
 			$this->setActive(true);
-			$this->setDepartment($_SESSION['USER']->getDepartment());
+			if (isset($_SESSION['USER'])) {
+                $this->setDepartment($_SESSION['USER']->getDepartment());
+			}
 		}
 	}
 

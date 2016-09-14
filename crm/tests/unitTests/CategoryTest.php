@@ -36,7 +36,8 @@ class CategoryTest extends PHPUnit_Framework_TestCase
             // The rest of these fields would cause hits to the database if we set values for them
             // We have left them empty so we can do clean unit tests.
             // These fields would need to be tested in the database tests.
-            'department_id'=>'', 'categoryGroup_id'=>'','customFields'=>'', 'autoCloseSubstatus_id'=>''
+            'department_id'=>'', 'categoryGroup_id'=>'','customFields'=>'',
+            'autoCloseSubstatus_id'=>'', 'defaultPerson_id'=>''
         ];
 
         $category = new Category();
