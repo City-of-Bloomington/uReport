@@ -173,7 +173,7 @@ class Ticket extends ActiveRecord
 
 	public function save()
 	{
-		$this->setLastModified(date(DATE_FORMAT));
+		$this->setLastModified('now');
 		parent::save();
 		if ($this->needToUpdateClusters) { GeoCluster::updateTicketClusters($this); }
 		$this->updateSearchIndex();
@@ -336,7 +336,7 @@ class Ticket extends ActiveRecord
 		$newStatus = $this->getStatus();
 		if ($newStatus == 'closed') {
 			if ($newStatus != $oldStatus || $this->getSubstatus_id() != $oldSubStatusId) {
-				$this->setClosedDate(date(DATE_FORMAT));
+				$this->setClosedDate('now');
 			}
 		}
 	}

@@ -35,22 +35,21 @@ class TicketTable extends TableGateway
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {
-						case 'start_date':
-							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
-							$select->where("tickets.enteredDate>='$d'");
-							break;
-						case 'end_date':
-							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
-							$select->where("tickets.enteredDate<='$d'");
-							break;
-						case 'lastModified_before':
-							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
-							$select->where("tickets.lastModified<='$d'");
-							break;
-						case 'lastModified_after':
-							$d = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($value));
-							$select->where("tickets.lastModified>='$d'");
-							break;
+                        case 'start_date':
+                        case 'end_date':
+                        case 'lastModified_before':
+                        case 'lastModified_after':
+                            if (get_class($value) !== 'DateTime') { throw new \Exception('invalidDate'); }
+                            $datetime = $value->format(ActiveRecord::MYSQL_DATETIME_FORMAT);
+
+                            switch ($key) {
+                                case          'start_date': $select->where("tickets.enteredDate  >= '$datetime'"); break;
+                                case            'end_date': $select->where("tickets.enteredDate  <= '$datetime'"); break;
+                                case 'lastModified_before': $select->where("tickets.lastModified <= '$datetime'"); break;
+                                case  'lastModified_after': $select->where("tickets.lastModified >= '$datetime'"); break;
+                            }
+                        break;
+
 						case 'bbox':
 							$bbox = explode(',', $value);
 							if (count($bbox) == 4) {

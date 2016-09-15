@@ -89,7 +89,8 @@ class Category extends ActiveRecord
 	}
 
 	public function save() {
-		$this->setLastModified(date(DATE_FORMAT));
+		$this->setLastModified('now');
+
 		parent::save();
 
 		if ($this->displayPermissionLevelHasChanged || $this->slaDaysHasChanged) {
