@@ -29,14 +29,14 @@ body > header {
         }
     }
 
-    @media screen and (min-width: $size-viewport-med) {
+    @media all and (min-width: $size-viewport-med) {
         position: relative;
         > .container { }
     }
-    @media screen and (min-width: $size-viewport-large) {
+    @media all and (min-width: $size-viewport-large) {
         > .container { }
     }
-    @media screen and (max-height: $size-viewport-notTall) {
+    @media all and (max-height: $size-viewport-notTall) {
         border-top: 0;
     }
 

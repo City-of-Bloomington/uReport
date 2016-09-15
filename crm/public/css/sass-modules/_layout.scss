@@ -31,8 +31,10 @@
 }
 
 .tickets {
-    #content-panel { width:500px; float:left; }
-    #panel-one { margin-left:510px; }
+    @media all and (min-width:960px) {
+        #content-panel { width:500px; float:left; }
+        #panel-one { margin-left:510px; }
+    }
 }
 
 footer { clear:both; }
