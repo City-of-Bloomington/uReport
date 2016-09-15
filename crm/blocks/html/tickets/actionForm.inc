@@ -20,7 +20,7 @@
                     'id'    => 'actionDate',
                     'label' => $this->_('date'),
                     'type'  => 'date',
-                    'value' => $this->ticketHistory->getActionDate('U')
+                    'value' => $this->ticketHistory->getActionDate(DATE_FORMAT)
                 ]);
                 echo $helper->field([
                     'name'  => 'notes',

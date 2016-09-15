@@ -55,7 +55,6 @@ if ($person) {
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();
-    print_r($data);
     foreach ($cf as $definition) {
         $fieldname = $definition->name;
         $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);

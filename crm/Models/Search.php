@@ -198,14 +198,23 @@ class Search
 			}
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
+                    $utc = new \DateTimeZone('UTC');
+
 					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
-						$startDate = !empty($get[$field]['start'])
-							? date(self::DATE_FORMAT, strtotime($get[$field]['start']))
-							: '*';
-						$endDate = !empty($get[$field]['end'])
-							? date(self::DATE_FORMAT, strtotime($get[$field]['end']))
-							: '*';
-						$fq[] = "$field:[$startDate TO $endDate]";
+                        if (!empty(  $get[$field]['start'])) {
+                                     $get[$field]['start']->setTimezone($utc);
+                            $start = $get[$field]['start']->format(self::DATE_FORMAT);
+                        }
+                        else { $startDate = '*'; }
+
+
+                        if (!empty($get[$field]['end'])) {
+                                   $get[$field]['end']->setTimezone($utc);
+                            $end = $get[$field]['end']->format(self::DATE_FORMAT);
+                        }
+                        else { $endDate = '*'; }
+
+						$fq[] = "$field:[$start TO $end]";
 					}
 				}
 				// coordinates is a not a numeric value but does not need to be quoted.

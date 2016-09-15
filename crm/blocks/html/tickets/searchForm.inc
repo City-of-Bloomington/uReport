@@ -145,22 +145,16 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                     ";
                     $fieldHelper = $this->template->getHelper('field');
                     foreach (['start', 'end'] as $d) {
-                        $$d = '';
+                        $value = '';
                         if (!empty($_GET['enteredDate'][$d])) {
-                            try {
-                                $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
-                                $$d = $date->format('U');
-                            }
-                            catch (\Exception $e) {
-                                // Ignore incorrectly formatted dates
-                            }
+                            $value = self::escape($_GET['enteredDate'][$d]);
                         }
                         $html.= $fieldHelper->field([
                             'name'  => "enteredDate[$d]",
                             'id'    => "enteredDate-$d",
                             'label' => $this->_($d),
                             'type'  => 'date',
-                            'value' => $$d
+                            'value' => $value
                         ]);
                     }
                     $html.= "
