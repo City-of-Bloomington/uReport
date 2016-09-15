@@ -336,6 +336,12 @@ class TicketsController extends Controller
 
             if (isset($_POST['ticket_id'])) {
                 try {
+                    $_POST['actionDate'] = \DateTime::createFromFormat(
+                        DATE_FORMAT.' '.TIME_FORMAT,
+                        $_POST['actionDate']['date'].' '.$_POST['actionDate']['time']
+                    );
+                    if (!$_POST['actionDate']) { throw new \Exception('invalidDate'); }
+
                     $history->handleUpdate($_POST);
                     $history->save();
                     $this->redirectToTicketView($ticket);

@@ -248,6 +248,9 @@ msgstr "Champs à afficher"
 msgid "date"
 msgstr "Date"
 
+msgid "time"
+msgstr "Temps"
+
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Jour"

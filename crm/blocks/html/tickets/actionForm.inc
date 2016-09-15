@@ -16,12 +16,20 @@
 			<?php
                 $helper = $this->template->getHelper('field');
                 echo $helper->field([
-                    'name'  => 'actionDate',
-                    'id'    => 'actionDate',
+                    'name'  => 'actionDate[date]',
+                    'id'    => 'actionDate_date',
                     'label' => $this->_('date'),
                     'type'  => 'date',
                     'value' => $this->ticketHistory->getActionDate(DATE_FORMAT)
                 ]);
+                echo $helper->field([
+                    'name'  => 'actionDate[time]',
+                    'id'    => 'actionDate_time',
+                    'label' =>$this->_('time'),
+                    'type'  =>'time',
+                    'value' =>$this->ticketHistory->getActionDate(TIME_FORMAT)
+                ]);
+
                 echo $helper->field([
                     'name'  => 'notes',
                     'id'    => 'notes',

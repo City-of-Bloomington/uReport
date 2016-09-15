@@ -38,6 +38,10 @@ class Field extends Helper
                     $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
                     $renderInput = 'input';
                 break;
+                case 'time':
+                    $params['attr']['placeholder'] = View::translateDateString(TIME_FORMAT);
+                    $renderInput = 'input';
+                break;
 
                 case 'select':
                 case 'textarea':
