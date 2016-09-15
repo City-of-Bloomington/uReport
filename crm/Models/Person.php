@@ -389,7 +389,7 @@ class Person extends ActiveRecord
 				$search[$field] = $this->getId();
 			}
 			else {
-				$search = array($field=>$this->getId());
+				$search = [$field=>$this->getId()];
 			}
 			$table = new TicketTable();
 			return $table->find($search);

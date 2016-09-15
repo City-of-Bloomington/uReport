@@ -150,12 +150,22 @@ class Open311Controller extends Controller
 					return;
 				}
 			}
-			if (!empty($_REQUEST['start_date']))     { $search['start_date']          = $_REQUEST['start_date'];     }
-			if (!empty($_REQUEST['end_date']))       { $search['end_date']            = $_REQUEST['end_date'];       }
-			if (!empty($_REQUEST['status']))         { $search['status']              = $_REQUEST['status'];         }
-			if (!empty($_REQUEST['updated_before'])) { $search['lastModified_before'] = $_REQUEST['updated_before']; }
-			if (!empty($_REQUEST['updated_after']))  { $search['lastModified_after']  = $_REQUEST['updated_after'];  }
-			if (!empty($_REQUEST['bbox']))           { $search['bbox']                = $_REQUEST['bbox'];           }
+
+			$tz = new \DateTimeZone(date_default_timezone_get());
+			$datefields = [
+                'start_date'     => 'start_date',
+                'end_date'       => 'end_date',
+                'updated_before' => 'lastModified_before',
+                'updated_after'  => 'lastModified_after'
+			];
+			foreach ($datefields as  $open311Field=>$ureportField) {
+                if (!empty($_REQUEST[$open311Field])) {
+                    $search[$ureportField] = new \DateTime($_REQUEST[$open311Field]);
+                    $search[$ureportField]->setTimezone($tz);
+                }
+			}
+
+			if (!empty($_REQUEST['bbox'])) { $search['bbox'] = $_REQUEST['bbox']; }
 
 			$pageSize = 1000;
 			if (!empty($_REQUEST['page_size'])) {
