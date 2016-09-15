@@ -247,23 +247,25 @@ class TicketHistory extends ActiveRecord
             $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
 
             foreach ($ticket->getNotificationPeople() as $person) {
-                if ($message) {
-                    $response   = $this->renderVariables($message->getTemplate(), $template, $person);
-                    $emailReply = $message->getReplyEmail();
-                }
-                else {
-                    $response   = '';
-                    $emailReply = $category->getNotificationReplyEmail();
-                }
+                if ($category->allowsDisplay($person)) {
+                    if ($message) {
+                        $response   = $this->renderVariables($message->getTemplate(), $template, $person);
+                        $emailReply = $message->getReplyEmail();
+                    }
+                    else {
+                        $response   = '';
+                        $emailReply = $category->getNotificationReplyEmail();
+                    }
 
-                $description = $this->getDescription($template, $person);
-                $block = new \Blossom\Classes\Block('notifications/history.inc', [
-                    'ticket'            => $ticket,
-                    'actionDescription' => $description,
-                    'autoResponse'      => $response,
-                    'userComments'      => $notes
-                ]);
-                $person->sendNotification($block->render('txt', $template), $subject, $emailReply);
+                    $description = $this->getDescription($template, $person);
+                    $block = new \Blossom\Classes\Block('notifications/history.inc', [
+                        'ticket'            => $ticket,
+                        'actionDescription' => $description,
+                        'autoResponse'      => $response,
+                        'userComments'      => $notes
+                    ]);
+                    $person->sendNotification($block->render('txt', $template), $subject, $emailReply);
+                }
             }
         }
 	}
