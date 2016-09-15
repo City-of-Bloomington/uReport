@@ -247,6 +247,9 @@ msgstr "Fields to display"
 msgid "date"
 msgstr "Date"
 
+msgid "time"
+msgstr "Time"
+
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Day"

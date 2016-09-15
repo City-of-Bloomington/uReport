@@ -132,7 +132,7 @@ class TicketHistory extends ActiveRecord
 	public function handleUpdate($post)
 	{
 		$this->setAction_id ($post['action_id'] );
-		$this->setActionDate($post['actionDate']);
+		$this->setActionDate($post['actionDate']->format(ActiveRecord::MYSQL_DATETIME_FORMAT));
 		$this->setNotes     ($post['notes']     );
 		$this->setEnteredByPerson($_SESSION['USER']);
 		$this->setActionPerson   ($_SESSION['USER']);

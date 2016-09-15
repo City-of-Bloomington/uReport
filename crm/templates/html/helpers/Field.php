@@ -35,8 +35,11 @@ class Field extends Helper
         if (isset(  $params['type'])) {
             switch ($params['type']) {
                 case 'date':
-                    $params['value'] = !empty($params['value']) ? date(DATE_FORMAT, $params['value']) : '';
                     $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
+                    $renderInput = 'input';
+                break;
+                case 'time':
+                    $params['attr']['placeholder'] = View::translateDateString(TIME_FORMAT);
                     $renderInput = 'input';
                 break;
 

@@ -247,6 +247,9 @@ msgstr "Zichtbare velden"
 msgid "date"
 msgstr "Datum"
 
+msgid "time"
+msgstr "Tijd"
+
 msgid "day"
 msgid_plural "days"
 msgstr[0] "Dag"

@@ -62,20 +62,16 @@ $helper = $this->template->getHelper('field');
                 <h1><?= $this->_('enteredDate'); ?></h1>
                 <?php
                     foreach (['start', 'end'] as $d) {
-                        $$d = '';
+                        $value = '';
                         if (!empty($_GET['enteredDate'][$d])) {
-                            try {
-                                $date = ActiveRecord::parseDate($_GET['enteredDate'][$d], DATE_FORMAT);
-                                $$d = $date->format('U');
-                            }
-                            catch (\Exception $e) { }
+                            $value = self::escape($_GET['enteredDate'][$d]);
                         }
                         echo $helper->field([
                             'name'  => "enteredDate[$d]",
                             'id'    => "enteredDate-$d",
                             'label' => $this->_($d),
                             'type'  => 'date',
-                            'value' => $$d
+                            'value' => $value
                         ]);
                     }
                 ?>

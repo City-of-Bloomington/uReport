@@ -58,7 +58,28 @@ class TicketsController extends Controller
 		}
 
 		$search = new Search();
-		$solrObject = $search->query($_GET, $format=='raw' ? true : false);
+		$query  = $_GET;
+
+		if (isset     ($query['enteredDate']['start'])) {
+            if (!empty($query['enteredDate']['start'])) {
+                try {  $query['enteredDate']['start'] = new \DateTime($query['enteredDate']['start'].' 00:00:00'); }
+                catch (\Exception $e) {
+                    unset($query['enteredDate']['start']);
+                }
+            }
+            else {  unset($query['enteredDate']['start']); }
+		}
+		if (isset     ($query['enteredDate']['end'])) {
+            if (!empty($query['enteredDate']['end'])) {
+                try {  $query['enteredDate']['end'] = new \DateTime($query['enteredDate']['end'].' 11:59:59'); }
+                catch (\Exception $e) {
+                    unset($query['enteredDate']['end']);
+                }
+            }
+            else {  unset($query['enteredDate']['end']); }
+		}
+
+		$solrObject = $search->query($query, $format=='raw' ? true : false);
 
 		$resultBlock = ($format == 'map') ? 'searchResultsMap.inc' : 'searchResults.inc';
 		$this->template->blocks['panel-one'][] = new Block('tickets/searchForm.inc', ['solrObject'=>$solrObject]);
@@ -315,6 +336,12 @@ class TicketsController extends Controller
 
             if (isset($_POST['ticket_id'])) {
                 try {
+                    $_POST['actionDate'] = \DateTime::createFromFormat(
+                        DATE_FORMAT.' '.TIME_FORMAT,
+                        $_POST['actionDate']['date'].' '.$_POST['actionDate']['time']
+                    );
+                    if (!$_POST['actionDate']) { throw new \Exception('invalidDate'); }
+
                     $history->handleUpdate($_POST);
                     $history->save();
                     $this->redirectToTicketView($ticket);
