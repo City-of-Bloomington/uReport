@@ -59,12 +59,18 @@ if ($cf) {
         $fieldname = $definition->name;
         $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
         $value = isset($data->$fieldname)  ? $data->$fieldname : '';
-        $value = is_array($value) ? implode(', ',$value) : self::escape($value);
+        if (is_string($value)) { $value = self::escape($value); }
+        if (is_object($value)) {
+            $temp = [];
+            foreach ($value as $k=>$v) { $temp[] = $v; }
+            $value = $temp;
+        }
+        if (is_array($value)) { $value = implode(', ', $value); }
+
         if ($value) { $fields.= "<dl><dt>$label</dt><dd>$value</dd></dl>"; }
     }
 }
 ?>
-
 <section class="ticketInfo">
     <header>
         <h1><span class="status <?= $status; ?>"><?= $status; ?></span>

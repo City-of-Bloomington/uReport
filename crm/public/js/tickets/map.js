@@ -11,4 +11,7 @@ google.maps.event.addDomListener(window, 'load', function() {
         info      = new google.maps.InfoWindow({content:geodata.innerHTML});
 
     marker.addListener('click', function () { info.open(map, marker); });
+    window.onbeforeprint = function () {
+        google.maps.event.trigger(map, 'resize');
+    }
 });

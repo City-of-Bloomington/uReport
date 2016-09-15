@@ -132,3 +132,12 @@ a.current { border:2px solid $color-calltoaction-background; }
 #location_map { margin-top:$size-gutter; }
 #location_map dd { width:16em; }
 #locationInfo .geodata { overflow:auto; height:0; }
+
+@media print {
+    body > header,
+    body > footer,
+    #locationInfo .ticketList,
+    .dropdown {
+        display:none;
+    }
+}
