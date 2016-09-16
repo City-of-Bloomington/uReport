@@ -205,6 +205,8 @@ class Person extends ActiveRecord
 
 		$method = $this->getAuthenticationMethod();
 		if ($this->getUsername() && $method && $method != 'local') {
+            global $DIRECTORY_CONFIG;
+
             $class = $DIRECTORY_CONFIG[$method]['classname'];
 			$identity = new $class($this->getUsername());
 			$this->populateFromExternalIdentity($identity);
