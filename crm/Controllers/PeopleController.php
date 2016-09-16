@@ -215,7 +215,6 @@ class PeopleController extends Controller
 			}
 		}
 
-		$this->template->title = 'Update a person';
 		$this->template->title = $person->getId()
             ? $this->template->_('person_edit')
             : $this->template->_('person_add');
