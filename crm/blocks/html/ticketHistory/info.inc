@@ -33,8 +33,13 @@ use Application\Models\Action;
                     if ($event->getData()) { echo json_encode($event->getData()); }
                 break;
 			}
+
+			$notification = $event->getSentNotifications();
+			if ($notification) {
+                $this->notification = $notification;
+                $this->_include('ticketHistory/sentNotification.inc');
+			}
 			echo "</article>";
 		}
-
 	?>
 </section>

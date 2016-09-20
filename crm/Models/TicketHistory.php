@@ -108,7 +108,8 @@ class TicketHistory extends ActiveRecord
 	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id'); }
 	public function getActionPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'actionPerson_id');    }
 	public function getAction()          { return parent::getForeignKeyObject(__namespace__.'\Action', 'action_id');          }
-	public function getData() { return json_decode(parent::get('data'), true); }
+	public function getData()              { return json_decode(parent::get('data'), true); }
+	public function getSentNotifications() { return json_decode(parent::get('sentNotifications')); }
 
 	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
@@ -131,12 +132,12 @@ class TicketHistory extends ActiveRecord
 	 */
 	public function handleUpdate($post)
 	{
+		$this->setTicket_id ($post['ticket_id']);
 		$this->setAction_id ($post['action_id'] );
 		$this->setActionDate($post['actionDate']->format(ActiveRecord::MYSQL_DATETIME_FORMAT));
 		$this->setNotes     ($post['notes']     );
 		$this->setEnteredByPerson($_SESSION['USER']);
 		$this->setActionPerson   ($_SESSION['USER']);
-		$this->setTicket_id($post['ticket_id']);
 	}
 
 	//----------------------------------------------------------------
@@ -146,17 +147,15 @@ class TicketHistory extends ActiveRecord
 	 * Returns the parsed description
 	 *
 	 * @param Template $template  The template being used for output formatting
-	 * @param Person   $person    The person to whom the message will be displayed
 	 * @return string
 	 */
-	public function getDescription(Template $template, Person $person=null)
+	public function getDescription(Template $template)
 	{
 		$a = $this->getAction();
 		if ($a) {
 			return $this->renderVariables(
 				$this->getAction()->getDescription(),
-				$template,
-				$person
+				$template
 			);
 		}
 	}
@@ -177,7 +176,7 @@ class TicketHistory extends ActiveRecord
 	 * @param Person   $person    The person to whom the message will be displayed
 	 * @return string
 	 */
-	public function renderVariables($message, Template $template, Person $person=null)
+	public function renderVariables($message, Template $template)
 	{
         $placeholders = [
             'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
@@ -238,34 +237,45 @@ class TicketHistory extends ActiveRecord
         $category = $ticket->getCategory();
         $url      = $ticket->getUrl();
         $action   = $this->getAction();
-
-        $message  = $category->responseTemplateForAction($action);
         $notes    = $this->getNotes();
-        if ($message || $notes) {
+        $autoResponse  = $category->responseTemplateForAction($action);
+
+        if ($autoResponse || $notes) {
             $template = new Template('email', 'txt');
 
             $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
 
+            if ($autoResponse) {
+                $response   = $this->renderVariables($autoResponse->getTemplate(), $template);
+                $emailReply = $autoResponse->getReplyEmail();
+            }
+            else {
+                $response   = '';
+                $emailReply = $category->getNotificationReplyEmail();
+            }
+
+            $block = new \Blossom\Classes\Block('ticketHistory/notification.inc', [
+                'ticket'            => $ticket,
+                'actionDescription' => $this->getDescription($template),
+                'autoResponse'      => $response,
+                'userComments'      => $notes
+            ]);
+            $message = $block->render('txt', $template);
+
+            $notificationLog = new \stdClass();
+            $notificationLog->message = $message;
+            $notificationLog->people  = [];
+
             foreach ($ticket->getNotificationPeople() as $person) {
                 if ($category->allowsDisplay($person)) {
-                    if ($message) {
-                        $response   = $this->renderVariables($message->getTemplate(), $template, $person);
-                        $emailReply = $message->getReplyEmail();
-                    }
-                    else {
-                        $response   = '';
-                        $emailReply = $category->getNotificationReplyEmail();
-                    }
-
-                    $description = $this->getDescription($template, $person);
-                    $block = new \Blossom\Classes\Block('notifications/history.inc', [
-                        'ticket'            => $ticket,
-                        'actionDescription' => $description,
-                        'autoResponse'      => $response,
-                        'userComments'      => $notes
-                    ]);
-                    $person->sendNotification($block->render('txt', $template), $subject, $emailReply);
+                    $person->sendNotification($message, $subject, $emailReply);
+                    $notificationLog->people[] = (int)$person->getId();
                 }
+            }
+            if (count($notificationLog->people)) {
+                $sql = 'update ticketHistory set sentNotifications=? where id=?';
+                $zend_db = Database::getConnection();
+                $zend_db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
             }
         }
 	}

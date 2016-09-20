@@ -86,6 +86,9 @@ msgstr "La personne qui est entré dans l'action"
 msgid "actions_actionPerson"
 msgstr "La personne qui est dans l'action"
 
+msgid "sentNotification_to"
+msgstr "Envoyés notification à %s"
+
 msgid "contactMethods_description"
 msgstr ""
 "Ce sont les méthodes de contact disponibles dans le système. Ils sont "

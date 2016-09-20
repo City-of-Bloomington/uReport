@@ -83,6 +83,9 @@ msgstr "De persoon die de actie heeft ingevoerd"
 msgid "actions_actionPerson"
 msgstr "De persoon die de actie moet uitvoeren"
 
+msgid "sentNotification_to"
+msgstr "Stuurde een kennisgeving aan %s"
+
 msgid "contactMethods_description"
 msgstr ""
 "Dit zijn de beschikbare contactmethoden van het systeem. Deze worden gebruikt om "

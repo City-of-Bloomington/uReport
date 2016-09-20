@@ -225,6 +225,7 @@ create table ticketHistory (
 	actionDate         datetime,
 	notes              text,
 	data               text,
+	sentNotifications  text,
 	constraint FK_ticketHistory_ticket_id          foreign key (ticket_id)          references tickets(id),
 	constraint FK_ticketHistory_enteredByPerson_id foreign key (enteredByPerson_id) references people (id),
 	constraint FK_ticketHistory_actionPerson_id    foreign key (actionPerson_id)    references people (id),

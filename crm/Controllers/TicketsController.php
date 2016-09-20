@@ -99,7 +99,7 @@ class TicketsController extends Controller
 			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
 			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
             $this->template->blocks[] = new Block(
-                'tickets/history.inc',
+                'ticketHistory/info.inc',
                 ['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
             );
 
@@ -480,7 +480,7 @@ class TicketsController extends Controller
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (isset($_POST['message'])) {
                 $template = new Template('email', 'txt');
-                $block = new Block('notifications/history.inc', [
+                $block = new Block('ticketHistory/notification.inc', [
                     'ticket'       => $ticket,
                     'userComments' => $_POST['message']
                 ]);
@@ -539,10 +539,10 @@ class TicketsController extends Controller
 		$this->template->blocks[] = new Block('tickets/mergeForm.inc', ['parent'=>$parent, 'child'=>$child]);
 
 		$this->template->blocks['left' ][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$parent,'disableButtons'=>true]);
-		$this->template->blocks['left' ][] = new Block('tickets/history.inc',    ['history'=>$parent->getHistory(), 'disableComments'=>true]);
+		$this->template->blocks['left' ][] = new Block('ticketHistory/info.inc', ['history'=>$parent->getHistory(), 'disableComments'=>true]);
 
 		$this->template->blocks['right'][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$child, 'disableButtons'=>true]);
-		$this->template->blocks['right'][] = new Block('tickets/history.inc',    ['history'=>$child->getHistory(), 'disableComments'=>true]);
+		$this->template->blocks['right'][] = new Block('ticketHistory/info.inc', ['history'=>$child->getHistory(), 'disableComments'=>true]);
 	}
 
 	/**
