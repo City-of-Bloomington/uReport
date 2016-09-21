@@ -18,7 +18,7 @@ use Application\Models\Action;
 			echo "
 			<article class=\"historyItem\">
                 <header>
-                    <h1>{$event->getActionDate(DATE_FORMAT)} $description</h1>
+                    <h1>{$event->getActionDate(DATETIME_FORMAT)} $description</h1>
                 </header>
 			";
 
