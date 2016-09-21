@@ -16,9 +16,8 @@ foreach ($this->notification->people as $id) {
         $people[] = self::escape($person->getFullname());
     }
     catch (\Exception $e) { }
-
-    $people = implode(', ', $people);
 }
+$people = implode(', ', $people);
 ?>
 <article class="sentNotification collapsible">
     <h1><?= sprintf($this->_('sentNotification_to', 'messages'), $people); ?></h1>
