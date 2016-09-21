@@ -269,6 +269,9 @@ msgstr "Niveau d'autorisation pour affichage"
 msgid "displayPermissionLevel"
 msgstr "Niveau d'autorisation pour voir"
 
+msgid "anonymous"
+msgstr "anonyme"
+
 #. Label for a person when you have a phone number for them
 msgid "contact"
 msgstr "Contact"
@@ -731,9 +734,6 @@ msgstr "Activité du mois passé"
 
 msgid "activity_report"
 msgstr "Rapport d'activité"
-
-msgid "text.activity_description"
-msgstr "* Moyenne des journées passées ouvert est calculé comme combien de temps les billets sont restés ouverts pendant toute l'histoire des données."
 
 msgid "create_department"
 msgstr "Nouveau département"

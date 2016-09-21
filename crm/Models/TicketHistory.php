@@ -179,11 +179,11 @@ class TicketHistory extends ActiveRecord
 	public function renderVariables($message, Template $template)
 	{
         $placeholders = [
-            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : '',
-            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : '',
+            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : $template->_('anonymous'),
+            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : $template->_('anonymous'),
             'ticket_id'      => $this->getTicket_id(),
-            'enteredDate'    => $this->getEnteredDate(DATE_FORMAT),
-            'actionDate'     => $this->getActionDate (DATE_FORMAT)
+            'enteredDate'    => $this->getEnteredDate(DATETIME_FORMAT),
+            'actionDate'     => $this->getActionDate (DATETIME_FORMAT)
         ];
         $data = $this->getData();
         if ($data) {
@@ -200,8 +200,6 @@ class TicketHistory extends ActiveRecord
                     $dataGroups[] = 'updated';
                 break;
             }
-
-            #$dataGroups = ['original', 'updated'];
 
             foreach ($dataGroups as $type) {
                 if (!empty(  $data[$type])) {

@@ -269,6 +269,9 @@ msgstr "Posting"
 msgid "displayPermissionLevel"
 msgstr "Display"
 
+msgid "anonymous"
+msgstr "anonymous"
+
 #. Label for a person when you have a phone number for them
 msgid "contact"
 msgstr "Contact"
@@ -731,9 +734,6 @@ msgstr "Activity the past month"
 
 msgid "activity_report"
 msgstr "Activity Report"
-
-msgid "text.activity_description"
-msgstr "* Average Days spent open is calculated as how long tickets stayed open during the entire history of the data."
 
 msgid "create_department"
 msgstr "New Department"
