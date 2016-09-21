@@ -58,6 +58,10 @@ main {
 .icon.slide { background-image:url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
 .btn.text   { background-image:url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
 
+.collapsed   h1, fieldset.collapsed { background-image:url('images/fa-svg/black/angle-right.svg'); background-size:1rem; }
+.expanded    h1, fieldset.expanded  { background-image:url('images/fa-svg/black/angle-down.svg' ); background-size:1rem; }
+
+
 #ticketSearchForm {
     margin-left: $size-gutter;
     ul { list-style-type:none; padding:0 1rem; }
