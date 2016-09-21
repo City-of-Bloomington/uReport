@@ -12,6 +12,6 @@ google.maps.event.addDomListener(window, 'load', function() {
 
     marker.addListener('click', function () { info.open(map, marker); });
     window.onbeforeprint = function () {
-        google.maps.event.trigger(map, 'resize');
+        map.setCenter(marker.getPosition());
     }
 });

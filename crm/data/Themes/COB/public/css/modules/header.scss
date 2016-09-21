@@ -17,7 +17,7 @@ body > header {
         }
         h1 a {
             background:url('images/logo.svg') no-repeat left center;
-            font-size:1rem; font-weight:normal; margin:0;
+            font-size:$font-size-normal; font-weight:normal; margin:0;
             padding-left:3rem;
             background-size:2.5rem 2.5rem;
         }

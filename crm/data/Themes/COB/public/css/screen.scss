@@ -126,7 +126,7 @@ a.current { border:2px solid $color-calltoaction-background; }
 .history article {
     padding-left:1rem;
 
-    h1 { font-size:1rem; }
+    h1 { font-size:$font-size-normal; }
     .sentNotification .message { white-space:pre; }
 }
 
@@ -135,6 +135,9 @@ a.current { border:2px solid $color-calltoaction-background; }
 #locationInfo .geodata { overflow:auto; height:0; }
 
 @media print {
+    body { font-size:10pt; }
+    main { padding:0; }
+
     body > header,
     body > footer,
     #locationInfo .ticketList,
@@ -142,5 +145,10 @@ a.current { border:2px solid $color-calltoaction-background; }
         display:none;
     }
 
-    #locationInfo { page-break-before:always; }
+    .tickets {
+        #content-panel { width:48%; float:left; }
+        #panel-one     { margin-left:50%; }
+    }
+
+    #location_map { width:312px; }
 }
