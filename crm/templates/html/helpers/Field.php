@@ -36,11 +36,13 @@ class Field extends Helper
             switch ($params['type']) {
                 case 'date':
                     unset($params['type']);
+                    $params['attr']['class']       = 'date';
                     $params['attr']['placeholder'] = View::translateDateString(DATE_FORMAT);
                     $renderInput = 'input';
                 break;
                 case 'time':
                     unset($params['type']);
+                    $params['attr']['class']       = 'time';
                     $params['attr']['placeholder'] = View::translateDateString(TIME_FORMAT);
                     #$params['attr']['step'] = 60;
                     $renderInput = 'input';
