@@ -3,10 +3,14 @@
  * @copyright 2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
+// Leaving the uReport Category ID empty will result in dumping the entire
+// CRM database into a single file.  This is useful for uploading a complete
+// dataset to CKAN.
 return [
     'ckan_url'=> 'https://localhost/ckan',
     'api_key' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxx-xxxxxx',
     'resource_categories' => [
+        // CKAN Resource ID                    => uReport Category ID
         'xxxxxxxx-xxxx-xxxx-yxxx-xxxxx-xxxxxx' => ''
     ]
 ];

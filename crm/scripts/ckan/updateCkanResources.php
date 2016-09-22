@@ -17,4 +17,5 @@ foreach ($config['resource_categories'] as $resource_id=>$category_id) {
 
     Open311Client::export_data($file, $category_id);
     $ckan->upload_resource($resource_id, $file);
+    # unlink($file);
 }
