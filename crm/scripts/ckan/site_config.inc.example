@@ -1,0 +1,12 @@
+<?php
+/**
+ * @copyright 2016 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ */
+return [
+    'ckan_url'=> 'https://localhost/ckan',
+    'api_key' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxx-xxxxxx',
+    'resource_categories' => [
+        'xxxxxxxx-xxxx-xxxx-yxxx-xxxxx-xxxxxx' => ''
+    ]
+];
