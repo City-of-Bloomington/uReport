@@ -12,10 +12,10 @@ $config = include realpath(__DIR__.'/site_config.inc');
 
 $ckan = new Ckan($config);
 
-foreach ($config['resource_categories'] as $resource_id=>$category_id) {
-    $file = __DIR__."/$resource_id.csv";
+foreach ($config['resource_categories'] as $resource_id=>$ureport) {
+    $file = __DIR__."/$ureport[filename]";
 
-    Open311Client::export_data($file, $category_id);
+    Open311Client::export_data($file, $ureport['category_id']);
     $ckan->upload_resource($resource_id, $file);
     # unlink($file);
 }

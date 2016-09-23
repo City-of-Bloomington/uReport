@@ -10,7 +10,10 @@ return [
     'ckan_url'=> 'https://localhost/ckan',
     'api_key' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxx-xxxxxx',
     'resource_categories' => [
-        // CKAN Resource ID                    => uReport Category ID
-        'xxxxxxxx-xxxx-xxxx-yxxx-xxxxx-xxxxxx' => ''
+        // CKAN Resource ID
+        'xxxxxxxx-xxxx-xxxx-yxxx-xxxxx-xxxxxx' => [
+            'category_id' => '',
+            'filename'    => 'data.csv'
+        ]
     ]
 ];
