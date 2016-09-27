@@ -22,7 +22,7 @@ We are always open to new collaborators.  If you are customizing uReport, we wel
 To get started developing uReport, there are some additional requirements in order to build a working copy from source.
 
 * composer
-* sass
+* node-sass
 * GNU gettext command line tools
 * bash
 
