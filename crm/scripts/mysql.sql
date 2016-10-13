@@ -168,7 +168,7 @@ create table department_categories (
 	constraint FK_department_categories_department_id foreign key (department_id) references departments(id),
 	constraint FK_department_categories_category_id   foreign key (category_id)   references categories (id)
 );
-
+SET SQL_MODE='ALLOW_INVALID_DATES';
 create table tickets (
 	id                  int         unsigned not null primary key auto_increment,
 	parent_id           int         unsigned,
