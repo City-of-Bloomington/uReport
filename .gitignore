@@ -14,3 +14,4 @@ vendor
 .sass-cache
 screen.css
 screen.css.map
+ansible/roles/City-of-Bloomington.*
