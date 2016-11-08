@@ -1,0 +1,37 @@
+---
+# Sets up a production version
+- name: Create directory for web application
+  file: path='{{ ureport_path }}' state=directory mode=2755
+
+- name: Download release
+  get_url:
+    url: https://github.com/City-of-Bloomington/ureport/releases/download/{{ ureport_version }}/ureport-{{ ureport_version }}.tar.gz
+    dest: "{{ ureport_install_dir }}/ureport-{{ ureport_version }}.tar.gz"
+  register: release
+
+- name: Extract release
+  command: tar xzvf ureport-{{ ureport_version }}.tar.gz
+  args:
+    chdir: "{{ ureport_install_dir }}"
+  when: release.changed
+
+- name: Install release
+  command: rsync -rlv {{ ureport_install_dir }}/ureport-{{ ureport_version }}/ {{ ureport_path }}/
+  notify: ureport update permissions
+  when: release.changed
+
+- name: configure ureport application
+  template: src=site_config.inc dest={{ ureport_path }}/crm/data/
+  notify: ureport update permissions
+  tags: ureport
+
+- name: configure COB Theme
+  template: src=theme_config.inc dest={{ ureport_path }}/crm/data/Themes/COB
+  notify: ureport update permissions
+  tags: ureport
+
+- name: update createPerson script
+  template: src=createAdminUser.php dest={{ ureport_path }}/crm/scripts/
+  notify: ureport update permissions
+  tags: ureport
+

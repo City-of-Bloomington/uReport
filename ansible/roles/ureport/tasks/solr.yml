@@ -1,0 +1,12 @@
+---
+- name: Create Solr Core
+  become: true
+  become_user: solr
+  command: "{{ solr_install_dir }}/solr/bin/solr create -c {{ ureport_name }}"
+  creates: "{{ solr_home }}/data/{{ ureport_name }}"
+  register: core
+
+- name: Copy Solr Schema
+  command: "cp {{ ureport_path }}/crm/scripts/solr/schema.xml {{ solr_home }}/data/{{ ureport_name }}/conf/schema.xml"
+  when: core.changed
+  notify: restart solr
