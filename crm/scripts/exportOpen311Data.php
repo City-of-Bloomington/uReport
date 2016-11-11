@@ -7,4 +7,4 @@ use Application\Models\Open311Client;
 
 include realpath(__DIR__.'/../bootstrap.inc');
 
-Open311Client::export_data(__DIR__.'/data.csv');
+Open311Client::export_data(__DIR__.'/data.csv', 25);

@@ -19,8 +19,13 @@ class MetricsController extends Controller
     public function onTimePercentage()
     {
         if (!empty($_GET['category_id']) && !empty($_GET['numDays'])) {
-            $data = Metrics::onTimePercentage($_GET['category_id'], $_GET['numDays']);
-            $this->template->blocks[] = new Block('metrics/metric.inc', ['value'=>$data]);
+
+            $effectiveDate = !empty($_GET['effectiveDate'])
+                ? new \DateTime($_GET['effectiveDate'])
+                : new \DateTime();
+
+            $data = Metrics::onTimePercentage($_GET['category_id'], $_GET['numDays'], $effectiveDate);
+            $this->template->blocks[] = new Block('metrics/metric.inc', ['response' => $data]);
         }
     }
 }
