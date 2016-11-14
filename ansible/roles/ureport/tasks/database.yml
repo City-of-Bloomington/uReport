@@ -19,8 +19,17 @@
     config_file: /etc/mysql/debian.cnf
   when: db.changed
 
+- name: Generate createAdminUser script
+  template: src=createAdminUser.php dest={{ ureport_path }}/crm/scripts/
+  when: db.changed
+
 - name: Create first user!
   shell: php createAdminUser.php
   args:
     chdir: "{{ ureport_path }}/crm/scripts"
   when: db.changed
+
+- name: Delete createAdminUser script
+  file:
+    path: "{{ ureport_path }}/crm/scripts/createAdminUser.php"
+    state: absent

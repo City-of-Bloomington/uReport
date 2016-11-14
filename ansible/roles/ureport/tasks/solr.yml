@@ -3,10 +3,34 @@
   become: true
   become_user: solr
   command: "{{ solr_install_dir }}/solr/bin/solr create -c {{ ureport_name }}"
-  creates: "{{ solr_home }}/data/{{ ureport_name }}"
+  args:
+    creates: "{{ solr_home }}/data/{{ ureport_name }}"
   register: core
 
+- name: Turn off managed schema
+  become: true
+  become_user: solr
+  lineinfile:
+    dest: "{{ solr_home }}/data/{{ ureport_name }}/conf/solrconfig.xml"
+    regexp: '<schemaFactory class="ManagedIndexSchemaFactory">'
+    line: '  <!-- <schemaFactory class="ManagedIndexSchemaFactory">'
+  notify: restart solr
+
+- name: Turn on classic schema
+  become: true
+  become_user: solr
+  lineinfile:
+    dest: "{{ solr_home }}/data/{{ ureport_name }}/conf/solrconfig.xml"
+    regexp: "</schemaFactory>"
+    line: '  </schemaFactory> --> <schemaFactory class="ClassicIndexSchemaFactory"/>'
+  notify: restart solr
+
 - name: Copy Solr Schema
-  command: "cp {{ ureport_path }}/crm/scripts/solr/schema.xml {{ solr_home }}/data/{{ ureport_name }}/conf/schema.xml"
+  become: true
+  become_user: solr
+  copy:
+    src: schema.xml
+    dest: "{{ solr_home }}/data/{{ ureport_name }}/conf/schema.xml"
+    follow: yes
   when: core.changed
   notify: restart solr

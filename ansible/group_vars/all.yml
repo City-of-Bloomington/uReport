@@ -1,2 +1,2 @@
 solr_version: "5.5.3"
-solr_download_url: "http://192.168.56.1/{{ solr_filename }}.tgz"
+solr_download_url: "http://packages.bloomington.in.gov/Apache/{{ solr_filename }}.tgz"

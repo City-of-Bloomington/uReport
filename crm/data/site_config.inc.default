@@ -1,6 +1,5 @@
 <?php
 define('APPLICATION_NAME','CRM');
-define('LOCATION_NAME', 'City of Bloomington');
 
 /**
  * The URL to get to this site

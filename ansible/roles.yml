@@ -3,3 +3,4 @@
 - src: City-of-Bloomington.mysql
 - src: City-of-Bloomington.php
 - src: City-of-Bloomington.solr
+- src: City-of-Bloomington.nodejs
