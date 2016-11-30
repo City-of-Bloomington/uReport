@@ -205,14 +205,14 @@ class Search
                                      $get[$field]['start']->setTimezone($utc);
                             $start = $get[$field]['start']->format(self::DATE_FORMAT);
                         }
-                        else { $startDate = '*'; }
+                        else { $start = '*'; }
 
 
                         if (!empty($get[$field]['end'])) {
                                    $get[$field]['end']->setTimezone($utc);
                             $end = $get[$field]['end']->format(self::DATE_FORMAT);
                         }
-                        else { $endDate = '*'; }
+                        else { $end = '*'; }
 
 						$fq[] = "$field:[$start TO $end]";
 					}
