@@ -66,14 +66,15 @@ use Application\Templates\Helpers\ButtonLink;
                     $name = "<a href=\"$uri\">$name</a>";
 				}
 
-				$department = $user->getDepartment();
+				$department     = $user->getDepartment();
 				$departmentName = $department ? self::escape($department->getName()) : '';
+				$role           = $this->_(strtolower($user->getRole()));
 				echo "
 				<tr><td>$username</td>
 					<td>$name</td>
 					<td>$departmentName</td>
 					<td>{$user->getAuthenticationMethod()}</td>
-					<td>{$user->getRole()}</td>
+					<td>$role</td>
 					<td>$editButton</td>
 					<td>$deleteButton</td>
 				</tr>

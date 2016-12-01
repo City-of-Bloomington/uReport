@@ -52,7 +52,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/users/updateUserForm.js');
 
                 $options = [['value'=>'']];
                 global $ZEND_ACL;
-                foreach (array_reverse($ZEND_ACL->getRoles()) as $role) { $options[] = ['value'=>$role]; }
+                foreach (array_reverse($ZEND_ACL->getRoles()) as $role) { $options[] = ['value'=>$role, 'label'=>$this->_(strtolower($role))]; }
                 echo $field->field([
                     'name'    => 'role',
                     'id'      => 'role',

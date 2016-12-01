@@ -269,7 +269,16 @@ msgid "displayPermissionLevel"
 msgstr "Inzien"
 
 msgid "anonymous"
-msgstr "anoniem"
+msgstr "Anoniem"
+
+msgid "public"
+msgstr "Publiek"
+
+msgid "staff"
+msgstr "Personeel"
+
+msgid "administrator"
+msgstr "Beheerder"
 
 #. Label for a person when you have a phone number for them
 msgid "contact"
