@@ -43,6 +43,20 @@ class ReportsController extends Controller
 		$this->template->blocks[] = new Block('reports/categories.inc', ['data'=>$data]);
 	}
 
+	public function staff()
+	{
+        $data = Report::staff($_GET);
+        $this->template->title = $this->template->_('staff');
+        $this->template->blocks[] = new Block('reports/staff.inc', ['data'=>$data]);
+	}
+
+	public function person()
+	{
+        $data = Report::person($_GET);
+        $this->template->title = $this->template->_('staff');
+        $this->template->blocks[] = new Block('reports/person.inc', ['data'=>$data]);
+	}
+
 	public function sla()
 	{
         $this->template->title = $this->template->_('sla');

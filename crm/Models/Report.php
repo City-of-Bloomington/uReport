@@ -67,7 +67,7 @@ class Report
 	}
 
 	/**
-	 * @param array $get The raw GET request
+	 * @param  array $get The raw GET request
 	 * @return array
 	 */
 	public static function categories($get)
@@ -107,6 +107,70 @@ class Report
 		}
 		return $d;
 	}
+
+	/**
+	 * @param  array  $get The raw GET request
+	 * @return string
+	 */
+	private static function getInvolvementQuery($get)
+	{
+		$options = self::handleSearchParameters($get);
+
+        $action = new Action('assignment');
+        $where  = "where h.action_id={$action->getId()}";
+		$where .= $options ? " and $options" : '';
+
+		$sql = "select  ticket_id, closedDate, min(actionDate) as actionDate,
+                        actionPerson_id, firstname, lastname,
+                        datediff(ifnull(ifnull(max(nextDate), closedDate), now()), min(actionDate)) as days
+                from (
+                    select  h.ticket_id,
+                            h.actionPerson_id, p.firstname, p.lastname,
+                            h.actionDate,
+                            ( select min(actionDate) from ticketHistory x
+                              where x.ticket_id=h.ticket_id and x.action_id={$action->getId()}
+                              and x.actionDate > h.actionDate
+                            ) as nextDate,
+                            t.closedDate
+                    from ticketHistory h
+                    join tickets       t on h.ticket_id=t.id
+                    join people        p on h.actionPerson_id=p.id
+                    $where
+                    order by h.actionDate
+                ) as s
+                group by ticket_id, actionPerson_id";
+
+        return $sql;
+	}
+
+	/**
+	 * @param  array $get The raw GET request
+	 * @return array
+	 */
+	public static function staff($get)
+	{
+		$involvementSelect = self::getInvolvementQuery($get);
+
+        $sql = "select  actionPerson_id, firstname, lastname,
+                        sum(days)/count(*)             as average,
+                        (count(*) - count(closedDate)) as open,
+                        count(closedDate)              as closed
+                from (
+                    $involvementSelect
+                ) as stats
+                group by stats.actionPerson_id";
+        $zend_db = Database::getConnection();
+        $result = $zend_db->query($sql)->execute();
+        return $result;
+    }
+
+    public static function person($get)
+    {
+        $sql     = self::getInvolvementQuery($get);
+        $zend_db = Database::getConnection();
+        $result  = $zend_db->query($sql)->execute();
+        return $result;
+    }
 
 	/**
 	 * Creates a comma-separated list of numbers from a request parameter
@@ -197,6 +261,10 @@ class Report
                 ? 'anonymous'
                 : 'staff';
             $options[] = "postingPermissionLevel='$v'";
+        }
+        if (!empty(    $get['actionPerson_id'])) {
+            $id = (int)$get['actionPerson_id'];
+            $options[]  = "h.actionPerson_id=$id";
         }
 	}
 
