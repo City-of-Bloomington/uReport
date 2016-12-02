@@ -156,7 +156,7 @@ class Report
 		$involvementSelect = self::getInvolvementQuery($get);
 
         $sql = "select  actionPerson_id, firstname, lastname,
-                        sum(days)/count(*)             as average,
+                        round(sum(days)/count(*), 1)   as average,
                         (count(*) - count(closedDate)) as open,
                         count(closedDate)              as closed
                 from (

@@ -17,9 +17,9 @@ $this->_include('reports/parameters.inc');
                 <tr><th><?= $this->_('ticket'); ?></th>
                     <th></th>
                     <th>Days Responsible</th>
-                    <th><?= $this->_('assignedDate'); ?></th>
-                    <th><?= $this->_('closedDate'); ?></th>
-                    <th></th>
+                    <th><?= $this->_('assignedDate'     ); ?></th>
+                    <th><?= $this->_('closedDate'       ); ?></th>
+                    <th><?= $this->_('category'         ); ?></th>
                     <th><?= $this->_('assignedPerson_id'); ?></th>
                 </tr>
             </thead>
