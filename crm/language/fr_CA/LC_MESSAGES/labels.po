@@ -481,6 +481,12 @@ msgstr "Filtre cartographique"
 msgid "enteredDate"
 msgstr "Date du cas"
 
+msgid "assignedDate"
+msgstr "Date du affectés"
+
+msgid "closedDate"
+msgstr "Date du fermé"
+
 msgid "enteredByPerson"
 msgstr "Entré par"
 

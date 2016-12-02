@@ -15,10 +15,12 @@ $this->_include('reports/parameters.inc');
         <table>
             <thead>
                 <tr><th><?= $this->_('ticket'); ?></th>
-                    <th><?= $this->_('person'); ?></th>
-                    <th><?= $this->_('actionDate'); ?></th>
-                    <th><?= $this->_('closedDate'); ?></th>
+                    <th></th>
                     <th>Days Responsible</th>
+                    <th><?= $this->_('assignedDate'); ?></th>
+                    <th><?= $this->_('closedDate'); ?></th>
+                    <th></th>
+                    <th><?= $this->_('assignedPerson_id'); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,9 +36,11 @@ $this->_include('reports/parameters.inc');
                     echo "
                     <tr><td><a href=\"$uri\">$row[ticket_id]</a></td>
                         <td>$row[firstname] $row[lastname]</td>
+                        <td>$row[days]</td>
                         <td>{$actionDate->format(DATE_FORMAT)}</td>
                         <td>$closedDate</td>
-                        <td>$row[days]</td>
+                        <td>$row[category]</td>
+                        <td>$row[assigned_firstname] $row[assigned_lastname]</td>
                     </tr>
                     ";
                 }

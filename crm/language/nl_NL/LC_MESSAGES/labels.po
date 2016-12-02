@@ -494,6 +494,12 @@ msgstr "Locatie filter"
 msgid "enteredDate"
 msgstr "Melddatum"
 
+msgid "assignedDate"
+msgstr "Toegewezen datum"
+
+msgid "closedDate"
+msgstr "Gesloten datum"
+
 msgid "enteredByPerson"
 msgstr "Aangemaakt door"
 

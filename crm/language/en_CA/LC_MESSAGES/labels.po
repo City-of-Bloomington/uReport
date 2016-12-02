@@ -481,6 +481,12 @@ msgstr "Map Filter"
 msgid "enteredDate"
 msgstr "Case Date"
 
+msgid "assignedDate"
+msgstr "Date Assigned"
+
+msgid "closedDate"
+msgstr "Date Closed"
+
 msgid "enteredByPerson"
 msgstr "Entered By"
 

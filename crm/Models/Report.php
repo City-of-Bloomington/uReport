@@ -120,9 +120,10 @@ class Report
         $where  = "where h.action_id={$action->getId()}";
 		$where .= $options ? " and $options" : '';
 
-		$sql = "select  ticket_id, closedDate, min(actionDate) as actionDate,
+		$sql = "select  ticket_id, category, closedDate, min(actionDate) as actionDate,
                         actionPerson_id, firstname, lastname,
-                        datediff(ifnull(ifnull(max(nextDate), closedDate), now()), min(actionDate)) as days
+                        datediff(ifnull(ifnull(max(nextDate), closedDate), now()), min(actionDate)) as days,
+                        assigned_firstname, assigned_lastname
                 from (
                     select  h.ticket_id,
                             h.actionPerson_id, p.firstname, p.lastname,
@@ -131,10 +132,13 @@ class Report
                               where x.ticket_id=h.ticket_id and x.action_id={$action->getId()}
                               and x.actionDate > h.actionDate
                             ) as nextDate,
-                            t.closedDate
+                            t.closedDate, c.name as category,
+                            t.assignedPerson_id, a.firstname assigned_firstname, a.lastname assigned_lastname
                     from ticketHistory h
                     join tickets       t on h.ticket_id=t.id
                     join people        p on h.actionPerson_id=p.id
+                    join people        a on t.assignedPerson_id=a.id
+                    join categories    c on t.category_id=c.id
                     $where
                     order by h.actionDate
                 ) as s
