@@ -19,11 +19,10 @@
 - name: Create an apache config file for ureport site based on template
   template: src=ureport.conf dest=/etc/apache2/sites-available/{{ ureport_name }}.conf
   notify:
-    - restart apache
+    - apache_restart
   tags: ureport
 
 - name: a2ensite ureport
   command: a2ensite ureport
   notify:
-    - restart apache
-
+    - apache_restart
