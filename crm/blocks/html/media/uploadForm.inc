@@ -35,8 +35,8 @@ foreach (Media::$mime_types as $mime=>$ext) {
 }
 $accept = implode(',', $accept);
 
-$maxSize = sprintf($this->_('file_max_size',    'messages'), $maxSize);
-$accept  = sprintf($this->_('file_type_accept', 'messages'), $accept);
+$maxSizeHelp = sprintf($this->_('file_max_size',    'messages'), $maxSize);
+$acceptHelp  = sprintf($this->_('file_type_accept', 'messages'), $accept);
 ?>
 <div class="uploadForm">
 	<form method="post" action="<?= BASE_URL; ?>/media/upload" enctype="multipart/form-data">
@@ -50,8 +50,8 @@ $accept  = sprintf($this->_('file_type_accept', 'messages'), $accept);
 
                 echo "
                 <input name=\"MAX_FILE_SIZE\" type=\"hidden\" value=\"$maxBytes\" />
-                <div>$maxSize</div>
-                <div>$accept</div>
+                <div>$maxSizeHelp</div>
+                <div>$acceptHelp</div>
                 ";
 
 			?>
