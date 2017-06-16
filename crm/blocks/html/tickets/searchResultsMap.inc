@@ -2,7 +2,7 @@
 /**
  * Displays a map of the search results
  *
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -17,7 +17,7 @@ $c = $this->solrObject->response->numFound;
         <h1><?= "{$this->_('bbox')}: (<span id=\"search_results_total\">$c</span>)"; ?></h1>
         <div class="tools">
         <?php
-            $url = new Url(URl::current_url());
+            $url = new Url(URl::current_url(BASE_HOST));
             unset($url->resultFormat);
 
             $helper = $this->template->getHelper('buttonLink');

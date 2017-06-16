@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -28,7 +28,7 @@ $c = $this->solrObject->response->numFound;
                         : 'desc';
                 }
 
-                $url = new Url(Url::current_url());
+                $url = new Url(Url::current_url(BASE_HOST));
                 $displayableFields = TicketTable::getDisplayableFields();
                 $sortableFields = Search::$sortableFields['ticket'];
 

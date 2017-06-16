@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->data
  */
@@ -22,7 +22,7 @@ $this->_include('reports/parameters.inc');
             </thead>
             <tbody>
             <?php
-                $current_url = new Url(Url::current_url());
+                $current_url = new Url(Url::current_url(BASE_HOST));
                 $data_url    = new Url(BASE_URL.'/reports/person');
                 $data_url->parameters = $current_url->parameters;
 

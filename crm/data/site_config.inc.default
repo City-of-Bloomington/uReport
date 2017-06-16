@@ -2,11 +2,16 @@
 define('APPLICATION_NAME','CRM');
 
 /**
- * The URL to get to this site
- * Do NOT use a trailing slash
+ * URL Generation settings
+ *
+ * Do NOT use trailing slashes
+ *
+ * If your site is being proxied, change BASE_HOST to the hostname
+ * used for the outside world.
  */
-define('BASE_URL','http://localhost/crm');
-define('BASE_URI','/crm');
+define('BASE_URI' , '/crm');
+define('BASE_HOST', $_SERVER['SERVER_NAME']);
+define('BASE_URL' , 'https://'.BASE_HOST.BASE_URI);
 
 /**
  * Specify the theme directory

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
@@ -477,7 +477,7 @@ class Search
                 if (!is_array($fq)) { $fq = [$fq]; }
 
 
-                $currentUrl = new Url(Url::current_url());
+                $currentUrl = new Url(Url::current_url(BASE_HOST));
                 foreach ($fq as $filter) {
                     $deleteUrl = clone $currentUrl;
 

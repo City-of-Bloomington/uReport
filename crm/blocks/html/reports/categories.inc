@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param array $this->data
  *
@@ -20,7 +20,7 @@ $h = $this->template->getHelper('formatDuration');
         <h1><?= $this->template->title; ?></h1>
     </header>
 	<?php
-        $current_url = new Url(Url::current_url());
+        $current_url = new Url(Url::current_url(BASE_HOST));
         $search_url  = new Url(BASE_URL.'/tickets');
         $search_url->parameters = $current_url->parameters;
         unset($search_url->categories);

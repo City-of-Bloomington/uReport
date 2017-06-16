@@ -22,28 +22,9 @@ include SITE_HOME.'/site_config.inc';
 /**
  * Enable autoloading for the PHP libraries
  */
-require_once APPLICATION_HOME.'/vendor/zendframework/zend-loader/src/AutoloaderFactory.php';
-$config = [
-	'Zend\Loader\StandardAutoloader' => [
-		'namespaces' => [
-			'Application' => APPLICATION_HOME,
-			'Site'        => SITE_HOME,
-            'Blossom'     => BLOSSOM.'/src',
-            'Interop\Container'    => APPLICATION_HOME.'/vendor/container-interop/container-interop/src/Interop/Container',
-            'Zend\Stdlib'          => APPLICATION_HOME.'/vendor/zendframework/zend-stdlib/src',
-            'Zend\Permissions\Acl' => APPLICATION_HOME.'/vendor/zendframework/zend-permissions-acl/src',
-            'Zend\Paginator'       => APPLICATION_HOME.'/vendor/zendframework/zend-paginator/src',
-            'Zend\Log'             => APPLICATION_HOME.'/vendor/zendframework/zend-log/src',
-            'Zend\Loader'          => APPLICATION_HOME.'/vendor/zendframework/zend-loader/src',
-            'Zend\Db'              => APPLICATION_HOME.'/vendor/zendframework/zend-db/src',
-            'Zend\ServiceManager'  => APPLICATION_HOME.'/vendor/zendframework/zend-servicemanager/src'
-		],
-		'prefixes' => [
-			'Apache'               => APPLICATION_HOME.'/vendor/reprovinci/solr-php-client/Apache'
-		]
-	]
-];
-Zend\Loader\AutoloaderFactory::factory($config);
+$loader = require APPLICATION_HOME.'/vendor/autoload.php';
+$loader->addPsr4('Application\\', APPLICATION_HOME);
+$loader->addPsr4('Site\\', SITE_HOME);
 
 include APPLICATION_HOME.'/access_control.inc';
 

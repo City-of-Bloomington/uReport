@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -54,7 +54,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 		</fieldset>
 		<fieldset id="advanced-search">
             <?php
-                $currentUrl = new Url(Url::current_url());
+                $currentUrl = new Url(Url::current_url(BASE_HOST));
                 $html       = '';
 
                 /**

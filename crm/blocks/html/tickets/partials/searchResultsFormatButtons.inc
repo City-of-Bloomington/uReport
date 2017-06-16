@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2017 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -12,7 +12,7 @@ $fq = isset($this->solrObject->responseHeader->params->fq)
     : [];
 
 echo '<div id="resultFormatButtons">';
-    $url = new Url(URl::current_url());
+    $url = new Url(URl::current_url(BASE_HOST));
     $helper = $this->template->getHelper('buttonLink');
 
     $resultFormat = (isset($_GET['resultFormat'])) ? trim($_GET['resultFormat']) : 'text';
