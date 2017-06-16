@@ -99,10 +99,10 @@
 	<field name="id"          type="int"    indexed="true" stored="true" required="true" />
 
 	<!-- Ticket Related Fields -->
-	<field name="enteredDate"   type="date"         indexed="true" stored="true" />
+	<field name="enteredDate"   type="date"         indexed="true" stored="true" omitNorms="false" />
 	<field name="coordinates"   type="location"     indexed="true" stored="true" />
 	<field name="description"   type="text_general" indexed="true" stored="true" />
-    <field name="closedDate"    type="date"         indexed="true" stored="true" />
+    <field name="closedDate"    type="date"         indexed="true" stored="true" omitNorms="false" />
     <field name="slaDays"       type="int"          indexed="true" stored="true" />
 
 	<field name="department_id" type="int" indexed="true" stored="true" />
