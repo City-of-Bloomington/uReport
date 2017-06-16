@@ -9,5 +9,5 @@ $onclick = isset($_REQUEST['callback'])
 	: '';
 echo "
 <button type=\"submit\" class=\"submit\">{$this->_('submit')}</button>
-<a class=\"cancel btn\" href=\"{$this->ticket->getURL()}\" $onclick>{$this->_('cancel')}</a>
+<a class=\"cancel button\" href=\"{$this->ticket->getURL()}\" $onclick>{$this->_('cancel')}</a>
 ";

@@ -50,7 +50,7 @@ class PersonChooser extends Helper
 		$html = "
 		<input type=\"hidden\" name=\"{$fieldname}_id\" id=\"{$fieldname}_id\" value=\"$id\" />
 		<span id=\"{$fieldname}-name\">$name</span>
-		<a class=\"user btn\"
+		<a class=\"user button\"
 			href=\"$personChooser\"
 			onclick=\"PERSON_CHOOSER.open(event, '$fieldname');\">
 			Change Person

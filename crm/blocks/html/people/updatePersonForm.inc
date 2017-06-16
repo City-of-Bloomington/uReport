@@ -34,7 +34,7 @@ $title = $this->title ? self::escape($this->title) : $this->template->title;
 					? 'onclick="self.close();"'
 					: '';
 				echo "
-				<a class=\"cancel btn\" href=\"$return_url\" $onclick>
+				<a class=\"cancel button\" href=\"$return_url\" $onclick>
 					{$this->_('cancel')}
 				</a>
 				";

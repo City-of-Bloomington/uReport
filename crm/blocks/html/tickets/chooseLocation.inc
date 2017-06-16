@@ -15,7 +15,7 @@ echo "
 <header id=\"locationChooser\">
     <h1>$location</h1>
     <div class=\"tools\">
-        <a id=\"findAddressButton\" class=\"map btn\" href=\"$url\">
+        <a id=\"findAddressButton\" class=\"map button\" href=\"$url\">
             {$this->_('find_location')}
         </a>
     </div>

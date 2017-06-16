@@ -36,7 +36,7 @@ $location = isset($_GET['location']) ? self::escape($_GET['location']) : '';
                 }
                 elseif (isset($_REQUEST['return_url'])) {
                     $url = self::escape($_REQUEST['return_url']);
-                    echo "<a href=\"$url\" class=\"cancel btn\">{$this->_('cancel')}</a>";
+                    echo "<a href=\"$url\" class=\"cancel button\">{$this->_('cancel')}</a>";
                 }
             ?>
         </fieldset>
