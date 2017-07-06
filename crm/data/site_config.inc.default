@@ -9,9 +9,12 @@ define('APPLICATION_NAME','CRM');
  * If your site is being proxied, change BASE_HOST to the hostname
  * used for the outside world.
  */
-define('BASE_URI' , '/crm');
+define('BASE_URI' , '/application');
+#define('BASE_HOST', isset($_SERVER['HTTP_X_FORWARDED_HOST'])
+#                        ? $_SERVER['HTTP_X_FORWARDED_HOST']
+#                        : $_SERVER['SERVER_NAME']);
 define('BASE_HOST', $_SERVER['SERVER_NAME']);
-define('BASE_URL' , 'https://'.BASE_HOST.BASE_URI);
+define('BASE_URL' , "$_SERVER[REQUEST_SCHEME]://".BASE_HOST.BASE_URI);
 
 /**
  * Specify the theme directory
