@@ -1,0 +1,17 @@
+[linux]
+ureporthost
+
+[apache]
+ureporthost
+
+[php]
+ureporthost
+
+[solr]
+ureporthost
+
+[mysql]
+ureporthost
+
+[ureport]
+ureporthost

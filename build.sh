@@ -1,6 +1,5 @@
 #!/bin/bash
 APPNAME=ureport
-VERSION=2.0.2
 DIR=`pwd`
 BUILD=$DIR/build
 
@@ -29,6 +28,6 @@ cd $DIR/crm/language
 ./build_lang.sh
 
 cd $DIR
-rsync -rl --exclude-from=$DIR/buildignore --delete $DIR/ $BUILD/$APPNAME-$VERSION
+rsync -rl --exclude-from=$DIR/buildignore --delete $DIR/ $BUILD/$APPNAME
 cd $BUILD
-tar czf $APPNAME-$VERSION.tar.gz $APPNAME-$VERSION
+tar czf $APPNAME.tar.gz $APPNAME

@@ -1,0 +1,6 @@
+---
+vault_ansible_sudo_pass: password
+
+vault_ureport_db:
+    password: password
+...

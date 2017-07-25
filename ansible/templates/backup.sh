@@ -7,7 +7,7 @@
 # Where to store the nightly backup tarballs
 APPLICATION_NAME="ureport"
 MYSQLDUMP=`which mysqldump`
-MYSQL_DBNAME="${APPLICATION_NAME}"
+MYSQL_DBNAME="{{ ureport_db.name }}"
 MYSQL_CREDENTIALS="/etc/cron.daily/backup.d/${APPLICATION_NAME}.cnf"
 BACKUP_DIR="/srv/backups/${APPLICATION_NAME}"
 APPLICATION_HOME="/srv/sites/${APPLICATION_NAME}"

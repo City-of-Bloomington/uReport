@@ -1,1 +1,0 @@
-You might consider doing database dumps into this directory, for backup

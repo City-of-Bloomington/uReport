@@ -1,0 +1,69 @@
+---
+- hosts: ureport
+  become: yes
+  roles:
+    - City-of-Bloomington.mysql
+    - City-of-Bloomington.php
+    - City-of-Bloomington.solr
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - imagemagick
+
+    - name: Create mysql database
+      mysql_db:
+        config_file: "{{ mysql_defaults_extra_file }}"
+        name: "{{ ureport_db.name }}"
+        state: present
+      no_log: True
+
+    - name: Create mysql user for site
+      mysql_user:
+        name:     "{{ ureport_db.username }}"
+        password: "{{ ureport_db.password }}"
+        priv:     "{{ ureport_db.name }}.*:ALL"
+        state: present
+        config_file: "{{ mysql_defaults_extra_file }}"
+      no_log: True
+
+    - name: Extract release
+      unarchive:
+        src: "{{ ureport_archive_path }}"
+        dest: /usr/local/src
+      register: release
+
+    - name: Install release
+      command: rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/
+      when: release.changed
+
+    - name: Update permissions
+      file: path=/srv/sites state=directory owner=www-data group=staff mode="g+rw" recurse=yes
+
+    - name: Update apache configuration
+      template:
+        src: ureport.conf
+        dest: /etc/apache2/sites-enabled/conf.d/ureport.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: apache_restart
+
+    - name: Create backup directory
+      file: path=/srv/backups/ureport state=directory group=staff mode="g+rw" recurse=yes
+
+    - name: Install CRON backup script
+      template:
+        src: backup.sh
+        dest: /etc/cron.daily/backup.d/ureport
+        mode: 0755
+
+    - name: Install CRON backup credentials
+      template:
+        src: backup.cnf
+        dest: /etc/cron.daily/backup.d/ureport.cnf
+        mode: 0400
+...

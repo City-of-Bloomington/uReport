@@ -1,2 +1,16 @@
 solr_version: "5.5.3"
 solr_download_url: "http://packages.bloomington.in.gov/Apache/{{ solr_filename }}.tgz"
+
+ureport_archive_path: ../build/ureport.tar.gz
+ureport_install_path: "/srv/sites/ureport"
+ureport_backup_path: "/srv/backups/ureport"
+
+ureport_base_uri: /ureport
+ureport_base_url: https://{{ ansible_host }}{{ ureport_base_uri }}
+
+ureport_max_image_size: 10M
+
+ureport_db:
+  name:     "ureport"
+  username: "ureport"
+  password: "{{ vault_ureport_db.password }}"

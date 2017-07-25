@@ -1,0 +1,3 @@
+[mysqldump]
+user={{ ureport_db.username }}
+password={{ ureport_db.password }}
