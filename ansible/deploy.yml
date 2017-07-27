@@ -66,4 +66,10 @@
         src: backup.cnf
         dest: /etc/cron.daily/backup.d/ureport.cnf
         mode: 0400
+
+    - name: Install CKAN upload cron script
+      template:
+        src: updateCkan.sh
+        dest: /etc/cron.daily/backup.d/updateCkan
+        mode: 0755
 ...
