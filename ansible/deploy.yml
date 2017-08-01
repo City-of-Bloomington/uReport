@@ -13,6 +13,8 @@
         state: present
       with_items:
         - imagemagick
+        - php-mysql
+        - xsltproc
 
     - name: Create mysql database
       mysql_db:
@@ -40,9 +42,6 @@
       command: rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/
       when: release.changed
 
-    - name: Update permissions
-      file: path=/srv/sites state=directory owner=www-data group=staff mode="g+rw" recurse=yes
-
     - name: Update apache configuration
       template:
         src: ureport.conf
@@ -51,6 +50,41 @@
         group: root
         mode: 0644
       notify: apache_restart
+
+    - name: Create Solr Core
+      become: true
+      become_user: solr
+      command: "{{ solr_install_dir }}/solr/bin/solr create -c ureport"
+      args:
+        creates: "{{ solr_home }}/data/ureport"
+      register: core
+
+    - name: "Copy solrconfig XSL"
+      become: "true"
+      become_user: "solr"
+      copy:
+        src: "solrconfig.xsl"
+        dest: "/tmp"
+
+    - name: "Update solrconfig"
+      become: "true"
+      become_user: "solr"
+      command: "xsltproc -o solrconfig.xml /tmp/solrconfig.xsl solrconfig.xml"
+      args:
+        chdir: "{{ solr_home }}/data/ureport/conf"
+      notify: "solr_restart"
+
+    - name: Copy Solr Schema
+      become: true
+      become_user: solr
+      copy:
+        src: "{{ ureport_install_path }}/crm/scripts/solr/schema.xml"
+        dest: "{{ solr_home }}/data/ureport/conf/schema.xml"
+        remote_src: "true"
+      notify: "solr_restart"
+
+    - name: Update uReport site_config
+      template: src=site_config.j2 dest={{ ureport_install_path }}/crm/data/site_config.inc
 
     - name: Create backup directory
       file: path=/srv/backups/ureport state=directory group=staff mode="g+rw" recurse=yes
@@ -72,4 +106,7 @@
         src: updateCkan.sh
         dest: /etc/cron.daily/backup.d/updateCkan
         mode: 0755
+
+    - name: Update permissions
+      file: path={{ ureport_install_path }} state=directory owner=www-data group=staff mode="g+rw" recurse=yes
 ...

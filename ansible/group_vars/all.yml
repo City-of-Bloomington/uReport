@@ -1,5 +1,5 @@
-solr_version: "5.5.3"
-solr_download_url: "http://packages.bloomington.in.gov/Apache/{{ solr_filename }}.tgz"
+# This is the latest version of Solr known to work with uReport
+solr_version: "5.3.1"
 
 ureport_archive_path: ../build/ureport.tar.gz
 ureport_install_path: "/srv/sites/ureport"
