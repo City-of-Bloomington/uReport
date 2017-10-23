@@ -48,7 +48,7 @@ use Application\Models\Person;
 			$description       = self::escape($category->getDescription());
 
 			$d = $category->getDepartment();
-			$p = $category->getDefaultPerson();
+			$p = $category->getDefaultPerson_id() ? $category->getDefaultPerson() : $d->getDefaultPerson();
 			$department    = $d ? self::escape($d->getName())     : '';
 			$defaultPerson = $p ? self::escape($p->getFullname()) : '';
 			if ($defaultPerson) { $department = "$department ($defaultPerson)"; }
