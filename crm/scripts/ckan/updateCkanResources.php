@@ -20,6 +20,6 @@ foreach ($config['resource_categories'] as $resource_id=>$ureport) {
     $file = $dir."/$ureport[filename]";
 
     Open311Client::export_data($file, $ureport['category_id']);
-    #$ckan->upload_resource($resource_id, $file);
-    # unlink($file);
+    $ckan->upload_resource($resource_id, $file);
+    unlink($file);
 }

@@ -35,5 +35,12 @@ class Ckan
         if ($response === false) {
             die(curl_error($request));
         }
+        else {
+            $json = json_decode($response);
+            if (   !$json            // invalid response
+                || !$json->success) {// Ckan reported an error
+                die($response);
+            }
+        }
     }
 }

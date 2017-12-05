@@ -16,3 +16,4 @@ vendor
 screen.css
 screen.css.map
 ansible/roles/City-of-Bloomington.*
+ansible/*.retry
