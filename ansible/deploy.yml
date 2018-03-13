@@ -32,6 +32,17 @@
         config_file: "{{ mysql_defaults_extra_file }}"
       no_log: True
 
+    - name: "Create installation directories"
+      file:
+        path: "{{ item }}"
+        state: "directory"
+        owner: "www-data"
+        group: "staff"
+      with_items:
+        - "{{ ureport_install_path }}"
+        - "{{ ureport_backup_path  }}"
+        - "{{ ureport_site_home    }}"
+
     - name: Extract release
       unarchive:
         src: "{{ ureport_archive_path }}"
@@ -41,6 +52,10 @@
     - name: Install release
       command: rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/
       when: release.changed
+
+    - name: "Update site_home"
+      command: "rsync -rl /usr/local/src/ureport/data/ {{ ureport_site_home }}/"
+      when: "release.changed"
 
     - name: Update apache configuration
       template:
@@ -83,11 +98,10 @@
         remote_src: "true"
       notify: "solr_restart"
 
-    - name: Update uReport site_config
-      template: src=site_config.j2 dest={{ ureport_install_path }}/crm/data/site_config.inc
-
-    - name: Create backup directory
-      file: path=/srv/backups/ureport state=directory group=staff mode="g+rw" recurse=yes
+    - name: "Update uReport site_config"
+      template:
+        src: "site_config.j2"
+        dest: "{{ ureport_site_home }}/site_config.inc"
 
     - name: Install CRON backup script
       template:
@@ -107,6 +121,15 @@
         dest: /etc/cron.daily/backup.d/updateCkan
         mode: 0755
 
-    - name: Update permissions
-      file: path={{ ureport_install_path }} state=directory owner=www-data group=staff mode="g+rw" recurse=yes
+    - name: "Update application permissions"
+      file:
+        path:    "{{ item }}"
+        state:   "directory"
+        owner:   "www-data"
+        group:   "staff"
+        mode:    "g+rw"
+        recurse: "yes"
+      with_items:
+        - "{{ ureport_install_path }}"
+        - "{{ ureport_site_home    }}"
 ...

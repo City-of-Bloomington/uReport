@@ -9,9 +9,9 @@ APPLICATION_NAME="ureport"
 MYSQLDUMP=`which mysqldump`
 MYSQL_DBNAME="{{ ureport_db.name }}"
 MYSQL_CREDENTIALS="/etc/cron.daily/backup.d/${APPLICATION_NAME}.cnf"
-BACKUP_DIR="/srv/backups/${APPLICATION_NAME}"
-APPLICATION_HOME="/srv/sites/${APPLICATION_NAME}"
-SITE_HOME="${APPLICATION_HOME}/crm/data"
+BACKUP_DIR="{{ ureport_backup_path }}"
+APPLICATION_HOME="{{ ureport_install_path }}"
+SITE_HOME="{{ ureport_site_home }}"
 
 # How many days worth of backups to keep around
 num_days_to_keep=5
