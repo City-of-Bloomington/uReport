@@ -54,7 +54,7 @@
       when: release.changed
 
     - name: "Update site_home"
-      command: "rsync -rl /usr/local/src/ureport/data/ {{ ureport_site_home }}/"
+      command: "rsync -rl /usr/local/src/ureport/crm/data/ {{ ureport_site_home }}/"
       when: "release.changed"
 
     - name: Update apache configuration
