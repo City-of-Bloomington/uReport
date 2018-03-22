@@ -15,6 +15,7 @@
         - imagemagick
         - php-mysql
         - xsltproc
+        - postfix
 
     - name: Create mysql database
       mysql_db:
