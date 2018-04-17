@@ -1,3 +1,0 @@
----
-- name: ureport update permissions
-  file: path='{{ ureport_path }}' state=directory owner=www-data group=staff recurse=yes mode=g+rw
