@@ -91,29 +91,37 @@ class TicketsController extends Controller
 	 */
 	public function view()
 	{
-		$ticket = $this->loadTicket($_GET['ticket_id']);
+        if (!empty($_GET['ticket_id'])) {
+            try { $ticket = $this->loadTicket((int)$_GET['ticket_id']); }
+            catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
+        }
 
-		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
-			$this->template->setFilename('tickets');
-			$this->template->title = $this->template->_('ticket').' #'.$ticket->getId();
-			$this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
-			$this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
-            $this->template->blocks[] = new Block(
-                'ticketHistory/info.inc',
-                ['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
-            );
+        if (isset($ticket)) {
+            if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
+                $this->template->setFilename('tickets');
+                $this->template->title = $this->template->_('ticket').' #'.$ticket->getId();
+                $this->template->blocks[] = new Block('tickets/ticketInfo.inc', ['ticket'=>$ticket]);
+                $this->template->blocks[] = new Block('tickets/slaStatus.inc',  ['ticket'=>$ticket]);
+                $this->template->blocks[] = new Block(
+                    'ticketHistory/info.inc',
+                    ['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
+                );
 
-            if ($ticket->getLocation()) {
-                $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
-                    'location'       => $ticket->getLocation(),
-                    'ticket'         => $ticket,
-                    'disableButtons' => true
-                ]);
+                if ($ticket->getLocation()) {
+                    $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
+                        'location'       => $ticket->getLocation(),
+                        'ticket'         => $ticket,
+                        'disableButtons' => true
+                    ]);
+                }
             }
-		}
-		else {
-			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
-		}
+            else {
+                $_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
+            }
+        }
+        else {
+            $this->template->blocks[] = new Block('404.inc');
+        }
 	}
 
 	/**
