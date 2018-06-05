@@ -5,6 +5,7 @@
     }],
     "require": {
         "php": ">=5.6",
+        "auth0/auth0-php": "~5",
         "City-of-Bloomington/blossom-lib": "dev-master",
         "jasig/phpcas": "~1",
         "reprovinci/solr-php-client": "~1",

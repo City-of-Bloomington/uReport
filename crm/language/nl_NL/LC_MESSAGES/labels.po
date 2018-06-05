@@ -126,6 +126,12 @@ msgstr "Aanmelden"
 msgid "logout"
 msgstr "Afmelden"
 
+msgid "login_cas"
+msgstr "Overheidsambtenaar"
+
+msgid "login_auth0"
+msgstr "Burgers"
+
 msgid "help"
 msgstr "Help"
 

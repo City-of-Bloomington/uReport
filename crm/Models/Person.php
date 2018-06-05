@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2016 City of Bloomington, Indiana
+ * @copyright 2009-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
@@ -15,6 +15,24 @@ class Person extends ActiveRecord
 
 	protected $department;
 
+	const ERROR_UNKNOWN_PERSON = 'people/unknown';
+	
+	/**
+	 * Returns the matching Person object or null if not found
+	 *
+	 * @return Person
+	 */
+	public static function findByUsername(string $username)
+	{
+        $zend_db = Database::getConnection();
+        $sql = 'select * from people where username=?';
+
+        $result = $zend_db->createStatement($sql)->execute([$username]);
+        if (count($result)) {
+            return new Person($result->current());
+        }
+	}
+	
 	/**
 	 * Populates the object with data
 	 *
@@ -52,7 +70,7 @@ class Person extends ActiveRecord
 					$this->exchangeArray($result->current());
 				}
 				else {
-					throw new \Exception('people/unknown');
+					throw new \Exception(self::ERROR_UNKNOWN_PERSON);
 				}
 			}
 		}

@@ -126,6 +126,12 @@ msgstr "Mon info"
 msgid "login"
 msgstr "Ouvrir une session "
 
+msgid "login_cas"
+msgstr "Fonctionnaire du gouvernement"
+
+msgid "login_auth0"
+msgstr "Personnes non gouvernementales"
+
 msgid "logout"
 msgstr "Se déconnecter"
 

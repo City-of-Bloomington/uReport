@@ -129,6 +129,12 @@ msgstr "Login"
 msgid "logout"
 msgstr "Logout"
 
+msgid "login_cas"
+msgstr "City Employees"
+
+msgid "login_auth0"
+msgstr "Non-city users"
+
 msgid "help"
 msgstr "Help"
 

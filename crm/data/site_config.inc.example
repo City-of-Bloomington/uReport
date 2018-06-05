@@ -97,6 +97,17 @@ $DIRECTORY_CONFIG = [
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
+/**
+ * Auth0 authentication https://auth0.com
+ *
+ * Comment this out to disable Auth0 authentication
+ * Uncomment to enable
+ */
+//$AUTH0 = [
+//    'domain'        => 'somewhere.auth0.com',
+//    'client_id'     => 'HASH CODE',
+//    'client_secret' => 'SECRET API KEY'
+//];
 
 /**
  * Controls whether the system sends email notifications to people
