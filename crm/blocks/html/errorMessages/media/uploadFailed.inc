@@ -12,6 +12,6 @@
         break;
 
         default:
-            echo "<p>{$this->('media/unknownProblem', 'errors')}</p>";
+            echo "<p>{$this->_('media/unknownProblem', 'errors')}</p>";
     }
 ?>
