@@ -17,21 +17,21 @@
         - xsltproc
         - postfix
 
-    - name: Create mysql database
+    - name: "Create mysql database"
       mysql_db:
         config_file: "{{ mysql_defaults_extra_file }}"
         name: "{{ ureport_db.name }}"
-        state: present
-      no_log: True
+        state: "present"
+      no_log: "True"
 
-    - name: Create mysql user for site
+    - name: "Create mysql user for site"
       mysql_user:
-        name:     "{{ ureport_db.username }}"
-        password: "{{ ureport_db.password }}"
+        name:     "{{ ureport_db.user }}"
+        password: "{{ ureport_db.pass }}"
         priv:     "{{ ureport_db.name }}.*:ALL"
-        state: present
+        state: "present"
         config_file: "{{ mysql_defaults_extra_file }}"
-      no_log: True
+      no_log: "True"
 
     - name: "Create installation directories"
       file:
@@ -67,37 +67,7 @@
         mode: 0644
       notify: apache_restart
 
-    - name: Create Solr Core
-      become: true
-      become_user: solr
-      command: "{{ solr_install_dir }}/solr/bin/solr create -c ureport"
-      args:
-        creates: "{{ solr_home }}/data/ureport"
-      register: core
-
-    - name: "Copy solrconfig XSL"
-      become: "true"
-      become_user: "solr"
-      copy:
-        src: "solrconfig.xsl"
-        dest: "/tmp"
-
-    - name: "Update solrconfig"
-      become: "true"
-      become_user: "solr"
-      command: "xsltproc -o solrconfig.xml /tmp/solrconfig.xsl solrconfig.xml"
-      args:
-        chdir: "{{ solr_home }}/data/ureport/conf"
-      notify: "solr_restart"
-
-    - name: Copy Solr Schema
-      become: true
-      become_user: solr
-      copy:
-        src: "{{ ureport_install_path }}/crm/scripts/solr/schema.xml"
-        dest: "{{ solr_home }}/data/ureport/conf/schema.xml"
-        remote_src: "true"
-      notify: "solr_restart"
+    - include_tasks: "tasks/solr.yml"
 
     - name: "Update uReport site_config"
       template:
@@ -122,15 +92,21 @@
         dest: /etc/cron.daily/backup.d/updateCkan
         mode: 0755
 
-    - name: "Update application permissions"
-      file:
-        path:    "{{ item }}"
-        state:   "directory"
-        owner:   "www-data"
-        group:   "staff"
-        mode:    "g+rw"
-        recurse: "yes"
+    - name: "Update directory ownership"
+      command: "chown -R www-data:staff {{ item }}"
+      args:
+        warn: "no"
       with_items:
         - "{{ ureport_install_path }}"
         - "{{ ureport_site_home    }}"
+        - "{{ ureport_backup_path  }}"
+
+    - name: "Update directory permission"
+      command: "chmod -R u=rwX,g=rwX,o=rX {{ item }}"
+      args:
+        warn: "no"
+      with_items:
+        - "{{ ureport_install_path }}"
+        - "{{ ureport_site_home    }}"
+        - "{{ ureport_backup_path  }}"
 ...

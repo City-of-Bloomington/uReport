@@ -1,5 +1,5 @@
 # This is the latest version of Solr known to work with uReport
-solr_version: "5.3.1"
+solr_version: "7.4.0"
 
 ureport_archive_path: "../build/ureport.tar.gz"
 ureport_install_path: "/srv/sites/ureport"
@@ -12,6 +12,6 @@ ureport_base_url: "https://{{ ansible_host }}{{ ureport_base_uri }}"
 ureport_max_image_size: "10M"
 
 ureport_db:
-  name:     "ureport"
-  username: "ureport"
-  password: "{{ vault_ureport_db.password }}"
+  name: "ureport"
+  user: "ureport"
+  pass: "{{ vault_ureport_db.pass }}"

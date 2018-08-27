@@ -1,0 +1,28 @@
+---
+- name: "Create solr core"
+  become_user: "solr"
+  command: "{{ solr_install_dir }}/solr/bin/solr create -c ureport"
+  args:
+    creates: "{{ solr_home }}/data/ureport"
+
+- name: "Install Solr config"
+  copy:
+    src: "../../crm/scripts/solr/solrconfig.xml"
+    dest: "{{ solr_home }}/data/ureport/conf/solrconfig.xml"
+    owner: "solr"
+    group: "solr"
+  notify: "solr_restart"
+
+- name: "Remove managed schema"
+  file:
+    path: "{{ solr_home }}/data/ureport/conf/managed-schema"
+    state: "absent"
+
+- name: "Copy Solr Schema"
+  copy:
+    src: "../../crm/scripts/solr/schema.xml"
+    dest: "{{ solr_home }}/data/ureport/conf/schema.xml"
+    owner: "solr"
+    group: "solr"
+  notify: "solr_restart"
+...
