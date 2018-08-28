@@ -15,5 +15,10 @@
         "zendframework/zend-paginator": "@stable",
         "zendframework/zend-permissions-acl": "@stable",
         "zendframework/zend-servicemanager": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "src/Application"
+        }
     }
 }
