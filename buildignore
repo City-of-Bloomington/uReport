@@ -5,10 +5,9 @@
 .git*
 .sass-cache
 site_config.inc
-/crm/data/media/*
-/crm/data/sessions/*
-/crm/data/Themes/COB/vendor/City-of-Bloomington/factory-number-one/node_modules
-/crm/data/Themes/COB/vendor/City-of-Bloomington/factory-number-one/src
-/crm/scripts/backup.cnf
-/crm/scripts/migration/0.0-1.0/calltrack/3_tickets.php
-/crm/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
+/data/media/*
+/data/sessions/*
+/data/Themes/COB/vendor
+/scripts/backup.cnf
+/scripts/migration/0.0-1.0/calltrack/3_tickets.php
+/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
