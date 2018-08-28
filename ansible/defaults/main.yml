@@ -9,6 +9,8 @@ ureport_site_home:    "{{ ureport_install_path }}/data"
 ureport_base_uri: "/ureport"
 ureport_base_url: "https://{{ ansible_host }}{{ ureport_base_uri }}"
 
+ureport_theme: "COB"
+
 ureport_max_image_size: "10M"
 
 ureport_db:
