@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "951b931705eff00695bc22bdc4b68f14",
+    "content-hash": "5b1a56352925ead3e45fd61c70186f73",
     "packages": [
         {
             "name": "City-of-Bloomington/blossom-lib",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/City-of-Bloomington/blossom-lib.git",
-                "reference": "fc43afc87f13909efaf7f2669fd487cc49f957b3"
+                "reference": "ecd27fcfb944c07bfcb3be3428bcbbbf47d528f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/City-of-Bloomington/blossom-lib/zipball/fc43afc87f13909efaf7f2669fd487cc49f957b3",
-                "reference": "fc43afc87f13909efaf7f2669fd487cc49f957b3",
+                "url": "https://api.github.com/repos/City-of-Bloomington/blossom-lib/zipball/ecd27fcfb944c07bfcb3be3428bcbbbf47d528f0",
+                "reference": "ecd27fcfb944c07bfcb3be3428bcbbbf47d528f0",
                 "shasum": ""
             },
             "require": {
@@ -37,7 +37,7 @@
                 "source": "https://github.com/City-of-Bloomington/blossom-lib/tree/master",
                 "issues": "https://github.com/City-of-Bloomington/blossom-lib/issues"
             },
-            "time": "2018-05-17T19:55:04+00:00"
+            "time": "2018-06-15T16:25:15+00:00"
         },
         {
             "name": "aura/router",
@@ -95,16 +95,16 @@
         },
         {
             "name": "auth0/auth0-php",
-            "version": "5.1.1",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/auth0/auth0-PHP.git",
-                "reference": "143ba77247442f12455ab2c7ef210b18a09625aa"
+                "reference": "c8aa6ea5dce87d112f3ff62d2b379202dd0bd217"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auth0/auth0-PHP/zipball/143ba77247442f12455ab2c7ef210b18a09625aa",
-                "reference": "143ba77247442f12455ab2c7ef210b18a09625aa",
+                "url": "https://api.github.com/repos/auth0/auth0-PHP/zipball/c8aa6ea5dce87d112f3ff62d2b379202dd0bd217",
+                "reference": "c8aa6ea5dce87d112f3ff62d2b379202dd0bd217",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +135,7 @@
                 }
             ],
             "description": "Auth0 PHP SDK.",
-            "time": "2018-04-10T14:29:30+00:00"
+            "time": "2018-06-13T18:07:09+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -1058,7 +1058,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6"
+        "php": ">=7.2"
     },
     "platform-dev": []
 }
