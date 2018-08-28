@@ -54,7 +54,7 @@ class PersonTable extends TableGateway
 	public function find($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
 	{
 		$this->select = new Select('people');
-		if $fields) {
+		if ($fields) {
 			$this->prepareJoins($fields);
 
 			foreach ($fields as $key=>$value) {

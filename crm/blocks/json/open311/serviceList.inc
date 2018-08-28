@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param CategoryList $this->categoryList
  */
@@ -11,7 +11,7 @@ foreach ($this->categoryList as $category) {
 		'service_name' => $category->getName(),
 		'type'         => 'realtime',
 		'description'  => $category->getDescription(),
-		'metadata'     => count($category->getCustomFields()) ? true : false,
+		'metadata'     => $category->getCustomFields() ? true : false,
 		'keywords'     => "",
 		'group'        => "{$category->getCategoryGroup()}"
 	];
