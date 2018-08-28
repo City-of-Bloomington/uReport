@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 
@@ -55,7 +54,7 @@ class PersonTable extends TableGateway
 	public function find($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
 	{
 		$this->select = new Select('people');
-		if (count($fields)) {
+		if $fields) {
 			$this->prepareJoins($fields);
 
 			foreach ($fields as $key=>$value) {
@@ -121,7 +120,7 @@ class PersonTable extends TableGateway
 						->orWhere(function (Where $w) use ($value) { $w->like('email.email'     , $value); })
 						->orWhere(function (Where $w) use ($value) { $w->like('people.username' , $value); });
 		}
-		elseif (count($fields)) {
+		elseif ($fields) {
 			$this->prepareJoins($fields);
 
 			foreach ($fields as $key=>$value) {

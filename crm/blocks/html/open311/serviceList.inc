@@ -28,7 +28,7 @@ echo "
 			$service_name = self::escape($category->getName());
 			$group        = self::escape($category->getCategoryGroup());
 			$description  = self::escape($category->getDescription());
-			$metadata     = count($category->getCustomFields()) ? 'true' : 'false';
+			$metadata     = $category->getCustomFields() ? 'true' : 'false';
 
 			$url = BASE_URL."/open311/v2/services/$service_code";
 			$service_code = $metadata=='true' ? "<a href=\"$url\">$service_code</a>" : $service_code;

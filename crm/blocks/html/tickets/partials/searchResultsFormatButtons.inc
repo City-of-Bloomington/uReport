@@ -1,15 +1,11 @@
 <?php
 /**
- * @copyright 2016-2017 City of Bloomington, Indiana
+ * @copyright 2016-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @param Apache_Solr_Response $this->solrObject
  */
 use Application\Models\Person;
 use Blossom\Classes\Url;
-
-$fq = isset($this->solrObject->responseHeader->params->fq)
-    ?       $this->solrObject->responseHeader->params->fq
-    : [];
 
 echo '<div id="resultFormatButtons">';
     $url = new Url(URl::current_url(BASE_HOST));
@@ -27,7 +23,7 @@ echo '<div id="resultFormatButtons">';
 
     // Users should filter the results somehow before they are allowed to
     // call for the full, raw results
-    if (isset($fq) && count($fq) && Person::isAllowed('tickets', 'print')) {
+    if (isset($this->solrObject->responseHeader->params->fq) && Person::isAllowed('tickets', 'print')) {
         $url->resultFormat = 'raw';
         $type = $resultFormat === 'raw' ? 'print current' : 'print';
         echo $helper->buttonLink($url, $this->_('search_results_print'), $type);

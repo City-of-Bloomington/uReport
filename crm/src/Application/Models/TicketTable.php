@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
@@ -31,7 +31,7 @@ class TicketTable extends TableGateway
 		$select = new Select('tickets');
 		$select->join(['c'=>'categories'], 'tickets.category_id=c.id', [], $select::JOIN_LEFT);
 
-		if (count($fields)) {
+		if ($fields) {
 			foreach ($fields as $key=>$value) {
 				if ($value) {
 					switch ($key) {

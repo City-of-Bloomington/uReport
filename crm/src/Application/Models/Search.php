@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2017 City of Bloomington, Indiana
+ * @copyright 2012-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
@@ -472,7 +472,7 @@ class Search
         if (isset($solrObject->responseHeader->params->fq)) {
             $fq = $solrObject->responseHeader->params->fq;
 
-            if (count($fq)) {
+            if ($fq) {
                 // It might happen that there is only one filterQuery
                 if (!is_array($fq)) { $fq = [$fq]; }
 

@@ -2,9 +2,8 @@
 /**
  * A collection class for Category objects
  *
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 
@@ -28,7 +27,7 @@ class CategoryTable extends TableGateway
 		$select = new Select('categories');
 		$select->join(['g'=>'categoryGroups'], 'categories.categoryGroup_id=g.id', [], $select::JOIN_LEFT);
 
-		if (count($fields)) {
+		if ($fields) {
 			foreach ($fields as $key=>$value) {
 				switch ($key) {
                     case 'active':
