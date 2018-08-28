@@ -29,15 +29,12 @@ body > header {
         }
     }
 
-    @media all and (min-width: $size-viewport-med) {
+    @media all and (min-width: $viewport-medium) {
         position: relative;
         > .container { }
     }
-    @media all and (min-width: $size-viewport-large) {
+    @media all and (min-width: $viewport-large) {
         > .container { }
-    }
-    @media all and (max-height: $size-viewport-notTall) {
-        border-top: 0;
     }
 
     #nav1 {

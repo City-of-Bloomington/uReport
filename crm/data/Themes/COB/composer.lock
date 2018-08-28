@@ -1,0 +1,43 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "9619eabd3a2edbcac4ef171a3344c697",
+    "packages": [
+        {
+            "name": "City-of-Bloomington/factory-number-one",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/City-of-Bloomington/factory-number-one.git",
+                "reference": "4970f905becd4841554291fbaba5a64fcc5fbc2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/City-of-Bloomington/factory-number-one/zipball/4970f905becd4841554291fbaba5a64fcc5fbc2c",
+                "reference": "4970f905becd4841554291fbaba5a64fcc5fbc2c",
+                "shasum": ""
+            },
+            "type": "library",
+            "support": {
+                "source": "https://github.com/City-of-Bloomington/factory-number-one/tree/master",
+                "issues": "https://github.com/City-of-Bloomington/factory-number-one/issues"
+            },
+            "time": "2018-03-29T18:46:24+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "city-of-bloomington/factory-number-one": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.2"
+    },
+    "platform-dev": []
+}

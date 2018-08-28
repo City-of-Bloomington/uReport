@@ -9,6 +9,7 @@
  *
  * This CSS should only include properties that are not include in fn1.
  */
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_vars-mixins.scss';
 @import 'modules/vars.scss';
 @import 'modules/header.scss';
 @import 'modules/table.scss';

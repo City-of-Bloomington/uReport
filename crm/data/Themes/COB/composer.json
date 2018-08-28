@@ -4,7 +4,7 @@
         "url": "https://github.com/City-of-Bloomington/factory-number-one"
     }],
     "require": {
-        "php": ">=5.6",
-        "City-of-Bloomington/factory-number-one": "dev-refactor"
+        "php": ">=7.2",
+        "City-of-Bloomington/factory-number-one": "dev-master"
     }
 }
