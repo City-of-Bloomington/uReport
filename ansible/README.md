@@ -17,9 +17,9 @@ On the ansible control machine, make sure you have everything you need:
 Variables
 -------------
 ### Solr
-Solr 5.5.3 is the very latest version known to work with uReport.  If you are deploying to multiple hosts, you might consider hosting the package on a local webserver.  Apache's hosting can be very slow.
+Solr 7.4.0 is the very latest version known to work with uReport.  If you are deploying to multiple hosts, you might consider hosting the package on a local webserver.  Apache's hosting can be very slow.
 
-    solr_version: "5.5.3"
+    solr_version: "7.4.0"
     solr_download_url: "http://packages.bloomington.in.gov/Apache/{{ solr_filename }}.tgz"
 
 ### Installation paths
@@ -27,7 +27,8 @@ The archive path is the path to the tarball you downloaded.  If you cloned from 
 
     ureport_archive_path: ../build/ureport.tar.gz
     ureport_install_path: "/srv/sites/ureport"
-    ureport_backup_path: "/srv/backups/ureport"
+    ureport_backup_path:  "/srv/backups/ureport"
+    ureport_site_home:    "/srv/data/ureport"
 
 ### Apache configuration
 The max image size is the largest upload file size accepted.  Users will not be able to upload images larger than this size.
@@ -37,13 +38,17 @@ The max image size is the largest upload file size accepted.  Users will not be 
     ureport_max_image_size: 10M
 
 ### Database
-The database password is probably the only thing you really need to vault.
+You should vault the database password.
 
     ureport_db:
     name:     "ureport"
     username: "ureport"
     password: "{{ vault_ureport_db.password }}"
 
+## Google Api Key
+You should vault your google api key.
+
+    ureport_google_api_key: "{{ vault_google_api_key }}"
 
 Dependencies
 -------------
