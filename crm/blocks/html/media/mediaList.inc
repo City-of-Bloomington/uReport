@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2011-2018 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param MediaList $this->mediaList
  * @param bool $this->disableButtons
  */
@@ -25,7 +25,7 @@ if (count($this->mediaList)) {
 		}
 		echo "
 		<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
-					{$media->getFilename()}
+					{$media->getInternalFilename()}
 				</a>
 			</td>
 			<td>{$media->getUploaded(DATE_FORMAT)}</td>
