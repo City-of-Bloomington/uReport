@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
 
 use Application\Models\Category;
+use Application\Models\CategoryGroup;
 use Application\Models\CategoryTable;
 use Application\Models\Ticket;
 use Application\Models\TicketTable;
@@ -42,6 +43,8 @@ class Open311Controller extends Controller
 	 */
 	public function services()
 	{
+        global $OBSOLETE_API_KEYS;
+
 		// If a service_id is provided, they want the service info
 		if (isset($_REQUEST['service_code'])) {
 			try {
@@ -63,10 +66,50 @@ class Open311Controller extends Controller
 		}
 		// Provide the full service list
 		else {
-			$table = new CategoryTable();
-			$categoryList = $table->find(['active'=>true]);
-			$this->template->blocks[] = new Block('open311/serviceList.inc', ['categoryList'=>$categoryList]);
+            $api_key      = !empty($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '';
+            $table        =  new CategoryTable();
+            $categoryList = !in_array($api_key, $OBSOLETE_API_KEYS)
+                          ? $table->find(['active'=>true])
+                          : self::mobileShutdownNotice();
+
+			$this->template->blocks = [
+                new Block('open311/serviceList.inc', ['categoryList'=>$categoryList])
+            ];
 		}
+	}
+
+	/**
+	 * Returns a fake categoryList using the names to create a message
+	 *
+	 * Users with the old apps are still attempting to use them.  We need
+	 * a way to get a message to them that the apps no longer work.
+	 * We cannot recompile and republish the apps, so we have to fiddle
+	 * with the service calls.
+	 *
+	 * @return array
+	 */
+	private static function mobileShutdownNotice(): array
+	{
+        $description = 'Go to blooomington.in.gov/ureport';
+
+        $group1    = new CategoryGroup(['id' => 'XXX', 'name'=>'This app has been updated']);
+        $group2    = new CategoryGroup(['id' => 'XXX', 'name'=>'To report issues to the City']);
+        $group3    = new CategoryGroup(['id' => 'XXX', 'name'=>'bloomington.in.gov/ureport']);
+
+        $line1 = new Category(['id'          => 'XXX',
+                               'name'        => 'to work in mobile web browsers',
+                               'description' => $description]);
+        $line2 = new Category(['id'          => 'XXX',
+                               'name'        => 'direct your mobile browser to:',
+                               'description' => $description]);
+        $line3 = new Category(['id'          => 'XXX',
+                               'name'        => 'Thank you!',
+                               'description' => $description]);
+
+        $line1->setCategoryGroup($group1);
+        $line2->setCategoryGroup($group2);
+        $line3->setCategoryGroup($group3);
+        return [$line1, $line2, $line3];
 	}
 
 	/**
