@@ -2,8 +2,9 @@ APPNAME=ureport
 
 SASS := $(shell command -v sassc 2> /dev/null)
 MSGFMT := $(shell command -v msgfmt 2> /dev/null)
-
 LANGUAGES := $(wildcard crm/language/*/LC_MESSAGES)
+VERSION := $(shell cat VERSION | tr -d "[:space:]")
+COMMIT := $(shell git rev-parse --short HEAD)
 
 default: clean compile package
 
@@ -23,8 +24,8 @@ clean:
 	rm -Rf crm/data/Themes/COB/public/css/.sass-cache
 
 compile: deps $(LANGUAGES)
-	cd crm/public/css                 && sassc -mt compact -m screen.scss screen.css
-	cd crm/data/Themes/COB/public/css && sassc -mt compact -m screen.scss screen.css
+	cd crm/public/css                 && sassc -mt compact -m screen.scss screen-${VERSION}.css
+	cd crm/data/Themes/COB/public/css && sassc -mt compact -m screen.scss screen-${VERSION}.css
 
 package:
 	cd crm/data/Themes/COB && rsync -rl ./vendor/City-of-Bloomington/factory-number-one/src/static/img/ ./public/img/
