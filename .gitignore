@@ -3,6 +3,7 @@ crm/data/sessions/*
 crm/data/templates/*
 crm/data/blocks/*
 crm/data/workers/*
+crm/data/Themes/COB/public/img
 site_config.inc
 theme_config.inc
 crm/scripts/backup.cnf

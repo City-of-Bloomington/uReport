@@ -101,12 +101,16 @@
         - "{{ ureport_site_home    }}"
         - "{{ ureport_backup_path  }}"
 
-    - name: "Update directory permission"
-      command: "chmod -R u=rwX,g=rwX,o=rX {{ item }}"
-      args:
-        warn: "no"
+    - name: "Update application permissions"
+      file:
+        path:    "{{ item }}"
+        state:   "directory"
+        owner:   "www-data"
+        group:   "staff"
+        mode:    "g+rw"
+        recurse: "yes"
       with_items:
         - "{{ ureport_install_path }}"
-        - "{{ ureport_site_home    }}"
         - "{{ ureport_backup_path  }}"
+        - "{{ ureport_site_home    }}"
 ...

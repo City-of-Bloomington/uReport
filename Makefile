@@ -1,6 +1,6 @@
 APPNAME=ureport
 
-SASS := $(shell command -v pysassc 2> /dev/null)
+SASS := $(shell command -v sassc 2> /dev/null)
 MSGFMT := $(shell command -v msgfmt 2> /dev/null)
 
 LANGUAGES := $(wildcard crm/language/*/LC_MESSAGES)
@@ -23,10 +23,11 @@ clean:
 	rm -Rf crm/data/Themes/COB/public/css/.sass-cache
 
 compile: deps $(LANGUAGES)
-	cd crm/public/css && pysassc -t compact -m screen.scss screen.css
-	cd crm/data/Themes/COB/public/css && pysassc -t compact -m screen.scss screen.css
+	cd crm/public/css                 && sassc -mt compact -m screen.scss screen.css
+	cd crm/data/Themes/COB/public/css && sassc -mt compact -m screen.scss screen.css
 
 package:
+	cd crm/data/Themes/COB && rsync -rl ./vendor/City-of-Bloomington/factory-number-one/src/static/img/ ./public/img/
 	rsync -rl --exclude-from=buildignore --delete ./crm/ build/$(APPNAME)
 	cd build && tar czf $(APPNAME).tar.gz $(APPNAME)
 

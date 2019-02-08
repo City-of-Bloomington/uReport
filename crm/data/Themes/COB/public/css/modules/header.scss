@@ -5,19 +5,18 @@ body > header {
     margin-bottom: 0;
     padding:0;
 
-    button { background-color:transparent; }
     a { color:$color-header; }
 
     > .container {
-        h1, h2 { display:inline-block; height:2.5rem; margin:0; vertical-align:middle; }
+        h1, h2 { display: inline-block; height:2.5rem; margin:0; vertical-align: middle; }
         h1 a, h2 a {
-            display:inline-block;
+            display: inline-block;
             height:2.5rem; line-height:2.5rem;
-            vertical-align:middle;
+            vertical-align: middle;
         }
         h1 a {
-            background:url('images/logo.svg') no-repeat left center;
-            font-size:$font-size-normal; font-weight:normal; margin:0;
+            background: url('images/logo.svg') no-repeat left center;
+            font-size:$font-size-normal; font-weight: normal; margin:0;
             padding-left:3rem;
             background-size:2.5rem 2.5rem;
         }
@@ -40,6 +39,6 @@ body > header {
     #nav1 {
         background-color: $color-header;
 
-        a { background:none; color:$color-content-background; }
+        a { background: none; color:$color-content-background; }
     }
 }

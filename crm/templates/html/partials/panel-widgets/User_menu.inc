@@ -33,5 +33,10 @@ else {
     else {
         $links[] = ['url'=>BASE_URI."/login?return_url=$return_url", 'label'=>$this->_('login')];
     }
-    echo $helper->dropdown($links, $this->_('login'), $dropdown_id);
+    if (count($links) > 1) {
+        echo $helper->dropdown($links, $this->_('login'), $dropdown_id);
+    }
+    else {
+        echo "<nav><a href=\"{$links[0]['url']}\">{$this->_('login')}</a></nav>";
+    }
 }

@@ -3,24 +3,37 @@
  *
  * This stylesheet extends the default Factory Number One CSS.
  * @see https://github.com/City-of-Bloomington/factory-number-one
- *
- * To use this stylesheet, make sure to include a link to the factory-number-one
- * stylesheet in the template head.
- *
- * This CSS should only include properties that are not include in fn1.
  */
-@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_vars-mixins.scss';
-@import 'modules/vars.scss';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_vars-mixins';
+@import 'modules/vars';
+
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_normalize';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_html-elements';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/includes/_header';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_nav1';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/themes/default/scss/modules/_main';
+
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/button/_btn';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/dropdown/_dropdown';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/event/_event';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/field/field';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/miniGallery/_miniGallery';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/table/table';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/personListing/_personListing';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/pricingTable/_pricingTable';
+@import '../../vendor/City-of-Bloomington/factory-number-one/src/components/uiBlock/_uiBlock';
+
 @import 'modules/header.scss';
 @import 'modules/table.scss';
 
+h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 footer {
-    background-color: $color-background-footer; color: $color-heading-1;
+    background-color: $color-background-footer; color: $color-heading;
     margin-top: ($size-gutter*2);
     padding: $size-gutter;
-    font-size: $font-size-small;
+    p { font-size: $font-size-small; }
 }
-fieldset { border:none; }
+fieldset { border: none; }
 
 main {
     padding-left: $size-gutter;
@@ -36,12 +49,12 @@ main {
     main { padding:0; }
 
     #panel-one {
-        background-color:$color-heading-2;
+        background-color: $color-heading;
         color:$color-content-background;
 
         h1, h2 { font-size:$font-size-normal; }
         h1, h2, legend, dt, a { color:$color-content-background; }
-        dl { background-color:$color-heading-2; }
+        dl { background-color:$color-heading; }
 
         .dropdown a { color:$color-link; }
 
@@ -56,11 +69,11 @@ main {
         dl { padding:0; }
     }
 }
-.icon.slide { background-image:url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
-.button.text   { background-image:url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
+.icon.slide    { background-image: url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
+.button.text   { background-image: url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
 
-.collapsed   h1, fieldset.collapsed { background-image:url('images/fa-svg/black/angle-right.svg'); background-size:1rem; }
-.expanded    h1, fieldset.expanded  { background-image:url('images/fa-svg/black/angle-down.svg' ); background-size:1rem; }
+.collapsed   h1, fieldset.collapsed { background-image: url('images/fa-svg/gray/angle-right.svg'); background-size:1rem; }
+.expanded    h1, fieldset.expanded  { background-image: url('images/fa-svg/gray/angle-down.svg' ); background-size:1rem; }
 
 
 #ticketSearchForm {
@@ -91,7 +104,7 @@ main {
     box-sizing:border-box;
 
     a {
-        border: 1px solid $color-heading-2; border-radius:0;
+        border: 1px solid $color-heading; border-radius:0;
         background-color: $color-accent; color: $color-content-background;
         &:first-child { border-radius: .25em  0     0  .25em; }
         &:last-child  { border-radius:   0  .25em .25em  0;   }
@@ -103,7 +116,7 @@ main {
 
 tr.verified, tr.usedForNotifications {
     td:first-child {
-        padding-left:1.7em;
+        padding-left: 1.7em;
         background-repeat: no-repeat;
         background-position: $size-gutter center;
         background-size: ($size-gutter*2) ($size-gutter*2);
@@ -117,22 +130,22 @@ tr.verified, tr.usedForNotifications {
 }
 
 .pageNavigation          { margin: $size-gutter; }
-.pageNavigation li       { display:inline; margin: $size-gutter; }
+.pageNavigation li       { display: inline; margin: $size-gutter; }
 a.current { border:2px solid $color-calltoaction-background; }
 
 .searchResultsRows header, .ticketInfo header {
-    h1 { display:block; margin-bottom:0; }
+    h1 { display: block; margin-bottom:0; }
     .status {
-        float:right;
+        float: right;
         &.open { color:$color-calltoaction-background; }
     }
-    .tools { position:relative; top:-1.8em; left:7em; }
+    .tools { position: relative; top: -1.8em; left: 7em; }
 }
 .history article {
     padding-left:1rem;
 
     h1 { font-size:$font-size-normal; }
-    .sentNotification .message { white-space:pre; }
+    .sentNotification .message { white-space: pre; }
 }
 
 #location_map { margin-top:$size-gutter; }
@@ -147,11 +160,11 @@ a.current { border:2px solid $color-calltoaction-background; }
     body > footer,
     #locationInfo .ticketList,
     .dropdown {
-        display:none;
+        display: none;
     }
 
     .tickets {
-        #content-panel { width:48%; float:left; }
+        #content-panel { width:48%; float: left; }
         #panel-one     { margin-left:50%; }
     }
 

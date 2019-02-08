@@ -1,3 +1,5 @@
+$font-family-heading: $sans;
+
 $font-size-bigger: 1.5rem;
 $font-size-big:    1.3rem;
 $font-size-normal:   1rem;
@@ -6,12 +8,13 @@ $font-size-smaller: .6rem;
 
 $color-accent: $azure;
 
-$color-heading-1: $gothic;
-$color-heading-2: $dark-slate;
-$color-heading-3: $mine-shaft;
+$color-heading: #555;
 
 $color-background-footer:      $mine-shaft;
 $color-border-modal:           $vista-white;
+
+// Special widget colors
+$color-background-field:           $gainsboro;
 
 $color-calltoaction-background:    $fern;
 $color-calltoaction-border:        $silver-chalice;
