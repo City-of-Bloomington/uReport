@@ -61,7 +61,7 @@ $c = $this->solrObject->response->numFound;
                                     : ['class' => 'asc' ];
                             }
                             else { $class = []; }
-                            $sortingLinks[] = ['url'=>$url, 'label'=>$label, 'attrs'=>$class];
+                            $sortingLinks[] = ['url'=>$url->__toString(), 'label'=>$label, 'attrs'=>$class];
                         }
                     }
                 }
