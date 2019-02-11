@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2012-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -240,6 +240,17 @@ class Search
 
 		$solrResponse = $this->solrClient->search($query, $startingPage, $rows, $additionalParameters);
 		return $solrResponse;
+	}
+
+	public function facetValues(string $facet_field)
+	{
+        $res = $this->solrClient->search('*:*', 0, 1, [
+            'facet'       => 'true',
+            'facet.field' => $facet_field
+        ]);
+        return   !empty(           $res->facet_counts->facet_fields->$facet_field)
+               ? array_keys((array)$res->facet_counts->facet_fields->$facet_field)
+               : [];
 	}
 
 	/**

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2012-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
@@ -269,6 +268,13 @@ class Report
         if (!empty(    $get['actionPerson_id'])) {
             $id = (int)$get['actionPerson_id'];
             $options[]  = "h.actionPerson_id=$id";
+        }
+
+        foreach (array_keys(AddressService::$customFieldDescriptions) as $f) {
+            if (!empty($get[$f])) {
+                $v = preg_replace('/[^a-zA-Z\ ]/', '', $get[$f]);
+                $options[] = "additionalFields like '%$v%'";
+            }
         }
 	}
 

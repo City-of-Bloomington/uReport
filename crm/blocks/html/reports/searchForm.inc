@@ -1,12 +1,14 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+use Application\Models\AddressService;
 use Application\Models\CategoryTable;
 use Application\Models\Department;
 use Application\Models\DepartmentTable;
 use Application\Models\ClientTable;
+use Application\Models\Search;
 
 use Blossom\Classes\ActiveRecord;
 
@@ -112,10 +114,29 @@ $helper = $this->template->getHelper('field');
                     ]);
                 ?>
             </nav>
-			<?php
-				$h = $this->template->getHelper('renderInputs');
-				echo $h->renderInputs($_GET, null, array('enteredDate'));
-			?>
+            <?php
+                $search = new Search();
+                foreach (AddressService::$customFieldDescriptions as $f=>$v) {
+                    echo "<nav class=\"collapsible\"><h1>$v[description]</h1>";
+                    $options = [['value'=>'']];
+                    $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
+                    foreach ($search->facetValues($f) as $k) { $options[] = ['value'=>$k]; }
+
+                    echo $helper->field([
+                        'name'    => $f,
+                        'id'      => $f,
+                        'type'    => 'select',
+                        'value'   => $value,
+                        'options' => $options
+                    ]);
+                    echo "</nav>";
+                }
+
+                $helper   = $this->template->getHelper('renderInputs');
+                $ignore   = array_keys(AddressService::$customFieldDescriptions);
+                $ignore[] = 'enteredDate';
+                echo $helper->renderInputs($_GET, null, $ignore);
+            ?>
 			<button type="submit" class="submit"><?= $this->template->_('submit'); ?></button>
 		</fieldset>
 	</form>

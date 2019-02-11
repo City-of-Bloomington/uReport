@@ -89,7 +89,8 @@ main {
 #advanced-search > .button.delete { display:block; }
 #reportSearchForm {
     ul { padding:0 1rem; }
-    dd { margin:0; }
+    dd { margin-left: 1em; }
+    select { width: 10em; }
 }
 
 .searchResults {
