@@ -17,8 +17,10 @@ class ReportsController extends Controller
 	{
 		parent::__construct($template);
         $this->template->setFilename('search');
-        $this->template->blocks['panel-one'][] = new Block('reports/list.inc');
-        $this->template->blocks['panel-one'][] = new Block('reports/searchForm.inc');
+        if ($this->template->outputFormat == 'html') {
+            $this->template->blocks['panel-one'][] = new Block('reports/list.inc');
+            $this->template->blocks['panel-one'][] = new Block('reports/searchForm.inc');
+        }
 	}
 
 	public function index()

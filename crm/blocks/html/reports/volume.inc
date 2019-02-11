@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright 2014-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2014-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Report;
+use Blossom\Classes\Url;
+
 $this->_include('reports/parameters.inc');
 
 $departmentData = Report::VolumeByDepartment($_GET);
@@ -11,6 +13,14 @@ $departmentData = Report::VolumeByDepartment($_GET);
 <section id="volumeReport" class="searchResults">
     <header>
         <h1><?= "{$this->_(['ticket', 'tickets', $departmentData['totalCount']])} ($departmentData[totalCount] total)"; ?></h1>
+        <div class="tools">
+        <?php
+            $h   = $this->template->getHelper('buttonLink');
+            $url = new Url(Url::current_url(BASE_HOST));
+            $url->format = 'csv';
+            echo $h->buttonLink($url, 'CSV', 'download');
+        ?>
+        </div>
     </header>
     <?php
         foreach ($departmentData['result'] as $row) {
