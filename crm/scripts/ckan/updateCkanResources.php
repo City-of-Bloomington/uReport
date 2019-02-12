@@ -9,7 +9,7 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-include './bootstrap.inc';
+include '../../bootstrap.inc';
 
 $dsn  = "mysql:host=localhost;dbname=".DB_NAME;
 $user = DB_USER;
@@ -145,6 +145,10 @@ function writeFileRecord($file, string $format, array $row, int $rowNumber)
         case 'xml':
             fwrite($file, "\t<service_request>\n");
             foreach ($row as $k=>$v) {
+                if ($v) {
+                    $v = preg_replace('/[[:^print:]]/', '', $v);
+                    $v = htmlspecialchars($v, ENT_XML1);
+                }
                 fwrite($file, "\t\t<$k>$v</$k>\n");
             }
             fwrite($file, "\t</service_request>\n");
