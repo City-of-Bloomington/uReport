@@ -26,6 +26,7 @@
 @import 'modules/header.scss';
 @import 'modules/table.scss';
 
+a { color: $color-link; }
 h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 footer {
     background-color: $color-background-footer; color: $color-heading;
@@ -33,6 +34,7 @@ footer {
     padding: $size-gutter;
     p { font-size: $font-size-small; }
 }
+form dl { margin: 0; }
 fieldset { border: none; }
 
 main {
@@ -43,6 +45,7 @@ main {
         border-bottom: .25em solid $color-calltoaction-border;
         color: $color-content-background;
     }
+    header { margin-bottom: $size-gutter; }
 }
 
 .searchLayout {
@@ -59,8 +62,6 @@ main {
         .dropdown a { color:$color-link; }
 
         input { color: $color-text-default; }
-
-        a.button { color: $color-text-default; }
     }
 
     #content-panel {
@@ -78,7 +79,7 @@ main {
 
 #ticketSearchForm {
     margin-left: $size-gutter;
-    ul { list-style-type:none; padding:0 1rem; }
+    ul { list-style-type: none; padding:0 1rem; }
     #display_fields {
         dl {
             margin:0; -webkit-column-count:2; -moz-column-count:2; column-count:2;
@@ -86,7 +87,10 @@ main {
         dd { margin:0; font-size:$font-size-small; }
     }
 }
-#advanced-search > .button.delete { display:block; }
+#bookmark-updateForm {
+    label { display: block; }
+}
+#advanced-search > .button.delete { display: block; }
 #reportSearchForm {
     ul { padding:0 1rem; }
     dd { margin-left: 1em; }
@@ -97,12 +101,14 @@ main {
     padding:0 1em;
 
     article { border:1px solid $color-border-table; padding: $size-gutter; }
-    dl      { border:none; }
+    dl      { border: none;  display: flex; flex-direction: row; }
+    dt { margin:0; padding: 0; }
+    dd { margin-left: 1em; }
 }
 #resultFormatButtons {
-    background-color:$color-accent; text-align:center;
+    background-color:$color-accent; text-align: center;
     padding: $size-gutter;
-    box-sizing:border-box;
+    box-sizing: border-box;
 
     a {
         border: 1px solid $color-heading; border-radius:0;
