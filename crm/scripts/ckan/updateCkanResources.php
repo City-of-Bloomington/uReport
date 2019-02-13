@@ -9,7 +9,7 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-include '../../bootstrap.inc';
+include realpath(__DIR__.'/../../bootstrap.inc');
 
 $dsn  = "mysql:host=localhost;dbname=".DB_NAME;
 $user = DB_USER;
