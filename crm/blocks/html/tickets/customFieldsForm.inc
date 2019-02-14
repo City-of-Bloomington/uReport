@@ -8,7 +8,7 @@
 $category = $this->category;
 if ($category) {
 	$customFields = $category->getCustomFields();
-	if (count($customFields)) {
+	if ($customFields) {
 		$ticketData = $this->ticket->getCustomFields();
 		$helper = $this->template->getHelper('field');
 
