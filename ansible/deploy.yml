@@ -58,6 +58,12 @@
       command: "rsync -rl /usr/local/src/ureport/data/ {{ ureport_site_home }}/"
       when: "release.changed"
 
+    - name: "Create media symlink"
+      file:
+        path: "{{ ureport_install_path }}/public/media"
+        state: "link"
+        src: "{{ ureport_site_home }}/media"
+
     - name: Update apache configuration
       template:
         src: ureport.conf
