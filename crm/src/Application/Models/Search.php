@@ -242,15 +242,19 @@ class Search
 		return $solrResponse;
 	}
 
-	public function facetValues(string $facet_field)
+	public function facetValues(string $facet_field): array
 	{
         $res = $this->solrClient->search('*:*', 0, 1, [
             'facet'       => 'true',
             'facet.field' => $facet_field
         ]);
-        return   !empty(           $res->facet_counts->facet_fields->$facet_field)
-               ? array_keys((array)$res->facet_counts->facet_fields->$facet_field)
-               : [];
+
+        if (          !empty($res->facet_counts->facet_fields->$facet_field)) {
+            $facets = (array)$res->facet_counts->facet_fields->$facet_field;
+            ksort($facets);
+            return $facets;
+        }
+        return [];
 	}
 
 	/**

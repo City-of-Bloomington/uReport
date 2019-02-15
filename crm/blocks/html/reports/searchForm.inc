@@ -120,7 +120,7 @@ $helper = $this->template->getHelper('field');
                     echo "<nav class=\"collapsible\"><h1>$v[description]</h1>";
                     $options = [['value'=>'']];
                     $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
-                    foreach ($search->facetValues($f) as $k) { $options[] = ['value'=>$k]; }
+                    foreach ($search->facetValues($f) as $k=>$c) { $options[] = ['value'=>$k]; }
 
                     echo $helper->field([
                         'name'    => $f,
