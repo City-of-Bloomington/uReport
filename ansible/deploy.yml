@@ -7,15 +7,16 @@
     - City-of-Bloomington.solr
 
   tasks:
-    - name: Install dependencies
+    - name: "Install dependencies"
       apt:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - imagemagick
-        - php-mysql
-        - xsltproc
-        - postfix
+        name: "{{ packages }}"
+        state: "present"
+      vars:
+        packages:
+          - "imagemagick"
+          - "php-mysql"
+          - "xsltproc"
+          - "postfix"
 
     - name: "Create mysql database"
       mysql_db:
