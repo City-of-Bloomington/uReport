@@ -1,5 +1,5 @@
 # Testing Plan
-These are the things to check to make sure everything is working.  While doing these checks, it is best to tail the Apache error log.  uReport should not ever write an errors to the error log.  Any message that shows up in the Apache error log is an unforseen mistake that should be fixed.
+These are the things to check to make sure everything is working.  While doing these checks, it is best to tail the Apache error log.  uReport should not ever write any errors to the error log.  Any message that shows up in the Apache error log is an unforseen mistake that should be fixed.
 
 ```bash
 tail -f /var/log/apache2/error.log
@@ -88,3 +88,34 @@ Create a new ticket and make sure everything gets saved correctly
     * Make sure everyone receives an email
 * Delete the ticket
     * Make sure the ticket is removed
+
+
+## Open311
+
+* Check GET services list
+    * Make sure HTML works
+    * Make sure json works
+    * Make sure XML  works
+
+* Check GET service definition
+    * Make sure HTML works
+    * Make sure json works
+    * Make sure XML  works
+
+* Check GET service request
+    * Make sure HTML works
+    * Make sure json works
+    * Make sure XML  works
+
+* Check POST service request
+    * Use the open311-nodejs client to test posting
+        * Make sure you can upload an image
+        * Make sure any additional attributes are saved
+
+# Reports
+Make sure all the reports are working.  Staff and Volume results should be downloadble as CSV.
+
+* Choose a report
+    * Make sure the filtering works
+        * Make sure date filtering is working
+    * Make sure CSV download works
