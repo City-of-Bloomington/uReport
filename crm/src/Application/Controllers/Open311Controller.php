@@ -68,7 +68,7 @@ class Open311Controller extends Controller
 		else {
             $api_key      = !empty($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '';
             $table        =  new CategoryTable();
-            $categoryList = !in_array($api_key, $OBSOLETE_API_KEYS)
+            $categoryList = (!isset($OBSOLETE_API_KEYS) || !in_array($api_key, $OBSOLETE_API_KEYS))
                           ? $table->find(['active'=>true])
                           : self::mobileShutdownNotice();
 
