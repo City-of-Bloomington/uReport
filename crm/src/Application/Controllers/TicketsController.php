@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
 
@@ -414,13 +414,12 @@ class TicketsController extends Controller
 			}
 		}
 
-		$_REQUEST['return_url'] = BASE_URL.'/tickets/changeLocation?ticket_id='.$ticket->getId();
-		$this->template->title = $this->template->_('change_location');
-		$this->template->blocks[] = new Block(
-            'locations/findLocationForm.inc',
-			['includeExternalResults' => true]
-		);
-		$this->template->blocks[] = new Block('locations/mapChooser.inc');
+		$_REQUEST['return_url'] = BASE_URL.'/tickets/view?ticket_id='.$ticket->getId();
+		$this->template->title  = $this->template->_('change_location');
+		$this->template->blocks = [
+            new Block('locations/findLocationForm.inc', ['includeExternalResults' => true]),
+            new Block('locations/mapChooser.inc')
+		];
 	}
 
 	/**
