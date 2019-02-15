@@ -1,10 +1,10 @@
 ---
-- hosts: ureport
-  become: yes
+- hosts: "ureport"
+  become: "yes"
   roles:
-    - City-of-Bloomington.mysql
-    - City-of-Bloomington.php
-    - City-of-Bloomington.solr
+    - "City-of-Bloomington.mysql"
+    - "City-of-Bloomington.php"
+    - "City-of-Bloomington.solr"
 
   tasks:
     - name: "Install dependencies"
@@ -45,15 +45,15 @@
         - "{{ ureport_backup_path  }}"
         - "{{ ureport_site_home    }}"
 
-    - name: Extract release
+    - name: "Extract release"
       unarchive:
         src: "{{ ureport_archive_path }}"
-        dest: /usr/local/src
-      register: release
+        dest: "/usr/local/src"
+      register: "release"
 
-    - name: Install release
-      command: rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/
-      when: release.changed
+    - name: "Install release"
+      command: "rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/"
+      when: "release.changed"
 
     - name: "Update site_home"
       command: "rsync -rl /usr/local/src/ureport/data/ {{ ureport_site_home }}/"
@@ -65,14 +65,14 @@
         state: "link"
         src: "{{ ureport_site_home }}/media"
 
-    - name: Update apache configuration
+    - name: "Update apache configuration"
       template:
-        src: ureport.conf
-        dest: /etc/apache2/sites-enabled/conf.d/ureport.conf
-        owner: root
-        group: root
-        mode: 0644
-      notify: apache_restart
+        src: "ureport.conf"
+        dest: "/etc/apache2/sites-enabled/conf.d/ureport.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      notify: "apache_restart"
 
     - include_tasks: "tasks/solr.yml"
 
@@ -81,23 +81,23 @@
         src: "site_config.j2"
         dest: "{{ ureport_site_home }}/site_config.inc"
 
-    - name: Install CRON backup script
+    - name: "Install CRON backup script"
       template:
-        src: backup.sh
-        dest: /etc/cron.daily/backup.d/ureport
-        mode: 0755
+        src: "backup.sh"
+        dest: "/etc/cron.daily/backup.d/ureport"
+        mode: "0755"
 
-    - name: Install CRON backup credentials
+    - name: "Install CRON backup credentials"
       template:
-        src: backup.cnf
-        dest: /etc/cron.daily/backup.d/ureport.cnf
-        mode: 0400
+        src: "backup.cnf"
+        dest: "/etc/cron.daily/backup.d/ureport.cnf"
+        mode: "0400"
 
-    - name: Install CKAN upload cron script
+    - name: "Install CKAN upload cron script"
       template:
-        src: updateCkan.sh
-        dest: /etc/cron.daily/backup.d/updateCkan
-        mode: 0755
+        src: "updateCkan.sh"
+        dest: "/etc/cron.daily/backup.d/updateCkan"
+        mode: "0755"
 
     - name: "Update directory ownership"
       command: "chown -R www-data:staff {{ item }}"
