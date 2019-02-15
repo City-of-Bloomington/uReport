@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2013-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+declare (strict_types=1);
+namespace Test\Unit;
+
+use PHPUnit\Framework\TestCase;
 use Application\Models\Person;
 
-$_SERVER['SITE_HOME'] = __DIR__;
-require_once '../../bootstrap.inc';
-
-class AuthenticationTest extends PHPUnit_Framework_TestCase
+class AuthenticationTest extends TestCase
 {
 	private $testUsername = 'username';
 	private $testPassword = 'test';

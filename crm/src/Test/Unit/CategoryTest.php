@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright 2015-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2015-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+declare (strict_types=1);
+namespace Test\Unit;
+
+use PHPUnit\Framework\TestCase;
 use Application\Models\Category;
 
-$_SERVER['SITE_HOME'] = __DIR__;
-require_once '../../bootstrap.inc';
-
-class CategoryTest extends PHPUnit_Framework_TestCase
+class CategoryTest extends TestCase
 {
     public function testAutoResponseFields()
     {

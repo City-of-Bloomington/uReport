@@ -16,9 +16,18 @@
         "zendframework/zend-permissions-acl": "@stable",
         "zendframework/zend-servicemanager": "@stable"
     },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "facebook/webdriver": "@stable"
+    },
     "autoload": {
         "psr-4": {
             "Application\\": "src/Application"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "src/Test"
         }
     }
 }

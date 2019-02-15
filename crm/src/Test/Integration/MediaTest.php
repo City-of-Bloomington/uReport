@@ -1,15 +1,18 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2013-2019 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+declare (strict_types=1);
+namespace Test\Integration;
+
+use PHPUnit\Framework\TestCase;
+
 use Application\Models\Media;
 use Application\Models\Image;
 use Blossom\Classes\Database;
 
-require_once '../../bootstrap.inc';
-
-class MediaTest extends PHPUnit_Framework_TestCase
+class MediaTest extends TestCase
 {
 	private $testSize = 60;
 
@@ -21,7 +24,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$temp = __DIR__."/temp.png";
 
 		$zend_db = Database::getConnection();
-		$result = $zend_db->query("select * from media where media_type='image' limit 1")->execute();
+		$result = $zend_db->query("select * from media where mime_type like 'image%' limit 1")->execute();
 		if (count($result)) {
 			$row = $result->current();
 			$media = new Media($row);
@@ -54,7 +57,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
 		$temp = __DIR__."/temp.png";
 
 		$zend_db = Database::getConnection();
-		$result = $zend_db->query("select * from media where media_type='image' limit 1")->execute();
+		$result = $zend_db->query("select * from media where mime_type like 'image%' limit 1")->execute();
 		if (count($result)) {
 			$row = $result->current();
 			$media = new Media($row);
