@@ -40,6 +40,15 @@ if (!defined('STDIN')) {
 	session_start();
 }
 
+if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
+    $graylog = new Application\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
+    $logger  = new Zend\Log\Logger();
+    $logger->addWriter($graylog);
+    Zend\Log\Logger::registerErrorHandler($logger);
+    Zend\Log\Logger::registerExceptionHandler($logger);
+    Zend\Log\Logger::registerFatalErrorShutdownFunction($logger);
+}
+
 /**
  * PHP command line executable
  *

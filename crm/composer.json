@@ -7,6 +7,7 @@
         "php": ">=7.2",
         "auth0/auth0-php": "~5",
         "City-of-Bloomington/blossom-lib": "dev-master",
+        "graylog2/gelf-php": "@stable",
         "jasig/phpcas": "~1",
         "reprovinci/solr-php-client": "~1",
         "zendframework/zend-db": "@stable",
