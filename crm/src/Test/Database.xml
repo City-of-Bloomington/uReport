@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit bootstrap="../../bootstrap.inc">
+    <testsuites>
+        <testsuite name="Database">
+            <directory>Database</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
+

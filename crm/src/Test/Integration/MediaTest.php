@@ -34,13 +34,13 @@ class MediaTest extends TestCase
 			curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($request, CURLOPT_BINARYTRANSFER, true);
 			file_put_contents($temp, curl_exec($request));
-			$this->assertTrue(file_exists($temp));
+			$this->assertTrue(file_exists($temp), 'No file was downloaded');
 
-			$this->assertEquals($image->getFilesize(), filesize($temp));
+			$this->assertEquals($image->getFilesize(), filesize($temp), 'Downloaded file size does not match original');
 
 			$download = getimagesize($temp);
-			$this->assertEquals($image->getWidth() , $download[0]);
-			$this->assertEquals($image->getHeight(), $download[1]);
+			$this->assertEquals($image->getWidth() , $download[0], 'Downloaded image width does not match original');
+			$this->assertEquals($image->getHeight(), $download[1], 'Downloaded image height does not match original');
 		}
 
 		#if (file_exists($temp)) { unlink($temp); }

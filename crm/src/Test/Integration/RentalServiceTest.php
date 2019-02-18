@@ -9,7 +9,7 @@ namespace Test\Integration;
 use PHPUnit\Framework\TestCase;
 use Application\Models\RentalService;
 
-class AddressServiceTest extends TestCase
+class RentalServiceTest extends TestCase
 {
 	public function testGetOwners()
 	{
