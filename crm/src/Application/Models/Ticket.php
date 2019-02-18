@@ -599,16 +599,18 @@ class Ticket extends ActiveRecord
         ];
 
         foreach ($fields as $f) {
-            $get = 'get'.ucfirst($f);
-            $set = 'set'.ucfirst($f);
+            if (isset($post[$f])) {
+                $get = 'get'.ucfirst($f);
+                $set = 'set'.ucfirst($f);
 
-            $current = $this->$get();
-            $new     = $post[$f];
-            if ($current != $new) {
-                $changed = true;
-                $this->$set($new);
-                $data['original'][$f] = $current;
-                $data['updated' ][$f] = $new;
+                $current = $this->$get();
+                $new     = $post[$f];
+                if ($current != $new) {
+                    $changed = true;
+                    $this->$set($new);
+                    $data['original'][$f] = $current;
+                    $data['updated' ][$f] = $new;
+                }
             }
         }
         if ($changed) {
