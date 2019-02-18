@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 use Application\Models\Media;
 use Application\Models\Image;
-use Blossom\Classes\Database;
+use Application\Database;
 
 class MediaTest extends TestCase
 {

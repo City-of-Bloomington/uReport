@@ -6,7 +6,7 @@
  */
 namespace Application\Models;
 use Blossom\Classes\ActiveRecord;
-use Blossom\Classes\Database;
+use Application\Database;
 use Zend\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord

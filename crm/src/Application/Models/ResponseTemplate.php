@@ -7,7 +7,7 @@ namespace Application\Models;
 namespace Application\Models;
 
 use Blossom\Classes\ActiveRecord;
-use Blossom\Classes\Database;
+use Application\Database;
 
 class ResponseTemplate extends ActiveRecord
 {

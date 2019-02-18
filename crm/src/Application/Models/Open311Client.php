@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-use Blossom\Classes\Database;
+use Application\Database;
 
 class Open311Client
 {

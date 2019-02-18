@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
-use Blossom\Classes\Database;
+use Application\Database;
 
 class Location
 {

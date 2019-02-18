@@ -6,7 +6,7 @@
 namespace Application\Models;
 
 use Blossom\Classes\ActiveRecord;
-use Blossom\Classes\Database;
+use Application\Database;
 use Blossom\Classes\ExternalIdentity;
 
 class Person extends ActiveRecord
@@ -16,7 +16,7 @@ class Person extends ActiveRecord
 	protected $department;
 
 	const ERROR_UNKNOWN_PERSON = 'people/unknown';
-	
+
 	/**
 	 * Returns the matching Person object or null if not found
 	 *
@@ -32,7 +32,7 @@ class Person extends ActiveRecord
             return new Person($result->current());
         }
 	}
-	
+
 	/**
 	 * Populates the object with data
 	 *

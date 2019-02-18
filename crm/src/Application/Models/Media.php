@@ -11,7 +11,7 @@
 namespace Application\Models;
 
 use Blossom\Classes\ActiveRecord;
-use Blossom\Classes\Database;
+use Application\Database;
 
 class Media extends ActiveRecord
 {

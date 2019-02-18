@@ -9,7 +9,7 @@ namespace Test\Database;
 use PHPUnit\Framework\TestCase;
 
 use Application\Models\Action;
-use Blossom\Classes\Database;
+use Application\Database;
 
 class ActionTest extends TestCase
 {
