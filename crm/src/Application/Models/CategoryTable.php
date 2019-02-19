@@ -7,7 +7,7 @@
  */
 namespace Application\Models;
 
-use Blossom\Classes\TableGateway;
+use Application\TableGateway;
 use Zend\Db\Sql\Select;
 
 class CategoryTable extends TableGateway

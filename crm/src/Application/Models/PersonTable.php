@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-use Blossom\Classes\TableGateway;
+use Application\TableGateway;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Where;
 

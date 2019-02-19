@@ -6,7 +6,7 @@
 namespace Application\Models;
 
 use Blossom\Classes\ActiveRecord;
-use Blossom\Classes\TableGateway;
+use Application\TableGateway;
 use Zend\Db\Sql\Select;
 
 class TicketTable extends TableGateway

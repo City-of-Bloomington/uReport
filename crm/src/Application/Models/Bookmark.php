@@ -48,7 +48,9 @@ class Bookmark extends ActiveRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->setPerson_id($_SESSION['USER']->getId());
+			if (isset($_SESSION['USER'])) {
+                $this->setPerson_id($_SESSION['USER']->getId());
+            }
 		}
 	}
 

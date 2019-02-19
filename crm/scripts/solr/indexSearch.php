@@ -5,7 +5,7 @@
  */
 use Application\Models\Search;
 use Application\Models\Ticket;
-use Blossom\Classes\Database;
+use Application\Database;
 
 include '../../bootstrap.inc';
 $search = new Search();

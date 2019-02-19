@@ -5,7 +5,7 @@
  */
 use Application\Models\Ticket;
 use Application\Models\GeoCluster;
-use Blossom\Classes\Database;
+use Application\Database;
 
 include '../../bootstrap.inc';
 
