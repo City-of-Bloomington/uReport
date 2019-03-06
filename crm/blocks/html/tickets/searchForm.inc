@@ -9,7 +9,7 @@ use Application\Models\Person;
 use Application\Models\Search;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 

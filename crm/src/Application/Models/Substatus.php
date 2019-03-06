@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 use Application\Database;
 
 class Substatus extends ActiveRecord

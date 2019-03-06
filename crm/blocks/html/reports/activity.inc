@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 use Application\Models\Report;
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 use Blossom\Classes\View;
 
 $h = $this->template->getHelper('formatDuration');

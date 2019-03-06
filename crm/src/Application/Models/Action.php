@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  */
 namespace Application\Models;
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 use Application\Database;
 
 class Action extends ActiveRecord

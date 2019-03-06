@@ -6,6 +6,8 @@
 declare (strict_types=1);
 namespace Test\Selenium;
 
+use Facebook\WebDriver\WebDriverBy;
+
 class TestSomething extends SeleniumTest
 {
     public function testOne()

@@ -10,7 +10,7 @@ use Application\Models\DepartmentTable;
 use Application\Models\ClientTable;
 use Application\Models\Search;
 
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 
 $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');

@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-use Blossom\Classes\ActiveRecord;
+use Application\ActiveRecord;
 use Application\Database;
 use Blossom\Classes\Template;
 
