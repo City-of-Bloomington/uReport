@@ -317,7 +317,7 @@ class Report
 				join categories c on t.category_id=c.id
 				group by t.category_id
 				having count>0
-				order by count";
+				order by count desc";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}
@@ -335,7 +335,7 @@ class Report
 				where t.enteredDate > (now() - interval 1 day)
 				group by t.category_id
 				having count>0
-				order by count";
+				order by count desc";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}
@@ -353,7 +353,7 @@ class Report
 				join categories c on t.category_id=c.id
 				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
-				order by count";
+				order by count desc";
 		$zend_db = Database::getConnection();
 		return $zend_db->query($sql)->execute();
 	}
