@@ -59,7 +59,10 @@ main {
         h1, h2, legend, dt, a { color:$color-content-background; }
         dl { background-color:$color-heading; }
 
-        .dropdown a { color:$color-link; }
+        .dropdown {
+            a { color:$color-link; }
+            a:hover { color:$color-content-background; }
+        }
 
         input { color: $color-text-default; }
     }
