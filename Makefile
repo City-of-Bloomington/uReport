@@ -3,7 +3,7 @@ APPNAME=ureport
 SASS := $(shell command -v sassc 2> /dev/null)
 MSGFMT := $(shell command -v msgfmt 2> /dev/null)
 LANGUAGES := $(wildcard crm/language/*/LC_MESSAGES)
-VERSION := $(shell cat VERSION | tr -d "[:space:]")
+VERSION := $(shell cat crm/VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
 
 default: clean compile package
