@@ -72,6 +72,8 @@ main {
         h2 { margin: 0; }
         dl { padding:0; }
     }
+
+    table thead th { text-align: left; }
 }
 .icon.slide    { background-image: url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
 .button.text   { background-image: url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
