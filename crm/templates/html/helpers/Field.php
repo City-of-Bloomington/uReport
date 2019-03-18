@@ -69,7 +69,7 @@ class Field extends Helper
 
         $attr = '';
         if (!empty(  $params['attr'])) {
-            foreach ($params['attr'] as $k=>$v) { $attr.= "$k=\"$v\""; }
+            foreach ($params['attr'] as $k=>$v) { $attr.= "$k=\"$v\" "; }
         }
 
         $input = $this->$renderInput($params, $required, $attr);

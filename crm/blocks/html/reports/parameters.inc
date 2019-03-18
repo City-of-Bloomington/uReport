@@ -14,7 +14,7 @@ use Application\Models\Person;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
-$currentURL = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+$currentURL = new Url(Url::current_url(BASE_HOST));
 ?>
 <div class="searchParameters">
 	<?php
