@@ -414,7 +414,7 @@ class TicketsController extends Controller
 			}
 		}
 
-		$_REQUEST['return_url'] = BASE_URL.'/tickets/view?ticket_id='.$ticket->getId();
+		$_REQUEST['return_url'] = BASE_URL.'/tickets/changeLocation?ticket_id='.$ticket->getId();
 		$this->template->title  = $this->template->_('change_location');
 		$this->template->blocks = [
             new Block('locations/findLocationForm.inc', ['includeExternalResults' => true]),
