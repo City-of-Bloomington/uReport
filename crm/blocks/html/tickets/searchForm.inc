@@ -55,6 +55,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 		<fieldset id="advanced-search">
             <?php
                 $currentUrl = new Url(Url::current_url(BASE_HOST));
+                if ($currentUrl->page) { unset($currentUrl->page); }
                 $html       = '';
 
                 /**
