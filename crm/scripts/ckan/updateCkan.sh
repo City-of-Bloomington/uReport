@@ -1,5 +1,5 @@
 #!/bin/bash
-PHP=/usr/bin/php
-CRM=/srv/sites/ureport/crm
+APPLICATION_HOME=/srv/sites/ureport
+SITE_HOME=$APPLICATION_HOME/data
 
-$PHP $CRM/scripts/ckan/updateCkanResources.php
+SITE_HOME=$SITE_HOME php $APPLICATION_HOME/scripts/ckan/updateCkanResources.php
