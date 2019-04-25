@@ -11,13 +11,9 @@
 declare (strict_types=1);
 include realpath(__DIR__.'/../../bootstrap.inc');
 
-$dsn  = "mysql:host=localhost;dbname=".DB_NAME;
-$user = DB_USER;
-$pass = DB_PASS;
-// $dsn  = $DATABASES['default']['dsn'];
-// $user = $DATABASES['default']['username'];
-// $pass = $DATABASES['default']['password'];
-$pdo  = new \PDO($dsn, $user, $pass);
+$db   = $DATABASES['default'];
+$dsn  = sprintf("%s:host=%s;dbname=ureport", $db['driver'], $db['host'], $db['name']);
+$pdo  = new \PDO($dsn, $db['user'], $db['pass']);
 
 $config = include SITE_HOME.'/ckan/config.inc';
 $tmp    = SITE_HOME.'/ckan';
