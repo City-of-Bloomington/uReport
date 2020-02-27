@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
@@ -33,8 +33,8 @@ class Substatus extends ActiveRecord
 				$sql = ActiveRecord::isId($id)
 					? 'select * from substatus where id=?'
 					: 'select * from substatus where name=?';
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -59,8 +59,8 @@ class Substatus extends ActiveRecord
 	public function save()
 	{
 		if ($this->isDefault()) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('update substatus set isDefault=0 where status=?', [$this->getStatus()]);
+			$db = Database::getConnection();
+			$db->query('update substatus set isDefault=0 where status=?', [$this->getStatus()]);
 		}
 
 		parent::save();

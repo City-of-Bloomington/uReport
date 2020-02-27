@@ -70,10 +70,10 @@ class DatabaseTest extends TestCase
                   and REFERENCED_COLUMN_NAME=?";
 
 
-        $zend_db = Database::getConnection();
-        $schema  = $zend_db->getDriver()->getConnection()->getCurrentSchema();
+        $db = Database::getConnection();
+        $schema  = $db->getDriver()->getConnection()->getCurrentSchema();
         $params  = [$schema, $table, $column, $referenced_table, $referenced_column];
-        $query   = $zend_db->query($sql)->execute($params);
+        $query   = $db->query($sql)->execute($params);
         $c       = count($query);
 
         $this->assertEquals(1, $c, 'Foreign key is missing');

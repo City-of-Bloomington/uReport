@@ -1,13 +1,13 @@
 <?php
 /**
  * @copyright 2011-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
 use Application\TableGateway;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Where;
+use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Where;
 
 class PersonTable extends TableGateway
 {

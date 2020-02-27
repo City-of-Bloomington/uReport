@@ -5,7 +5,7 @@
  * The ticket will already have the new status set.
 *
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
 use Application\Models\Action;

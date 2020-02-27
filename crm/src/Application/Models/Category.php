@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 use Application\ActiveRecord;
@@ -41,8 +41,8 @@ class Category extends ActiveRecord
 					? 'select * from categories where id=?'
 					: 'select * from categories where name=?';
 
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -313,8 +313,8 @@ class Category extends ActiveRecord
 	 */
 	public static function getGlobalLastModifiedDate($format=null, \DateTimeZone $timezone=null)
 	{
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select max(lastModified) as lastModified from categories')->execute();
+		$db = Database::getConnection();
+		$result = $db->query('select max(lastModified) as lastModified from categories')->execute();
 		$row = $result->current();
 
 		if ($format) {

@@ -23,8 +23,8 @@ class MediaTest extends TestCase
 	{
 		$temp = __DIR__."/temp.png";
 
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query("select * from media where mime_type like 'image%' limit 1")->execute();
+		$db = Database::getConnection();
+		$result = $db->query("select * from media where mime_type like 'image%' limit 1")->execute();
 		if (count($result)) {
 			$row = $result->current();
 			$media = new Media($row);
@@ -56,8 +56,8 @@ class MediaTest extends TestCase
 	{
 		$temp = __DIR__."/temp.png";
 
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query("select * from media where mime_type like 'image%' limit 1")->execute();
+		$db = Database::getConnection();
+		$result = $db->query("select * from media where mime_type like 'image%' limit 1")->execute();
 		if (count($result)) {
 			$row = $result->current();
 			$media = new Media($row);

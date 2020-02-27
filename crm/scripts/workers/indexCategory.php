@@ -2,8 +2,8 @@
 /**
  * Reindex all tickets for the given category_id
  *
- * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2013-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param int $argv[2] The category_id to reindex tickets for
  * @param int $argv[1] The path to the SITE_HOME directory
  */
@@ -18,15 +18,15 @@ if (isset($argv[2]) && is_numeric($argv[2])) {
 	include_once realpath(__DIR__.'/../../bootstrap.inc');
 
     $filename = SITE_HOME.'/workers/indexCategory_'.uniqid();
-    $LOG = fopen($filename, 'a');
+    $LOG      = fopen($filename, 'a');
 
-	$sql = 'select * from tickets where category_id=?';
+	$sql      = 'select * from tickets where category_id=?';
 	if ($openFlag) { $sql.= ' and closedDate is null'; }
 
 	fwrite($LOG, "$sql\n");
-	$zend_db = Database::getConnection();
-    $result = $zend_db->query($sql)->execute([$argv[2]]);
-    $count = count($result);
+	$db     = Database::getConnection();
+    $result = $db->query($sql)->execute([$argv[2]]);
+    $count  = count($result);
 
     $search = new Search();
 	foreach ($result as $c=>$row) {

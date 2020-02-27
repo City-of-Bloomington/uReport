@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
 
@@ -68,7 +68,7 @@ class LoginController extends Controller
 		header('Location: '.BASE_URL.'/login?return_url='.$this->return_url);
 		exit();
 	}
-	
+
 	/**
 	 * Attempts to authenticate users based on AuthenticationMethod
 	 */
@@ -101,7 +101,7 @@ class LoginController extends Controller
 		header('Location: '.$this->return_url);
 		exit();
 	}
-	
+
 	/**
 	 * Checks for a user account with the given username.
 	 * If they exist it will register the user into the session and redirect.

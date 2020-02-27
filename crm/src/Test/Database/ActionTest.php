@@ -56,8 +56,8 @@ class ActionTest extends TestCase
 		}
 
 		if ($id) {
-            $zend_db = Database::getConnection();
-            $zend_db->query('delete from actions where id=?')
+            $db = Database::getConnection();
+            $db->query('delete from actions where id=?')
                     ->execute([$id]);
         }
 	}

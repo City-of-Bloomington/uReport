@@ -5,7 +5,7 @@
  * Caches a resized version of the image
  *
  * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Media $this->media
  * @param int   $this->size
  */

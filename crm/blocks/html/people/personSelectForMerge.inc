@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 $this->template->addToAsset('scripts', BASE_URI.'/js/merge.js');
 ?>

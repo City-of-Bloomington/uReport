@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 namespace Application\Models;
@@ -35,9 +35,9 @@ class ResponseTemplate extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = 'select * from category_action_responses where id=?';
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}

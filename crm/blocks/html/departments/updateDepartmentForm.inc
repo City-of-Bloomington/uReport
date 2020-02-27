@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Department $this->department
  * @param string     $this->action      The URL for posting the form
  * @param string     $this->return_url

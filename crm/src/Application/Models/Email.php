@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2013-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
@@ -34,9 +34,9 @@ class Email extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = 'select * from peopleEmails where id=?';
-                $result = $zend_db->createStatement($sql)->execute([$id]);
+                $result = $db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
                     $this->exchangeArray($result->current());
                 }
@@ -94,8 +94,8 @@ class Email extends ActiveRecord
 
 		// If we delete the only email used for notifications,
 		// we need to mark one of the other email addresses.
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?')->execute([$person->getId()]);
+		$db = Database::getConnection();
+		$result = $db->query('select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?')->execute([$person->getId()]);
 		$row = $result->current();
 		if (!$row['c']) {
 			$list = $person->getEmails();

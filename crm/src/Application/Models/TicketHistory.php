@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -29,9 +29,9 @@ class TicketHistory extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = "select * from ticketHistory where id=?";
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -272,8 +272,8 @@ class TicketHistory extends ActiveRecord
             }
             if (count($notificationLog->people)) {
                 $sql = 'update ticketHistory set sentNotifications=? where id=?';
-                $zend_db = Database::getConnection();
-                $zend_db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
+                $db = Database::getConnection();
+                $db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
             }
         }
 	}

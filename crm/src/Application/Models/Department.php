@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -33,11 +33,11 @@ class Department extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from departments where id=?'
 					: 'select * from departments where name=?';
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -91,8 +91,8 @@ class Department extends ActiveRecord
 	public function delete()
 	{
 		if ($this->isSafeToDelete()) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from department_actions where department_id=?', array($this->getId()));
+			$db = Database::getConnection();
+			$db->query('delete from department_actions where department_id=?', array($this->getId()));
 			parent::delete();
 		}
 		else {
@@ -173,10 +173,10 @@ class Department extends ActiveRecord
 	{
         $department_id = $this->getId();
 		if ($department_id) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from department_categories where department_id=?')->execute([$department_id]);
+			$db = Database::getConnection();
+			$db->query('delete from department_categories where department_id=?')->execute([$department_id]);
 
-			$query = $zend_db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
+			$query = $db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
 			foreach ($category_ids as $id) {
 				$query->execute([$department_id, $id]);
 			}
@@ -212,10 +212,10 @@ class Department extends ActiveRecord
 	{
         $department_id = $this->getId();
 		if ($department_id) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from department_actions where department_id=?')->execute([$department_id]);
+			$db = Database::getConnection();
+			$db->query('delete from department_actions where department_id=?')->execute([$department_id]);
 
-			$query = $zend_db->createStatement('insert into department_actions set department_id=?, action_id=?');
+			$query = $db->createStatement('insert into department_actions set department_id=?, action_id=?');
 			foreach ($action_ids as $id) {
                 $query->execute([$this->getId(), (int)$id]);
 			}
@@ -248,16 +248,16 @@ class Department extends ActiveRecord
 		// we cannot use those functions for this test.
 		// We need to absolutely know if there is any foreign key
 		// violation before we delete.
-		$zend_db = Database::getConnection();
-        $result = $zend_db->query('select count(*) as c from categories where department_id=?')->execute([$this->getId()]);
+		$db = Database::getConnection();
+        $result = $db->query('select count(*) as c from categories where department_id=?')->execute([$this->getId()]);
         $row = $result->current();
 		if ($row['c']) { return false; }
 
-		$result = $zend_db->query('select count(*) as c from department_categories where department_id=?')->execute([$this->getId()]);
+		$result = $db->query('select count(*) as c from department_categories where department_id=?')->execute([$this->getId()]);
         $row = $result->current();
         if ($row['c']) { return false; }
 
-        $result = $zend_db->query('select count(*) as c from people where department_id=?')->execute([$this->getId()]);
+        $result = $db->query('select count(*) as c from people where department_id=?')->execute([$this->getId()]);
         $row = $result->current();
         if ($row['c']) { return false; }
 

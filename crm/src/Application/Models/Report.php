@@ -47,8 +47,8 @@ class Report
 					t.substatus_id, s.name
 				order by p.lastname, p.firstname, c.name, t.status, t.substatus_id";
 
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		$result = $db->query($sql)->execute();
 		$d = array();
 		foreach ($result as $r) {
 			$pid = $r['assignedPerson_id'];
@@ -89,9 +89,9 @@ class Report
 					p.firstname, p.lastname,
 					s.name
 				order by c.name, p.lastname, p.firstname, t.status desc, t.substatus_id";
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 		$d = array();
-		$result = $zend_db->query($sql)->execute();
+		$result = $db->query($sql)->execute();
 		foreach ($result as $r) {
 			$cid = $r['category_id'];
 			$pid = $r['assignedPerson_id'];
@@ -162,16 +162,16 @@ class Report
                     $involvementSelect
                 ) as stats
                 group by stats.actionPerson_id";
-        $zend_db = Database::getConnection();
-        $result = $zend_db->query($sql)->execute();
+        $db = Database::getConnection();
+        $result = $db->query($sql)->execute();
         return $result;
     }
 
     public static function person($get)
     {
         $sql     = self::getInvolvementQuery($get);
-        $zend_db = Database::getConnection();
-        $result  = $zend_db->query($sql)->execute();
+        $db = Database::getConnection();
+        $result  = $db->query($sql)->execute();
         return $result;
     }
 
@@ -308,7 +308,7 @@ class Report
     }
 
 	/**
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public static function currentOpenTickets()
 	{
@@ -318,14 +318,14 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 	/**
 	 * Returns the tickets opened in the past 24 hours
 	 *
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public static function openedTickets()
 	{
@@ -336,14 +336,14 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 	/**
 	 * Returns the tickets closed in the past 24 hours
 	 *
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public static function closedTickets()
 	{
@@ -354,8 +354,8 @@ class Report
 				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
 				order by count desc";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 	/**
@@ -365,7 +365,7 @@ class Report
 	 *
 	 * @param string $start
 	 * @param string $end
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public static function openTicketsCount($start, $end)
 	{
@@ -376,8 +376,8 @@ class Report
 				where '$s'<=t.enteredDate and t.enteredDate<='$e'
 				group by date
 				order by date";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 	/**
@@ -387,7 +387,7 @@ class Report
 	 *
 	 * @param string $start
 	 * @param string $end
-	 * @return Zend\Db\ResultSet ('date'=>xx, 'closed'=>xx)
+	 * @return Laminas\Db\ResultSet ('date'=>xx, 'closed'=>xx)
 	 */
 	public static function closedTicketsCount($start, $end)
 	{
@@ -399,12 +399,12 @@ class Report
 				where '$s'<=t.closedDate and t.closedDate<='$e'
 				group by date
 				order by date";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 	/**
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public static function categoryActivity()
 	{
@@ -422,8 +422,8 @@ class Report
 				join categories c on t.category_id=c.id
 				group by t.category_id
 				order by currentopen desc";
-		$zend_db = Database::getConnection();
-		return $zend_db->query($sql)->execute();
+		$db = Database::getConnection();
+		return $db->query($sql)->execute();
 	}
 
 
@@ -451,8 +451,8 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query($sql)->execute([$date, $date]);
+		$db = Database::getConnection();
+		$result = $db->query($sql)->execute([$date, $date]);
 		$row = $result->current();
 		return $row['count'];
 	}
@@ -482,8 +482,8 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query($sql)->execute([$date, $date]);
+		$db = Database::getConnection();
+		$result = $db->query($sql)->execute([$date, $date]);
 		$row = $result->current();
 		return $row['slaPercentage'];
 	}
@@ -513,13 +513,13 @@ class Report
         $options = self::volumeOptions($get);
         $where = $options ? "where $options" : '';
 
-        $zend_db = Database::getConnection();
+        $db = Database::getConnection();
 
         $sql = "select count(*) as count
                 from tickets t
                 join categories p on t.category_id=p.id
                 $where";
-        $result = $zend_db->query($sql)->execute();
+        $result = $db->query($sql)->execute();
         $row = $result->current();
         $totalCount = $row['count'];
 
@@ -530,7 +530,7 @@ class Report
                 join tickets t on p.id=t.category_id
                 $where
                 group by d.id, d.name order by d.name";
-        $result = $zend_db->query($sql)->execute();
+        $result = $db->query($sql)->execute();
 
         return [ 'totalCount'=>$totalCount, 'result'=>$result ];
 	}
@@ -541,7 +541,7 @@ class Report
         $options = self::volumeOptions($get);
         $options = $options ? "and $options" : '';
 
-        $zend_db = Database::getConnection();
+        $db = Database::getConnection();
 
         $sql = "select p.name, count(*) as count
                 from categories p
@@ -549,7 +549,7 @@ class Report
                 where p.department_id=?
                 $options
                 group by p.name order by count desc";
-        $result = $zend_db->query($sql)->execute([$department_id]);
+        $result = $db->query($sql)->execute([$department_id]);
         return ['result'=>$result];
     }
 }

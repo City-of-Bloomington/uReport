@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  * @param bool   $this->disableButtons  (optional)
  * @param Ticket $this->ticket          (optional)

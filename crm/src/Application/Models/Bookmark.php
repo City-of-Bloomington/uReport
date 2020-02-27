@@ -3,7 +3,7 @@
  * Represents a saved URL for a user
  *
  * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -35,8 +35,8 @@ class Bookmark extends ActiveRecord
 			else {
 				$sql = 'select * from bookmarks where id=?';
 
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}

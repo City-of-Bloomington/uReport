@@ -12,11 +12,11 @@
  * These old tickets do not usually pass validation, so we have to do
  * raw SQL queries to do the work.
  *
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 include '../bootstrap.inc';
-$zend_db = Database::getConnection();
+$db = Database::getConnection();
 $closedAction = new Action('close');
 
 $cutoff_date = '2009-01-01';
@@ -25,10 +25,10 @@ $sql = "select t.id, t.enteredDate, t.assignedPerson_id
 		from tickets t
 		where t.status='open'
 		and t.enteredDate<'$cutoff_date'";
-$result = $zend_db->fetchAll($sql);
+$result = $db->fetchAll($sql);
 foreach ($result as $row) {
 	$sql = 'select max(actionDate) from ticketHistory where ticket_id=?';
-	$actionDate = $zend_db->fetchOne($sql, array($row['id']));
+	$actionDate = $db->fetchOne($sql, array($row['id']));
 	$history = array(
 		'ticket_id'=>$row['id'],
 		'actionPerson_id'=>$row['assignedPerson_id'],
@@ -36,8 +36,8 @@ foreach ($result as $row) {
 		'actionDate'=>$actionDate ? $actionDate : $row['enteredDate'],
 		'notes'=>'[data cleanup] Closed old ticket from ReqPro'
 	);
-	$zend_db->insert('ticketHistory', $history);
-	$zend_db->update('tickets', array('status'=>'closed'), 'id='.$row['id']);
+	$db->insert('ticketHistory', $history);
+	$db->update('tickets', array('status'=>'closed'), 'id='.$row['id']);
 
 	$ticket = new Ticket($row['id']);
 	$search = new Search();

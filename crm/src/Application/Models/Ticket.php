@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -43,9 +43,9 @@ class Ticket extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-                $zend_db = Database::getConnection();
+                $db = Database::getConnection();
 				$sql = 'select * from tickets where id=?';
-                $result = $zend_db->createStatement($sql)->execute([$id]);
+                $result = $db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
                     $this->exchangeArray($result->current());
                 }
@@ -183,8 +183,8 @@ class Ticket extends ActiveRecord
 	{
         foreach ($this->getMedia() as $m) { $m->delete(); }
 
-        $zend_db = Database::getConnection();
-        $zend_db->query('delete from ticketHistory where ticket_id=?')->execute([$this->getId()]);
+        $db = Database::getConnection();
+        $db->query('delete from ticketHistory where ticket_id=?')->execute([$this->getId()]);
 
 		$search = new Search();
 		$search->delete($this);
@@ -319,8 +319,8 @@ class Ticket extends ActiveRecord
 		}
 		else {
 			// See if there's a default substatus to set
-			$zend_db = Database::getConnection();
-			$result = $zend_db->query('select * from substatus where status=? and isDefault=1')->execute([$this->getStatus()]);
+			$db = Database::getConnection();
+			$result = $db->query('select * from substatus where status=? and isDefault=1')->execute([$this->getStatus()]);
 			if (count($result)) {
 				$this->setSubstatus(new Substatus($result->current()));
 			}
@@ -415,13 +415,13 @@ class Ticket extends ActiveRecord
 	 */
 	public function getClusterIds()
 	{
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 
 		// We may want to redefine cluster_ids in the future
 		// Just select all the fields that are in the table, and
 		// we'll remove the ticket_id field.
 		// All the rest of the fields should be cluster_ids
-		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->getId()]);
+		$result = $db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->getId()]);
 		$row = $result->current();
 		unset($row['ticket_id']);
 
@@ -429,7 +429,7 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @return Zend\Db\ResultSet
+	 * @return Laminas\Db\ResultSet
 	 */
 	public function getMedia()
 	{
@@ -460,9 +460,9 @@ class Ticket extends ActiveRecord
 	{
 		$history = [];
 
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 		$sql = 'select * from ticketHistory where ticket_id=? order by enteredDate desc';
-		$result = $zend_db->query($sql)->execute([$this->getId()]);
+		$result = $db->query($sql)->execute([$this->getId()]);
 		foreach ($result as $row) {
 			$history[] = new TicketHistory($row);
 		}
@@ -509,9 +509,9 @@ class Ticket extends ActiveRecord
 	public function mergeFrom(Ticket $ticket)
 	{
 		if ($this->getId() && $this->permitsMerge($ticket)) {
-			$zend_db = Database::getConnection();
+			$db = Database::getConnection();
 
-			$zend_db->query('update tickets set parent_id=? where id=?')
+			$db->query('update tickets set parent_id=? where id=?')
                     ->execute([$this->getId(), $ticket->getId()]);
 
 			$history = new TicketHistory();
@@ -638,8 +638,8 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleAdd($post)
 	{
-		$zend_db = Database::getConnection();
-		$zend_db->getDriver()->getConnection()->beginTransaction();
+		$db = Database::getConnection();
+		$db->getDriver()->getConnection()->beginTransaction();
 		try {
             // Set all the location information using any fields the user posted
             $fields = [
@@ -670,7 +670,7 @@ class Ticket extends ActiveRecord
 			$this->getCategory()->onTicketAdd($this);
 		}
 		catch (\Exception $e) {
-			$zend_db->getDriver()->getConnection()->rollback();
+			$db->getDriver()->getConnection()->rollback();
 
 			$search = new Search();
 			$search->delete($this);
@@ -678,7 +678,7 @@ class Ticket extends ActiveRecord
 
 			throw $e;
 		}
-		$zend_db->getDriver()->getConnection()->commit();
+		$db->getDriver()->getConnection()->commit();
 
         // Create the entry in the history log
         $history = new TicketHistory();
@@ -911,8 +911,8 @@ class Ticket extends ActiveRecord
               union select p.* from tickets       t join people p on t.reportedByPerson_id = p.id and t.id=$id
               union select p.* from ticketHistory t join people p on t. enteredByPerson_id = p.id and t.ticket_id=$id
               union select p.* from ticketHistory t join people p on t.    actionPerson_id = p.id and t.ticket_id=$id";
-            $zend_db = Database::getConnection();
-            $result = $zend_db->query($sql)->execute();
+            $db = Database::getConnection();
+            $result = $db->query($sql)->execute();
             foreach ($result as $row) {
                 $person = new Person($row);
                 if (!array_key_exists($person->getId(), $people)) {
@@ -945,8 +945,8 @@ class Ticket extends ActiveRecord
                 join peopleEmails e on p.id=e.person_id
                 where usedForNotifications=1";
         $id      = $this->getId();
-        $zend_db = Database::getConnection();
-        $result  = $zend_db->createStatement($sql)->execute([$id, $id, $id]);
+        $db = Database::getConnection();
+        $result  = $db->createStatement($sql)->execute([$id, $id, $id]);
         foreach ($result as $row) { $people[] = new Person($row); }
         return $people;
 	}

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2013-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\GeoCluster;
 use Application\Models\Ticket;
@@ -52,8 +51,8 @@ class GeoClusterTest extends DatabaseTestCase
 		$ticket = new Ticket($this->testTicketId);
 		GeoCluster::updateTicketClusters($ticket);
 
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->testTicketId]);
+		$db     = Database::getConnection();
+		$result = $db->query('select * from ticket_geodata where ticket_id=?')->execute([$this->testTicketId]);
 		$row = $result->current();
 		for ($i=0; $i<=6; $i++) {
 			$this->assertGreaterThan(0, $row["cluster_id_$i"]);

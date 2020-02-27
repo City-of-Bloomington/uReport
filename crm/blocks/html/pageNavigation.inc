@@ -2,9 +2,9 @@
 /**
  * Displays page navigation for any list that has pagination turned on
  *
- * @copyright 2007-2017 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Zend\Paginator $this->paginator
+ * @copyright 2007-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param Laminas\Paginator $this->paginator
  */
 use Blossom\Classes\Url;
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2006-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Person $this->person
  */
 use Application\Models\DepartmentTable;
@@ -51,8 +51,8 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/users/updateUserForm.js');
                 echo $field->field(['name'=>'password', 'id'=>'password', 'label'=>$this->_('password'), 'type'=>'password']);
 
                 $options = [['value'=>'']];
-                global $ZEND_ACL;
-                foreach (array_reverse($ZEND_ACL->getRoles()) as $role) { $options[] = ['value'=>$role, 'label'=>$this->_(strtolower($role))]; }
+                global $ACL;
+                foreach (array_reverse($ACL->getRoles()) as $role) { $options[] = ['value'=>$role, 'label'=>$this->_(strtolower($role))]; }
                 echo $field->field([
                     'name'    => 'role',
                     'id'      => 'role',

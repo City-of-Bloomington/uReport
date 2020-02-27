@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Search;
 use Application\Models\Ticket;
@@ -13,8 +13,8 @@ $search->solrClient->deleteByQuery('*:*');
 $search->solrClient->commit();
 
 $sql = 'select * from tickets';
-$zend_db = Database::getConnection();
-$result = $zend_db->query($sql)->execute();
+$db = Database::getConnection();
+$result = $db->query($sql)->execute();
 $count = count($result);
 foreach ($result as $c=>$row) {
 	$ticket = new Ticket($row);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2013-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
@@ -33,9 +33,9 @@ class Phone extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = 'select * from peoplePhones where id=?';
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}

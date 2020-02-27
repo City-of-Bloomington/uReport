@@ -42,11 +42,11 @@ if (!defined('STDIN')) {
 
 if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
     $graylog = new Application\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
-    $logger  = new Zend\Log\Logger();
+    $logger  = new Laminas\Log\Logger();
     $logger->addWriter($graylog);
-    Zend\Log\Logger::registerErrorHandler($logger);
-    Zend\Log\Logger::registerExceptionHandler($logger);
-    Zend\Log\Logger::registerFatalErrorShutdownFunction($logger);
+    Laminas\Log\Logger::registerErrorHandler($logger);
+    Laminas\Log\Logger::registerExceptionHandler($logger);
+    Laminas\Log\Logger::registerFatalErrorShutdownFunction($logger);
 }
 
 /**

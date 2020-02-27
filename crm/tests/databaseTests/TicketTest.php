@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @copyright 2013-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Ticket;
 use Blossom\Classes\Database;
@@ -49,9 +48,9 @@ class TicketTest extends DatabaseTestCase
 		$this->assertEquals($ticket->getLatitude() , $this->testLatitude );
 		$this->assertEquals($ticket->getLongitude(), $this->testLongitude);
 
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select * from ticket_geodata where ticket_id=?')->execute([$id]);
-		$row = $result->current();
+		$db     = Database::getConnection();
+		$result = $db->query('select * from ticket_geodata where ticket_id=?')->execute([$id]);
+		$row    = $result->current();
 		for ($i=0; $i<=6; $i++) {
 			$this->assertGreaterThan(0, $row["cluster_id_$i"]);
 		}
@@ -66,10 +65,10 @@ class TicketTest extends DatabaseTestCase
 			'latitude'   => 0,
 			'longitude'  => 0
 		));
-		$id = $ticket->getId();
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query('select latitude,longitude from tickets where id=?')->execute([$id]);
-		$row = $result->current();
+		$id     = $ticket->getId();
+		$db     = Database::getConnection();
+		$result = $db->query('select latitude,longitude from tickets where id=?')->execute([$id]);
+		$row    = $result->current();
 		$this->assertNull($row['latitude' ]);
 		$this->assertNull($row['longitude']);
 	}

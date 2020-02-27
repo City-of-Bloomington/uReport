@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
-use Zend\Db\Sql\Sql;
+use Laminas\Db\Sql\Sql;
 
 abstract class ActiveRecord
 {
@@ -31,8 +31,8 @@ abstract class ActiveRecord
 	protected function save()
 	{
 		$this->validate();
-		$zend_db = Database::getConnection();
-		$sql = new Sql($zend_db, $this->tablename);
+		$db  = Database::getConnection();
+		$sql = new Sql($db, $this->tablename);
 		if ($this->getId()) {
 			$update = $sql->update()
 				->set($this->data)
@@ -42,7 +42,7 @@ abstract class ActiveRecord
 		else {
 			$insert = $sql->insert()->values($this->data);
 			$sql->prepareStatementForSqlObject($insert)->execute();
-			$this->data['id'] = $zend_db->getDriver()->getLastGeneratedValue();
+			$this->data['id'] = $db->getDriver()->getLastGeneratedValue();
 		}
 	}
 

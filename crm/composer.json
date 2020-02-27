@@ -6,20 +6,17 @@
     "require": {
         "php": ">=7.2",
         "auth0/auth0-php": "~5",
-        "City-of-Bloomington/blossom-lib": "dev-master",
+        "city-of-bloomington/blossom-lib": "dev-master",
         "graylog2/gelf-php": "@stable",
         "jasig/phpcas": "~1",
         "reprovinci/solr-php-client": "~1",
-        "zendframework/zend-db": "@stable",
-        "zendframework/zend-log": "@stable",
-        "zendframework/zend-loader": "@stable",
-        "zendframework/zend-paginator": "@stable",
-        "zendframework/zend-permissions-acl": "@stable",
-        "zendframework/zend-servicemanager": "@stable"
+        "laminas/laminas-db":              "@stable",
+        "laminas/laminas-log":             "@stable",
+        "laminas/laminas-paginator":       "@stable",
+        "laminas/laminas-permissions-acl": "@stable"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable",
-        "facebook/webdriver": "@stable"
+        "phpunit/phpunit": "@stable"
     },
     "autoload": {
         "psr-4": {

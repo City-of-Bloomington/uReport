@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param TicketList $this->ticketList
  */

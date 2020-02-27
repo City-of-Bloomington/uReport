@@ -3,7 +3,7 @@
  * Displays a list of Tickets using Open311 terminology
  *
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param TicketList $this->ticketList
  */
 use Blossom\Classes\Block;

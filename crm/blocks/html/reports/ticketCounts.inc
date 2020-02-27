@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright 2014-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Zend\Db\Result $this->data
- * @param string         $this->title
+ * @copyright 2014-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param Laminas\Db\Result $this->data
+ * @param string            $this->title
  */
 ?>
 <section class="searchResults">

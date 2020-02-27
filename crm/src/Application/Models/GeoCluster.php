@@ -1,13 +1,13 @@
 <?php
 /**
  * @copyright 2013-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Application\ActiveRecord;
 use Application\Database;
-use Zend\Db\Sql\Sql;
+use Laminas\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord
 {
@@ -31,10 +31,10 @@ class GeoCluster extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				$sql = "select id,level,x(center) as longitude, y(center) as latitude
 						from geoclusters where id=?";
-                $result = $zend_db->createStatement($sql)->execute([$id]);
+                $result = $db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
                     $this->exchangeArray($result->current());
                 }
@@ -62,19 +62,19 @@ class GeoCluster extends ActiveRecord
 		 // We cannot use the default ActiveRecord save,
 		 // because the center point must use mysql spatial functions
 		$this->validate();
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 		if ($this->getId()) {
 			$sql = 'update geoclusters set level=?, center=point(?, ?) where id=?';
-			$zend_db->query($sql)->execute([
+			$db->query($sql)->execute([
 				$this->getLevel(), $this->getLongitude(), $this->getLatitude(), $this->getId()
 			]);
 		}
 		else {
 			$sql = 'insert geoclusters set level=?, center=point(?, ?)';
-			$zend_db->query($sql)->execute([
+			$db->query($sql)->execute([
 				$this->getLevel(), $this->getLongitude(), $this->getLatitude()
 			]);
-			$this->data['id'] = $zend_db->getDriver()->getLastGeneratedValue();
+			$this->data['id'] = $db->getDriver()->getLastGeneratedValue();
 		}
 	}
 
@@ -96,8 +96,8 @@ class GeoCluster extends ActiveRecord
 	public static function updateTicketClusters(Ticket $ticket)
 	{
 		if ($ticket->getId()) {
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from ticket_geodata where ticket_id=?')->execute([$ticket->getId()]);
+			$db = Database::getConnection();
+			$db->query('delete from ticket_geodata where ticket_id=?')->execute([$ticket->getId()]);
 
 			if ($ticket->getLatitude() && $ticket->getLongitude()) {
 				$data['ticket_id'] = $ticket->getId();
@@ -105,7 +105,7 @@ class GeoCluster extends ActiveRecord
 					$data["cluster_id_$i"] = self::assignClusterIdForLevel($ticket, $i);
 				}
 
-				$sql = new Sql($zend_db);
+				$sql = new Sql($db);
 				$insert = $sql->insert('ticket_geodata');
 				$insert->values($data);
 				$sql->prepareStatementForSqlObject($insert)->execute();
@@ -154,8 +154,8 @@ class GeoCluster extends ActiveRecord
 		order by distance
 		LIMIT 1
 		";
-		$zend_db = Database::getConnection();
-		$result = $zend_db->query($sql)->execute([$level]);
+		$db = Database::getConnection();
+		$result = $db->query($sql)->execute([$level]);
 		if (count($result)) {
 			$row = $result->current();
 			return $row['id'];

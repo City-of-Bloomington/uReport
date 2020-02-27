@@ -1,17 +1,17 @@
 <?php
 /**
- * A base class that streamlines creation of ZF2 TableGateway
+ * A base class that streamlines creation of TableGateway
  *
- * @copyright 2014-2019 City of Bloomington, Indiana
+ * @copyright 2014-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
 
-use Zend\Db\TableGateway\TableGateway as ZendTableGateway;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Sql\Select;
-use Zend\Paginator\Adapter\DbSelect;
-use Zend\Paginator\Paginator;
+use Laminas\Db\TableGateway\TableGateway as LaminasTableGateway;
+use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Db\Sql\Select;
+use Laminas\Paginator\Adapter\DbSelect;
+use Laminas\Paginator\Paginator;
 
 abstract class TableGateway
 {
@@ -29,7 +29,7 @@ abstract class TableGateway
 	{
 		$this->resultSetPrototype = new ResultSet();
 		$this->resultSetPrototype->setArrayObjectPrototype(new $class());
-		$this->tableGateway = new ZendTableGateway(
+		$this->tableGateway = new LaminasTableGateway(
 			$table,
 			Database::getConnection(),
 			null,
@@ -72,8 +72,8 @@ abstract class TableGateway
 	}
 
 	/**
-	 * @param Zend\Db\Sql\Select $select
-	 * @return Zend\Db\ResultSet
+	 * @param  Select    $select
+	 * @return ResultSet
 	 */
 	public function performSelect(Select $select, $order, $paginated=false, $limit=null)
 	{
@@ -81,7 +81,7 @@ abstract class TableGateway
 		if ($limit) { $select->limit($limit); }
 
 		if ($paginated) {
-			$adapter = new DbSelect($select, $this->tableGateway->getAdapter(), $this->resultSetPrototype);
+			$adapter   = new DbSelect($select, $this->tableGateway->getAdapter(), $this->resultSetPrototype);
 			$paginator = new Paginator($adapter);
 			return $paginator;
 		}
@@ -91,10 +91,10 @@ abstract class TableGateway
 	}
 
 	/**
-	 * @param Zend\Db\ResultSet
+	 * @param  ResultSet
 	 * @return array
 	 */
-	public static function hydrateResults(ResultSet $results)
+	public static function hydrateResults(ResultSet $results): array
 	{
         $output = [];
         foreach ($results as $object) {
@@ -105,18 +105,13 @@ abstract class TableGateway
 
 	/**
 	 * Returns the generated sql
-	 *
-	 * @param Zend\Db\Sql\Select
 	 */
-	public function getSqlForSelect(Select $select)
+	public function getSqlForSelect(Select $select): string
 	{
 		return $select->getSqlString($this->tableGateway->getAdapter()->getPlatform());
 	}
 
-	/**
-	 * @param Zend\Db\ResultSet
-	 */
-	public static function getSqlForResult(ResultSet $result)
+	public static function getSqlForResult(ResultSet $result): string
 	{
 		return $result->getDataSource()->getResource()->queryString;
 	}

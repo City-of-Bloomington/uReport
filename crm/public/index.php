@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2012-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Blossom\Classes\Block;
 use Blossom\Classes\Template;
@@ -51,9 +51,9 @@ $format = !empty($_REQUEST['format']) ? $_REQUEST['format'] : 'html';
 $template = new Template('default', $format);
 
 // Execute the Controller::action()
-if (isset($resource) && isset($action) && $ZEND_ACL->hasResource($resource)) {
+if (isset($resource) && isset($action) && $ACL->hasResource($resource)) {
 	$role = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';
-	if ($ZEND_ACL->isAllowed($role, $resource, $action)) {
+	if ($ACL->isAllowed($role, $resource, $action)) {
 		$controller = 'Application\\Controllers\\'.ucfirst($resource).'Controller';
 		$c = new $controller($template);
 		$c->$action();

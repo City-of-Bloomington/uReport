@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2011-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Category $this->category
  */
 use Application\Models\CategoryGroupTable;
@@ -108,9 +108,9 @@ $helper = $this->template->getHelper('field');
 	</fieldset>
 	<fieldset><legend><?= $this->_('permissions_required'); ?></legend>
         <?php
-            global $ZEND_ACL;
+            global $ACL;
             $options = [];
-            foreach ($ZEND_ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
+            foreach ($ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
             echo $helper->field([
                 'name'    => 'postingPermissionLevel',
                 'id'      => 'postingPermissionLevel',
@@ -120,7 +120,7 @@ $helper = $this->template->getHelper('field');
                 'options' => $options
             ]);
             $options = [];
-            foreach ($ZEND_ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
+            foreach ($ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
             echo $helper->field([
                 'name'    => 'displayPermissionLevel',
                 'id'      => 'displayPermissionLevel',

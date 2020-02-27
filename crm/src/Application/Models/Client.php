@@ -3,7 +3,7 @@
  * A Web Service Client authorized to POST tickets
  *
  * @copyright 2011-2014 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
@@ -19,9 +19,9 @@ class Client extends ActiveRecord
 
 	public static function loadByApiKey($api_key)
 	{
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 		$sql = 'select * from clients where api_key=?';
-		$result = $zend_db->createStatement($sql)->execute([$api_key]);
+		$result = $db->createStatement($sql)->execute([$api_key]);
 		if (count($result)) {
 			return new Client($result->current());
 		}
@@ -51,8 +51,8 @@ class Client extends ActiveRecord
 			else {
 				$sql = 'select * from clients where id=?';
 
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}

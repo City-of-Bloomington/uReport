@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -29,7 +29,7 @@ class Metrics
         $scopeEnd   = $e->format(ActiveRecord::MYSQL_DATETIME_FORMAT);
         $scopeFilter = "('$scopeStart' <= ifnull(closedDate, now()) and '$scopeEnd' >= enteredDate)";
 
-        $zend_db = Database::getConnection();
+        $db = Database::getConnection();
         $sql = "select x.total, x.ontime, x.effectiveDate, floor(ontime / total * 100) as percentage
                 from (
                     select  count(*) as total,
@@ -40,7 +40,7 @@ class Metrics
                     where t.category_id=?
                     and (? <= ifnull(closedDate, now()) and ? >= enteredDate)
                 ) x";
-        $result = $zend_db->query($sql)->execute([$category_id, $scopeStart, $scopeEnd]);
+        $result = $db->query($sql)->execute([$category_id, $scopeStart, $scopeEnd]);
         if (count($result)) {
             return $result->current();
         }

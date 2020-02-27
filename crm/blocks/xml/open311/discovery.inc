@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2012 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 $lastModified = '2012-09-18T15:37-05';

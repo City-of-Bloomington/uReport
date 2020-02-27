@@ -1,8 +1,8 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
- * @param Zend\Db\ResultSet $this->ticketList
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param Laminas\Db\ResultSet $this->ticketList
  */
 use Application\Models\Person;
 use Application\Models\TicketTable;

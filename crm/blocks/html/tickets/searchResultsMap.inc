@@ -3,7 +3,7 @@
  * Displays a map of the search results
  *
  * @copyright 2013-2017 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Apache_Solr_Response $this->solrObject
  */
 use Blossom\Classes\Block;

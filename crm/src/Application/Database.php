@@ -5,11 +5,11 @@
  * Allows for connecting to multiple databases, using
  * only a single instance for each database connection.
  *
- * @copyright 2006-2019 City of Bloomington, Indiana
+ * @copyright 2006-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
-use Zend\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Adapter;
 
 class Database
 {

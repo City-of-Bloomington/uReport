@@ -6,7 +6,7 @@
  * User provided filenames will be stored in the database
  *
  * @copyright 2006-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -67,7 +67,7 @@ class Media extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$zend_db = Database::getConnection();
+				$db = Database::getConnection();
 				if (ActiveRecord::isId($id)) {
 					$sql = 'select * from media where id=?';
 				}
@@ -78,7 +78,7 @@ class Media extends ActiveRecord
 
 				$result = null;
 				if (isset($sql)) {
-                    $result = $zend_db->createStatement($sql)->execute([$id]);
+                    $result = $db->createStatement($sql)->execute([$id]);
 				}
 
 				if (count($result)) {

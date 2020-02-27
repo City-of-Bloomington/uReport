@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2011-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 use Application\ActiveRecord;
@@ -47,8 +47,8 @@ class Action extends ActiveRecord
 					? 'select * from actions where id=?'
 					: 'select * from actions where name=?';
 
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}

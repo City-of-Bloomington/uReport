@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @copyright 2013-2020 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 include '../bootstrap.inc';
 
@@ -12,11 +12,11 @@ include '../bootstrap.inc';
 $_SESSION['USER'] = new Person();
 $_SESSION['USER']->setRole('Administrator');
 
-$zend_db = Database::getConnection();
+$db  = Database::getConnection();
 $sql = "select distinct assignedPerson_id
 		from tickets
 		where status='open'";
-$ids = $zend_db->fetchCol($sql);
+$ids = $db->fetchCol($sql);
 foreach ($ids as $id) {
 	$person  = new Person($id);
 

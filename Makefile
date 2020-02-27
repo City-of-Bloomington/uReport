@@ -10,7 +10,7 @@ default: clean compile package
 
 deps:
 ifndef SASS
-	$(error "pysassc is not installed")
+	$(error "sassc is not installed")
 endif
 ifndef MSGFMT
 	$(error "msgfmt is not installed, please install gettext")

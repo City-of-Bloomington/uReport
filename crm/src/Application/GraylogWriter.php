@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2020 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -10,7 +10,7 @@ use Gelf\Publisher;
 use Gelf\Message;
 use Gelf\Transport\UdpTransport;
 
-use Zend\Log\Writer\AbstractWriter;
+use Laminas\Log\Writer\AbstractWriter;
 
 class GraylogWriter extends AbstractWriter
 {

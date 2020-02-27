@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright 2009-2018 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
@@ -24,10 +24,10 @@ class Person extends ActiveRecord
 	 */
 	public static function findByUsername(string $username)
 	{
-        $zend_db = Database::getConnection();
+        $db = Database::getConnection();
         $sql = 'select * from people where username=?';
 
-        $result = $zend_db->createStatement($sql)->execute([$username]);
+        $result = $db->createStatement($sql)->execute([$username]);
         if (count($result)) {
             return new Person($result->current());
         }
@@ -64,8 +64,8 @@ class Person extends ActiveRecord
 					$sql = 'select * from people where username=?';
 				}
 
-				$zend_db = Database::getConnection();
-				$result = $zend_db->createStatement($sql)->execute([$id]);
+				$db = Database::getConnection();
+				$result = $db->createStatement($sql)->execute([$id]);
 				if (count($result)) {
 					$this->exchangeArray($result->current());
 				}
@@ -124,10 +124,10 @@ class Person extends ActiveRecord
 				throw new \Exception('people/personStillHasTickets');
 			}
 
-			$zend_db = Database::getConnection();
-			$zend_db->query('delete from peopleAddresses where person_id=?', [$this->getId()]);
-			$zend_db->query('delete from peoplePhones where person_id=?',    [$this->getId()]);
-			$zend_db->query('delete from peopleEmails where person_id=?',    [$this->getId()]);
+			$db = Database::getConnection();
+			$db->query('delete from peopleAddresses where person_id=?', [$this->getId()]);
+			$db->query('delete from peoplePhones where person_id=?',    [$this->getId()]);
+			$db->query('delete from peopleEmails where person_id=?',    [$this->getId()]);
 
 			parent::delete();
 		}
@@ -306,8 +306,8 @@ class Person extends ActiveRecord
 	/**
 	 * Checks if the user is supposed to have acces to the resource
 	 *
-	 * This is implemented by checking against a Zend_Acl object
-	 * The Zend_Acl should be created in bootstrap.inc
+	 * This is implemented by checking against a Laminas Acl object
+	 * The Laminas Acl should be created in bootstrap.inc
 	 *
 	 * @param string $resource
 	 * @param string $action
@@ -315,12 +315,12 @@ class Person extends ActiveRecord
 	 */
 	public static function isAllowed($resource, $action=null)
 	{
-		global $ZEND_ACL;
+		global $ACL;
 		$role = 'Anonymous';
 		if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()) {
 			$role = $_SESSION['USER']->getRole();
 		}
-		return $ZEND_ACL->isAllowed($role, $resource, $action);
+		return $ACL->isAllowed($role, $resource, $action);
 	}
 
 	//----------------------------------------------------------------
@@ -425,7 +425,7 @@ class Person extends ActiveRecord
 	{
 		$id = (int)$this->getId();
 		if ($id) {
-			$zend_db = Database::getConnection();
+			$db = Database::getConnection();
 			// This query is written as a Union for speed
 			// A Union is the only way to use the indexes for this query
 			$sql = "(select t.id from tickets t
@@ -442,7 +442,7 @@ class Person extends ActiveRecord
 					(select m.ticket_id from media m
 					where m.person_id=$id
 					limit 1)";
-			$result = $zend_db->createStatement($sql)->execute();
+			$result = $db->createStatement($sql)->execute();
 			return $result->count() ? true : false;
 		}
 	}
@@ -494,7 +494,7 @@ class Person extends ActiveRecord
 	public static function getDistinct($fieldname, $query=null)
 	{
 		$fieldname = trim($fieldname);
-		$zend_db = Database::getConnection();
+		$db = Database::getConnection();
 
 		$validFields = array('firstname', 'lastname', 'organization');
 		if (in_array($fieldname, $validFields)) {
@@ -503,7 +503,7 @@ class Person extends ActiveRecord
 		elseif ($fieldname == 'email') {
 			$sql = "select distinct email from peopleEmails where email like ?";
 		}
-		$result = $zend_db->createStatement($sql)->execute(["$query%"]);
+		$result = $db->createStatement($sql)->execute(["$query%"]);
 		$o = [];
 		foreach ($result as $row) { $o[] = $row[$fieldname]; }
 		return $o;
@@ -568,7 +568,7 @@ class Person extends ActiveRecord
 				throw new \Exception('people/mergerNotAllowed');
 			}
 
-			$zend_db = Database::getConnection();
+			$db = Database::getConnection();
 			// Look up all the tickets we're about to modify
 			// We need to remember them so we can update the search
 			// index after we've updated the database
@@ -579,36 +579,36 @@ class Person extends ActiveRecord
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or  th.actionPerson_id=$id)
 					   or m.person_id=$id";
-			$result = $zend_db->query($sql)->execute();
+			$result = $db->query($sql)->execute();
 			$ticketIds = [];
 			foreach ($result as $row) {
 				$ticketIds[] = $row['id'];
 			}
 
-			$zend_db->getDriver()->getConnection()->beginTransaction();
+			$db->getDriver()->getConnection()->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$zend_db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
 
 				// Fields that don't hit the Solr index
-				$zend_db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$zend_db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				$db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
 
-				$zend_db->query('delete from people where id=?')->execute([$person->getId()]);
+				$db->query('delete from people where id=?')->execute([$person->getId()]);
 			}
 			catch (Exception $e) {
-				$zend_db->getDriver()->getConnection()->rollback();
+				$db->getDriver()->getConnection()->rollback();
 				throw($e);
 			}
-			$zend_db->getDriver()->getConnection()->commit();
+			$db->getDriver()->getConnection()->commit();
 
 			foreach ($ticketIds as $id) {
 				$search = new Search();

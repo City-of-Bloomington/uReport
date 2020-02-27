@@ -11,7 +11,7 @@
  * server-side markup.
  *
  * @copyright 2012 City of Bloomington, Indiana
- * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST partial A comma-separated list of blocks or panels
  */
