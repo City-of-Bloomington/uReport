@@ -16,6 +16,13 @@ class MediaTest extends TestCase
 {
 	private $testSize = 60;
 
+	public function testThumbnailGeneration()
+	{
+        $testImage = __DIR__.'/Dan.png';
+        Image::resize($testImage, $this->testSize);
+        $this->assertTrue(file_exists(__DIR__."/{$this->testSize}/Dan.png"), 'Thumbnail was not saved');
+	}
+
 	/**
 	 * Make sure the URL for the image is web accessible
 	 */
@@ -36,7 +43,10 @@ class MediaTest extends TestCase
 			file_put_contents($temp, curl_exec($request));
 			$this->assertTrue(file_exists($temp), 'No file was downloaded');
 
-			$this->assertEquals($image->getFilesize(), filesize($temp), 'Downloaded file size does not match original');
+			$this->assertEquals($image->getFilesize(), filesize($temp), "
+                Downloaded file does not match original.
+                Check that Apache can serve these files directly.
+			");
 
 			$download = getimagesize($temp);
 			$this->assertEquals($image->getWidth() , $download[0], 'Downloaded image width does not match original');
@@ -64,18 +74,18 @@ class MediaTest extends TestCase
 			$image = new Image($media);
 
 			$image->clearCache();
-			$this->assertFalse(file_exists($image->getFullPathForSize($this->testSize)));
+			$this->assertFalse(file_exists($image->getFullPathForSize($this->testSize)), 'Was not able to delete old thumbnail');
 
 			$url = $image->getURL($this->testSize);
-			$request = curl_init($image->getURL($this->testSize));
+			$request = curl_init($url);
 			curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($request, CURLOPT_BINARYTRANSFER, true);
 			file_put_contents($temp, curl_exec($request));
-			$this->assertTrue(file_exists($temp));
+			$this->assertTrue(file_exists($temp), "$url did not return a file");
 
 			$info = getimagesize($temp);
 
-			$this->assertTrue(($info[0]==$this->testSize || $info[1]==$this->testSize));
+			$this->assertTrue(($info[0]==$this->testSize || $info[1]==$this->testSize), "Generated thumbnail was not the right size");
 
 			#if (file_exists($temp)) { unlink($temp); }
 		}
