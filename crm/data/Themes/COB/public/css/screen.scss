@@ -24,7 +24,9 @@
 
 @import 'modules/header.scss';
 @import 'modules/table.scss';
-body { margin:0; }
+
+body  { margin:0; }
+table { border-collapse: collapse; border-spacing: 0; }
 
 a { color: $color-link; }
 h1, h2, h3, h4, h5, h6 { font-weight: normal; }

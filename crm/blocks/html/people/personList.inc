@@ -67,7 +67,6 @@ $callback = !empty($_REQUEST['callback'])
 
                 $person_id = $person->getId();
 				if ($callback) {
-					$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson.js');
 
 					$personLink = "
