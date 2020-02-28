@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\AddressService;
@@ -12,9 +12,6 @@ use Application\Models\Search;
 
 use Application\ActiveRecord;
 
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-$this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
-
 $helper = $this->template->getHelper('field');
 ?>
 <section id="reportSearchForm">
@@ -23,8 +20,8 @@ $helper = $this->template->getHelper('field');
     </header>
 	<form method="get">
 		<fieldset>
-			<nav class="collapsible">
-				<h1><?= $this->_('category'); ?></h1>
+			<details>
+				<summary><?= $this->_('category'); ?></summary>
 				<?php
 					$table   = new CategoryTable();
 					$list    = $table->find();
@@ -41,9 +38,9 @@ $helper = $this->template->getHelper('field');
 					]);
 
 				?>
-			</nav>
-			<nav class="collapsible">
-                <h1><?= $this->_('department'); ?></h1>
+			</details>
+			<details>
+                <summary><?= $this->_('department'); ?></summary>
 				<?php
 					$table   = new DepartmentTable();
 					$list    = $table->find();
@@ -59,9 +56,9 @@ $helper = $this->template->getHelper('field');
                         'options' => $options
 					]);
 				?>
-			</nav>
-			<nav class="collapsible">
-                <h1><?= $this->_('enteredDate'); ?></h1>
+			</details>
+			<details>
+                <summary><?= $this->_('enteredDate'); ?></summary>
                 <?php
                     foreach (['start', 'end'] as $d) {
                         $value = '';
@@ -77,9 +74,9 @@ $helper = $this->template->getHelper('field');
                         ]);
                     }
                 ?>
-            </nav>
-			<nav class="collapsible">
-                <h1><?= $this->_('postingPermissionLevel'); ?></h1>
+            </details>
+			<details>
+                <summary><?= $this->_('postingPermissionLevel'); ?></summary>
                 <?php
                     $value   = !empty($_GET['postingPermissionLevel'])
                                 ? $_GET['postingPermissionLevel']
@@ -95,9 +92,9 @@ $helper = $this->template->getHelper('field');
                         'options' => $options
                     ]);
                 ?>
-			</nav>
-            <nav class="collapsible">
-                <h1><?= $this->_('client'); ?></h1>
+			</details>
+            <details>
+                <summary><?= $this->_('client'); ?></summary>
                 <?php
                     $table   = new ClientTable();
                     $list    = $table->find();
@@ -113,11 +110,11 @@ $helper = $this->template->getHelper('field');
                         'options' => $options
                     ]);
                 ?>
-            </nav>
+            </details>
             <?php
                 $search = new Search();
                 foreach (AddressService::$customFieldDescriptions as $f=>$v) {
-                    echo "<nav class=\"collapsible\"><h1>$v[description]</h1>";
+                    echo "<details><summary>$v[description]</summary>";
                     $options = [['value'=>'']];
                     $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
                     foreach ($search->facetValues($f) as $k=>$c) { $options[] = ['value'=>$k]; }
@@ -129,7 +126,7 @@ $helper = $this->template->getHelper('field');
                         'value'   => $value,
                         'options' => $options
                     ]);
-                    echo "</nav>";
+                    echo "</details>";
                 }
 
                 $helper   = $this->template->getHelper('renderInputs');

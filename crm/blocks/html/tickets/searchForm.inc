@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2017 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -14,7 +14,6 @@ use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
 $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-$this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 ?>
 <section id="ticketSearchForm">
     <header>
@@ -73,7 +72,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 
 					foreach (Search::$facetFields['ticket'] as $key) {
 						$list  = [];
-						$class = 'class="collapsible"';
+						$class = '';
 						foreach ($facetFields->$key as $value=>$count) {
 							if ($count) {
 								$url = clone $currentUrl;
@@ -81,10 +80,11 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 								try {
 									$displayValue = Search::getDisplayName($key, $value);
 
+									// If the key has a current value, then start expanded
 									if (array_key_exists($key, $currentFilters) && $currentFilters[$key]['value'] === $displayValue) {
                                         $url   = $currentFilters[$key]['deleteUrl'];
                                         $label = $helper->buttonLink($url, $displayValue, 'delete');
-                                        $class = '';
+                                        $class = 'open="true"';
                                         unset($currentFilters[$key]);
 									}
 									else {
@@ -102,10 +102,10 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 							$label = $this->_($key);
 							$list  = implode('', $list);
 							$html.= "
-							<nav $class>
-								<h1>$label</h1>
+							<details $class>
+								<summary>$label</summary>
 								<ul>$list</ul>
-							</nav>
+							</details>
 							";
 						}
 					}
@@ -116,33 +116,33 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 					if ($value) {
                         if (array_key_exists('sla', $currentFilters) && $currentFilters['sla']['value'] === 'overdue') {
                             $label = $helper->buttonLink($currentFilters['sla']['deleteUrl'], $this->_('overdue'), 'delete');
-                            $class = '';
+                            $class = 'open="true"';
                         }
                         else {
                             $url      = clone $currentUrl;
                             $url->sla = 'overdue';
                             $label    = "<a href=\"$url\">{$this->_('overdue')}</a>";
-                            $class    = 'class="collapsible"';
+                            $class    = '';
                         }
                         $html.= "
-                        <nav $class>
-                            <h1>{$this->_('sla')}</h1>
+                        <details $class>
+                            <summary>{$this->_('sla')}</summary>
                             <ul><li>$label ($value)</li></ul>
-                        </nav>
+                        </details>
                         ";
                     }
 
                     /**
                      * Date ranges are a special type of facet
                      */
-                    $class = 'class="collapsible"';
+                    $class = '';
                     if (array_key_exists('enteredDate', $currentFilters)) {
-                        $class = '';
+                        $class = 'open="true"';
                         unset($currentFilters['enteredDate']);
                     }
                     $html.= "
-                    <nav $class>
-                        <h1>{$this->_('enteredDate')}</h1>
+                    <details $class>
+                        <summary>{$this->_('enteredDate')}</summary>
                     ";
                     $fieldHelper = $this->template->getHelper('field');
                     foreach (['start', 'end'] as $d) {
@@ -159,7 +159,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                         ]);
                     }
                     $html.= "
-                    </nav>
+                    </details>
                     ";
 				}
 
@@ -175,8 +175,9 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
 		</fieldset>
 
 
-		<fieldset id="display_fields" class="collapsible">
-            <legend><?= $this->_('display_fields'); ?></legend>
+		<details>
+            <summary><?= $this->_('display_fields'); ?></summary>
+            <fieldset id="display_fields">
 			<?php
 				// Default columns to display
 				if (!isset($_GET['fields'])) {
@@ -198,10 +199,11 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/collapsible.js');
                     'options' => $options
 				]);
 			?>
-		</fieldset>
+            </fieldset>
+        </details>
 
 
-		<fieldset><legend><?= $this->_('submit'); ?></legend>
+		<fieldset>
 			<?php
 				$h = $this->template->getHelper('renderInputs');
 				echo $h->renderInputs($_GET, null, ['query', 'fields']);

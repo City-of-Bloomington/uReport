@@ -4,9 +4,9 @@
  * The Layout css should have styles for all this.
  * See: twoColumn_300-a.css
  */
-jQuery(function ($) {
-    $('#panel-one').prepend('<a class="slide icon" id="slideButton">Slide</a>');
-    $('#slideButton').on('click', function () {
-        $('main').toggleClass('hideLeft');
-    });
-});
+(function () {
+    document.getElementById('panel-one').insertAdjacentHTML('afterbegin', '<a class="slide icon" id="slideButton">Slide</a>');
+    document.getElementById('slideButton').addEventListener('click', function (e) {
+        document.getElementsByTagName('main')[0].classList.toggle('hideLeft');
+    }, false);
+})();
