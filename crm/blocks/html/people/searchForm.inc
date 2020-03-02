@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->title (optional)
  */
@@ -59,8 +59,3 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 		</fieldset>
 	</form>
 </section>
-<?php
-	$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
-	$this->template->addToAsset('scripts', JQUERY_UI.'/jquery-ui.min.js');
-	$this->template->addToAsset('scripts', BASE_URI.'/js/people/search.js');
-?>
