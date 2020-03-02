@@ -53,7 +53,6 @@ $c = $this->solrObject->response->numFound;
         </script>
         ";
 
-        $this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
         $this->template->addToAsset('scripts', GOOGLE_MAPS);
         $this->template->addToAsset('scripts', BASE_URI.'/js/urlParsing.js');
         $this->template->addToAsset('scripts', BASE_URI.'/js/markerCluster.js');

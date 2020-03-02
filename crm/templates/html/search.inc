@@ -8,8 +8,6 @@
 <body class="searchLayout">
 	<?php
 		$this->_include('partials/header.inc');
-
-		$this->addToAsset('scripts', JQUERY.'/jquery.min.js');
 		$this->addToAsset('scripts', BASE_URI.'/js/slidingPanel.js');
 	?>
 	<main>

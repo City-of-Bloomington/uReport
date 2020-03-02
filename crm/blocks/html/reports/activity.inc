@@ -8,7 +8,6 @@ use Application\ActiveRecord;
 use Blossom\Classes\View;
 
 $h = $this->template->getHelper('formatDuration');
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 $this->template->addToAsset('scripts', GOOGLE_LOADER);
 $this->template->addToAsset('scripts', BASE_URI.'/js/reports/activityCharts.js');
 

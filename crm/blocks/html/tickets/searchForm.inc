@@ -13,7 +13,6 @@ use Application\ActiveRecord;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
-$this->template->addToAsset('scripts', JQUERY.'/jquery.min.js');
 ?>
 <section id="ticketSearchForm">
     <header>
