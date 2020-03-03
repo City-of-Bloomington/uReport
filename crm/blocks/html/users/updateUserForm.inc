@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2016 City of Bloomington, Indiana
+ * @copyright 2006-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Person $this->person
  */
@@ -12,7 +12,7 @@ foreach ($fields as $f) {
     $get = 'get'.ucfirst($f);
     $$f  = self::escape($this->person->$get());
 }
-$this->template->addToAsset('scripts', BASE_URI.'/js/users/updateUserForm.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/users/updateUserForm-'.VERSION.'.js');
 ?>
 <section class="updateUserForm">
     <header>

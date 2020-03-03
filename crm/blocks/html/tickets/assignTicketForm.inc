@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
  */
 use Application\Models\DepartmentTable;
 
-$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/assignForm.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/assignForm-'.VERSION.'.js');
 ?>
 <div class="assignTicketForm">
 	<form method="post" action="<?= BASE_URI; ?>/tickets/assign">

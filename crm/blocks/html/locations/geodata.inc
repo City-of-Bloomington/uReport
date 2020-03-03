@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  * @param Ticket $this->ticket   (optional)
@@ -29,7 +29,7 @@ if ($this->ticket) {
         </script>
         ";
         $this->template->addToAsset('scripts', GOOGLE_MAPS);
-        $this->template->addToAsset('scripts', BASE_URL.'/js/tickets/map.js');
+        $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/map-'.VERSION.'.js');
     }
 }
 if (defined('ADDRESS_SERVICE')) {

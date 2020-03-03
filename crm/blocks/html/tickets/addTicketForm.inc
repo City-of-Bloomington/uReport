@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket     $this->ticket
  * @param Issue      $this->issue
@@ -17,7 +17,7 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
 		<fieldset><legend><?= $this->_('category'); ?></legend>
 		<?php
-			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory.js');
+			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory-'.VERSION.'.js');
 			$this->return_url = BASE_URL.'/tickets/add';
 			$this->_include('tickets/partials/chooseCategoryFields.inc');
 		?>

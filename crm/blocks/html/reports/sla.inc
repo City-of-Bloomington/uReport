@@ -1,12 +1,12 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Report;
 
 $this->template->addToAsset('scripts', GOOGLE_LOADER);
-$this->template->addToAsset('scripts', BASE_URI.'/js/reports/slaCharts.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/reports/slaCharts-'.VERSION.'.js');
 
 $SLA_DATA = [
     'openTicketCounts' => [

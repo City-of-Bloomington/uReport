@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php
         $this->_include('partials/stylesheets.inc');
-        $this->addToAsset('scripts', BASE_URI.'/js/menus.js');
+        $this->addToAsset('scripts', BASE_URI.'/js/menus-'.VERSION.'.js');
     ?>
     <script type="text/javascript" src="<?= BASE_URI; ?>/js/crm.js"></script>
     <script type="text/javascript">

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-$this->template->addToAsset('scripts', BASE_URI.'/js/merge.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/merge-'.VERSION.'.js');
 ?>
 <form method="get" action="<?= BASE_URI; ?>/people/merge" class="personSelectForMergeForm">
 	<fieldset><legend><?= $this->_('merge_people'); ?></legend>

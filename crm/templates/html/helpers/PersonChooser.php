@@ -14,7 +14,7 @@
  * page redirection to the href provided.  The people search will return the user
  * to the current url once they've chosen a person.
  *
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Templates\Helpers;
@@ -36,7 +36,7 @@ class PersonChooser extends Helper
 	 */
 	public function personChooser($fieldname, Person $person=null)
 	{
-		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser.js');
+		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser-'.VERSION.'.js');
 
 		$id   = '';
 		$name = '';

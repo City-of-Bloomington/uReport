@@ -4,7 +4,7 @@
         <h2><a href="<?= BASE_URI; ?>">City of Bloomington, Indiana &ndash; John Hamilton, Mayor</a></h2>
         <div class="utilityBar">
         <?php
-            $this->addToAsset('scripts', BASE_URI.'/js/menus.js');
+            $this->addToAsset('scripts', BASE_URI.'/js/menus-'.VERSION.'.js');
 
             $this->_include('partials/panel-widgets/User_menu.inc');
             $this->_include('partials/panel-widgets/Administrator_menu.inc');

@@ -69,7 +69,7 @@ $helper = $this->template->getHelper('field');
 		</legend>
 		<p><?= $this->_('service_level_agreement_description', 'messages'); ?></p>
 		<?php
-			$this->template->addToAsset('scripts', BASE_URI.'/js/categories/chooseDepartment.js');
+			$this->template->addToAsset('scripts', BASE_URI.'/js/categories/chooseDepartment-'.VERSION.'.js');
 
             $t = new DepartmentTable();
             $list = $t->find();

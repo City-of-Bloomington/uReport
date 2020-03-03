@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2016 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param PersonList $this->personList
  */
@@ -67,7 +67,7 @@ $callback = !empty($_REQUEST['callback'])
 
                 $person_id = $person->getId();
 				if ($callback) {
-					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson.js');
+					$this->template->addToAsset('scripts', BASE_URI.'/js/issues/changePerson-'.VERSION.'.js');
 
 					$personLink = "
 					<td><button type=\"button\" onclick=\"self.opener.$callback('$person_id');\">

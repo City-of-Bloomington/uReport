@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 ?>
@@ -12,4 +12,4 @@
 <button type="button" id="useThisLocation" class="submit"><?= $this->_('use_location'); ?></button>
 <?php
 $this->template->addToAsset('scripts', GOOGLE_MAPS);
-$this->template->addToAsset('scripts', BASE_URL.'/js/locations/mapChooser.js');
+$this->template->addToAsset('scripts', BASE_URI.'/js/locations/mapChooser-'.VERSION.'.js');

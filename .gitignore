@@ -16,7 +16,7 @@ dist
 .phpunit*
 vendor
 .sass-cache
-screen-*.css
-screen-*.css.map
+screen-*.css*
+*-*.js
 ansible/roles/City-of-Bloomington.*
 ansible/*.retry

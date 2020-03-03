@@ -2,7 +2,7 @@
 /**
  * Displays a map of the search results
  *
- * @copyright 2013-2017 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Apache_Solr_Response $this->solrObject
  */
@@ -54,9 +54,9 @@ $c = $this->solrObject->response->numFound;
         ";
 
         $this->template->addToAsset('scripts', GOOGLE_MAPS);
-        $this->template->addToAsset('scripts', BASE_URI.'/js/urlParsing.js');
-        $this->template->addToAsset('scripts', BASE_URI.'/js/markerCluster.js');
-        $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/searchResultsMap.js');
-        $this->template->addToAsset('scripts', BASE_URI.'/js/oms.min.js');
+        $this->template->addToAsset('scripts', BASE_URI.'/js/urlParsing-'.VERSION.'.js');
+        $this->template->addToAsset('scripts', BASE_URI.'/js/markerCluster-'.VERSION.'.js');
+        $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/searchResultsMap-'.VERSION.'.js');
+        $this->template->addToAsset('scripts', BASE_URI.'/js/oms.min-'.VERSION.'.js');
     ?>
 </section>
