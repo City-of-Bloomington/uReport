@@ -7,10 +7,8 @@ google.maps.event.addDomListener(window, 'load', function() {
                         center: new google.maps.LatLng(latitude, longitude),
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     }),
-        marker    = new google.maps.Marker({position:new google.maps.LatLng(latitude, longitude), map:map}),
-        info      = new google.maps.InfoWindow({content:geodata.innerHTML});
+        marker    = new google.maps.Marker({position:new google.maps.LatLng(latitude, longitude), map:map})
 
-    marker.addListener('click', function () { info.open(map, marker); });
     window.onbeforeprint = function () {
         map.setCenter(marker.getPosition());
     }

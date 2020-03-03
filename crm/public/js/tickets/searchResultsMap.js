@@ -63,11 +63,11 @@ google.maps.event.addDomListener(window, 'load', function () {
 			return p;
 		},
 		getSolrBaseUrl = function (coordinates) {
-			var url = CRM.BASE_URL + '/solr?';
-			url += SOLR_PARAMS.q    ? 'q='     + SOLR_PARAMS.q    : 'q=*.*';
-			url += SOLR_PARAMS.sort ? '&sort=' + SOLR_PARAMS.sort : '';
-			url += getFqParameters() + '&fq=coordinates:' + coordinates;
-			url += '&wt=json&json.nl=map';
+			var url  = CRM.BASE_URI + '/solr?';
+			    url += SOLR_PARAMS.q    ? 'q='     + SOLR_PARAMS.q    : 'q=*.*';
+			    url += SOLR_PARAMS.sort ? '&sort=' + SOLR_PARAMS.sort : '';
+			    url += getFqParameters() + '&fq=coordinates:' + coordinates;
+			    url += '&wt=json&json.nl=map';
 			return url;
 		},
 		/**
@@ -112,6 +112,7 @@ google.maps.event.addDomListener(window, 'load', function () {
             let coordinates  = {},
                 latlng       = [],
                 markerLatLng = {},
+                infoWindow   = new google.maps.InfoWindow(),
                 len          = 0,
                 i            = 0;
 
@@ -121,9 +122,16 @@ google.maps.event.addDomListener(window, 'load', function () {
                 latlng          = coordinates.split(",");
                 markerLatLng    = new google.maps.LatLng(latlng[0],latlng[1]);
                 indivMarkers[i] = new google.maps.Marker({
-                    position: markerLatLng,
-                    map: map,
-                    title: tickets[i].id.toString()
+                    position:  markerLatLng,
+                    map:       map,
+                    ticket_id: tickets[i].id,
+                    title:     tickets[i].id.toString(),
+                    location:  tickets[i].location,
+                    category:  tickets[i].category
+                });
+                indivMarkers[i].addListener('click', function (e) {
+                    infoWindow.setContent(infoWindowMarkup(this));
+                    infoWindow.open(map, this);
                 });
             }
             len = indivMarkers.length;
@@ -131,6 +139,17 @@ google.maps.event.addDomListener(window, 'load', function () {
                 oms.addMarker(indivMarkers[i]);
             }
         },
+        /**
+         * @param  google.maps.Marker marker
+         * @return string
+         */
+        infoWindowMarkup = function (marker) {
+            return '<a href=' + CRM.BASE_URI + '/tickets/view?ticket_id=' + marker.ticket_id + '>'
+                 + '<h2>#' + marker.ticket_id + '</h2>'
+                 + marker.location
+                 + '</a>';
+        },
+
 
         /**
          * Draws cluster markers on the map

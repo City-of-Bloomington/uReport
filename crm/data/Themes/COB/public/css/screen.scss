@@ -81,10 +81,6 @@ main {
 .icon.slide    { background-image: url('images/fa-svg/gray/angle-left.svg'); padding-left:1.7em; }
 .button.text   { background-image: url('images/fa-svg/gray/reorder.svg'   ); padding-left:1.7em; }
 
-.collapsed   h1, fieldset.collapsed { background-image: url('images/fa-svg/gray/angle-right.svg'); background-size:1rem; }
-.expanded    h1, fieldset.expanded  { background-image: url('images/fa-svg/gray/angle-down.svg' ); background-size:1rem; }
-
-
 #ticketSearchForm {
     margin-left: $size-gutter;
     ul { list-style-type: none; padding:0 1rem; }
@@ -164,8 +160,6 @@ a.current { border:2px solid $color-calltoaction-background; }
 }
 
 #location_map { margin-top:$size-gutter; }
-#location_map dd { width:16em; }
-#locationInfo .geodata { overflow:auto; height:0; }
 
 @media print {
     body { font-size:10pt; }
