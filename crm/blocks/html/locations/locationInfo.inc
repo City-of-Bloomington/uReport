@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  * @param bool   $this->disableButtons  (optional)
@@ -12,35 +12,42 @@ use Application\Models\TicketTable;
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
-if ($this->location) {
-    // This will properly encode the location string as a url parameter
-	$url = new Url(BASE_URL.'/locations/view?location='.$this->location);
+if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongitude())) {
+    $header  = '';
+    $tickets = [];
 
-	$location = self::escape($this->location);
+    if ($this->location) {
+        // This will properly encode the location string as a url parameter
+        $url = new Url(BASE_URL.'/locations/view?location='.$this->location);
 
-	$addTicketButton = '';
-	if (!$this->disableButtons && Person::isAllowed('tickets', 'add')) {
-		$h = $this->template->getHelper('buttonLink');
-		$addTicketButton = $h->buttonLink(
-			BASE_URI.'/tickets/add?location='.$this->location,
-			$this->_('add_ticket'),
-			'add'
-		);
-	}
+        $location = self::escape($this->location);
+
+        $addTicketButton = '';
+        if (!$this->disableButtons && Person::isAllowed('tickets', 'add')) {
+            $h = $this->template->getHelper('buttonLink');
+            $addTicketButton = $h->buttonLink(
+                BASE_URI.'/tickets/add?location='.$this->location,
+                $this->_('add_ticket'),
+                'add'
+            );
+        }
+        $header = "
+            <header>
+                <h1><a href=\"$url\" class=\"location\">$location</a></h1>
+                <div class=\"tools\">$addTicketButton</div>
+            </header>
+        ";
+
+        $table   = new TicketTable();
+        $list    = $table->find(['location'=>$this->location]);
+        foreach ($list as $t) { $tickets[] = $t; }
+    }
 
 	echo "
 	<section id=\"locationInfo\">
-        <header>
-            <h1><a href=\"$url\" class=\"location\">$location</a></h1>
-            <div class=\"tools\">$addTicketButton</div>
-        </header>
+        $header
     ";
-        $table   = new TicketTable();
-        $list    = $table->find(['location'=>$this->location]);
-        $tickets = [];
-        foreach ($list as $t) { $tickets[] = $t; }
-
-        if ($this->ticket || count($tickets)) {
+        if ($this->ticket || $tickets) {
             $block = new Block('locations/geodata.inc', [
                 'location'=> $this->location,
                 'ticket'  => $this->ticket ? $this->ticket : $tickets[0]
@@ -52,7 +59,7 @@ if ($this->location) {
 
         $t = $this->ticket ? 1 : 0;
 
-        if (count($tickets) > 0) {
+        if ($tickets) {
             $block = new Block('tickets/ticketList.inc', [
                 'ticketList'    => $tickets,
                 'title'         => 'Other cases for this location',

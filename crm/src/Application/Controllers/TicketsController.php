@@ -107,7 +107,7 @@ class TicketsController extends Controller
                     ['history'=>$ticket->getHistory(), 'ticket'=>$ticket]
                 );
 
-                if ($ticket->getLocation()) {
+                if ($ticket->getLocation() || ($ticket->getLatitude() && $ticket->getLongitude())) {
                     $this->template->blocks['panel-one'][] = new Block('locations/locationInfo.inc', [
                         'location'       => $ticket->getLocation(),
                         'ticket'         => $ticket,
