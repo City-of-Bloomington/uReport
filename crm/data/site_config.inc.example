@@ -114,6 +114,8 @@ $DIRECTORY_CONFIG = [
  * Controls whether the system sends email notifications to people
  */
 define('NOTIFICATIONS_ENABLED', true);
+define('SMTP_HOST', 'localhost.localdomain');
+define('SMTP_PORT', 25);
 define('ADMINISTRATOR_EMAIL', 'someone@localhost');
 
 /**

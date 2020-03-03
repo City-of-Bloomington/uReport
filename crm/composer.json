@@ -10,6 +10,7 @@
         "graylog2/gelf-php": "@stable",
         "jasig/phpcas": "~1",
         "reprovinci/solr-php-client": "~1",
+        "phpmailer/phpmailer":             "@stable",
         "laminas/laminas-db":              "@stable",
         "laminas/laminas-log":             "@stable",
         "laminas/laminas-paginator":       "@stable",

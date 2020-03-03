@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2018 City of Bloomington, Indiana
+ * @copyright 2009-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -8,6 +8,7 @@ namespace Application\Models;
 use Application\ActiveRecord;
 use Application\Database;
 use Blossom\Classes\ExternalIdentity;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class Person extends ActiveRecord
 {
@@ -459,25 +460,22 @@ class Person extends ActiveRecord
 				$subject = APPLICATION_NAME.' Notification';
 			}
 
-            if (isset($_SERVER['SERVER_NAME'])) {
-                $name = preg_replace('/[^a-zA-Z0-9]+/','_',APPLICATION_NAME);
-                $fromEmail    = "$name@$_SERVER[SERVER_NAME]";
-                $fromFullname = APPLICATION_NAME;
-            }
-            else {
-                $fromFullname = APPLICATION_NAME;
-                preg_match('#//([^/]+)#', BASE_URL, $matches);
-                $server = $matches[1];
-                $fromEmail    = "$fromFullname@$server";
-            }
+            $mail = new PHPMailer(true);
+            $mail->isHTML(false);
+            $mail->isSMTP();
+            $mail->Host        = SMTP_HOST;
+            $mail->Port        = SMTP_PORT;
+            $mail->SMTPSecure  = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Subject     = $subject;
+            $mail->Body        = $message;
+            $mail->setFrom('no-reply@'.BASE_HOST, APPLICATION_NAME);
 
-			$message  = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
-			foreach ($this->getNotificationEmails() as $email) {
-                $to = $email->getEmail();
-                $from = "From: $fromFullname <$fromEmail>";
-                if ($replyTo) { $from.="\r\nReply-to: $replyTo"; }
-                mail($to, $subject, $message, $from, '-f'.ADMINISTRATOR_EMAIL);
-			}
+            foreach ($this->getNotificationEmails() as $email) {
+                $mail->addAddress($email->getEmail());
+                $mail->send();
+                $mail->clearAddresses();
+            }
 		}
 	}
 
