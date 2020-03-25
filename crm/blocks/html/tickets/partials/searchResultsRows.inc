@@ -1,19 +1,22 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Apache_Solr_Response $this->solrObject
+ * @param bool                 $this->paginated   Whether the response is paginated or not
+ * @param array                $this->fields      Ticket fields the user asked to see
  */
 use Application\Models\Person;
 use Application\Models\Search;
 use Application\Models\TicketTable;
 
-$tickets = Search::hydrateDocs($this->solrObject);
+$tickets           = Search::hydrateDocs($this->solrObject);
+$displayableFields = TicketTable::getDisplayableFields();
+
 echo '<div class="searchResultsRows">';
 foreach ($tickets as $ticket) {
 	// Go through each of the fields the user wants displayed
 	// and dig the displayable value from the row data
-	$displayableFields = TicketTable::getDisplayableFields();
 	$additionalFields  = $ticket->getAdditionalFields();
 	// Create empty variables needed for the final markup
 	foreach ([ 'status', 'substatus_id',
@@ -24,7 +27,7 @@ foreach ($tickets as $ticket) {
 
 	$dl = [];
 
-	foreach ($_GET['fields'] as $field=>$value) {
+	foreach ($this->fields as $field=>$value) {
 		// Make sure the user is allowed to see this field
 		if (array_key_exists($field, $displayableFields)) {
 			// Format the data being asked for

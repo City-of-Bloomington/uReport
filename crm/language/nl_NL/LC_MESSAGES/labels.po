@@ -62,6 +62,9 @@ msgstr "Locatie resultaten"
 msgid "search_results_print"
 msgstr "Resultaten afdrukken"
 
+msgid "search_results_csv"
+msgstr "Resultaten CSV"
+
 msgid "search_current"
 msgstr "Filter"
 

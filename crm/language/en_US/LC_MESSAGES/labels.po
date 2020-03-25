@@ -62,6 +62,9 @@ msgstr "Map Results"
 msgid "search_results_print"
 msgstr "Printable Results"
 
+msgid "search_results_csv"
+msgstr "CSV Results"
+
 msgid "search_current"
 msgstr "Current Search"
 

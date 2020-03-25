@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -46,18 +46,49 @@ class TicketsController extends Controller
 	 */
 	public function index()
 	{
-		$format = isset($_GET['resultFormat']) ? trim($_GET['resultFormat']) : '';
+        $paginated = true;
+        $format    = $_GET['format'] ?? 'html';
+        $fields    = $_GET['fields'] ?? TicketTable::$defaultFieldsToDisplay;
 
-		if ($format == 'raw'
-			&& $this->template->outputFormat=='html'
-			&& Person::isAllowed('tickets', 'print')) {
-			$this->template->setFilename('print');
-		}
-		else {
-			$this->template->setFilename('search');
-		}
+        if (($format == 'print' || $format == 'csv') && Person::isAllowed('tickets', 'print')) {
+            $paginated = false;
+            
+            if ($format == 'print') {
+                $this->template->setOutputFormat('html');
+                $this->template->setFilename('print');
+            }
+            else {
+                $this->template->setFilename('default');
+            }
+        }
+        else {
+            $this->template->setFilename('search');
+        }
 
 		$search = new Search();
+		$query  = self::prepareSolrQuery();
+		$params = [
+            'solrObject' => $search->query($query, !$paginated),
+            'paginated'  => $paginated,
+            'fields'     => $fields
+		];
+        $this->template->blocks = [
+            new Block($format == 'map' ? 'tickets/searchResultsMap.inc' : 'tickets/searchResults.inc', $params)
+        ];
+        if ($this->template->outputFormat == 'html') {
+            $this->template->blocks['panel-one'] = [ new Block('tickets/searchForm.inc', $params) ];
+        }
+	}
+	
+	/**
+	 * Read HTML form parameters and prepare the Solr query
+	 *
+	 * Dates need to be converted to PHP DateTimes.
+	 * The HTML form parameters match the names of the Solr query parameters,
+	 * so for the most part we can just use the GET array as-is.
+	 */
+	private static function prepareSolrQuery(): array
+	{
 		$query  = $_GET;
 
 		if (isset     ($query['enteredDate']['start'])) {
@@ -78,12 +109,7 @@ class TicketsController extends Controller
             }
             else {  unset($query['enteredDate']['end']); }
 		}
-
-		$solrObject = $search->query($query, $format=='raw' ? true : false);
-
-		$resultBlock = ($format == 'map') ? 'searchResultsMap.inc' : 'searchResults.inc';
-		$this->template->blocks['panel-one'][] = new Block('tickets/searchForm.inc', ['solrObject'=>$solrObject]);
-		$this->template->blocks[]              = new Block("tickets/$resultBlock",   ['solrObject'=>$solrObject]);
+		return $query;
 	}
 
 	/**

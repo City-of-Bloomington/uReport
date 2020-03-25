@@ -1,26 +1,16 @@
 <?php
 /**
- * Displays a list of Tickets
+ * Sends CSV data for a list of tickets
  *
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
+ * @param Apache_Solr_Response $this->solrObject
+ * @param bool                 $this->paginated   Whether the response is paginated or not
+ * @param array                $this->fields      Ticket fields to display
  */
 use Blossom\Classes\Block;
 
-$ticketList = new TicketList();
-$ticketList->findRawData($_GET);
+header("Content-Disposition: attachment; filename=\"tickets.csv\"");
 
-if (count($ticketList)) {
-	$header = new Block(
-		'tickets/partials/searchResultsColumnHeaders.inc',
-		array('ticketList'=>$ticketList)
-	);
-	echo $header->render('csv',$this->template);
-
-	$body = new Block(
-		'tickets/partials/searchResultsRows.inc',
-		array('ticketList'=>$ticketList)
-	);
-	echo $body->render('csv',$this->template);
-}
+$this->_include('tickets/partials/searchResultsColumnHeaders.inc');
+$this->_include('tickets/partials/searchResultsRows.inc');

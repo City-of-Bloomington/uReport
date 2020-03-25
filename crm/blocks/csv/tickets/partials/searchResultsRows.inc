@@ -1,62 +1,80 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Laminas\Db\ResultSet $this->ticketList
+ * @param Apache_Solr_Response $this->solrObject
+ * @param array                $this->fields      Ticket fields the user asked to see
  */
-use Application\Models\Person;
+use Application\Models\Search;
 use Application\Models\TicketTable;
 
-foreach ($this->ticketList as $row) {
-	// Go through each of the fields the user wants displayed
-	// and dig the displayable value from the row data
-	$displayableFields = TicketList::getDisplayableFields();
-	$line = array();
-	foreach ($_GET['fields'] as $field=>$value) {
+$OUT               = fopen('php://output', 'w');
+$tickets           = Search::hydrateDocs($this->solrObject);
+$displayableFields = TicketTable::getDisplayableFields();
+
+foreach ($tickets as $ticket) {
+    $line              = [];
+	$additionalFields  = $ticket->getAdditionalFields();
+	
+    // Go through each of the fields the user wants displayed
+    // and dig the displayable value from the row data
+	foreach ($this->fields as $field=>$value) {
 		// Make sure the user is allowed to see this field
-		if (array_key_exists($field,$displayableFields)
-			&& (false === strpos($field,'Person') || Person::isAllowed('People'))) {
+		if (array_key_exists($field, $displayableFields)) {
 			// Format the data being asked for
+			$get = 'get'.ucfirst($field);
 			switch ($field) {
-				case 'enteredByPerson':
-				case 'assignedPerson':
-					if (isset($row[$field])) {
-						$person = new Person($row[$field]);
-						$value = $person->getFullname();
-					}
-					else {
-						$value = '';
-					}
+				case 'status':
+				case 'location':
+				case 'city':
+				case 'state':
+				case 'zip':
+				case 'description':
+					$value = $ticket->$get();
+					break;
+
+				case 'substatus_id':
+				case 'category_id':
+					$g     = 'get'.ucfirst(substr($field, 0, -3));
+					$o     = $ticket->$g();
+					$value = $o ? $o->getName() : '';
+					break;
+
+				case 'enteredByPerson_id':
+				case 'assignedPerson_id':
+					$get    = 'get'.ucfirst(substr($field, 0, -3));
+					$person = $ticket->$get();
+					$value  = $person ? $person->getFullname() : '';
 					break;
 
 				case 'enteredDate':
-					if (isset($row[$field]->sec)) {
-						$value = date(DATE_FORMAT,$row[$field]->sec);
-					}
+					$value = $ticket->$get(DATE_FORMAT);
 					break;
 
-				case 'category':
-					$value = isset($row['category']['name']) ? $row['category']['name'] : '';
-					break;
 
-				case 'department':
-					$value = isset($row['assignedPerson']['department']['name'])
-						         ? $row['assignedPerson']['department']['name']
-                                : '';
+				case 'department_id':
+					$department = $ticket->getDepartment();
+					$value      = $department ? $department->getName() : '';
 					break;
 
 				case 'latitude':
 				case 'longitude':
-					$value = isset($row['coordinates'][$field]) ? $row['coordinates'][$field] : '';
+					$value = $ticket->$get();
+					break;
+
+				case 'slaPercentage':
+					$value = $ticket->$get();
 					break;
 
 				default:
-					$value = isset($row[$displayableFields[$field]['index']])
-						         ? $row[$displayableFields[$field]['index']]
-						         : '';
+					// Anything else should be a custom field for the ticket
+					if (isset($additionalFields->$field)) {
+						$value = self::escape($additionalFields->$field);
+					}
 			}
 			$line[] = $value;
 		}
 	}
-	echo implode('|',$line)."\n";
+	fputcsv($OUT, $line);
 }
+fclose($OUT);

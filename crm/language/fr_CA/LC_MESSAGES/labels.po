@@ -62,6 +62,9 @@ msgstr "Résultat cartographique"
 msgid "search_results_print"
 msgstr "Imprimer vos résultats"
 
+msgid "search_results_csv"
+msgstr "Résultat CSV"
+
 msgid "search_current"
 msgstr "Recherche courante"
 
