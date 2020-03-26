@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  */
@@ -8,7 +8,9 @@ use Application\Models\Person;
 use Application\Models\PersonTable;
 use Application\Models\RentalService;
 
-if (Person::isAllowed('people', 'view')) {
+if ($this->location
+    && Person::isAllowed('people', 'view')) {
+    
 	echo '<div class="locationPeople">';
 	$table = new PersonTable();
 	$people = $table->find(['address' => $this->location]);

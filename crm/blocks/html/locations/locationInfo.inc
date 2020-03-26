@@ -55,7 +55,9 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
             echo $block->render('html', $this->template);
         }
 
-        $this->_include('locations/locationPeople.inc');
+        if ($this->location) {
+            $this->_include('locations/locationPeople.inc');
+        }
 
         $t = $this->ticket ? 1 : 0;
 
