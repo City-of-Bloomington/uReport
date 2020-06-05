@@ -28,8 +28,8 @@ clean:
 	for f in $(shell find crm/public/js   -name '*-*.js'       ); do rm $$f; done
 
 compile: deps $(LANGUAGES)
-	cd crm/public/css                 && sassc -mt compact -m screen.scss screen-${VERSION}.css
-	cd crm/data/Themes/COB/public/css && sassc -mt compact -m screen.scss screen-${VERSION}.css
+	cd crm/public/css                 && sassc -t compact -m screen.scss screen-${VERSION}.css
+	cd crm/data/Themes/COB/public/css && sassc -t compact -m screen.scss screen-${VERSION}.css
 	for f in ${JAVASCRIPT}; do cp $$f $${f%.js}-${VERSION}.js; done
 
 package:
