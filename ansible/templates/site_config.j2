@@ -71,14 +71,8 @@ $DIRECTORY_CONFIG = [
 
 {% if ureport_cas_host %}
 /**
- * CAS authentication http://www.jasig.org/cas
- *
- * https://wiki.jasig.org/display/CASC/phpCAS
- *
- * phpCAS is a PHP library for handling the calls to the CAS service
- * It is the official library, part of the Jasig CAS project
+ * CAS authentication
  */
-define('CAS', APPLICATION_HOME.'/vendor/jasig/phpcas/source');
 define('CAS_SERVER','{{ ureport_cas_host }}');
 define('CAS_URI','cas');
 {% endif %}
