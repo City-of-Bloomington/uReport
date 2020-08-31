@@ -7,6 +7,8 @@ namespace Application\Models;
 
 use Application\ActiveRecord;
 use Application\Database;
+use Application\Models\Email;
+
 use Blossom\Classes\ExternalIdentity;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -448,17 +450,17 @@ class Person extends ActiveRecord
 		}
 	}
 
-	/**
-	 * @param string $message
-	 * @param string $subject
-	 * @param string $replyTo
-	 */
-	public function sendNotification($message, $subject=null, $replyTo=null)
-	{
-		if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
-			if (!$subject) {
-				$subject = APPLICATION_NAME.' Notification';
-			}
+    /**
+     * @param string $message
+     * @param string $subject
+     * @param string $replyTo
+     */
+    public function sendNotification($message, $subject=null, $replyTo=null)
+    {
+        if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
+            if (!$subject) {
+                $subject = APPLICATION_NAME.' Notification';
+            }
 
             $mail = new PHPMailer(true);
             $mail->isHTML(false);
@@ -472,12 +474,14 @@ class Person extends ActiveRecord
             $mail->setFrom('no-reply@'.BASE_HOST, APPLICATION_NAME);
 
             foreach ($this->getNotificationEmails() as $email) {
-                $mail->addAddress($email->getEmail());
-                $mail->send();
+                if (Email::isValidEmail($email->getEmail()) {
+                    $mail->addAddress($email->getEmail());
+                    $mail->send();
+                }
                 $mail->clearAddresses();
             }
-		}
-	}
+        }
+    }
 
 	/**
 	 * Returns the array of distinct field values for People records
