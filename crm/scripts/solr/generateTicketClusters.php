@@ -10,8 +10,10 @@ use Application\Database;
 include '../../bootstrap.inc';
 
 $db = Database::getConnection();
-$db->query('delete from ticket_geodata')->execute();
-$db->query('truncate table geoclusters')->execute();
+$db->query('SET FOREIGN_KEY_CHECKS = 0'   )->execute();
+$db->query('truncate table ticket_geodata')->execute();
+$db->query('truncate table geoclusters'   )->execute();
+$db->query('SET FOREIGN_KEY_CHECKS = 1'   )->execute();
 
 $sql = "select id from tickets
 		where latitude  is not null
