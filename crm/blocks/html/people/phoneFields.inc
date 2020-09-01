@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Phone $this->phone
  */
@@ -20,5 +20,5 @@ use Application\Models\Phone;
 		?>
 		</select>
 	</label>
-	<input name="number" value="<?= self::escape($this->phone->getNumber()); ?>" />
+	<input name="number" value="<?= self::escape($this->phone->getNumber()); ?>" type="tel" required="true" />
 </fieldset>

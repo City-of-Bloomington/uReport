@@ -474,7 +474,7 @@ class Person extends ActiveRecord
             $mail->setFrom('no-reply@'.BASE_HOST, APPLICATION_NAME);
 
             foreach ($this->getNotificationEmails() as $email) {
-                if (Email::isValidEmail($email->getEmail()) {
+                if (Email::isValidEmail($email->getEmail())) {
                     $mail->addAddress($email->getEmail());
                     $mail->send();
                 }

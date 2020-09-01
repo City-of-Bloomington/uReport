@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Person $this->person
  */
@@ -32,8 +32,8 @@ foreach ($fields as $field) {
         if (!$this->person->getId()) {
             $email = !empty($_REQUEST['email']) ? self::escape($_REQUEST['email']) : '';
             $phone = !empty($_REQUEST['phone']) ? self::escape($_REQUEST['phone']) : '';
-            echo $helper->field(['name'=>'email', 'id'=>'email', 'label'=>$this->_('email'), 'value'=>$email]);
-            echo $helper->field(['name'=>'phone', 'id'=>'phone', 'label'=>$this->_('phone'), 'value'=>$phone]);
+            echo $helper->field(['name'=>'email', 'id'=>'email', 'label'=>$this->_('email'), 'value'=>$email, 'type'=>'email']);
+            echo $helper->field(['name'=>'phone', 'id'=>'phone', 'label'=>$this->_('phone'), 'value'=>$phone, 'type'=>'tel'  ]);
         }
 
 		echo $helper->field(['name'=>'organization', 'id'=>'organization', 'label'=>$this->_('organization'), 'value'=>$organization]);
