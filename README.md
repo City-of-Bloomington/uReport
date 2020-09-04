@@ -7,12 +7,12 @@ existing environments.
 ## Installation
 In order to install one of our binary releases, you must have a linux system already set up with:
 
-* [PHP 5.6](http://php.net) or later
-* [Apache](http://httpd.apache.org)
-* [MySQL](http://dev.mysql.com)
-* [Solr](http://lucene.apache.org/solr)
+* [PHP    7.2](http://php.net) or later
+* [Apache 2.4](http://httpd.apache.org)
+* [MySQL  5.7](http://dev.mysql.com) or later
+* [Solr   7.4](http://lucene.apache.org/solr)
 
-There are many ways to set up and install your own linux webserver.  Our [github page](http://city-of-bloomington.github.io) documents how we install linux web applications here in Bloomington.  Our way is not the only way, though.  It's well worth reading up on all the technologies and deciding what you need for your own hosting.
+There are many ways to set up and install your own linux webserver.  Our way is not the only way, though.  It's well worth reading up on all the technologies and deciding what you need for your own hosting.
 
 Once you've got hosting sorted out, you can follow the [Wiki instructions](https://github.com/City-of-Bloomington/uReport/wiki/Install) to install uReport on your webserver.
 
@@ -38,4 +38,4 @@ If you want to contribute to the project, join us on our
 
 ## License
 The files in this project are released under the GNU Affero GPLv3.
-Details are in [LICENSE.txt](LICENSE.txt)
+Details are in [LICENSE](LICENSE)
