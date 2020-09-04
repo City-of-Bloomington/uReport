@@ -125,31 +125,29 @@ class GeoCluster extends ActiveRecord
 	 */
 	public static function assignClusterIdForLevel(Ticket $ticket, $level)
 	{
-		$lat  = $ticket->getLatitude ();
-		$lng  = $ticket->getLongitude();
-		$dist = 0.01 * pow(2, $level * 2);
+		$lat   = $ticket->getLatitude ();
+		$lng   = $ticket->getLongitude();
+		$point = "ST_PointFromText('Point($lat $lng)', 4326)";
+		$dist  = 0.01 * pow(2, $level * 2); // Kilometers
 
 		$minX = $lng - $dist;
 		$maxX = $lng + $dist;
 		$minY = $lat - $dist;
 		$maxY = $lat + $dist;
+		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 4326)";
 
 		// Geocluster center points are in the database, so we can just look
 		// them up. However, MySQL spatial functions only allow bounding box
 		// queries, not points inside a circle, which is what we want.
 		// So, here, we're still calculating the haversine distance
 		$sql  = "
-		SELECT id, ST_X(center) as longitude, ST_Y(center) as latitude,
-			( SELECT
-				(ACOS(SIN(RADIANS(ST_Y(center))) * SIN(RADIANS($lat))
-				    + COS(RADIANS(ST_Y(center))) * COS(RADIANS($lat))
-				    * COS(RADIANS(ST_X(center) - $lng))) * 6371.0)
-			) as distance
+		SELECT id,
+               ST_X(center) as longitude,
+               ST_Y(center) as latitude,
+               ST_Distance(center, $point, 'kilometre') as distance
 		FROM geoclusters
 		WHERE level=?
-		  and (ACOS(SIN(RADIANS(ST_Y(center))) * SIN(RADIANS($lat))
-			      + COS(RADIANS(ST_Y(center))) * COS(RADIANS($lat))
-			      * COS(RADIANS(ST_X(center) - $lng))) * 6371.0) < $dist
+		  and MBRWithin(center, $bbox)
 		order by distance
 		LIMIT 1
 		";
