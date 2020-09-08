@@ -1,10 +1,13 @@
+alter table tickets       modify enteredDate datetime not null default CURRENT_TIMESTAMP;
+alter table ticketHistory modify actionDate  datetime not null default CURRENT_TIMESTAMP;
+
 drop table ticket_geodata;
 drop table geoclusters;
 
 create table geoclusters (
 	id     int     unsigned not null primary key auto_increment,
 	level  tinyint unsigned not null,
-	center point            not null SRID 4326, -- EPSG WGS 84
+	center point            not null SRID 0, -- Flatspace
 	spatial index(center)
 );
 

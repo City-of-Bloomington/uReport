@@ -63,7 +63,7 @@ class GeoCluster extends ActiveRecord
 		$this->validate();
 		$db    = Database::getConnection();
 		$point = ($this->getLatitude() && $this->getLongitude())
-                    ? "ST_PointFromText('Point({$this->getLatitude()} {$this->getLongitude()})', 4326)"
+                    ? "ST_PointFromText('Point({$this->getLatitude()} {$this->getLongitude()})', 0)"
                     : 'null';
 
 		if ($this->getId()) {
@@ -127,19 +127,15 @@ class GeoCluster extends ActiveRecord
 	{
 		$lat   = $ticket->getLatitude ();
 		$lng   = $ticket->getLongitude();
-		$point = "ST_PointFromText('Point($lat $lng)', 4326)";
+		$point = "ST_PointFromText('Point($lat $lng)', 0)";
 		$dist  = 0.01 * pow(2, $level * 2); // Kilometers
 
 		$minX = $lng - $dist;
 		$maxX = $lng + $dist;
 		$minY = $lat - $dist;
 		$maxY = $lat + $dist;
-		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 4326)";
+		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 0)";
 
-		// Geocluster center points are in the database, so we can just look
-		// them up. However, MySQL spatial functions only allow bounding box
-		// queries, not points inside a circle, which is what we want.
-		// So, here, we're still calculating the haversine distance
 		$sql  = "
 		SELECT id,
                ST_X(center) as longitude,

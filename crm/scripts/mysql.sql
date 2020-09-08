@@ -180,7 +180,7 @@ create table tickets (
 	assignedPerson_id   int         unsigned,
 	contactMethod_id    int         unsigned,
 	responseMethod_id   int         unsigned,
-	enteredDate         datetime,
+	enteredDate         datetime    not null default CURRENT_TIMESTAMP,
 	lastModified        timestamp   not null default CURRENT_TIMESTAMP,
 	addressId           int         unsigned,
 	latitude            float(17, 14),
@@ -202,7 +202,6 @@ create table tickets (
 	constraint FK_tickets_assignedPerson_id  foreign key (assignedPerson_id)  references people     (id),
 	constraint FK_tickets_substatus_id       foreign key (substatus_id)       references substatus  (id)
 );
-/*!50700 alter table tickets modify enteredDate datetime not null default CURRENT_TIMESTAMP */;
 
 create table issueTypes (
 	id int unsigned not null primary key auto_increment,
@@ -222,7 +221,7 @@ create table ticketHistory (
 	actionPerson_id    int unsigned,
 	action_id          int unsigned not null,
 	enteredDate        timestamp    not null default CURRENT_TIMESTAMP,
-	actionDate         datetime,
+	actionDate         datetime     not null default CURRENT_TIMESTAMP,
 	notes              text,
 	data               text,
 	sentNotifications  text,
@@ -231,7 +230,6 @@ create table ticketHistory (
 	constraint FK_ticketHistory_actionPerson_id    foreign key (actionPerson_id)    references people (id),
 	constraint FK_ticketHistory_action_id          foreign key (action_id)          references actions(id)
 );
-/*!50700 alter table ticketHistory modify actionDate datetime not null default CURRENT_TIMESTAMP */;
 
 create table media (
 	id         int          unsigned not null primary key auto_increment,
@@ -257,7 +255,7 @@ create table bookmarks (
 create table geoclusters (
 	id     int     unsigned not null primary key auto_increment,
 	level  tinyint unsigned not null,
-	center point            not null SRID 4326, -- EPSG WGS 84
+	center point            not null SRID 0, -- Flatspace
 	spatial index(center)
 );
 
