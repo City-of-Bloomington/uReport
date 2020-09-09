@@ -10,6 +10,7 @@ use Laminas\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord
 {
+    public const CLUSTER_UNIT_SIZE = 0.0001; // 10 Meters (very roughly)
 	protected $tablename = 'geoclusters';
 	/**
 	 * Populates the object with data
@@ -128,7 +129,7 @@ class GeoCluster extends ActiveRecord
 		$lat   = $ticket->getLatitude ();
 		$lng   = $ticket->getLongitude();
 		$point = "ST_PointFromText('Point($lat $lng)', 0)";
-		$dist  = 0.01 * pow(2, $level * 2); // Kilometers
+		$dist  = self::CLUSTER_UNIT_SIZE * pow(2, $level * 2);
 
 		$minX = $lng - $dist;
 		$maxX = $lng + $dist;
@@ -140,10 +141,10 @@ class GeoCluster extends ActiveRecord
 		SELECT id,
                ST_X(center) as longitude,
                ST_Y(center) as latitude,
-               ST_Distance(center, $point, 'kilometre') as distance
+               ST_Distance(center, $point) as distance
 		FROM geoclusters
 		WHERE level=?
-		  and MBRWithin(center, $bbox)
+		  and ST_Distance(center, $point) < $dist
 		order by distance
 		LIMIT 1
 		";
