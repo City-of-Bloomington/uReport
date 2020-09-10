@@ -52,7 +52,7 @@ class TicketsController extends Controller
 
         if (($format == 'print' || $format == 'csv') && Person::isAllowed('tickets', 'print')) {
             $paginated = false;
-            
+
             if ($format == 'print') {
                 $this->template->setOutputFormat('html');
                 $this->template->setFilename('print');
@@ -79,7 +79,7 @@ class TicketsController extends Controller
             $this->template->blocks['panel-one'] = [ new Block('tickets/searchForm.inc', $params) ];
         }
 	}
-	
+
 	/**
 	 * Read HTML form parameters and prepare the Solr query
 	 *
@@ -443,8 +443,7 @@ class TicketsController extends Controller
 		$_REQUEST['return_url'] = BASE_URL.'/tickets/changeLocation?ticket_id='.$ticket->getId();
 		$this->template->title  = $this->template->_('change_location');
 		$this->template->blocks = [
-            new Block('locations/findLocationForm.inc', ['includeExternalResults' => true]),
-            new Block('locations/mapChooser.inc')
+            new Block('tickets/changeLocationForm.inc', ['ticket' => $ticket])
 		];
 	}
 

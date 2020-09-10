@@ -1,15 +1,13 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param string $this->title
  */
-$title    = $this->title ? self::escape($this->title) : $this->template->title;
 $location = isset($_GET['location']) ? self::escape($_GET['location']) : '';
 ?>
 <section class="findLocationForm">
     <header>
-        <h1><?= $title; ?></h1>
+        <h2><?= $this->_('find_location'); ?></h2>
     </header>
 
     <form method="get" action="<?= BASE_URL; ?>/locations">
