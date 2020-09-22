@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -99,11 +99,14 @@ class Search
 		);
 
 		// Add facets for the AddressService custom fields
-		foreach (AddressService::$customFieldDescriptions as $key=>$desc) {
-            self::$searchableFields[] = $key;
-			self::$facetFields['ticket'][] = $key;
-			self::$sortableFields['ticket'][] = $key;
-		}
+		if (defined('ADDRESS_SERVICE')) {
+            $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
+            foreach ($fields as $key) {
+                self::$searchableFields[]         = $key;
+                self::$facetFields   ['ticket'][] = $key;
+                self::$sortableFields['ticket'][] = $key;
+            }
+        }
 		// Add facets that are only to be used if the current user is authorized
 		if (Person::isAllowed('people', 'view')) {
 			self::$searchableFields[] =  'enteredByPerson_id';

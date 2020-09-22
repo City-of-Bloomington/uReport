@@ -190,7 +190,9 @@ class TicketsController extends Controller
 		// Handle any Location choice passed in
 		if (!empty($_GET['location'])) {
 			$ticket->setLocation($_GET['location']);
-			$ticket->setAddressServiceData(AddressService::getLocationData($ticket->getLocation()));
+			if (defined('ADDRESS_SERVICE')) {
+                $ticket->setAddressServiceData(call_user_func(ADDRESS_SERVICE.'::getLocationData', $ticket->getLocation()));
+            }
 		}
 
 		// Handle any Person choice passed in

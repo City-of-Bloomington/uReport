@@ -122,8 +122,14 @@ define('SOLR_SERVER_PATH', '/solr/ureport');
 
 /**
  * Addresses can be validated against a master address web service
+ *
+ * Your custom address service must implement the AddressService interface.
+ * Bloomington's custom address service implementation is an example.
+ * @see src/Application/Models/AddressService
  */
-//define('ADDRESS_SERVICE','http://localhost/master_address');
+//define('ADDRESS_SERVICE',     'Site\Classes\MasterAddress');
+//define('ADDRESS_SERVICE_URL', 'http://localhost/master_address');
+
 
 /**
  * Rental addresses have additional information we can look up

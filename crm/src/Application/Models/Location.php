@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -34,20 +34,23 @@ class Location
 				$results[$row['location']] = $row;
 			}
 
-            $sql = $db->createStatement('select count(*) as ticketCount from tickets where addressId=?');
-            foreach (AddressService::searchAddresses($query) as $location=>$data) {
-                if (!isset($results[$location])) {
+			if (defined('ADDRESS_SERVICE')) {
+                $sql = $db->createStatement('select count(*) as ticketCount from tickets where addressId=?');
+                $res = call_user_func(ADDRESS_SERVICE.'::searchAddresses', $query);
+                foreach ($res as $location=>$data) {
+                    if (!isset($results[$location])) {
 
-                    $r = $sql->execute([$data['addressId']]);
-                    $t = $r->current();
-                    $data['ticketCount'] = $t['ticketCount'];
+                        $r = $sql->execute([$data['addressId']]);
+                        $t = $r->current();
+                        $data['ticketCount'] = $t['ticketCount'];
 
-                    $results[$location] = $data;
+                        $results[$location] = $data;
+                    }
+                    else {
+                        $results[$location] = array_merge($results[$location],$data);
+                    }
+                    $results[$location]['source'] = 'Master Address';
                 }
-                else {
-                    $results[$location] = array_merge($results[$location],$data);
-                }
-                $results[$location]['source'] = 'Master Address';
             }
 		}
 

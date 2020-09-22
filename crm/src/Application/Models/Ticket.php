@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -580,11 +580,14 @@ class Ticket extends ActiveRecord
 			$set = 'set'.ucfirst($field);
 			$this->$set('');
 		}
-		foreach (AddressService::$customFieldDescriptions as $key=>$definition) {
-			$d = $this->getAdditionalFields();
-			if (isset($d->$key)) { unset($d->$key); }
-			$this->setAdditionalFields($d);
-		}
+		if (defined('ADDRESS_SERVICE')) {
+            $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
+            foreach ($fields as $key) {
+                $d = $this->getAdditionalFields();
+                if (isset($d->$key)) { unset($d->$key); }
+                $this->setAdditionalFields($d);
+            }
+        }
 	}
 
 	/**
@@ -638,6 +641,8 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleAdd($post)
 	{
+        error_log("handleAdd: \n".print_r($post, true));
+
 		$db = Database::getConnection();
 		$db->getDriver()->getConnection()->beginTransaction();
 		try {
@@ -655,12 +660,11 @@ class Ticket extends ActiveRecord
                 }
             }
 
-            // If they gave us an address, and we don't have any additional info,
-            // try and get the data from Master Address
-            if ($this->getLocation()
-                && (!$this->getLatitude() || !$this->getLongitude()
-                    || !$this->getCity() || !$this->getState() || !$this->getZip())) {
-                $data = AddressService::getLocationData($this->getLocation());
+            // If they gave us an address, try and get data from Master Address
+            if (defined('ADDRESS_SERVICE') && $this->getLocation()) {
+                $data = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
+                error_log("Master Address: \n".print_r($data, true));
+
                 if ($data) {
                     $this->setAddressServiceData($data);
                 }
@@ -765,7 +769,10 @@ class Ticket extends ActiveRecord
             $this->setLatitude ($post['latitude' ]);
             $this->setLongitude($post['longitude']);
         }
-        $this->setAddressServiceData(AddressService::getLocationData($this->getLocation()));
+        if (defined('ADDRESS_SERVICE')) {
+            $d = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
+            $this->setAddressServiceData($d);
+        }
         $this->save();
 
         $data['updated']['location'] = $this->getLocation();
