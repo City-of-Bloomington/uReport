@@ -68,7 +68,7 @@ class MasterAddress implements AddressService
 		$location = trim($location);
 		$parse    = self::parseAddress($location);
 
-		if ($parse && $location) {
+		if (!empty($parse['street_number']) && !empty($parse['street_name'])) {
             $url  = self::addressSearchUrl($location);
             $json = self::doJsonRequest($url);
             if (isset($json['locations'])) {
@@ -85,7 +85,7 @@ class MasterAddress implements AddressService
 	/**
 	 * @return array   Address data
 	 */
-	private static function chooseMatch(array $locations, array $parse): array
+	private static function chooseMatch(array $locations, array $parse): ?array
 	{
         foreach ($locations as $a) {
             if (empty($parse['subunitIdentifier'])) {
@@ -95,6 +95,7 @@ class MasterAddress implements AddressService
                 if (!empty($a['subunit_id'])) { return $a; }
             }
         }
+        return null;
 	}
 
 	public static function searchAddresses(string $query): array
