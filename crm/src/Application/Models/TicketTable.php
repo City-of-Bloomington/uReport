@@ -160,4 +160,17 @@ class TicketTable extends TableGateway
 		)) ? true : false;
 	}
 
+	/**
+	 * Prepares a bounding box for finding nearby tickets
+	 * @see self::find()
+	 */
+	public static function nearbyBoundingBox(float $lat, float $lon): array
+	{
+        return [
+            $lat - 0.0001,
+            $lon - 0.0001,
+            $lat + 0.0001,
+            $lon + 0.0001
+        ];
+	}
 }
