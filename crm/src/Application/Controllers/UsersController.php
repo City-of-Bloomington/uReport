@@ -1,12 +1,14 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
 
 use Application\Models\Person;
 use Application\Models\PersonTable;
+use Application\Models\DepartmentTable;
+
 use Blossom\Classes\Block;
 use Blossom\Classes\Controller;
 use Blossom\Classes\Template;
@@ -15,14 +17,19 @@ class UsersController extends Controller
 {
 	public function index()
 	{
-		$search = ['user_account'=>true];
-		if (!empty($_GET['department_id'])) {
-			$search['department_id'] = $_GET['department_id'];
-		}
-		$table  = new PersonTable();
-		$people = $table->find($search);
-		$this->template->title = $this->template->_(['user', 'users', count($people)]);
-		$this->template->blocks[] = new Block('users/userList.inc', ['userList'=>$people]);
+        global $ACL;
+
+		$depts  = new DepartmentTable();
+		$people = new PersonTable();
+		$users  = $people->search(array_merge($_GET, ['user_account'=>true]));
+		$vars   = [
+            'users'                 => $users,
+            'departments'           => $depts->find(),
+            'roles'                 => $ACL->getRoles(),
+            'authenticationMethods' => Person::getAuthenticationMethods()
+		];
+		$this->template->title  = $this->template->_(['user', 'users', 100]);
+		$this->template->blocks = [ new Block('users/findForm.inc', $vars) ];
 	}
 
 	public function update()

@@ -115,54 +115,56 @@ class PersonTable extends TableGateway
 		if (isset($fields['query'])) {
 			$value = trim($fields['query']).'%';
 			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
-			$this->select->where (function (Where $w) use ($value) { $w->like('people.firstname', $value); })
-						->orWhere(function (Where $w) use ($value) { $w->like('people.lastname' , $value); })
-						->orWhere(function (Where $w) use ($value) { $w->like('email.email'     , $value); })
-						->orWhere(function (Where $w) use ($value) { $w->like('people.username' , $value); });
+			$this->select->where(function (Where $w) use ($value) { $w->like('people.firstname', $value); })
+					   ->orWhere(function (Where $w) use ($value) { $w->like('people.lastname' , $value); })
+					   ->orWhere(function (Where $w) use ($value) { $w->like('email.email'     , $value); })
+					   ->orWhere(function (Where $w) use ($value) { $w->like('people.username' , $value); });
 		}
 		elseif ($fields) {
 			$this->prepareJoins($fields);
 
 			foreach ($fields as $key=>$value) {
-				switch ($key) {
-					case 'user_account':
-						$value
-							? $this->select->where('username is not null')
-							: $this->select->where('username is null');
-						break;
+                if ($value) {
+                    switch ($key) {
+                        case 'user_account':
+                            $value
+                                ? $this->select->where('username is not null')
+                                : $this->select->where('username is null');
+                            break;
 
-					case 'email':
-						$this->select->where(function (Where $w) use ($value) { $w->like('email.email', "$value%"); });
-						break;
+                        case 'email':
+                            $this->select->where(function (Where $w) use ($value) { $w->like('email.email', "$value%"); });
+                            break;
 
-					case 'phoneNumber':
-						$this->select->where(function (Where $w) use ($value) { $w->like('phone.number', "$value%"); });
-						break;
+                        case 'phoneNumber':
+                            $this->select->where(function (Where $w) use ($value) { $w->like('phone.number', "$value%"); });
+                            break;
 
-					case 'phoneDeviceId':
-						$this->select->where(function (Where $w) use ($value) { $w->like('phone.deviceId', "$value%"); });
-						break;
+                        case 'phoneDeviceId':
+                            $this->select->where(function (Where $w) use ($value) { $w->like('phone.deviceId', "$value%"); });
+                            break;
 
-					case 'department_id':
-						$this->select->where([$key=>$value]);
-						break;
+                        case 'department_id':
+                            $this->select->where([$key=>$value]);
+                            break;
 
-					case 'address':
-					case 'city':
-					case 'state':
-					case 'zip':
-						$this->select->where(function (Where $w) use ($key, $value) { $w->like("address.$key", "$value%"); });
-						break;
+                        case 'address':
+                        case 'city':
+                        case 'state':
+                        case 'zip':
+                            $this->select->where(function (Where $w) use ($key, $value) { $w->like("address.$key", "$value%"); });
+                            break;
 
-					case 'reportedTicket_id':
-						$this->select->where(['t.reportedByPerson_id' => $value]);
-						break;
+                        case 'reportedTicket_id':
+                            $this->select->where(['t.reportedByPerson_id' => $value]);
+                            break;
 
-					default:
-						if (in_array($key, self::$fields)) {
-							$this->select->where(function (Where $w) use ($key, $value) { $w->like("people.$key", "$value%"); });
-						}
-				}
+                        default:
+                            if (in_array($key, self::$fields)) {
+                                $this->select->where(function (Where $w) use ($key, $value) { $w->like("people.$key", "$value%"); });
+                            }
+                    }
+                }
 			}
 		}
 
