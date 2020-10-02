@@ -9,7 +9,7 @@ use Application\ActiveRecord;
 use Application\Database;
 use Application\Models\Email;
 
-use Blossom\Classes\ExternalIdentity;
+use Domain\Auth\ExternalIdentity;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Person extends ActiveRecord
@@ -229,8 +229,11 @@ class Person extends ActiveRecord
             global $DIRECTORY_CONFIG;
 
             $class = $DIRECTORY_CONFIG[$method]['classname'];
-			$identity = new $class($this->getUsername());
-			$this->populateFromExternalIdentity($identity);
+			$dir   = new $class($DIRECTORY_CONFIG[$method]);
+			$id    = $dir->identify($this->getUsername());
+			if ($id) {
+                $this->populateFromExternalIdentity($id);
+            }
 		}
 	}
 
@@ -267,28 +270,23 @@ class Person extends ActiveRecord
 	 * Should provide the list of methods supported
 	 *
 	 * There should always be at least one method, called "local"
-	 * Additional methods must match classes that implement External Identities
-	 * See: ExternalIdentity.php
-	 *
-	 * @return array
+	 * Additional methods be classes that implement AuthenticationInterface
+	 * @see Domain\Auth\AuthenticationInterface
 	 */
-	public static function getAuthenticationMethods()
+	public static function getAuthenticationMethods(): array
 	{
 		global $DIRECTORY_CONFIG;
-		return array_merge(array('local'), array_keys($DIRECTORY_CONFIG));
+		return array_merge(['local'], array_keys($DIRECTORY_CONFIG));
 	}
 
 	/**
 	 * Determines which authentication scheme to use for the user and calls the appropriate method
 	 *
 	 * Local users will get authenticated against the database
-	 * Other authenticationMethods will need to write a class implementing ExternalIdentity
-	 * See: /libraries/framework/classes/ExternalIdentity.php
-	 *
-	 * @param string $password
-	 * @return boolean
+	 * Other authenticationMethods will need to write a class implementing AuthenticationInterface
+	 * @see Domain\Auth\AuthenticationInterface
 	 */
-	public function authenticate($password)
+	public function authenticate(string $password): bool
 	{
         global $DIRECTORY_CONFIG;
 
@@ -300,14 +298,15 @@ class Person extends ActiveRecord
 
 				default:
 					$method = $this->getAuthenticationMethod();
-					$class = $DIRECTORY_CONFIG[$method]['classname'];
-					return $class::authenticate($this->getUsername(),$password);
+					$class  = $DIRECTORY_CONFIG[$method]['classname'];
+					$auth   = new $class($DIRECTORY_CONFIG[$method]);
+					return $auth->authenticate($this->getUsername(), $password);
 			}
 		}
 	}
 
 	/**
-	 * Checks if the user is supposed to have acces to the resource
+	 * Checks if the user is supposed to have access to the resource
 	 *
 	 * This is implemented by checking against a Laminas Acl object
 	 * The Laminas Acl should be created in bootstrap.inc
@@ -511,44 +510,37 @@ class Person extends ActiveRecord
 		return $o;
 	}
 
-	/**
-	 * @param ExternalIdentity $identity An object implementing ExternalIdentity
-	 */
-	public function populateFromExternalIdentity(ExternalIdentity $identity)
+	public function populateFromExternalIdentity(ExternalIdentity $id)
 	{
-		if (!$this->getFirstname() && $identity->getFirstname()) {
-			$this->setFirstname($identity->getFirstname());
-		}
-		if (!$this->getLastname() && $identity->getLastname()) {
-			$this->setLastname($identity->getLastname());
-		}
+		if (!$this->getFirstname() && $id->firstname) { $this->setFirstname($id->firstname); }
+		if (!$this->getLastname()  && $id->lastname ) { $this->setLastname ($id->lastname ); }
 
 		// We're going to be adding email and phone records for this person.
 		// We have to save the person record before we can do the foreign keys.
 		if (!$this->getId()) { $this->save(); }
 
 		$list = $this->getEmails();
-		if (!count($list) && $identity->getEmail()) {
+		if (!count($list) && $id->email) {
 			$email = new Email();
 			$email->setPerson($this);
-			$email->setEmail($identity->getEmail());
+			$email->setEmail($id->email);
 			$email->save();
 		}
 		$list = $this->getPhones();
-		if (!count($list) && $identity->getPhone()) {
+		if (!count($list) && $id->phone) {
 			$phone = new Phone();
 			$phone->setPerson($this);
-			$phone->setNumber($identity->getPhone());
+			$phone->setNumber($id->phone);
 			$phone->save();
 		}
 		$list = $this->getAddresses();
-		if (!count($list) && $identity->getAddress()) {
+		if (!count($list) && $id->address) {
 			$address = new Address();
 			$address->setPerson($this);
-			$address->setAddress($identity->getAddress());
-			$address->setCity   ($identity->getCity());
-			$address->setState  ($identity->getState());
-			$address->setZip    ($identity->setZip());
+			$address->setAddress($id->address);
+			$address->setCity   ($id->city   );
+			$address->setState  ($id->state  );
+			$address->setZip    ($id->zip    );
 			$address->save();
 		}
 	}

@@ -22,23 +22,22 @@ class PersonTable extends TableGateway
 
 	public function __construct() { parent::__construct('people', __namespace__.'\Person'); }
 
-	private function prepareJoins($fields)
+	private function prepareJoins(array $fields)
 	{
-		$keys = array_keys($fields);
-		if (in_array('email', $keys)) {
+		if (!empty($fields['email'])) {
 			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
 		}
-		if (   in_array('phoneNumber',   $keys)
-			|| in_array('phoneDeviceId', $keys)) {
+		if (   !empty($fields['phoneNumber'  ])
+			|| !empty($fields['phoneDeviceId'])) {
 			$this->select->join(['phone'=>'peoplePhones'], 'people.id=phone.person_id', [], Select::JOIN_LEFT);
 		}
-		if (in_array('address',  $keys)
-			|| in_array('city',  $keys)
-			|| in_array('state', $keys)
-			|| in_array('zip',   $keys)) {
+		if (   !empty($fields['address'])
+			|| !empty($fields['city'   ])
+			|| !empty($fields['state'  ])
+			|| !empty($fields['zip'    ])) {
 			$this->select->join(['address'=>'peopleAddresses'], 'people.id=address.person_id', [], Select::JOIN_LEFT);
 		}
-		if (in_array('reportedTicket_id', $keys)) {
+		if (!empty($fields['reportedTicket_id'])) {
 			$this->select->join(['t'=>'tickets'], 'people.id=t.reportedByPerson_id', [], Select::JOIN_LEFT);
 		}
 	}

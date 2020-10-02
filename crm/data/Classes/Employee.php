@@ -1,72 +1,120 @@
 <?php
 /**
- * A class for working with a Directory webservice
+ * A example class for working with entries in LDAP.
  *
  * This class is written specifically for the City of Bloomington's
- * Directory webservice.  If you are going to be doing authentication
- * with your own webservice, you will probably need to customize
- * the this class.
+ * LDAP layout.  If you are going to be doing LDAP authentication
+ * with your own LDAP server, you will probably need to customize
+ * the fields used in this class.
  *
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * To implement your own identity class, you should create a class
+ * in SITE_HOME/Classes.  The SITE_HOME directory does not get
+ * overwritten during an upgrade.  The namespace for your class
+ * should be Site\Classes\
+ *
+ * You can use this class as a starting point for your own implementation.
+ * You will ned to change the namespace to Site\Classes.  You might also
+ * want to change the name of the class to suit your own needs.
+ *
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Site\Classes;
 
-use Blossom\Classes\ExternalIdentity;
-use Blossom\Classes\Url;
+use Domain\Auth\AuthenticationInterface;
+use Domain\Auth\ExternalIdentity;
 
-class Employee implements ExternalIdentity
+class Employee implements AuthenticationInterface
 {
 	private static $connection;
 	private $config;
-	private $entry;
 
-	/**
-	 * @param  array     $config
-	 * @param  string    $username
-	 * @param  string    $password
-	 * @throws Exception
-	 */
-	public static function authenticate($username, $password)
+
+	public function __construct(array $config)
 	{
-        return false;
+        $this->config = $config;
 	}
 
-
-	/**
-	 * Loads an entry from the webservice for the given user
-	 *
-	 * @param array  $config
-	 * @param string $username
-	 */
-	public function __construct($username)
+	public function identify(string $username): ?ExternalIdentity
 	{
-		global $DIRECTORY_CONFIG;
-		$this->config = $DIRECTORY_CONFIG['Employee'];
+		$this->openConnection();
 
-		$url = $this->config['DIRECTORY_SERVER'].'/people/view?format=json;username='.$username;
-		$response = Url::get($url);
-		if ($response) {
-            $this->entry = json_decode($response);
-            if (!$this->entry) {
-                throw new \Exception('ldap/unknownUser');
-            }
+		$result = ldap_search(
+			self::$connection,
+			$this->config['base_dn'],
+			$this->config['username_attribute']."=$username",
+			array_values(self::$fieldmap)
+		);
+		if (ldap_count_entries(self::$connection,$result)) {
+			$entries = ldap_get_entries(self::$connection, $result);
+			$entry   = $entries[0];
+			$id      = [];
+			foreach (self::$fieldmap as $personField => $ldapField) {
+                if (isset($entry[$ldapField])) {
+                    $id[$personField] = $entry[$ldapField][0];
+                }
+			}
+			return new ExternalIdentity($id);
 		}
 		else {
-            throw new \Exception('ldap/unknownUser');
+			throw new \Exception('ldap/unknownUser');
 		}
 	}
 
 	/**
-	 * @return string
+	 * Maps uReport Person fields to LDAP fields
 	 */
-	public function getUsername()	{ return $this->entry->username;  }
-	public function getFirstname()	{ return $this->entry->firstname; }
-	public function getLastname()	{ return $this->entry->lastname;  }
-	public function getEmail()		{ return $this->entry->email;     }
-	public function getPhone()		{ return $this->entry->office;    }
-	public function getAddress()	{ return $this->entry->address;   }
-	public function getCity()		{ return $this->entry->city;      }
-	public function getState()		{ return $this->entry->state;     }
-	public function getZip()		{ return $this->entry->zip;       }
+	public static $fieldmap = [
+        // Person   => Ldap
+        'username'  => 'samaccountname',
+        'firstname' => 'givenname',
+        'lastname'  => 'sn',
+        'email'     => 'mail',
+        'phone'     => 'telephonenumber',
+        'address'   => 'postaladdress',
+        'city'      => 'l',
+        'state'     => 'st',
+        'zip'       => 'postalcode'
+	];
+
+	public function authenticate(string $username, string $password): bool
+	{
+		$bindUser = sprintf(str_replace('{username}','%s',$this->config['user_binding']),$username);
+
+		$connection = ldap_connect($this->config['server']) or die('ldap/connectionFailed');
+		ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, 3);
+		if (ldap_bind($connection,$bindUser,$password)) {
+			return true;
+		}
+	}
+
+	/**
+	 * Creates the connection to the LDAP server
+	 */
+	private function openConnection()
+	{
+		if (!self::$connection) {
+			if (self::$connection = ldap_connect($this->config['server'])) {
+				ldap_set_option(self::$connection, LDAP_OPT_PROTOCOL_VERSION,3);
+				ldap_set_option(self::$connection, LDAP_OPT_REFERRALS, 0);
+				if (!empty($this->config['admin_binding'])) {
+					if (!ldap_bind(
+							self::$connection,
+							$this->config['admin_binding'],
+							$this->config['admin_pass']
+						)) {
+						throw new \Exception(ldap_error(self::$connection));
+					}
+				}
+				else {
+					if (!ldap_bind(self::$connection)) {
+						throw new \Exception(ldap_error(self::$connection));
+					}
+				}
+			}
+			else {
+				throw new \Exception(ldap_error(self::$connection));
+			}
+		}
+	}
 }

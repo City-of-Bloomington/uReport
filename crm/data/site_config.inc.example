@@ -55,34 +55,18 @@ $DATABASES = [
  * are in a seperate LDAP directory from public user accounts.
  * Classes that implement ExternalIdentity should have an entry here.
  *
- * See: ExternalIdentity
+ * @see: Domain\Auth\ExternalIdentity
  */
-// Example for ADS style authentication
 $DIRECTORY_CONFIG = [
-//  'Ldap' => [
-//      'classname' => 'Site\Classes\Ldap',
-//      'DIRECTORY_SERVER'=>'ldaps://example.org:636',
-//      'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
-//      'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
-//      'DIRECTORY_USER_BINDING'=>'{username}@example.org',
-//      'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
-//      'DIRECTORY_ADMIN_PASS'=>'password'
-//  ]
-//
-// Example for LDAP style authentication
-//  'Ldap' => [
-//      'classname' => 'Site\Classes\Ldap',
-//      'DIRECTORY_SERVER'=>'ldaps://example.org:636');
-//      'DIRECTORY_BASE_DN'=>'ou=people,o=ldap.domain.somewhere');
-//      'DIRECTORY_USERNAME_ATTRIBUTE'=>'uid');
-//      'DIRECTORY_USER_BINDING'=>'uid={username},'.DIRECTORY_BASE_DN);
-//      'DIRECTORY_ADMIN_BINDING'=>'uid=admin,'.DIRECTORY_BASE_DN);
-//      'DIRECTORY_ADMIN_PASS'=>'password');
-//  ]
-// Example for Directory webservice
+// Example for ADS style authentication
 //  'Employee' => [
-//      'classname' => 'Site\Classes\Employee',
-//      'DIRECTORY_SERVER' => 'http://localhost/directory',
+//      'classname'         => 'Site\Classes\Employee',
+//      'server'            => 'ldaps://example.org:636',
+//      'base_dn'           => 'OU=Department,DC=example,DC=org',
+//      'username_attribute'=> 'sAMAccountName',
+//      'user_binding'      => '{username}@example.org',
+//      'admin_binding'     => 'admin@example.org',
+//      'admin_pass'        => 'password'
 //  ]
 ];
 

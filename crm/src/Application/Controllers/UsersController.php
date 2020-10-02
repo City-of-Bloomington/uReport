@@ -69,9 +69,10 @@ class UsersController extends Controller
 				['person'=>$user,'disableButtons'=>true]
 			);
 		}
+
 		$this->template->title = $user->getId()
-            ? $this->template->_('create_account')
-            : $this->template->_('edit_account');
+            ? $this->template->_('edit_account')
+            : $this->template->_('create_account');
 		$this->template->blocks[] = new Block('users/updateUserForm.inc', ['person'=>$user]);
 	}
 
