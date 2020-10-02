@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Department $this->department
  * @param string     $this->action      The URL for posting the form
@@ -30,8 +30,10 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
                     'value'    => self::escape($this->department->getName())
                 ]);
 
+                $people = $this->department->getPeople();
+                if (!$people) { $people = [$_SESSION['USER']]; }
+
                 $options = [];
-                $people  = $this->department->getPeople();
                 foreach ($people as $p) { $options[] = ['value'=>$p->getId(), 'label'=>self::escape($p->getFullname())]; }
                 echo $helper->field([
                     'name'     => 'defaultPerson_id',
