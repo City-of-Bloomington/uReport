@@ -114,7 +114,9 @@ class MasterAddress implements AddressService
 
 	private static function addressSearchUrl(string $query): string
 	{
-        return ADDRESS_SERVICE_URL.'/locations?'.http_build_query(['format'=>'json','location'=>$query], '', ';');
+        return ADDRESS_SERVICE_URL.'/locations?'.http_build_query(['format'   => 'json',
+                                                                   'active'   => 1,
+                                                                   'location' => $query], '', ';');
 	}
 
 	public static function parseAddress(string $address): ?array
