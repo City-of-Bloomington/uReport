@@ -96,7 +96,8 @@ define('SOLR_SERVER_PATH', '/solr/ureport');
 /**
  * Addresses can be validated against a master address web service
  */
-define('ADDRESS_SERVICE', '{{ ureport_address_service }}');
+define('ADDRESS_SERVICE',     '{{ ureport_address_service.class }}');
+define('ADDRESS_SERVICE_URL', '{{ ureport_address_service.url   }}');
 {% endif %}
 
 {% if ureport_rental_service %}

@@ -24,6 +24,8 @@ class Ticket extends ActiveRecord
 
 	private $needToUpdateClusters = false;
 
+	const CLOSE_ENOUGH = 0.0015; // ~50 meters
+
 	/**
 	 * Populates the object with data
 	 *
@@ -533,34 +535,46 @@ class Ticket extends ActiveRecord
 	 */
 	public function setAddressServiceData($data)
 	{
-		foreach ($data as $key=>$value) {
-			$get = 'get'.ucfirst($key);
-			$set = 'set'.ucfirst($key);
+        foreach ($data as $key=>$value) {
+            $get = 'get'.ucfirst($key);
+            $set = 'set'.ucfirst($key);
 
-			$currentValue = null;
-			if (method_exists($this, $get)) {
-				$currentValue = $this->$get();
-			}
+            $currentValue = null;
+            if (method_exists($this, $get)) {
+                $currentValue = $this->$get();
+            }
 
-			if (method_exists($this,$set)) {
-				// We must replace the user-provided address string
-				// with the string from the AddressService.
-				// We are using the AddressService string as the canonical string
-				// used to identify places in the city.
-				//
-				// Any other fields, we should preserve, especially the
-				// lat/long.  The user chose a point on the map where the problem
-				// was.  We don't want to move that around.
-				if ($key == 'location' || !$currentValue) {
-					$this->$set($value);
-				}
-			}
-			else {
-				$d = $this->getAdditionalFields();
-				$d->$key = (string)$value;
-				$this->setAdditionalFields($d);
-			}
-		}
+            if (method_exists($this,$set)) {
+                // We must replace the user-provided address string
+                // with the string from the AddressService.
+                // We are using the AddressService string as the canonical string
+                // used to identify places in the city.
+                //
+                // Any other fields, we should preserve, especially the
+                // lat/long.  The user chose a point on the map where the problem
+                // was.  We don't want to move that around.
+                if (!$currentValue) { $this->$set($value); }
+                elseif ($key == 'location'
+                        && $this->getLatitude()      && $this->getLongitude()
+                        && !empty($data['latitude']) && !empty($data['longitude'])
+                        && self::distance((float)$data['latitude' ],
+                                          (float)$data['longitude'],
+                                          $this->getLatitude(),
+                                          $this->getLongitude()) < self::CLOSE_ENOUGH) {
+                    $this->$set($value);
+                }
+            }
+            else {
+                $d = $this->getAdditionalFields();
+                $d->$key = (string)$value;
+                $this->setAdditionalFields($d);
+            }
+        }
+	}
+
+	public static function distance(float $latA, float $lonA, float $latB, float $lonB): float
+	{
+        return sqrt(pow($latA - $latB, 2) + pow($lonA - $lonB, 2));
 	}
 
 	/**
@@ -641,8 +655,6 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleAdd($post)
 	{
-        error_log("handleAdd: \n".print_r($post, true));
-
 		$db = Database::getConnection();
 		$db->getDriver()->getConnection()->beginTransaction();
 		try {
@@ -663,8 +675,6 @@ class Ticket extends ActiveRecord
             // If they gave us an address, try and get data from Master Address
             if (defined('ADDRESS_SERVICE') && $this->getLocation()) {
                 $data = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
-                error_log("Master Address: \n".print_r($data, true));
-
                 if ($data) {
                     $this->setAddressServiceData($data);
                 }
@@ -706,7 +716,6 @@ class Ticket extends ActiveRecord
         }
         $history->save();
 	}
-
 
 	/**
 	 * Does all the database work for TicketController::changeStatus
