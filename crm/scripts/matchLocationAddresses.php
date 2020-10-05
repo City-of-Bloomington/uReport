@@ -24,13 +24,17 @@ $result  = $query->fetchAll(\PDO::FETCH_ASSOC);
 
 $unknown = fopen('./unknown.txt', 'w');
 $matches = fopen('./matches.txt', 'w');
+$tooFar  = fopen('./tooFar.txt',  'w');
 foreach ($result as $row) {
+    $info = "$row[id]: $row[location] => ";
     $data = MasterAddress::getLocationData($row['location']);
+    echo $info;
     if ($data) {
         $dist    = Ticket::distance((float)$data['latitude' ], (float)$data['longitude'],
                                     (float) $row['latitude' ], (float) $row['longitude']);
-        $info    = "$row[id]: $row[location] => $data[location] $dist\n";
-        echo $info;
+        $dist    = round($dist, 6);
+        $info   .= "$data[location] $dist\n";
+        echo "$data[location] $dist\n";
 
         if ($dist < Ticket::CLOSE_ENOUGH) {
             $ticket = new Ticket($row['id']);
@@ -39,7 +43,11 @@ foreach ($result as $row) {
             fwrite($matches, $info);
         }
         else {
-            fwrite($unknown, $info);
+            fwrite($tooFar, $info);
         }
+    }
+    else {
+        echo "\n";
+        fwrite($unknown, "$info\n");
     }
 }
