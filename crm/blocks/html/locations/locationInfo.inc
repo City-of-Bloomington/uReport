@@ -74,6 +74,7 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
         }
 
         // Other nearby tickets
+        /*
         if ($this->ticket->getLatitude() && $this->ticket->getLongitude()) {
             $bbox    = TicketTable::nearbyBoundingBox($this->ticket->getLatitude(), $this->ticket->getLongitude());
             $tickets = $table->find(['bbox'=>implode(',', $bbox)]);
@@ -83,6 +84,7 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
             $block->fields     = ['status', 'enteredDate', 'location'];
             echo $block->render('html', $this->template);
         }
+        */
     echo "
 	</section>
 	";
