@@ -60,12 +60,16 @@ $DATABASES = [
  * See: ExternalIdentity
  */
 $DIRECTORY_CONFIG = [
-{% if ureport_directory_service %}
-// Example for Directory webservice
-  'Employee' => [
-      'classname' => 'Site\Classes\Employee',
-      'DIRECTORY_SERVER' => '{{ ureport_directory_service }}',
-  ]
+{% if ureport_ldap %}
+    'Employee' => [
+        'classname'          => "{{ ureport_ldap.classname          }}",
+        'server'             => "{{ ureport_ldap.server             }}",
+        'base_dn'            => "{{ ureport_ldap.base_dn            }}",
+        'username_attribute' => "{{ ureport_ldap.username_attribute }}",
+        'user_binding'       => "{{ ureport_ldap.user_binding       }}",
+        'admin_binding'      => "{{ ureport_ldap.admin_binding      }}",
+        'admin_pass'         => "{{ ureport_ldap.admin_pass         }}"
+    ]
 {% endif %}
 ];
 
@@ -151,3 +155,8 @@ define('DATE_FORMAT', 'n/j/Y');
 define('DATETIME_FORMAT', 'n/j/Y H:i:s');
 define('TIME_FORMAT', 'H:i:s');
 define('LOCALE', 'en_US');
+
+{% if ureport_graylog %}
+define('GRAYLOG_DOMAIN', '{{ ureport_graylog.domain }}');
+define('GRAYLOG_PORT',    {{ ureport_graylog.port   }});
+{% endif %}
