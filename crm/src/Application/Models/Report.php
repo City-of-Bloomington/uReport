@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -270,10 +270,13 @@ class Report
             $options[]  = "h.actionPerson_id=$id";
         }
 
-        foreach (array_keys(AddressService::$customFieldDescriptions) as $f) {
-            if (!empty($get[$f])) {
-                $v = preg_replace('/[^a-zA-Z\ ]/', '', $get[$f]);
-                $options[] = "additionalFields like '%$v%'";
+        if (defined('ADDRESS_SERVICE')) {
+            $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
+            foreach ($fields as $f) {
+                if (!empty($get[$f])) {
+                    $v = preg_replace('/[^a-zA-Z\ ]/', '', $get[$f]);
+                    $options[] = "additionalFields like '%$v%'";
+                }
             }
         }
 	}

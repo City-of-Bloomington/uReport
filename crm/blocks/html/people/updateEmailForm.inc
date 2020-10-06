@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Email $this->email
  */
@@ -23,7 +23,7 @@ use Application\Models\Email;
 							</select>
 						</label>
 					</td>
-					<td><input name="email" value="<?= self::escape($this->email); ?>" /></td>
+					<td><input name="email" value="<?= self::escape($this->email); ?>" type="email" required="true" /></td>
 				</tr>
 				<tr><td><label for="usedForNotifications"><?= $this->_('usedForNotifications', 'messages'); ?></label></td>
 					<td><select name="usedForNotifications" id="usedForNotifications">

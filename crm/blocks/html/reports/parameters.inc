@@ -2,7 +2,7 @@
 /**
  * Displays the fields the user searched on
  *
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\AddressService;
@@ -89,14 +89,16 @@ $currentURL = new Url(Url::current_url(BASE_HOST));
             }
 		}
 
-		foreach (AddressService::$customFieldDescriptions as $f=>$v) {
-            if (!empty($_GET[$f])) {
-                $deleteURL = clone $currentURL;
-                unset($deleteURL->parameters[$f]);
-                $name = self::escape($_GET[$f]);
-                echo $helper->buttonLink($deleteURL, $name, 'delete');
+		if (defined('ADDRESS_SERVICE')) {
+            foreach (call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions') as $f=>$v) {
+                if (!empty($_GET[$f])) {
+                    $deleteURL = clone $currentURL;
+                    unset($deleteURL->parameters[$f]);
+                    $name = self::escape($_GET[$f]);
+                    echo $helper->buttonLink($deleteURL, $name, 'delete');
+                }
             }
-		}
+        }
 	?>
 	</span>
 </div>

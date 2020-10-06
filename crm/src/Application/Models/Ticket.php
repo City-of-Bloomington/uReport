@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -23,6 +23,8 @@ class Ticket extends ActiveRecord
 	protected $issueType;
 
 	private $needToUpdateClusters = false;
+
+	const CLOSE_ENOUGH = 0.0015; // ~50 meters
 
 	/**
 	 * Populates the object with data
@@ -533,34 +535,46 @@ class Ticket extends ActiveRecord
 	 */
 	public function setAddressServiceData($data)
 	{
-		foreach ($data as $key=>$value) {
-			$get = 'get'.ucfirst($key);
-			$set = 'set'.ucfirst($key);
+        foreach ($data as $key=>$value) {
+            $get = 'get'.ucfirst($key);
+            $set = 'set'.ucfirst($key);
 
-			$currentValue = null;
-			if (method_exists($this, $get)) {
-				$currentValue = $this->$get();
-			}
+            $currentValue = null;
+            if (method_exists($this, $get)) {
+                $currentValue = $this->$get();
+            }
 
-			if (method_exists($this,$set)) {
-				// We must replace the user-provided address string
-				// with the string from the AddressService.
-				// We are using the AddressService string as the canonical string
-				// used to identify places in the city.
-				//
-				// Any other fields, we should preserve, especially the
-				// lat/long.  The user chose a point on the map where the problem
-				// was.  We don't want to move that around.
-				if ($key == 'location' || !$currentValue) {
-					$this->$set($value);
-				}
-			}
-			else {
-				$d = $this->getAdditionalFields();
-				$d->$key = (string)$value;
-				$this->setAdditionalFields($d);
-			}
-		}
+            if (method_exists($this,$set)) {
+                // We must replace the user-provided address string
+                // with the string from the AddressService.
+                // We are using the AddressService string as the canonical string
+                // used to identify places in the city.
+                //
+                // Any other fields, we should preserve, especially the
+                // lat/long.  The user chose a point on the map where the problem
+                // was.  We don't want to move that around.
+                if (!$currentValue) { $this->$set($value); }
+                elseif ($key == 'location'
+                        && $this->getLatitude()      && $this->getLongitude()
+                        && !empty($data['latitude']) && !empty($data['longitude'])
+                        && self::distance((float)$data['latitude' ],
+                                          (float)$data['longitude'],
+                                          $this->getLatitude(),
+                                          $this->getLongitude()) < self::CLOSE_ENOUGH) {
+                    $this->$set($value);
+                }
+            }
+            else {
+                $d = $this->getAdditionalFields();
+                $d->$key = (string)$value;
+                $this->setAdditionalFields($d);
+            }
+        }
+	}
+
+	public static function distance(float $latA, float $lonA, float $latB, float $lonB): float
+	{
+        return sqrt(pow($latA - $latB, 2) + pow($lonA - $lonB, 2));
 	}
 
 	/**
@@ -580,11 +594,14 @@ class Ticket extends ActiveRecord
 			$set = 'set'.ucfirst($field);
 			$this->$set('');
 		}
-		foreach (AddressService::$customFieldDescriptions as $key=>$definition) {
-			$d = $this->getAdditionalFields();
-			if (isset($d->$key)) { unset($d->$key); }
-			$this->setAdditionalFields($d);
-		}
+		if (defined('ADDRESS_SERVICE')) {
+            $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
+            foreach ($fields as $key) {
+                $d = $this->getAdditionalFields();
+                if (isset($d->$key)) { unset($d->$key); }
+                $this->setAdditionalFields($d);
+            }
+        }
 	}
 
 	/**
@@ -655,12 +672,9 @@ class Ticket extends ActiveRecord
                 }
             }
 
-            // If they gave us an address, and we don't have any additional info,
-            // try and get the data from Master Address
-            if ($this->getLocation()
-                && (!$this->getLatitude() || !$this->getLongitude()
-                    || !$this->getCity() || !$this->getState() || !$this->getZip())) {
-                $data = AddressService::getLocationData($this->getLocation());
+            // If they gave us an address, try and get data from Master Address
+            if (defined('ADDRESS_SERVICE') && $this->getLocation()) {
+                $data = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
                 if ($data) {
                     $this->setAddressServiceData($data);
                 }
@@ -702,7 +716,6 @@ class Ticket extends ActiveRecord
         }
         $history->save();
 	}
-
 
 	/**
 	 * Does all the database work for TicketController::changeStatus
@@ -765,7 +778,10 @@ class Ticket extends ActiveRecord
             $this->setLatitude ($post['latitude' ]);
             $this->setLongitude($post['longitude']);
         }
-        $this->setAddressServiceData(AddressService::getLocationData($this->getLocation()));
+        if (defined('ADDRESS_SERVICE')) {
+            $d = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
+            $this->setAddressServiceData($d);
+        }
         $this->save();
 
         $data['updated']['location'] = $this->getLocation();

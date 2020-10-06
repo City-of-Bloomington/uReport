@@ -55,46 +55,24 @@ $DATABASES = [
  * are in a seperate LDAP directory from public user accounts.
  * Classes that implement ExternalIdentity should have an entry here.
  *
- * See: ExternalIdentity
+ * @see: Domain\Auth\ExternalIdentity
  */
-// Example for ADS style authentication
 $DIRECTORY_CONFIG = [
-//  'Ldap' => [
-//      'classname' => 'Site\Classes\Ldap',
-//      'DIRECTORY_SERVER'=>'ldaps://example.org:636',
-//      'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
-//      'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
-//      'DIRECTORY_USER_BINDING'=>'{username}@example.org',
-//      'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
-//      'DIRECTORY_ADMIN_PASS'=>'password'
-//  ]
-//
-// Example for LDAP style authentication
-//  'Ldap' => [
-//      'classname' => 'Site\Classes\Ldap',
-//      'DIRECTORY_SERVER'=>'ldaps://example.org:636');
-//      'DIRECTORY_BASE_DN'=>'ou=people,o=ldap.domain.somewhere');
-//      'DIRECTORY_USERNAME_ATTRIBUTE'=>'uid');
-//      'DIRECTORY_USER_BINDING'=>'uid={username},'.DIRECTORY_BASE_DN);
-//      'DIRECTORY_ADMIN_BINDING'=>'uid=admin,'.DIRECTORY_BASE_DN);
-//      'DIRECTORY_ADMIN_PASS'=>'password');
-//  ]
-// Example for Directory webservice
+// Example for ADS style authentication
 //  'Employee' => [
-//      'classname' => 'Site\Classes\Employee',
-//      'DIRECTORY_SERVER' => 'http://localhost/directory',
+//      'classname'         => 'Site\Classes\Employee',
+//      'server'            => 'ldaps://example.org:636',
+//      'base_dn'           => 'OU=Department,DC=example,DC=org',
+//      'username_attribute'=> 'sAMAccountName',
+//      'user_binding'      => '{username}@example.org',
+//      'admin_binding'     => 'admin@example.org',
+//      'admin_pass'        => 'password'
 //  ]
 ];
 
 /**
- * CAS authentication http://www.jasig.org/cas
- *
- * https://wiki.jasig.org/display/CASC/phpCAS
- *
- * phpCAS is a PHP library for handling the calls to the CAS service
- * It is the official library, part of the Jasig CAS project
+ * CAS authentication
  */
-//define('CAS', APPLICATION_HOME.'/vendor/jasig/phpcas/source');
 //define('CAS_SERVER','cas.somewhere.org');
 //define('CAS_URI','cas');
 
@@ -128,8 +106,14 @@ define('SOLR_SERVER_PATH', '/solr/ureport');
 
 /**
  * Addresses can be validated against a master address web service
+ *
+ * Your custom address service must implement the AddressService interface.
+ * Bloomington's custom address service implementation is an example.
+ * @see src/Application/Models/AddressService
  */
-//define('ADDRESS_SERVICE','http://localhost/master_address');
+//define('ADDRESS_SERVICE',     'Site\Classes\MasterAddress');
+//define('ADDRESS_SERVICE_URL', 'http://localhost/master_address');
+
 
 /**
  * Rental addresses have additional information we can look up

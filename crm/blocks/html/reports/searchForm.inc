@@ -112,25 +112,28 @@ $helper = $this->template->getHelper('field');
                 ?>
             </details>
             <?php
-                $search = new Search();
-                foreach (AddressService::$customFieldDescriptions as $f=>$v) {
-                    echo "<details><summary>$v[description]</summary>";
-                    $options = [['value'=>'']];
-                    $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
-                    foreach ($search->facetValues($f) as $k=>$c) { $options[] = ['value'=>$k]; }
+                if (defined('ADDRESS_SERVICE')) {
+                    $search       = new Search();
+                    $customFields = call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions');
+                    foreach ($customFields as $f=>$v) {
+                        echo "<details><summary>$v[description]</summary>";
+                        $options = [['value'=>'']];
+                        $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
+                        foreach ($search->facetValues($f) as $k=>$c) { $options[] = ['value'=>$k]; }
 
-                    echo $helper->field([
-                        'name'    => $f,
-                        'id'      => $f,
-                        'type'    => 'select',
-                        'value'   => $value,
-                        'options' => $options
-                    ]);
-                    echo "</details>";
+                        echo $helper->field([
+                            'name'    => $f,
+                            'id'      => $f,
+                            'type'    => 'select',
+                            'value'   => $value,
+                            'options' => $options
+                        ]);
+                        echo "</details>";
+                    }
                 }
 
                 $helper   = $this->template->getHelper('renderInputs');
-                $ignore   = array_keys(AddressService::$customFieldDescriptions);
+                $ignore   = array_keys($customFields);
                 $ignore[] = 'enteredDate';
                 echo $helper->renderInputs($_GET, null, $ignore);
             ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2018 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -89,10 +89,8 @@ class TicketTable extends TableGateway
 	 *
 	 * The key should be the fieldname in the database
 	 * The value should be a nice, readable label for the field
-	 *
-	 * @return array
 	 */
-	public static function getDisplayableFields()
+	public static function getDisplayableFields(): array
 	{
 		$fields = [
 			'id'                => 'Case #',
@@ -112,9 +110,12 @@ class TicketTable extends TableGateway
 			'description'       => 'Description',
 			'slaPercentage'     => 'SLA'
 		];
-		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
-			$fields[$key] = $value['description'];
-		}
+		if (defined('ADDRESS_SERVICE')) {
+            $custom = call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions');
+            foreach ($custom as $key=>$def) {
+                $fields[$key] = $def['description'];
+            }
+        }
 		return $fields;
 	}
 
@@ -122,10 +123,8 @@ class TicketTable extends TableGateway
 	 * Returns fields this class knows how to search for
 	 *
 	 * These should match the fieldnames in the database
-	 *
-	 * @return array
 	 */
-	public static function getSearchableFields()
+	public static function getSearchableFields(): array
 	{
 		$fields = [
 			'enteredDate', 'description',
@@ -138,9 +137,12 @@ class TicketTable extends TableGateway
 			'end_date',
 			'label_id', 'issueType_id'
 		];
-		foreach (AddressService::$customFieldDescriptions as $key=>$value) {
-			$fields[$key] = $key;
-		}
+		if (defined('ADDRESS_SERVICE')) {
+            $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
+            foreach ($fields as $key) {
+                $fields[$key] = $key;
+            }
+        }
 		return $fields;
 	}
 
@@ -158,4 +160,17 @@ class TicketTable extends TableGateway
 		)) ? true : false;
 	}
 
+	/**
+	 * Prepares a bounding box for finding nearby tickets
+	 * @see self::find()
+	 */
+	public static function nearbyBoundingBox(float $lat, float $lon): array
+	{
+        return [
+            $lat - 0.0001,
+            $lon - 0.0001,
+            $lat + 0.0001,
+            $lon + 0.0001
+        ];
+	}
 }

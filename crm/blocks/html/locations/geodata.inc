@@ -16,13 +16,13 @@ if ($this->ticket) {
         $get = 'get'.ucfirst($field);
         $$field = self::escape($this->ticket->$get());
         if ($$field) {
-            $ticketFields.= "<dl class=\"{$field}\"><dt>{$this->_($field)}</dt><dd>{$$field}</dd></dl>";
+            $ticketFields.= "<tr><th>{$this->_($field)}</th><td>{$$field}</td></tr>";
         }
     }
 
     if ($latitude && $longitude) {
         echo "
-        <div id=\"location_map\"></div>
+        <div id=\"location_map\" data-latitude=\"$latitude\" data-longitude=\"$longitude\"></div>
         <script type=\"text/javascript\">
             var DEFAULT_LATITUDE  = ".DEFAULT_LATITUDE.";
             var DEFAULT_LONGITUDE = ".DEFAULT_LONGITUDE.";
@@ -33,22 +33,22 @@ if ($this->ticket) {
     }
 }
 if (defined('ADDRESS_SERVICE')) {
-    $data = AddressService::getLocationData($this->location);
-    if (count($data)) {
-        foreach ($data as $key=>$value) {
-            $value = self::escape(trim($value));
-            if (array_key_exists($key, AddressService::$customFieldDescriptions)
-                && $value) {
-                $label = AddressService::$customFieldDescriptions[$key]['description'];
-                $addressFields.= "<dl><dt>$label</dt><dd>$value</dd></dl>";
+    $customFields = call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions');
+    $data         = $this->ticket->getAdditionalFields();
+    if ($data) {
+        foreach ($customFields as $key=>$def) {
+            if (!empty($data->$key)) {
+                $value         = parent::escape($data->$key);
+                $label         = $def['description'];
+                $addressFields.= "<tr><th>$label</th><td>$value</td></tr>";
             }
         }
     }
 }
 
 echo "
-<div class=\"geodata\">
+<table class=\"geodata\">
     $ticketFields
     $addressFields
-</div>
+</table>
 ";

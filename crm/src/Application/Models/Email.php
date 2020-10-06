@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Application\ActiveRecord;
@@ -68,6 +67,8 @@ class Email extends ActiveRecord
 
 	public function validate()
 	{
+        if (!self::isValidFormat($this->getEmail())) { throw new \Exception('email/invalidFormat'); }
+
 		if (!$this->getLabel()) { $this->setLabel('Other'); }
 		if (!$this->getPerson_id()) { throw new \Exception('missingRequiredFields'); }
 
@@ -148,4 +149,10 @@ class Email extends ActiveRecord
 	 * @return bool
 	 */
 	public function isUsedForNotifications() { return $this->getUsedForNotifications(); }
+
+    public static function isValidFormat(string $email): bool
+    {
+        $regex = "/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/";
+        return preg_match($regex, $email);
+    }
 }

@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2013-2014 City of Bloomington, Indiana
+ * @copyright 2013-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Application\ActiveRecord;
@@ -11,6 +10,7 @@ use Laminas\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord
 {
+    public const CLUSTER_UNIT_SIZE = 0.0001; // 10 Meters (very roughly)
 	protected $tablename = 'geoclusters';
 	/**
 	 * Populates the object with data
@@ -32,7 +32,7 @@ class GeoCluster extends ActiveRecord
 			}
 			else {
 				$db = Database::getConnection();
-				$sql = "select id,level,x(center) as longitude, y(center) as latitude
+				$sql = "select id, level, ST_X(center) as longitude, ST_Y(center) as latitude
 						from geoclusters where id=?";
                 $result = $db->createStatement($sql)->execute([$id]);
                 if (count($result)) {
@@ -62,18 +62,18 @@ class GeoCluster extends ActiveRecord
 		 // We cannot use the default ActiveRecord save,
 		 // because the center point must use mysql spatial functions
 		$this->validate();
-		$db = Database::getConnection();
+		$db    = Database::getConnection();
+		$point = ($this->getLatitude() && $this->getLongitude())
+                    ? "ST_PointFromText('Point({$this->getLatitude()} {$this->getLongitude()})', 0)"
+                    : 'null';
+
 		if ($this->getId()) {
-			$sql = 'update geoclusters set level=?, center=point(?, ?) where id=?';
-			$db->query($sql)->execute([
-				$this->getLevel(), $this->getLongitude(), $this->getLatitude(), $this->getId()
-			]);
+			$sql = "update geoclusters set level=?, center=$point where id=?";
+			$db->query($sql)->execute([$this->getLevel(), $this->getId()]);
 		}
 		else {
-			$sql = 'insert geoclusters set level=?, center=point(?, ?)';
-			$db->query($sql)->execute([
-				$this->getLevel(), $this->getLongitude(), $this->getLatitude()
-			]);
+			$sql = "insert geoclusters set level=?, center=$point";
+			$db->query($sql)->execute([$this->getLevel()]);
 			$this->data['id'] = $db->getDriver()->getLastGeneratedValue();
 		}
 	}
@@ -81,10 +81,10 @@ class GeoCluster extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()        { return parent::get('id'       ); }
-	public function getLevel()     { return parent::get('level'    ); }
-	public function getLatitude()  { return parent::get('latitude' ); }
-	public function getLongitude() { return parent::get('longitude'); }
+	public function getId()        { return   (int)parent::get('id'       ); }
+	public function getLevel()     { return   (int)parent::get('level'    ); }
+	public function getLatitude()  { return (float)parent::get('latitude' ); }
+	public function getLongitude() { return (float)parent::get('longitude'); }
 
 	public function setLatitude ($f) { parent::set('latitude' , (float)$f); }
 	public function setLongitude($f) { parent::set('longitude', (float)$f); }
@@ -126,31 +126,25 @@ class GeoCluster extends ActiveRecord
 	 */
 	public static function assignClusterIdForLevel(Ticket $ticket, $level)
 	{
-		$lat  = $ticket->getLatitude ();
-		$lng  = $ticket->getLongitude();
-		$dist = 0.01 * pow(2, $level * 2);
+		$lat   = $ticket->getLatitude ();
+		$lng   = $ticket->getLongitude();
+		$point = "ST_PointFromText('Point($lat $lng)', 0)";
+		$dist  = self::CLUSTER_UNIT_SIZE * pow(2, $level * 2);
 
 		$minX = $lng - $dist;
 		$maxX = $lng + $dist;
 		$minY = $lat - $dist;
 		$maxY = $lat + $dist;
+		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 0)";
 
-		// Geocluster center points are in the database, so we can just look
-		// them up. However, MySQL spatial functions only allow bounding box
-		// queries, not points inside a circle, which is what we want.
-		// So, here, we're still calculating the haversine distance
 		$sql  = "
-		SELECT id,x(center) as longitude, y(center) as latitude,
-			( SELECT
-				(ACOS(SIN(RADIANS(y(center))) * SIN(RADIANS($lat))
-				    + COS(RADIANS(y(center))) * COS(RADIANS($lat))
-				    * COS(RADIANS(x(center) - $lng))) * 6371.0)
-			) as distance
+		SELECT id,
+               ST_X(center) as longitude,
+               ST_Y(center) as latitude,
+               ST_Distance(center, $point) as distance
 		FROM geoclusters
 		WHERE level=?
-		  and (ACOS(SIN(RADIANS(y(center))) * SIN(RADIANS($lat))
-			      + COS(RADIANS(y(center))) * COS(RADIANS($lat))
-			      * COS(RADIANS(x(center) - $lng))) * 6371.0) < $dist
+		  and ST_Distance(center, $point) < $dist
 		order by distance
 		LIMIT 1
 		";
