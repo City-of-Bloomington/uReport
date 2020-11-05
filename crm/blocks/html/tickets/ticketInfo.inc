@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
- * @param bool $this->disableButtons
+ * @param bool   $this->disableButtons
  */
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
@@ -33,25 +33,20 @@ $description = $contactMethod || $description
 $description = $description ? "<p>$description</p>" : '';
 
 $fields = '';
-$person = $this->ticket->getReportedByPerson();
-if ($person) {
-    $name = $person->getFullname();
-    if (Person::isAllowed('people', 'view')) {
-        $uri = BASE_URI.'/people/view?person_id='.$person->getId();
-        $name = "<a href=\"$uri\">$name</a>";
+if (Person::isAllowed('people', 'view')) {
+    $person = $this->ticket->getReportedByPerson();
+    if ($person) {
+        $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
+        $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
+        $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
     }
-    $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
-}
-$person = $this->ticket->getAssignedPerson();
-if ($person) {
-    $name = $person->getFullname();
-    if (Person::isAllowed('people', 'view')) {
-        $uri = BASE_URI.'/people/view?person_id='.$person->getId();
-        $name = "<a href=\"$uri\">$name</a>";
+    $person = $this->ticket->getAssignedPerson();
+    if ($person) {
+        $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
+        $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
+        $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
     }
-    $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
 }
-
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();
