@@ -1,5 +1,5 @@
 <div class="loginForm.inc">
-	<form method="post" action="<?= BASE_URL; ?>/login/login">
+	<form method="post">
 		<fieldset><legend><?= $this->_('login'); ?></legend>
 			<input name="return_url" type="hidden" value="<?= $this->return_url ?>" />
 			<table>
