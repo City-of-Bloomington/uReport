@@ -12,7 +12,6 @@ create table departments (
 	defaultPerson_id int          unsigned,
 	constraint FK_departments_defaultPerson_id foreign key (defaultPerson_id) references people(id)
 );
-insert departments set name='Information Services';
 
 create table people (
 	id                   int          unsigned not null primary key auto_increment,

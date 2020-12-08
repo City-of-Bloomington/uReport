@@ -85,7 +85,8 @@ $helper = $this->template->getHelper('field');
             ]);
 
             $options = [['value'=>'']];
-            $people  = $this->category->getDepartment()->getPeople();
+            $dept    = $this->category->getDepartment();
+            $people  = $dept ? $dept->getPeople() : [];
             foreach ($people as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getFullname())]; }
             echo $helper->field([
                 'name'    => 'defaultPerson_id',
