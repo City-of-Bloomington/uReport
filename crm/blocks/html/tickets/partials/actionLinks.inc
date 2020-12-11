@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2020 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
 use Application\Models\Person;
 use Application\Models\Action;
+use Application\Models\Department;
 
     $helper    = $this->template->getHelper('dropdown');
     $ticket_id = $this->ticket->getId();
