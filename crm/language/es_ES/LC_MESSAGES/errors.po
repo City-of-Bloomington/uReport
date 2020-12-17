@@ -1,0 +1,156 @@
+# Translation
+# Copyright (C) 2016-2020 City of Bloomington
+# This file is distributed under the same license as the Blossom package.
+#
+domain "errors"
+
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 2\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sebastián Lamonega <slamonega@gmail.com>\n"
+"Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
+"Language-Team: City of Bloomington <dev@bloomington.in.gov>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "invalidDate"
+msgstr "Proporcionó una fecha no válida."
+
+msgid "invalidEndDate"
+msgstr "La fecha de finalización debe ser posterior a la fecha de inicio."
+
+msgid "invalidLogin"
+msgstr "La combinación de nombre de usuario y contraseña que ingresó no es correcta."
+
+msgid "missingRequiredFields"
+msgstr "No incluyó todos los campos obligatorios."
+
+msgid "noAccessAllowed"
+msgstr "Lo siento, no tienes permitido ir allí."
+
+msgid "notLoggedIn"
+msgstr "Ya no estás conectado a este sitio."
+
+msgid "passwordCorrupted"
+msgstr "Su contraseña está dañada. Póngase en contacto con un administrador del sistema para obtener ayuda."
+
+msgid "ldap/unknownUser"
+msgstr "Ese nombre de usuario no está en LDAP. No puede configurar la autenticación LDAP si el usuario no está en LDAP."
+
+msgid "actions/unknown"
+msgstr "Esa acción no está en el sistema"
+
+msgid "addresses/unknown"
+msgstr "Esa dirección no está en el sistema"
+
+msgid "bookmarks/unknown"
+msgstr "Esa búsqueda guardada no está en el sistema"
+
+msgid "categories/unknown"
+msgstr "Esa categoría no está en el sistema"
+
+msgid "categories/missingName"
+msgstr "Debe proporcionar un nombre"
+
+msgid "categories/missingGroup"
+msgstr "Debe proporcionar un grupo"
+
+msgid "categories/missingDepartment"
+msgstr "Debe proporcionar un departamento"
+
+msgid "categoryGroups/unknown"
+msgstr "Ese grupo no está en el sistema"
+
+msgid "clients/unknownApiKey"
+msgstr "Debe proporcionar una api_key válida"
+
+msgid "clients/unknown"
+msgstr "Ese cliente no está en el sistema"
+
+msgid "contactMethods/unknown"
+msgstr "Ese método de contacto no está en el sistema"
+
+msgid "departments/unknown"
+msgstr "Ese departamento no está en el sistema"
+
+msgid "departments/foreignKeyViolation"
+msgstr "No se pudo eliminar el departamento debido a una clave externa"
+
+msgid "emails/unknown"
+msgstr "Ese correo electrónico no está en el sistema"
+
+msgid "issueTypes/unknown"
+msgstr "Ese tipo no está en el sistema"
+
+msgid "media/unknown"
+msgstr "Ese archivo no está en el sistema"
+
+msgid "media/uploadFailed"
+msgstr "El archivo que intentó cargar nunca llegó al servidor."
+
+msgid "media/fileTooBig"
+msgstr "Su archivo era demasiado grande"
+
+msgid "media/networkProblem"
+msgstr "Hubo un problema de comunicación de red."
+
+msgid "media/unknownProblem"
+msgstr "Hubo un problema con el servidor. Puede intentar comunicarse con el administrador del sistema."
+
+msgid "media/invalidFileType"
+msgstr "No se permite subir archivos de ese tipo."
+
+msgid "media/badServerPermissions"
+msgstr "La carga se realizó correctamente, pero el servidor no pudo guardar el archivo. Solicite al administrador del sistema que verifique los permisos del servidor."
+
+msgid "people/unknown"
+msgstr "Esa persona no está en nuestro sistema"
+
+msgid "people/personStillHasTickets"
+msgstr "Esa persona todavía tiene casos asociados"
+
+msgid "people/mergerNotAllowed"
+msgstr "No se permite fusionar personas con nombres de usuario"
+
+msgid "phones/unknown"
+msgstr "Ese número de teléfono no está en el sistema"
+
+msgid "responseTemplates/unknown"
+msgstr "Ese mensaje de respuesta no está en el sistema"
+
+msgid "substatus/unknown"
+msgstr "Ese subestado no está en el sistema"
+
+msgid "tickets/unknown"
+msgstr "Ese caso no está en el sistema"
+
+msgid "tickets/missingCategory"
+msgstr "Los casos deben tener una categoría"
+
+msgid "tickets/locationOutOfBounds"
+msgstr "Esa ubicación está fuera de nuestra jurisdicción"
+
+msgid "tickets/statusMismatch"
+msgstr "Ese subestado no es aplicable"
+
+msgid "tickets/missingResolution"
+msgstr "Un caso cerrado debe tener un subestado"
+
+msgid "tickets/missingClosingComment"
+msgstr "El municipio requiere que se documente la resolución cuando se cierra un caso. Este mensaje debe ser comprensible para cualquiera que lo lea y explicar cómo se resolvió el caso y cómo se informó a los electores"
+
+msgid "ticketHistory/unknown"
+msgstr "Esa entrada del historial no está en el sistema"
+
+msgid "ticketHistory/missingAction"
+msgstr "Debe elegir una acción para actualizar el registro del historial"
+
+msgid "users/wrongPassword"
+msgstr "La contraseña que ingresó no es correcta"
+
+msgid "users/passwordsDontMatch"
+msgstr "Las nuevas contraseñas que ingresó no coinciden"

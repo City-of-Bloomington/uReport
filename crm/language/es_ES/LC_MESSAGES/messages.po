@@ -1,0 +1,138 @@
+# Translation
+# Copyright (C) 2013-2020 City of Bloomington
+domain "messages"
+
+msgid ""
+msgstr ""
+"Project-Id-Version: uReport 2\n"
+"Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sebastián Lamonega <slamonega@gmail.com>\n"
+"Language-Team: City of Bloomington <dev@bloomington.in.gov>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "signed_in_as"
+msgstr "Accediste como %s"
+
+msgid "add_action"
+msgstr "Actualizar el registro del historial con las acciones realizadas en este caso"
+
+msgid "merge_people_description"
+msgstr "Combina dos personas arrastrando filas o escribiendo los ID de las personas"
+
+msgid "merge_tickets_description"
+msgstr ""
+"Combine dos casos arrastrando una de las filas o escribiendo los ID para comparar"
+"casos y mover datos entre ellos."
+
+msgid "how_did_you_respond"
+msgstr "¿Cómo le respondiste a la persona?"
+
+msgid "click_full_size"
+msgstr "Haga clic en la miniatura para ampliarla"
+
+msgid "choose_category"
+msgstr "Elija una categoría"
+
+msgid "close_this_ticket"
+msgstr "Cerrar este caso"
+
+msgid "verified_locations"
+msgstr "Indica ubicaciones verificadas"
+
+msgid "no_tickets_found"
+msgstr "No se encontraron casos"
+
+msgid "no_locations_found"
+msgstr ""
+"No se encontraron ubicaciones. Intente realizar la búsqueda nuevamente o comuníquese con un administrador"
+"si cree que falta una ubicación en nuestra base de datos."
+
+msgid "usedForNotifications"
+msgstr "Usado para notificaciones"
+
+#. Describe to the user what "Clients" are.
+#. Clients are issued an api_key that allows them to POST Open311 requests to uReport.
+msgid "clients_description"
+msgstr "Estos son clientes autorizados que pueden POSTAR tickets a través de la web"
+
+
+#. Explain to the user that string substitution will happen for action descriptions
+msgid "actions_description"
+msgstr ""
+"Puede personalizar el mensaje que se muestra para esta acción en el registro del historial.  "
+"En el mensaje, el sistema sustituirá el nombre de la persona correspondiente por"
+"estas claves en la cadena."
+
+msgid "actions_enteredByPerson"
+msgstr "La persona que entró en la acción"
+
+msgid "actions_actionPerson"
+msgstr "La persona sobre la que se trata la acción"
+
+msgid "sentNotification_to"
+msgstr "Notificación enviada a %s"
+
+msgid "contactMethods_description"
+msgstr ""
+"Estos son los métodos de contacto disponibles para el sistema. Se utilizan tanto"
+"por cómo el ciudadano contactó con la ciudad y por cómo le gustaría al ciudadano"
+"ser contactado."
+
+msgid "responseMethod_help"
+msgstr "Cómo quiere ser contactada esta persona"
+
+msgid "response_reminder"
+msgstr ""
+"Cuando se cierra un caso, es su responsabilidad ponerse en contacto con quien"
+"informó este problema a la Ciudad. Registre esos contactos en las respuestas a continuación."
+
+msgid "search_parameters_description"
+msgstr ""
+"Sus parámetros de búsqueda actuales. Haga clic en una de las etiquetas para eliminarlo"
+"parámetro de su búsqueda."
+
+msgid "labels_description"
+msgstr "Estas son las etiquetas predefinidas que los usuarios pueden aplicar a los problemas."
+
+msgid "locationPeople_description"
+msgstr ""
+"Una lista de personas que incluyeron esto como su dirección. Nota: puede que no sea"
+"su dirección actual."
+
+#. %1$s A person's name
+#. %2$s The name of your website
+#. %3$s A Url
+msgid "digestNotification"
+msgstr ""
+"%1$s, aquí está su resumen semanal de casos abiertos en %2$s.  Por favor <a href="
+"\"%3$s\">visite su perfil</a> o haga clic en un caso a continuación para editar o actualizar sus"
+"casos."
+
+#. Explain to the user what the Service Level Agreement specifies
+#. http://en.wikipedia.org/wiki/Service-level_agreement
+msgid "service_level_agreement_description"
+msgstr "Los departamentos acuerdan manejar nuevos casos dentro del tiempo especificado."
+
+#. %1$d The number of days the case, after which the case is due
+#. %2$d The number of days that have already passed
+msgid "sla_status_notice"
+msgstr ""
+"La mayoría de los tickets de este tipo deberían cerrarse en %1$d días, aunque algunos "
+"asos pueden ser más largos. Ya han pasado %2$d días."
+
+msgid "employee_authentication_description"
+msgstr ""
+"Si utiliza la autenticación de empleado, el resto de esta información"
+"se completará automáticamente desde el directorio. De lo contrario, debe proporcionar"
+"al menos un nombre y apellido."
+
+msgid "file_max_size"
+msgstr "Tamaño máximo de archivo: %s"
+
+msgid "file_type_accept"
+msgstr "Tipos de archivo aceptados: %s"
