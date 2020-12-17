@@ -1,4 +1,3 @@
-# uReport Translation
 # Copyright (C) 2013-2020 City of Bloomington
 # This file is distributed under the same license as the uReport package.
 #
@@ -11,7 +10,7 @@ domain "labels"
 
 msgid ""
 msgstr ""
-"Project-Id-Version: uReport 2\n"
+"Project-Id-Version: uReport 2.2.1\n"
 "Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sebastián Lamonega <slamonega@gmail.com>\n"

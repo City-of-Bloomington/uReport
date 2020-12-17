@@ -1,11 +1,9 @@
-# Translation
-# Copyright (C) 2013-2016 City of Bloomington
-# This file is distributed under the same license as the Blossom package.
+# Copyright (C) 2013-2020 City of Bloomington
 domain "messages"
 
 msgid ""
 msgstr ""
-"Project-Id-Version: Blossom\n"
+"Project-Id-Version: uReport\n"
 "Report-Msgid-Bugs-To: dev@bloomington.in.gov\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Cliff Ingham <inghamn@bloomington.in.gov>\n"
