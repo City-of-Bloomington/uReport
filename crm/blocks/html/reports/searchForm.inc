@@ -112,6 +112,7 @@ $helper = $this->template->getHelper('field');
                 ?>
             </details>
             <?php
+                $customFields = [];
                 if (defined('ADDRESS_SERVICE')) {
                     $search       = new Search();
                     $customFields = call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions');
