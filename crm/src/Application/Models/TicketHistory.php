@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -151,10 +151,10 @@ class TicketHistory extends ActiveRecord
 	 */
 	public function getDescription(Template $template)
 	{
-		$a = $this->getAction();
-		if ($a) {
+		$action = $this->getAction();
+		if ($action) {
 			return $this->renderVariables(
-				$this->getAction()->getDescription(),
+				$action->getDescription(),
 				$template
 			);
 		}
@@ -173,14 +173,13 @@ class TicketHistory extends ActiveRecord
 	 *
 	 * @param string   $message
 	 * @param Template $template  The template being used for output formatting
-	 * @param Person   $person    The person to whom the message will be displayed
 	 * @return string
 	 */
 	public function renderVariables($message, Template $template)
 	{
         $placeholders = [
-            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->getFullname() : $template->_('anonymous'),
-            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson()   ->getFullname() : $template->_('anonymous'),
+            'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->anonymizeCitizenName($template) : $template->_('anonymous'),
+            'actionPerson'   => $this->getActionPerson_id()    ? $this->getActionPerson   ()->anonymizeCitizenName($template) : $template->_('anonymous'),
             'ticket_id'      => $this->getTicket_id(),
             'enteredDate'    => $this->getEnteredDate(DATETIME_FORMAT),
             'actionDate'     => $this->getActionDate (DATETIME_FORMAT)

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2020 City of Bloomington, Indiana
+ * @copyright 2009-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -8,6 +8,8 @@ namespace Application\Models;
 use Application\ActiveRecord;
 use Application\Database;
 use Application\Models\Email;
+
+use Blossom\Classes\Template;
 
 use Domain\Auth\ExternalIdentity;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -385,6 +387,17 @@ class Person extends ActiveRecord
 		else {
 			return $this->getOrganization();
 		}
+	}
+
+	/**
+	 * Returns the person name only if $person is city staff
+	 * or if the current user is permitted to view all personal info.
+	 */
+	public function anonymizeCitizenName(Template $t): string
+	{
+        return ($this->getUsername() || Person::isAllowed('people', 'view'))
+            ? $this->getFullname()
+            : $t->_('anonymous');
 	}
 
 	/**

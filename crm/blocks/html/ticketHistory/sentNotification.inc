@@ -1,16 +1,19 @@
 <?php
 /**
- * @copyright 2016-2020 City of Bloomington, Indiana
+ * @copyright 2016-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param stdClass $this->notification
  */
 use Application\Models\Person;
 
-$people = [];
+$canView = Person::isAllowed('people', 'view');
+$people  = [];
 foreach ($this->notification->people as $id) {
     try {
         $person = new Person($id);
-        $people[] = self::escape($person->getFullname());
+        $people[] = ($person->getUsername() || $canView)
+            ? self::escape($person->getFullname())
+            : $this->_('anonymous');
     }
     catch (\Exception $e) { }
 }

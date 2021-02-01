@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  * @param bool   $this->disableButtons
@@ -32,21 +32,21 @@ $description = $contactMethod || $description
     : '';
 $description = $description ? "<p>$description</p>" : '';
 
-$fields = '';
-if (Person::isAllowed('people', 'view')) {
-    $person = $this->ticket->getReportedByPerson();
-    if ($person) {
-        $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
-        $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
-        $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
-    }
-    $person = $this->ticket->getAssignedPerson();
-    if ($person) {
-        $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
-        $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
-        $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
-    }
+$fields  = '';
+$canView = Person::isAllowed('people', 'view');
+$person  = $this->ticket->getReportedByPerson();
+if ($person && ($person->getUsername() || $canView)) {
+    $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
+    $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
+    $fields.= "<dl><dt>{$this->_('reportedByPerson')}</dt><dd>$name</dd></dl>";
 }
+$person = $this->ticket->getAssignedPerson();
+if ($person && ($person->getUsername() || $canView)) {
+    $uri    = BASE_URI.'/people/view?person_id='.$person->getId();
+    $name   = "<a href=\"$uri\">{$person->getFullname()}</a>";
+    $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
+}
+
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();
