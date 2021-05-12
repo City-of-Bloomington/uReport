@@ -86,12 +86,6 @@
         dest: "/etc/cron.daily/backup.d/ureport.cnf"
         mode: "0400"
 
-    - name: "Install CKAN upload cron script"
-      template:
-        src: "updateCkan.sh"
-        dest: "/etc/cron.daily/backup.d/updateCkan"
-        mode: "0755"
-
     - name: "Update directory ownership"
       command: "chown -R www-data:staff {{ item }}"
       args:
