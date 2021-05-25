@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -16,8 +16,8 @@ class ReportsController extends Controller
 	public function __construct(Template $template)
 	{
 		parent::__construct($template);
-        $this->template->setFilename('search');
         if ($this->template->outputFormat == 'html') {
+            $this->template->setFilename('search');
             $this->template->blocks['panel-one'][] = new Block('reports/list.inc');
             $this->template->blocks['panel-one'][] = new Block('reports/searchForm.inc');
         }
@@ -43,6 +43,15 @@ class ReportsController extends Controller
 		$data = Report::categories($_GET);
 		$this->template->title = $this->template->_(['category', 'categories', count($data)]);
 		$this->template->blocks[] = new Block('reports/categories.inc', ['data'=>$data]);
+	}
+
+	public function data()
+	{
+        $data = ($this->template->outputFormat != 'html' && !empty($_GET['categories']))
+              ? Report::data($_GET)
+              : [];
+        $this->template->title    = $this->template->_('data');
+        $this->template->blocks[] = new Block('reports/data.inc', ['data'=>$data]);
 	}
 
 	public function staff()

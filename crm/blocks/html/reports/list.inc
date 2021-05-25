@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\BookmarkTable;
@@ -27,6 +27,9 @@ use Blossom\Classes\Block;
             <li><a href="<?= BASE_URI; ?>/reports/sla"><?= $this->_('sla'); ?></a></li>
             <li><a href="<?= BASE_URI; ?>/reports/volume"><?= $this->_('volume'); ?></a></li>
         </ul>
+	</section>
+	<section>
+        <header><h1><a href="<?= BASE_URI; ?>/reports/data"><?= $this->_('data'); ?></a></h1></header>
 	</section>
 	<?php
 		$table = new BookmarkTable();

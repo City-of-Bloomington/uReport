@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -105,6 +105,22 @@ class Report
 			$d[$cid]['people'][$pid]['data'][] = $r;
 		}
 		return $d;
+	}
+
+	public static function data($get): array
+	{
+        $options = self::handleSearchParameters($get);
+        $where   = $options ? "where $options" : '';
+
+        $sql     = "select t.*
+                    from      tickets   t
+                         join people    p on t.assignedPerson_id=p.id
+				    left join substatus s on t.substatus_id=s.id
+				    $where";
+        $db      = Database::getConnection()->getDriver()->getConnection()->getResource();
+        $d       = [];
+        $result  = $db->query($sql);
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
 	/**
