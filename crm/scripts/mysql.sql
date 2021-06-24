@@ -247,7 +247,7 @@ create table bookmarks (
 	person_id   int unsigned not null,
 	`type`      varchar(128) not null default 'search',
 	name        varchar(128),
-	requestUri  varchar(255) not null,
+	requestUri  varchar(1024) not null,
 	constraint FK_bookmarks_person_id foreign key (person_id) references people(id)
 );
 
