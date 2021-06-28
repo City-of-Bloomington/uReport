@@ -68,7 +68,7 @@ class TicketsController extends Controller
 		$search = new Search();
 		$query  = self::prepareSolrQuery();
 		$params = [
-            'solrObject' => $search->query($query, !$paginated),
+            'result'     => $search->query($query, !$paginated),
             'paginated'  => $paginated,
             'fields'     => $fields
 		];

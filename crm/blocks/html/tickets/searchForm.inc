@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Apache_Solr_Response $this->solrObject
+ * @param \Solarium\QueryType\Select\Result\Result $this->result
  */
 use Application\Models\BookmarkTable;
 use Application\Models\Person;
@@ -62,113 +62,113 @@ use Blossom\Classes\Url;
                  * If a filter is active, we will echo the $deleteUrl,
                  * insted of echo'ing a link to add the filter to the current search.
                  */
-                $currentFilters = Search::getCurrentFilters($this->solrObject);
+                #$currentFilters = Search::getCurrentFilters($this->result);
 
-				if (isset($this->solrObject->facet_counts->facet_fields)) {
-					$person      = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
-					$facetFields = $this->solrObject->facet_counts->facet_fields;
-					$helper      = $this->template->getHelper('buttonLink');
+                $person       = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
+                $resultFacets = $this->result->getFacetSet()->getFacets();
+                $helper       = $this->template->getHelper('buttonLink');
 
-					foreach (Search::$facetFields['ticket'] as $key) {
-						$list  = [];
-						$class = '';
-						foreach ($facetFields->$key as $value=>$count) {
-							if ($count) {
-								$url = clone $currentUrl;
-								$url->$key = $value;
-								try {
-									$displayValue = Search::getDisplayName($key, $value);
+                foreach (Search::$facetFields as $f) {
+                    if ($f['type'] == 'field') {
+                        $key   = $f['field'];
+                        $list  = [];
+                        $class = '';
+                        foreach ($resultFacets[$key] as $value=>$count) {
+                            if ($count) {
+                                $url = clone $currentUrl;
+                                $url->$key = $value;
+                                try {
+                                    $displayValue = Search::getDisplayName($key, $value);
 
-									// If the key has a current value, then start expanded
-									if (array_key_exists($key, $currentFilters) && $currentFilters[$key]['value'] === $displayValue) {
-                                        $url   = $currentFilters[$key]['deleteUrl'];
+                                    // If the key has a current value, then start expanded
+                                    if (!empty($_GET[$key])) {
+                                        unset($url->$key);
                                         $label = $helper->buttonLink($url, $displayValue, 'delete');
                                         $class = 'open="true"';
-                                        unset($currentFilters[$key]);
-									}
-									else {
+                                    }
+                                    else {
                                         $label = "<a href=\"$url\">$displayValue</a>";
-									}
+                                    }
 
-									$list[] = "<li>$label ($count)</li>";
-								}
-								catch (\Exception $e) {
-									// Don't bother displaying any facets that are no longer in the system
-								}
-							}
-						}
-						if ($list) {
-							$label = $this->_($key);
-							$list  = implode('', $list);
-							$html.= "
-							<details $class>
-								<summary>$label</summary>
-								<ul>$list</ul>
-							</details>
-							";
-						}
-					}
-					/**
-					 * SLA is a special type of facet
-					 */
-					$value = (int)$this->solrObject->facet_counts->facet_queries->{Search::SLA_OVERDUE_FUNCTION};
-					if ($value) {
-                        if (array_key_exists('sla', $currentFilters) && $currentFilters['sla']['value'] === 'overdue') {
-                            $label = $helper->buttonLink($currentFilters['sla']['deleteUrl'], $this->_('overdue'), 'delete');
-                            $class = 'open="true"';
+                                    $list[] = "<li>$label ($count)</li>";
+                                }
+                                catch (\Exception $e) {
+                                    // Don't bother displaying any facets that are no longer in the system
+                                }
+                            }
                         }
-                        else {
-                            $url      = clone $currentUrl;
-                            $url->sla = 'overdue';
-                            $label    = "<a href=\"$url\">{$this->_('overdue')}</a>";
-                            $class    = '';
+                        if ($list) {
+                            $label = $this->_($key);
+                            $list  = implode('', $list);
+                            $html.= "
+                            <details $class>
+                                <summary>$label</summary>
+                                <ul>$list</ul>
+                            </details>
+                            ";
                         }
-                        $html.= "
-                        <details $class>
-                            <summary>{$this->_('sla')}</summary>
-                            <ul><li>$label ($value)</li></ul>
-                        </details>
-                        ";
                     }
+                }
+                /**
+                 * SLA is a facetQuery not a field
+                 */
 
-                    /**
-                     * Date ranges are a special type of facet
-                     */
-                    $class = '';
-                    if (array_key_exists('enteredDate', $currentFilters)) {
+                $value = (int)$resultFacets['overdue']->getValue();
+                if ($value) {
+                    $url = clone($currentUrl);
+                    $url->sla = 'overdue';
+
+                    if (!empty($_GET['sla'])) {
+                        unset($url->sla);
+                        $label = $helper->buttonLink($url, $this->_('overdue'), 'delete');
                         $class = 'open="true"';
-                        unset($currentFilters['enteredDate']);
+                    }
+                    else {
+                        $label = "<a href=\"$url\">{$this->_('overdue')}</a>";
+                        $class = '';
                     }
                     $html.= "
                     <details $class>
-                        <summary>{$this->_('enteredDate')}</summary>
-                    ";
-                    $fieldHelper = $this->template->getHelper('field');
-                    foreach (['start', 'end'] as $d) {
-                        $value = '';
-                        if (!empty($_GET['enteredDate'][$d])) {
-                            $value = self::escape($_GET['enteredDate'][$d]);
-                        }
-                        $html.= $fieldHelper->field([
-                            'name'  => "enteredDate[$d]",
-                            'id'    => "enteredDate-$d",
-                            'label' => $this->_($d),
-                            'type'  => 'date',
-                            'value' => $value
-                        ]);
-                    }
-                    $html.= "
+                        <summary>{$this->_('sla')}</summary>
+                        <ul><li>$label ($value)</li></ul>
                     </details>
                     ";
-				}
+                }
+
+                /**
+                 * Date ranges
+                 */
+                $class = empty($_GET['enteredDate']) ? '' : 'open="true"';
+                $html .= "
+                <details $class>
+                    <summary>{$this->_('enteredDate')}</summary>
+                ";
+                $fieldHelper = $this->template->getHelper('field');
+                foreach (['start', 'end'] as $d) {
+                    $value = '';
+                    if (!empty($_GET['enteredDate'][$d])) {
+                        $value = self::escape($_GET['enteredDate'][$d]);
+                    }
+                    $html.= $fieldHelper->field([
+                        'name'  => "enteredDate[$d]",
+                        'id'    => "enteredDate-$d",
+                        'label' => $this->_($d),
+                        'type'  => 'date',
+                        'value' => $value
+                    ]);
+                }
+                $html.= "
+                </details>
+                ";
+
 
 				/**
 				 * Any additional filters that are not being displayed as facets
 				 */
-				foreach ($currentFilters as $key=>$f) {
-                    $label = $key === 'bbox' ? $this->_($key) : $this->_($key).':'.$f['value'];
-                    echo $helper->buttonLink($f['deleteUrl'], $label, 'delete');
-				}
+// 				foreach ($currentFilters as $key=>$f) {
+//                     $label = $key === 'bbox' ? $this->_($key) : $this->_($key).':'.$f['value'];
+//                     echo $helper->buttonLink($f['deleteUrl'], $label, 'delete');
+// 				}
 				echo $html;
 			?>
 		</fieldset>

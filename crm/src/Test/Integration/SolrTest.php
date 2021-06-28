@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2019 City of Bloomington, Indiana
+ * @copyright 2013-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -11,12 +11,17 @@ use Application\Models\Search;
 
 class SolrTest extends TestCase
 {
-	public function testParamsReturnedInSolrResponse()
-	{
-		$q = [];
-		$search = new Search();
-		$solrResponse = $search->query($q);
-		$this->assertTrue(isset($solrResponse->responseHeader), 'Solr response is missing responseHeader');
-		$this->assertTrue(isset($solrResponse->responseHeader->params), 'Solr response is missing params in responseHeader');
-	}
+    public function testSolr()
+    {
+        $search = new Search();
+        $result = $search->query([]);
+        $this->assertGreaterThan(0, $result->getNumFound(), "No tickets found");
+
+        $facets = array_keys($result->getFacetSet()->getFacets());
+        foreach (Search::$facetFields as $f) {
+            if ($f['type'] == 'field') {
+                $this->assertTrue(in_array($f['field'], $facets), "$f[field] facet not returned in result");
+            }
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -9,8 +9,8 @@ use Blossom\Classes\Url;
 
 class Search
 {
-	public $solrClient;
-	public static $defaultSort = array('field'=>'enteredDate', 'order'=>'desc');
+	public $solr;
+	public static $defaultSort = ['enteredDate'=>'desc'];
 
 	const ITEMS_PER_PAGE  = 10;
 	const MAX_RAW_RESULTS = 10000;
@@ -57,16 +57,15 @@ class Search
 	 * Use __construct() to add fields that should be kept hidden
 	 * unless a person is authorized to see them.
 	 */
-	public static $facetFields = array(
-		'ticket'=>array(
-			'category_id',
-			'department_id',
-			'status',
-			'client_id',
-			'issueType_id',
-			'contactMethod_id'
-		)
-	);
+	public static $facetFields = [
+        ['type'=>'field', 'field'=>'category_id'     , 'local_key'=>'category_id'     ],
+        ['type'=>'field', 'field'=>'department_id'   , 'local_key'=>'department_id'   ],
+        ['type'=>'field', 'field'=>'status'          , 'local_key'=>'status'          ],
+        ['type'=>'field', 'field'=>'client_id'       , 'local_key'=>'client_id'       ],
+        ['type'=>'field', 'field'=>'issueType_id'    , 'local_key'=>'issueType_id'    ],
+        ['type'=>'field', 'field'=>'contactMethod_id', 'local_key'=>'contactMethod_id'],
+        ['type'=>'query', 'key'  =>'overdue'         , 'local_key'=>'overdue', 'query'=>self::SLA_OVERDUE_FUNCTION]
+	];
 
 	/**
 	 * These are the fields that you can sort on
@@ -76,35 +75,40 @@ class Search
 	 * be able to sort on the string values they represent.
 	 * Make sure the fields for the string values are indexed
 	 */
-	public static $sortableFields = array(
-		'ticket'=>array(
-			'enteredDate',
-			'status',
-			'location','city','state','zip',
-			'department', 'category'
-		)
-	);
+	public static $sortableFields = [
+        'enteredDate',
+        'status',
+        'location','city','state','zip',
+        'department', 'category'
+	];
 
 	/**
 	 * Connects to Solr and adds additional facet fields
 	 */
 	public function __construct()
 	{
-		$this->solrClient = new \Apache_Solr_Service(
-			SOLR_SERVER_HOSTNAME,
-			SOLR_SERVER_PORT,
-			SOLR_SERVER_PATH,
-			false,
-			new \Apache_Solr_Compatibility_Solr4CompatibilityLayer()
-		);
+        $this->solr = new \Solarium\Client(
+            new \Solarium\Core\Client\Adapter\Curl(),
+            new \Symfony\Component\EventDispatcher\EventDispatcher(),
+            [
+                'endpoint' => [
+                    'solr' => [
+                        'host' => SOLR_SERVER_HOST,
+                        'port' => SOLR_SERVER_PORT,
+                        'path' => '/',
+                        'core' => SOLR_SERVER_CORE
+                    ]
+                ]
+            ]
+        );
 
 		// Add facets for the AddressService custom fields
 		if (defined('ADDRESS_SERVICE')) {
             $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
             foreach ($fields as $key) {
-                self::$searchableFields[]         = $key;
-                self::$facetFields   ['ticket'][] = $key;
-                self::$sortableFields['ticket'][] = $key;
+                self::$searchableFields[] = $key;
+                self::$facetFields     [] = ['field'=>$key, 'local_key'=>$key, 'type'=>'field'];
+                self::$sortableFields  [] = $key;
             }
         }
 		// Add facets that are only to be used if the current user is authorized
@@ -113,43 +117,36 @@ class Search
 			self::$searchableFields[] =   'assignedPerson_id';
 			self::$searchableFields[] = 'reportedByPerson_id';
 
-			self::$facetFields['ticket'][] = 'assignedPerson_id';
+			self::$facetFields[] = ['field'=>'assignedPerson_id', 'local_key'=>'assignedPerson_id', 'type'=>'field'];
 
-			self::$sortableFields['ticket'][] = 'enteredByPerson';
-			self::$sortableFields['ticket'][] = 'assignedPerson';
-			self::$sortableFields['ticket'][] = 'reportedByPerson';
+			self::$sortableFields[] = 'enteredByPerson';
+			self::$sortableFields[] = 'assignedPerson';
+			self::$sortableFields[] = 'reportedByPerson';
 		}
 	}
 
-	/**
-	 * @return array
-	 */
-	public static function getDefaultFilterQuery()
+	public static function getDefaultFilterQuery(): array
 	{
-		$fq = array();
-
 		// User permissions
 		if (!isset($_SESSION['USER'])
-			|| !in_array($_SESSION['USER']->getRole(), array('Administrator', 'Staff'))) {
+			|| !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
 			$permissions = 'anonymous';
 			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
 				$permissions.= ' OR public';
 			}
-			$fq[] = "displayPermissionLevel:$permissions";
+			return [
+                ['query'=>"displayPermissionLevel:$permissions"]
+            ];
 		}
-		return $fq;
+		return [];
 	}
 
 	/**
 	 * Use the $raw flag to ask for raw results.  This will
 	 * disable facetting and pagination.  It will return up to
 	 * MAX_RAW_RESULTS.
-	 *
-	 * @param array $_GET
-	 * @param BOOL $raw
-	 * @return SolrObject
 	 */
-	public function query($get, $raw=false)
+	public function query(array $get, ?bool $raw=false): \Solarium\QueryType\Select\Result\Result
 	{
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
@@ -160,13 +157,9 @@ class Search
         }
 
 		// Start with all the default query values
-		$query = !empty($get['query'])
-			? "{!df=description}$get[query]"
-			: '*:*';
-		$sort = self::$defaultSort;
-		$fq   = self::getDefaultFilterQuery();
-
-		$additionalParameters = array();
+		$query = !empty($get['query']) ? "{!df=description}$get[query]" : '*:*';
+		$sort  = self::$defaultSort;
+		$fq    = self::getDefaultFilterQuery();
 
 		// Pagination
 		$rows = $raw ? self::MAX_RAW_RESULTS : self::ITEMS_PER_PAGE;
@@ -181,20 +174,13 @@ class Search
 
 		// Sorting
 		if (isset($get['sort'])) {
-			$keys = array_keys($_GET['sort']);
-			$sort['field'] = $keys[0];
-			$sort['order'] = ($_GET['sort'][$keys[0]] == 'asc')
-				? 'asc'
-				: 'desc';
+			$keys = array_keys($get['sort']);
+			$k    = $keys[0];
+			$dir  = ($get['sort'][$k] == 'asc') ? 'asc' : 'desc';
+            $sort = [$k => $dir];
 		}
-		$additionalParameters['sort'] = trim("$sort[field] $sort[order]");
 
-		// Facets
-		$additionalParameters['facet'] = 'true';
-		$additionalParameters['facet.query'] = self::SLA_OVERDUE_FUNCTION;
-		$additionalParameters['facet.field'] = self::$facetFields['ticket'];
-
-		// Search Parameters
+		// Filter Query aka Search Parameters
 		foreach (self::$searchableFields as $field) {
 			if (substr($field, -3) == '_id' && isset($get[$field])) {
 				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
@@ -217,7 +203,7 @@ class Search
                         }
                         else { $end = '*'; }
 
-						$fq[] = "$field:[$start TO $end]";
+						$fq[] = ['query' => "$field:[$start TO $end]"];
 					}
 				}
 				// coordinates is a not a numeric value but does not need to be quoted.
@@ -225,29 +211,37 @@ class Search
 					$key = 'coordinates';
 					list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $get[$field]);
 					$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
-					$fq[] = "$key:$value";
+					$fq[] = ['query' => "$key:$value"];
 				}
 				elseif ($field == 'sla' && $get[$field] == 'overdue') {
-                    $fq[] = self::SLA_OVERDUE_FUNCTION;
+                    $fq[] = ['query' => self::SLA_OVERDUE_FUNCTION];
 				}
 				else {
 					$value = is_numeric($get[$field])
 						? $get[$field]
 						: "\"$get[$field]\"";
-					$fq[] = "$field:$value";
+					$fq[] = ['query' => "$field:$value"];
 				}
 			}
 		}
 
-		if (count($fq)) { $additionalParameters['fq'] = $fq; }
-
-		$solrResponse = $this->solrClient->search($query, $startingPage, $rows, $additionalParameters);
-		return $solrResponse;
+        $select = $this->solr->createSelect([
+            'query' => $query,
+            'start' => $startingPage,
+            'rows'  => $rows,
+            'sort'  => $sort,
+            'filterquery' => $fq,
+            'component'   => [
+                'facetset' => ['facet' => self::$facetFields]
+            ]
+        ]);
+        $result = $this->solr->select($select);
+        return $result;
 	}
 
 	public function facetValues(string $facet_field): array
 	{
-        $res = $this->solrClient->search('*:*', 0, 1, [
+        $res = $this->solr->search('*:*', 0, 1, [
             'facet'       => 'true',
             'facet.field' => $facet_field
         ]);
@@ -261,14 +255,13 @@ class Search
 	}
 
 	/**
-	 * @param Apache_Solr_Response $object
 	 * @return array An array of CRM models based on the search results
 	 */
-	public static function hydrateDocs(\Apache_Solr_Response $o)
+	public static function hydrateDocs(\Solarium\QueryType\Select\Result\Result $result): array
 	{
-		$models = array();
-		if (isset($o->response->docs) && $o->response->docs) {
-			foreach ($o->response->docs as $doc) {
+		$models = [];
+		if (count($result)) {
+			foreach ($result as $doc) {
 				switch ($doc->recordType) {
 					case 'ticket':
 						// Check to make sure the ticket permits viewing
@@ -295,7 +288,7 @@ class Search
 	public function add($record)
 	{
 		$document = $this->createDocument($record);
-		$this->solrClient->addDocument($document);
+		$this->solr->addDocument($document);
 	}
 
 	/**
@@ -306,7 +299,7 @@ class Search
 	public function delete($record)
 	{
 		if ($record instanceof Ticket) {
-			$this->solrClient->deleteById('t_'.$record->getId());
+			$this->solr->deleteById('t_'.$record->getId());
 		}
 	}
 
@@ -443,7 +436,7 @@ class Search
 	 * @param string $value
 	 * @return string
 	 */
-	public static function getDisplayName($fieldname, $value)
+	public static function getDisplayName(string $fieldname, string $value): string
 	{
         if (in_array($fieldname, self::$searchableFields)) {
 			if (false !== strpos($fieldname, 'Date')) {
@@ -479,16 +472,12 @@ class Search
 		}
 	}
 
-	/**
-	 * @param Apache_Solr_Response $solrObject
-	 * @return array
-	 */
-	public static function getCurrentFilters(\Apache_Solr_Response $solrObject)
+	public static function getCurrentFilters(\Solarium\QueryType\Select\Result\Result $result): array
 	{
         $currentFilters = [];
 
-        if (isset($solrObject->responseHeader->params->fq)) {
-            $fq = $solrObject->responseHeader->params->fq;
+        if (isset($result->responseHeader->params->fq)) {
+            $fq = $result->responseHeader->params->fq;
 
             if ($fq) {
                 // It might happen that there is only one filterQuery

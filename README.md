@@ -7,7 +7,7 @@ existing environments.
 ## Installation
 In order to install one of our binary releases, you must have a linux system already set up with:
 
-* [PHP    7.2](http://php.net) or later
+* [PHP    7.4](http://php.net) or later
 * [Apache 2.4](http://httpd.apache.org)
 * [MySQL  5.7](http://dev.mysql.com) or later
 * [Solr   7.4](http://lucene.apache.org/solr)
@@ -15,6 +15,23 @@ In order to install one of our binary releases, you must have a linux system alr
 There are many ways to set up and install your own linux webserver.  Our way is not the only way, though.  It's well worth reading up on all the technologies and deciding what you need for your own hosting.
 
 Once you've got hosting sorted out, you can follow the [Wiki instructions](https://github.com/City-of-Bloomington/uReport/wiki/Install) to install uReport on your webserver.
+
+## Running Tests
+
+Tests are written using PHPUnit.  You can run them from the root installation directory.
+
+Unit tests are safe run any time.  The do not alter the database or touch the hard drive of a deployment.
+
+Integration tests are intended to be run against a production deployment to make sure everything is
+configured correctly and working.  (Database connections, Image uploads, Solr queries, External webservices, etc.)  These tests will make queries and write files to the hard drive of the deployment.  However, they are non-destructive, read-only queries and are safe.
+
+Database tests SHOULD NOT BE RUN against production.  These check the implementation of data apis and will alter and delete data.  Only run these against a dev or test instance.
+
+```
+SITE_HOME=/path/to/data/dir phpunit -c src/Test/Unit.xml
+SITE_HOME=/path/to/data/dir phpunit -c src/Test/Integration.xml
+SITE_HOME=/path/to/data/dir phpunit -c src/Test/Database.xml
+```
 
 ## Developing uReport
 We are always open to new collaborators.  If you are customizing uReport, we welcome pull requests on Github.

@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Apache_Solr_Response $this->solrObject
+ * @param \Solarium\QueryType\Select\Result\Result $this->result
  * @param array                $this->fields      Ticket fields the user asked to see
  */
 use Application\Models\Person;
@@ -10,7 +10,7 @@ use Application\Models\Search;
 use Application\Models\TicketTable;
 use Blossom\Classes\Url;
 
-$c = $this->solrObject->response->numFound;
+$c = $this->result->getNumFound();
 ?>
 <header>
     <h1><?= "{$this->_('search_results')}: ($c)"; ?></h1>
@@ -18,20 +18,12 @@ $c = $this->solrObject->response->numFound;
         <?php
             $sortingLinks = [];
 
-            $c = $this->solrObject->response->numFound;
             if ($c) {
-                $currentSort = Search::$defaultSort;
-                if (isset($_GET['sort'])) {
-                    $keys = array_keys($_GET['sort']);
-                    $currentSort['field'] = $keys[0];
-                    $currentSort['order'] = ($_GET['sort'][$keys[0]] == 'asc')
-                        ? 'asc'
-                        : 'desc';
-                }
+                $currentSort = $_GET['sort'] ?? Search::$defaultSort;
 
                 $url               = new Url(Url::current_url(BASE_HOST));
                 $displayableFields = TicketTable::getDisplayableFields();
-                $sortableFields    = Search::$sortableFields['ticket'];
+                $sortableFields    = Search::$sortableFields;
 
                 // Loop through all the fields the user asked to see
                 // The key will be the fieldname and the value will be "On" or 1
@@ -48,17 +40,18 @@ $c = $this->solrObject->response->numFound;
                         // If this field is being used for sorting,
                         // draw a url that reverses the sort order
                         if (in_array($name, $sortableFields)) {
-                            $url->sort = ($currentSort['field'] == $name
-                                        && $currentSort['order'] == 'asc')
-                                ? array($name=>'desc')
-                                : array($name=>'asc');
-                            $icon = '';
-                            if ($name == $currentSort['field']) {
-                                $class = $currentSort['order'] == 'desc'
-                                    ? ['class' => 'desc']
-                                    : ['class' => 'asc' ];
+                            if (!empty($currentSort[$name])) {
+                                if ($currentSort[$name] == 'asc') {
+                                    $url->sort = 'desc';
+                                    $class     = ['class' => 'asc'];
+                                }
+                                else {
+                                    $url->sort = 'asc';
+                                    $class     = ['class' => 'desc'];
+                                }
                             }
-                            else { $class = []; }
+                            else { $class = [];  }
+                            $icon = '';
                             $sortingLinks[] = ['url'=>$url->__toString(), 'label'=>$label, 'attrs'=>$class];
                         }
                     }
