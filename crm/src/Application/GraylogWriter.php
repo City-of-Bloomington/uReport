@@ -37,6 +37,7 @@ class GraylogWriter extends AbstractWriter
         if (!empty($event['extra']['file'])) { $message->setFile ($event['extra']['file']); }
         if (!empty($event['extra']['line'])) { $message->setLine ($event['extra']['line']); }
         $message->setAdditional('base_uri', BASE_URI);
+        $message->setAdditional('request_uri', $_SERVER['REQUEST_URI'] ?? 'command line');
         $message->setFullMessage(print_r($event, true));
 
         $this->publisher->publish($message);
