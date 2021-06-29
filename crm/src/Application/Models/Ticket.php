@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -170,7 +170,6 @@ class Ticket extends ActiveRecord
 	{
 		$search = new Search();
 		$search->add($this);
-		$search->solrClient->commit();
 	}
 
 	public function save()
@@ -190,7 +189,6 @@ class Ticket extends ActiveRecord
 
 		$search = new Search();
 		$search->delete($this);
-		$search->solrClient->commit();
 
 		parent::delete();
 	}
@@ -688,7 +686,6 @@ class Ticket extends ActiveRecord
 
 			$search = new Search();
 			$search->delete($this);
-			$search->solrClient->commit();
 
 			throw $e;
 		}

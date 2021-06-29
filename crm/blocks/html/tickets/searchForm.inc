@@ -62,8 +62,6 @@ use Blossom\Classes\Url;
                  * If a filter is active, we will echo the $deleteUrl,
                  * insted of echo'ing a link to add the filter to the current search.
                  */
-                #$currentFilters = Search::getCurrentFilters($this->result);
-
                 $person       = isset($_SESSION['USER']) ? $_SESSION['USER'] : 'anonymous';
                 $resultFacets = $this->result->getFacetSet()->getFacets();
                 $helper       = $this->template->getHelper('buttonLink');

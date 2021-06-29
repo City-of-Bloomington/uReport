@@ -7,6 +7,13 @@ namespace Application\Models;
 
 use Blossom\Classes\Url;
 
+use Solarium\Core\Client\Adapter\Curl;
+use Solarium\QueryType\Select\Result\Result;
+use Solarium\QueryType\Update\Query\Document;
+use Solarium\QueryType\Update\Query\Query as UpdateQuery;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 class Search
 {
 	public $solr;
@@ -88,8 +95,8 @@ class Search
 	public function __construct()
 	{
         $this->solr = new \Solarium\Client(
-            new \Solarium\Core\Client\Adapter\Curl(),
-            new \Symfony\Component\EventDispatcher\EventDispatcher(),
+            new Curl(),
+            new EventDispatcher(),
             [
                 'endpoint' => [
                     'solr' => [
@@ -146,7 +153,7 @@ class Search
 	 * disable facetting and pagination.  It will return up to
 	 * MAX_RAW_RESULTS.
 	 */
-	public function query(array $get, ?bool $raw=false): \Solarium\QueryType\Select\Result\Result
+	public function query(array $get, ?bool $raw=false): Result
 	{
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
@@ -239,25 +246,28 @@ class Search
         return $result;
 	}
 
-	public function facetValues(string $facet_field): array
+	public function facetValues(string $field): array
 	{
-        $res = $this->solr->search('*:*', 0, 1, [
-            'facet'       => 'true',
-            'facet.field' => $facet_field
+        $select = $this->solr->createSelect([
+            'query'     => '*:*',
+            'rows'      => 1,
+            'component' => [
+                'facetset' => [
+                    'facet' => [['type'=>'field', 'field'=>$field, 'local_key'=>$field]]
+                ]
+            ]
         ]);
-
-        if (          !empty($res->facet_counts->facet_fields->$facet_field)) {
-            $facets = (array)$res->facet_counts->facet_fields->$facet_field;
-            ksort($facets);
-            return $facets;
-        }
-        return [];
+        $result  = $this->solr->select($select);
+        $facets  = $result->getFacetSet()->getFacets();
+        $values  = array_keys($facets[$field]->getValues());
+        ksort($values);
+        return $values;
 	}
 
 	/**
 	 * @return array An array of CRM models based on the search results
 	 */
-	public static function hydrateDocs(\Solarium\QueryType\Select\Result\Result $result): array
+	public static function hydrateDocs(Result $result): array
 	{
 		$models = [];
 		if (count($result)) {
@@ -285,43 +295,30 @@ class Search
 	 *
 	 * @param mixed $record
 	 */
-	public function add($record)
+	public function add(Ticket $ticket)
 	{
-		$document = $this->createDocument($record);
-		$this->solr->addDocument($document);
+        $update   = $this->solr->createUpdate();
+		$document = $this->createDocument($ticket, $update);
+		$update->addDocument($document);
+		$update->addCommit();
+		$this->solr->update($update);
 	}
 
 	/**
 	 * Removes a single record from Solr
-	 *
-	 * @param mixed $record
 	 */
-	public function delete($record)
+	public function delete(Ticket $ticket)
 	{
-		if ($record instanceof Ticket) {
-			$this->solr->deleteById('t_'.$record->getId());
-		}
-	}
-
-	/**
-	 * Indexes a whole collection of records in Solr
-	 *
-	 * @param mixed $list
-	 */
-	public function index($list)
-	{
-		foreach ($list as $record) {
-			$this->add($record);
-		}
+        $update = $this->solr->createUpdate();
+        $update->addDeleteById('t_'.$ticket->getId());
+        $update->addCommit();
+        $this->solr->update($update);
 	}
 
 	/**
 	 * Prepares a Solr Document with the correct fields for the record type
-	 *
-	 * @param mixed $record
-	 * @return Apache_Solr_Document
 	 */
-	private function createDocument($record)
+	public function createDocument(Ticket $ticket, UpdateQuery $update): Document
 	{
 		// These are the fields from the tickets table that we're indexing
 		//
@@ -338,66 +335,67 @@ class Search
 			// enteredDate, latitude, longitude
 		];
 
-		if ($record instanceof Ticket) {
-			$document = new \Apache_Solr_Document();
-			$document->addField('recordKey', "t_{$record->getId()}");
-			$document->addField('recordType', 'ticket');
+        $document = $update->createDocument();
+        $document->recordKey  = "t_{$ticket->getId()}";
+        $document->recordType = 'ticket';
 
-			$document->addField('enteredDate',    $record->getEnteredDate(Search::DATE_FORMAT), \DateTimeZone::UTC);
-			if ($record->getClosedDate()) {
-                $document->addField('closedDate', $record->getClosedDate (Search::DATE_FORMAT), \DateTimeZone::UTC);
+        $document->enteredDate = $ticket->getEnteredDate(Search::DATE_FORMAT);
+        if ($ticket->getClosedDate()) {
+            $document->closedDate = $ticket->getClosedDate(Search::DATE_FORMAT);
+        }
+
+        if ($ticket->getLatLong()) {
+            $document->coordinates = $ticket->getLatLong();
+        }
+        if ($ticket->getCategory()) {
+            $c = $ticket->getCategory();
+            $document->displayPermissionLevel = $c->getDisplayPermissionLevel();
+            if ($c->getSlaDays()) {
+                $document->slaDays = $c->getSlaDays();
             }
+        }
 
-			if ($record->getLatLong()) {
-				$document->addField('coordinates', $record->getLatLong());
-			}
-			if ($record->getCategory()) {
-                $c = $record->getCategory();
-				$document->addField('displayPermissionLevel', $c->getDisplayPermissionLevel());
-				if ($c->getSlaDays()) {
-                    $document->addField('slaDays', $c->getSlaDays());
-				}
-			}
+        // Ticket information indexing
+        foreach ($ticketFields as $f) {
+            $get = 'get'.ucfirst($f);
+            if ($ticket->$get()) {
+                $document->$f = $ticket->$get();
+                // For the _id fields, also add a string value
+                // ie. category_id=12, category='Graffiti'
+                if (substr($f, -3) == '_id') {
+                    $o = substr($f, 0, -3);
+                    $document->$o = self::sortableString($ticket, $f);
+                }
+            }
+        }
+        $person = $ticket->getAssignedPerson();
+        if ($person && $person->getDepartment_id()) {
+            $document->department_id = $person->getDepartment_id();
+            $document->department    = self::sortableString($person, 'department_id');
+        }
 
-			// Ticket information indexing
-			foreach ($ticketFields as $f) {
-				$get = 'get'.ucfirst($f);
-				if ($record->$get()) {
-					$document->addField($f, $record->$get());
-					if (substr($f, -3) == '_id') {
-						$document->addField(substr($f, 0, -3), self::sortableString($record, $f));
-					}
-				}
-			}
-			$person = $record->getAssignedPerson();
-			if ($person && $person->getDepartment_id()) {
-				$document->addField('department_id', $person->getDepartment_id());
-				$document->addField('department', self::sortableString($person, 'department_id'));
-			}
+        // Index extra fields provided by the AddressService
+        $additionalFields = $ticket->getAdditionalFields();
+        if ($additionalFields) {
+            foreach ($additionalFields as $key=>$value) {
+                if ($value) {
+                    $document->$key = $value;
+                }
+            }
+        }
 
-			// Index extra fields provided by the AddressService
-			$additionalFields = $record->getAdditionalFields();
-			if ($additionalFields) {
-				foreach ($additionalFields as $key=>$value) {
-					if ($value) {
-						$document->addField($key, $value);
-					}
-				}
-			}
+        if ($ticket->getLatitude() && $ticket->getLongitude()) {
+            $latitude  = $ticket->getLatitude();
+            $longitude = $ticket->getLongitude();
+            $document->latitude  = $latitude;
+            $document->longitude = $longitude;
 
-			if ($record->getLatitude() && $record->getLongitude()) {
-				$latitude  = $record->getLatitude();
-				$longitude = $record->getLongitude();
-				$document->addField('latitude' , $latitude );
-				$document->addField('longitude', $longitude);
+            foreach ($ticket->getClusterIds() as $key=>$value) {
+                $document->$key = $value;
+            }
+        }
 
-				foreach ($record->getClusterIds() as $key=>$value) {
-					$document->addField($key, $value);
-				}
-			}
-
-			return $document;
-		}
+        return $document;
 	}
 
 	/**
@@ -431,10 +429,6 @@ class Search
 	 * Example: self::getDisplayName('department_id', 32);
 	 *
 	 * Returns null if the value is an invalid ID
-	 *
-	 * @param string $fieldname
-	 * @param string $value
-	 * @return string
 	 */
 	public static function getDisplayName(string $fieldname, string $value): string
 	{
@@ -470,62 +464,5 @@ class Search
 				return $value;
 			}
 		}
-	}
-
-	public static function getCurrentFilters(\Solarium\QueryType\Select\Result\Result $result): array
-	{
-        $currentFilters = [];
-
-        if (isset($result->responseHeader->params->fq)) {
-            $fq = $result->responseHeader->params->fq;
-
-            if ($fq) {
-                // It might happen that there is only one filterQuery
-                if (!is_array($fq)) { $fq = [$fq]; }
-
-
-                $currentUrl = new Url(Url::current_url(BASE_HOST));
-                foreach ($fq as $filter) {
-                    $deleteUrl = clone $currentUrl;
-
-                    if (preg_match('/([^:]+):(.+)/', $filter, $matches)) {
-                        $key   = $matches[1];
-                        $value = $matches[2];
-
-                        // String values come back with double quotes around them.
-                        // We need to strip the quotes to get the raw values.
-                        if (substr($value, 0, 1) === '"' && substr($value, -1) === '"') {
-                            $value = substr($value, 1, -1);
-                        }
-
-                        if (substr($key, -3) === '_id') {
-                            $value = self::getDisplayName($key, $value);
-                        }
-
-                        // The input and output syntax for bounding box definitions are different
-                        // The query gets sent to search using "bbox"; however,
-                        // when the parameters come back from SOLR, the "bbox" has been
-                        // renamed to "coordinates".
-                        if ($key === 'coordinates') {
-                            $key = 'bbox';
-                            if (isset($deleteUrl->zoom)) { unset($deleteUrl->zoom); }
-                        }
-                    }
-                    else {
-                        if ($filter == Search::SLA_OVERDUE_FUNCTION) {
-                            $key   = 'sla';
-                            $value = 'overdue';
-                        }
-                    }
-
-                    if (in_array($key, Search::$searchableFields)) {
-                        if (isset($deleteUrl->$key)) { unset($deleteUrl->$key); }
-
-                        $currentFilters[$key] = ['value'=>$value, 'deleteUrl'=>$deleteUrl->__toString()];
-                    }
-                }
-            }
-        }
-        return $currentFilters;
 	}
 }
