@@ -46,7 +46,6 @@ class TicketsController extends Controller
 	 */
 	public function index()
 	{
-        $paginated = true;
         foreach ($_GET as $k=>$v) {
             if (substr($k, -3) == '_id') {
                 if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
@@ -60,6 +59,7 @@ class TicketsController extends Controller
             }
         }
 
+        $paginated = true;
         $format    = $_GET['format'] ?? 'html';
         $fields    = $_GET['fields'] ?? TicketTable::$defaultFieldsToDisplay;
 
@@ -80,8 +80,17 @@ class TicketsController extends Controller
 
 		$search = new Search();
 		$query  = self::prepareSolrQuery();
+		try {
+            $result = $search->query($query, !$paginated);
+        }
+        catch (\Exception $e) {
+            header('HTTP/1.1 400 Bad Request', true, 400);
+            $_SESSION['errorMessages'][] = $e;
+            $this->template->blocks = [ new Block('400.inc') ];
+            return;
+        }
 		$params = [
-            'result'     => $search->query($query, !$paginated),
+            'result'     => $result,
             'paginated'  => $paginated,
             'fields'     => $fields
 		];

@@ -8,6 +8,7 @@ namespace Application\Models;
 use Blossom\Classes\Url;
 
 use Solarium\Core\Client\Adapter\Curl;
+use Solarium\Exception\ExceptionInterface;
 use Solarium\QueryType\Select\Result\Result;
 use Solarium\QueryType\Update\Query\Document;
 use Solarium\QueryType\Update\Query\Query as UpdateQuery;
@@ -152,6 +153,8 @@ class Search
 	 * Use the $raw flag to ask for raw results.  This will
 	 * disable facetting and pagination.  It will return up to
 	 * MAX_RAW_RESULTS.
+	 *
+	 * @throws \Exception
 	 */
 	public function query(array $get, ?bool $raw=false): Result
 	{
@@ -190,7 +193,8 @@ class Search
 		// Filter Query aka Search Parameters
 		foreach (self::$searchableFields as $field) {
 			if (substr($field, -3) == '_id' && isset($get[$field])) {
-				$get[$field] = preg_replace('|[^0-9]|', '', $get[$field]);
+                if (is_numeric(trim($get[$field]))) { $get[$field] = (int)$get[$field]; }
+                else { unset($get[$field]); }
 			}
 			if (!empty($get[$field])) {
 				if (false !== strpos($field, 'Date')) {
@@ -242,7 +246,14 @@ class Search
                 'facetset' => ['facet' => self::$facetFields]
             ]
         ]);
-        $result = $this->solr->select($select);
+        try {
+            $result = $this->solr->select($select);
+        }
+        catch (ExceptionInterface $e) {
+            $json = json_decode($e->getBody(), true);
+            if ($json) { throw new \Exception($json['error']['msg']); }
+            else throw($e);
+        }
         return $result;
 	}
 
