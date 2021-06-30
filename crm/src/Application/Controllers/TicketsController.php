@@ -47,6 +47,19 @@ class TicketsController extends Controller
 	public function index()
 	{
         $paginated = true;
+        foreach ($_GET as $k=>$v) {
+            if (substr($k, -3) == '_id') {
+                if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
+                else {
+                    unset($_GET[$k]);
+                    header('HTTP/1.1 400 Bad Request', true, 400);
+                    $_SESSION['errorMessages'][] = new \Exception("invalid $k");
+                    $this->template->blocks = [ new Block('400.inc') ];
+                    return;
+                }
+            }
+        }
+
         $format    = $_GET['format'] ?? 'html';
         $fields    = $_GET['fields'] ?? TicketTable::$defaultFieldsToDisplay;
 

@@ -16,7 +16,7 @@
                     <h1>{$this->_('error')}</h1>
                 </header>
             ";
-			$error = $e->getMessage();
+			$error = is_string($e) ? $e : $e->getMessage();
 			$file = "$errorDir/$error.inc";
 
             if ($this->theme
