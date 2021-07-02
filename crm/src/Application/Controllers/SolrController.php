@@ -8,9 +8,8 @@
  * This proxy URL provides a solution for both these problems.
  * Request parameters are forwarded to the /solr/select? url
  *
- * @copyright 2013 City of Bloomington, Indiana
+ * @copyright 2013-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
 
@@ -29,9 +28,9 @@ class SolrController extends Controller
 		}
 
 		$protocol = SOLR_SERVER_PORT==443 ? 'http://' : 'http://';
-		$url = $protocol.SOLR_SERVER_HOSTNAME;
+		$url = $protocol.SOLR_SERVER_HOST;
 		if (SOLR_SERVER_PORT != 80) { $url.= ':'.SOLR_SERVER_PORT; }
-		$url.= SOLR_SERVER_PATH.'/select?'.$_SERVER['QUERY_STRING'];
+		$url.= '/solr/'.SOLR_SERVER_CORE.'/select?'.$_SERVER['QUERY_STRING'];
 
 		echo Url::get($url);
 		exit();

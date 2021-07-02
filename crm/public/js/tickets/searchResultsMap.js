@@ -64,8 +64,7 @@ google.maps.event.addDomListener(window, 'load', function () {
 		},
 		getSolrBaseUrl = function (coordinates) {
 			var url  = CRM.BASE_URI + '/solr?';
-			    url += SOLR_PARAMS.q    ? 'q='     + SOLR_PARAMS.q    : 'q=*.*';
-			    url += SOLR_PARAMS.sort ? '&sort=' + SOLR_PARAMS.sort : '';
+			    url += SOLR_PARAMS.q ? 'q=' + SOLR_PARAMS.q : 'q=*:*';
 			    url += getFqParameters() + '&fq=coordinates:' + coordinates;
 			    url += '&wt=json&json.nl=map';
 			return url;

@@ -2,15 +2,15 @@
 /**
  * Displays a map of the search results
  *
- * @copyright 2013-2020 City of Bloomington, Indiana
+ * @copyright 2013-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Apache_Solr_Response $this->solrObject
+ * @param \Solarium\QueryType\Select\Result\Result $this->result
  */
 use Blossom\Classes\Block;
 use Blossom\Classes\Url;
 
 $this->_include('tickets/partials/searchResultsFormatButtons.inc');
-$c = $this->solrObject->response->numFound;
+$c = $this->result->getNumFound();
 ?>
 <section class="searchResults">
     <header>
@@ -38,10 +38,10 @@ $c = $this->solrObject->response->numFound;
         }
         $zoom = isset($_GET['zoom']) ? (int)$_GET['zoom'] : 12;
 
-        $solr_params = isset($this->solrObject->responseHeader->params)
-            ?    json_encode($this->solrObject->responseHeader->params)
-            : '{}';
-
+        $query  = $this->result->getQuery()->getOptions();
+        $fq     = [];
+        foreach ($query['filterquery'] as $q) { $fq[] = $q['query']; }
+        $params = json_encode(['query'=>$query['query'], 'fq'=>$fq ]);
 
         echo "
         <div id=\"location_map\"></div>
@@ -49,7 +49,7 @@ $c = $this->solrObject->response->numFound;
             var CENTER_LATITUDE  = $centerLatitude;
             var CENTER_LONGITUDE = $centerLongitude;
             var ZOOM = $zoom;
-            var SOLR_PARAMS = $solr_params;
+            var SOLR_PARAMS = $params;
         </script>
         ";
 
