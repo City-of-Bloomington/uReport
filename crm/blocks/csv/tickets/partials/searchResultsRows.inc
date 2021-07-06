@@ -1,21 +1,21 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param Apache_Solr_Response $this->solrObject
+ * @param \Solarium\QueryType\Select\Result\Result $this->result
  * @param array                $this->fields      Ticket fields the user asked to see
  */
 use Application\Models\Search;
 use Application\Models\TicketTable;
 
 $OUT               = fopen('php://output', 'w');
-$tickets           = Search::hydrateDocs($this->solrObject);
+$tickets           = Search::hydrateDocs($this->result);
 $displayableFields = TicketTable::getDisplayableFields();
 
 foreach ($tickets as $ticket) {
     $line              = [];
 	$additionalFields  = $ticket->getAdditionalFields();
-	
+
     // Go through each of the fields the user wants displayed
     // and dig the displayable value from the row data
 	foreach ($this->fields as $field=>$value) {
