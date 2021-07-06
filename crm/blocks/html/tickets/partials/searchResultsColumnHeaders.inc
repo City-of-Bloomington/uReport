@@ -42,15 +42,18 @@ $c = $this->result->getNumFound();
                         if (in_array($name, $sortableFields)) {
                             if (!empty($currentSort[$name])) {
                                 if ($currentSort[$name] == 'asc') {
-                                    $url->sort = 'desc';
-                                    $class     = ['class' => 'asc'];
+                                    $url->sort = [$name   => 'desc'];
+                                    $class     = ['class' => 'asc' ];
                                 }
                                 else {
-                                    $url->sort = 'asc';
+                                    $url->sort = [$name   => 'asc' ];
                                     $class     = ['class' => 'desc'];
                                 }
                             }
-                            else { $class = [];  }
+                            else {
+                                $url->sort = [$name => 'asc'];
+                                $class     = [];
+                            }
                             $icon = '';
                             $sortingLinks[] = ['url'=>$url->__toString(), 'label'=>$label, 'attrs'=>$class];
                         }
