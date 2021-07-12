@@ -183,7 +183,7 @@ class Search
 		}
 
 		// Sorting
-		if (isset($get['sort'])) {
+		if (isset($get['sort']) && is_array($get['sort'])) {
 			$keys = array_keys($get['sort']);
 			$k    = $keys[0];
 			$dir  = ($get['sort'][$k] == 'asc') ? 'asc' : 'desc';
