@@ -120,7 +120,7 @@ $helper = $this->template->getHelper('field');
                         echo "<details><summary>$v[description]</summary>";
                         $options = [['value'=>'']];
                         $value   = !empty($_GET[$f]) ? self::escape($_GET[$f]) : '';
-                        foreach ($search->facetValues($f) as $k=>$c) { $options[] = ['value'=>$k]; }
+                        foreach ($search->facetValues($f) as $c) { $options[] = ['value'=>$c]; }
 
                         echo $helper->field([
                             'name'    => $f,
