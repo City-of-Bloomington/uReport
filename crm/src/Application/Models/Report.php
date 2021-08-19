@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -111,68 +111,74 @@ class Report
 	 * @param  array  $get The raw GET request
 	 * @return string
 	 */
-	private static function getInvolvementQuery($get)
+	private static function getInvolvementQuery($get): string
 	{
 		$options = self::handleSearchParameters($get);
 
-        $action = new Action('assignment');
-        $where  = "where h.action_id={$action->getId()}";
-		$where .= $options ? " and $options" : '';
+        $asn     = new Action('assignment');
+        $cls     = new Action('closed');
+        $actions = "{$asn->getId()},{$cls->getId()}";
+        $where   = $options ? "where $options" : '';
 
-		$sql = "select  ticket_id, category, closedDate, min(actionDate) as actionDate,
-                        actionPerson_id, firstname, lastname,
-                        datediff(ifnull(ifnull(max(nextDate), closedDate), now()), min(actionDate)) as days,
-                        assigned_firstname, assigned_lastname
-                from (
-                    select  h.ticket_id,
-                            h.actionPerson_id, p.firstname, p.lastname,
-                            h.actionDate,
-                            ( select min(actionDate) from ticketHistory x
-                              where x.ticket_id=h.ticket_id and x.action_id={$action->getId()}
-                              and x.actionDate > h.actionDate
-                            ) as nextDate,
-                            t.closedDate, c.name as category,
-                            t.assignedPerson_id, a.firstname assigned_firstname, a.lastname assigned_lastname
-                    from ticketHistory h
-                    join tickets       t on h.ticket_id=t.id
-                    join people        p on h.actionPerson_id=p.id
-                    join people        a on t.assignedPerson_id=a.id
-                    join categories    c on t.category_id=c.id
-                    $where
-                    order by h.actionDate
-                ) as s
-                group by ticket_id, actionPerson_id";
-
-        return $sql;
+		return "select x.ticket_id,
+                       c.name             as category,
+                       t.closedDate,
+                       x.actionPerson_id,
+                       p.firstname,
+                       p.lastname,
+                       sum(x.involvement) as involvement,
+                       a.firstname        as assigned_firstname,
+                       a.lastname         as assigned_lastname
+                from (select s.ticket_id,
+                             s.enteredByPerson_id,
+                             s.actionPerson_id,
+                             s.action_id,
+                             s.actionDate as startDate,
+                             e.actionDate as endDate,
+                             unix_timestamp(e.actionDate) - unix_timestamp(s.actionDate) as involvement
+                        from ticketHistory s
+                        join ticketHistory e on s.ticket_id=e.ticket_id 
+                                            and e.action_id in ($actions)
+                                            and s.actionPerson_id=e.enteredByPerson_id
+                                            and s.actionDate < e.actionDate
+                        where s.action_id in ($actions)
+                ) as x
+                join people     p on p.id=x.actionPerson_id
+                join tickets    t on t.id=x.ticket_id
+                join people     a on a.id=t.assignedPerson_id
+                join categories c on c.id=t.category_id
+                $where
+                group by x.ticket_id, x.actionPerson_id";
 	}
 
 	/**
 	 * @param  array $get The raw GET request
 	 * @return array
 	 */
-	public static function staff($get)
+	public static function staff($get): \Laminas\Db\Adapter\Driver\Pdo\Result
 	{
 		$involvementSelect = self::getInvolvementQuery($get);
-
-        $sql = "select  actionPerson_id, firstname, lastname,
-                        round(sum(days)/count(*), 1)   as average,
-                        (count(*) - count(closedDate)) as open,
-                        count(closedDate)              as closed
+		$sql = "select actionPerson_id,
+                       firstname,
+                       lastname,
+                       round(hour(sec_to_time(round(sum(involvement)/count(*))))/24, 1) as average,
+                       (count(*) - count(closedDate)) as open,
+                       count(closedDate)              as closed
                 from (
                     $involvementSelect
                 ) as stats
-                group by stats.actionPerson_id";
+                group by actionPerson_id";
+
         $db = Database::getConnection();
         $result = $db->query($sql)->execute();
         return $result;
     }
 
-    public static function person($get)
+    public static function person($get): \Laminas\Db\Adapter\Driver\Pdo\Result
     {
-        $sql     = self::getInvolvementQuery($get);
-        $db = Database::getConnection();
-        $result  = $db->query($sql)->execute();
-        return $result;
+        $sql = self::getInvolvementQuery($get);
+        $db  = Database::getConnection();
+        return $db->query($sql)->execute();
     }
 
 	/**
