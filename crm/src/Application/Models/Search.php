@@ -160,6 +160,7 @@ class Search
 	{
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
+            $get['query'] = preg_replace('/[^a-zA-Z]/', ' ', $get['query']);
             if (preg_match('|^#?([0-9]+)|', $get['query'], $matches)) {
                 $get['id'] = (int)$matches[1];
                 unset($get['query']);
@@ -441,7 +442,7 @@ class Search
 	 *
 	 * Returns null if the value is an invalid ID
 	 */
-	public static function getDisplayName(string $fieldname, string $value): string
+	public static function getDisplayName(string $fieldname, string $value): ?string
 	{
         if (in_array($fieldname, self::$searchableFields)) {
 			if (false !== strpos($fieldname, 'Date')) {
