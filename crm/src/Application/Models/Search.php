@@ -160,7 +160,7 @@ class Search
 	{
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
-            $get['query'] = preg_replace('/[^a-zA-Z]/', ' ', $get['query']);
+            $get['query'] = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $get['query']);
             if (preg_match('|^#?([0-9]+)|', $get['query'], $matches)) {
                 $get['id'] = (int)$matches[1];
                 unset($get['query']);
