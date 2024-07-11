@@ -288,9 +288,14 @@ class Search
 					case 'ticket':
 						// Check to make sure the ticket permits viewing
 						// The search engine could be out of sync with the database record
-						$t = new Ticket($doc->id);
-						if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
-							$models[] = new Ticket($doc->id);
+						try {
+							$t = new Ticket($doc->id);
+							if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
+								$models[] = new Ticket($doc->id);
+							}
+						}
+						catch (\Exception $e) {
+							// Ignore search records that are no longer in the database
 						}
 						break;
 				}
