@@ -86,8 +86,7 @@ class Open311Client
 			'first_name'=> 'firstname',
 			'last_name' => 'lastname',
 			'email'     => 'email',
-			'phone'     => 'phoneNumber',
-			'device_id' => 'phoneDeviceId'
+			'phone'     => 'phone'
 		];
 
         $person = [];
@@ -118,11 +117,10 @@ class Open311Client
                 $email->save();
             }
 
-            if (!empty($post['phone']) || !empty($post['device_id'])) {
+            if (!empty($post['phone'])) {
                 $phone = new Phone();
                 $phone->setPerson($person);
-                if (!empty($post['phone'    ])) { $phone->setNumber  ($post['phone'    ]); }
-                if (!empty($post['device_id'])) { $phone->setDeviceId($post['device_id']); }
+                $phone->setNumber($post['phone']);
                 $phone->save();
             }
         }

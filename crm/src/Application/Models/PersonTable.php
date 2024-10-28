@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2018 City of Bloomington, Indiana
+ * @copyright 2011-2024 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -27,8 +27,7 @@ class PersonTable extends TableGateway
 		if (!empty($fields['email'])) {
 			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
 		}
-		if (   !empty($fields['phoneNumber'  ])
-			|| !empty($fields['phoneDeviceId'])) {
+		if (!empty($fields['phone'])) {
 			$this->select->join(['phone'=>'peoplePhones'], 'people.id=phone.person_id', [], Select::JOIN_LEFT);
 		}
 		if (   !empty($fields['address'])
@@ -68,12 +67,8 @@ class PersonTable extends TableGateway
 							$this->select->where(['email.email' => $value]);
 							break;
 
-						case 'phoneNumber':
+						case 'phone':
 							$this->select->where(['phone.number' => $value]);
-							break;
-
-						case 'phoneDeviceId':
-							$this->select->where(['phone.deviceId' => $value]);
 							break;
 
 						case 'address':
@@ -135,12 +130,8 @@ class PersonTable extends TableGateway
                             $this->select->where(function (Where $w) use ($value) { $w->like('email.email', "$value%"); });
                             break;
 
-                        case 'phoneNumber':
+                        case 'phone':
                             $this->select->where(function (Where $w) use ($value) { $w->like('phone.number', "$value%"); });
-                            break;
-
-                        case 'phoneDeviceId':
-                            $this->select->where(function (Where $w) use ($value) { $w->like('phone.deviceId', "$value%"); });
                             break;
 
                         case 'department_id':
