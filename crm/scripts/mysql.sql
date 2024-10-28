@@ -45,7 +45,6 @@ create table peoplePhones (
 	id        int          unsigned not null primary key auto_increment,
 	person_id int          unsigned not null,
 	number    varchar(20),
-	deviceId  varchar(128),
 	label enum('Main', 'Mobile', 'Work', 'Home', 'Fax', 'Pager', 'Other') not null default 'Other',
 	constraint FK_peoplePhones_person_id foreign key (person_id) references people(id)
 );
@@ -123,7 +122,7 @@ insert categoryGroups set name='Other';
 create table categories (
 	id                     int          unsigned not null primary key auto_increment,
 	name                   varchar(50)  not null,
-	description            varchar(128),
+	description            varchar(512),
 	department_id          int          unsigned not null,
 	defaultPerson_id       int          unsigned,
 	categoryGroup_id       int          unsigned,

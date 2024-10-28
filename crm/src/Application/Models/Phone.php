@@ -79,11 +79,9 @@ class Phone extends ActiveRecord
 	//----------------------------------------------------------------
 	public function getId()       { return parent::get('id');       }
 	public function getNumber()   { return parent::get('number');   }
-	public function getDeviceId() { return parent::get('deviceId'); }
 	public function getLabel()    { return parent::get('label');    }
 
 	public function setNumber  ($s) { parent::set('number',   $s); }
-	public function setDeviceId($s) { parent::set('deviceId', $s); }
 	public function setLabel   ($s) { parent::set('label',    $s); }
 
 	public function getPerson_id() { return parent::get('person_id'); }
@@ -93,7 +91,7 @@ class Phone extends ActiveRecord
 
 	public function handleUpdate($post)
 	{
-		$fields = array('number', 'deviceId', 'label', 'person_id');
+		$fields = array('number', 'label', 'person_id');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);
