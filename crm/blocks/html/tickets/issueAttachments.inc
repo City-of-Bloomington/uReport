@@ -18,16 +18,14 @@ if (count($this->mediaList)) {
         <header>
             <h2>{$this->_(['media', 'medias', 2])}</h2>
         </header>
-	";
+        <div>
+            <a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->ticket->getId()}\">
+                {$this->_('see_all_thumbnails')}
+            </a>
+        </div>
+        ";
 		$profileImage = $this->ticket->getProfileImage();
 		if ($profileImage) {
-			echo "
-			<div>
-				<a href=\"".BASE_URI."/tickets/thumbnails?ticket_id={$this->ticket->getId()}\">
-					{$this->_('see_all_thumbnails')}
-				</a>
-			</div>
-			";
 			$thumbnail = new Block('media/thumbnail.inc', [
                 'media'          => $profileImage,
                 'disableButtons' => $this->disableButtons

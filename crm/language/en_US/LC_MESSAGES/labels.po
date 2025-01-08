@@ -626,7 +626,7 @@ msgid "upload_media"
 msgstr "Upload a photo/file"
 
 msgid "see_all_thumbnails"
-msgstr "See all thumbnails"
+msgstr "Manage Attachments"
 
 msgid "back_to_ticket"
 msgstr "Back to case"

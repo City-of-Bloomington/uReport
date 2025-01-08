@@ -20,12 +20,15 @@ if (!$this->disableButtons && Person::isAllowed('media', 'delete')) {
 		ButtonLink::SIZE_ICON
 	);
 }
+
+$img = $this->media->getMedia_type() == 'image'
+        ? "<img src=\"{$this->media->getURL(THUMBNAIL_SIZE)}\" />"
+        : $this->media->getInternalFilename();
+
 echo "
 <div class=\"thumbnail\">
 	<div class=\"image\">
-		<a href=\"{$this->media->getURL()}\">
-			<img src=\"{$this->media->getURL(THUMBNAIL_SIZE)}\" />
-		</a>
+		<a href=\"{$this->media->getURL()}\">$img</a>
 	</div>
 	<div class=\"date\">
 		{$this->media->getUploaded(DATE_FORMAT)}
