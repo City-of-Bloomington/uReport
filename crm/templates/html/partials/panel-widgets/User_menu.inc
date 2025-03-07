@@ -3,7 +3,6 @@
  * @copyright 2015-2018 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-global $AUTH0;
 $helper      = $this->getHelper('dropdown');
 $dropdown_id = 'user_menu';
 
@@ -21,14 +20,8 @@ else {
     $links      = [];
     $return_url = parent::escape($_SERVER['REQUEST_URI']);
 
-    if (defined('CAS_SERVER') || isset($AUTH0)) {
-        if (defined('CAS_SERVER')) {
-            $links[] = ['url'=>BASE_URI."/login/cas?return_url=$return_url", 'label'=>$this->_('login_cas')];
-        }
-        if (isset($AUTH0)) {
-            $links[] = ['url'=>BASE_URI."/login/auth0?return_url=$return_url", 'label'=>$this->_('login_auth0')];
-        }
-
+    if (defined('CAS_SERVER')) {
+        $links[] = ['url'=>BASE_URI."/login/cas?return_url=$return_url", 'label'=>$this->_('login_cas')];
     }
     else {
         $links[] = ['url'=>BASE_URI."/login?return_url=$return_url", 'label'=>$this->_('login')];

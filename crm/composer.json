@@ -5,7 +5,6 @@
     }],
     "require": {
         "php": ">=7.2",
-        "auth0/auth0-php": "~5",
         "city-of-bloomington/blossom-lib": "dev-master",
         "graylog2/gelf-php":               "@stable",
         "apereo/phpcas":                   "@stable",
