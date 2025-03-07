@@ -46,7 +46,7 @@ class LocationsController extends Controller
 	public function view()
 	{
 		// Make sure we have the location in the system
-		$location = trim($_GET['location']);
+		$location = !empty($_GET['location']) ? trim($_GET['location']) : null;
 		if (!$location) {
 			header('Location: '.BASE_URL.'/locations');
 			exit();
