@@ -1,3 +1,0 @@
-[mysqldump]
-user={{ ureport_db.user }}
-password={{ ureport_db.pass }}

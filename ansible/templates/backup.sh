@@ -1,13 +1,12 @@
 #!/bin/bash
 # Creates a tarball containing a full snapshot of the data in the site
 #
-# @copyright 2011-2021 City of Bloomington, Indiana
+# @copyright 2011-2024 City of Bloomington, Indiana
 # @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE
 
 # Where to store the nightly backup tarballs
-APPLICATION_NAME="ureport"
 MYSQL_DBNAME="{{ ureport_db.name }}"
-MYSQL_CREDENTIALS="/etc/cron.daily/backup.d/${APPLICATION_NAME}.cnf"
+MYSQL_CREDENTIALS="/etc/mysql/debian.cnf"
 BACKUP_DIR="{{ ureport_backup_path }}"
 APPLICATION_HOME="{{ ureport_install_path }}"
 SITE_HOME="{{ ureport_site_home }}"

@@ -8,7 +8,7 @@
 
   tasks:
     - name: "Install dependencies"
-      apt:
+      ansible.builtin.apt:
         name: "{{ packages }}"
         state: "present"
       vars:
@@ -18,14 +18,14 @@
           - "xsltproc"
 
     - name: "Create mysql database"
-      mysql_db:
+      community.mysql.mysql_db:
         config_file: "{{ mysql_defaults_extra_file }}"
         name: "{{ ureport_db.name }}"
         state: "present"
       no_log: "True"
 
     - name: "Create mysql user for site"
-      mysql_user:
+      community.mysql.mysql_user:
         name:     "{{ ureport_db.user }}"
         password: "{{ ureport_db.pass }}"
         priv:     "{{ ureport_db.name }}.*:ALL"
@@ -33,78 +33,57 @@
         config_file: "{{ mysql_defaults_extra_file }}"
       no_log: "True"
 
-    - name: "Create installation directories"
-      file:
+    - name: "Create directories"
+      ansible.builtin.file:
         path: "{{ item }}"
         state: "directory"
         owner: "www-data"
         group: "staff"
+        mode:  "u=rwX,g=rwXs,o=rX"
       with_items:
         - "{{ ureport_install_path }}"
         - "{{ ureport_backup_path  }}"
         - "{{ ureport_site_home    }}"
+        - "{{ ureport_site_home    }}/sessions"
 
     - name: "Extract release"
-      unarchive:
-        src: "{{ ureport_archive_path }}"
-        dest: "/usr/local/src"
+      ansible.builtin.unarchive:
+        src:  "{{ ureport_archive_path }}"
+        dest: "{{ ureport_install_path | dirname }}"
       register: "release"
 
-    - name: "Install release"
-      command: "rsync -rl /usr/local/src/ureport/ {{ ureport_install_path }}/"
-      when: "release.changed"
-
     - name: "Update site_home"
-      command: "rsync -rl /usr/local/src/ureport/data/ {{ ureport_site_home }}/"
+      ansible.builtin.command: "rsync -rl {{ ureport_install_path }}/data/ {{ ureport_site_home }}/"
       when: "release.changed"
 
     - name: "Update apache configuration"
-      template:
-        src: "ureport.conf"
-        dest: "/etc/apache2/sites-enabled/conf.d/ureport.conf"
-        owner: "root"
-        group: "root"
-        mode: "0644"
-      notify: "apache_restart"
+      ansible.builtin.template:
+        src:   "apache.conf"
+        dest:  "/etc/apache2/sites-enabled/conf.d/ureport.conf"
+      notify:  "apache_restart"
 
     - include_tasks: "tasks/solr.yml"
 
     - name: "Update uReport site_config"
-      template:
+      ansible.builtin.template:
         src: "site_config.j2"
         dest: "{{ ureport_site_home }}/site_config.inc"
 
     - name: "Install CRON backup script"
-      template:
+      ansible.builtin.template:
         src: "backup.sh"
         dest: "/etc/cron.daily/backup.d/ureport"
         mode: "0755"
 
-    - name: "Install CRON backup credentials"
-      template:
-        src: "backup.cnf"
-        dest: "/etc/cron.daily/backup.d/ureport.cnf"
-        mode: "0400"
-
-    - name: "Update directory ownership"
-      command: "chown -R www-data:staff {{ item }}"
-      args:
-        warn: "no"
-      with_items:
-        - "{{ ureport_install_path }}"
-        - "{{ ureport_site_home    }}"
-        - "{{ ureport_backup_path  }}"
-
-    - name: "Update application permissions"
-      file:
+    - name: 'Update directory permissions'
+      ansible.builtin.file:
         path:    "{{ item }}"
-        state:   "directory"
-        owner:   "www-data"
-        group:   "staff"
-        mode:    "g+rw"
-        recurse: "yes"
+        state:   'directory'
+        owner:   'www-data'
+        group:   'staff'
+        mode:    'u=rwX,g=rwX,o=rX'
+        recurse: 'true'
       with_items:
         - "{{ ureport_install_path }}"
-        - "{{ ureport_backup_path  }}"
         - "{{ ureport_site_home    }}"
 ...
