@@ -10,7 +10,7 @@ use Gelf\Publisher;
 use Gelf\Message;
 use Gelf\Transport\UdpTransport;
 
-class GraylogWriter extends AbstractWriter
+class GraylogWriter
 {
     public static function doWrite(array $event)
     {

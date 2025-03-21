@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Person $this->person
 */
-use Blossom\Classes\View;
+use Application\View;
 
 $username     = self::escape($this->person->getUsername());
 $name         = self::escape($this->person->getFullname());

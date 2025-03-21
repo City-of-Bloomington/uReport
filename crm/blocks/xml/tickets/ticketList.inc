@@ -11,7 +11,7 @@
  * @param string $this->moreLink
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
+use Application\View;
 
 echo "<tickets>";
 foreach ($this->ticketList as $ticket) {

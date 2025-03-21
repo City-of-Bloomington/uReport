@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Report;
-use Blossom\Classes\Url;
+use Application\Url;
 
 $this->_include('reports/parameters.inc');
 

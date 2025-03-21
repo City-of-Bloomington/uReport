@@ -13,8 +13,8 @@
  */
 namespace Application\Controllers;
 
-use Blossom\Classes\Controller;
-use Blossom\Classes\Url;
+use Application\Controller;
+use Application\Url;
 
 class SolrController extends Controller
 {

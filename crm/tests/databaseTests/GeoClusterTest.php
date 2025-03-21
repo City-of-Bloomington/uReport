@@ -5,7 +5,7 @@
  */
 use Application\Models\GeoCluster;
 use Application\Models\Ticket;
-use Blossom\Classes\Database;
+use Application\Database;
 
 require_once './DatabaseTestCase.php';
 

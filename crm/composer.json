@@ -1,14 +1,9 @@
 {
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/City-of-Bloomington/blossom-lib"
-    }],
     "require": {
         "php": ">=7.2",
-        "city-of-bloomington/blossom-lib": "dev-master",
-        "graylog2/gelf-php":               "@stable",
-        "apereo/phpcas":                   "@stable",
-        "solarium/solarium":               "dev-master",
+        "graylog2/gelf-php":               "~1",
+        "jumbojett/openid-connect-php":    "@stable",
+        "solarium/solarium":               "@stable",
         "symfony/event-dispatcher":        "@stable",
         "phpmailer/phpmailer":             "@stable",
         "laminas/laminas-db":              "@stable",

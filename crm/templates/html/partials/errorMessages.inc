@@ -2,14 +2,14 @@
 /**
  * @copyright 2007-2016 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param array $this->errorMessages
  */
+if (isset($_SESSION['errorMessages'])) {
 ?>
 <section id="alert">
 	<?php
         $errorDir = "/blocks/html/errorMessages";
 
-		foreach ($this->errorMessages as $e) {
+		foreach ($_SESSION['errorMessages'] as $e) {
             echo "
             <article>
                 <header>
@@ -36,3 +36,6 @@
 		}
 	?>
 </section>
+<?php
+    unset ($_SESSION['errorMessages']);
+}

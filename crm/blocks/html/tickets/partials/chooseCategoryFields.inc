@@ -6,7 +6,7 @@
  */
 use Application\Models\Category;
 use Application\Models\CategoryTable;
-use Blossom\Classes\Url;
+use Application\Url;
 ?>
 <div>
 	<select id="category_id" name="category_id">

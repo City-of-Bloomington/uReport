@@ -10,8 +10,8 @@ use Application\Models\Search;
 use Application\Models\TicketTable;
 
 use Application\ActiveRecord;
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 ?>
 <section id="ticketSearchForm">

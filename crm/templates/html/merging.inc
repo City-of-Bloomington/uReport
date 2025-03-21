@@ -11,7 +11,7 @@
 	?>
 	<main>
 		<?php
-			include BLOSSOM.'/errorMessages.php';
+			$this->_include('partials/errorMessages.inc');
 			echo $this->includeBlocks();
 		?>
 		<div id="left">

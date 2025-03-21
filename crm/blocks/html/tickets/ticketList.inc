@@ -10,7 +10,7 @@
  * @param string $this->moreLink
  */
 use Application\Models\Person;
-use Blossom\Classes\Url;
+use Application\Url;
 
 $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'tickets', count($this->ticketList)]);
 ?>

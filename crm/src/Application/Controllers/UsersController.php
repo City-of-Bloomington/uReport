@@ -9,9 +9,9 @@ use Application\Models\Person;
 use Application\Models\PersonTable;
 use Application\Models\DepartmentTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class UsersController extends Controller
 {

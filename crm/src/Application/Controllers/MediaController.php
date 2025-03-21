@@ -10,8 +10,8 @@ use Application\Models\Media;
 use Application\Models\Action;
 use Application\Models\TicketHistory;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
+use Application\Block;
+use Application\Controller;
 
 class MediaController extends Controller
 {

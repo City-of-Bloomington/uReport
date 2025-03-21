@@ -8,9 +8,9 @@ namespace Application\Controllers;
 use Application\Models\ContactMethod;
 use Application\Models\ContactMethodTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class ContactMethodsController extends Controller
 {

@@ -12,7 +12,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
-use Blossom\Classes\Url;
+use Application\Url;
 
 class RentalService
 {

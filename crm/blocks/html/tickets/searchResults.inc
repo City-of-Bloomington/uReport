@@ -10,8 +10,8 @@
  */
 use Application\Models\Search;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\SolrPaginatorAdapter;
+use Application\Block;
+use Application\SolrPaginatorAdapter;
 
 use Application\Paginator;
 

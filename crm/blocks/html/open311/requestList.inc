@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param TicketList $this->ticketList
  */
-use Blossom\Classes\Block;
+use Application\Block;
 
 echo "
 <div class=\"requestList\">

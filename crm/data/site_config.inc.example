@@ -70,11 +70,23 @@ $DIRECTORY_CONFIG = [
 //  ]
 ];
 
-/**
- * CAS authentication
- */
-//define('CAS_SERVER','cas.somewhere.org');
-//define('CAS_URI','cas');
+$AUTHENTICATION = [
+    'oidc' => [
+        'server'         => 'https://ad.example.org/adfs',
+        'client_id'      => '',
+        'client_secret'  => '',
+        'claims' => [
+            // OnBoard field => OIDC Claim
+            'username'    => 'adfs1upn',
+            'displayname' => 'commonname',
+            'firstname'   => 'given_name',
+            'lastname'    => 'family_name',
+            'email'       => 'upn',
+            'groups'      => 'group',
+            'groupmap'    => [ ]
+        ],
+    ]
+];
 
 /**
  * Controls whether the system sends email notifications to people

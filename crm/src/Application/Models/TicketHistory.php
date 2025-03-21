@@ -7,7 +7,7 @@ namespace Application\Models;
 
 use Application\ActiveRecord;
 use Application\Database;
-use Blossom\Classes\Template;
+use Application\Template;
 
 class TicketHistory extends ActiveRecord
 {

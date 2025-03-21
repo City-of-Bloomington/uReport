@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param Category $this->category
  */
-use Blossom\Classes\View;
+use Application\View;
 
 $name = self::escape($this->category->getName());
 echo "

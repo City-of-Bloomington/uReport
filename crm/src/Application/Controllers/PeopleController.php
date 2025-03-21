@@ -11,10 +11,10 @@ use Application\Models\Email;
 use Application\Models\Phone;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
+use Application\Url;
 
 class PeopleController extends Controller
 {

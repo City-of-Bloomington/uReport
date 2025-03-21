@@ -5,7 +5,7 @@
  */
 namespace Application\Models;
 
-use Blossom\Classes\Url;
+use Application\Url;
 
 use Solarium\Core\Client\Adapter\Curl;
 use Solarium\Exception\ExceptionInterface;

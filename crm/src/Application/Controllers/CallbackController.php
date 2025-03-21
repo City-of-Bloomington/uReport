@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
-use Blossom\Classes\Controller;
+use Application\Controller;
 
 class CallbackController extends Controller
 {

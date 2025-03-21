@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\Ticket;
-use Blossom\Classes\Database;
+use Application\Database;
 
 require_once './DatabaseTestCase.php';
 

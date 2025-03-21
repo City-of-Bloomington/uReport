@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param PersonList $this->personList
  */
-use Blossom\Classes\Url;
+use Application\Url;
 
 $callback = !empty($_REQUEST['callback'])
     ? preg_replace('/[^a-zA-Z_\.]/', '', $_REQUEST['callback'])

@@ -8,7 +8,7 @@
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
-use Blossom\Classes\Block;
+use Application\Block;
 
 $ticket_id = $this->ticket->getId();
 

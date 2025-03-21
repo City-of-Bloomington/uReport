@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\BookmarkTable;
-use Blossom\Classes\Block;
+use Application\Block;
 ?>
 <div>
 	<section>

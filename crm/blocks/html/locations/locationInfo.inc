@@ -9,8 +9,8 @@
 use Application\Models\Person;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongitude())) {
     $header  = '';

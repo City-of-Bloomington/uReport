@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
-use Blossom\Classes\Url;
+use Application\Url;
 
 $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseLocation-'.VERSION.'.js');
 

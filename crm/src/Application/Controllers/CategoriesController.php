@@ -8,10 +8,10 @@ namespace Application\Controllers;
 use Application\Models\Category;
 use Application\Models\CategoryTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
+use Application\Url;
 
 class CategoriesController extends Controller
 {

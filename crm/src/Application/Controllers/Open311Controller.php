@@ -13,9 +13,9 @@ use Application\Models\TicketTable;
 use Application\Models\Open311Client;
 use Application\Models\Media;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class Open311Controller extends Controller
 {

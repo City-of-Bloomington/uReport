@@ -9,7 +9,7 @@
  */
 use Application\Models\Search;
 use Application\Models\Ticket;
-use Blossom\Classes\Database;
+use Application\Database;
 
 if (isset($argv[2]) && is_numeric($argv[2])) {
 	$_SERVER['SITE_HOME'] = $argv[1];

@@ -16,10 +16,10 @@ use Application\Models\TicketTable;
 use Application\Models\Search;
 use Application\Models\Response;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
+use Application\Url;
 
 class TicketsController extends Controller
 {

@@ -13,7 +13,7 @@
 	?>
 	<main>
         <div id="content-panel" class="panel">
-            <?php include BLOSSOM.'/errorMessages.php'; ?>
+            <?php $this->_include('partials/errorMessages.inc'); ?>
             <div id="panel-one" class="panel">
                 <?= $this->includeBlocks('panel-one'); ?>
             </div>

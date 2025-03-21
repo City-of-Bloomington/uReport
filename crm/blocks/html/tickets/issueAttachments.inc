@@ -6,7 +6,7 @@
  * @param bool    $this->disableButtons (optional)
  */
 use Application\Models\Person;
-use Blossom\Classes\Block;
+use Application\Block;
 
 $helper = $this->template->getHelper('buttonLink');
 

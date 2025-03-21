@@ -9,7 +9,7 @@ use Application\ActiveRecord;
 use Application\Database;
 use Application\Models\Email;
 
-use Blossom\Classes\Template;
+use Application\Template;
 
 use Domain\Auth\ExternalIdentity;
 use PHPMailer\PHPMailer\PHPMailer;

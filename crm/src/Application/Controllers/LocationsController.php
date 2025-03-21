@@ -9,9 +9,9 @@ use Application\Models\Location;
 use Application\Models\Person;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class LocationsController extends Controller
 {

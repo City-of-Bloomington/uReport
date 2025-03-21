@@ -7,8 +7,8 @@ namespace Application\Controllers;
 
 use Application\Models\Metrics;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
+use Application\Block;
+use Application\Controller;
 
 class MetricsController extends Controller
 {

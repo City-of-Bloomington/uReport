@@ -11,8 +11,8 @@ use Application\Models\Client;
 use Application\Models\Department;
 use Application\Models\Person;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 $currentURL = new Url(Url::current_url(BASE_HOST));
 ?>

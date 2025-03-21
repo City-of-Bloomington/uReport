@@ -10,7 +10,7 @@
  * count(*) as count,
  * avg(time) as seconds
  */
-use Blossom\Classes\Url;
+use Application\Url;
 
 $this->_include('reports/parameters.inc');
 $h = $this->template->getHelper('formatDuration');

@@ -6,8 +6,8 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param \Solarium\QueryType\Select\Result\Result $this->result
  */
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 $this->_include('tickets/partials/searchResultsFormatButtons.inc');
 $c = $this->result->getNumFound();

@@ -20,8 +20,9 @@ else {
     $links      = [];
     $return_url = parent::escape($_SERVER['REQUEST_URI']);
 
-    if (defined('CAS_SERVER')) {
-        $links[] = ['url'=>BASE_URI."/login/cas?return_url=$return_url", 'label'=>$this->_('login_cas')];
+    global $AUTHENTICATION;
+    if (!empty($AUTHENTICATION['oidc']['client_id'])) {
+        $links[] = ['url'=>BASE_URI."/login/oidc?return_url=$return_url", 'label'=>$this->_('login_cas')];
     }
     else {
         $links[] = ['url'=>BASE_URI."/login?return_url=$return_url", 'label'=>$this->_('login')];
