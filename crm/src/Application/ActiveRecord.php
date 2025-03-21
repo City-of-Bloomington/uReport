@@ -171,10 +171,10 @@ abstract class ActiveRecord
     protected function getForeignKeyObject($class, $field)
     {
         $var = preg_replace('/_id$/', '', $field);
-        if (!$this->$var && isset($this->data[$field])) {
-            $this->$var = new $class($this->data[$field]);
+        if (empty($this->data[$var]) && isset($this->data[$field])) {
+            $this->data[$var] = new $class($this->data[$field]);
         }
-        return $this->$var;
+        return $this->data[$var] ?? null;
     }
 
     /**
@@ -189,14 +189,13 @@ abstract class ActiveRecord
      */
     protected function setForeignKeyField($class, $field, $id)
     {
-        $id = trim($id);
+        $id  = trim($id);
         $var = preg_replace('/_id$/', '', $field);
         if ($id) {
-            $this->$var = new $class($id);
-            $this->data[$field] = $this->$var->getId();
+            $this->data[$var  ] = new $class($id);
+            $this->data[$field] = $this->data[$var]->getId();
         }
         else {
-            $this->$field = null;
             $this->data[$field] = null;
         }
     }
@@ -216,7 +215,7 @@ abstract class ActiveRecord
         if ($object instanceof $class) {
             $var = preg_replace('/_id$/', '', $field);
             $this->data[$field] = $object->getId();
-            $this->$var = $object;
+            $this->data[$var  ] = $object;
         }
         else {
             throw new \Exception('Object does not match the given class');

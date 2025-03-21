@@ -65,10 +65,6 @@ class Department extends ActiveRecord
         parent::exchangeArray($data);
 
         $this->defaultPerson = null;
-        $this->categories = [];
-        $this->actions    = [];
-        $this->categoriesUpdated = false;
-        $this->actionsUpdated    = false;
 	}
 
 	/**
