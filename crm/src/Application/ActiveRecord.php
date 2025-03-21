@@ -76,8 +76,7 @@ abstract class ActiveRecord
      */
     protected function set($fieldname, $value)
     {
-        $value = trim($value);
-        $this->data[$fieldname] = $value ? $value : null;
+        $this->data[$fieldname] = $value ? trim($value) : null;
     }
 
     /**
@@ -121,8 +120,8 @@ abstract class ActiveRecord
      */
     protected function setDateData($dateField, $date, $format=DATETIME_FORMAT, $databaseFormat=self::MYSQL_DATETIME_FORMAT)
     {
-        $date = trim($date);
         if ($date) {
+            $date = trim($date);
             try {
                 $d = self::parseDate($date, $format);
                 $this->data[$dateField] = $d->format($databaseFormat);
