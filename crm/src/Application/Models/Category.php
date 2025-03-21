@@ -230,7 +230,8 @@ class Category extends ActiveRecord
 	 */
 	public function getCustomFields()
 	{
-		return json_decode(parent::get('customFields'));
+        $f = parent::get('customFields');
+        return $f ? json_decode($f) : null;
 	}
 
 	/**

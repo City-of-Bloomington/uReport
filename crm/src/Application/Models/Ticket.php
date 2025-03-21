@@ -347,8 +347,7 @@ class Ticket extends ActiveRecord
 	public function getAdditionalFields()
 	{
 		$s = parent::get('additionalFields');
-		if (!$s) { $s = '{}'; }
-		return json_decode($s);
+        return $s ? json_decode($s) : [];
 	}
 	/**
 	 * @param array $array
@@ -363,7 +362,8 @@ class Ticket extends ActiveRecord
 	 */
 	public function getCustomFields()
 	{
-		return json_decode(parent::get('customFields'));
+        $f = parent::get('customFields');
+        return $f ? json_decode($f) : null;
 	}
 
 	/**

@@ -108,8 +108,8 @@ class TicketHistory extends ActiveRecord
 	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id'); }
 	public function getActionPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'actionPerson_id');    }
 	public function getAction()          { return parent::getForeignKeyObject(__namespace__.'\Action', 'action_id');          }
-	public function getData()              { return json_decode(parent::get('data'), true); }
-	public function getSentNotifications() { return json_decode(parent::get('sentNotifications')); }
+	public function getData()              { $d = parent::get('data');              return $d ? json_decode($d, true) : null; }
+	public function getSentNotifications() { $n = parent::get('sentNotifications'); return $n ? json_decode($n) : null; }
 
 	public function setNotes ($s) { parent::set('notes',  $s); }
 	public function setEnteredDate($d) { parent::setDateData('enteredDate', $d); }
