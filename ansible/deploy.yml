@@ -66,12 +66,6 @@
         src: "site_config.j2"
         dest: "{{ ureport_site_home }}/site_config.inc"
 
-    - name: "Install CRON backup script"
-      ansible.builtin.template:
-        src: "backup.sh"
-        dest: "/etc/cron.daily/backup.d/ureport"
-        mode: "0755"
-
     - name: 'Update directory permissions'
       ansible.builtin.file:
         path:    "{{ item }}"
