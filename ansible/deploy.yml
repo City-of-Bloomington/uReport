@@ -4,7 +4,6 @@
   roles:
     - "City-of-Bloomington.mysql"
     - "City-of-Bloomington.php"
-    - "City-of-Bloomington.solr"
 
   tasks:
     - name: "Install dependencies"
@@ -61,8 +60,6 @@
         src:   "apache.conf"
         dest:  "/etc/apache2/sites-enabled/conf.d/ureport.conf"
       notify:  "apache_restart"
-
-    - include_tasks: "tasks/solr.yml"
 
     - name: "Update uReport site_config"
       ansible.builtin.template:

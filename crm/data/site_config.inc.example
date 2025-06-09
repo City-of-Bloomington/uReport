@@ -99,9 +99,16 @@ define('ADMINISTRATOR_EMAIL', 'someone@localhost');
 /**
  * Point to the Solr server
  */
-define('SOLR_SERVER_HOST', 'localhost');
-define('SOLR_SERVER_PORT', 8983);
-define('SOLR_SERVER_CORE', 'ureport');
+$SOLR = [
+    'ureport' => [
+        'scheme'   => 'https',
+        'host'     => 'localhost',
+        'port'     => 443,
+        'core'     => 'ureport',
+        'username' => 'ureport',
+        'password' => 'secret password'
+    ]
+];
 
 /**
  * Addresses can be validated against a master address web service

@@ -91,18 +91,22 @@ $AUTHENTICATION = [
     ]
 ];
 
+$SOLR = [
+    'ureport' => [
+        'scheme'   => 'https',
+        'host'     => '{{ ureport_solr.host }}',
+        'port'     =>  {{ ureport_solr.port }},
+        'core'     => '{{ ureport_solr.core }}',
+        'username' => '{{ ureport_solr.user }}',
+        'password' => '{{ ureport_solr.pass }}'
+    ]
+];
+
 /**
  * Controls whether the system sends email notifications to people
  */
 define('NOTIFICATIONS_ENABLED', true);
 define('ADMINISTRATOR_EMAIL', '{{ apache_serveradmin }}');
-
-/**
- * Point to the Solr server
- */
-define('SOLR_SERVER_HOST', '{{ ureport_solr.host }}');
-define('SOLR_SERVER_PORT',  {{ ureport_solr.port }});
-define('SOLR_SERVER_CORE', '{{ ureport_solr.core }}');
 
 
 {% if ureport_address_service %}

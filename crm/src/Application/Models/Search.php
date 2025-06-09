@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright 2012-2021 City of Bloomington, Indiana
+ * @copyright 2012-2025 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
 use Application\Url;
 
+use Solarium\Client;
 use Solarium\Core\Client\Adapter\Curl;
 use Solarium\Exception\ExceptionInterface;
 use Solarium\QueryType\Select\Result\Result;
@@ -95,20 +96,13 @@ class Search
 	 */
 	public function __construct()
 	{
-        $this->solr = new \Solarium\Client(
-            new Curl(),
-            new EventDispatcher(),
-            [
-                'endpoint' => [
-                    'solr' => [
-                        'host' => SOLR_SERVER_HOST,
-                        'port' => SOLR_SERVER_PORT,
-                        'path' => '/',
-                        'core' => SOLR_SERVER_CORE
-                    ]
-                ]
-            ]
-        );
+        global $SOLR;
+        $config = $SOLR['ureport'];
+        $curl   = new Curl();
+        $curl->setTimeout(10);
+        $this->solr = new Client($curl,
+                                 new EventDispatcher(),
+                                 ['endpoint'=>['solr'=>$config]]);
 
 		// Add facets for the AddressService custom fields
 		if (defined('ADDRESS_SERVICE')) {
