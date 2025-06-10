@@ -230,49 +230,51 @@ class TicketHistory extends ActiveRecord
 	 */
 	public function sendNotifications()
 	{
-        $ticket   = $this->getTicket();
-        $category = $ticket->getCategory();
-        $url      = $ticket->getUrl();
-        $action   = $this->getAction();
-        $notes    = $this->getNotes();
-        $autoResponse  = $category->responseTemplateForAction($action);
+        if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
+            $ticket   = $this->getTicket();
+            $category = $ticket->getCategory();
+            $url      = $ticket->getUrl();
+            $action   = $this->getAction();
+            $notes    = $this->getNotes();
+            $autoResponse  = $category->responseTemplateForAction($action);
 
-        if ($autoResponse || $notes) {
-            $template = new Template('email', 'txt');
+            if ($autoResponse || $notes) {
+                $template = new Template('email', 'txt');
 
-            $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
+                $subject = APPLICATION_NAME." {$template->_('ticket')} #{$ticket->getId()}";
 
-            if ($autoResponse) {
-                $response   = $this->renderVariables($autoResponse->getTemplate(), $template);
-                $emailReply = $autoResponse->getReplyEmail();
-            }
-            else {
-                $response   = '';
-                $emailReply = $category->getNotificationReplyEmail();
-            }
-
-            $block = new \Blossom\Classes\Block('ticketHistory/notification.inc', [
-                'ticket'            => $ticket,
-                'actionDescription' => $this->getDescription($template),
-                'autoResponse'      => $response,
-                'userComments'      => $notes
-            ]);
-            $message = $block->render('txt', $template);
-
-            $notificationLog = new \stdClass();
-            $notificationLog->message = $message;
-            $notificationLog->people  = [];
-
-            foreach ($ticket->getNotificationPeople() as $person) {
-                if ($category->allowsDisplay($person)) {
-                    $person->sendNotification($message, $subject, $emailReply);
-                    $notificationLog->people[] = (int)$person->getId();
+                if ($autoResponse) {
+                    $response   = $this->renderVariables($autoResponse->getTemplate(), $template);
+                    $emailReply = $autoResponse->getReplyEmail();
                 }
-            }
-            if (count($notificationLog->people)) {
-                $sql = 'update ticketHistory set sentNotifications=? where id=?';
-                $db = Database::getConnection();
-                $db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
+                else {
+                    $response   = '';
+                    $emailReply = $category->getNotificationReplyEmail();
+                }
+
+                $block = new \Application\Block('ticketHistory/notification.inc', [
+                    'ticket'            => $ticket,
+                    'actionDescription' => $this->getDescription($template),
+                    'autoResponse'      => $response,
+                    'userComments'      => $notes
+                ]);
+                $message = $block->render('txt', $template);
+
+                $notificationLog = new \stdClass();
+                $notificationLog->message = $message;
+                $notificationLog->people  = [];
+
+                foreach ($ticket->getNotificationPeople() as $person) {
+                    if ($category->allowsDisplay($person)) {
+                        $person->sendNotification($message, $subject, $emailReply);
+                        $notificationLog->people[] = (int)$person->getId();
+                    }
+                }
+                if (count($notificationLog->people)) {
+                    $sql = 'update ticketHistory set sentNotifications=? where id=?';
+                    $db = Database::getConnection();
+                    $db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
+                }
             }
         }
 	}

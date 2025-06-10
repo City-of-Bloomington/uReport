@@ -50,7 +50,7 @@ use Application\Models\Department;
     }
     if ($status === 'open' && Person::isAllowed('tickets', 'close')) {
         $subgroup[] = [
-            'url'   => BASE_URI."/tickets/close?ticket_id=$ticket_id;status=closed",
+            'url'   => BASE_URI."/tickets/close?ticket_id=$ticket_id",
             'label' => $this->_('ticket_close')
         ];
     }
@@ -110,7 +110,7 @@ use Application\Models\Department;
     $subgroup = [];
     if ($status != 'open' && Person::isAllowed('tickets', 'open')) {
         $subgroup[] = [
-            'url'   => BASE_URI."/tickets/open?ticket_id=$ticket_id;status=open",
+            'url'   => BASE_URI."/tickets/open?ticket_id=$ticket_id",
             'label' => $this->_('ticket_open')
         ];
     }
