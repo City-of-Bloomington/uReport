@@ -13,6 +13,7 @@ use Application\Database;
 class Bookmark extends ActiveRecord
 {
 	protected $tablename = 'bookmarks';
+    protected $person;
 
 	/**
 	 * Populates the object with data

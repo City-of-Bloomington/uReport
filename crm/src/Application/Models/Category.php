@@ -11,7 +11,8 @@ class Category extends ActiveRecord
 {
 	protected $tablename = 'categories';
 
-	protected $department;
+    protected $autoCloseSubstatus;
+    protected $department;
 	protected $defaultPerson;
 	protected $categoryGroup;
 
