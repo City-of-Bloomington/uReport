@@ -53,53 +53,51 @@ use Application\Models\Department;
     }
     if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
-    if ($status === 'open') {
-        $subgroup = [];
-        if (Person::isAllowed('tickets', 'update')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/tickets/update?ticket_id='.$ticket_id,
-                'label' => $this->_('update_ticket')
-            ];
-        }
-        if (Person::isAllowed('tickets', 'changeCategory')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
-                'label' => $this->_('change_category'),
-                'attrs' => ['data-callback'=>'changeCategory']
-            ];
-        }
-        if (Person::isAllowed('tickets', 'changeLocation')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
-                'label' => $this->_('change_location'),
-                'attrs' => ['data-callback'=>'changeLocation']
-            ];
-        }
-        if (Person::isAllowed('media', 'upload')) {
-            $subgroup[] = [
-                'url'   => BASE_URI.'/media/upload?ticket_id='.$ticket_id,
-                'label' => $this->_('upload_media')
-            ];
-        }
-        if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+    $subgroup = [];
+    if (Person::isAllowed('tickets', 'update')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/update?ticket_id='.$ticket_id,
+            'label' => $this->_('update_ticket')
+        ];
+    }
+    if (Person::isAllowed('tickets', 'changeCategory')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/changeCategory?ticket_id='.$ticket_id,
+            'label' => $this->_('change_category'),
+            'attrs' => ['data-callback'=>'changeCategory']
+        ];
+    }
+    if (Person::isAllowed('tickets', 'changeLocation')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/changeLocation?ticket_id='.$ticket_id,
+            'label' => $this->_('change_location'),
+            'attrs' => ['data-callback'=>'changeLocation']
+        ];
+    }
+    if (Person::isAllowed('media', 'upload')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/media/upload?ticket_id='.$ticket_id,
+            'label' => $this->_('upload_media')
+        ];
+    }
+    if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
-        if (isset($_SESSION['USER']) && Person::isAllowed('tickets', 'recordAction')) {
-            $department = $_SESSION['USER']->getDepartment_id()
-                ? $_SESSION['USER']->getDepartment()
-                : new Department();
+    if (isset($_SESSION['USER']) && Person::isAllowed('tickets', 'recordAction')) {
+        $department = $_SESSION['USER']->getDepartment_id()
+            ? $_SESSION['USER']->getDepartment()
+            : new Department();
 
-            $actions = $department->getActions();
-            $c       = count($actions);
-            if ($c) {
-                $subgroup = [];
-                foreach ($actions as $a) {
-                    $links[] = [
-                        'url'   => BASE_URI."/tickets/recordAction?ticket_id=$ticket_id;action_id={$a->getId()}",
-                        'label' => $a->getName()
-                    ];
-                }
-                if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+        $actions = $department->getActions();
+        $c       = count($actions);
+        if ($c) {
+            $subgroup = [];
+            foreach ($actions as $a) {
+                $links[] = [
+                    'url'   => BASE_URI."/tickets/recordAction?ticket_id=$ticket_id;action_id={$a->getId()}",
+                    'label' => $a->getName()
+                ];
             }
+            if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
         }
     }
 
