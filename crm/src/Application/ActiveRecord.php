@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2025 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
@@ -9,7 +9,7 @@ use Laminas\Db\Sql\Sql;
 abstract class ActiveRecord
 {
     protected $tablename;
-    protected $data = [];
+    protected $data = array();
 
     const MYSQL_DATE_FORMAT     = 'Y-m-d';
     const MYSQL_TIME_FORMAT     = 'H:i:s';
@@ -76,7 +76,10 @@ abstract class ActiveRecord
      */
     protected function set($fieldname, $value)
     {
-        $this->data[$fieldname] = $value ? trim($value) : null;
+        if ($value) {
+            $value = trim($value);
+        }
+        $this->data[$fieldname] = $value ? $value : null;
     }
 
     /**
@@ -170,10 +173,10 @@ abstract class ActiveRecord
     protected function getForeignKeyObject($class, $field)
     {
         $var = preg_replace('/_id$/', '', $field);
-        if (empty($this->data[$var]) && isset($this->data[$field])) {
-            $this->data[$var] = new $class($this->data[$field]);
+        if (!$this->$var && isset($this->data[$field])) {
+            $this->$var = new $class($this->data[$field]);
         }
-        return $this->data[$var] ?? null;
+        return $this->$var;
     }
 
     /**
@@ -188,13 +191,14 @@ abstract class ActiveRecord
      */
     protected function setForeignKeyField($class, $field, $id)
     {
-        $id  = trim($id);
-        $var = preg_replace('/_id$/', '', $field);
         if ($id) {
-            $this->data[$var  ] = new $class($id);
-            $this->data[$field] = $this->data[$var]->getId();
+            $id  = trim($id);
+            $var = preg_replace('/_id$/', '', $field);
+            $this->$var = new $class($id);
+            $this->data[$field] = $this->$var->getId();
         }
         else {
+            $this->$field       = null;
             $this->data[$field] = null;
         }
     }
@@ -214,7 +218,7 @@ abstract class ActiveRecord
         if ($object instanceof $class) {
             $var = preg_replace('/_id$/', '', $field);
             $this->data[$field] = $object->getId();
-            $this->data[$var  ] = $object;
+            $this->$var = $object;
         }
         else {
             throw new \Exception('Object does not match the given class');
