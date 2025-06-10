@@ -13,28 +13,25 @@ use Application\Models\Department;
     $links     = [];
     $status    = $this->ticket->getStatus();
 
-
-
     if ($status === 'open') {
         $subgroup = [];
-		if (Person::isAllowed('tickets', 'recordAction')) {
+        if (Person::isAllowed('tickets', 'recordAction')) {
             $action  = new Action(Action::COMMENTED);
             $subgroup[] = [
                 'url'   => BASE_URI."/tickets/recordAction?ticket_id=$ticket_id;action_id={$action->getId()}",
                 'label' => $this->_('comment')
             ];
-		}
-		if (Person::isAllowed('tickets', 'assign')) {
+        }
+        if (Person::isAllowed('tickets', 'assign')) {
             $subgroup[] = [
                 'url'   => BASE_URI.'/tickets/assign?ticket_id='.$ticket_id,
                 'label' => $this->_('assign_ticket'),
                 'attrs' => ['data-callback'=>'assign']
             ];
-		}
-		if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+        }
+        if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
     }
 
-    #---
     $subgroup = [];
     if (Person::isAllowed('tickets', 'message')) {
         $subgroup[] = [
@@ -57,8 +54,7 @@ use Application\Models\Department;
     if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
     if ($status === 'open') {
-		#---
-		$subgroup = [];
+        $subgroup = [];
         if (Person::isAllowed('tickets', 'update')) {
             $subgroup[] = [
                 'url'   => BASE_URI.'/tickets/update?ticket_id='.$ticket_id,
@@ -114,14 +110,14 @@ use Application\Models\Department;
             'label' => $this->_('ticket_open')
         ];
     }
-	if (Person::isAllowed('tickets', 'delete')) {
+    if (Person::isAllowed('tickets', 'delete')) {
         $subgroup[] = [
             'url'   => BASE_URI.'/tickets/delete?ticket_id='.$ticket_id,
             'label' => $this->_('delete_ticket')
         ];
-	}
-	if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
+    }
+    if (count($subgroup)) { $links[] = ['subgroup'=>$subgroup]; }
 
-	if (count($links)) {
+    if (count($links)) {
         echo $helper->dropdown($links, $this->_(['action', 'actions', count($links)]), "ticketActions_$ticket_id");
     }
