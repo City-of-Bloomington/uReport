@@ -142,6 +142,7 @@ tr.verified, tr.usedForNotifications {
     .edit   { background-image:url('images/fa-svg/white/pencil.svg'); }
     .delete { background-image:url('images/fa-svg/white/times.svg' ); }
 }
+tr.missing td { background-color: $color-error; }
 
 .pageNavigation          { margin: $size-gutter; }
 .pageNavigation li       { display: inline; margin: $size-gutter; }

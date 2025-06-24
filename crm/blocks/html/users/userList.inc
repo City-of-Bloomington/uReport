@@ -55,8 +55,10 @@ use Application\Templates\Helpers\ButtonLink;
             $department     = $user->getDepartment();
             $departmentName = $department ? self::escape($department->getName()) : '';
             $role           = $this->_(strtolower($user->getRole()));
+            $class          = $user->getExternalIdentity() ? '' : 'class="missing"';
             echo "
-            <tr><td>$username</td>
+            <tr $class>
+                <td>$username</td>
                 <td>$name</td>
                 <td>$departmentName</td>
                 <td>{$user->getAuthenticationMethod()}</td>
