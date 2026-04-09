@@ -3,11 +3,13 @@
  * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../bootstrap.inc'; 
+
 use Application\Models\Search;
 use Application\Models\Ticket;
 use Application\Database;
 
-include '../../bootstrap.inc';
 $search = new Search();
 $delete = $search->solr->createUpdate();
 $delete->addDeleteQuery('*:*');
