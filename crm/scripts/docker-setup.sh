@@ -61,5 +61,8 @@ fi
 # --- Compile CSS/JS assets ---
 ./crm/scripts/compile-assets.sh
 
+# --- Compile translations ---
+./crm/scripts/compile-translations.sh
+
 # --- Start the main app command ---
 exec "$@"
