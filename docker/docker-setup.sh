@@ -59,10 +59,13 @@ else
 fi
 
 # --- Compile CSS/JS assets ---
-./crm/scripts/compile-assets.sh
+./docker/compile-assets.sh
 
 # --- Compile translations ---
-./crm/scripts/compile-translations.sh
+./docker/compile-translations.sh
+
+# --- Copy Apache config ---
+cp ./docker/.htaccess ./crm/public/.htaccess
 
 # --- Start the main app command ---
 exec "$@"
