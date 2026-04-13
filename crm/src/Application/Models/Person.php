@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2021 City of Bloomington, Indiana
+ * @copyright 2009-2025 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -226,17 +226,10 @@ class Person extends ActiveRecord
 			}
 		}
 
-		$method = $this->getAuthenticationMethod();
-		if ($this->getUsername() && $method && $method != 'local') {
-            global $DIRECTORY_CONFIG;
-
-            $class = $DIRECTORY_CONFIG[$method]['classname'];
-			$dir   = new $class($DIRECTORY_CONFIG[$method]);
-			$id    = $dir->identify($this->getUsername());
-			if ($id) {
-                $this->populateFromExternalIdentity($id);
-            }
-		}
+        $id = $this->getExternalIdentity();
+        if ($id) {
+            $this->populateFromExternalIdentity($id);
+        }
 	}
 
 	/**
@@ -268,6 +261,19 @@ class Person extends ActiveRecord
 	//----------------------------------------------------------------
 	// User Authentication
 	//----------------------------------------------------------------
+	public function getExternalIdentity(): ?ExternalIdentity
+    {
+        $method = $this->getAuthenticationMethod();
+        if ($this->getUsername() && $method && $method != 'local') {
+            global $DIRECTORY_CONFIG;
+
+            $class = $DIRECTORY_CONFIG[$method]['classname'];
+            $dir   = new $class($DIRECTORY_CONFIG[$method]);
+            return $dir->identify($this->getUsername());
+        }
+        return null;
+    }
+
 	/**
 	 * Should provide the list of methods supported
 	 *

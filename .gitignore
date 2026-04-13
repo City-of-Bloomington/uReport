@@ -4,6 +4,9 @@ crm/data/templates/*
 crm/data/blocks/*
 crm/data/workers/*
 crm/data/Themes/COB/public/img
+crm/public/css/*.css
+crm/public/css/*.css.map
+crm/public/.htaccess
 config.inc
 site_config.inc
 theme_config.inc

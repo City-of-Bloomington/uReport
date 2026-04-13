@@ -14,6 +14,14 @@ In order to install one of our binary releases, you must have a linux system alr
 
 There are many ways to set up and install your own linux webserver.  Our way is not the only way, though.  It's well worth reading up on all the technologies and deciding what you need for your own hosting.
 
+### Installing with Docker
+The easiest way to set up a development environment is with Docker. We recommend installing Docker for Desktop. Make sure that the commands `docker` and `docker-compose` are added to your system path. Then, in your repo directory:
+
+1. Copy `crm/data/site_config.inc.docker.example` to `crm/data/site_config.inc`.
+2. In the repo directory, run `docker-compose up --build`.
+
+You should see the application running at http://localhost:8080/tickets.
+
 Once you've got hosting sorted out, you can follow the [Wiki instructions](https://github.com/City-of-Bloomington/uReport/wiki/Install) to install uReport on your webserver.
 
 ## Running Tests

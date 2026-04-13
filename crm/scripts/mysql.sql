@@ -253,9 +253,20 @@ create table bookmarks (
 create table geoclusters (
 	id     int     unsigned not null primary key auto_increment,
 	level  tinyint unsigned not null,
-	center point            not null SRID 0, -- Flatspace
+	center point            not null,
 	spatial index(center)
 );
+
+-- Set Flatspace for MySQL 8+
+SET @is_mariadb = (SELECT VERSION() LIKE '%MariaDB%');
+SET @sql = IF(@is_mariadb,
+  'select 1',
+  'alter table geoclusters modify column center point not null SRID 0'
+);
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 create table ticket_geodata (
 	ticket_id    int unsigned not null primary key,

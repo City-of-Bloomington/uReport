@@ -16,7 +16,7 @@
  * You will ned to change the namespace to Site\Classes.  You might also
  * want to change the name of the class to suit your own needs.
  *
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2025 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Site\Classes;
@@ -56,9 +56,7 @@ class Employee implements AuthenticationInterface
 			}
 			return new ExternalIdentity($id);
 		}
-		else {
-			throw new \Exception('ldap/unknownUser');
-		}
+		return null;
 	}
 
 	/**

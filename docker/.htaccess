@@ -1,0 +1,25 @@
+# --------------------------------------------------
+# uReport Dev .htaccess
+# --------------------------------------------------
+
+# Enable URL rewriting
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Base directory
+    RewriteBase /
+
+    # Serve existing files directly
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Route everything else to index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Optional: prevent directory listing
+Options -Indexes
+
+# Optional: serve PHP errors in development
+php_flag display_errors On
+php_value error_reporting 32767
