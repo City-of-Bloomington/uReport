@@ -3,6 +3,7 @@ FROM php:8.3-apache
 # Install system deps
 RUN apt-get update && apt-get install -y \
     unzip \
+    rsync \
     git \
     curl \
     default-mysql-client \
