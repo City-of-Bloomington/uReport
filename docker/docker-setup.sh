@@ -64,8 +64,5 @@ fi
 # --- Compile translations ---
 ./docker/compile-translations.sh
 
-# --- Copy Apache config ---
-cp ./docker/.htaccess ./crm/public/.htaccess
-
 # --- Start the main app command ---
 exec "$@"
