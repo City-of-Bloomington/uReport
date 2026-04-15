@@ -19,7 +19,3 @@
 
 # Optional: prevent directory listing
 Options -Indexes
-
-# Optional: serve PHP errors in development
-php_flag display_errors On
-php_value error_reporting 32767

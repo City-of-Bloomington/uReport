@@ -10,8 +10,8 @@ define('APPLICATION_NAME','CRM');
  * used for the outside world.
  */
 define('BASE_URI' , '');
-define('BASE_HOST', $_SERVER['SERVER_NAME'] ?? $_SERVER['HTTP_HOST'] ?? 'localhost');
-define('BASE_URL' , "http://localhost:8080");
+define('BASE_HOST', 'localhost:8080');
+define('BASE_URL' , 'http://localhost:8080');
 
 /**
  * Specify the theme directory
