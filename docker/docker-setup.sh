@@ -64,5 +64,7 @@ fi
 # --- Compile translations ---
 ./docker/compile-translations.sh
 
+mkdir -p ./crm/data/media/2026/4/15
+cp ./docker/abc123def4567.png ./crm/data/media/2026/4/15/abc123def4567
 # --- Start the main app command ---
 exec "$@"
