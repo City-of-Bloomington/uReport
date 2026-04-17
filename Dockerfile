@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     gettext \
     locales \
+    imagemagick \
     && docker-php-ext-install pdo pdo_mysql mysqli gettext \
     && sed -i 's/^# *en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen \

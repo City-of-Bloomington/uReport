@@ -32,4 +32,11 @@ INSERT INTO department_categories (department_id, category_id) VALUES
 
 -- tickets
 INSERT INTO tickets (id, category_id, description, status)
-VALUES (1, 3, 'Test ticket for Solr indexing', 'open');
+VALUES 
+(1, 3, 'Test ticket for Solr indexing', 'open'),
+(2, 3, 'Test ticket with media attachment', 'open');
+
+-- media. Note that filenames must be 13-digit hexadecimal strings without file extensions.
+INSERT INTO media (id, ticket_id, person_id, filename, internalFilename, mime_type, uploaded)
+VALUES
+(1, 2, 1, 'abc123def4567', 'abc123def4567', 'image/png', '2026-04-15');
