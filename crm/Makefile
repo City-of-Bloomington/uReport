@@ -9,7 +9,7 @@ JAVASCRIPT := $(shell find public -name '*.js' ! -name '*-*.js')
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
 
-default: clean compile package
+default: test clean compile package
 
 clean:
 	rm -Rf ../build
@@ -33,3 +33,6 @@ package:
 
 $(LANGUAGES):
 	cd $@ && msgfmt -cv *.po
+
+test:
+	vendor/bin/phpstan analyse -l 0

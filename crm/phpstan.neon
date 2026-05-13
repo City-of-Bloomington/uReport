@@ -1,0 +1,6 @@
+parameters:
+  bootstrapFiles:
+    - src/Test/bootstrap.php
+  paths:
+    - src/Application
+    - src/Domain
