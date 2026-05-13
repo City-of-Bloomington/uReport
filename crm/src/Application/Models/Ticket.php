@@ -203,9 +203,9 @@ class Ticket extends ActiveRecord
 	public function getState()        { return parent::get('state');      }
 	public function getZip()          { return parent::get('zip');        }
 	public function getStatus()       { return parent::get('status');     }
-	public function getEnteredDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
-	public function getLastModified($f=null, \DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
-	public function getClosedDate  ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
+	public function getEnteredDate (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
+	public function getLastModified(?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
+	public function getClosedDate  (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
 	public function getParent_id()           { return parent::get('parent_id');           }
 	public function getSubstatus_id()        { return parent::get('substatus_id');        }
 	public function getCategory_id()         { return parent::get('category_id');         }
@@ -227,12 +227,12 @@ class Ticket extends ActiveRecord
 	public function getAssignedPerson()   { return parent::getForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id');   }
 	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
 	public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
-    public function getLatitude()
+    public function getLatitude(): ?float
     {
         $l = parent::get('latitude');
         return $l ? (float)$l : null;
     }
-    public function getLongitude()
+    public function getLongitude(): ?float
     {
         $l = parent::get('longitude');
         return $l ? (float)$l : null;
@@ -384,36 +384,28 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Returns the department of the person this ticket is assigned to.
-	 *
-	 * @return Department
 	 */
-	public function getDepartment()
+	public function getDepartment(): ?Department
 	{
 		$person = $this->getAssignedPerson();
 		if ($person && $person->getDepartment_id()) {
 			return $person->getDepartment();
 		}
+		return null;
 	}
 
-
-
-	/**
-	 * @return string
-	 */
-	public function getLatLong()
+	public function getLatLong(): ?string
 	{
 		if ($this->getLatitude() && $this->getLongitude()) {
 			return "{$this->getLatitude()},{$this->getLongitude()}";
 		}
+		return null;
 	}
 
 	/**
 	 * Returns an array of cluster_ids as key=>value
-	 *
-	 * @param int $level
-	 * @return array
 	 */
-	public function getClusterIds()
+	public function getClusterIds(): array
 	{
 		$db = Database::getConnection();
 
@@ -441,22 +433,18 @@ class Ticket extends ActiveRecord
 	 * Returns the profile picture for this issue
 	 *
 	 * Currently the profile picture is the first image that was uploaded
-	 *
-	 * @return Media
 	 */
-	public function getProfileImage()
+	public function getProfileImage(): ?Media
 	{
 		foreach ($this->getMedia() as $media) {
 			if ($media->getMedia_type() == 'image') {
 				return $media;
 			}
 		}
+		return null;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getHistory()
+	public function getHistory(): array
 	{
 		$history = [];
 
@@ -469,20 +457,12 @@ class Ticket extends ActiveRecord
 		return $history;
 	}
 
-
-	/**
-	 * @return string
-	 */
-	public function getURL()
+	public function getURL(): string
 	{
 		return BASE_URL."/tickets/view?ticket_id={$this->getId()}";
 	}
 
-	/**
-	 * @param  Ticket $ticket
-	 * @return bool
-	 */
-	public function permitsMerge(Ticket $ticket)
+	public function permitsMerge(Ticket $ticket): bool
 	{
         // Both tickets need to be open
         if ($this->getStatus() == 'closed' || $ticket->getStatus() == 'closed') { return false; }
@@ -503,8 +483,6 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Marks another ticket as a duplicate of this one
-	 *
-	 * @param Ticket $ticket
 	 */
 	public function mergeFrom(Ticket $ticket)
 	{
@@ -528,10 +506,8 @@ class Ticket extends ActiveRecord
 	 * Preserves any fields that are already set...except...
 	 * We always update the ticket with the address string that
 	 * comes from the AddressService.
-	 *
-	 * @param array $data
 	 */
-	public function setAddressServiceData($data)
+	public function setAddressServiceData(array $data)
 	{
         foreach ($data as $key=>$value) {
             $get = 'get'.ucfirst($key);
@@ -602,10 +578,7 @@ class Ticket extends ActiveRecord
         }
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
         $changed = false;
         $data    = [];
@@ -648,10 +621,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * This function calls save() as needed.  After using this function,
 	 * there's no need to make an additional save() call.
-	 *
-	 * @param array $post
 	 */
-	public function handleAdd($post)
+	public function handleAdd(array $post)
 	{
 		$db = Database::getConnection();
 		$db->getDriver()->getConnection()->beginTransaction();
@@ -721,10 +692,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * This function calls save() as needed.  After using this function,
 	 * there's no need to make an additional save() call.
-	 *
-	 * @param array $post[status=>'', 'substatus_id'=>'', 'notes'=>'']
 	 */
-	public function handleChangeStatus($post)
+	public function handleChangeStatus(array $post)
 	{
         $substatus_id = !empty($post['substatus_id']) ? $post['substatus_id'] : null;
         $this->setStatus($post['status'], $substatus_id);
@@ -762,10 +731,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * This function calls save() as needed.  After using this function,
 	 * there's no need to make an additional save() call.
-	 *
-	 * @param array $post
 	 */
-	public function handleChangeLocation($post)
+	public function handleChangeLocation(array $post)
 	{
         $data['original']['location'] = $this->getLocation();
 
@@ -795,10 +762,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * This function calls save() as needed.  After using this function,
 	 * there's no need to make an additional save() call.
-	 *
-	 * @param array $post
 	 */
-	public function handleChangeCategory($post)
+	public function handleChangeCategory(array $post)
 	{
         $data['original']['category_id'] = $this->getCategory_id();
 
@@ -819,10 +784,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * This function calls save() as needed.  After using this function,
 	 * there's no need to make an additional save() call.
-	 *
-	 * @param array $post
 	 */
-	public function handleResponse($post)
+	public function handleResponse(array $post)
 	{
         $history = new TicketHistory();
         $history->setTicket($this);
@@ -836,19 +799,13 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Checks whether the user is supposed to be allowed to see this ticket
-	 *
-	 * @param Person $person
-	 * @return bool
 	 */
-	public function allowsDisplay(Person $person=null)
+	public function allowsDisplay(?Person $person=null): bool
 	{
 		$category = $this->getCategory_id() ? $this->getCategory() : new Category();
 		return $category->allowsDisplay($person);
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getSlaDays()
 	{
 		$category = $this->getCategory();
@@ -857,10 +814,7 @@ class Ticket extends ActiveRecord
 		}
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getSlaPercentage()
+	public function getSlaPercentage(): ?int
 	{
 		$days = $this->getSlaDays();
 		if ($days) {
@@ -872,31 +826,25 @@ class Ticket extends ActiveRecord
 			$daysPassed = $diff->format('%a');
 			return round($daysPassed/$days*100);
 		}
+		return null;
 	}
 
-	/**
-	 * @param string       $f  Desired date format
-	 * @param DateTimeZone $tz
-	 * @return string          Formatted date string
-	 */
-	public function getExpectedDate($f='c', \DateTimeZone $tz=null)
+	public function getExpectedDate(string $format='c', ?\DateTimeZone $tz=null): ?string
 	{
         $days = $this->getSlaDays();
         if ($days) {
             $date = new \DateTime(parent::get('enteredDate'));
             $date->add(new \DateInterval("P{$days}D"));
             if ($tz) { $date->setTimezone($tz); }
-            return $date->format($f);
+            return $date->format($format);
         }
+        return null;
 	}
 
 	/**
 	 * Returns an array of Tickets that are children of this ticket
-	 *
-	 * @param  bool  $recursive
-	 * @return array
 	 */
-	public function getChildren($recursive=false)
+	public function getChildren(?bool $recursive=false): array
 	{
         $tickets = [];
         $table   = new TicketTable();
@@ -910,11 +858,8 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Returns an array of all the people involved with this ticket
-	 *
-	 * @param  bool  $recursive
-	 * @return array             An array of Person objects
 	 */
-	public function getPeople($recursive=false)
+	public function getPeople(?bool $recursive=false): array
 	{
         $people = [];
         $add    = function (Ticket $t) use (&$people) {
@@ -941,10 +886,8 @@ class Ticket extends ActiveRecord
 
 	/**
 	 * Returns everyone involved with this ticket who has an email address
-	 *
-	 * @return array An array of Person objects
 	 */
-	public function getNotificationPeople()
+	public function getNotificationPeople(): array
 	{
         $people = [];
         $sql = "select distinct p.* from (

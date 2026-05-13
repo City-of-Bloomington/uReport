@@ -4,7 +4,7 @@
  *
  * The template collects all the blocks from the controller
  *
- * @copyright 2006-2017 City of Bloomington, Indiana
+ * @copyright 2006-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
@@ -19,12 +19,7 @@ class Template extends View
 	private $assets  = array();
 	private $helpers = array();
 
-	/**
-	 * @param string $filename
-	 * @param string $outputFormat
-	 * @param array $vars
-	 */
-	public function __construct($filename='default',$outputFormat='html',array $vars=null)
+	public function __construct(string $filename='default', string $outputFormat='html', ?array $vars=null)
 	{
 		parent::__construct($vars);
 
@@ -43,10 +38,7 @@ class Template extends View
 		}
 	}
 
-	/**
-	 * @param string $filename
-	 */
-	public function setFilename($filename)
+	public function setFilename(string $filename)
 	{
 		if ($this->theme
                && is_file($this->theme."/templates/{$this->outputFormat}/$filename.inc")) {
@@ -62,10 +54,7 @@ class Template extends View
 		$this->filename = $filename;
 	}
 
-	/**
-	 * @param string $format
-	 */
-	public function setOutputFormat($format)
+	public function setOutputFormat(string $format)
 	{
 		$format = preg_replace('/[^a-zA-Z]/','',$format);
 
@@ -88,10 +77,8 @@ class Template extends View
 	 *
 	 * Template files must include a call to $this->includeBlocks(),
 	 * when they're ready for content
-	 *
-	 * @return string
 	 */
-	public function render()
+	public function render(): string
 	{
 		ob_start();
 		include "{$this->path}/{$this->outputFormat}/{$this->filename}.inc";
@@ -122,11 +109,8 @@ class Template extends View
 	 * $this->blocks['panel-one'][] = "left sidebar block one";
 	 * $this->blocks['panel-one'][] = "left sidebar block two";
 	 * $this->blocks['panel-two'][] = "right sidebar block one";
-	 *
-	 * @param string $panel
-	 * @return string
 	 */
-	private function includeBlocks($target=null)
+	private function includeBlocks(?string $target=null): string
 	{
 		ob_start();
 		if ($target) {
@@ -172,11 +156,8 @@ class Template extends View
 
 	/**
 	 * Adds data to an asset, making sure to not duplicate existing data
-	 *
-	 * @param string $name The name of the asset
-	 * @param mixed $data
 	 */
-	public function addToAsset($name,$data)
+	public function addToAsset(string $name, $data)
 	{
 		if (!isset($this->assets[$name]) || !is_array($this->assets[$name])) {
 			$this->assets[$name] = array();
@@ -189,7 +170,7 @@ class Template extends View
 	/**
 	 * Loads and returns a helper object
 	 */
-	public function getHelper($functionName)
+	public function getHelper(string $functionName)
 	{
 		if (!array_key_exists($functionName, $this->helpers)) {
 			$class = ucfirst($functionName);
@@ -214,10 +195,8 @@ class Template extends View
 	 * Supports THEME overriding.
 	 * Specify a relative path starting from /templates/
 	 * $file paths should not start with a slash.
-	 *
-	 * @param string $file
 	 */
-	public function _include($file)
+	public function _include(string $file)
 	{
 		if ($this->theme
             && is_file($this->theme."/templates/{$this->outputFormat}/$file")) {

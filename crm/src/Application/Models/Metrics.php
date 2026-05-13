@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -15,7 +15,7 @@ class Metrics
      * @param  int $numDays
      * @return int
      */
-    public static function onTimePercentage($category_id, $numDays, \DateTime $effectiveDate=null)
+    public static function onTimePercentage($category_id, $numDays, ?\DateTime $effectiveDate=null): ?int
     {
         $category_id = (int)$category_id;
         $numDays     = (int)$numDays;
@@ -42,7 +42,8 @@ class Metrics
                 ) x";
         $result = $db->query($sql)->execute([$category_id, $scopeStart, $scopeEnd]);
         if (count($result)) {
-            return $result->current();
+            return (int)$result->current();
         }
+        return null;
     }
 }

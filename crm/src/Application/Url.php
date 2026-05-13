@@ -7,7 +7,7 @@
  * $url->somevar = $somevar;
  * echo $url->getURL();
  *
- * @copyright 2006-2017 City of Bloomington, Indiana.
+ * @copyright 2006-2026 City of Bloomington, Indiana.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
@@ -24,11 +24,8 @@ class Url
 
 	/**
 	 * Performs an HTTP GET and returns response string
-	 *
-	 * @param string $url
-	 * @return string
 	 */
-	public static function get($url)
+	public static function get(string $url): ?string
 	{
 		$request = curl_init($url);
 		curl_setopt($request, CURLOPT_RETURNTRANSFER,true);
@@ -43,18 +40,15 @@ class Url
 	/**
 	 * If you are behind a proxy, you can pass in the hostname to use.
 	 * Otherwise it will just use $_SERVER[SERVER_NAME] of the localhost
-	 *
-	 * @param  string $hostname Optional hostname to use
-	 * @return string
 	 */
-	public static function current_url($hostname=null)
+	public static function current_url(?string $hostname=null): string
 	{
         if (!$hostname) { $hostname = $_SERVER['SERVER_NAME']; }
 
         return "$_SERVER[REQUEST_SCHEME]://$hostname$_SERVER[REQUEST_URI]";
 	}
 
-	public function __construct($url)
+	public function __construct(string $url)
 	{
 		$script = urldecode($url);
 
@@ -77,9 +71,9 @@ class Url
 
 	/**
 	 * Returns just the base portion of the url
-	 * @return string
 	 */
-	public function getScript() {
+	public function getScript(): string
+	{
         $url = "{$this->getScheme()}://{$this->host}";
         if ($this->port) { $url.= ":{$this->port}"; }
         $url.= $this->path;
@@ -88,18 +82,16 @@ class Url
 
 	/**
 	 * Returns the full, properly formatted and escaped URL
-	 * @return string
 	 */
-	public function __toString() {
+	public function __toString(): string
+	{
 		return $this->getUrl();
 	}
 
 	/**
 	 * Returns the full, properly formatted and escaped URL
-	 *
-	 * @return string
 	 */
-	public function getUrl()
+	public function getUrl(): string
 	{
 		$url = $this->getScript();
 
@@ -115,9 +107,9 @@ class Url
 
 	/**
 	 * Returns just the protocol (http://, https://) portion
-	 * @return string
 	 */
-	public function getScheme() {
+	public function getScheme(): string
+	{
 		if (!$this->scheme) {
 			$this->scheme = 'http';
 		}
@@ -126,12 +118,11 @@ class Url
 
 	/**
 	 * Sets the protocol for the URL (http, https)
-	 * @param string $protocol
 	 */
-	public function setScheme($string)
+	public function setScheme(string $protocol)
 	{
-		$string = preg_replace('|://|', '', $string);
-		$this->scheme = $string;
+		$protocol = preg_replace('|://|', '', $protocol);
+		$this->scheme = $protocol;
 	}
 
 	/**
@@ -142,7 +133,7 @@ class Url
 		$this->parameters = $this->array_filter_recursive($this->parameters);
 	}
 
-	private function array_filter_recursive(array $input)
+	private function array_filter_recursive(array $input): array
 	{
 		foreach ($input as &$value) {
 			if (is_array($value)) {
@@ -152,39 +143,25 @@ class Url
 		return array_filter($input);
 	}
 
-	/**
-	 * @param string $key
-	 * @return string
-	 */
-	public function __get($key)
+	public function __get(string $key): ?string
 	{
 		if (isset($this->parameters[$key])) {
 			return $this->parameters[$key];
 		}
+		return null;
 	}
 
-	/**
-	 * @param string $key
-	 * @param string $value
-	 */
-	public function __set($key,$value)
+	public function __set(string $key, $value)
 	{
 		$this->parameters[$key] = $value;
 	}
 
-	/**
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function __isset($key)
+	public function __isset(string $key): bool
 	{
 		return isset($this->parameters[$key]);
 	}
 
-	/**
-	 * @param string $key
-	 */
-	public function __unset($key)
+	public function __unset(string $key)
 	{
 		unset($this->parameters[$key]);
 	}

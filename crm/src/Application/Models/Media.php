@@ -5,7 +5,7 @@
  * Files will be stored as /data/media/YYYY/MM/DD/$unique_id
  * User provided filenames will be stored in the database
  *
- * @copyright 2006-2016 City of Bloomington, Indiana
+ * @copyright 2006-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -144,7 +144,7 @@ class Media extends ActiveRecord
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getPerson_id()  { return parent::get('person_id');  }
-	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
+	public function getUploaded(?string $format=null, ?\DateTimeZone $tz=null) { return parent::getDateData('uploaded', $format, $tz); }
 
 	public function getTicket() { return   parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
 	public function getPerson() { return   parent::getForeignKeyObject(__namespace__.'\Person', 'person_id'); }
@@ -155,7 +155,7 @@ class Media extends ActiveRecord
 	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o);  }
 	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 
-	public function getModified($f=null, \DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
+	public function getModified(?string $format=null, ?\DateTimeZone $tz=null) { return $this->getUploaded($format, $tz); }
 
 	//----------------------------------------------------------------
 	// Custom Functions

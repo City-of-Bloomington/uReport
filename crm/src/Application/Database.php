@@ -37,7 +37,7 @@ class Database
                     'password' => $DATABASES[$db]['pass']
 				]);
 			}
-			catch (Exception $e) { die($e->getMessage()); }
+			catch (\Exception $e) { die($e->getMessage()); }
 		}
 		return self::$connections[$db];
 	}

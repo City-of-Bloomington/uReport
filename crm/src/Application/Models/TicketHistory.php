@@ -103,8 +103,8 @@ class TicketHistory extends ActiveRecord
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getActionPerson_id()    { return parent::get('actionPerson_id');    }
 	public function getAction_id()          { return parent::get('action_id');          }
-	public function getEnteredDate($f=null, \DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
-	public function getActionDate ($f=null, \DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
+	public function getEnteredDate(?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('enteredDate', $f, $tz); }
+	public function getActionDate (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('actionDate',  $f, $tz); }
 	public function getEnteredByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id'); }
 	public function getActionPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'actionPerson_id');    }
 	public function getAction()          { return parent::getForeignKeyObject(__namespace__.'\Action', 'action_id');          }
@@ -120,7 +120,7 @@ class TicketHistory extends ActiveRecord
 	public function setEnteredByPerson(Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'enteredByPerson_id', $p);  }
 	public function setActionPerson   (Person $p) { parent::setForeignKeyObject(__namespace__.'\Person', 'actionPerson_id',    $p);  }
 	public function setAction         (Action $o) { parent::setForeignKeyObject(__namespace__.'\Action', 'action_id',          $o);  }
-	public function setData(array $data=null) { parent::set('data', json_encode($data)); }
+	public function setData(?array $data=null) { parent::set('data', json_encode($data)); }
 
 	public function getTicket_id() { return parent::get('ticket_id');          }
 	public function getTicket()    { return parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
@@ -145,11 +145,8 @@ class TicketHistory extends ActiveRecord
 	//----------------------------------------------------------------
 	/**
 	 * Returns the parsed description
-	 *
-	 * @param Template $template  The template being used for output formatting
-	 * @return string
 	 */
-	public function getDescription(Template $template)
+	public function getDescription(Template $template): ?string
 	{
 		$action = $this->getAction();
 		if ($action) {
@@ -158,6 +155,7 @@ class TicketHistory extends ActiveRecord
 				$template
 			);
 		}
+		return null;
 	}
 
 	/**
@@ -170,12 +168,8 @@ class TicketHistory extends ActiveRecord
 	 * We to be careful and only give out peoples' names to authorized users
 	 * Make sure to call this function by sending in the user to
 	 * whom you're displaying the information.
-	 *
-	 * @param string   $message
-	 * @param Template $template  The template being used for output formatting
-	 * @return string
 	 */
-	public function renderVariables($message, Template $template)
+	public function renderVariables(string $message, Template $template): string
 	{
         $placeholders = [
             'enteredByPerson'=> $this->getEnteredByPerson_id() ? $this->getEnteredByPerson()->anonymizeCitizenName($template) : $template->_('anonymous'),

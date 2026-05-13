@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2009-2025 City of Bloomington, Indiana
+ * @copyright 2009-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -24,10 +24,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Returns the matching Person object or null if not found
-	 *
-	 * @return Person
 	 */
-	public static function findByUsername(string $username)
+	public static function findByUsername(string $username): ?Person
 	{
         $db = Database::getConnection();
         $sql = 'select * from people where username=?';
@@ -36,6 +34,7 @@ class Person extends ActiveRecord
         if (count($result)) {
             return new Person($result->current());
         }
+        return null;
 	}
 
 	/**
@@ -311,6 +310,7 @@ class Person extends ActiveRecord
 					return $auth->authenticate($this->getUsername(), $password);
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -318,12 +318,8 @@ class Person extends ActiveRecord
 	 *
 	 * This is implemented by checking against a Laminas Acl object
 	 * The Laminas Acl should be created in bootstrap.inc
-	 *
-	 * @param string $resource
-	 * @param string $action
-	 * @return boolean
 	 */
-	public static function isAllowed($resource, $action=null)
+	public static function isAllowed(string $resource, ?string $action=null): bool
 	{
 		global $ACL;
 		$role = 'Anonymous';
@@ -336,9 +332,6 @@ class Person extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return PhoneList
-	 */
 	public function getPhones()
 	{
 		if ($this->getId()) {
@@ -348,9 +341,6 @@ class Person extends ActiveRecord
 		return array();
 	}
 
-	/**
-	 * @return EmailList
-	 */
 	public function getEmails()
 	{
 		if ($this->getId()) {
@@ -360,18 +350,12 @@ class Person extends ActiveRecord
 		return array();
 	}
 
-	/**
-	 * @return EmailList
-	 */
 	public function getNotificationEmails()
 	{
         $table = new EmailTable();
 		return $table->find( ['person_id'=>$this->getId(), 'usedForNotifications'=>1] );
 	}
 
-	/**
-	 * @return AddressList
-	 */
 	public function getAddresses()
 	{
 		if ($this->getId()) {
@@ -381,18 +365,11 @@ class Person extends ActiveRecord
 		return array();
 	}
 
-
-	/**
-	 * @return string
-	 */
-	public function getFullname()
+	public function getFullname(): string
 	{
-		if ($this->getFirstname() || $this->getLastname()) {
-			return "{$this->getFirstname()} {$this->getLastname()}";
-		}
-		else {
-			return $this->getOrganization();
-		}
+		return ($this->getFirstname() || $this->getLastname())
+			? "{$this->getFirstname()} {$this->getLastname()}"
+			: $this->getOrganization();
 	}
 
 	/**
@@ -406,22 +383,19 @@ class Person extends ActiveRecord
             : $t->_('anonymous');
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getURL()
+	public function getURL(): ?string
 	{
 		if ($this->getId()) {
 			return BASE_URL."/people/view?person_id={$this->getId()}";
 		}
+		return null;
 	}
 
 	/**
 	 * @param string $personField The field in Ticket that has this person embedded
 	 * @param array $fields Additional fields to filter the ticketList
-	 * @return TicketList
 	 */
-	public function getTickets($personFieldname, $fields=null)
+	public function getTickets(string $personFieldname, ?array $fields=null)
 	{
 		if ($this->getId()) {
 			$field = $personFieldname.'Person_id';
@@ -439,10 +413,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Returns true if this person's ID is associated with any fields in the ticket records
-	 *
-	 * @return boolean
 	 */
-	public function hasTickets()
+	public function hasTickets(): bool
 	{
 		$id = (int)$this->getId();
 		if ($id) {
@@ -466,14 +438,10 @@ class Person extends ActiveRecord
 			$result = $db->createStatement($sql)->execute();
 			return $result->count() ? true : false;
 		}
+		return false;
 	}
 
-    /**
-     * @param string $message
-     * @param string $subject
-     * @param string $replyTo
-     */
-    public function sendNotification($message, $subject=null, $replyTo=null)
+    public function sendNotification(string $message, ?string $subject=null, ?string $replyTo=null)
     {
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (!$subject) {
@@ -506,12 +474,8 @@ class Person extends ActiveRecord
 	 *
 	 * This is primarily used to populate autocomplete lists for search forms
 	 * Make sure to keep this function as fast as possible
-	 *
-	 * @param string $fieldname
-	 * @param string $query Text to match in the $fieldname
-	 * @return array
 	 */
-	public static function getDistinct($fieldname, $query=null)
+	public static function getDistinct(string $fieldname, ?string $query=null): array
 	{
 		$fieldname = trim($fieldname);
 		$db = Database::getConnection();
@@ -617,7 +581,7 @@ class Person extends ActiveRecord
 
 				$db->query('delete from people where id=?')->execute([$person->getId()]);
 			}
-			catch (Exception $e) {
+			catch (\Exception $e) {
 				$db->getDriver()->getConnection()->rollback();
 				throw($e);
 			}

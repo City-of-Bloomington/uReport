@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2016 City of Bloomington, Indiana
+ * @copyright 2006-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
@@ -16,7 +16,7 @@ abstract class View
 	/**
 	 * Configures the gettext translations
 	 */
-	public function __construct(array $vars=null)
+	public function __construct(?array $vars=null)
 	{
         if (defined('THEME')) {
             $dir = SITE_HOME.'/Themes/'.THEME;

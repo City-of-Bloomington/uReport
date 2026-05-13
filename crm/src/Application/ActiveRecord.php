@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2025 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
@@ -15,6 +15,7 @@ abstract class ActiveRecord
     const MYSQL_TIME_FORMAT     = 'H:i:s';
     const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
+    abstract public function getId();
     abstract public function validate();
 
     /**
@@ -58,23 +59,14 @@ abstract class ActiveRecord
         }
     }
 
-    /**
-     * Returns any field stored in $data
-     *
-     * @param string $fieldname
-     */
-    protected function get($fieldname)
+    protected function get(string $fieldname)
     {
-        if (isset($this->data[$fieldname])) {
+        if ( isset($this->data[$fieldname])) {
             return $this->data[$fieldname];
         }
     }
 
-    /**
-     * @param string $fieldname
-     * @param string $value
-     */
-    protected function set($fieldname, $value)
+    protected function set(string $fieldname, string $value)
     {
         if ($value) {
             $value = trim($value);
@@ -88,13 +80,8 @@ abstract class ActiveRecord
      * Format is specified using PHP's date() syntax
      * http://www.php.net/manual/en/function.date.php
      * If no format is given, the database's raw data is returned
-     *
-     * @param string $field
-     * @param string $format
-     * @param DateTimeZone $timezone
-     * @return string
      */
-    protected function getDateData($dateField, $format=null, \DateTimeZone $timezone=null)
+    protected function getDateData(string $dateField, ?string $format=null, ?\DateTimeZone $timezone=null): ?string
     {
         if (isset($this->data[$dateField])) {
             if ($format) {
@@ -106,6 +93,7 @@ abstract class ActiveRecord
                 return $this->data[$dateField];
             }
         }
+        return null;
     }
 
     /**
@@ -115,13 +103,8 @@ abstract class ActiveRecord
      * If we cannot parse the string using DATETIME_FORMAT, we will
      * fall back to trying something strtotime() understands
      * http://www.php.net/manual/en/function.strtotime.php
-     *
-     * @param string $dateField
-     * @param string $date
-     * @param string $format
-     * @param string $databaseFormat
      */
-    protected function setDateData($dateField, $date, $format=DATETIME_FORMAT, $databaseFormat=self::MYSQL_DATETIME_FORMAT)
+    protected function setDateData(string $dateField, string $date, string $format=DATETIME_FORMAT, string $databaseFormat=self::MYSQL_DATETIME_FORMAT)
     {
         if ($date) {
             $date = trim($date);
@@ -146,13 +129,8 @@ abstract class ActiveRecord
      * If we cannot parse the string using $format, we will
      * fall back to trying something strtotime() understands
      * http://www.php.net/manual/en/function.strtotime.php
-     *
-     * @param string $date
-     * @param string $format
-     * @throws Exception
-     * @return DateTime
      */
-    public static function parseDate($date, $format=DATETIME_FORMAT)
+    public static function parseDate(string $date, string $format=DATETIME_FORMAT): \DateTime
     {
         $d = \DateTime::createFromFormat($format, $date);
         if (!$d) {
@@ -166,11 +144,8 @@ abstract class ActiveRecord
      *
      * Will cache the object in a protected variable to avoid multiple database
      * lookups. Make sure to declare a protected variable matching the class
-     *
-     * @param string $class Fully namespaced classname
-     * @param string $field
      */
-    protected function getForeignKeyObject($class, $field)
+    protected function getForeignKeyObject(string $class, string $field)
     {
         $var = preg_replace('/_id$/', '', $field);
         if (!$this->$var && isset($this->data[$field])) {
@@ -184,12 +159,8 @@ abstract class ActiveRecord
      *
      * Loads the object record for the foreign key and caches
      * the object in a private variable
-     *
-     * @param string $class Fully namespaced classname
-     * @param string $field Name of field to set
-     * @param string $id The value to set
      */
-    protected function setForeignKeyField($class, $field, $id)
+    protected function setForeignKeyField(string $class, string $field, string $id)
     {
         $var = preg_replace('/_id$/', '', $field);
 
@@ -214,7 +185,7 @@ abstract class ActiveRecord
      * @param string $field Name of field to set
      * @param Object $object Value to set
      */
-    protected function setForeignKeyObject($class, $field, $object)
+    protected function setForeignKeyObject(string $class, string $field, $object)
     {
         if ($object instanceof $class) {
             $var = preg_replace('/_id$/', '', $field);
@@ -228,10 +199,8 @@ abstract class ActiveRecord
 
     /**
      * Returns whether the value can be an ID for a record
-     *
-     * return @bool
      */
-    public static function isId($id)
+    public static function isId($id): bool
     {
         return ((is_int($id) && $id>0) || (is_string($id) && ctype_digit($id)));
     }

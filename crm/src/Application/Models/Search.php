@@ -475,5 +475,6 @@ class Search
 				return $value;
 			}
 		}
+		return null;
 	}
 }

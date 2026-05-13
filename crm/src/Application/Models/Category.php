@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -125,7 +125,7 @@ class Category extends ActiveRecord
 	public function getDepartment()         { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id'        ); }
 	public function getDefaultPerson()      { return parent::getForeignKeyObject(__namespace__.'\Person',        'defaultPerson_id'     ); }
 	public function getCategoryGroup()      { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'     ); }
-	public function getLastModified($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
+	public function getLastModified(?string $format=null, ?\DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
@@ -168,10 +168,7 @@ class Category extends ActiveRecord
         parent::set('slaDays', $i);
     }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
         $fields = [
             'name', 'description', 'department_id', 'defaultPerson_id', 'categoryGroup_id',
@@ -191,12 +188,9 @@ class Category extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return bool
-	 */
-	public function autoCloseIsActive() { return $this->getAutoCloseIsActive() ? true : false; }
-	public function isActive()          { return $this->getActive()            ? true : false; }
-	public function isFeatured()        { return $this->getFeatured()          ? true : false; }
+	public function autoCloseIsActive(): bool { return $this->getAutoCloseIsActive() ? true : false; }
+	public function isActive()         : bool { return $this->getActive()            ? true : false; }
+	public function isFeatured()       : bool { return $this->getFeatured()          ? true : false; }
 
 	/**
 	 * Event handler called from Ticket::handleAdd()
@@ -226,10 +220,8 @@ class Category extends ActiveRecord
 	 * Anything without a type will be rendered as type='text'
 	 * If type is select, radio, or checkbox, you must provide values
 	 *		for the user to choose from
-	 *
-	 * @return array
 	 */
-	public function getCustomFields()
+	public function getCustomFields(): ?array
 	{
         $f = parent::get('customFields');
         return $f ? json_decode($f) : null;
@@ -270,11 +262,7 @@ class Category extends ActiveRecord
 		}
 	}
 
-	/**
-	 * @param Person $person
-	 * @return bool
-	 */
-	public function allowsDisplay(Person $person=null)
+	public function allowsDisplay(?Person $person=null): bool
 	{
 		if (!$person) {
 			return $this->getDisplayPermissionLevel()==='anonymous';
@@ -288,11 +276,7 @@ class Category extends ActiveRecord
 		return true;
 	}
 
-	/**
-	 * @param Person $person
-	 * @return bool
-	 */
-	public function allowsPosting(Person $person=null)
+	public function allowsPosting(?Person $person=null): bool
 	{
 		if (!$person) {
 			return $this->getPostingPermissionLevel()==='anonymous';
@@ -308,12 +292,8 @@ class Category extends ActiveRecord
 
 	/**
 	 * Returns the most recent lastModified date from all categories
-	 *
-	 * @param string $format
-	 * @param DateTimeZone $timezone
-	 * @return string
 	 */
-	public static function getGlobalLastModifiedDate($format=null, \DateTimeZone $timezone=null)
+	public static function getGlobalLastModifiedDate(?string $format=null, ?\DateTimeZone $timezone=null): string
 	{
 		$db = Database::getConnection();
 		$result = $db->query('select max(lastModified) as lastModified from categories')->execute();
@@ -331,10 +311,8 @@ class Category extends ActiveRecord
 
 	/**
 	 * Returns an array of templates, with the template ID as the key
-	 *
-	 * @return array An array of ResponseTemplate objects
 	 */
-	public function getResponseTemplates()
+	public function getResponseTemplates(): array
 	{
         $templates = [];
         $table = new ResponseTemplateTable();
@@ -343,11 +321,7 @@ class Category extends ActiveRecord
         return $templates;
 	}
 
-	/**
-	 * @param  Action           $action
-	 * @return ResponseTemplate
-	 */
-	public function responseTemplateForAction(Action $action)
+	public function responseTemplateForAction(Action $action): ?ResponseTemplate
 	{
         $table = new ResponseTemplateTable();
         $list = $table->find(['category_id'=>$this->getId(), 'action_id'=>$action->getId()]);
@@ -364,12 +338,13 @@ class Category extends ActiveRecord
                 return $response;
             }
         }
+        return null;
 	}
 }
 
 class JSONException extends \Exception
 {
-	public function __construct($message, $code=0, \Exception $previous=null)
+	public function __construct($message, $code=0, ?\Exception $previous=null)
 	{
 		switch ($message) {
 			case JSON_ERROR_NONE:
