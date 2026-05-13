@@ -7,12 +7,10 @@ crm/data/Themes/COB/public/img
 crm/public/css/*.css
 crm/public/css/*.css.map
 crm/public/.htaccess
+site_config.php
 config.inc
 site_config.inc
 theme_config.inc
-crm/scripts/backup.cnf
-crm/scripts/migration/0.0-1.0/calltrack/3_tickets.php
-crm/scripts/migration/0.0-1.0/calltrack/migrationConfig.inc
 build
 dist
 *.mo
