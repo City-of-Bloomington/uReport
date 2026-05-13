@@ -117,13 +117,6 @@ $SOLR = [
 //define('ADDRESS_SERVICE',     'Site\Classes\MasterAddress');
 //define('ADDRESS_SERVICE_URL', 'http://localhost/master_address');
 
-
-/**
- * Rental addresses have additional information we can look up
- * Owner information is being provided from this service
- */
-//define('RENTAL_SERVICE','http://localhost/rentpro/RentService');
-
 /**
  * Some default values for Tickets in the system
  */

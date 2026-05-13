@@ -117,14 +117,6 @@ define('ADDRESS_SERVICE',     '{{ ureport_address_service.class }}');
 define('ADDRESS_SERVICE_URL', '{{ ureport_address_service.url   }}');
 {% endif %}
 
-{% if ureport_rental_service %}
-/**
- * Rental addresses have additional information we can look up
- * Owner information is being provided from this service
- */
-define('RENTAL_SERVICE','{{ ureport_rental_service }}');
-{% endif %}
-
 /**
  * Some default values for Tickets in the system
  */
