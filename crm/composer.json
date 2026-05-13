@@ -1,7 +1,7 @@
 {
     "require": {
-        "php": ">=7.2",
-        "graylog2/gelf-php":               "~1",
+        "php": ">=8.5",
+        "graylog2/gelf-php":               "@stable",
         "jumbojett/openid-connect-php":    "@stable",
         "solarium/solarium":               "@stable",
         "symfony/event-dispatcher":        "@stable",
@@ -11,17 +11,14 @@
         "laminas/laminas-permissions-acl": "@stable"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable"
+        "phpunit/phpunit": "@stable",
+        "phpstan/phpstan": "@stable"
     },
     "autoload": {
         "psr-4": {
             "Application\\": "src/Application",
-            "Domain\\":      "src/Domain"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Test\\": "src/Test"
+            "Domain\\":      "src/Domain",
+            "Test\\":        "src/Test"
         }
     }
 }
