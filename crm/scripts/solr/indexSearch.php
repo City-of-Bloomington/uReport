@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../bootstrap.inc'; 
+require_once __DIR__ . '/../../bootstrap.php';
 
 use Application\Models\Search;
 use Application\Models\Ticket;

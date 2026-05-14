@@ -18,7 +18,10 @@ class AccountController extends Controller
 		$this->template->blocks['panel-one'][] = new Block('account/myAccount.inc');
 	}
 
-	private function redirectToErrorUrl(\Exception $e)
+	/**
+	 * @return never
+	 */
+	private function redirectToErrorUrl(\Exception $e): void
 	{
 		$_SESSION['errorMessages'][] = $e;
 		header('Location: '.BASE_URL.'/account');

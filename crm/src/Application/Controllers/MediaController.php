@@ -55,16 +55,18 @@ class MediaController extends Controller
         $ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		if (isset($_FILES['attachment'])) {
+			$media = new Media();
+			$media->setTicket($ticket);
+
+			$history = new TicketHistory();
+			$history->setTicket($media->getTicket());
+			$history->setAction(new Action(Action::UPLOADED_MEDIA));
+			$history->setData(['media_id'=>$media->getId()]);
+
 			try {
-				$media = new Media();
-				$media->setTicket($ticket);
 				$media->setFile($_FILES['attachment']);
 				$media->save();
 
-				$history = new TicketHistory();
-				$history->setTicket($media->getTicket());
-				$history->setAction(new Action(Action::UPLOADED_MEDIA));
-				$history->setData(['media_id'=>$media->getId()]);
 				$history->save();
 			}
 			catch (\Exception $e) {

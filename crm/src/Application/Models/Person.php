@@ -189,10 +189,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Updates fields that are not associated with authentication
-	 *
-	 * @param array $post
 	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$fields = array(
 			'firstname', 'middlename', 'lastname', 'organization'
@@ -486,6 +484,9 @@ class Person extends ActiveRecord
 		}
 		elseif ($fieldname == 'email') {
 			$sql = "select distinct email from peopleEmails where email like ?";
+		}
+		else {
+			return [];
 		}
 		$result = $db->createStatement($sql)->execute(["$query%"]);
 		$o = [];

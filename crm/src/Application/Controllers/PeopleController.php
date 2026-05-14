@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -18,7 +18,10 @@ use Application\Url;
 
 class PeopleController extends Controller
 {
-	private function redirectToErrorUrl(\Exception $e)
+	/**
+	 * @return never
+	 */
+	private function redirectToErrorUrl(\Exception $e): void
 	{
 		$_SESSION['errorMessages'][] = $e;
 		header('Location: '.BASE_URL.'/people');
@@ -170,7 +173,7 @@ class PeopleController extends Controller
 		}
 		else {
 			$person = new Person();
-			if (isset($_GET)) { $person->handleUpdate($_GET); }
+			$person->handleUpdate($_GET);
 		}
 
 		if (isset($_POST['firstname'])) {

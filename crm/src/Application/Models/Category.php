@@ -344,7 +344,7 @@ class Category extends ActiveRecord
 
 class JSONException extends \Exception
 {
-	public function __construct($message, $code=0, ?\Exception $previous=null)
+	public function __construct($message)
 	{
 		switch ($message) {
 			case JSON_ERROR_NONE:
@@ -367,7 +367,6 @@ class JSONException extends \Exception
 			break;
 			default:
 				$this->message = 'Unknown JSON error';
-			break;
 		}
 	}
 }

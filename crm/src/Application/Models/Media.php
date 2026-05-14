@@ -133,7 +133,9 @@ class Media extends ActiveRecord
 	 */
 	public function delete()
 	{
-		unlink(SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		$file = SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
+		if (is_file($file)) { unlink($file); }
+
 		parent::delete();
 	}
 	//----------------------------------------------------------------
@@ -192,15 +194,12 @@ class Media extends ActiveRecord
 
 		// Find out the mime type for this file
 		$this->data['mime_type'] = mime_content_type($tempFile);
-		if (array_key_exists($this->data['mime_type'], self::$mime_types)) {
-            $extension = self::$mime_types[$this->data['mime_type']];
-		}
-		else {
+		if (!array_key_exists($this->data['mime_type'], self::$mime_types)) {
 			throw new \Exception('media/invalidFileType');
 		}
 
 		// Clean all bad characters from the filename
-		$filename = $this->createValidFilename($filename, $extension);
+		$filename = $this->createValidFilename($filename);
 		$this->data['filename'] = $filename;
 
 		// Move the file where it's supposed to go
@@ -293,22 +292,20 @@ class Media extends ActiveRecord
 
 	/**
 	 * Cleans a filename of any characters that might cause problems on filesystems
-	 *
-	 * @return string
 	 */
-	public static function createValidFilename($string)
+	public static function createValidFilename(string $filename): string
 	{
 		// No bad characters
-		$string = preg_replace('/[^A-Za-z0-9_\.\s]/','',$string);
+		$filename = preg_replace('/[^A-Za-z0-9_\.\s]/','', $filename);
 
 		// Convert spaces to underscores
-		$string = preg_replace('/\s+/','_',$string);
+		$filename = preg_replace('/\s+/','_', $filename);
 
 		// Lower case any file extension
-		if (preg_match('/(^.*\.)([^\.]+)$/',$string,$matches)) {
-			$string = $matches[1].strtolower($matches[2]);
+		if (preg_match('/(^.*\.)([^\.]+)$/', $filename, $matches)) {
+			$filename = $matches[1].strtolower($matches[2]);
 		}
 
-		return $string;
+		return $filename;
 	}
 }
