@@ -15,13 +15,14 @@ abstract class ActiveRecord
     const MYSQL_TIME_FORMAT     = 'H:i:s';
     const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-    abstract public function getId();
     abstract public function validate();
+
+    public function getId(): ?int { return $this->data['id'] ?? null; }
 
     /**
      * Callback from TableGateway
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         $this->data = $data;
     }

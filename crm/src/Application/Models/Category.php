@@ -65,11 +65,8 @@ class Category extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -80,7 +77,8 @@ class Category extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -107,7 +105,6 @@ class Category extends ActiveRecord
 	// Getters and Setters
 	//----------------------------------------------------------------
 	public function __toString()                { return parent::get('name');                   }
-	public function getId()                     { return parent::get('id');                     }
 	public function getName()                   { return parent::get('name');                   }
 	public function getDepartment_id()          { return parent::get('department_id');          }
 	public function getDefaultPerson_id()       { return parent::get('defaultPerson_id');       }
@@ -196,7 +193,6 @@ class Category extends ActiveRecord
 	 * Event handler called from Ticket::handleAdd()
 	 *
 	 * Handles the autoClose and autoResponse sending
-	 * @param Ticket $ticket
 	 */
 	public function onTicketAdd(Ticket &$ticket)
 	{
@@ -238,10 +234,8 @@ class Category extends ActiveRecord
 	 * Anything without a type will be rendered as type='text'
 	 * If type is select, radio, or checkbox, you must provide values
 	 *		for the user to choose from
-	 *
-	 * @param string $json
 	 */
-	public function setCustomFields($json=null)
+	public function setCustomFields(?string $json=null)
 	{
 		$json = trim($json);
 		$customFields = '';

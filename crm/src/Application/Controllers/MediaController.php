@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -33,9 +33,6 @@ class MediaController extends Controller
 	{
 	}
 
-	/**
-	 * @param GET media_id
-	 */
 	public function delete()
 	{
 		$media = new Media($_GET['media_id']);
@@ -46,10 +43,6 @@ class MediaController extends Controller
 		exit();
 	}
 
-	/**
-	 * @param POST issue_id
-	 * @param FILES attachment
-	 */
 	public function upload()
 	{
         $ticket = $this->loadTicket($_REQUEST['ticket_id']);
@@ -92,9 +85,6 @@ class MediaController extends Controller
 
 	/**
 	 * Create and cache a resized image file
-	 *
-	 * @param REQUEST media_id
-	 * @param REQUEST size
 	 */
 	public function resize()
 	{

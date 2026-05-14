@@ -88,11 +88,8 @@ class Person extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -101,7 +98,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -155,7 +153,6 @@ class Person extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()            { return parent::get('id');           }
 	public function getFirstname()     { return parent::get('firstname');    }
 	public function getMiddlename()    { return parent::get('middlename');   }
 	public function getLastname()      { return parent::get('lastname');     }
@@ -390,8 +387,8 @@ class Person extends ActiveRecord
 	}
 
 	/**
-	 * @param string $personField The field in Ticket that has this person embedded
-	 * @param array $fields Additional fields to filter the ticketList
+	 * @param string $personFieldname The field in Ticket that has this person embedded
+	 * @param array  $fields          Additional fields to filter the ticketList
 	 */
 	public function getTickets(string $personFieldname, ?array $fields=null)
 	{

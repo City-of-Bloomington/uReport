@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -38,9 +38,6 @@ class Open311Controller extends Controller
 		$this->template->blocks[] = new Block('open311/discovery.inc');
 	}
 
-	/**
-	 * @param REQUEST service_code
-	 */
 	public function services()
 	{
         global $OBSOLETE_API_KEYS;
@@ -112,9 +109,6 @@ class Open311Controller extends Controller
         return [$line1, $line2, $line3];
 	}
 
-	/**
-	 * @param REQUEST service_request_id
-	 */
 	public function requests()
 	{
 		if (!empty($_REQUEST['service_code'])) {

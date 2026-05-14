@@ -116,7 +116,8 @@ class Media extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -141,7 +142,6 @@ class Media extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('id');         }
 	public function getTicket_id()  { return parent::get('ticket_id');  }
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
@@ -176,9 +176,9 @@ class Media extends ActiveRecord
 	 * This function does the bulk of the work for setting all the required information.
 	 * It tries to read as much meta-data about the file as possible
 	 *
-	 * @param array|string Either a $_FILES array or a path to a file
+	 * @param array|string $file   Either a $_FILES array or a path to a file
 	 */
-	public function setFile($file)
+	public function setFile(array|string $file)
 	{
 		// Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;

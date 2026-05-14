@@ -35,4 +35,4 @@ $(LANGUAGES):
 	cd $@ && msgfmt -cv *.po
 
 test:
-	vendor/bin/phpstan analyse -l 0
+	vendor/bin/phpstan analyse -l 2

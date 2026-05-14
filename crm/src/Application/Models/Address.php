@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -79,7 +79,6 @@ class Address extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()      { return parent::get('id');      }
 	public function getAddress() { return parent::get('address'); }
 	public function getCity()    { return parent::get('city');    }
 	public function getState()   { return parent::get('state');   }

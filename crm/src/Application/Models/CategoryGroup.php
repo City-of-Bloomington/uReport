@@ -52,7 +52,8 @@ class CategoryGroup extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -68,7 +69,6 @@ class CategoryGroup extends ActiveRecord
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()			{ return parent::get('id');       }
 	public function getName()		{ return parent::get('name');     }
 	public function getOrdering()   { return parent::get('ordering'); }
 	public function __toString()	{ return parent::get('name');     }
@@ -76,10 +76,7 @@ class CategoryGroup extends ActiveRecord
 	public function setName    ($s) { parent::set('name',     $s); }
 	public function setOrdering($s)	{ parent::set('ordering', $s); }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$this->setName    ($post['name']);
 		$this->setOrdering($post['ordering']);
@@ -87,9 +84,6 @@ class CategoryGroup extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return Laminas\Db\ResultSet
-	 */
 	public function getCategories()
 	{
 		$table = new CategoryTable();

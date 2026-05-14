@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -29,9 +29,6 @@ class ClientsController extends Controller
 	 * Choosing a person involves going through a whole person finding process
 	 * at a different url.  Once the user has chosen a new person, they will
 	 * return here, passing in the person_id they have chosen
-	 *
-	 * @param REQUEST client_id
-	 * @param REQUEST person_id  The new contactPerson
 	 */
 	public function update()
 	{

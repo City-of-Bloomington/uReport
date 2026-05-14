@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2021 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -19,10 +19,7 @@ class TicketHistory extends ActiveRecord
 	protected $ticket;
 	protected $action;
 
-	/**
-	 * @param array $data
-	 */
-	public function __construct($id=null)
+	public function __construct(array|string|null $id=null)
 	{
 		if ($id) {
 			if (is_array($id)) {
@@ -66,9 +63,7 @@ class TicketHistory extends ActiveRecord
     }
 
 	/**
-	 * Throws an exception if anything's wrong
-	 *
-	 * @throws Exception $e
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -98,7 +93,6 @@ class TicketHistory extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()                 { return parent::get('id');                 }
 	public function getNotes()              { return parent::get('notes');              }
 	public function getEnteredByPerson_id() { return parent::get('enteredByPerson_id'); }
 	public function getActionPerson_id()    { return parent::get('actionPerson_id');    }

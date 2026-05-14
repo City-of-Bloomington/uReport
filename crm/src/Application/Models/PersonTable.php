@@ -43,13 +43,8 @@ class PersonTable extends TableGateway
 
 	/**
 	 * Populates the collection, using strict matching of the requested fields
-	 *
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function find($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
+	public function find(?array $fields=null, ?string $order="people.lastname, people.firstname", bool $paginated=false, ?int $limit=null)
 	{
 		$this->select = new Select('people');
 		if ($fields) {
@@ -96,13 +91,8 @@ class PersonTable extends TableGateway
 
 	/**
 	 * Populates the collection, using regular expressions for matching
-	 *
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param int $limit
-	 * @param string|array $groupBy Multi-column group by should be given as an array
 	 */
-	public function search($fields=null, $order="people.lastname, people.firstname", $paginated=false, $limit=null)
+	public function search(?array $fields=null, ?string $order="people.lastname, people.firstname", bool $paginated=false, ?int $limit=null)
 	{
 		$this->select = new Select('people');
 		$search = [];

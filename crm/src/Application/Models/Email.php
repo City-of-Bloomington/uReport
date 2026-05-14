@@ -112,7 +112,6 @@ class Email extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()    { return parent::get('id');    }
 	public function getEmail() { return parent::get('email'); }
 	public function getLabel() { return parent::get('label'); }
 

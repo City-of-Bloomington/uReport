@@ -77,7 +77,6 @@ class Phone extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()       { return parent::get('id');       }
 	public function getNumber()   { return parent::get('number');   }
 	public function getLabel()    { return parent::get('label');    }
 

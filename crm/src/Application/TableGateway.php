@@ -25,7 +25,7 @@ abstract class TableGateway
 	 * You must pass in the fully namespaced classname.  We do not assume
 	 * any particular namespace for the models.
 	 */
-	public function __construct($table, $class)
+	public function __construct(string $table, string $class)
 	{
 		$this->resultSetPrototype = new ResultSet();
 		$this->resultSetPrototype->setArrayObjectPrototype(new $class());
@@ -47,13 +47,8 @@ abstract class TableGateway
 	 * You generally want to override this implementation with your own
 	 * However, this basic implementation will allow you to get up and
 	 * running quicker.
-	 *
-	 * @param array $fields Key value pairs to select on
-	 * @param string $order The default ordering to use for select
-	 * @param boolean $paginated If set to true, will return a paginator
-	 * @param int $limit
 	 */
-	public function find($fields=null, $order=null, $paginated=false, $limit=null)
+	public function find(?array $fields=null, ?string $order=null, bool $paginated=false, ?int $limit=null)
 	{
 		$select = new Select($this->tableGateway->getTable());
 		if ($fields) {
@@ -71,11 +66,7 @@ abstract class TableGateway
 		return $this->performSelect($select, $order, $paginated, $limit);
 	}
 
-	/**
-	 * @param  Select    $select
-	 * @return ResultSet
-	 */
-	public function performSelect(Select $select, $order, $paginated=false, $limit=null)
+	public function performSelect(Select $select, string $order, bool $paginated=false, ?int $limit=null)
 	{
 		if ($order) { $select->order($order); }
 		if ($limit) { $select->limit($limit); }
@@ -90,10 +81,6 @@ abstract class TableGateway
 		}
 	}
 
-	/**
-	 * @param  ResultSet
-	 * @return array
-	 */
 	public static function hydrateResults(ResultSet $results): array
 	{
         $output = [];
@@ -109,10 +96,5 @@ abstract class TableGateway
 	public function getSqlForSelect(Select $select): string
 	{
 		return $select->getSqlString($this->tableGateway->getAdapter()->getPlatform());
-	}
-
-	public static function getSqlForResult(ResultSet $result): string
-	{
-		return $result->getDataSource()->getResource()->queryString;
 	}
 }

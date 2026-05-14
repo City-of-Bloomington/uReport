@@ -1,6 +1,11 @@
 parameters:
   bootstrapFiles:
     - src/Test/bootstrap.php
+  universalObjectCratesClasses:
+    - Application\Block
+    - Application\Template
+    - Application\View
+    - Application\Url
   paths:
     - src/Application
     - src/Domain

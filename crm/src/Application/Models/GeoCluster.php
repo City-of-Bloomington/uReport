@@ -81,7 +81,6 @@ class GeoCluster extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()        { return   (int)parent::get('id'       ); }
 	public function getLevel()     { return   (int)parent::get('level'    ); }
 	public function getLatitude()  { return (float)parent::get('latitude' ); }
 	public function getLongitude() { return (float)parent::get('longitude'); }

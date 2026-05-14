@@ -72,7 +72,8 @@ abstract class View
 	 * @param string $key
 	 * @return boolean
 	 */
-	public function __isset($key) {
+	public function __isset(string $key): bool
+    {
 		return array_key_exists($key,$this->vars);
 	}
 
@@ -82,12 +83,8 @@ abstract class View
 	 * There are more bad characters than htmlspecialchars deals with.  We just want
 	 * to add in some other characters to clean.  While here, we might as well
 	 * have it trim out the whitespace too.
-	 *
-	 * @param array|string $input
-	 * @param CONSTANT $quotes Optional, the desired constant to use for the htmlspecidalchars call
-	 * @return string
 	 */
-	public static function escape($input, $quotes=ENT_QUOTES)
+	public static function escape(array|string $input, int $quotes=ENT_QUOTES): string
 	{
 		if (is_array($input)) {
 			foreach ($input as $key=>$value) {
@@ -103,11 +100,8 @@ abstract class View
 
 	/**
 	 * Reverses the escaping done by View::escape()
-	 *
-	 * @param array|string $input
-	 * @return string
 	 */
-	public static function unescape($input)
+	public static function unescape(array|string $input): string
 	{
         if (is_array($input)) {
             foreach ($input as $key=>$value) {
@@ -128,12 +122,8 @@ abstract class View
      *
      * For entries in the PO that are plurals, you must pass msgid as an array
      * $this->translate( ['msgid', 'msgid_plural', $num] )
-     *
-     * @param mixed $msgid String or Array
-     * @param string $domain Alternate domain
-     * @return string
      */
-    public function translate($msgid, $domain=null)
+    public function translate(array|string $msgid, ?string $domain=null): string
     {
         if (is_array($msgid)) {
             return $domain
@@ -150,7 +140,7 @@ abstract class View
     /**
      * Alias of $this->translate()
      */
-    public function _($msgid, $domain=null)
+    public function _(array|string $msgid, ?string $domain=null): string
     {
         return $this->translate($msgid, $domain);
     }
@@ -161,11 +151,8 @@ abstract class View
 
     /**
      * Converts the PHP date format string syntax into something for humans
-     *
-     * @param string $format
-     * @return string
      */
-    public static function translateDateString($format)
+    public static function translateDateString(string $format): string
     {
         return str_replace(
             self::$supportedDateFormatStrings,
@@ -174,7 +161,7 @@ abstract class View
         );
     }
 
-    public static function convertDateFormat($format, $syntax)
+    public static function convertDateFormat(string $format, string $syntax): ?string
     {
         $languages = [
             'mysql'  => ['%m', '%c', '%d', '%e', '%Y', '%H', '%l', '%i', '%s', '%p'],
@@ -188,6 +175,7 @@ abstract class View
                 $format
             );
         }
+        return null;
     }
 
     /**
@@ -197,16 +185,13 @@ abstract class View
      * generate function on it.
      *
      * @see https://github.com/auraphp/Aura.Router/tree/2.x
-     * @param string $route_name
-     * @param array $params
-     * @return string
      */
-    public static function generateUri($route_name, $params=[])
+    public static function generateUri(string $route_name, array $params=[]): string
     {
         global $ROUTES;
         return $ROUTES->generate($route_name, $params);
     }
-    public static function generateUrl($route_name, $params=[])
+    public static function generateUrl(string $route_name, array $params=[]): string
     {
         return "$_SERVER[REQUEST_SCHEME]://$_SERVER[SERVER_NAME]".self::generateUri($route_name, $params);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -134,9 +134,6 @@ class TicketsController extends Controller
 		return $query;
 	}
 
-	/**
-	 * @param GET ticket_id
-	 */
 	public function view()
 	{
         if (!empty($_GET['ticket_id'])) {
@@ -174,8 +171,6 @@ class TicketsController extends Controller
 
 	/**
 	 * Displays thumbnails for all image media attached to tickets
-	 *
-	 * @param GET ticket_id
 	 */
 	public function thumbnails()
 	{
@@ -188,9 +183,6 @@ class TicketsController extends Controller
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function add()
 	{
 		$ticket = new Ticket();
@@ -295,10 +287,6 @@ class TicketsController extends Controller
 		$this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST confirm
-	 */
 	public function delete()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
@@ -319,10 +307,6 @@ class TicketsController extends Controller
 		);
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param GET department_id
-	 */
 	public function assign()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
@@ -374,9 +358,6 @@ class TicketsController extends Controller
 		);
 	}
 
-	/**
-	 * @param POST ticket_id
-	 */
 	public function recordAction()
 	{
         if (!empty($_REQUEST['ticket_id'])) {
@@ -418,10 +399,7 @@ class TicketsController extends Controller
 		}
 	}
 
-	/**
-	 * @param string $status
-	 */
-	private function changeStatus($status)
+	private function changeStatus(string $status)
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
 		$ticket->setStatus($status);
@@ -445,10 +423,6 @@ class TicketsController extends Controller
 	public function close() { $this->template->title = $this->template->_('ticket_close'); $this->changeStatus('closed'); }
 	public function open () { $this->template->title = $this->template->_('ticket_open' ); $this->changeStatus('open'  ); }
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST location
-	 */
 	public function changeLocation()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
@@ -471,10 +445,6 @@ class TicketsController extends Controller
 		];
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST category_id
-	 */
 	public function changeCategory()
 	{
 		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
@@ -502,8 +472,6 @@ class TicketsController extends Controller
 	 * This creates a history entry that a staff person communicated
 	 * with someone.  Thist action does not actually send any messages.
 	 * This is only the logging action.
-	 *
-	 * @param REQUEST ticket_id
 	 */
 	public function respond()
 	{
@@ -569,9 +537,6 @@ class TicketsController extends Controller
 
 	/**
 	 * Copies all data from one ticket to another, then deletes the empty ticket
-	 *
-	 * @param GET ticket_id_a
-	 * @param GET ticket_id_b
 	 */
 	public function merge()
 	{
@@ -601,14 +566,11 @@ class TicketsController extends Controller
 		$this->template->blocks['right'][] = new Block('ticketHistory/info.inc', ['history'=>$child->getHistory(), 'disableComments'=>true]);
 	}
 
-	/**
-	 * @param Ticket $ticket
-	 */
 	private function redirectToTicketView(Ticket $ticket)
 	{
 		if (isset($_REQUEST['callback'])) {
 			$return_url = new Url(BASE_URL.'/callback');
-			$return_url->callback = $_REQUEST['callback'];
+			$return_url->__set('callback', $_REQUEST['callback']);
 		}
 		else {
 			$return_url = $ticket->getURL();

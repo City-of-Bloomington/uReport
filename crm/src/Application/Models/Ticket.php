@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2021 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -196,7 +196,6 @@ class Ticket extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()           { return parent::get('id');         }
 	public function getAddressId()    { return parent::get('addressId');  }
 	public function getLocation()     { return parent::get('location');   }
 	public function getCity()         { return parent::get('city');       }
@@ -295,11 +294,8 @@ class Ticket extends ActiveRecord
 	 *
 	 * The new status will delete the current substatus if
 	 * the current substatus is not valid for the new status
-	 *
-	 * @param string $string
-	 * @param int $substatus_id
 	 */
-	public function setStatus($status, $substatus_id=null)
+	public function setStatus(string $status, ?int $substatus_id=null)
 	{
 		$oldStatus      = $this->getStatus();
 		$oldSubStatusId = $this->getSubstatus_id();
@@ -420,9 +416,6 @@ class Ticket extends ActiveRecord
 		return $row;
 	}
 
-	/**
-	 * @return Laminas\Db\ResultSet
-	 */
 	public function getMedia()
 	{
 		$table = new MediaTable();
@@ -695,7 +688,7 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleChangeStatus(array $post)
 	{
-        $substatus_id = !empty($post['substatus_id']) ? $post['substatus_id'] : null;
+        $substatus_id = !empty($post['substatus_id']) ? (int)$post['substatus_id'] : null;
         $this->setStatus($post['status'], $substatus_id);
 
         // add a record to ticket history

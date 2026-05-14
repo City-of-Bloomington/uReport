@@ -65,7 +65,6 @@ class ResponseTemplate extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
-	public function getId         () { return parent::get('id'         ); }
 	public function getTemplate   () { return parent::get('template'   ); }
 	public function getReplyEmail () { return parent::get('replyEmail' ); }
 	public function getCategory_id() { return parent::get('category_id'); }

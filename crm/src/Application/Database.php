@@ -15,12 +15,7 @@ class Database
 {
 	private static $connections = [];
 
-	/**
-	 * @param boolean $reconnect If true, drops the connection and reconnects
-	 * @param string $db         Label for database configuration
-	 * @return resource
-	 */
-	public static function getConnection($reconnect=false, $db='default')
+	public static function getConnection(bool $reconnect=false, string $db='default'): Adapter
 	{
         global $DATABASES;
 

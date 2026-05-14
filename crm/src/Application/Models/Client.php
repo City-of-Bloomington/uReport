@@ -75,11 +75,8 @@ class Client extends ActiveRecord
 	/**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -89,7 +86,7 @@ class Client extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -108,7 +105,6 @@ class Client extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getURL()              { return parent::get('url');              }
 	public function getApi_key()          { return parent::get('api_key');          }
@@ -125,11 +121,7 @@ class Client extends ActiveRecord
 	public function setContactPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'contactPerson_id', $o);  }
 	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id', $o);  }
 
-
-	/**
-	 * @param array $post
-	 */
-	 public function handleUpdate($post)
+	 public function handleUpdate(array $post)
 	 {
 		$this->setName            ($post['name']);
 		$this->setURL             ($post['url']);

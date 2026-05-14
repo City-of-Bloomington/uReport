@@ -69,7 +69,8 @@ class Department extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -100,7 +101,6 @@ class Department extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function __toString()          { return parent::get('name');             }
-	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getDefaultPerson_id() { return parent::get('defaultPerson_id'); }
 	public function getDefaultPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'defaultPerson_id'); }

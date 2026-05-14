@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -67,7 +67,8 @@ class Action extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -86,7 +87,6 @@ class Action extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function __toString()     { return parent::get('name');        }
-	public function getId()          { return parent::get('id');          }
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
 	public function getType()        { return parent::get('type');        }
@@ -98,19 +98,13 @@ class Action extends ActiveRecord
 	public function setTemplate   ($s) { parent::set('template',    $s); }
 	public function setReplyEmail ($s) { parent::set('replyEmail',  $s); }
 
-	/**
-	 * @param string $string
-	 */
-	public function setType($string)
+	public function setType(string $string)
 	{
 		$string = trim($string);
 		if (in_array($string, self::$types)) { $this->data['type'] = $string; }
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
         if ($this->getType() !== 'system') {
             $this->setName($post['name']);

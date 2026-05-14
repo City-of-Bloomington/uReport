@@ -241,15 +241,7 @@ class Search
                 'facetset' => ['facet' => self::$facetFields]
             ]
         ]);
-        try {
-            $result = $this->solr->select($select);
-        }
-        catch (ExceptionInterface $e) {
-            $json = json_decode($e->getBody(), true);
-            if ($json) { throw new \Exception($json['error']['msg']); }
-            else throw($e);
-        }
-        return $result;
+		return $this->solr->select($select);
 	}
 
 	public function facetValues(string $field): array
@@ -303,8 +295,6 @@ class Search
 
 	/**
 	 * Indexes a single record in Solr
-	 *
-	 * @param mixed $record
 	 */
 	public function add(Ticket $ticket)
 	{
@@ -346,23 +336,23 @@ class Search
 			// enteredDate, latitude, longitude
 		];
 
-        $document = $update->createDocument();
-        $document->recordKey  = "t_{$ticket->getId()}";
-        $document->recordType = 'ticket';
-
-        $document->enteredDate = $ticket->getEnteredDate(Search::DATE_FORMAT);
+        /** @var Document $document */
+		$document = $update->createDocument();
+		$document->setField('recordKey',  "t_{$ticket->getId()}");
+		$document->setField('recordType', 'ticket');
+		$document->setField('enteredDate', $ticket->getEnteredDate(Search::DATE_FORMAT));
         if ($ticket->getClosedDate()) {
-            $document->closedDate = $ticket->getClosedDate(Search::DATE_FORMAT);
+            $document->setField('closedDate', $ticket->getClosedDate(Search::DATE_FORMAT));
         }
 
         if ($ticket->getLatLong()) {
-            $document->coordinates = $ticket->getLatLong();
+            $document->setField('coordinates', $ticket->getLatLong());
         }
         if ($ticket->getCategory()) {
             $c = $ticket->getCategory();
-            $document->displayPermissionLevel = $c->getDisplayPermissionLevel();
+            $document->setField('displayPermissionLevel', $c->getDisplayPermissionLevel());
             if ($c->getSlaDays()) {
-                $document->slaDays = $c->getSlaDays();
+                $document->setField('slaDays', $c->getSlaDays());
             }
         }
 
@@ -370,19 +360,19 @@ class Search
         foreach ($ticketFields as $f) {
             $get = 'get'.ucfirst($f);
             if ($ticket->$get()) {
-                $document->$f = $ticket->$get();
+                $document->setField($f, $ticket->$get());
                 // For the _id fields, also add a string value
                 // ie. category_id=12, category='Graffiti'
                 if (substr($f, -3) == '_id') {
                     $o = substr($f, 0, -3);
-                    $document->$o = self::sortableString($ticket, $f);
+                    $document->setField($o, self::sortableString($ticket, $f));
                 }
             }
         }
         $person = $ticket->getAssignedPerson();
         if ($person && $person->getDepartment_id()) {
-            $document->department_id = $person->getDepartment_id();
-            $document->department    = self::sortableString($person, 'department_id');
+            $document->setField('department_id', $person->getDepartment_id());
+            $document->setField('department',    self::sortableString($person, 'department_id'));
         }
 
         // Index extra fields provided by the AddressService
@@ -390,7 +380,7 @@ class Search
         if ($additionalFields) {
             foreach ($additionalFields as $key=>$value) {
                 if ($value) {
-                    $document->$key = $value;
+                    $document->setField($key, $value);
                 }
             }
         }
@@ -398,11 +388,11 @@ class Search
         if ($ticket->getLatitude() && $ticket->getLongitude()) {
             $latitude  = $ticket->getLatitude();
             $longitude = $ticket->getLongitude();
-            $document->latitude  = $latitude;
-            $document->longitude = $longitude;
+            $document->setField('latitude',  $latitude);
+            $document->setField('longitude', $longitude);
 
             foreach ($ticket->getClusterIds() as $key=>$value) {
-                $document->$key = $value;
+                $document->setField($key, $value);
             }
         }
 

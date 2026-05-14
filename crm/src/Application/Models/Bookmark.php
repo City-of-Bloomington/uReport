@@ -80,7 +80,6 @@ class Bookmark extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('id');          }
 	public function getType()       { return parent::get('type');        }
 	public function getRequestUri() { return parent::get('requestUri');  }
 	public function getPerson_id()  { return parent::get('person_id');   }

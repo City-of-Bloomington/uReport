@@ -34,8 +34,6 @@ class PeopleController extends Controller
 	 * The user can come here from somewhere they need a person
 	 * Choosing a person should send them back where they came from,
 	 * with the chosen person appended to the url
-	 *
-	 * @param GET return_url
 	 */
 	public function index()
 	{
@@ -79,10 +77,6 @@ class PeopleController extends Controller
 		}
 	}
 
-	/**
-	 * @param GET person_id
-	 * @param GET disableLinks
-	 */
 	public function view()
 	{
 		$this->template->setFilename('people');
@@ -123,15 +117,9 @@ class PeopleController extends Controller
 	/**
 	 * Adds a ticketList about the Person to the template
 	 *
-	 * @param string $panel
-	 * @param string $listType (enteredBy, assigned, reportedBy)
-	 * @param string $title
-	 * @param Person $person
-	 * @param bool $disableLinks
-	 *
 	 * @return int The number of tickets displayed in the list
 	 */
-	private function addTicketList($panel, $listType, $title, Person $person, $disableLinks=false, $disableButtons=false)
+	private function addTicketList(string $panel, string $listType, string $title, Person $person, bool $disableLinks=false, bool $disableButtons=false): int
 	{
 		$field = $listType.'Person_id';
 
@@ -241,10 +229,8 @@ class PeopleController extends Controller
 	 * Helper function for handling foreign key object deletions
 	 *
 	 * Email, Phone, and Address are all handled exactly the same way.
-	 *
-	 * @param string $item
 	 */
-	private function deleteLinkedItem($item)
+	private function deleteLinkedItem(string $item)
 	{
 		$class = 'Application\\Models\\'.ucfirst($item);
 
@@ -275,7 +261,7 @@ class PeopleController extends Controller
 	 * @param string $requiredField The field to look for in the POST which
 	 *								determines whether this item has been posted
 	 */
-	private function updateLinkedItem($item, $requiredField)
+	private function updateLinkedItem(string $item, string $requiredField)
 	{
 		$this->template->setFilename('people');
 		$basename = ucfirst($item);
@@ -379,9 +365,6 @@ class PeopleController extends Controller
 	 * Displays the list of distinct values for a given field and term
 	 *
 	 * Used primarily to support autocomplete on the person search form
-	 *
-	 * @param GET field
-	 * @param GET term
 	 */
 	public function distinct()
 	{
