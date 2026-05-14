@@ -96,7 +96,7 @@ class Category extends ActiveRecord
 
 		if ($this->displayPermissionLevelHasChanged || $this->slaDaysHasChanged) {
 			// Spawn a background process to reindex the search engine
-			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.SITE_HOME.' '.$this->getId();
+			$cmd = 'php '.APPLICATION_HOME.'/scripts/solr/indexCategory.php '.SITE_HOME.' '.$this->getId();
 			if ($this->slaDaysHasChanged) { $cmd .= ' open'; }
 
 			shell_exec("nohup $cmd > /dev/null 2>&1 &");
