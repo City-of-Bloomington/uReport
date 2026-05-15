@@ -1,9 +1,8 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
-namespace Application\Models;
 namespace Application\Models;
 
 use Application\ActiveRecord;
@@ -11,7 +10,7 @@ use Application\Database;
 
 class ResponseTemplate extends ActiveRecord
 {
-	protected $tablename = 'category_action_responses';
+	public const TABLENAME = 'category_action_responses';
 
 	protected $category;
 	protected $action;
@@ -25,8 +24,6 @@ class ResponseTemplate extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -35,11 +32,10 @@ class ResponseTemplate extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = 'select * from category_action_responses where id=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('responseTemplates/unknown');

@@ -7,43 +7,43 @@ namespace Application;
 
 abstract class ActiveRecord
 {
-    protected $tablename;
-    protected $data = array();
-
-    const MYSQL_DATE_FORMAT     = 'Y-m-d';
-    const MYSQL_TIME_FORMAT     = 'H:i:s';
-    const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const TABLENAME             = '';
+    public const MYSQL_DATE_FORMAT     = 'Y-m-d';
+    public const MYSQL_TIME_FORMAT     = 'H:i:s';
+    public const MYSQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     abstract public function validate();
 
-    public function getId(): ?int { return $this->data['id'] ?? null; }
-
-    /**
-     * Callback from TableGateway
-     */
+    public $data = [];
     public function exchangeArray(array $data)
     {
         $this->data = $data;
     }
 
-    /**
-     * Writes the database back to the database
-     */
+    public function getId(): ?int { return $this->data['id'] ?? null; }
+
     protected function save()
     {
         $this->validate();
-        $db  = Database::getConnection();
-        $sql = new Sql($db, $this->tablename);
+        $pdo   = Database::getConnection();
+        $table = static::TABLENAME;
+
+        $c = [];
+        foreach ($this->data as $k=>$v) {
+            if ($k != 'id') { $c[] = "$k=:$k"; }
+        }
+        $set = 'set '.implode(',', $c);
+
         if ($this->getId()) {
-            $update = $sql->update()
-                ->set($this->data)
-                ->where(array('id'=>$this->getId()));
-            $sql->prepareStatementForSqlObject($update)->execute();
+            $update = $pdo->prepare("update $table $set where id=:id");
+            $update->execute($this->data);
         }
         else {
-            $insert = $sql->insert()->values($this->data);
-            $sql->prepareStatementForSqlObject($insert)->execute();
-            $this->data['id'] = $db->getDriver()->getLastGeneratedValue();
+            unset($this->data['id']);
+
+            $insert = $pdo->prepare("insert $table $set");
+            $insert->execute($this->data);
+            $this->data['id'] = $pdo->lastInsertId();
         }
     }
 
@@ -53,9 +53,10 @@ abstract class ActiveRecord
     protected function delete()
     {
         if ($this->getId()) {
-            $sql = new Sql(Database::getConnection(), $this->tablename);
-            $delete = $sql->delete()->where(['id'=>$this->getId()]);
-            $sql->prepareStatementForSqlObject($delete)->execute();
+            $pdo    = Database::getConnection();
+            $table  = static::TABLENAME;
+            $delete = $pdo->prepare("delete from $table where id=:id");
+            $delete->execute(['id'=>$this->getId()]);
         }
     }
 

@@ -5,9 +5,6 @@
  */
 namespace Application\Models;
 
-use Application\ActiveRecord;
-use Application\Database;
-
 class Image extends Media
 {
 	public function __construct(Media $media)

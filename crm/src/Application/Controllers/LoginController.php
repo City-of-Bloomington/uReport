@@ -105,7 +105,7 @@ class LoginController extends Controller
                 header("Location: {$this->return_url}");
                 exit();
             }
-            throw new \Exception(Person::ERROR_UNKNOWN_PERSON);
+            throw new \Exception('people/unknown');
         }
         catch (\Exception $e) {
             $_SESSION['errorMessages'][] = $e;

@@ -2,7 +2,7 @@
 /**
  * Represents a saved URL for a user
  *
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -12,7 +12,7 @@ use Application\Database;
 
 class Bookmark extends ActiveRecord
 {
-	protected $tablename = 'bookmarks';
+	public const TABLENAME = 'bookmarks';
     protected $person;
 
 	/**
@@ -24,8 +24,6 @@ class Bookmark extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -35,11 +33,9 @@ class Bookmark extends ActiveRecord
 			}
 			else {
 				$sql = 'select * from bookmarks where id=?';
-
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('bookmarks/unknown');
@@ -105,10 +101,7 @@ class Bookmark extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return string
-	 */
-	public function getFullUrl()
+	public function getFullUrl(): string
 	{
 		$protocol = $_SERVER['SERVER_PORT']==443 ? 'https://' : 'http://';
 		return $protocol.$_SERVER['SERVER_NAME'].$this->getRequestUri();

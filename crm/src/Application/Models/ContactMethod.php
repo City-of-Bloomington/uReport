@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
 class ContactMethod extends ActiveRecord
 {
-	protected $tablename = 'contactMethods';
+	public const TABLENAME = 'contactMethods';
+
 	/**
 	 * Populates the object with data
 	 *
@@ -20,8 +21,6 @@ class ContactMethod extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -30,13 +29,12 @@ class ContactMethod extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from contactMethods where id=?'
 					: 'select * from contactMethods where name=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('contactMethods/unknown');
@@ -64,10 +62,7 @@ class ContactMethod extends ActiveRecord
 
 	public function setName($s) { parent::set('name', $s); }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$this->setName($post['name']);
 	}

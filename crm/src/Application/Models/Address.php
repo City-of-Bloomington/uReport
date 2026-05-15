@@ -10,7 +10,7 @@ use Application\Database;
 
 class Address extends ActiveRecord
 {
-	protected $tablename = 'peopleAddresses';
+	public const TABLENAME = 'peopleAddresses';
 	protected $person;
 	public static $LABELS = array('Home', 'Business', 'Rental');
 
@@ -33,11 +33,10 @@ class Address extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = 'select * from peopleAddresses where id=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('addresses/unknown');

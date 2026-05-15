@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright 2013-2020 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
-use Laminas\Db\Sql\Sql;
 
 class GeoCluster extends ActiveRecord
 {
     public const CLUSTER_UNIT_SIZE = 0.0001; // 10 Meters (very roughly)
-	protected $tablename = 'geoclusters';
+	public const TABLENAME         = 'geoclusters';
+
 	/**
 	 * Populates the object with data
 	 *
@@ -21,8 +22,6 @@ class GeoCluster extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -31,12 +30,11 @@ class GeoCluster extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = "select id, level, ST_X(center) as longitude, ST_Y(center) as latitude
 						from geoclusters where id=?";
-                $result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
                 if (count($result)) {
-                    $this->exchangeArray($result->current());
+                    $this->exchangeArray($result[0]);
                 }
 				else {
 					throw new \Exception('geoclusters/unknown');
@@ -62,19 +60,20 @@ class GeoCluster extends ActiveRecord
 		 // We cannot use the default ActiveRecord save,
 		 // because the center point must use mysql spatial functions
 		$this->validate();
-		$db    = Database::getConnection();
 		$point = ($this->getLatitude() && $this->getLongitude())
                     ? "ST_PointFromText('Point({$this->getLatitude()} {$this->getLongitude()})', 0)"
                     : 'null';
 
 		if ($this->getId()) {
 			$sql = "update geoclusters set level=?, center=$point where id=?";
-			$db->query($sql)->execute([$this->getLevel(), $this->getId()]);
+			Database::execute($sql, [$this->getLevel(), $this->getId()]);
 		}
 		else {
+			$pdo = Database::getConnection();
 			$sql = "insert geoclusters set level=?, center=$point";
-			$db->query($sql)->execute([$this->getLevel()]);
-			$this->data['id'] = $db->getDriver()->getLastGeneratedValue();
+			$ins = $pdo->prepare($sql);
+			$ins->execute([$this->getLevel()]);
+            $this->data['id'] = $pdo->lastInsertId();
 		}
 	}
 
@@ -96,18 +95,19 @@ class GeoCluster extends ActiveRecord
 	{
 		if ($ticket->getId()) {
 			$db = Database::getConnection();
-			$db->query('delete from ticket_geodata where ticket_id=?')->execute([$ticket->getId()]);
+			Database::query('delete from ticket_geodata where ticket_id=?', [$ticket->getId()]);
 
 			if ($ticket->getLatitude() && $ticket->getLongitude()) {
+				$c = ['ticket_id=:ticket_id'];
 				$data['ticket_id'] = $ticket->getId();
-				for ($i=0; $i<=6; $i++) {
-					$data["cluster_id_$i"] = self::assignClusterIdForLevel($ticket, $i);
-				}
 
-				$sql = new Sql($db);
-				$insert = $sql->insert('ticket_geodata');
-				$insert->values($data);
-				$sql->prepareStatementForSqlObject($insert)->execute();
+				for ($i=0; $i<=6; $i++) {
+					$k   = "cluster_id_$i";
+					$c[] = ["$k=:$k"];
+					$data[$k] = self::assignClusterIdForLevel($ticket, $i);
+				}
+				$set = 'set '.implode(',', $c);
+				Database::execute("insert into ticket_geodata $set", $data);
 			}
 		}
 	}
@@ -136,22 +136,15 @@ class GeoCluster extends ActiveRecord
 		$maxY = $lat + $dist;
 		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 0)";
 
-		$sql  = "
-		SELECT id,
-               ST_X(center) as longitude,
-               ST_Y(center) as latitude,
-               ST_Distance(center, $point) as distance
+		$sql  = <<<END
+		SELECT id, ST_Distance(center, $point) as distance
 		FROM geoclusters
-		WHERE level=?
-		  and ST_Distance(center, $point) < $dist
-		order by distance
-		LIMIT 1
-		";
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute([$level]);
+		WHERE level=? and ST_Distance(center, $point) < $dist
+		order by distance limit 1
+		END;
+		$result = Database::query($sql, [$level]);
 		if (count($result)) {
-			$row = $result->current();
-			return $row['id'];
+			return $result[0]['id'];
 		}
 		else {
 			$cluster = new GeoCluster();

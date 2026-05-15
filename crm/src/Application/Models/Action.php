@@ -10,18 +10,18 @@ use Application\Database;
 class Action extends ActiveRecord
 {
     // Pre-defined system level actions
-    const OPENED     = 'open';
-    const CLOSED     = 'closed';
-    const ASSIGNED   = 'assignment';
-    const UPDATED    = 'update';
-    const RESPONDED  = 'response';
-    const DUPLICATED = 'duplicate';
-    const COMMENTED  = 'comment';
-    const CHANGED_CATEGORY = 'changeCategory';
-    const CHANGED_LOCATION = 'changeLocation';
-    const UPLOADED_MEDIA   = 'upload_media';
+    public const OPENED     = 'open';
+    public const CLOSED     = 'closed';
+    public const ASSIGNED   = 'assignment';
+    public const UPDATED    = 'update';
+    public const RESPONDED  = 'response';
+    public const DUPLICATED = 'duplicate';
+    public const COMMENTED  = 'comment';
+    public const CHANGED_CATEGORY = 'changeCategory';
+    public const CHANGED_LOCATION = 'changeLocation';
+    public const UPLOADED_MEDIA   = 'upload_media';
 
-	protected $tablename = 'actions';
+	public const TABLENAME = 'actions';
 	public static $types = ['system', 'department'];
 
 	/**
@@ -47,10 +47,9 @@ class Action extends ActiveRecord
 					? 'select * from actions where id=?'
 					: 'select * from actions where name=?';
 
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('actions/unknown');

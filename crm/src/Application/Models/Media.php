@@ -15,7 +15,7 @@ use Application\Database;
 
 class Media extends ActiveRecord
 {
-	protected $tablename = 'media';
+	public const TABLENAME = 'media';
 
 	protected $ticket;
 	protected $person;
@@ -78,11 +78,11 @@ class Media extends ActiveRecord
 
 				$result = null;
 				if (isset($sql)) {
-                    $result = $db->createStatement($sql)->execute([$id]);
+					$result = Database::query($sql, [$id]);
 				}
 
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('media/unknown');
@@ -102,11 +102,8 @@ class Media extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -164,11 +161,9 @@ class Media extends ActiveRecord
 	//----------------------------------------------------------------
 	/**
 	 * Returns the root portion of the mime_type
-	 *
-	 * @return string
 	 */
-	public function getMedia_type() { return dirname($this->getMime_type()); }
-	public function getType()       { return dirname($this->getMime_type()); }
+	public function getMedia_type():string { return dirname($this->getMime_type()); }
+	public function getType()      :string { return dirname($this->getMime_type()); }
 
 	/**
 	 * Populates this object by reading information on a file
@@ -219,10 +214,8 @@ class Media extends ActiveRecord
 
 	/**
 	 * Returns the full path to the file or derivative
-	 *
-	 * @return string
 	 */
-	public function getFullPath()
+	public function getFullPath(): string
 	{
         return SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
 	}
@@ -233,10 +226,8 @@ class Media extends ActiveRecord
 	 * Media is stored in the SITE_HOME directory, outside of the web directory
 	 * This variable only contains the partial path.
 	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
-	 *
-	 * @return string
 	 */
-	public function getDirectory()
+	public function getDirectory(): string
 	{
         return $this->getUploaded('Y/n/j');
 	}
@@ -248,10 +239,8 @@ class Media extends ActiveRecord
 	 * We generate a unique filename the first time the filename is needed.
 	 * This filename will be saved in the database whenever this media is
 	 * finally saved.
-	 *
-	 * @return string
 	 */
-	public function getInternalFilename()
+	public function getInternalFilename(): string
 	{
 		$filename = parent::get('internalFilename');
 		if (!$filename) {
@@ -261,20 +250,15 @@ class Media extends ActiveRecord
 		return $filename;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getExtension()
+	public function getExtension(): string
 	{
         return self::$mime_types[$this->data['mime_type']];
 	}
 
 	/**
 	 * Returns the URL to this media
-	 *
-	 * @return string
 	 */
-	public function getURL($size=null)
+	public function getURL($size=null): string
 	{
 		$url = BASE_URL."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }

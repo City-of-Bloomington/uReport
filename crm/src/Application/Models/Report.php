@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
@@ -40,18 +41,17 @@ class Report
 					t.substatus_id, s.name
 				order by p.lastname, p.firstname, c.name, t.status, t.substatus_id";
 
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute();
-		$d = array();
+		$result = Database::query($sql, []);
+		$d      = [];
 		foreach ($result as $r) {
 			$pid = $r['assignedPerson_id'];
 			$cid = $r['category_id'];
 			if (!isset($d[$pid])) { $d[$pid]['name'] = "$r[firstname] $r[lastname]"; }
 			if (!isset($d[$pid]['categories'][$cid])) {
-				$d[$pid]['categories'][$cid] = array(
-					'name'=>$r['category'],
-					'data'=>array()
-				);
+				$d[$pid]['categories'][$cid] = [
+					'name' => $r['category'],
+					'data' => []
+				];
 			}
 			$d[$pid]['categories'][$cid]['data'][] = $r;
 		}
@@ -78,18 +78,17 @@ class Report
 					p.firstname, p.lastname,
 					s.name
 				order by c.name, p.lastname, p.firstname, t.status desc, t.substatus_id";
-		$db = Database::getConnection();
-		$d = array();
-		$result = $db->query($sql)->execute();
+		$d      = [];
+		$result = Database::query($sql, []);
 		foreach ($result as $r) {
 			$cid = $r['category_id'];
 			$pid = $r['assignedPerson_id'];
 			if (!isset($d[$cid])) { $d[$cid]['name'] = $r['category']; }
 			if (!isset($d[$cid]['people'][$pid])) {
-				$d[$cid]['people'][$pid] = array(
+				$d[$cid]['people'][$pid] = [
 					'name'=>"$r[firstname] $r[lastname]",
-					'data'=> array()
-				);
+					'data'=> []
+				];
 			}
 			$d[$cid]['people'][$pid]['data'][] = $r;
 		}
@@ -143,17 +142,13 @@ class Report
                     $involvementSelect
                 ) as stats
                 group by stats.actionPerson_id";
-        $db = Database::getConnection();
-        $result = $db->query($sql)->execute();
-        return $result;
+        return Database::query($sql, []);
     }
 
     public static function person(array $get): array
     {
-        $sql     = self::getInvolvementQuery($get);
-        $db = Database::getConnection();
-        $result  = $db->query($sql)->execute();
-        return $result;
+        $sql = self::getInvolvementQuery($get);
+		return Database::query($sql, []);
     }
 
 	/**
@@ -291,8 +286,7 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
@@ -307,8 +301,7 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
@@ -323,8 +316,7 @@ class Report
 				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
@@ -341,8 +333,7 @@ class Report
 				where '$s'<=t.enteredDate and t.enteredDate<='$e'
 				group by date
 				order by date";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
@@ -360,8 +351,7 @@ class Report
 				where '$s'<=t.closedDate and t.closedDate<='$e'
 				group by date
 				order by date";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	public static function categoryActivity()
@@ -380,8 +370,7 @@ class Report
 				join categories c on t.category_id=c.id
 				group by t.category_id
 				order by currentopen desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 
@@ -405,10 +394,8 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute([$date, $date]);
-		$row = $result->current();
-		return $row['count'];
+		$result = Database::query($sql, [$date, $date]);
+		return $result[0]['count'];
 	}
 
 	/**
@@ -432,10 +419,8 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute([$date, $date]);
-		$row = $result->current();
-		return $row['slaPercentage'];
+		$result = Database::query($sql, [$date, $date]);
+		return $result[0]['slaPercentage'];
 	}
 
 	public static function generateDateArray(int $start, int $end): array
@@ -460,9 +445,8 @@ class Report
                 from tickets t
                 join categories p on t.category_id=p.id
                 $where";
-        $result = $db->query($sql)->execute();
-        $row = $result->current();
-        $totalCount = $row['count'];
+        $result = Database::query($sql, []);
+        $totalCount = $result[0]['count'];
 
 
         $sql = "select d.id, d.name, count(*) as count
@@ -471,7 +455,7 @@ class Report
                 join tickets t on p.id=t.category_id
                 $where
                 group by d.id, d.name order by d.name";
-        $result = $db->query($sql)->execute();
+        $result = Database::query($sql, []);
 
         return [ 'totalCount'=>$totalCount, 'result'=>$result ];
 	}
@@ -482,15 +466,13 @@ class Report
         $options = self::volumeOptions($get);
         $options = $options ? "and $options" : '';
 
-        $db = Database::getConnection();
-
         $sql = "select p.name, count(*) as count
                 from categories p
                 join tickets t on p.id=t.category_id
                 where p.department_id=?
                 $options
                 group by p.name order by count desc";
-        $result = $db->query($sql)->execute([$department_id]);
+        $result = Database::query($sql, [$department_id]);
         return ['result'=>$result];
     }
 }

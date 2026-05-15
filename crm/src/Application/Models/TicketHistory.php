@@ -11,7 +11,7 @@ use Application\Template;
 
 class TicketHistory extends ActiveRecord
 {
-    protected $tablename = 'ticketHistory';
+    public const TABLENAME = 'ticketHistory';
 
 	protected $enteredByPerson;
 	protected $actionPerson;
@@ -19,18 +19,17 @@ class TicketHistory extends ActiveRecord
 	protected $ticket;
 	protected $action;
 
-	public function __construct(array|string|null $id=null)
+	public function __construct($id=null)
 	{
 		if ($id) {
 			if (is_array($id)) {
                 $this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = "select * from ticketHistory where id=?";
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('ticketHistory/unknown');
@@ -48,11 +47,8 @@ class TicketHistory extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -121,10 +117,7 @@ class TicketHistory extends ActiveRecord
 	public function setTicket_id($id)     { parent::setForeignKeyField( __namespace__.'\Ticket', 'ticket_id', $id); }
 	public function setTicket(Ticket $o)  { parent::setForeignKeyObject(__namespace__.'\Ticket', 'ticket_id', $o); }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$this->setTicket_id ($post['ticket_id']);
 		$this->setAction_id ($post['action_id'] );
@@ -137,9 +130,6 @@ class TicketHistory extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * Returns the parsed description
-	 */
 	public function getDescription(Template $template): ?string
 	{
 		$action = $this->getAction();
@@ -260,8 +250,7 @@ class TicketHistory extends ActiveRecord
                 }
                 if (count($notificationLog->people)) {
                     $sql = 'update ticketHistory set sentNotifications=? where id=?';
-                    $db = Database::getConnection();
-                    $db->query($sql)->execute([json_encode($notificationLog), $this->getId()]);
+					Database::execute($sql, [json_encode($notificationLog), $this->getId()]);
                 }
             }
         }

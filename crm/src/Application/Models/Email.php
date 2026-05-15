@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright 2013-2020 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
 class Email extends ActiveRecord
 {
-	protected $tablename = 'peopleEmails';
+	public const TABLENAME = 'peopleEmails';
 	protected $person;
 
 	public static $LABELS = array('Work','Home','Other');
@@ -23,8 +24,6 @@ class Email extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -33,11 +32,10 @@ class Email extends ActiveRecord
                 $this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = 'select * from peopleEmails where id=?';
-                $result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
                 if (count($result)) {
-                    $this->exchangeArray($result->current());
+                    $this->exchangeArray($result[0]);
                 }
                 else {
                     throw new \Exception('emails/unknown');
@@ -54,11 +52,8 @@ class Email extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -95,10 +90,9 @@ class Email extends ActiveRecord
 
 		// If we delete the only email used for notifications,
 		// we need to mark one of the other email addresses.
-		$db = Database::getConnection();
-		$result = $db->query('select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?')->execute([$person->getId()]);
-		$row = $result->current();
-		if (!$row['c']) {
+		$sql    = 'select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?';
+		$result = Database::query($sql, [$person->getId()]);
+		if (!$result[0]['c']) {
 			$list = $person->getEmails();
 			if (count($list)) {
 				$e = $list->current();
@@ -106,7 +100,6 @@ class Email extends ActiveRecord
 				$e->save();
 			}
 		}
-
 	}
 
 	//----------------------------------------------------------------

@@ -9,7 +9,7 @@ use Application\Database;
 
 class Category extends ActiveRecord
 {
-	protected $tablename = 'categories';
+	public const TABLENAME = 'categories';
 
     protected $autoCloseSubstatus;
     protected $department;
@@ -28,8 +28,6 @@ class Category extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -41,11 +39,9 @@ class Category extends ActiveRecord
 				$sql = ActiveRecord::isId($id)
 					? 'select * from categories where id=?'
 					: 'select * from categories where name=?';
-
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('categories/unknown');
@@ -287,20 +283,18 @@ class Category extends ActiveRecord
 	/**
 	 * Returns the most recent lastModified date from all categories
 	 */
-	public static function getGlobalLastModifiedDate(?string $format=null, ?\DateTimeZone $timezone=null): string
+	public static function getGlobalLastModifiedDate(?string $format=null, ?\DateTimeZone $timezone=null): ?string
 	{
-		$db = Database::getConnection();
-		$result = $db->query('select max(lastModified) as lastModified from categories')->execute();
-		$row = $result->current();
-
-		if ($format) {
-			$date = new \DateTime($row['lastModified']);
-			if ($timezone) { $date->setTimezone($timezone); }
-			return $date->format($format);
+		$result = Database::query('select max(lastModified) as lastModified from categories', []);
+		if ($result) {
+			if ($format) {
+				$date = new \DateTime($result[0]['lastModified']);
+				if ($timezone) { $date->setTimezone($timezone); }
+				return $date->format($format);
+			}
+			return $result[0]['lastModified'];
 		}
-		else {
-			return $row['lastModified'];
-		}
+		return null;
 	}
 
 	/**

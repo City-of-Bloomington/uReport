@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
 class Substatus extends ActiveRecord
 {
-	protected $tablename = 'substatus';
+	public const TABLENAME = 'substatus';
+
 	/**
 	 * Populates the object with data
 	 *
@@ -20,8 +21,6 @@ class Substatus extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -33,10 +32,9 @@ class Substatus extends ActiveRecord
 				$sql = ActiveRecord::isId($id)
 					? 'select * from substatus where id=?'
 					: 'select * from substatus where name=?';
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('substatus/unknown');
@@ -59,8 +57,7 @@ class Substatus extends ActiveRecord
 	public function save()
 	{
 		if ($this->isDefault()) {
-			$db = Database::getConnection();
-			$db->query('update substatus set isDefault=0 where status=?', [$this->getStatus()]);
+			Database::execute('update substatus set isDefault=0 where status=?', [$this->getStatus()]);
 		}
 
 		parent::save();
@@ -81,10 +78,7 @@ class Substatus extends ActiveRecord
 	public function isDefault() { return parent::get('isDefault') ? true : false; }
 	public function setDefault($b) {     $this->data['isDefault'] = $b ? 1 : 0; }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$this->setName($post['name']);
 		$this->setDescription($post['description']);

@@ -16,23 +16,19 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class Person extends ActiveRecord
 {
-	protected $tablename = 'people';
+	public const TABLENAME = 'people';
 
 	protected $department;
-
-	const ERROR_UNKNOWN_PERSON = 'people/unknown';
 
 	/**
 	 * Returns the matching Person object or null if not found
 	 */
 	public static function findByUsername(string $username): ?Person
 	{
-        $db = Database::getConnection();
         $sql = 'select * from people where username=?';
-
-        $result = $db->createStatement($sql)->execute([$username]);
+		$result = Database::query($sql, [$username]);
         if (count($result)) {
-            return new Person($result->current());
+            return new Person($result[0]);
         }
         return null;
 	}
@@ -46,8 +42,6 @@ class Person extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|string|array $id (ID, email, username)
 	 */
 	public function __construct($id=null)
 	{
@@ -68,13 +62,12 @@ class Person extends ActiveRecord
 					$sql = 'select * from people where username=?';
 				}
 
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
-					throw new \Exception(self::ERROR_UNKNOWN_PERSON);
+					throw new \Exception('people/unknown');
 				}
 			}
 		}
@@ -126,10 +119,9 @@ class Person extends ActiveRecord
 				throw new \Exception('people/personStillHasTickets');
 			}
 
-			$db = Database::getConnection();
-			$db->query('delete from peopleAddresses where person_id=?', [$this->getId()]);
-			$db->query('delete from peoplePhones where person_id=?',    [$this->getId()]);
-			$db->query('delete from peopleEmails where person_id=?',    [$this->getId()]);
+			Database::execute('delete from peopleAddresses where person_id=?', [$this->getId()]);
+			Database::execute('delete from peoplePhones    where person_id=?', [$this->getId()]);
+			Database::execute('delete from peopleEmails    where person_id=?', [$this->getId()]);
 
 			parent::delete();
 		}
@@ -202,10 +194,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Updates only the fields associated with authentication
-	 *
-	 * @param array $post
 	 */
-	public function handleUpdateUserAccount($post)
+	public function handleUpdateUserAccount(array $post)
 	{
 		$this->handleUpdate($post);
 
@@ -226,10 +216,7 @@ class Person extends ActiveRecord
         }
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function handleChangePassword($post)
+	public function handleChangePassword(array $post)
 	{
 		if (   !empty($post['current_password'])
 			&& !empty($post['new_password'])
@@ -430,7 +417,7 @@ class Person extends ActiveRecord
 					(select m.ticket_id from media m
 					where m.person_id=$id
 					limit 1)";
-			$result = $db->createStatement($sql)->execute();
+			$result = Database::query($sql, []);
 			return $result->count() ? true : false;
 		}
 		return false;
@@ -485,7 +472,7 @@ class Person extends ActiveRecord
 		else {
 			return [];
 		}
-		$result = $db->createStatement($sql)->execute(["$query%"]);
+		$result = Database::query($sql, ["$query%"]);
 		$o = [];
 		foreach ($result as $row) { $o[] = $row[$fieldname]; }
 		return $o;
@@ -543,7 +530,6 @@ class Person extends ActiveRecord
 				throw new \Exception('people/mergerNotAllowed');
 			}
 
-			$db = Database::getConnection();
 			// Look up all the tickets we're about to modify
 			// We need to remember them so we can update the search
 			// index after we've updated the database
@@ -554,36 +540,37 @@ class Person extends ActiveRecord
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or  th.actionPerson_id=$id)
 					   or m.person_id=$id";
-			$result = $db->query($sql)->execute();
+			$result = Database::query($sql)->execute();
 			$ticketIds = [];
 			foreach ($result as $row) {
 				$ticketIds[] = $row['id'];
 			}
 
-			$db->getDriver()->getConnection()->beginTransaction();
+			$pdo = Database::getConnection();
+			$pdo->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				Database::execute('update media         set           person_id=? where           person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?', [$this->getId(), $person->getId()]);
 
 				// Fields that don't hit the Solr index
-				$db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				Database::execute('update clients         set contactPerson_id=? where contactPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update departments     set defaultPerson_id=? where defaultPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peopleAddresses set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peoplePhones    set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peopleEmails    set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
 
-				$db->query('delete from people where id=?')->execute([$person->getId()]);
+				Database::execute('delete from people where id=?', [$person->getId()]);
 			}
 			catch (\Exception $e) {
-				$db->getDriver()->getConnection()->rollback();
+				$pdo->rollBack();
 				throw($e);
 			}
-			$db->getDriver()->getConnection()->commit();
+			$pdo->commit();
 
 			foreach ($ticketIds as $id) {
 				$search = new Search();
