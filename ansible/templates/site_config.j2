@@ -40,9 +40,7 @@ define('GOOGLE_LOADER', '//www.google.com/jsapi');
  */
 $DATABASES = [
     'default' => [
-        'driver'  => 'mysql',
-        'host'    => '{{ ureport_db.host }}',
-        'name'    => '{{ ureport_db.name }}',
+        'dsn'     => "mysql:dbname={{ ureport_db.name }};host={{ ureport_db.host }}",
         'user'    => '{{ ureport_db.user }}',
         'pass'    => '{{ ureport_db.pass }}',
         'options' => []

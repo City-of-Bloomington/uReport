@@ -35,9 +35,7 @@ define('GOOGLE_LOADER', 'http://www.google.com/jsapi');
  */
 $DATABASES = [
     'default' => [
-        'driver'  => 'mysql',
-        'host'    => 'db',
-        'name'    => 'ureport',
+        'dsn'     => 'mysql:dbname=ureport;host=db',
         'user'    => 'ureport',
         'pass'    => 'ureport',
         'options' => []

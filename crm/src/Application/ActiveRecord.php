@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application;
-use Laminas\Db\Sql\Sql;
 
 abstract class ActiveRecord
 {
