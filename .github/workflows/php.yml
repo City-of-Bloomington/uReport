@@ -1,0 +1,54 @@
+name: uReport CICD
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+
+    - name: Debug PHP
+      run: |
+        which php
+        php -v
+
+    - name: Validate composer.json
+      run: composer validate --no-check-lock --working-dir=crm
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --ignore-platform-reqs --working-dir=crm
+
+    - name: PHP Lint
+      working-directory: ./crm
+      run: |
+        set -euo pipefail
+
+        find . \
+          -type f \
+          -name "*.php" \
+          -not -path "./vendor/*" \
+          | while read -r file; do
+            echo "Linting: $file"
+            php -l "$file" > /dev/null
+        done

@@ -1,4 +1,6 @@
 {
+    "name": "city-of-bloomington/ureport",
+    "description": "uReport",
     "require": {
         "php": ">=8.5",
         "graylog2/gelf-php":               "@stable",
