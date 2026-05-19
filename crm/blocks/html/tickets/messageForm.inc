@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
-use Application\Models\ContactMethodTable;
 ?>
 <section class="messageForm">
     <header>

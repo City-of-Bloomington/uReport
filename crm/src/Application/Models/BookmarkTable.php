@@ -1,15 +1,14 @@
 <?php
 /**
- * @copyright 2014 City of Bloomington, Indiana
+ * @copyright 2014-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 
-use Application\TableGateway;
-use Laminas\Db\Sql\Select;
+use Application\PdoRepository;
 
-class BookmarkTable extends TableGateway
+class BookmarkTable extends PdoRepository
 {
-	public function __construct() { parent::__construct('bookmarks', __namespace__.'\Bookmark'); }
+	public const TABLENAME = 'bookmarks';
+	public const CLASSNAME = __namespace__.'\Bookmark';
 }

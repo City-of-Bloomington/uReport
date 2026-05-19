@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2020 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 include '../bootstrap.inc';
@@ -21,12 +21,12 @@ foreach ($ids as $id) {
 	$person  = new Person($id);
 
 	$table   = new TicketTable();
-	$tickets = $table->find(['assignedPerson_id'=>$person->getId(), 'status'=>'open']);
+	$list    = $table->find(['assignedPerson_id'=>$person->getId(), 'status'=>'open']);
 
 	$template = new Template('email', 'txt');
 	$template->blocks[] = new Block('notifications/digestNotification.inc', ['person'=>$person]);
 	$template->blocks[] = new Block('tickets/ticketList.inc', [
-        'ticketList'    => $tickets,
+        'ticketList'    => $list['rows'],
         'title'         => 'Outstanding cases',
         'disableButtons'=> true,
         'fields'        => ['status', 'enteredDate', 'slaPercentage', 'category', 'location']
@@ -34,6 +34,5 @@ foreach ($ids as $id) {
 
 	$text = $template->render();
 
-	$count = count($tickets);
-	$person->sendNotification($text, "$count open cases in ".APPLICATION_NAME);
+	$person->sendNotification($text, "$list[total] open cases in ".APPLICATION_NAME);
 }

@@ -130,30 +130,25 @@ class Department extends ActiveRecord
 			: $this->saveActions([]);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
 	/**
 	 * Returns an array of Category objects, indexed by Id
-	 *
-	 * @param  array $search  Additional fields to search on
-	 * @return array          An array of Category objects
 	 */
-	public function getCategories(array $search=[])
+	public function getCategories(array $search=[]): array
 	{
-        $id         = $this->getId();
-        $categories = [];
+        $id  = $this->getId();
+        $out = [];
 
         if ($id) {
-            $search['department_id'] = $id;
-
-			$table   = new CategoryTable();
-			$list    = $table->find($search);
-			foreach ($list as $c) {
-                $categories[$c->getId()] = $c;
-            }
+			$sql = <<<END
+			select c.*
+			from categories c
+			join department_categories d on c.id=d.category_id
+			where d.department_id=?
+			END;
+			$res = Database::query($sql, [$id]);
+			foreach ($res as $r) { $out[$r['id']] = new Category($r); }
 		}
-		return $categories;
+		return $out;
 	}
 
 	/**
@@ -182,11 +177,16 @@ class Department extends ActiveRecord
         $actions       = [];
 
         if ($department_id) {
-            $table = new ActionTable();
-			$list  = $table->find(['department_id'=>$department_id]);
-			foreach ($list as $a) {
-                $actions[$a->getId()] = $a;
-            }
+			$sql = <<<END
+			select a.*
+			from actions a
+			join department_actions d on a.id=d.action_id
+			where d.department_id=?
+			END;
+			$res = Database::query($sql, [$department_id]);
+			foreach ($res as $a) {
+				$actions[$a['id']] = new Action($a);
+			}
 		}
 		return $actions;
 	}
@@ -210,13 +210,11 @@ class Department extends ActiveRecord
 
 	public function getPeople(): array
 	{
-        $people = [];
-		if ($this->getId()) {
-            $table = new PersonTable();
-			$list  = $table->find(['department_id' => $this->getId()]);
-            foreach ($list as $p) { $people[] = $p; }
-		}
-		return $people;
+		$out = [];
+		$sql = 'select * from people where department_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Person($r); }
+		return $out;
 	}
 
 	public function isSafeToDelete(): bool

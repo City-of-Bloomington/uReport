@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?php
 /**
- * @copyright 2011 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 header('Content-type: text/xml; charset=utf-8');
-$this->_include('partials/errorMessages.inc');
 echo $this->includeBlocks();

@@ -7,8 +7,6 @@ namespace Application\Models;
 
 use Application\ActiveRecord;
 use Application\Database;
-use Application\Models\Email;
-
 use Application\Template;
 
 use Domain\Auth\ExternalIdentity;
@@ -311,40 +309,42 @@ class Person extends ActiveRecord
 		return $ACL->isAllowed($role, $resource, $action);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	public function getPhones()
+	public function getPhones(): array
 	{
-		if ($this->getId()) {
-            $table = new PhoneTable();
-			return $table->find( ['person_id'=>$this->getId()] );
-		}
-		return array();
+		$out = [];
+		$sql = 'select * from peoplePhones where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Phone($r); }
+		return $out;
 	}
 
-	public function getEmails()
+	public function getEmails(): array
 	{
-		if ($this->getId()) {
-            $table = new EmailTable();
-			return $table->find( ['person_id'=>$this->getId()] );
+		$out = [];
+		$sql = 'select * from peopleEmails where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) {
+			$out[] = new Email($r);
 		}
-		return array();
+		return $out;
 	}
 
-	public function getNotificationEmails()
+	public function getNotificationEmails(): array
 	{
-        $table = new EmailTable();
-		return $table->find( ['person_id'=>$this->getId(), 'usedForNotifications'=>1] );
+		$out = [];
+		$sql = 'select * from peopleEmails where person_id=? and usedForNotifications=1';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Email($r); }
+		return $out;
 	}
 
-	public function getAddresses()
+	public function getAddresses(): array
 	{
-		if ($this->getId()) {
-            $table = new AddressTable();
-			return $table->find( ['person_id'=>$this->getId()] );
-		}
-		return array();
+		$out = [];
+		$sql = 'select * from peopleAddresses where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Address($r); }
+		return $out;
 	}
 
 	public function getFullname(): string
@@ -377,7 +377,7 @@ class Person extends ActiveRecord
 	 * @param string $personFieldname The field in Ticket that has this person embedded
 	 * @param array  $fields          Additional fields to filter the ticketList
 	 */
-	public function getTickets(string $personFieldname, ?array $fields=null)
+	public function getTickets(string $personFieldname, ?array $fields=null): array
 	{
 		if ($this->getId()) {
 			$field = $personFieldname.'Person_id';
@@ -389,8 +389,10 @@ class Person extends ActiveRecord
 				$search = [$field=>$this->getId()];
 			}
 			$table = new TicketTable();
-			return $table->find($search);
+			$list  = $table->find($search);
+			return $list['rows'];
 		}
+		return [];
 	}
 
 	/**
@@ -400,7 +402,7 @@ class Person extends ActiveRecord
 	{
 		$id = (int)$this->getId();
 		if ($id) {
-			$db = Database::getConnection();
+			$pdo = Database::getConnection();
 			// This query is written as a Union for speed
 			// A Union is the only way to use the indexes for this query
 			$sql = "(select t.id from tickets t
@@ -418,7 +420,7 @@ class Person extends ActiveRecord
 					where m.person_id=$id
 					limit 1)";
 			$result = Database::query($sql, []);
-			return $result->count() ? true : false;
+			return count($result) ? true : false;
 		}
 		return false;
 	}
@@ -533,14 +535,14 @@ class Person extends ActiveRecord
 			// Look up all the tickets we're about to modify
 			// We need to remember them so we can update the search
 			// index after we've updated the database
-			$id = (int)$person->getId();
+			$id  = (int)$person->getId();
 			$sql = "select distinct t.id from tickets t
 					left join ticketHistory th on t.id=th.ticket_id
 					left join media          m on t.id= m.ticket_id
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or  th.actionPerson_id=$id)
 					   or m.person_id=$id";
-			$result = Database::query($sql)->execute();
+			$result = Database::query($sql, []);
 			$ticketIds = [];
 			foreach ($result as $row) {
 				$ticketIds[] = $row['id'];

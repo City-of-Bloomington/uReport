@@ -84,16 +84,18 @@ abstract class View
 	 * to add in some other characters to clean.  While here, we might as well
 	 * have it trim out the whitespace too.
 	 */
-	public static function escape(array|string $input, int $quotes=ENT_QUOTES): string
+	public static function escape(array|string|null $input, int $quotes=ENT_QUOTES): ?string
 	{
-		if (is_array($input)) {
-			foreach ($input as $key=>$value) {
-				$input[$key] = self::escape($value,$quotes);
-			}
-		}
-		else {
-            $input = $input ? htmlspecialchars(trim($input), $quotes, 'UTF-8') : '';
-		}
+        if ($input) {
+            if (is_array($input)) {
+                foreach ($input as $key=>$value) {
+                    $input[$key] = self::escape($value,$quotes);
+                }
+            }
+            else {
+                $input = $input ? htmlspecialchars(trim($input), $quotes, 'UTF-8') : '';
+            }
+        }
 
 		return $input;
 	}
@@ -101,15 +103,17 @@ abstract class View
 	/**
 	 * Reverses the escaping done by View::escape()
 	 */
-	public static function unescape(array|string $input): string
+	public static function unescape(array|string|null $input): ?string
 	{
-        if (is_array($input)) {
-            foreach ($input as $key=>$value) {
-                $input[$key] = self::unescape($value);
+        if ($input) {
+            if (is_array($input)) {
+                foreach ($input as $key=>$value) {
+                    $input[$key] = self::unescape($value);
+                }
             }
-        }
-        else {
-            $input = $input ? htmlspecialchars_decode(trim($input), ENT_QUOTES) : '';
+            else {
+                $input = $input ? htmlspecialchars_decode(trim($input), ENT_QUOTES) : '';
+            }
         }
         return $input;
 	}

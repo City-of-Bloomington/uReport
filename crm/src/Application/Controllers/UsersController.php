@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -19,12 +19,16 @@ class UsersController extends Controller
 	{
         global $ACL;
 
-		$depts  = new DepartmentTable();
-		$people = new PersonTable();
-		$users  = $people->search(array_merge($_GET, ['user_account'=>true]));
-		$vars   = [
+		$t     = new DepartmentTable();
+		$r     = $t->find();
+		$depts = $r['rows'];
+
+		$t     = new PersonTable();
+		$r     = $t->search(array_merge($_GET, ['user_account'=>true]));
+		$users = $r['rows'];
+		$vars  = [
             'users'                 => $users,
-            'departments'           => $depts->find(),
+            'departments'           => $depts,
             'roles'                 => $ACL->getRoles(),
             'authenticationMethods' => Person::getAuthenticationMethods()
 		];

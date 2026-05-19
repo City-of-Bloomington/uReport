@@ -7,7 +7,6 @@ namespace Application\Controllers;
 
 use Application\Models\Location;
 use Application\Models\Person;
-use Application\Models\TicketTable;
 
 use Application\Block;
 use Application\Controller;

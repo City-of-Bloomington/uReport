@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -21,8 +21,8 @@ class SubstatusController extends Controller
 			? $table->find(['status'=>$_REQUEST['status']])
 			: $table->find();
 
-        $this->template->title = $this->template->_(['substatus', 'substatuses', count($list)]);
-		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list]);
+        $this->template->title = $this->template->_(['substatus', 'substatuses', $list['total']]);
+		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list['rows']]);
 	}
 
 	public function update()

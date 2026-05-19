@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2006-2020 City of Bloomington, Indiana
+ * @copyright 2006-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Person $this->person
  */
@@ -26,7 +26,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/users/updateUserForm-'.VERS
                 $options = [['value'=>'']];
                 $table = new DepartmentTable();
                 $list  = $table->find();
-                foreach ($list as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
+                foreach ($list['rows'] as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
                 echo $field->field([
                     'name'    => 'department_id',
                     'id'      => 'department_id',

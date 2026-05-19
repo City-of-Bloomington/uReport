@@ -2,9 +2,9 @@
 /**
  * Displays a list of Tickets using Open311 terminology
  *
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param TicketList $this->ticketList
+ * @param array $this->ticketList
  */
 use Application\Block;
 
@@ -79,5 +79,3 @@ echo "
 echo "
 </div>
 ";
-$block = new Block('pageNavigation.inc', ['paginator'=>$this->ticketList]);
-echo $block->render('html',$this->template);

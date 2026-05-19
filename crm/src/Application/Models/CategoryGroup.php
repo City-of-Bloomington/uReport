@@ -77,12 +77,13 @@ class CategoryGroup extends ActiveRecord
 		$this->setName    ($post['name']);
 		$this->setOrdering($post['ordering']);
 	}
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	public function getCategories()
+
+	public function getCategories(): array
 	{
-		$table = new CategoryTable();
-		return $table->find(['categoryGroup_id'=>$this->getId()]);
+		$out = [];
+		$sql = 'select * from categories where categoryGroup_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Category($r); }
+		return $out;
 	}
 }

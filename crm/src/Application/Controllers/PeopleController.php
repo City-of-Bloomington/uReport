@@ -70,10 +70,10 @@ class PeopleController extends Controller
 						break;
 				}
 			}
-			$table = new PersonTable();
-			$personList = $table->search($search);
-			$searchResults = new Block('people/searchResults.inc', ['personList'=>$personList]);
-			$this->template->blocks[] = $searchResults;
+			$t = new PersonTable();
+			$r = $t->search($search);
+			$b = new Block('people/searchResults.inc', ['personList'=>$r['rows']]);
+			$this->template->blocks[] = $b;
 		}
 	}
 
@@ -116,33 +116,27 @@ class PeopleController extends Controller
 
 	/**
 	 * Adds a ticketList about the Person to the template
-	 *
-	 * @return int The number of tickets displayed in the list
 	 */
-	private function addTicketList(string $panel, string $listType, string $title, Person $person, bool $disableLinks=false, bool $disableButtons=false): int
+	private function addTicketList(string $panel, string $listType, string $title, Person $person, bool $disableLinks=false, bool $disableButtons=false)
 	{
-		$field = $listType.'Person_id';
+		$field   = $listType.'Person_id';
 
-		$table = new TicketTable();
-		$tickets = $table->find([$field=>$person->getId()], 'tickets.enteredDate desc', true);
-		$tickets->setCurrentPageNumber(1);
-		$tickets->setItemCountPerPage(10);
+		$table   = new TicketTable();
+		$tickets = $table->find([$field=>$person->getId()], 't.enteredDate desc', 10, 1);
 
-		$numPages = count($tickets);
-		if ($numPages) {
+		if (count($tickets['rows'])) {
 			$block = new Block('tickets/ticketList.inc', [
-                'ticketList'    => $tickets,
+                'ticketList'    => $tickets['rows'],
                 'title'         => $title,
                 'disableLinks'  => $disableLinks,
                 'disableButtons'=> $disableButtons,
                 'fields'        => ['status', 'enteredDate', 'category', 'location']
             ]);
-			if ($numPages > 1) {
+			if ($tickets['total'] > 10) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
 			$this->template->blocks[$panel][] = $block;
 		}
-		return $numPages;
 	}
 
 	public function update()

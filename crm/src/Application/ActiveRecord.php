@@ -67,12 +67,12 @@ abstract class ActiveRecord
         }
     }
 
-    protected function set(string $fieldname, string $value)
+    protected function set(string $fieldname, ?string $value=null)
     {
         if ($value) {
             $value = trim($value);
         }
-        $this->data[$fieldname] = $value ? $value : null;
+        $this->data[$fieldname] = $value;
     }
 
     /**

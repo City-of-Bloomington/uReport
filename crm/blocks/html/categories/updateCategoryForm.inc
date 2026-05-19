@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Category $this->category
  */
@@ -49,7 +49,7 @@ $helper = $this->template->getHelper('field');
             $t = new CategoryGroupTable();
             $list = $t->find();
             $options = [];
-            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            foreach ($list['rows'] as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
             echo $helper->field([
                 'name'    => 'categoryGroup_id',
                 'id'      => 'categoryGroup_id',
@@ -74,7 +74,7 @@ $helper = $this->template->getHelper('field');
             $t = new DepartmentTable();
             $list = $t->find();
             $options = [];
-            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            foreach ($list['rows'] as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
             echo $helper->field([
                 'name'    => 'department_id',
                 'id'      => 'department_id',
@@ -155,7 +155,7 @@ $helper = $this->template->getHelper('field');
             $table = new SubstatusTable();
             $list = $table->find(['status'=>'closed']);
             $options = [['value'=>'', 'label'=>'']];
-            foreach ($list as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
+            foreach ($list['rows'] as $o) { $options[] = ['value'=>$o->getId(), 'label'=>self::escape($o->getName())]; }
             echo $helper->field([
                 'name'    => 'autoCloseSubstatus_id',
                 'id'      => 'autoCloseSubstatus_id',

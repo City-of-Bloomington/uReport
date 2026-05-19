@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -17,9 +17,10 @@ class ActionsController extends Controller
 	public function index()
 	{
         $table = new ActionTable();
-        $list  = $table->find();
-		$this->template->blocks[] = new Block('actions/actionList.inc', ['actions'=>$list]);
-		$this->template->title = $this->template->_(['action', 'actions', count($list)]);
+        $res   = $table->find();
+        $list  = $res['rows'];
+        $this->template->blocks[] = new Block('actions/actionList.inc', ['actions'=>$list]);
+        $this->template->title = $this->template->_(['action', 'actions', count($list)]);
 	}
 
 	public function view()

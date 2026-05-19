@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->return_url
  */
@@ -34,9 +34,9 @@ use Application\Url;
 			echo '<option value="">----</option>';
 
 			$table = new CategoryTable();
-			$list  = $table->find(['active'=>true], 'categories.name');
+			$list  = $table->find(['active'=>true], 'c.name');
 			$options = [];
-			foreach ($list as $c) {
+			foreach ($list['rows'] as $c) {
                 $name = self::escape($c->getName());
                 $d    = $c->getDepartment();
                 $dept = self::escape($d->getName());

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -25,8 +25,8 @@ class BookmarksController extends Controller
 	{
 		$table = new BookmarkTable();
 		$list  = $table->find(['person_id' => $_SESSION['USER']->getId()]);
-		$this->template->title = $this->template->_(['bookmark', 'bookmarks', count($list)]);
-		$this->template->blocks[] = new Block('bookmarks/list.inc', ['bookmarks'=>$list]);
+		$this->template->title = $this->template->_(['bookmark', 'bookmarks', $list['total']]);
+		$this->template->blocks[] = new Block('bookmarks/list.inc', ['bookmarks'=>$list['rows']]);
 	}
 
 	public function update()

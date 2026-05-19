@@ -1,6 +1,4 @@
 # Copyright (C) 2013-2020 City of Bloomington
-domain "messages"
-
 msgid ""
 msgstr ""
 "Project-Id-Version: uReport 1.11\n"

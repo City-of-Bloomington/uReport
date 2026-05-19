@@ -180,8 +180,7 @@ class Ticket extends ActiveRecord
 	{
         foreach ($this->getMedia() as $m) { $m->delete(); }
 
-        $db = Database::getConnection();
-        $db->query('delete from ticketHistory where ticket_id=?')->execute([$this->getId()]);
+		Database::execute('delete from ticketHistory where ticket_id=?', [$this->getId()]);
 
 		$search = new Search();
 		$search->delete($this);
@@ -332,7 +331,7 @@ class Ticket extends ActiveRecord
 		}
 	}
 
-	public function getAdditionalFields(): array
+	public function getAdditionalFields()
 	{
 		$s = parent::get('additionalFields');
         return $s ? json_decode($s) : [];
@@ -342,7 +341,7 @@ class Ticket extends ActiveRecord
 		$this->data['additionalFields'] = json_encode($data);
 	}
 
-	public function getCustomFields(): array
+	public function getCustomFields()
 	{
         $f = parent::get('customFields');
         return $f ? json_decode($f) : null;
@@ -393,15 +392,17 @@ class Ticket extends ActiveRecord
 		// we'll remove the ticket_id field.
 		// All the rest of the fields should be cluster_ids
 		$result = Database::query('select * from ticket_geodata where ticket_id=?', [$this->getId()]);
-		$row = $result->current();
 		unset( $result[0]['ticket_id']);
 		return $result[0];
 	}
 
-	public function getMedia()
+	public function getMedia(): array
 	{
-		$table = new MediaTable();
-		return $table->find(['ticket_id' => $this->getId()]);
+		$out = [];
+		$sql = 'select * from media where ticket_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Media($r); }
+		return $out;
 	}
 
 	/**
@@ -595,8 +596,8 @@ class Ticket extends ActiveRecord
 	 */
 	public function handleAdd(array $post)
 	{
-		$db = Database::getConnection();
-		$db->getDriver()->getConnection()->beginTransaction();
+		$pdo = Database::getConnection();
+		$pdo->beginTransaction();
 		try {
             // Set all the location information using any fields the user posted
             $fields = [
@@ -624,14 +625,14 @@ class Ticket extends ActiveRecord
 			$this->getCategory()->onTicketAdd($this);
 		}
 		catch (\Exception $e) {
-			$db->getDriver()->getConnection()->rollback();
+			$pdo->rollBack();
 
 			$search = new Search();
 			$search->delete($this);
 
 			throw $e;
 		}
-		$db->getDriver()->getConnection()->commit();
+		$pdo->commit();
 
         // Create the entry in the history log
         $history = new TicketHistory();
@@ -818,9 +819,9 @@ class Ticket extends ActiveRecord
 	public function getChildren(?bool $recursive=false): array
 	{
         $tickets = [];
-        $table   = new TicketTable();
-        $list    = $table->find(['parent_id'=>$this->getId()]);
-        foreach ($list as $t) {
+		$sql = 'select * from tickets where parent_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+        foreach ($res as $t) {
             if ($recursive) { $tickets = array_merge($tickets, $t->getChildren($recursive)); }
             $tickets[] = $t;
         }

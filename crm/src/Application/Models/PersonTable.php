@@ -1,153 +1,152 @@
 <?php
 /**
- * @copyright 2011-2024 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
-use Application\TableGateway;
-use Laminas\Db\Sql\Select;
-use Laminas\Db\Sql\Where;
+use Application\PdoRepository;
 
-class PersonTable extends TableGateway
+class PersonTable extends PdoRepository
 {
-	private $select;
-	private static $defaultSort = array('p.lastname', 'p.firstname');
-	private static $fields = array(
+	public const TABLENAME = 'people';
+	public const CLASSNAME = __namespace__.'\Person';
+
+	private static $defaultSort = ['p.lastname', 'p.firstname'];
+	private static $fields = [
 		'firstname','middlename','lastname',
 		'email','organization',
 		'address','city','state','zip',
 		'department_id','username','authenticationMethod','role'
-	);
+	];
 
-	public function __construct() { parent::__construct('people', __namespace__.'\Person'); }
-
-	private function prepareJoins(array $fields)
+	private static function prepareJoins(array $fields): array
 	{
+		$joins = [];
+
 		if (!empty($fields['email'])) {
-			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
+			$joins[] = 'left join peopleEmails e on p.id=e.person_id';
 		}
 		if (!empty($fields['phone'])) {
-			$this->select->join(['phone'=>'peoplePhones'], 'people.id=phone.person_id', [], Select::JOIN_LEFT);
+			$joins[] = 'left join peoplePhones h on p.id=h.person_id';
 		}
 		if (   !empty($fields['address'])
 			|| !empty($fields['city'   ])
 			|| !empty($fields['state'  ])
 			|| !empty($fields['zip'    ])) {
-			$this->select->join(['address'=>'peopleAddresses'], 'people.id=address.person_id', [], Select::JOIN_LEFT);
+			$joins[] = 'left join peopleAddresses a on p.id=a.person_id';
 		}
-		if (!empty($fields['reportedTicket_id'])) {
-			$this->select->join(['t'=>'tickets'], 'people.id=t.reportedByPerson_id', [], Select::JOIN_LEFT);
-		}
+		return $joins;
 	}
 
-	/**
-	 * Populates the collection, using strict matching of the requested fields
-	 */
-	public function find(?array $fields=null, ?string $order="people.lastname, people.firstname", bool $paginated=false, ?int $limit=null)
+    public function find(array $fields=[], ?string $order='p.lastname, p.firstname', ?int $itemsPerPage=null, ?int $currentPage=null): array
 	{
-		$this->select = new Select('people');
-		if ($fields) {
-			$this->prepareJoins($fields);
+        $select = 'select p.* from people p';
+        $joins  = [];
+        $where  = [];
+        $params = [];
 
-			foreach ($fields as $key=>$value) {
-				if ($value) {
-					switch ($key) {
+		if ($fields) {
+			$joins = self::prepareJoins($fields);
+
+			foreach ($fields as $k=>$v) {
+				if ($v) {
+					switch ($k) {
 						case 'user_account':
-							$value
-								? $this->select->where('people.username is not null')
-								: $this->select->where('people.username is null');
+							$where[] = $v ? 'p.username is not null'
+							              : 'p.username is null';
+
 							break;
 						case 'email':
-							$this->select->where(['email.email' => $value]);
+							$where[] = 'e.email=:email';
+							$params['email'] = $v;
 							break;
 
 						case 'phone':
-							$this->select->where(['phone.number' => $value]);
+							$where[] = 'h.number=:number';
+							$params['number'] = $v;
 							break;
 
 						case 'address':
 						case 'city':
 						case 'state':
 						case 'zip':
-							$this->select->where(["address.$key" => $value]);
-							break;
-
-						case 'reportedTicket_id':
-							$this->select->where(['t.id' => $value]);
+							$where[] = "a.$k=:$k";
+							$params[$k] = $v;
 							break;
 
 						default:
-							if (in_array($key, self::$fields)) {
-								$this->select->where(["people.$key" => $value]);
+							if (in_array($k, self::$fields)) {
+								$where[] = "p.$k=:$k";
+								$params[$k] = $v;
 							}
 					}
 				}
 			}
 		}
 
-		return parent::performSelect($this->select, $order, $paginated, $limit);
+        $sql  = parent::buildSql($select, $joins, $where, null, $order);
+        return  parent::performSelect($sql, $params, $itemsPerPage, $currentPage);
 	}
 
-	/**
-	 * Populates the collection, using regular expressions for matching
-	 */
-	public function search(?array $fields=null, ?string $order="people.lastname, people.firstname", bool $paginated=false, ?int $limit=null)
+    public function search(array $fields=[], ?string $order='p.lastname, p.firstname', ?int $itemsPerPage=null, ?int $currentPage=null): array
 	{
-		$this->select = new Select('people');
-		$search = [];
+		$select = 'select p.* from people p';
+        $joins  = [];
+        $where  = [];
+        $params = [];
+
 		if (isset($fields['query'])) {
-			$value = trim($fields['query']).'%';
-			$this->select->join(['email'=>'peopleEmails'], 'people.id=email.person_id', [], Select::JOIN_LEFT);
-			$this->select->where(function (Where $w) use ($value) { $w->like('people.firstname', $value); })
-					   ->orWhere(function (Where $w) use ($value) { $w->like('people.lastname' , $value); })
-					   ->orWhere(function (Where $w) use ($value) { $w->like('email.email'     , $value); })
-					   ->orWhere(function (Where $w) use ($value) { $w->like('people.username' , $value); });
+			$v       = trim($fields['query']).'%';
+			$joins[] = 'left join peopleEmails e on p.id=e.person_id';
+			$where[] = '(p.firstname=:firstname or p.lastname=:lastname or p.email=:email or p.username=:username)';
+			$params  = ['firstname'=>$v, 'lastname'=>$v, 'email'=>$v, 'username'=>$v];
 		}
 		elseif ($fields) {
-			$this->prepareJoins($fields);
+			$joins = self::prepareJoins($fields);
 
-			foreach ($fields as $key=>$value) {
-                if ($value) {
-                    switch ($key) {
+			foreach ($fields as $k=>$v) {
+                if ($v) {
+                    switch ($k) {
                         case 'user_account':
-                            $value
-                                ? $this->select->where('username is not null')
-                                : $this->select->where('username is null');
+							$where[] = $v ? 'p.username is not null'
+							              : 'p.username is null';
                             break;
 
                         case 'email':
-                            $this->select->where(function (Where $w) use ($value) { $w->like('email.email', "$value%"); });
+							$where[] = 'e.email like :email';
+							$params['email'] = "$v%";
                             break;
 
                         case 'phone':
-                            $this->select->where(function (Where $w) use ($value) { $w->like('phone.number', "$value%"); });
+							$where[] = 'h.number like :number';
+							$params['number'] = "$v%";
                             break;
 
                         case 'department_id':
-                            $this->select->where([$key=>$value]);
+							$where[] = "p.$k=:$k";
+							$params[$k] = $v;
                             break;
 
                         case 'address':
                         case 'city':
                         case 'state':
                         case 'zip':
-                            $this->select->where(function (Where $w) use ($key, $value) { $w->like("address.$key", "$value%"); });
-                            break;
-
-                        case 'reportedTicket_id':
-                            $this->select->where(['t.reportedByPerson_id' => $value]);
+							$where[] = "a.$k=:$k";
+							$params[$k] = "$v%";
                             break;
 
                         default:
-                            if (in_array($key, self::$fields)) {
-                                $this->select->where(function (Where $w) use ($key, $value) { $w->like("people.$key", "$value%"); });
+                            if (in_array($k, self::$fields)) {
+								$where[] = "p.$k like :$k";
+								$params[$k] = "$v%";
                             }
                     }
                 }
 			}
 		}
 
-		return parent::performSelect($this->select, $order, $paginated, $limit);
+        $sql  = parent::buildSql($select, $joins, $where, null, $order);
+        return  parent::performSelect($sql, $params, $itemsPerPage, $currentPage);
 	}
 }

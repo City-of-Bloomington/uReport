@@ -96,14 +96,10 @@ class Open311Client
 		return $person;
 	}
 
-	/**
-	 * @param  array      $post  Person data array using CRM fieldnames
-	 * @throws \Exception
-	 */
 	private static function createNewPersonRecord(array $post): Person
 	{
-		$db = Database::getConnection();
-		$db->getDriver()->getConnection()->beginTransaction();
+		$pdo = Database::getConnection();
+		$pdo->beginTransaction();
 
         $person = new Person();
         try {
@@ -125,20 +121,17 @@ class Open311Client
             }
         }
         catch (\Exception $e) {
-			$db->getDriver()->getConnection()->rollback();
+			$pdo->rollBack();
 			throw($e);
         }
-		$db->getDriver()->getConnection()->commit();
+        $pdo->commit();
 		return $person;
 	}
 
-	/**
-	 * @param  array  $search Person data array using CRM fieldnames
-	 */
 	private static function findPerson(array $search): ?Person
 	{
         $table = new PersonTable();
         $list  = $table->find($search);
-        return count($list) == 1 ? $list->current() : null;
+        return $list['total'] == 1 ? $list['rows'][0] : null;
 	}
 }

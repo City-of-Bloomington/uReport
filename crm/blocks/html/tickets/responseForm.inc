@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
@@ -28,9 +28,9 @@ use Application\Models\ContactMethodTable;
                 ]);
 
                 $options = [];
-                $table   = new contactMethodTable();
+                $table   = new ContactMethodTable();
                 $list    = $table->find();
-                foreach ($list as $m) { $options[] = ['value'=>$m->getId(), 'label'=>self::escape($m->getName())]; }
+                foreach ($list['rows'] as $m) { $options[] = ['value'=>$m->getId(), 'label'=>self::escape($m->getName())]; }
                 echo $helper->field([
                     'name'     => 'contactMethod_id',
                     'id'       => 'contactMethod_id',

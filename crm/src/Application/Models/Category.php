@@ -302,28 +302,28 @@ class Category extends ActiveRecord
 	 */
 	public function getResponseTemplates(): array
 	{
-        $templates = [];
-        $table = new ResponseTemplateTable();
-        $list = $table->find(['category_id'=>$this->getId()]);
-        foreach ($list as $t) { $templates[$t->getId()] = $t; }
-        return $templates;
+		$out = [];
+		$sql = 'select * from category_action_responses where category_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new ResponseTemplate($r); }
+		return $out;
 	}
 
-	public function responseTemplateForAction(Action $action): ?ResponseTemplate
+	public function responseTemplateForAction(Action $a): ?ResponseTemplate
 	{
-        $table = new ResponseTemplateTable();
-        $list = $table->find(['category_id'=>$this->getId(), 'action_id'=>$action->getId()]);
-        if (count($list)) {
-            return $list->current();
-        }
+		$sql = 'select * from category_action_responses where category_id=? and action_id=?';
+		$res = Database::query($sql, [$this->getId(), $a->getId()]);
+		if (count($res)) {
+			return new ResponseTemplate($res[0]);
+		}
         else {
-            if ($action->getTemplate()) {
-                $response = new ResponseTemplate();
-                $response->setCategory($this);
-                $response->setAction    ($action);
-                $response->setTemplate  ($action->getTemplate());
-                $response->setReplyEmail($action->getReplyEmail());
-                return $response;
+            if ($a->getTemplate()) {
+                $r = new ResponseTemplate();
+                $r->setCategory($this);
+                $r->setAction    ($a);
+                $r->setTemplate  ($a->getTemplate());
+                $r->setReplyEmail($a->getReplyEmail());
+                return $r;
             }
         }
         return null;

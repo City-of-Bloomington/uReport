@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -20,8 +20,8 @@ class CategoriesController extends Controller
 		$table = new CategoryTable;
 		$list  = $table->find();
 
-		$this->template->title = $this->template->_(['category', 'categories', count($list)]);
-		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$list]);
+		$this->template->title = $this->template->_(['category', 'categories', $list['total']]);
+		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$list['rows']]);
 	}
 
 	public function view()
@@ -95,9 +95,9 @@ class CategoriesController extends Controller
 		}
 
 		$t = new CategoryTable();
-		$list = $t->find();
+		$r = $t->find();
 
 		$this->template->title = $this->template->_('service_level_agreement');
-		$this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$list]);
+		$this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$r['rows']]);
 	}
 }

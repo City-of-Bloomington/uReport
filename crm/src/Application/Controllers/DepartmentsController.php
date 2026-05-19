@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -20,8 +20,8 @@ class DepartmentsController extends Controller
 		$table = new DepartmentTable();
 		$list = $table->find();
 
-		$this->template->title = $this->template->_(['department', 'departments', count($list)]);
-		$this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$list]);
+		$this->template->title = $this->template->_(['department', 'departments', $list['total']]);
+		$this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$list['rows']]);
 	}
 
 	public function view()

@@ -34,7 +34,7 @@ class PersonChooser extends Helper
 	 * @param Person $person The currently selected Person object
 	 * @return string
 	 */
-	public function personChooser($fieldname, Person $person=null)
+	public function personChooser($fieldname, ?Person $person=null)
 	{
 		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser-'.VERSION.'.js');
 

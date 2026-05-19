@@ -19,8 +19,8 @@ class ClientsController extends Controller
 		$table = new ClientTable();
 		$list  = $table->find();
 
-		$this->template->title = $this->template->_(['client', 'clients', count($list)]);
-		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list]);
+		$this->template->title = $this->template->_(['client', 'clients', $list['total']]);
+		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list['rows']]);
 	}
 
 	/**

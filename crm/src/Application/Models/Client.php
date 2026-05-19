@@ -17,17 +17,17 @@ class Client extends ActiveRecord
 	protected $contactPerson;
 	protected $contactMethod;
 
-	public static function loadByApiKey($api_key)
+	public static function loadByApiKey(string $api_key): ?Client
 	{
-		$db = Database::getConnection();
 		$sql = 'select * from clients where api_key=?';
-		$result = $db->createStatement($sql)->execute([$api_key]);
-		if (count($result)) {
-			return new Client($result->current());
+		$res = Database::query($sql, [$api_key]);
+		if (count($res)) {
+			return new Client($res[0]);
 		}
 		else {
 			throw new \Exception('clients/unknownApiKey');
 		}
+		return null;
 	}
 
 	/**

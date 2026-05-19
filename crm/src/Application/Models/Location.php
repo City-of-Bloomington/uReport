@@ -27,7 +27,7 @@ class Location
 				   count(*) as ticketCount
 			from tickets
 			where location like ?
-			group by location, addressId, city"
+			group by location, addressId, city
 			END;
 			$q = Database::query($sql, ["$query%"]);
 			foreach ($q as $row) {
@@ -35,14 +35,14 @@ class Location
 			}
 
 			if (defined('ADDRESS_SERVICE')) {
-                $sql = $db->createStatement('select count(*) as ticketCount from tickets where addressId=?');
+				$pdo = Database::getConnection();
+                $sql = $pdo->prepare('select count(*) as ticketCount from tickets where addressId=?');
                 $res = call_user_func(ADDRESS_SERVICE.'::searchAddresses', $query);
                 foreach ($res as $location=>$data) {
                     if (!isset($results[$location])) {
 
                         $r = $sql->execute([$data['addressId']]);
-                        $t = $r->current();
-                        $data['ticketCount'] = $t['ticketCount'];
+                        $data['ticketCount'] = $r[0]['ticketCount'];
 
                         $results[$location] = $data;
                     }
