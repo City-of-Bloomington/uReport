@@ -41,7 +41,8 @@ class Location
                 foreach ($res as $location=>$data) {
                     if (!isset($results[$location])) {
 
-                        $r = $sql->execute([$data['addressId']]);
+                        $sql->execute([$data['addressId']]);
+						$r = $sql->fetchAll(\PDO::FETCH_ASSOC);
                         $data['ticketCount'] = $r[0]['ticketCount'];
 
                         $results[$location] = $data;
