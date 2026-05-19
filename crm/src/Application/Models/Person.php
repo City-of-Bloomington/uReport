@@ -437,7 +437,6 @@ class Person extends ActiveRecord
             $mail->isSMTP();
             $mail->Host        = SMTP_HOST;
             $mail->Port        = SMTP_PORT;
-            $mail->SMTPSecure  = false;
             $mail->SMTPAutoTLS = false;
             $mail->Subject     = $subject;
             $mail->Body        = $message;

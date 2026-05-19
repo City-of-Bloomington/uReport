@@ -796,7 +796,7 @@ class Ticket extends ActiveRecord
 				: new \DateTime($this->getClosedDate());
 			$diff = $targetDate->diff($dateEntered);
 			$daysPassed = $diff->format('%a');
-			return round($daysPassed/$days*100);
+			return (int)round($daysPassed/$days*100);
 		}
 		return null;
 	}
