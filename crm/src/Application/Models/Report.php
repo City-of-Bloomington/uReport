@@ -10,7 +10,6 @@ use Application\Database;
 
 class Report
 {
-	private static $select;
 	private static $closedAction;
 
 	public static function closedId(): int

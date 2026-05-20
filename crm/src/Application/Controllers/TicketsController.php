@@ -544,7 +544,7 @@ class TicketsController extends Controller
 		$parent = $this->loadTicket($_REQUEST['parent_ticket_id']);
 		$child  = $this->loadTicket($_REQUEST[ 'child_ticket_id']);
 
-		if (!empty($_POST['confirm']) && $_POST['confirm']) {
+		if (!empty($_POST['confirm'])) {
             try {
                 $parent->mergeFrom($child);
                 $this->redirectToTicketView($parent);

@@ -12,7 +12,6 @@ class PersonTable extends PdoRepository
 	public const TABLENAME = 'people';
 	public const CLASSNAME = __namespace__.'\Person';
 
-	private static $defaultSort = ['p.lastname', 'p.firstname'];
 	private static $fields = [
 		'firstname','middlename','lastname',
 		'email','organization',
@@ -53,8 +52,7 @@ class PersonTable extends PdoRepository
 				if ($v) {
 					switch ($k) {
 						case 'user_account':
-							$where[] = $v ? 'p.username is not null'
-							              : 'p.username is null';
+							$where[] = 'p.username is not null';
 
 							break;
 						case 'email':

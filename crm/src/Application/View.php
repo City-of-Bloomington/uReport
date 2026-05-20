@@ -93,7 +93,7 @@ abstract class View
                 }
             }
             else {
-                $input = $input ? htmlspecialchars(trim($input), $quotes, 'UTF-8') : '';
+                $input = htmlspecialchars(trim($input), $quotes, 'UTF-8');
             }
         }
 
@@ -112,7 +112,7 @@ abstract class View
                 }
             }
             else {
-                $input = $input ? htmlspecialchars_decode(trim($input), ENT_QUOTES) : '';
+                $input = htmlspecialchars_decode(trim($input), ENT_QUOTES);
             }
         }
         return $input;

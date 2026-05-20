@@ -17,7 +17,7 @@ class Client extends ActiveRecord
 	protected $contactPerson;
 	protected $contactMethod;
 
-	public static function loadByApiKey(string $api_key): ?Client
+	public static function loadByApiKey(string $api_key): Client
 	{
 		$sql = 'select * from clients where api_key=?';
 		$res = Database::query($sql, [$api_key]);
@@ -27,7 +27,6 @@ class Client extends ActiveRecord
 		else {
 			throw new \Exception('clients/unknownApiKey');
 		}
-		return null;
 	}
 
 	/**
