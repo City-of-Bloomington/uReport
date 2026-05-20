@@ -18,8 +18,7 @@ $search->solr->update($delete);
 
 
 $sql    = 'select * from tickets';
-$db     = Database::getConnection();
-$result = $db->query($sql)->execute();
+$result = Database::query($sql, []);
 $count  = count($result);
 foreach ($result as $c=>$row) {
     $ticket   = new Ticket($row);
