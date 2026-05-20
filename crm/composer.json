@@ -6,8 +6,6 @@
         "solarium/solarium":               "@stable",
         "symfony/event-dispatcher":        "@stable",
         "phpmailer/phpmailer":             "@stable",
-        "laminas/laminas-db":              "@stable",
-        "laminas/laminas-paginator":       "@stable",
         "laminas/laminas-permissions-acl": "@stable"
     },
     "require-dev": {

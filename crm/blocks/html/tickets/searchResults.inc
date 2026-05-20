@@ -11,9 +11,6 @@
 use Application\Models\Search;
 
 use Application\Block;
-use Application\SolrPaginatorAdapter;
-
-use Application\Paginator;
 
 $this->_include('tickets/partials/searchResultsFormatButtons.inc');
 ?>

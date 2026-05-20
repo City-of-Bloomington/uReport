@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e2d2613a28a102ec63462f2540ed5bf",
+    "content-hash": "97c97596e658fdc40288fa3689f61186",
     "packages": [
         {
             "name": "graylog2/gelf-php",
@@ -167,213 +167,6 @@
             "time": "2024-09-13T07:08:11+00:00"
         },
         {
-            "name": "laminas/laminas-db",
-            "version": "2.6.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "ed12acd7ac63d29e2c32433038667595fb321fa1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/ed12acd7ac63d29e2c32433038667595fb321fa1",
-                "reference": "ed12acd7ac63d29e2c32433038667595fb321fa1",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-stdlib": "~2.7",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": ">=5.5"
-            },
-            "replace": {
-                "zendframework/zend-db": "self.version"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "laminas/laminas-eventmanager": "~2.5",
-                "laminas/laminas-hydrator": "~1.0",
-                "laminas/laminas-mvc": "~2.5",
-                "laminas/laminas-servicemanager": "~2.5",
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
-                "laminas/laminas-hydrator": "Laminas\\Hydrator component for using HydratingResultSets",
-                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Db\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "db",
-                "laminas"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-db/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-db/issues",
-                "rss": "https://github.com/laminas/laminas-db/releases.atom",
-                "source": "https://github.com/laminas/laminas-db"
-            },
-            "time": "2019-12-31T20:00:00+00:00"
-        },
-        {
-            "name": "laminas/laminas-hydrator",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-hydrator.git",
-                "reference": "acab29a3327a70be0a653d88906655b15de15517"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-hydrator/zipball/acab29a3327a70be0a653d88906655b15de15517",
-                "reference": "acab29a3327a70be0a653d88906655b15de15517",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-stdlib": "^2.5.1",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": ">=5.5"
-            },
-            "replace": {
-                "zendframework/zend-hydrator": "self.version"
-            },
-            "require-dev": {
-                "laminas/laminas-eventmanager": "^2.5.1",
-                "laminas/laminas-filter": "^2.5.1",
-                "laminas/laminas-inputfilter": "^2.5.1",
-                "laminas/laminas-serializer": "^2.5.1",
-                "laminas/laminas-servicemanager": "^2.5.1",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "^2.0@dev"
-            },
-            "suggest": {
-                "laminas/laminas-eventmanager": "^2.5.1, to support aggregate hydrator usage",
-                "laminas/laminas-filter": "^2.5.1, to support naming strategy hydrator usage",
-                "laminas/laminas-serializer": "^2.5.1, to use the SerializableStrategy",
-                "laminas/laminas-servicemanager": "^2.5.1, to support hydrator plugin manager usage"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev",
-                    "dev-develop": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Hydrator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "hydrator",
-                "laminas"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-hydrator/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-hydrator/issues",
-                "rss": "https://github.com/laminas/laminas-hydrator/releases.atom",
-                "source": "https://github.com/laminas/laminas-hydrator"
-            },
-            "time": "2019-12-31T17:06:20+00:00"
-        },
-        {
-            "name": "laminas/laminas-paginator",
-            "version": "2.5.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-paginator.git",
-                "reference": "2d8e72ccf7950202c3430b617d00b20592ecf1b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-paginator/zipball/2d8e72ccf7950202c3430b617d00b20592ecf1b0",
-                "reference": "2d8e72ccf7950202c3430b617d00b20592ecf1b0",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-stdlib": "~2.5",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": ">=5.3.23"
-            },
-            "replace": {
-                "zendframework/zend-paginator": "self.version"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "laminas/laminas-cache": "~2.5",
-                "laminas/laminas-config": "~2.5",
-                "laminas/laminas-db": "~2.5",
-                "laminas/laminas-filter": "~2.5",
-                "laminas/laminas-json": "~2.5",
-                "laminas/laminas-mvc": "~2.5",
-                "laminas/laminas-servicemanager": "~2.5",
-                "laminas/laminas-view": "~2.5",
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "laminas/laminas-cache": "Laminas\\Cache component to support cache features",
-                "laminas/laminas-db": "Laminas\\Db component",
-                "laminas/laminas-filter": "Laminas\\Filter component",
-                "laminas/laminas-json": "Laminas\\Json component",
-                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component",
-                "laminas/laminas-view": "Laminas\\View component"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev",
-                    "dev-develop": "2.6-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Paginator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "paginator"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-paginator/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-paginator/issues",
-                "rss": "https://github.com/laminas/laminas-paginator/releases.atom",
-                "source": "https://github.com/laminas/laminas-paginator"
-            },
-            "time": "2019-12-31T17:36:15+00:00"
-        },
-        {
             "name": "laminas/laminas-permissions-acl",
             "version": "2.18.0",
             "source": {
@@ -436,139 +229,6 @@
                 }
             ],
             "time": "2025-11-03T09:15:20+00:00"
-        },
-        {
-            "name": "laminas/laminas-stdlib",
-            "version": "2.7.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "b69e2741673daabdf720bc76668448ceb1e4c537"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/b69e2741673daabdf720bc76668448ceb1e4c537",
-                "reference": "b69e2741673daabdf720bc76668448ceb1e4c537",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-hydrator": "~1.0",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": ">=5.5"
-            },
-            "replace": {
-                "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "athletic/athletic": "~0.1",
-                "fabpot/php-cs-fixer": "1.7.*",
-                "laminas/laminas-config": "~2.5",
-                "laminas/laminas-eventmanager": "~2.5",
-                "laminas/laminas-filter": "~2.5",
-                "laminas/laminas-inputfilter": "~2.5",
-                "laminas/laminas-serializer": "~2.5",
-                "laminas/laminas-servicemanager": "~2.5",
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "laminas/laminas-eventmanager": "To support aggregate hydrator usage",
-                "laminas/laminas-filter": "To support naming strategy hydrator usage",
-                "laminas/laminas-serializer": "Laminas\\Serializer component",
-                "laminas/laminas-servicemanager": "To support hydrator plugin manager usage"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev",
-                    "dev-develop": "2.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Stdlib\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "stdlib"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-stdlib/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-stdlib/issues",
-                "rss": "https://github.com/laminas/laminas-stdlib/releases.atom",
-                "source": "https://github.com/laminas/laminas-stdlib"
-            },
-            "time": "2019-12-31T17:51:00+00:00"
-        },
-        {
-            "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "13af2502d9bb6f7d33be2de4b51fb68c6cdb476e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/13af2502d9bb6f7d33be2de4b51fb68c6cdb476e",
-                "reference": "13af2502d9bb6f7d33be2de4b51fb68c6cdb476e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
-                "psalm/plugin-phpunit": "^0.15.1",
-                "squizlabs/php_codesniffer": "^3.5",
-                "vimeo/psalm": "^4.6"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "module": "Laminas\\ZendFrameworkBridge"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/autoload.php"
-                ],
-                "psr-4": {
-                    "Laminas\\ZendFrameworkBridge\\": "src//"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Alias legacy ZF class names to Laminas Project equivalents.",
-            "keywords": [
-                "ZendFramework",
-                "autoloading",
-                "laminas",
-                "zf"
-            ],
-            "support": {
-                "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-zendframework-bridge/issues",
-                "rss": "https://github.com/laminas/laminas-zendframework-bridge/releases.atom",
-                "source": "https://github.com/laminas/laminas-zendframework-bridge"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "abandoned": true,
-            "time": "2021-06-24T12:49:22+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -691,16 +351,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "e193b921a73e65bff40cab89ea0b0293be0e0c20"
+                "reference": "1bc1716a507a65e039d4ac9d9adebbbd0d346e15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e193b921a73e65bff40cab89ea0b0293be0e0c20",
-                "reference": "e193b921a73e65bff40cab89ea0b0293be0e0c20",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/1bc1716a507a65e039d4ac9d9adebbbd0d346e15",
+                "reference": "1bc1716a507a65e039d4ac9d9adebbbd0d346e15",
                 "shasum": ""
             },
             "require": {
@@ -761,7 +421,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v7.1.0"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -769,7 +429,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-15T14:22:59+00:00"
+            "time": "2026-05-18T08:06:14+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1619,11 +1279,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.54",
+            "version": "2.1.55",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
-                "reference": "8be50c3992107dc837b17da4d140fbbdf9a5c5bd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9eaac3826ed5e9b8427350a43cac825eeca3f566",
+                "reference": "9eaac3826ed5e9b8427350a43cac825eeca3f566",
                 "shasum": ""
             },
             "require": {
@@ -1668,20 +1328,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-29T13:31:09+00:00"
+            "time": "2026-05-18T11:57:34+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "14.1.8",
+            "version": "14.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "031856c28c060e1c1d1fc94d256e3ffbe4230c91"
+                "reference": "655533a65696bbc4231cd8027af150dadc40ec88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/031856c28c060e1c1d1fc94d256e3ffbe4230c91",
-                "reference": "031856c28c060e1c1d1fc94d256e3ffbe4230c91",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/655533a65696bbc4231cd8027af150dadc40ec88",
+                "reference": "655533a65696bbc4231cd8027af150dadc40ec88",
                 "shasum": ""
             },
             "require": {
@@ -1738,7 +1398,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.8"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.9"
             },
             "funding": [
                 {
@@ -1758,7 +1418,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-09T12:06:52+00:00"
+            "time": "2026-05-16T05:16:14+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2215,16 +1875,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "8.1.4",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "1edd557042bf4ff9978ec125d8131b147d5c8224"
+                "reference": "ddacb462216a4f6d97e84bf08165b9074ddbafeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1edd557042bf4ff9978ec125d8131b147d5c8224",
-                "reference": "1edd557042bf4ff9978ec125d8131b147d5c8224",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/ddacb462216a4f6d97e84bf08165b9074ddbafeb",
+                "reference": "ddacb462216a4f6d97e84bf08165b9074ddbafeb",
                 "shasum": ""
             },
             "require": {
@@ -2232,10 +1892,10 @@
                 "ext-mbstring": "*",
                 "php": ">=8.4",
                 "sebastian/diff": "^8.3",
-                "sebastian/exporter": "^8.0"
+                "sebastian/exporter": "^8.0.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^13.0"
+                "phpunit/phpunit": "^13.1.10"
             },
             "suggest": {
                 "ext-bcmath": "For comparing BcMath\\Number objects"
@@ -2243,7 +1903,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "8.1-dev"
+                    "dev-main": "8.2-dev"
                 }
             },
             "autoload": {
@@ -2283,7 +1943,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/8.1.4"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/8.2.0"
             },
             "funding": [
                 {
@@ -2303,7 +1963,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-15T08:30:51+00:00"
+            "time": "2026-05-20T11:55:37+00:00"
         },
         {
             "name": "sebastian/complexity",
@@ -2532,16 +2192,16 @@
         },
         {
             "name": "sebastian/exporter",
-            "version": "8.0.2",
+            "version": "8.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "9cee180ebe62259e3ed48df2212d1fc8cfd971bb"
+                "reference": "9b54f1afabb977a097ef353600d41a372ccde617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/9cee180ebe62259e3ed48df2212d1fc8cfd971bb",
-                "reference": "9cee180ebe62259e3ed48df2212d1fc8cfd971bb",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/9b54f1afabb977a097ef353600d41a372ccde617",
+                "reference": "9b54f1afabb977a097ef353600d41a372ccde617",
                 "shasum": ""
             },
             "require": {
@@ -2550,7 +2210,7 @@
                 "sebastian/recursion-context": "^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^13.0"
+                "phpunit/phpunit": "^13.1.10"
             },
             "type": "library",
             "extra": {
@@ -2598,7 +2258,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/exporter/issues",
                 "security": "https://github.com/sebastianbergmann/exporter/security/policy",
-                "source": "https://github.com/sebastianbergmann/exporter/tree/8.0.2"
+                "source": "https://github.com/sebastianbergmann/exporter/tree/8.0.3"
             },
             "funding": [
                 {
@@ -2618,7 +2278,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-15T12:38:05+00:00"
+            "time": "2026-05-20T04:38:47+00:00"
         },
         {
             "name": "sebastian/git-state",
@@ -2765,24 +2425,24 @@
         },
         {
             "name": "sebastian/lines-of-code",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/lines-of-code.git",
-                "reference": "4f21bb7768e1c997722ccc7efb1d6b5c11bfd471"
+                "reference": "d2cff273a90c79b0eb590baa682d4b5c318bdbb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/lines-of-code/zipball/4f21bb7768e1c997722ccc7efb1d6b5c11bfd471",
-                "reference": "4f21bb7768e1c997722ccc7efb1d6b5c11bfd471",
+                "url": "https://api.github.com/repos/sebastianbergmann/lines-of-code/zipball/d2cff273a90c79b0eb590baa682d4b5c318bdbb7",
+                "reference": "d2cff273a90c79b0eb590baa682d4b5c318bdbb7",
                 "shasum": ""
             },
             "require": {
-                "nikic/php-parser": "^5.0",
+                "nikic/php-parser": "^5.7.0",
                 "php": ">=8.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^13.0"
+                "phpunit/phpunit": "^13.1.10"
             },
             "type": "library",
             "extra": {
@@ -2811,7 +2471,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/lines-of-code/issues",
                 "security": "https://github.com/sebastianbergmann/lines-of-code/security/policy",
-                "source": "https://github.com/sebastianbergmann/lines-of-code/tree/5.0.0"
+                "source": "https://github.com/sebastianbergmann/lines-of-code/tree/5.0.1"
             },
             "funding": [
                 {
@@ -2831,7 +2491,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-06T04:45:54+00:00"
+            "time": "2026-05-19T16:23:37+00:00"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -3049,23 +2709,23 @@
         },
         {
             "name": "sebastian/type",
-            "version": "7.0.0",
+            "version": "7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "42412224607bd3931241bbd17f38e0f972f5a916"
+                "reference": "fee0309275847fefd7636167085e379c1dbf6990"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/42412224607bd3931241bbd17f38e0f972f5a916",
-                "reference": "42412224607bd3931241bbd17f38e0f972f5a916",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fee0309275847fefd7636167085e379c1dbf6990",
+                "reference": "fee0309275847fefd7636167085e379c1dbf6990",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^13.0"
+                "phpunit/phpunit": "^13.1.10"
             },
             "type": "library",
             "extra": {
@@ -3094,7 +2754,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
                 "security": "https://github.com/sebastianbergmann/type/security/policy",
-                "source": "https://github.com/sebastianbergmann/type/tree/7.0.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/7.0.1"
             },
             "funding": [
                 {
@@ -3114,7 +2774,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-06T04:52:09+00:00"
+            "time": "2026-05-20T06:49:11+00:00"
         },
         {
             "name": "sebastian/version",
@@ -3290,8 +2950,6 @@
     "stability-flags": {
         "graylog2/gelf-php": 0,
         "jumbojett/openid-connect-php": 0,
-        "laminas/laminas-db": 0,
-        "laminas/laminas-paginator": 0,
         "laminas/laminas-permissions-acl": 0,
         "phpmailer/phpmailer": 0,
         "phpstan/phpstan": 0,
