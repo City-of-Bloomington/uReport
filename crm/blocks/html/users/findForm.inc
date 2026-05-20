@@ -1,9 +1,8 @@
 <?php
 /**
- * @copyright 2018-2020 City of Bloomington, Indiana
+ * @copyright 2018-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->roles
- * @param array $this->authenticationMethods
  * @param array $this->users
  */
 use Application\Models\Person;
@@ -64,18 +63,6 @@ foreach ($fields as $f) {
                     'type'     => 'select',
                     'options'  => $options
 				]);
-
-
-                $options = [['value'=>'']];
-                foreach ($this->authenticationMethods as $m) { $options[] = ['value'=>$m]; }
-                echo $h->field([
-                    'name'     => 'authenticationMethod',
-                    'id'       => 'authenticationMethod',
-                    'label'    => $this->_('authenticationMethod'),
-                    'value'    => $authenticationMethod,
-                    'type'     => 'select',
-                    'options'  => $options
-                ]);
 
                 // Preserve any extra parameters passed in
                 foreach ($_REQUEST as $key=>$value) {

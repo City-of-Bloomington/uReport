@@ -107,8 +107,7 @@ class PersonTable extends PdoRepository
                 if ($v) {
                     switch ($k) {
                         case 'user_account':
-							$where[] = $v ? 'p.username is not null'
-							              : 'p.username is null';
+							$where[] = 'p.username is not null';
                             break;
 
                         case 'email':

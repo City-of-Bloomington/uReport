@@ -72,7 +72,6 @@ class Person extends ActiveRecord
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->setAuthenticationMethod('local');
 		}
 	}
 
@@ -98,10 +97,6 @@ class Person extends ActiveRecord
 		if ((!$this->getFirstname() && !$this->getLastname())
 			&& !$this->getOrganization()) {
 			throw new \Exception('missingRequiredFields');
-		}
-
-		if ($this->getUsername() && !$this->getAuthenticationMethod()) {
-			$this->setAuthenticationMethod('local');
 		}
 	}
 
@@ -131,7 +126,7 @@ class Person extends ActiveRecord
 	public function deleteUserAccount()
 	{
 		$userAccountFields = [
-			'username', 'password', 'authenticationMethod', 'role', 'department_id'
+			'username', 'password', 'role', 'department_id'
 		];
 		foreach ($userAccountFields as $f) {
 			$this->data[$f] = null;
@@ -159,20 +154,10 @@ class Person extends ActiveRecord
 	public function setDepartment(Department $d) { parent::setForeignKeyObject(__namespace__.'\Department', 'department_id', $d);  }
 
 	public function getUsername()             { return parent::get('username'); }
-	public function getPassword()             { return parent::get('password'); } # Encrypted
 	public function getRole()                 { return parent::get('role');     }
-	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
 
 	public function setUsername            ($s) { parent::set('username',             $s); }
 	public function setRole                ($s) { parent::set('role',                 $s); }
-	public function setAuthenticationMethod($s) { parent::set('authenticationMethod', $s); }
-
-	public function setPassword($s)
-	{
-		$s = trim($s);
-		if ($s) { $this->data['password'] = sha1($s); }
-		else    { $this->data['password'] = null;     }
-	}
 
 	/**
 	 * Updates fields that are not associated with authentication
@@ -197,14 +182,11 @@ class Person extends ActiveRecord
 	{
 		$this->handleUpdate($post);
 
-		$fields = array('department_id','username','authenticationMethod','role');
+		$fields = array('department_id', 'username', 'role');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);
 				$this->$set($post[$f]);
-			}
-			if (!empty($post['password'])) {
-				$this->setPassword($post['password']);
 			}
 		}
 
@@ -214,84 +196,17 @@ class Person extends ActiveRecord
         }
 	}
 
-	public function handleChangePassword(array $post)
-	{
-		if (   !empty($post['current_password'])
-			&& !empty($post['new_password'])
-			&& !empty($post['retype_password'])) {
-
-			if ($this->authenticate($_POST['current_password'])) {
-				if ($post['new_password'] == $post['retype_password']) {
-					$this->setPassword($post['new_password']);
-				}
-				else {
-					throw new \Exception('users/passwordsDontMatch');
-				}
-			}
-			else {
-				throw new \Exception('users/wrongPassword');
-			}
-		}
-		else {
-			throw new \Exception('missingRequiredFields');
-		}
-	}
-
-	//----------------------------------------------------------------
-	// User Authentication
-	//----------------------------------------------------------------
 	public function getExternalIdentity(): ?ExternalIdentity
     {
-        $method = $this->getAuthenticationMethod();
-        if ($this->getUsername() && $method && $method != 'local') {
+        if ($this->getUsername()) {
             global $DIRECTORY_CONFIG;
 
-            $class = $DIRECTORY_CONFIG[$method]['classname'];
-            $dir   = new $class($DIRECTORY_CONFIG[$method]);
+            $class = $DIRECTORY_CONFIG['Employee']['classname'];
+            $dir   = new $class($DIRECTORY_CONFIG['Employee']);
             return $dir->identify($this->getUsername());
         }
         return null;
     }
-
-	/**
-	 * Should provide the list of methods supported
-	 *
-	 * There should always be at least one method, called "local"
-	 * Additional methods be classes that implement AuthenticationInterface
-	 * @see Domain\Auth\AuthenticationInterface
-	 */
-	public static function getAuthenticationMethods(): array
-	{
-		global $DIRECTORY_CONFIG;
-		return array_merge(['local'], array_keys($DIRECTORY_CONFIG));
-	}
-
-	/**
-	 * Determines which authentication scheme to use for the user and calls the appropriate method
-	 *
-	 * Local users will get authenticated against the database
-	 * Other authenticationMethods will need to write a class implementing AuthenticationInterface
-	 * @see Domain\Auth\AuthenticationInterface
-	 */
-	public function authenticate(string $password): bool
-	{
-        global $DIRECTORY_CONFIG;
-
-		if ($this->getUsername()) {
-			switch($this->getAuthenticationMethod()) {
-				case "local":
-					return $this->getPassword()==sha1($password);
-				break;
-
-				default:
-					$method = $this->getAuthenticationMethod();
-					$class  = $DIRECTORY_CONFIG[$method]['classname'];
-					$auth   = new $class($DIRECTORY_CONFIG[$method]);
-					return $auth->authenticate($this->getUsername(), $password);
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * Checks if the user is supposed to have access to the resource

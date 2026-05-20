@@ -37,4 +37,4 @@ package:
 	cd ../build && tar czf $(APPNAME).tar.gz $(APPNAME)
 
 test:
-	vendor/bin/phpstan analyse -l 3
+	vendor/bin/phpstan analyse -l 4

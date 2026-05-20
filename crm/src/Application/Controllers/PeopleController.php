@@ -60,16 +60,6 @@ class PeopleController extends Controller
 		}
 
 		if (count($search)) {
-			if (isset(  $_GET['setOfPeople'])) {
-				switch ($_GET['setOfPeople']) {
-					case 'staff':
-						$search['user_account'] = true;
-						break;
-					case 'public':
-						$search['user_account'] = false;
-						break;
-				}
-			}
 			$t = new PersonTable();
 			$r = $t->search($search);
 			$b = new Block('people/searchResults.inc', ['personList'=>$r['rows']]);

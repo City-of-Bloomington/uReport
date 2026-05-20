@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2025 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -58,30 +58,10 @@ class LoginController extends Controller
         exit();
     }
 
-	/**
-	 * Attempts to authenticate users based on AuthenticationMethod
-	 */
 	public function index()
 	{
-		if (isset($_POST['username'])) {
-			try {
-				$person = new Person($_POST['username']);
-				if ($person->authenticate($_POST['password'])) {
-					$_SESSION['USER'] = $person;
-					header('Location: '.$this->return_url);
-					exit();
-				}
-				else {
-					throw new \Exception('invalidLogin');
-				}
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		$this->template->title = $this->template->_('login');
-		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
+		header('Location: '.BASE_URL.'/login/oidc');
+		exit();
 	}
 
 	public function logout()

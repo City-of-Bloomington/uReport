@@ -12,7 +12,6 @@ use Application\Templates\Helpers\ButtonLink;
         <tr><th><?= $this->_('username'); ?></th>
             <th><?= $this->_('name'); ?></th>
             <th><?= $this->_('department'); ?></th>
-            <th><?= $this->_('authenticationMethod'); ?></th>
             <th><?= $this->_('role'); ?></th>
             <th></th>
             <th></th>
@@ -62,7 +61,6 @@ use Application\Templates\Helpers\ButtonLink;
                 <td>$username</td>
                 <td>$name</td>
                 <td>$dept</td>
-                <td>{$user->getAuthenticationMethod()}</td>
                 <td>$role</td>
                 <td>$editButton</td>
                 <td>$deleteButton</td>

@@ -16,15 +16,15 @@
  * You will ned to change the namespace to Site\Classes.  You might also
  * want to change the name of the class to suit your own needs.
  *
- * @copyright 2011-2025 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Site\Classes;
 
-use Domain\Auth\AuthenticationInterface;
+use Domain\Auth\IdentityInterface;
 use Domain\Auth\ExternalIdentity;
 
-class Employee implements AuthenticationInterface
+class Employee implements IdentityInterface
 {
 	private static $connection;
 	private $config;
@@ -74,17 +74,6 @@ class Employee implements AuthenticationInterface
         'state'     => 'st',
         'zip'       => 'postalcode'
 	];
-
-	public function authenticate(string $username, string $password): bool
-	{
-		$bindUser = sprintf(str_replace('{username}','%s',$this->config['user_binding']),$username);
-
-		$connection = ldap_connect($this->config['server']) or die('ldap/connectionFailed');
-		ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, 3);
-		if (ldap_bind($connection,$bindUser,$password)) {
-			return true;
-		}
-	}
 
 	/**
 	 * Creates the connection to the LDAP server

@@ -29,8 +29,7 @@ class UsersController extends Controller
 		$vars  = [
             'users'                 => $users,
             'departments'           => $depts,
-            'roles'                 => $ACL->getRoles(),
-            'authenticationMethods' => Person::getAuthenticationMethods()
+            'roles'                 => $ACL->getRoles()
 		];
 		$this->template->title  = $this->template->_(['user', 'users', 100]);
 		$this->template->blocks = [ new Block('users/findForm.inc', $vars) ];

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->title (optional)
  */
@@ -18,7 +18,7 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
 
 				// Preserve any extra parameters passed in
 				foreach ($_REQUEST as $key=>$value) {
-					if ($key!='setOfPeople' && !in_array($key, $fields)) {
+					if (!in_array($key, $fields)) {
 						$key   = self::escape($key);
 						$value = self::escape($value);
 						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
@@ -33,18 +33,6 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
                         'value' => isset($_GET[$f]) ? self::escape($_GET[$f]) : ''
 					]);
 				}
-
-				$roles   = ['all', 'staff', 'public'];
-				$options = [];
-                foreach ($roles as $v) { $options[] = ['value'=>$v, 'label'=>$this->_($v)]; }
-                echo $helper->field([
-                    'name'    => 'setOfPeople',
-                    'id'      => 'setOfPeople',
-                    'label'   => $this->_(['role', 'roles', count($roles)]),
-                    'type'    => 'select',
-                    'value'   => !empty($_GET['setOfPeople']) ? $_GET['setOfPeople'] : 'all',
-                    'options' => $options
-                ]);
 			?>
 			<button type="submit" class="search"><?= $this->_('search'); ?></button>
 			<?php

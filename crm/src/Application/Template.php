@@ -109,6 +109,8 @@ class Template extends View
 	 * $this->blocks['panel-one'][] = "left sidebar block one";
 	 * $this->blocks['panel-one'][] = "left sidebar block two";
 	 * $this->blocks['panel-two'][] = "right sidebar block one";
+	 *
+	 * @phpstan-ignore method.unused
 	 */
 	private function includeBlocks(?string $target=null): string
 	{

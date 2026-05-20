@@ -1,4 +1,4 @@
--- @copyright 2006-2019 City of Bloomington, Indiana
+-- @copyright 2006-2026 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE
 set foreign_key_checks=0;
 create table version (
@@ -25,8 +25,6 @@ create table people (
 	zip                  varchar(20),
 	department_id        int          unsigned,
 	username             varchar(40)  unique,
-	password             varchar(40),
-	authenticationMethod varchar(40),
 	role varchar(30),
 	constraint FK_people_department_id foreign key (department_id) references departments(id)
 );
