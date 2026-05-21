@@ -35,9 +35,3 @@ if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
          set_exception_handler([$graylog, 'exception']);
     register_shutdown_function([$graylog, 'shutdown' ]);
 }
-
-/**
- * Image handling library
- * Set the path to the ImageMagick binaries
- */
-define('IMAGEMAGICK','/usr/bin');

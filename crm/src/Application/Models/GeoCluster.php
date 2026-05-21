@@ -84,9 +84,9 @@ class GeoCluster extends ActiveRecord
 	public function getLatitude()  { return (float)parent::get('latitude' ); }
 	public function getLongitude() { return (float)parent::get('longitude'); }
 
-	public function setLatitude ($f) { parent::set('latitude' , (float)$f); }
-	public function setLongitude($f) { parent::set('longitude', (float)$f); }
-	public function setLevel($i=null) { $this->data['level'] = isset($i) ? (int)$i : null; }
+	public function setLatitude ($f) { $this->data['latitude' ] = $f ? (float)$f : null; }
+	public function setLongitude($f) { $this->data['longitude'] = $f ? (float)$f : null; }
+	public function setLevel    ($i) { $this->data['level'    ] = $i ?   (int)$i : null; }
 
 	//----------------------------------------------------------------
 	// Custom Functions

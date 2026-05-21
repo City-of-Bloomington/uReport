@@ -110,7 +110,7 @@ class Category extends ActiveRecord
 	public function getFeatured()               { return parent::get('featured');               }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
-	public function getSlaDays()                { return parent::get('slaDays');                }
+	public function getSlaDays(): ?int          { return $this->data['slaDays'] ?? null;        }
 	public function getNotificationReplyEmail() { return parent::get('notificationReplyEmail'); }
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
 	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
@@ -122,11 +122,11 @@ class Category extends ActiveRecord
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
-	public function setActive                ($s) { parent::set('active',        $s ? 1 : 0); }
-	public function setFeatured              ($s) { parent::set('featured',      $s ? 1 : 0); }
+	public function setActive                ($s) { $this->data['active'  ] = $s ? 1 : 0; }
+	public function setFeatured              ($s) { $this->data['featured'] = $s ? 1 : 0; }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
 	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
-	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
+	public function setAutoCloseIsActive     ($b) { $this->data['autoCloseIsActive'] = $b ? 1 : 0; }
 	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
 	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
 	public function setDefaultPerson_id     ($id)           { parent::setForeignKeyField( __namespace__.'\Person',        'defaultPerson_id',      $id); }
@@ -149,16 +149,14 @@ class Category extends ActiveRecord
         parent::set('displayPermissionLevel',$s);
     }
 
-    public function setSlaDays($i)
+    public function setSlaDays(?int $i=null)
     {
-        $i = (int)$i;
-
         if ($this->getId()) {
             if ($this->getSlaDays() != $i) {
                 $this->slaDaysHasChanged = true;
             }
         }
-        parent::set('slaDays', $i);
+        $this->data['slaDays'] = $i;
     }
 
 	public function handleUpdate(array $post)

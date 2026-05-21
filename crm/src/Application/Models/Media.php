@@ -266,10 +266,7 @@ class Media extends ActiveRecord
 		return $url;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getFilesize()
+	public function getFilesize(): int
 	{
         return filesize($this->getFullPath());
 	}

@@ -117,7 +117,7 @@ class Email extends ActiveRecord
 	public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
 
 	public function getUsedForNotifications() { return parent::get('usedForNotifications') ? true : false; }
-	public function setUsedForNotifications($b)      { parent::set('usedForNotifications', $b ? 1 : 0); }
+	public function setUsedForNotifications($b)      { $this->data['usedForNotifications'] = $b ? 1 : 0; }
 
 	public function handleUpdate($post)
 	{

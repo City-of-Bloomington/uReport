@@ -33,10 +33,8 @@ class Action extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
-	public function __construct($id=null)
+	public function __construct(array|int|string|null $id=null)
 	{
 		if ($id) {
 			if (is_array($id)) {

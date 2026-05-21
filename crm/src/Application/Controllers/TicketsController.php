@@ -23,11 +23,7 @@ use Application\Url;
 
 class TicketsController extends Controller
 {
-	/**
-	 * @param string $id
-	 * @return Ticket
-	 */
-	private function loadTicket($id)
+	private function loadTicket(int $id): Ticket
 	{
 		try {
 			$ticket = new Ticket($id);
@@ -174,7 +170,7 @@ class TicketsController extends Controller
 	 */
 	public function thumbnails()
 	{
-		$ticket = $this->loadTicket($_GET['ticket_id']);
+		$ticket = $this->loadTicket((int)$_GET['ticket_id']);
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->blocks[] = new Block('tickets/thumbnails.inc', ['ticket'=>$ticket]);
 		}
@@ -267,7 +263,7 @@ class TicketsController extends Controller
 
 	public function update()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['person_id'])) {
 			$ticket->setReportedByPerson_id($_REQUEST['person_id']);
@@ -289,7 +285,7 @@ class TicketsController extends Controller
 
 	public function delete()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['confirm'])) {
 			$ticket->delete();
@@ -309,7 +305,7 @@ class TicketsController extends Controller
 
 	public function assign()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		// Handle any Department choice passed in
 		if (isset($_GET['department_id'])) {
@@ -361,7 +357,7 @@ class TicketsController extends Controller
 	public function recordAction()
 	{
         if (!empty($_REQUEST['ticket_id'])) {
-            $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+            $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
         }
         if (!empty($_REQUEST['action_id'])) {
             try { $action = new Action($_REQUEST['action_id']); }
@@ -401,7 +397,7 @@ class TicketsController extends Controller
 
 	private function changeStatus(string $status)
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 		$ticket->setStatus($status);
 		$_POST['status'] = $ticket->getStatus();
 
@@ -425,7 +421,7 @@ class TicketsController extends Controller
 
 	public function changeLocation()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		// Once the user has chosen a location, they'll pass it in here
 		if (!empty($_REQUEST['location'])) {
@@ -447,7 +443,7 @@ class TicketsController extends Controller
 
 	public function changeCategory()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['category_id'])) {
 			try {
@@ -475,7 +471,7 @@ class TicketsController extends Controller
 	 */
 	public function respond()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_POST['contactMethod_id'])) {
 			try {
@@ -499,7 +495,7 @@ class TicketsController extends Controller
 	 */
 	public function message()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (isset($_POST['message'])) {
@@ -541,8 +537,8 @@ class TicketsController extends Controller
 	public function merge()
 	{
 		// Load the two tickets
-		$parent = $this->loadTicket($_REQUEST['parent_ticket_id']);
-		$child  = $this->loadTicket($_REQUEST[ 'child_ticket_id']);
+		$parent = $this->loadTicket((int)$_REQUEST['parent_ticket_id']);
+		$child  = $this->loadTicket((int)$_REQUEST[ 'child_ticket_id']);
 
 		if (!empty($_POST['confirm'])) {
             try {
