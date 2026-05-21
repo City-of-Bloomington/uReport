@@ -38,3 +38,4 @@ package:
 
 test:
 	vendor/bin/phpstan analyse -l 5
+	vendor/bin/phpunit -c src/Test/phpunit.xml --testsuite Unit
