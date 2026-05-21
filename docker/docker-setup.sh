@@ -20,6 +20,14 @@ INDEX_SCRIPT="${INDEX_SCRIPT:-crm/scripts/solr/indexSearch.php}"
 TIMEOUT="${WAIT_TIMEOUT:-60}"  # seconds
 SECONDS=0
 
+CONFIG_FILE="crm/data/site_config.php"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "ERROR: Missing config file: "
+  echo "$CONFIG_FILE"
+  exit 1
+fi
+
 # --- Wait for MySQL ---
 echo "Waiting for MySQL at $DB_HOST:$DB_PORT..."
 until mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" --ssl=0 -e "SELECT 1"; do

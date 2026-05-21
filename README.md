@@ -7,7 +7,7 @@ existing environments.
 ## Installation
 In order to install one of our binary releases, you must have a linux system already set up with:
 
-* [PHP    7.4](http://php.net) or later
+* [PHP    8.5](http://php.net) or later
 * [Apache 2.4](http://httpd.apache.org)
 * [MySQL  5.7](http://dev.mysql.com) or later
 * [Solr   7.4](http://lucene.apache.org/solr)
@@ -17,7 +17,7 @@ There are many ways to set up and install your own linux webserver.  Our way is 
 ### Installing with Docker
 The easiest way to set up a development environment is with Docker. We recommend installing Docker for Desktop. Make sure that the commands `docker` and `docker-compose` are added to your system path. Then, in your repo directory:
 
-1. Copy `crm/data/site_config.inc.docker.example` to `crm/data/site_config.inc`.
+1. Copy `crm/data/site_config.php.docker.example` to `crm/data/site_config.php`.
 2. In the repo directory, run `docker-compose up --build`.
 
 You should see the application running at http://localhost:8080/tickets.
