@@ -30,7 +30,7 @@ include APPLICATION_HOME.'/access_control.php';
  * @see https://graylog.org
  */
 if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
-    $graylog = new \Web\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
+    $graylog = new \Application\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
              set_error_handler([$graylog, 'error'    ]);
          set_exception_handler([$graylog, 'exception']);
     register_shutdown_function([$graylog, 'shutdown' ]);
