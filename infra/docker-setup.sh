@@ -2,11 +2,6 @@
 set -e
 
 # --- Configuration ---
-# MySQL
-DB_HOST="${DB_HOST:-db}"
-DB_PORT="${DB_PORT:-3306}"
-DB_USER="${DB_USER:-ureport}"
-DB_PASS="${DB_PASS:-ureport}"
 
 # Solr
 SOLR_HOST="${SOLR_HOST:-solr}"
@@ -29,16 +24,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # --- Wait for MySQL ---
-echo "Waiting for MySQL at $DB_HOST:$DB_PORT..."
-until mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" --ssl=0 -e "SELECT 1"; do
-    if [ $SECONDS -ge $TIMEOUT ]; then
-        echo "Timeout waiting for MySQL"
-        exit 1
-    fi
-    echo "MySQL not ready yet... sleeping 2s"
-    sleep 2
-done
-echo "MySQL is ready!"
+./infra/wait-for-db.sh
 
 # --- Wait for Solr ---
 echo "Waiting for Solr core '$SOLR_CORE' at $SOLR_HOST:$SOLR_PORT..."
