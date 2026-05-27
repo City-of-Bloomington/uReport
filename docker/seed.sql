@@ -7,12 +7,12 @@ INSERT INTO departments (id, name, defaultPerson_id) VALUES
 INSERT INTO people (
     id, firstname, middlename, lastname, organization,
     address, city, state, zip, department_id,
-    username, password, authenticationMethod, role
+    username, role
 ) VALUES
 (
     1, 'Test', NULL, 'Person', NULL,
     NULL, NULL, NULL, NULL, 1,
-    NULL, NULL, NULL, NULL
+    NULL, NULL
 );
 
 -- categories
