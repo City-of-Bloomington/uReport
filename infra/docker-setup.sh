@@ -67,12 +67,12 @@ else
 fi
 
 # --- Compile CSS/JS assets ---
-./docker/compile-assets.sh
+./infra/compile-assets.sh
 
 # --- Compile translations ---
-./docker/compile-translations.sh
+./infra/compile-translations.sh
 
 mkdir -p ./crm/data/media/2026/4/15
-cp ./docker/abc123def4567.png ./crm/data/media/2026/4/15/abc123def4567
+cp ./infra/abc123def4567.png ./crm/data/media/2026/4/15/abc123def4567
 # --- Start the main app command ---
 exec "$@"
