@@ -17,7 +17,7 @@ There are many ways to set up and install your own linux webserver.  Our way is 
 ### Installing with Docker
 The easiest way to set up a development environment is with Docker. We recommend installing Docker for Desktop. Make sure that the commands `docker` and `docker-compose` are added to your system path. Then, in your repo directory:
 
-1. Copy `crm/data/site_config.php.docker.example` to `crm/data/site_config.php`.
+1. Copy `infra/site_config.docker.php` to `crm/data/site_config.php`.
 2. In the repo directory, run `docker-compose up --build`.
 
 You should see the application running at http://localhost:8080/tickets.

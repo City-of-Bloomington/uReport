@@ -6,7 +6,7 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
-      - ./docker/apache.conf:/etc/apache2/sites-available/000-default.conf
+      - ./infra/apache.conf:/etc/apache2/sites-available/000-default.conf
     depends_on:
       - db
       - solr
@@ -22,7 +22,7 @@ services:
       SOLR_CORE: ureport
       INDEX_SCRIPT: crm/scripts/solr/indexSearch.php
       WAIT_TIMEOUT: 120
-    command: ["./docker/docker-setup.sh", "apache2-foreground"]
+    command: ["./infra/docker-setup.sh", "apache2-foreground"]
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -50,7 +50,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./crm/scripts/mysql.sql:/docker-entrypoint-initdb.d/01-mysql.sql:ro
-      - ./docker/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./infra/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
 
   solr:
     image: solr:8.11
