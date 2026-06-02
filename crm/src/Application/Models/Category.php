@@ -214,7 +214,7 @@ class Category extends ActiveRecord
 	public function getCustomFields(): ?array
 	{
         $f = parent::get('customFields');
-        return $f ? json_decode($f) : null;
+        return $f ? json_decode($f, true) : null;
 	}
 
 	/**
@@ -234,7 +234,7 @@ class Category extends ActiveRecord
 		$json = trim($json);
 		$customFields = '';
 		if ($json) {
-			$customFields = json_decode($json);
+			$customFields = json_decode($json, true);
 			if (is_array($customFields)) {
 				$this->data['customFields'] = $json;
 			}

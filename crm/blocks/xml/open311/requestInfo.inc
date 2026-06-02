@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
@@ -21,7 +21,7 @@ $zipcode = self::escape($this->ticket->getZip());
 $media_url = '';
 $media = $this->ticket->getMedia();
 if (count($media)) {
-	$m = $media->current();
+	$m = $media[0];
 	$media_url = $m->getURL();
 }
 

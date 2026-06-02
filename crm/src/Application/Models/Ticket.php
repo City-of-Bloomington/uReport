@@ -331,20 +331,23 @@ class Ticket extends ActiveRecord
 		}
 	}
 
-	public function getAdditionalFields()
+	public function getAdditionalFields(): array
 	{
-		$s = parent::get('additionalFields');
-        return $s ? json_decode($s) : [];
+		return isset($this->data['additionalFields'])
+			? json_decode($this->data['additionalFields'], true)
+			: [];
 	}
+
 	public function setAdditionalFields(array $data)
 	{
 		$this->data['additionalFields'] = json_encode($data);
 	}
 
-	public function getCustomFields()
+	public function getCustomFields(): array
 	{
-        $f = parent::get('customFields');
-        return $f ? json_decode($f) : null;
+		return isset($this->data['customFields'])
+			? json_decode($this->data['customFields'], true)
+			: [];
 	}
 
 	public function setCustomFields(array $data)
@@ -512,7 +515,7 @@ class Ticket extends ActiveRecord
             }
             else {
                 $d = $this->getAdditionalFields();
-                $d->$key = (string)$value;
+                $d[$key] = (string)$value;
                 $this->setAdditionalFields($d);
             }
         }
@@ -544,7 +547,7 @@ class Ticket extends ActiveRecord
             $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
             foreach ($fields as $key) {
                 $d = $this->getAdditionalFields();
-                if (isset($d->$key)) { unset($d->$key); }
+                if (isset($d[$key])) { unset($d[$key]); }
                 $this->setAdditionalFields($d);
             }
         }

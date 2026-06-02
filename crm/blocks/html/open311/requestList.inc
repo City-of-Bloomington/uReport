@@ -44,7 +44,7 @@ echo "
             $media_url = '';
             $media = $t->getMedia();
             if (count($media)) {
-                $m = $media->current();
+                $m = $media[0];
                 $media_url = $m->getURL();
             }
 

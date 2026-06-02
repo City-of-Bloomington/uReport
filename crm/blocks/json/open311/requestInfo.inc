@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
@@ -14,7 +14,7 @@ $history = end($h);
 $media_url = '';
 $media = $this->ticket->getMedia();
 if (count($media)) {
-	$m = $media->current();
+	$m = $media[0];
 	$media_url = $m->getURL();
 }
 
@@ -27,7 +27,7 @@ if ($p) {
 	}
 }
 
-$request = array(array(
+$request = [[
 	'service_request_id' => $this->ticket->getId(),
 	'status'             => strtolower($this->ticket->getStatus()),
 	'service_name'       => $service_name,
@@ -42,5 +42,5 @@ $request = array(array(
 	'lat'                => $this->ticket->getLatitude(),
 	'long'               => $this->ticket->getLongitude(),
 	'media_url'          => $media_url
-));
+]];
 echo json_encode($request);

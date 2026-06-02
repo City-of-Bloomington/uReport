@@ -71,7 +71,7 @@ class Email extends ActiveRecord
 		$notificationEmails = $this->getPerson()->getNotificationEmails();
 		if (!count($notificationEmails)) { $this->setUsedForNotifications(true); }
 		if  (count($notificationEmails) == 1) {
-			$e = $notificationEmails->current();
+			$e = $notificationEmails[0];
 			if ($e->getId()==$this->getId()) { $this->setUsedForNotifications(true); }
 		}
 
@@ -95,7 +95,7 @@ class Email extends ActiveRecord
 		if (!$result[0]['c']) {
 			$list = $person->getEmails();
 			if (count($list)) {
-				$e = $list->current();
+				$e = $list[0];
 				$e->setUsedForNotifications(true);
 				$e->save();
 			}

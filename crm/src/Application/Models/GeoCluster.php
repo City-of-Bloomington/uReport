@@ -103,7 +103,7 @@ class GeoCluster extends ActiveRecord
 
 				for ($i=0; $i<=6; $i++) {
 					$k   = "cluster_id_$i";
-					$c[] = ["$k=:$k"];
+					$c[] = "$k=:$k";
 					$data[$k] = self::assignClusterIdForLevel($ticket, $i);
 				}
 				$set = 'set '.implode(',', $c);
