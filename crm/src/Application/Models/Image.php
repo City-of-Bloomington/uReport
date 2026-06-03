@@ -1,12 +1,9 @@
 <?php
 /**
- * @copyright 2007-2016 City of Bloomington, Indiana. All rights reserved.
+ * @copyright 2007-2026 City of Bloomington, Indiana. All rights reserved.
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
-
-use Application\ActiveRecord;
-use Application\Database;
 
 class Image extends Media
 {
@@ -49,15 +46,12 @@ class Image extends Media
 	 *
 	 * Input must be a full path.
 	 * The resized image file will be saved in $inputPath/$size/$inputFilename.$ext
-	 * The sizes array determines the output filetype (gif,jpg,png)
-	 * ie. /var/www/sites/photobase/uploads/username/something.jpg
 	 *
 	 * @param string $inputFile Full path to an image file
-	 * @param int $size The desired bounding box size
+	 * @param int    $size      Pixel width of the square bounding box
 	 */
-	public static function resize($inputFile, $size)
+	public static function resize(string $inputFile, int $size)
 	{
-		$size = (int)$size;
 		$directory = dirname($inputFile)."/$size";
 		$filename  = basename($inputFile);
 
@@ -65,7 +59,7 @@ class Image extends Media
 
 		$dimensions = $size.'x'.$size;
 		$newFile = "$directory/$filename";
-		exec(IMAGEMAGICK."/convert $inputFile -auto-orient -resize '$dimensions' png:$newFile");
+		exec("convert $inputFile -auto-orient -resize '$dimensions' png:$newFile");
 	}
 
 	/**
@@ -82,11 +76,7 @@ class Image extends Media
 		}
 	}
 
-	/**
-	 * @param int $size
-	 * @return string
-	 */
-	public function getFullPathForSize($size=null)
+	public function getFullPathForSize(?int $size=null): string
 	{
 		$size     = (int)$size;
 		$dir      = dirname($this->getFullPath());
@@ -97,23 +87,13 @@ class Image extends Media
             : "$dir/$filename";
 	}
 
-	/**
-	 * Returns the width of the requested version of an image
-	 *
-	 * @param string $size The version of the image (see self::$sizes)
-	 */
-	public function getWidth($size=null)
+	public function getWidth(): int
 	{
-		return exec(IMAGEMAGICK."/identify -format '%w' ".$this->getFullPathForSize($size));
+		return (int)exec("identify -format '%w' ".$this->getFullPath());
 	}
 
-	/**
-	 * Returns the height of the requested version of an image
-	 *
-	 * @param string $size The version of the image (see self::$sizes)
-	 */
-	public function getHeight($size=null)
+	public function getHeight(): int
 	{
-		return exec(IMAGEMAGICK."/identify -format '%h' ".$this->getFullPathForSize($size));
+		return (int)exec("identify -format '%h' ".$this->getFullPath());
 	}
 }

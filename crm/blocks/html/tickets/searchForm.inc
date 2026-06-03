@@ -10,8 +10,8 @@ use Application\Models\Search;
 use Application\Models\TicketTable;
 
 use Application\ActiveRecord;
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 ?>
 <section id="ticketSearchForm">
@@ -32,10 +32,9 @@ use Blossom\Classes\Url;
 
                 $table = new BookmarkTable();
                 $list  = $table->find(['person_id'=>$_SESSION['USER']->getId(), 'type'=>'search']);
-                $c     = count($list);
-                if ($c) {
+                if ($list['rows']) {
                     $bookmarks = [];
-                    foreach ($list as $b) {
+                    foreach ($list['rows'] as $b) {
                         $bookmarks[] = ['label'=>self::escape($b->getName()), 'url'=>$b->getRequestUri()];
                     }
                     $links[] = ['subgroup'=>$bookmarks];

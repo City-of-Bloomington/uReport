@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -27,9 +27,9 @@ class Open311Client
 	 *
 	 * @param  array     $open311Post  The raw POST from the client
 	 * @return array                   A POST for Ticket::handleAdd()
-	 * @throws Exception
+	 * @throws \Exception
 	 */
-	public static function translatePostArray($open311Post)
+	public static function translatePostArray(array $open311Post): array
 	{
 		// Make sure we have a valid api_key
 		if (!empty($open311Post['api_key'])) { $client = Client::loadByApiKey($open311Post['api_key']); }
@@ -76,8 +76,8 @@ class Open311Client
 	 * Converts an array of person data from Open311 fieldnames to
 	 * the fieldnames used by the CRM.
 	 *
-	 * @param array $post  Person data array using Open311 fieldnames
-	 * @param array        Person data array using CRM fieldnames
+	 * @param  array $post  Person data array using Open311 fieldnames
+	 * @return array        Person data array using CRM fieldnames
 	 */
 	private static function personParamsFromOpen311(array $post): array
 	{
@@ -96,14 +96,10 @@ class Open311Client
 		return $person;
 	}
 
-	/**
-	 * @param  array      $post  Person data array using CRM fieldnames
-	 * @throws Exception
-	 */
 	private static function createNewPersonRecord(array $post): Person
 	{
-		$db = Database::getConnection();
-		$db->getDriver()->getConnection()->beginTransaction();
+		$pdo = Database::getConnection();
+		$pdo->beginTransaction();
 
         $person = new Person();
         try {
@@ -125,21 +121,17 @@ class Open311Client
             }
         }
         catch (\Exception $e) {
-			$db->getDriver()->getConnection()->rollback();
+			$pdo->rollBack();
 			throw($e);
         }
-		$db->getDriver()->getConnection()->commit();
+        $pdo->commit();
 		return $person;
 	}
 
-	/**
-	 * @param  array  $search Person data array using CRM fieldnames
-	 * @return Person
-	 */
 	private static function findPerson(array $search): ?Person
 	{
         $table = new PersonTable();
         $list  = $table->find($search);
-        return count($list) == 1 ? $list->current() : null;
+        return $list['total'] == 1 ? $list['rows'][0] : null;
 	}
 }

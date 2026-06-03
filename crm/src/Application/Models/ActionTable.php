@@ -1,38 +1,41 @@
 <?php
 /**
- * @copyright 2011-2018 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+declare (strict_types=1);
 namespace Application\Models;
 
-use Application\TableGateway;
-use Laminas\Db\Sql\Select;
+use Application\PdoRepository;
 
-class ActionTable extends TableGateway
+class ActionTable extends PdoRepository
 {
-	public function __construct() { parent::__construct('actions', __namespace__.'\Action'); }
+    public const TABLENAME = 'actions';
+    public const CLASSNAME = __namespace__.'\Action';
 
-	/**
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param bool $paginated Whether to return a paginator or a raw resultSet
-	 * @param int $limit
-	 */
-	public function find($fields=null, $order='name', $paginated=false, $limit=null)
+    public function find(array $fields=[], ?string $order='name', ?int $itemsPerPage=null, ?int $currentPage=null): array
 	{
-		$select = new Select('actions');
+        $select = 'select a.* from actions a';
+        $joins  = [];
+        $where  = [];
+        $params = [];
+
 		if ($fields) {
-			foreach ($fields as $key=>$value) {
-				switch ($key) {
+			foreach ($fields as $k=>$v) {
+				switch ($k) {
 					case 'department_id':
-						$select->join(['d'=>'department_actions'], 'actions.id=d.action_id', [], $select::JOIN_LEFT);
-						$select->where(['d.department_id' => $value]);
+                        $joins[] = ['left join department_actions d on a.id=d.action_id'];
+                        $where[] = 'd.department_id=:department_id';
+                        $params['department_id'] = $v;
 						break;
+
 					default:
-						$select->where([$key=>$value]);
+                        $where[] = "a.$k=:$k";
+                        $params[$k] = $v;
 				}
 			}
 		}
-		return parent::performSelect($select, $order, $paginated, $limit);
+        $sql  = parent::buildSql($select, $joins, $where, null, $order);
+        return  parent::performSelect($sql, $params, $itemsPerPage, $currentPage);
 	}
 }

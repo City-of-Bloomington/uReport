@@ -7,9 +7,9 @@ namespace Application\Controllers;
 
 use Application\Models\ResponseTemplate;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class ResponseTemplatesController extends Controller
 {

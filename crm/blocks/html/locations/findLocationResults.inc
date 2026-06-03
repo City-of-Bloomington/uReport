@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->results
  */
-use Blossom\Classes\Url;
+use Application\Url;
 ?>
 <div class="findLocationResults">
 <?php

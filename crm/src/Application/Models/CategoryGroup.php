@@ -1,8 +1,7 @@
 <?php
 /**
- * @copyright 2012-2014 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
 use Application\ActiveRecord;
@@ -10,7 +9,7 @@ use Application\Database;
 
 class CategoryGroup extends ActiveRecord
 {
-	protected $tablename = 'categoryGroups';
+	public const TABLENAME = 'categoryGroups';
 
 	/**
 	 * Populates the object with data
@@ -21,8 +20,6 @@ class CategoryGroup extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -31,13 +28,12 @@ class CategoryGroup extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from categoryGroups where id=?'
 					: 'select * from categoryGroups where name=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('categoryGroups/unknown');
@@ -52,7 +48,8 @@ class CategoryGroup extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -68,7 +65,6 @@ class CategoryGroup extends ActiveRecord
 	//----------------------------------------------------------------
 	// Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()			{ return parent::get('id');       }
 	public function getName()		{ return parent::get('name');     }
 	public function getOrdering()   { return parent::get('ordering'); }
 	public function __toString()	{ return parent::get('name');     }
@@ -76,23 +72,18 @@ class CategoryGroup extends ActiveRecord
 	public function setName    ($s) { parent::set('name',     $s); }
 	public function setOrdering($s)	{ parent::set('ordering', $s); }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$this->setName    ($post['name']);
 		$this->setOrdering($post['ordering']);
 	}
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	/**
-	 * @return Laminas\Db\ResultSet
-	 */
-	public function getCategories()
+
+	public function getCategories(): array
 	{
-		$table = new CategoryTable();
-		return $table->find(['categoryGroup_id'=>$this->getId()]);
+		$out = [];
+		$sql = 'select * from categories where categoryGroup_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Category($r); }
+		return $out;
 	}
 }

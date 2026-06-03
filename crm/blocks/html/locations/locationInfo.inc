@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  * @param bool   $this->disableButtons  (optional)
@@ -9,8 +9,8 @@
 use Application\Models\Person;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Url;
 
 if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongitude())) {
     $header  = '';
@@ -40,7 +40,7 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
 
         $table   = new TicketTable();
         $list    = $table->find(['location'=>$this->location]);
-        foreach ($list as $t) { $tickets[] = $t; }
+        $tickets = $list['rows'];
     }
 
 	echo "

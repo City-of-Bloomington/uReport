@@ -6,11 +6,11 @@
  * @param string $this->title
  * @param string $this->return_url
  */
-use Blossom\Classes\View;
+use Application\View;
 ?>
 <div class="confirm">
 	<h1><?= $this->title ? self::escape($this->title) : 'Confirm'; ?></h1>
-	<form method="get" action="<?= $_SERVER['REDIRECT_URL']; ?>">
+	<form method="get">
 		<fieldset><legend>Are you sure?</legend>
 			<input name="confirm" type="hidden" value="1" />
 			<?php

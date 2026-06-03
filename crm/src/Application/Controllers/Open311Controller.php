@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2019 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -13,9 +13,9 @@ use Application\Models\TicketTable;
 use Application\Models\Open311Client;
 use Application\Models\Media;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class Open311Controller extends Controller
 {
@@ -38,9 +38,6 @@ class Open311Controller extends Controller
 		$this->template->blocks[] = new Block('open311/discovery.inc');
 	}
 
-	/**
-	 * @param REQUEST service_code
-	 */
 	public function services()
 	{
         global $OBSOLETE_API_KEYS;
@@ -66,10 +63,12 @@ class Open311Controller extends Controller
 		}
 		// Provide the full service list
 		else {
-            $api_key      = !empty($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '';
-            $table        =  new CategoryTable();
+            $api_key = !empty($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '';
+            $table   =  new CategoryTable();
+			$res     = $table->find(['active'=>true]);
+
             $categoryList = (!isset($OBSOLETE_API_KEYS) || !in_array($api_key, $OBSOLETE_API_KEYS))
-                          ? $table->find(['active'=>true])
+                          ? $res['rows']
                           : self::mobileShutdownNotice();
 
 			$this->template->blocks = [
@@ -112,9 +111,6 @@ class Open311Controller extends Controller
         return [$line1, $line2, $line3];
 	}
 
-	/**
-	 * @param REQUEST service_request_id
-	 */
 	public function requests()
 	{
 		if (!empty($_REQUEST['service_code'])) {
@@ -223,12 +219,13 @@ class Open311Controller extends Controller
 				if ($p) { $page = $p; }
 			}
 			$table = new TicketTable();
-			$tickets = $table->find($search, null, true);
-			$tickets->setCurrentPageNumber($page);
-			$tickets->setItemCountPerPage($pageSize);
-			$this->template->blocks[] = new Block('open311/requestList.inc',['ticketList'=>$tickets]);
+			$tickets = $table->find($search, null, $pageSize, $page);
+			$this->template->blocks[] = new Block('open311/requestList.inc',['ticketList'=>$tickets['rows']]);
 			if ($this->template->outputFormat == 'html') {
-				$this->template->blocks[] = new Block('pageNavigation.inc', ['paginator'=>$tickets]);
+				$this->template->blocks[] = new Block('pageNavigation.inc', [
+					'totalItemCount' => $tickets['total'],
+					'pageNumber'     => $page
+				]);
 			}
 		}
 	}

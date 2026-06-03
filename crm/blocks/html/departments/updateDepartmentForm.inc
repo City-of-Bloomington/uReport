@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Department $this->department
  * @param string     $this->action      The URL for posting the form
@@ -48,7 +48,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
                 $options = [];
                 $table   = new ActionTable();
                 $list    = $table->find(['type'=>'department']);
-                foreach ($list as $a) { $options[] = ['value'=>$a->getId(), 'label'=>self::escape($a->getName())]; }
+                foreach ($list['rows'] as $a) { $options[] = ['value'=>$a->getId(), 'label'=>self::escape($a->getName())]; }
                 echo $helper->field([
                     'name'    => 'actions',
                     'id'      => 'actions',
@@ -62,7 +62,7 @@ $return_url = $this->return_url ? $this->return_url : BASE_URI.'/departments';
                 $options = [];
                 $table   = new CategoryTable();
                 $list    = $table->find();
-                foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+                foreach ($list['rows'] as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
                 echo $helper->field([
                     'name'    => 'categories',
                     'id'      => 'categories',

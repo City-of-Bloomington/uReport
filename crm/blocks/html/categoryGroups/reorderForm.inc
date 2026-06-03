@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\CategoryGroupTable;
@@ -12,8 +12,8 @@ use Application\Models\CategoryGroupTable;
             $helper = $this->template->getHelper('field');
 
             $t = new CategoryGroupTable();
-            $groups = $t->find();
-            foreach ($groups as $group) {
+            $r = $t->find();
+            foreach ($r['rows'] as $group) {
                 $id    = $group->getId();
                 $name  = self::escape($group->getName());
                 $order = (int)$group->getOrdering();

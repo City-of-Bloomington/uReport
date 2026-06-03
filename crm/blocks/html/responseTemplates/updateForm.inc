@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param ResponseTemplate $this->responseTemplate
  */
@@ -29,10 +29,10 @@ $categoryName = self::escape($category->getName());
 
                         $existing = array_keys($category->getResponseTemplates());
 
-                        $options = [];
-                        $table = new ActionTable();
-                        $list = $table->find();
-                        foreach ($list as $a) {
+                        $options  = [];
+                        $table    = new ActionTable();
+                        $list     = $table->find();
+                        foreach ($list['rows'] as $a) {
                             if (!in_array($a->getId(), $existing)) {
                                 $name = self::escape($a->getName());
                                 $selected = $a->getId() == $action_id

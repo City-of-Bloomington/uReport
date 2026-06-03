@@ -5,5 +5,5 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 header('Content-type: text/json; charset=utf-8');
-include BLOSSOM.'/errorMessages.php';
+$this->_include('partials/errorMessages.inc');
 echo $this->includeBlocks('right');

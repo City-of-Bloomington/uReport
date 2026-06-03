@@ -1,41 +1,34 @@
 <?php
 /**
- * @copyright 2009-2025 City of Bloomington, Indiana
+ * @copyright 2009-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
 use Application\ActiveRecord;
 use Application\Database;
-use Application\Models\Email;
-
-use Blossom\Classes\Template;
+use Application\Template;
 
 use Domain\Auth\ExternalIdentity;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Person extends ActiveRecord
 {
-	protected $tablename = 'people';
+	public const TABLENAME = 'people';
 
 	protected $department;
 
-	const ERROR_UNKNOWN_PERSON = 'people/unknown';
-
 	/**
 	 * Returns the matching Person object or null if not found
-	 *
-	 * @return Person
 	 */
-	public static function findByUsername(string $username)
+	public static function findByUsername(string $username): ?Person
 	{
-        $db = Database::getConnection();
         $sql = 'select * from people where username=?';
-
-        $result = $db->createStatement($sql)->execute([$username]);
+		$result = Database::query($sql, [$username]);
         if (count($result)) {
-            return new Person($result->current());
+            return new Person($result[0]);
         }
+        return null;
 	}
 
 	/**
@@ -47,8 +40,6 @@ class Person extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|string|array $id (ID, email, username)
 	 */
 	public function __construct($id=null)
 	{
@@ -69,31 +60,26 @@ class Person extends ActiveRecord
 					$sql = 'select * from people where username=?';
 				}
 
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
-					throw new \Exception(self::ERROR_UNKNOWN_PERSON);
+					throw new \Exception('people/unknown');
 				}
 			}
 		}
 		else {
 			// This is where the code goes to generate a new, empty instance.
 			// Set any default values for properties that need it here
-			$this->setAuthenticationMethod('local');
 		}
 	}
 
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -102,7 +88,8 @@ class Person extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -110,10 +97,6 @@ class Person extends ActiveRecord
 		if ((!$this->getFirstname() && !$this->getLastname())
 			&& !$this->getOrganization()) {
 			throw new \Exception('missingRequiredFields');
-		}
-
-		if ($this->getUsername() && !$this->getAuthenticationMethod()) {
-			$this->setAuthenticationMethod('local');
 		}
 	}
 
@@ -129,10 +112,9 @@ class Person extends ActiveRecord
 				throw new \Exception('people/personStillHasTickets');
 			}
 
-			$db = Database::getConnection();
-			$db->query('delete from peopleAddresses where person_id=?', [$this->getId()]);
-			$db->query('delete from peoplePhones where person_id=?',    [$this->getId()]);
-			$db->query('delete from peopleEmails where person_id=?',    [$this->getId()]);
+			Database::execute('delete from peopleAddresses where person_id=?', [$this->getId()]);
+			Database::execute('delete from peoplePhones    where person_id=?', [$this->getId()]);
+			Database::execute('delete from peopleEmails    where person_id=?', [$this->getId()]);
 
 			parent::delete();
 		}
@@ -144,7 +126,7 @@ class Person extends ActiveRecord
 	public function deleteUserAccount()
 	{
 		$userAccountFields = [
-			'username', 'password', 'authenticationMethod', 'role', 'department_id'
+			'username', 'password', 'role', 'department_id'
 		];
 		foreach ($userAccountFields as $f) {
 			$this->data[$f] = null;
@@ -156,7 +138,6 @@ class Person extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()            { return parent::get('id');           }
 	public function getFirstname()     { return parent::get('firstname');    }
 	public function getMiddlename()    { return parent::get('middlename');   }
 	public function getLastname()      { return parent::get('lastname');     }
@@ -173,27 +154,15 @@ class Person extends ActiveRecord
 	public function setDepartment(Department $d) { parent::setForeignKeyObject(__namespace__.'\Department', 'department_id', $d);  }
 
 	public function getUsername()             { return parent::get('username'); }
-	public function getPassword()             { return parent::get('password'); } # Encrypted
 	public function getRole()                 { return parent::get('role');     }
-	public function getAuthenticationMethod() { return parent::get('authenticationMethod'); }
 
 	public function setUsername            ($s) { parent::set('username',             $s); }
 	public function setRole                ($s) { parent::set('role',                 $s); }
-	public function setAuthenticationMethod($s) { parent::set('authenticationMethod', $s); }
-
-	public function setPassword($s)
-	{
-		$s = trim($s);
-		if ($s) { $this->data['password'] = sha1($s); }
-		else    { $this->data['password'] = null;     }
-	}
 
 	/**
 	 * Updates fields that are not associated with authentication
-	 *
-	 * @param array $post
 	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
 		$fields = array(
 			'firstname', 'middlename', 'lastname', 'organization'
@@ -208,21 +177,16 @@ class Person extends ActiveRecord
 
 	/**
 	 * Updates only the fields associated with authentication
-	 *
-	 * @param array $post
 	 */
-	public function handleUpdateUserAccount($post)
+	public function handleUpdateUserAccount(array $post)
 	{
 		$this->handleUpdate($post);
 
-		$fields = array('department_id','username','authenticationMethod','role');
+		$fields = array('department_id', 'username', 'role');
 		foreach ($fields as $f) {
 			if (isset($post[$f])) {
 				$set = 'set'.ucfirst($f);
 				$this->$set($post[$f]);
-			}
-			if (!empty($post['password'])) {
-				$this->setPassword($post['password']);
 			}
 		}
 
@@ -232,98 +196,25 @@ class Person extends ActiveRecord
         }
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function handleChangePassword($post)
-	{
-		if (   !empty($post['current_password'])
-			&& !empty($post['new_password'])
-			&& !empty($post['retype_password'])) {
-
-			if ($this->authenticate($_POST['current_password'])) {
-				if ($post['new_password'] == $post['retype_password']) {
-					$this->setPassword($post['new_password']);
-				}
-				else {
-					throw new \Exception('users/passwordsDontMatch');
-				}
-			}
-			else {
-				throw new \Exception('users/wrongPassword');
-			}
-		}
-		else {
-			throw new \Exception('missingRequiredFields');
-		}
-	}
-
-	//----------------------------------------------------------------
-	// User Authentication
-	//----------------------------------------------------------------
 	public function getExternalIdentity(): ?ExternalIdentity
     {
-        $method = $this->getAuthenticationMethod();
-        if ($this->getUsername() && $method && $method != 'local') {
+        if ($this->getUsername()) {
             global $DIRECTORY_CONFIG;
 
-            $class = $DIRECTORY_CONFIG[$method]['classname'];
-            $dir   = new $class($DIRECTORY_CONFIG[$method]);
+            $class = $DIRECTORY_CONFIG['Employee']['classname'];
+            $dir   = new $class($DIRECTORY_CONFIG['Employee']);
             return $dir->identify($this->getUsername());
         }
         return null;
     }
 
 	/**
-	 * Should provide the list of methods supported
-	 *
-	 * There should always be at least one method, called "local"
-	 * Additional methods be classes that implement AuthenticationInterface
-	 * @see Domain\Auth\AuthenticationInterface
-	 */
-	public static function getAuthenticationMethods(): array
-	{
-		global $DIRECTORY_CONFIG;
-		return array_merge(['local'], array_keys($DIRECTORY_CONFIG));
-	}
-
-	/**
-	 * Determines which authentication scheme to use for the user and calls the appropriate method
-	 *
-	 * Local users will get authenticated against the database
-	 * Other authenticationMethods will need to write a class implementing AuthenticationInterface
-	 * @see Domain\Auth\AuthenticationInterface
-	 */
-	public function authenticate(string $password): bool
-	{
-        global $DIRECTORY_CONFIG;
-
-		if ($this->getUsername()) {
-			switch($this->getAuthenticationMethod()) {
-				case "local":
-					return $this->getPassword()==sha1($password);
-				break;
-
-				default:
-					$method = $this->getAuthenticationMethod();
-					$class  = $DIRECTORY_CONFIG[$method]['classname'];
-					$auth   = new $class($DIRECTORY_CONFIG[$method]);
-					return $auth->authenticate($this->getUsername(), $password);
-			}
-		}
-	}
-
-	/**
 	 * Checks if the user is supposed to have access to the resource
 	 *
 	 * This is implemented by checking against a Laminas Acl object
 	 * The Laminas Acl should be created in bootstrap.inc
-	 *
-	 * @param string $resource
-	 * @param string $action
-	 * @return boolean
 	 */
-	public static function isAllowed($resource, $action=null)
+	public static function isAllowed(string $resource, ?string $action=null): bool
 	{
 		global $ACL;
 		$role = 'Anonymous';
@@ -333,66 +224,49 @@ class Person extends ActiveRecord
 		return $ACL->isAllowed($role, $resource, $action);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	/**
-	 * @return PhoneList
-	 */
-	public function getPhones()
+	public function getPhones(): array
 	{
-		if ($this->getId()) {
-            $table = new PhoneTable();
-			return $table->find( ['person_id'=>$this->getId()] );
-		}
-		return array();
+		$out = [];
+		$sql = 'select * from peoplePhones where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Phone($r); }
+		return $out;
 	}
 
-	/**
-	 * @return EmailList
-	 */
-	public function getEmails()
+	public function getEmails(): array
 	{
-		if ($this->getId()) {
-            $table = new EmailTable();
-			return $table->find( ['person_id'=>$this->getId()] );
+		$out = [];
+		$sql = 'select * from peopleEmails where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) {
+			$out[] = new Email($r);
 		}
-		return array();
+		return $out;
 	}
 
-	/**
-	 * @return EmailList
-	 */
-	public function getNotificationEmails()
+	public function getNotificationEmails(): array
 	{
-        $table = new EmailTable();
-		return $table->find( ['person_id'=>$this->getId(), 'usedForNotifications'=>1] );
+		$out = [];
+		$sql = 'select * from peopleEmails where person_id=? and usedForNotifications=1';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Email($r); }
+		return $out;
 	}
 
-	/**
-	 * @return AddressList
-	 */
-	public function getAddresses()
+	public function getAddresses(): array
 	{
-		if ($this->getId()) {
-            $table = new AddressTable();
-			return $table->find( ['person_id'=>$this->getId()] );
-		}
-		return array();
+		$out = [];
+		$sql = 'select * from peopleAddresses where person_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Address($r); }
+		return $out;
 	}
 
-
-	/**
-	 * @return string
-	 */
-	public function getFullname()
+	public function getFullname(): string
 	{
-		if ($this->getFirstname() || $this->getLastname()) {
-			return "{$this->getFirstname()} {$this->getLastname()}";
-		}
-		else {
-			return $this->getOrganization();
-		}
+		return ($this->getFirstname() || $this->getLastname())
+			? "{$this->getFirstname()} {$this->getLastname()}"
+			: $this->getOrganization();
 	}
 
 	/**
@@ -406,22 +280,19 @@ class Person extends ActiveRecord
             : $t->_('anonymous');
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getURL()
+	public function getURL(): ?string
 	{
 		if ($this->getId()) {
 			return BASE_URL."/people/view?person_id={$this->getId()}";
 		}
+		return null;
 	}
 
 	/**
-	 * @param string $personField The field in Ticket that has this person embedded
-	 * @param array $fields Additional fields to filter the ticketList
-	 * @return TicketList
+	 * @param string $personFieldname The field in Ticket that has this person embedded
+	 * @param array  $fields          Additional fields to filter the ticketList
 	 */
-	public function getTickets($personFieldname, $fields=null)
+	public function getTickets(string $personFieldname, ?array $fields=null): array
 	{
 		if ($this->getId()) {
 			$field = $personFieldname.'Person_id';
@@ -433,20 +304,20 @@ class Person extends ActiveRecord
 				$search = [$field=>$this->getId()];
 			}
 			$table = new TicketTable();
-			return $table->find($search);
+			$list  = $table->find($search);
+			return $list['rows'];
 		}
+		return [];
 	}
 
 	/**
 	 * Returns true if this person's ID is associated with any fields in the ticket records
-	 *
-	 * @return boolean
 	 */
-	public function hasTickets()
+	public function hasTickets(): bool
 	{
 		$id = (int)$this->getId();
 		if ($id) {
-			$db = Database::getConnection();
+			$pdo = Database::getConnection();
 			// This query is written as a Union for speed
 			// A Union is the only way to use the indexes for this query
 			$sql = "(select t.id from tickets t
@@ -463,17 +334,13 @@ class Person extends ActiveRecord
 					(select m.ticket_id from media m
 					where m.person_id=$id
 					limit 1)";
-			$result = $db->createStatement($sql)->execute();
-			return $result->count() ? true : false;
+			$result = Database::query($sql, []);
+			return count($result) ? true : false;
 		}
+		return false;
 	}
 
-    /**
-     * @param string $message
-     * @param string $subject
-     * @param string $replyTo
-     */
-    public function sendNotification($message, $subject=null, $replyTo=null)
+    public function sendNotification(string $message, ?string $subject=null, ?string $replyTo=null)
     {
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (!$subject) {
@@ -485,7 +352,6 @@ class Person extends ActiveRecord
             $mail->isSMTP();
             $mail->Host        = SMTP_HOST;
             $mail->Port        = SMTP_PORT;
-            $mail->SMTPSecure  = false;
             $mail->SMTPAutoTLS = false;
             $mail->Subject     = $subject;
             $mail->Body        = $message;
@@ -506,12 +372,8 @@ class Person extends ActiveRecord
 	 *
 	 * This is primarily used to populate autocomplete lists for search forms
 	 * Make sure to keep this function as fast as possible
-	 *
-	 * @param string $fieldname
-	 * @param string $query Text to match in the $fieldname
-	 * @return array
 	 */
-	public static function getDistinct($fieldname, $query=null)
+	public static function getDistinct(string $fieldname, ?string $query=null): array
 	{
 		$fieldname = trim($fieldname);
 		$db = Database::getConnection();
@@ -523,7 +385,10 @@ class Person extends ActiveRecord
 		elseif ($fieldname == 'email') {
 			$sql = "select distinct email from peopleEmails where email like ?";
 		}
-		$result = $db->createStatement($sql)->execute(["$query%"]);
+		else {
+			return [];
+		}
+		$result = Database::query($sql, ["$query%"]);
 		$o = [];
 		foreach ($result as $row) { $o[] = $row[$fieldname]; }
 		return $o;
@@ -581,47 +446,47 @@ class Person extends ActiveRecord
 				throw new \Exception('people/mergerNotAllowed');
 			}
 
-			$db = Database::getConnection();
 			// Look up all the tickets we're about to modify
 			// We need to remember them so we can update the search
 			// index after we've updated the database
-			$id = (int)$person->getId();
+			$id  = (int)$person->getId();
 			$sql = "select distinct t.id from tickets t
 					left join ticketHistory th on t.id=th.ticket_id
 					left join media          m on t.id= m.ticket_id
 					where ( t.enteredByPerson_id=$id or t.assignedPerson_id=$id or t.reportedByPerson_id=$id)
 					   or (th.enteredByPerson_id=$id or  th.actionPerson_id=$id)
 					   or m.person_id=$id";
-			$result = $db->query($sql)->execute();
+			$result = Database::query($sql, []);
 			$ticketIds = [];
 			foreach ($result as $row) {
 				$ticketIds[] = $row['id'];
 			}
 
-			$db->getDriver()->getConnection()->beginTransaction();
+			$pdo = Database::getConnection();
+			$pdo->beginTransaction();
 			try {
 				// These are all the database fields that hit the Solr index
-				$db->query('update media         set           person_id=? where           person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?')->execute([$this->getId(), $person->getId()]);
+				Database::execute('update media         set           person_id=? where           person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set reportedByPerson_id=? where reportedByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update ticketHistory set  enteredByPerson_id=? where  enteredByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update ticketHistory set     actionPerson_id=? where     actionPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set  enteredByPerson_id=? where  enteredByPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update tickets       set   assignedPerson_id=? where   assignedPerson_id=?', [$this->getId(), $person->getId()]);
 
 				// Fields that don't hit the Solr index
-				$db->query('update clients         set contactPerson_id=? where contactPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update departments     set defaultPerson_id=? where defaultPerson_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peopleAddresses set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peoplePhones    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
-				$db->query('update peopleEmails    set        person_id=? where        person_id=?')->execute([$this->getId(), $person->getId()]);
+				Database::execute('update clients         set contactPerson_id=? where contactPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update departments     set defaultPerson_id=? where defaultPerson_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peopleAddresses set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peoplePhones    set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
+				Database::execute('update peopleEmails    set        person_id=? where        person_id=?', [$this->getId(), $person->getId()]);
 
-				$db->query('delete from people where id=?')->execute([$person->getId()]);
+				Database::execute('delete from people where id=?', [$person->getId()]);
 			}
-			catch (Exception $e) {
-				$db->getDriver()->getConnection()->rollback();
+			catch (\Exception $e) {
+				$pdo->rollBack();
 				throw($e);
 			}
-			$db->getDriver()->getConnection()->commit();
+			$pdo->commit();
 
 			foreach ($ticketIds as $id) {
 				$search = new Search();

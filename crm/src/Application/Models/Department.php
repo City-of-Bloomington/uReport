@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -10,7 +10,7 @@ use Application\Database;
 
 class Department extends ActiveRecord
 {
-	protected $tablename = 'departments';
+	public const TABLENAME = 'departments';
 
 	protected $defaultPerson;
 
@@ -23,8 +23,6 @@ class Department extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -33,13 +31,12 @@ class Department extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = ActiveRecord::isId($id)
 					? 'select * from departments where id=?'
 					: 'select * from departments where name=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('departments/unknown');
@@ -65,15 +62,12 @@ class Department extends ActiveRecord
         parent::exchangeArray($data);
 
         $this->defaultPerson = null;
-        $this->categories = [];
-        $this->actions    = [];
-        $this->categoriesUpdated = false;
-        $this->actionsUpdated    = false;
 	}
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -91,8 +85,7 @@ class Department extends ActiveRecord
 	public function delete()
 	{
 		if ($this->isSafeToDelete()) {
-			$db = Database::getConnection();
-			$db->query('delete from department_actions where department_id=?', array($this->getId()));
+			Database::execute('delete from department_actions where department_id=?', [$this->getId()]);
 			parent::delete();
 		}
 		else {
@@ -104,7 +97,6 @@ class Department extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function __toString()          { return parent::get('name');             }
-	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getDefaultPerson_id() { return parent::get('defaultPerson_id'); }
 	public function getDefaultPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'defaultPerson_id'); }
@@ -138,45 +130,38 @@ class Department extends ActiveRecord
 			: $this->saveActions([]);
 	}
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
 	/**
 	 * Returns an array of Category objects, indexed by Id
-	 *
-	 * @param  array $search  Additional fields to search on
-	 * @return array          An array of Category objects
 	 */
-	public function getCategories(array $search=[])
+	public function getCategories(array $search=[]): array
 	{
-        $id         = $this->getId();
-        $categories = [];
+        $id  = $this->getId();
+        $out = [];
 
         if ($id) {
-            $search['department_id'] = $id;
-
-			$table   = new CategoryTable();
-			$list    = $table->find($search);
-			foreach ($list as $c) {
-                $categories[$c->getId()] = $c;
-            }
+			$sql = <<<END
+			select c.*
+			from categories c
+			join department_categories d on c.id=d.category_id
+			where d.department_id=?
+			END;
+			$res = Database::query($sql, [$id]);
+			foreach ($res as $r) { $out[$r['id']] = new Category($r); }
 		}
-		return $categories;
+		return $out;
 	}
 
 	/**
 	 * Saves new categories directly to the database
-	 *
-	 * @param array $category_ids
 	 */
-	public function saveCategories($category_ids)
+	public function saveCategories(array $category_ids)
 	{
         $department_id = $this->getId();
 		if ($department_id) {
-			$db = Database::getConnection();
-			$db->query('delete from department_categories where department_id=?')->execute([$department_id]);
+			$pdo = Database::getConnection();
+			Database::execute('delete from department_categories where department_id=?', [$department_id]);
 
-			$query = $db->createStatement('insert into department_categories (department_id, category_id) values(?, ?)');
+			$query = $pdo->prepare('insert into department_categories (department_id, category_id) values(?, ?)');
 			foreach ($category_ids as $id) {
 				$query->execute([$department_id, $id]);
 			}
@@ -185,61 +170,54 @@ class Department extends ActiveRecord
 
 	/**
 	 * Returns an array of Action objects, indexed by Id
-	 *
-	 * @return array
 	 */
-	public function getActions()
+	public function getActions(): array
 	{
         $department_id = $this->getId();
         $actions       = [];
 
         if ($department_id) {
-            $table = new ActionTable();
-			$list  = $table->find(['department_id'=>$department_id]);
-			foreach ($list as $a) {
-                $actions[$a->getId()] = $a;
-            }
+			$sql = <<<END
+			select a.*
+			from actions a
+			join department_actions d on a.id=d.action_id
+			where d.department_id=?
+			END;
+			$res = Database::query($sql, [$department_id]);
+			foreach ($res as $a) {
+				$actions[$a['id']] = new Action($a);
+			}
 		}
 		return $actions;
 	}
 
 	/**
 	 * Saves new Actions directly to the database
-	 *
-	 * @param array $action_ids
 	 */
-	public function saveActions($action_ids)
+	public function saveActions(array $action_ids)
 	{
         $department_id = $this->getId();
 		if ($department_id) {
-			$db = Database::getConnection();
-			$db->query('delete from department_actions where department_id=?')->execute([$department_id]);
+			$pdo = Database::getConnection();
+			Database::query('delete from department_actions where department_id=?', [$department_id]);
 
-			$query = $db->createStatement('insert into department_actions set department_id=?, action_id=?');
+			$query = $pdo->prepare('insert into department_actions set department_id=?, action_id=?');
 			foreach ($action_ids as $id) {
                 $query->execute([$this->getId(), (int)$id]);
 			}
 		}
 	}
 
-	/**
-	 * @return array An array of Person objects
-	 */
-	public function getPeople()
+	public function getPeople(): array
 	{
-        $people = [];
-		if ($this->getId()) {
-            $table = new PersonTable();
-			$list  = $table->find(['department_id' => $this->getId()]);
-            foreach ($list as $p) { $people[] = $p; }
-		}
-		return $people;
+		$out = [];
+		$sql = 'select * from people where department_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new Person($r); }
+		return $out;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isSafeToDelete()
+	public function isSafeToDelete(): bool
 	{
 		if (!$this->getId()) { return false; }
 
@@ -248,19 +226,13 @@ class Department extends ActiveRecord
 		// we cannot use those functions for this test.
 		// We need to absolutely know if there is any foreign key
 		// violation before we delete.
-		$db = Database::getConnection();
-        $result = $db->query('select count(*) as c from categories where department_id=?')->execute([$this->getId()]);
-        $row = $result->current();
-		if ($row['c']) { return false; }
-
-		$result = $db->query('select count(*) as c from department_categories where department_id=?')->execute([$this->getId()]);
-        $row = $result->current();
-        if ($row['c']) { return false; }
-
-        $result = $db->query('select count(*) as c from people where department_id=?')->execute([$this->getId()]);
-        $row = $result->current();
-        if ($row['c']) { return false; }
-
+		$fk = ['categories', 'department_categories', 'people'];
+		foreach ($fk as $table) {
+			$res = Database::query("select count(*) as c from $table where department_id=?", [$this->getId()]);
+			if ($res[0]['c']) {
+				return false;
+			}
+		}
 		return true;
 	}
 }

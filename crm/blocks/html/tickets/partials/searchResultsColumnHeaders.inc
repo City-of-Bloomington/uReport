@@ -8,7 +8,7 @@
 use Application\Models\Person;
 use Application\Models\Search;
 use Application\Models\TicketTable;
-use Blossom\Classes\Url;
+use Application\Url;
 
 $c = $this->result->getNumFound();
 ?>

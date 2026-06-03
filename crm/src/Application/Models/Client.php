@@ -2,28 +2,27 @@
 /**
  * A Web Service Client authorized to POST tickets
  *
- * @copyright 2011-2014 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
 class Client extends ActiveRecord
 {
-	protected $tablename = 'clients';
+	public const TABLENAME = 'clients';
 
 	protected $contactPerson;
 	protected $contactMethod;
 
-	public static function loadByApiKey($api_key)
+	public static function loadByApiKey(string $api_key): Client
 	{
-		$db = Database::getConnection();
 		$sql = 'select * from clients where api_key=?';
-		$result = $db->createStatement($sql)->execute([$api_key]);
-		if (count($result)) {
-			return new Client($result->current());
+		$res = Database::query($sql, [$api_key]);
+		if (count($res)) {
+			return new Client($res[0]);
 		}
 		else {
 			throw new \Exception('clients/unknownApiKey');
@@ -39,8 +38,6 @@ class Client extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -50,11 +47,9 @@ class Client extends ActiveRecord
 			}
 			else {
 				$sql = 'select * from clients where id=?';
-
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('clients/unknown');
@@ -75,11 +70,8 @@ class Client extends ActiveRecord
 	/**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -89,7 +81,7 @@ class Client extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -108,7 +100,6 @@ class Client extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters and Setters
 	//----------------------------------------------------------------
-	public function getId()               { return parent::get('id');               }
 	public function getName()             { return parent::get('name');             }
 	public function getURL()              { return parent::get('url');              }
 	public function getApi_key()          { return parent::get('api_key');          }
@@ -125,11 +116,7 @@ class Client extends ActiveRecord
 	public function setContactPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'contactPerson_id', $o);  }
 	public function setContactMethod(ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id', $o);  }
 
-
-	/**
-	 * @param array $post
-	 */
-	 public function handleUpdate($post)
+	 public function handleUpdate(array $post)
 	 {
 		$this->setName            ($post['name']);
 		$this->setURL             ($post['url']);

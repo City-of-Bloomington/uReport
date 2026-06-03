@@ -21,10 +21,10 @@ namespace Application\Templates\Helpers;
 
 use Application\Models\Person;
 
-use Blossom\Classes\Helper;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
-use Blossom\Classes\View;
+use Application\Helper;
+use Application\Template;
+use Application\Url;
+use Application\View;
 
 
 class PersonChooser extends Helper
@@ -34,7 +34,7 @@ class PersonChooser extends Helper
 	 * @param Person $person The currently selected Person object
 	 * @return string
 	 */
-	public function personChooser($fieldname, Person $person=null)
+	public function personChooser($fieldname, ?Person $person=null)
 	{
 		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser-'.VERSION.'.js');
 

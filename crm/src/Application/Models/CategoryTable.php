@@ -2,85 +2,84 @@
 /**
  * A collection class for Category objects
  *
- * @copyright 2011-2018 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
-use Application\TableGateway;
-use Laminas\Db\Sql\Select;
+use Application\PdoRepository;
 
-class CategoryTable extends TableGateway
+class CategoryTable extends PdoRepository
 {
-	public function __construct() { parent::__construct('categories', __namespace__.'\Category'); }
+	public const TABLENAME = 'categories';
+	public const CLASSNAME = __namespace__.'\Category';
 
-	/**
-	 * Populates the collection, using strict matching of the requested fields
-	 *
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param bool $paginated Whether to return a paginator or a raw resultSet
-	 * @param int $limit
-	 */
-	public function find($fields=null, $order=['g.ordering', 'g.name', 'categories.name'], $paginated=false, $limit=null)
+    public function find(array $fields=[], ?string $order='g.ordering, g.name, c.name', ?int $itemsPerPage=null, ?int $currentPage=null): array
 	{
-		$select = new Select('categories');
-		$select->join(['g'=>'categoryGroups'], 'categories.categoryGroup_id=g.id', [], $select::JOIN_LEFT);
+        $select =  'select c.* from categories c';
+        $joins  = ['left join categoryGroups g on g.id=c.categoryGroup_id'];
+        $where  = [];
+        $params = [];
 
 		if ($fields) {
-			foreach ($fields as $key=>$value) {
-				switch ($key) {
+			foreach ($fields as $k=>$v) {
+				switch ($k) {
                     case 'active':
-                        $select->where(['categories.active'=>$value ? 1 : 0]);
+						$where[] = "c.active=:active";
+						$params['active'] = $v ? 1 : 0;
                         break;
 
 					case 'postableBy':
 						// If they're authenticated, but they are not staff
-						if ($value instanceof Person) {
-							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
+						if ($v instanceof Person) {
+							if ($v->getRole()!='Staff' && $v->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$select->where(['categories.postingPermissionLevel'=>['public','anonymous']]);
+								$where[] = "c.postingPermissionLevel in ('public', 'anonymous')";
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$select->where(['categories.postingPermissionLevel'=>'anonymous']);
+							$where[] = "c.postingPermissionLevel='anonymous'";
 						}
 						break;
 
 					case 'displayableTo':
 						// If they're authenticated, but they are not staff
-						if ($value instanceof Person) {
-							if ($value->getRole()!='Staff' && $value->getRole()!='Administrator') {
+						if ($v instanceof Person) {
+							if ($v->getRole()!='Staff' && $v->getRole()!='Administrator') {
 								// Limit them to public and anonymous categories
-								$select->where(['categories.displayPermissionLevel'=>['public','anonymous']]);
+								$where[] = "c.displayPermissionLevel in ('public', 'anonymous')";
 							}
 						}
 						// They are not logged in. Limit them to anonymous categories
 						else {
-							$select->where(['categories.displayPermissionLevel'=>'anonymous']);
+							$where[] = "c.displayPermissionLevel='anonymous'";
 						}
 						break;
+
 					case 'department_id':
-						$select->join(['d'=>'department_categories'], 'categories.id=d.category_id', [], $select::JOIN_LEFT);
-						$select->where(['d.department_id'=>$value]);
+						$joins[] = 'left join department_categories d on c.id=d.category_id';
+						$where[] = 'd.department_id=:department_id';
+						$params['department_id'] = $v;
 						break;
 
 					default:
-						if ($value) {
-							$select->where(["categories.$key"=>$value]);
+						if ($v) {
+							$where[] = "c.$k=:$k";
+							$params[$k] = $v;
 						}
 				}
 			}
 		}
 		// Only get categories this user is allowed to see or post to
 		if (!isset($_SESSION['USER'])) {
-			$select->where("(categories.postingPermissionLevel='anonymous' or categories.displayPermissionLevel='anonymous')");
+			$where[] = "(c.postingPermissionLevel='anonymous' or c.displayPermissionLevel='anonymous')";
 		}
 		elseif ($_SESSION['USER']->getRole()!='Staff' && $_SESSION['USER']->getRole()!='Administrator') {
-			$select->where("(categories.postingPermissionLevel in ('public','anonymous') or categories.displayPermissionLevel in ('public','anonymous'))");
+			$where[] = "(c.postingPermissionLevel in ('public','anonymous') or c.displayPermissionLevel in ('public','anonymous'))";
 		}
 
-		return parent::performSelect($select, $order, $paginated, $limit);
+        $sql  = parent::buildSql($select, $joins, $where, null, $order);
+        return  parent::performSelect($sql, $params, $itemsPerPage, $currentPage);
 	}
 }

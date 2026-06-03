@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright 2012-2025 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
 
 use Application\Models\Person;
+use Jumbojett\OpenIDConnectClient;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class LoginController extends Controller
 {
@@ -21,50 +22,46 @@ class LoginController extends Controller
 		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
 	}
 
-	/**
-	 * Attempts to authenticate users via CAS
-	 */
-	public function cas()
-	{
-		// If they don't have CAS configured, send them onto the application's
-		// internal authentication system
-		if (defined('CAS_SERVER')) {
-            \phpCAS::client(CAS_VERSION_2_0, CAS_SERVER, 443, CAS_URI, false);
-            \phpCAS::setNoCasServerValidation();
-            \phpCAS::forceAuthentication();
-            // at this step, the user has been authenticated by the CAS server
-            // and the user's login name can be read with phpCAS::getUser().
+	public function oidc()
+    {
+        // If they don't have OpenID configured, send them onto the application's
+        // internal authentication system
+        global $AUTHENTICATION;
+        if ( !empty(  $AUTHENTICATION['oidc']['client_id'])) {
+            $config = $AUTHENTICATION['oidc'];
+            $oidc   = new OpenIDConnectClient($config['server'], $config['client_id'], $config['client_secret']);
+            $oidc->addScope(['openid', 'allatclaims', 'profile']);
+            $oidc->setAllowImplicitFlow(true);
+            $oidc->setRedirectURL(BASE_URL.'/login/oidc');
 
-            $this->registerUser(\phpCAS::getUser());
+            $success = null;
+            try { $success = $oidc->authenticate(); }
+            catch (\Exception $e) { }
+            if (!$success) {
+                $_SESSION['errorMessages'][] = 'invalidLogin';
+            }
+
+            // at this step, the user has been authenticated by the OIDC server
+            $info = $oidc->getVerifiedClaims();
+
+            if (!$info->{$config['claims']['username']}) {
+                $_SESSION['errorMessages'][] = 'ldap/unknownUser';
+            }
+            // They may be authenticated according to ADFS,
+            // but that doesn't mean they have person record
+            // and even if they have a person record, they may not
+            // have a user account for that person record.
+            $this->registerUser($info->{$config['claims']['username']});
         }
-		header('Location: '.BASE_URL.'/login?return_url='.$this->return_url);
-		exit();
-	}
 
-	/**
-	 * Attempts to authenticate users based on AuthenticationMethod
-	 */
+        header('Location: '.BASE_URL.'/login?return_url='.$this->return_url);
+        exit();
+    }
+
 	public function index()
 	{
-		if (isset($_POST['username'])) {
-			try {
-				$person = new Person($_POST['username']);
-				if ($person->authenticate($_POST['password'])) {
-					$_SESSION['USER'] = $person;
-					header('Location: '.$this->return_url);
-					exit();
-				}
-				else {
-					throw new \Exception('invalidLogin');
-				}
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		$this->template->title = $this->template->_('login');
-		$this->template->blocks[] = new Block('loginForm.inc', ['return_url'=>$this->return_url]);
+		header('Location: '.BASE_URL.'/login/oidc');
+		exit();
 	}
 
 	public function logout()
@@ -88,7 +85,7 @@ class LoginController extends Controller
                 header("Location: {$this->return_url}");
                 exit();
             }
-            throw new \Exception(Person::ERROR_UNKNOWN_PERSON);
+            throw new \Exception('people/unknown');
         }
         catch (\Exception $e) {
             $_SESSION['errorMessages'][] = $e;

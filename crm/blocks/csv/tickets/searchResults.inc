@@ -8,7 +8,7 @@
  * @param bool                 $this->paginated   Whether the response is paginated or not
  * @param array                $this->fields      Ticket fields to display
  */
-use Blossom\Classes\Block;
+use Application\Block;
 
 header("Content-Disposition: attachment; filename=\"tickets.csv\"");
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\AddressService;
@@ -29,7 +29,7 @@ $helper = $this->template->getHelper('field');
                     $values  = (!empty($_GET['categories']) && is_array($_GET['categories']))
                                 ? array_keys($_GET['categories'])
                                 : [];
-					foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+					foreach ($list['rows'] as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
 					echo $helper->field([
                         'name'    => 'categories',
                         'type'    => 'checkbox',
@@ -48,7 +48,7 @@ $helper = $this->template->getHelper('field');
 					$values  = (!empty($_GET['departments']) && is_array($_GET['departments']))
                                 ? array_keys($_GET['departments'])
                                 : [];
-					foreach ($list as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
+					foreach ($list['rows'] as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
 					echo $helper->field([
                         'name'    => 'departments',
                         'type'    => 'checkbox',
@@ -102,7 +102,7 @@ $helper = $this->template->getHelper('field');
                     $value   = (!empty($_GET['clients']) && is_array($_GET['clients']))
                                 ? array_keys($_GET['clients'])
                                 : [];
-                    foreach ($list as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+                    foreach ($list['rows'] as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
                     echo $helper->field([
                         'name'    => 'clients',
                         'type'    => 'checkbox',

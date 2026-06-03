@@ -40,9 +40,7 @@ define('GOOGLE_LOADER', '//www.google.com/jsapi');
  */
 $DATABASES = [
     'default' => [
-        'driver'  => 'mysql',
-        'host'    => '{{ ureport_db.host }}',
-        'name'    => '{{ ureport_db.name }}',
+        'dsn'     => "mysql:dbname={{ ureport_db.name }};host={{ ureport_db.host }}",
         'user'    => '{{ ureport_db.user }}',
         'pass'    => '{{ ureport_db.pass }}',
         'options' => []
@@ -73,27 +71,40 @@ $DIRECTORY_CONFIG = [
 {% endif %}
 ];
 
-{% if ureport_cas_host %}
-/**
- * CAS authentication
- */
-define('CAS_SERVER','{{ ureport_cas_host }}');
-define('CAS_URI','cas');
-{% endif %}
+$AUTHENTICATION = [
+    'oidc' => [
+        'server'         => '{{ ureport_oidc.server        }}',
+        'client_id'      => '{{ ureport_oidc.client_id     }}',
+        'client_secret'  => '{{ ureport_oidc.client_secret }}',
+        'claims' => [
+            // uReport field => OIDC Claim
+            'username'    => 'adfs1upn',
+            'displayname' => 'commonname',
+            'firstname'   => 'given_name',
+            'lastname'    => 'family_name',
+            'email'       => 'upn',
+            'groups'      => 'group',
+            'groupmap'    => []
+        ],
+    ]
+];
 
+$SOLR = [
+    'ureport' => [
+        'scheme'   => 'https',
+        'host'     => '{{ ureport_solr.host }}',
+        'port'     =>  {{ ureport_solr.port }},
+        'core'     => '{{ ureport_solr.core }}',
+        'username' => '{{ ureport_solr.user }}',
+        'password' => '{{ ureport_solr.pass }}'
+    ]
+];
 
 /**
  * Controls whether the system sends email notifications to people
  */
 define('NOTIFICATIONS_ENABLED', true);
 define('ADMINISTRATOR_EMAIL', '{{ apache_serveradmin }}');
-
-/**
- * Point to the Solr server
- */
-define('SOLR_SERVER_HOSTNAME', 'localhost');
-define('SOLR_SERVER_PORT', 8983);
-define('SOLR_SERVER_PATH', '/solr/ureport');
 
 
 {% if ureport_address_service %}
@@ -102,14 +113,6 @@ define('SOLR_SERVER_PATH', '/solr/ureport');
  */
 define('ADDRESS_SERVICE',     '{{ ureport_address_service.class }}');
 define('ADDRESS_SERVICE_URL', '{{ ureport_address_service.url   }}');
-{% endif %}
-
-{% if ureport_rental_service %}
-/**
- * Rental addresses have additional information we can look up
- * Owner information is being provided from this service
- */
-define('RENTAL_SERVICE','{{ ureport_rental_service }}');
 {% endif %}
 
 /**
@@ -157,6 +160,6 @@ define('TIME_FORMAT', 'H:i:s');
 define('LOCALE', 'en_US');
 
 {% if ureport_graylog %}
-define('GRAYLOG_DOMAIN', '{{ ureport_graylog.domain }}');
-define('GRAYLOG_PORT',    {{ ureport_graylog.port   }});
+define('GRAYLOG_DOMAIN', '{{ ureport_graylog.host }}');
+define('GRAYLOG_PORT',    {{ ureport_graylog.port }});
 {% endif %}

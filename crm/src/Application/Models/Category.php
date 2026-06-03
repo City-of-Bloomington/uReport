@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -9,9 +9,10 @@ use Application\Database;
 
 class Category extends ActiveRecord
 {
-	protected $tablename = 'categories';
+	public const TABLENAME = 'categories';
 
-	protected $department;
+    protected $autoCloseSubstatus;
+    protected $department;
 	protected $defaultPerson;
 	protected $categoryGroup;
 
@@ -27,8 +28,6 @@ class Category extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
 	public function __construct($id=null)
 	{
@@ -40,11 +39,9 @@ class Category extends ActiveRecord
 				$sql = ActiveRecord::isId($id)
 					? 'select * from categories where id=?'
 					: 'select * from categories where name=?';
-
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('categories/unknown');
@@ -64,11 +61,8 @@ class Category extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -79,7 +73,8 @@ class Category extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -95,7 +90,7 @@ class Category extends ActiveRecord
 
 		if ($this->displayPermissionLevelHasChanged || $this->slaDaysHasChanged) {
 			// Spawn a background process to reindex the search engine
-			$cmd = PHP.' '.APPLICATION_HOME.'/scripts/workers/indexCategory.php '.SITE_HOME.' '.$this->getId();
+			$cmd = 'php '.APPLICATION_HOME.'/scripts/solr/indexCategory.php '.SITE_HOME.' '.$this->getId();
 			if ($this->slaDaysHasChanged) { $cmd .= ' open'; }
 
 			shell_exec("nohup $cmd > /dev/null 2>&1 &");
@@ -106,7 +101,6 @@ class Category extends ActiveRecord
 	// Getters and Setters
 	//----------------------------------------------------------------
 	public function __toString()                { return parent::get('name');                   }
-	public function getId()                     { return parent::get('id');                     }
 	public function getName()                   { return parent::get('name');                   }
 	public function getDepartment_id()          { return parent::get('department_id');          }
 	public function getDefaultPerson_id()       { return parent::get('defaultPerson_id');       }
@@ -116,7 +110,7 @@ class Category extends ActiveRecord
 	public function getFeatured()               { return parent::get('featured');               }
 	public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
 	public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
-	public function getSlaDays()                { return parent::get('slaDays');                }
+	public function getSlaDays(): ?int          { return $this->data['slaDays'] ?? null;        }
 	public function getNotificationReplyEmail() { return parent::get('notificationReplyEmail'); }
 	public function getAutoCloseIsActive()      { return parent::get('autoCloseIsActive');      }
 	public function getAutoCloseSubstatus_id()  { return parent::get('autoCloseSubstatus_id');  }
@@ -124,15 +118,15 @@ class Category extends ActiveRecord
 	public function getDepartment()         { return parent::getForeignKeyObject(__namespace__.'\Department',    'department_id'        ); }
 	public function getDefaultPerson()      { return parent::getForeignKeyObject(__namespace__.'\Person',        'defaultPerson_id'     ); }
 	public function getCategoryGroup()      { return parent::getForeignKeyObject(__namespace__.'\CategoryGroup', 'categoryGroup_id'     ); }
-	public function getLastModified($format=null, \DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
+	public function getLastModified(?string $format=null, ?\DateTimeZone $timezone=null) { return parent::getDateData('lastModified', $format, $timezone); }
 
 	public function setName                  ($s) { parent::set('name',                  $s); }
 	public function setDescription           ($s) { parent::set('description',           $s); }
-	public function setActive                ($s) { parent::set('active',        $s ? 1 : 0); }
-	public function setFeatured              ($s) { parent::set('featured',      $s ? 1 : 0); }
+	public function setActive                ($s) { $this->data['active'  ] = $s ? 1 : 0; }
+	public function setFeatured              ($s) { $this->data['featured'] = $s ? 1 : 0; }
 	public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
 	public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
-	public function setAutoCloseIsActive     ($b) { parent::set('autoCloseIsActive',     $b ? 1 : 0); }
+	public function setAutoCloseIsActive     ($b) { $this->data['autoCloseIsActive'] = $b ? 1 : 0; }
 	public function setAutoCloseSubstatus_id($id)           { parent::setForeignKeyField( __namespace__.'\Substatus',     'autoCloseSubstatus_id', $id); }
 	public function setDepartment_id        ($id)           { parent::setForeignKeyField( __namespace__.'\Department',    'department_id',         $id); }
 	public function setDefaultPerson_id     ($id)           { parent::setForeignKeyField( __namespace__.'\Person',        'defaultPerson_id',      $id); }
@@ -155,22 +149,17 @@ class Category extends ActiveRecord
         parent::set('displayPermissionLevel',$s);
     }
 
-    public function setSlaDays($i)
+    public function setSlaDays(?int $i=null)
     {
-        $i = (int)$i;
-
         if ($this->getId()) {
             if ($this->getSlaDays() != $i) {
                 $this->slaDaysHasChanged = true;
             }
         }
-        parent::set('slaDays', $i);
+        $this->data['slaDays'] = $i;
     }
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
         $fields = [
             'name', 'description', 'department_id', 'defaultPerson_id', 'categoryGroup_id',
@@ -190,18 +179,14 @@ class Category extends ActiveRecord
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
-	/**
-	 * @return bool
-	 */
-	public function autoCloseIsActive() { return $this->getAutoCloseIsActive() ? true : false; }
-	public function isActive()          { return $this->getActive()            ? true : false; }
-	public function isFeatured()        { return $this->getFeatured()          ? true : false; }
+	public function autoCloseIsActive(): bool { return $this->getAutoCloseIsActive() ? true : false; }
+	public function isActive()         : bool { return $this->getActive()            ? true : false; }
+	public function isFeatured()       : bool { return $this->getFeatured()          ? true : false; }
 
 	/**
 	 * Event handler called from Ticket::handleAdd()
 	 *
 	 * Handles the autoClose and autoResponse sending
-	 * @param Ticket $ticket
 	 */
 	public function onTicketAdd(Ticket &$ticket)
 	{
@@ -225,12 +210,11 @@ class Category extends ActiveRecord
 	 * Anything without a type will be rendered as type='text'
 	 * If type is select, radio, or checkbox, you must provide values
 	 *		for the user to choose from
-	 *
-	 * @return array
 	 */
-	public function getCustomFields()
+	public function getCustomFields(): ?array
 	{
-		return json_decode(parent::get('customFields'));
+        $f = parent::get('customFields');
+        return $f ? json_decode($f, true) : null;
 	}
 
 	/**
@@ -244,15 +228,13 @@ class Category extends ActiveRecord
 	 * Anything without a type will be rendered as type='text'
 	 * If type is select, radio, or checkbox, you must provide values
 	 *		for the user to choose from
-	 *
-	 * @param string $json
 	 */
-	public function setCustomFields($json=null)
+	public function setCustomFields(?string $json=null)
 	{
 		$json = trim($json);
 		$customFields = '';
 		if ($json) {
-			$customFields = json_decode($json);
+			$customFields = json_decode($json, true);
 			if (is_array($customFields)) {
 				$this->data['customFields'] = $json;
 			}
@@ -268,11 +250,7 @@ class Category extends ActiveRecord
 		}
 	}
 
-	/**
-	 * @param Person $person
-	 * @return bool
-	 */
-	public function allowsDisplay(Person $person=null)
+	public function allowsDisplay(?Person $person=null): bool
 	{
 		if (!$person) {
 			return $this->getDisplayPermissionLevel()==='anonymous';
@@ -286,11 +264,7 @@ class Category extends ActiveRecord
 		return true;
 	}
 
-	/**
-	 * @param Person $person
-	 * @return bool
-	 */
-	public function allowsPosting(Person $person=null)
+	public function allowsPosting(?Person $person=null): bool
 	{
 		if (!$person) {
 			return $this->getPostingPermissionLevel()==='anonymous';
@@ -306,68 +280,57 @@ class Category extends ActiveRecord
 
 	/**
 	 * Returns the most recent lastModified date from all categories
-	 *
-	 * @param string $format
-	 * @param DateTimeZone $timezone
-	 * @return string
 	 */
-	public static function getGlobalLastModifiedDate($format=null, \DateTimeZone $timezone=null)
+	public static function getGlobalLastModifiedDate(?string $format=null, ?\DateTimeZone $timezone=null): ?string
 	{
-		$db = Database::getConnection();
-		$result = $db->query('select max(lastModified) as lastModified from categories')->execute();
-		$row = $result->current();
-
-		if ($format) {
-			$date = new \DateTime($row['lastModified']);
-			if ($timezone) { $date->setTimezone($timezone); }
-			return $date->format($format);
+		$result = Database::query('select max(lastModified) as lastModified from categories', []);
+		if ($result) {
+			if ($format) {
+				$date = new \DateTime($result[0]['lastModified']);
+				if ($timezone) { $date->setTimezone($timezone); }
+				return $date->format($format);
+			}
+			return $result[0]['lastModified'];
 		}
-		else {
-			return $row['lastModified'];
-		}
+		return null;
 	}
 
 	/**
 	 * Returns an array of templates, with the template ID as the key
-	 *
-	 * @return array An array of ResponseTemplate objects
 	 */
-	public function getResponseTemplates()
+	public function getResponseTemplates(): array
 	{
-        $templates = [];
-        $table = new ResponseTemplateTable();
-        $list = $table->find(['category_id'=>$this->getId()]);
-        foreach ($list as $t) { $templates[$t->getId()] = $t; }
-        return $templates;
+		$out = [];
+		$sql = 'select * from category_action_responses where category_id=?';
+		$res = Database::query($sql, [$this->getId()]);
+		foreach ($res as $r) { $out[] = new ResponseTemplate($r); }
+		return $out;
 	}
 
-	/**
-	 * @param  Action           $action
-	 * @return ResponseTemplate
-	 */
-	public function responseTemplateForAction(Action $action)
+	public function responseTemplateForAction(Action $a): ?ResponseTemplate
 	{
-        $table = new ResponseTemplateTable();
-        $list = $table->find(['category_id'=>$this->getId(), 'action_id'=>$action->getId()]);
-        if (count($list)) {
-            return $list->current();
-        }
+		$sql = 'select * from category_action_responses where category_id=? and action_id=?';
+		$res = Database::query($sql, [$this->getId(), $a->getId()]);
+		if (count($res)) {
+			return new ResponseTemplate($res[0]);
+		}
         else {
-            if ($action->getTemplate()) {
-                $response = new ResponseTemplate();
-                $response->setCategory($this);
-                $response->setAction    ($action);
-                $response->setTemplate  ($action->getTemplate());
-                $response->setReplyEmail($action->getReplyEmail());
-                return $response;
+            if ($a->getTemplate()) {
+                $r = new ResponseTemplate();
+                $r->setCategory($this);
+                $r->setAction    ($a);
+                $r->setTemplate  ($a->getTemplate());
+                $r->setReplyEmail($a->getReplyEmail());
+                return $r;
             }
         }
+        return null;
 	}
 }
 
 class JSONException extends \Exception
 {
-	public function __construct($message, $code=0, \Exception $previous=null)
+	public function __construct($message)
 	{
 		switch ($message) {
 			case JSON_ERROR_NONE:
@@ -390,7 +353,6 @@ class JSONException extends \Exception
 			break;
 			default:
 				$this->message = 'Unknown JSON error';
-			break;
 		}
 	}
 }

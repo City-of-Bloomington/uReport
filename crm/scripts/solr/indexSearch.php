@@ -3,11 +3,13 @@
  * @copyright 2012-2021 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../bootstrap.php';
+
 use Application\Models\Search;
 use Application\Models\Ticket;
 use Application\Database;
 
-include '../../bootstrap.inc';
 $search = new Search();
 $delete = $search->solr->createUpdate();
 $delete->addDeleteQuery('*:*');
@@ -16,8 +18,7 @@ $search->solr->update($delete);
 
 
 $sql    = 'select * from tickets';
-$db     = Database::getConnection();
-$result = $db->query($sql)->execute();
+$result = Database::query($sql, []);
 $count  = count($result);
 foreach ($result as $c=>$row) {
     $ticket   = new Ticket($row);

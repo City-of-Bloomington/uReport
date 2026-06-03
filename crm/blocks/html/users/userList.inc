@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2007-2020 City of Bloomington, Indiana
+ * @copyright 2007-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array $this->users
  */
@@ -12,7 +12,6 @@ use Application\Templates\Helpers\ButtonLink;
         <tr><th><?= $this->_('username'); ?></th>
             <th><?= $this->_('name'); ?></th>
             <th><?= $this->_('department'); ?></th>
-            <th><?= $this->_('authenticationMethod'); ?></th>
             <th><?= $this->_('role'); ?></th>
             <th></th>
             <th></th>
@@ -52,16 +51,16 @@ use Application\Templates\Helpers\ButtonLink;
                 $name = "<a href=\"$uri\">$name</a>";
             }
 
-            $department     = $user->getDepartment();
-            $departmentName = $department ? self::escape($department->getName()) : '';
-            $role           = $this->_(strtolower($user->getRole()));
-            $class          = $user->getExternalIdentity() ? '' : 'class="missing"';
+            $d     = $user->getDepartment();
+            $dept  = $d ? self::escape($d->getName()) : '';
+            $r     = $user->getRole();
+            $role  = $r ? $this->_(strtolower($r)) : '';
+            $class = $user->getExternalIdentity() ? '' : 'class="missing"';
             echo "
             <tr $class>
                 <td>$username</td>
                 <td>$name</td>
-                <td>$departmentName</td>
-                <td>{$user->getAuthenticationMethod()}</td>
+                <td>$dept</td>
                 <td>$role</td>
                 <td>$editButton</td>
                 <td>$deleteButton</td>

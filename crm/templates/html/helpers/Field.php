@@ -5,8 +5,8 @@
  */
 namespace Application\Templates\Helpers;
 
-use Blossom\Classes\Helper;
-use Blossom\Classes\View;
+use Application\Helper;
+use Application\View;
 
 class Field extends Helper
 {

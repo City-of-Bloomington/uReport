@@ -5,7 +5,7 @@
  * Files will be stored as /data/media/YYYY/MM/DD/$unique_id
  * User provided filenames will be stored in the database
  *
- * @copyright 2006-2016 City of Bloomington, Indiana
+ * @copyright 2006-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -15,7 +15,7 @@ use Application\Database;
 
 class Media extends ActiveRecord
 {
-	protected $tablename = 'media';
+	public const TABLENAME = 'media';
 
 	protected $ticket;
 	protected $person;
@@ -78,11 +78,11 @@ class Media extends ActiveRecord
 
 				$result = null;
 				if (isset($sql)) {
-                    $result = $db->createStatement($sql)->execute([$id]);
+					$result = Database::query($sql, [$id]);
 				}
 
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('media/unknown');
@@ -102,11 +102,8 @@ class Media extends ActiveRecord
     /**
      * When repopulating with fresh data, make sure to set default
      * values on all object properties.
-     *
-     * @Override
-     * @param array $data
      */
-    public function exchangeArray($data)
+    public function exchangeArray(array $data)
     {
         parent::exchangeArray($data);
 
@@ -116,7 +113,8 @@ class Media extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -133,18 +131,19 @@ class Media extends ActiveRecord
 	 */
 	public function delete()
 	{
-		unlink(SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}");
+		$file = SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
+		if (is_file($file)) { unlink($file); }
+
 		parent::delete();
 	}
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()         { return parent::get('id');         }
 	public function getTicket_id()  { return parent::get('ticket_id');  }
 	public function getFilename()   { return parent::get('filename');   }
 	public function getMime_type()  { return parent::get('mime_type');  }
 	public function getPerson_id()  { return parent::get('person_id');  }
-	public function getUploaded($f=null, \DateTimeZone $tz=null) { return parent::getDateData('uploaded', $f, $tz); }
+	public function getUploaded(?string $format=null, ?\DateTimeZone $tz=null) { return parent::getDateData('uploaded', $format, $tz); }
 
 	public function getTicket() { return   parent::getForeignKeyObject(__namespace__.'\Ticket', 'ticket_id'); }
 	public function getPerson() { return   parent::getForeignKeyObject(__namespace__.'\Person', 'person_id'); }
@@ -155,18 +154,16 @@ class Media extends ActiveRecord
 	public function setPerson(Person $o) { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $o);  }
 	public function setUploaded($d)      { parent::setDateData('uploaded', $d); }
 
-	public function getModified($f=null, \DateTimeZone $tz=null) { return $this->getUploaded($f, $tz); }
+	public function getModified(?string $format=null, ?\DateTimeZone $tz=null) { return $this->getUploaded($format, $tz); }
 
 	//----------------------------------------------------------------
 	// Custom Functions
 	//----------------------------------------------------------------
 	/**
 	 * Returns the root portion of the mime_type
-	 *
-	 * @return string
 	 */
-	public function getMedia_type() { return dirname($this->getMime_type()); }
-	public function getType()       { return dirname($this->getMime_type()); }
+	public function getMedia_type():string { return dirname($this->getMime_type()); }
+	public function getType()      :string { return dirname($this->getMime_type()); }
 
 	/**
 	 * Populates this object by reading information on a file
@@ -174,9 +171,9 @@ class Media extends ActiveRecord
 	 * This function does the bulk of the work for setting all the required information.
 	 * It tries to read as much meta-data about the file as possible
 	 *
-	 * @param array|string Either a $_FILES array or a path to a file
+	 * @param array|string $file   Either a $_FILES array or a path to a file
 	 */
-	public function setFile($file)
+	public function setFile(array|string $file)
 	{
 		// Handle passing in either a $_FILES array or just a path to a file
 		$tempFile = is_array($file) ? $file['tmp_name'] : $file;
@@ -192,15 +189,12 @@ class Media extends ActiveRecord
 
 		// Find out the mime type for this file
 		$this->data['mime_type'] = mime_content_type($tempFile);
-		if (array_key_exists($this->data['mime_type'], self::$mime_types)) {
-            $extension = self::$mime_types[$this->data['mime_type']];
-		}
-		else {
+		if (!array_key_exists($this->data['mime_type'], self::$mime_types)) {
 			throw new \Exception('media/invalidFileType');
 		}
 
 		// Clean all bad characters from the filename
-		$filename = $this->createValidFilename($filename, $extension);
+		$filename = $this->createValidFilename($filename);
 		$this->data['filename'] = $filename;
 
 		// Move the file where it's supposed to go
@@ -220,10 +214,8 @@ class Media extends ActiveRecord
 
 	/**
 	 * Returns the full path to the file or derivative
-	 *
-	 * @return string
 	 */
-	public function getFullPath()
+	public function getFullPath(): string
 	{
         return SITE_HOME."/media/{$this->getDirectory()}/{$this->getInternalFilename()}";
 	}
@@ -234,10 +226,8 @@ class Media extends ActiveRecord
 	 * Media is stored in the SITE_HOME directory, outside of the web directory
 	 * This variable only contains the partial path.
 	 * This partial path can be concat with APPLICATION_HOME or BASE_URL
-	 *
-	 * @return string
 	 */
-	public function getDirectory()
+	public function getDirectory(): string
 	{
         return $this->getUploaded('Y/n/j');
 	}
@@ -249,10 +239,8 @@ class Media extends ActiveRecord
 	 * We generate a unique filename the first time the filename is needed.
 	 * This filename will be saved in the database whenever this media is
 	 * finally saved.
-	 *
-	 * @return string
 	 */
-	public function getInternalFilename()
+	public function getInternalFilename(): string
 	{
 		$filename = parent::get('internalFilename');
 		if (!$filename) {
@@ -262,20 +250,15 @@ class Media extends ActiveRecord
 		return $filename;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getExtension()
+	public function getExtension(): string
 	{
         return self::$mime_types[$this->data['mime_type']];
 	}
 
 	/**
 	 * Returns the URL to this media
-	 *
-	 * @return string
 	 */
-	public function getURL($size=null)
+	public function getURL($size=null): string
 	{
 		$url = BASE_URL."/media/{$this->getDirectory()}";
 		if (!empty($size)) { $url.= "/$size"; }
@@ -283,32 +266,27 @@ class Media extends ActiveRecord
 		return $url;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getFilesize()
+	public function getFilesize(): int
 	{
         return filesize($this->getFullPath());
 	}
 
 	/**
 	 * Cleans a filename of any characters that might cause problems on filesystems
-	 *
-	 * @return string
 	 */
-	public static function createValidFilename($string)
+	public static function createValidFilename(string $filename): string
 	{
 		// No bad characters
-		$string = preg_replace('/[^A-Za-z0-9_\.\s]/','',$string);
+		$filename = preg_replace('/[^A-Za-z0-9_\.\s]/','', $filename);
 
 		// Convert spaces to underscores
-		$string = preg_replace('/\s+/','_',$string);
+		$filename = preg_replace('/\s+/','_', $filename);
 
 		// Lower case any file extension
-		if (preg_match('/(^.*\.)([^\.]+)$/',$string,$matches)) {
-			$string = $matches[1].strtolower($matches[2]);
+		if (preg_match('/(^.*\.)([^\.]+)$/', $filename, $matches)) {
+			$filename = $matches[1].strtolower($matches[2]);
 		}
 
-		return $string;
+		return $filename;
 	}
 }

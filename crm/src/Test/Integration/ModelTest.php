@@ -1,32 +1,64 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2026 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Test\Integration;
 
+use Application\Database;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ModelTest extends TestCase
 {
-    public function classProvider()
+    public static function models(): array
     {
-        $classes = [];
-        foreach (glob(APPLICATION_HOME.'/src/Application/Models/*Table.php') as $f) {
-            preg_match('/(^.*)\.([^\.]+)$/', $f, $matches);
-            $file      = basename($matches[1]);
-            $classes[] = ["Application\Models\\".basename($matches[1])];
-        }
-        return $classes;
+        return [
+            ['\Application\Models\Action'          ],
+            ['\Application\Models\Address'         ],
+            ['\Application\Models\Bookmark'        ],
+            ['\Application\Models\Category'        ],
+            ['\Application\Models\CategoryGroup'   ],
+            ['\Application\Models\Client'          ],
+            ['\Application\Models\ContactMethod'   ],
+            ['\Application\Models\Department'      ],
+            ['\Application\Models\Email'           ],
+            ['\Application\Models\IssueType'       ],
+            ['\Application\Models\Media'           ],
+            ['\Application\Models\Person'          ],
+            ['\Application\Models\Phone'           ],
+            ['\Application\Models\ResponseTemplate'],
+            ['\Application\Models\Substatus'       ],
+            ['\Application\Models\Ticket'          ],
+            ['\Application\Models\TicketHistory'   ]
+        ];
+    }
+
+    #[DataProvider('models')]
+    public function testConstructors(string $class)
+    {
+        $this->assertFalse(empty($class::TABLENAME), 'TABLENAME not set');
+        $pdo = Database::getConnection();
+        $tab = $class::TABLENAME;
+
+        $q   = $pdo->query("select * from $tab limit 1");
+        $res = $q->fetchAll(\PDO::FETCH_ASSOC);
+
+        $o   = new $class($res[0]['id']);
+        $this->assertTrue(self::compare($res[0], $o->data));
     }
 
     /**
-     * @dataProvider classProvider
+     * Make sure all the database fields are present in the loaded Model
+     *
+     * Model data may contain additional fields, this only compares the fields
+     * from the database.
      */
-    public function testTableClasses(string $class)
+    private static function compare(array $db, array $model): bool
     {
-        $o = new $class();
-        $this->assertEquals($class, get_class($o));
+        foreach ($db as $k=>$v) {
+            if ($model[$k] != $v) { return false; }
+        }
+        return true;
     }
 }

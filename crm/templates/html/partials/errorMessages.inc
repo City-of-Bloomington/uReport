@@ -1,0 +1,41 @@
+<?php
+/**
+ * @copyright 2007-2016 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ */
+if (isset($_SESSION['errorMessages'])) {
+?>
+<section id="alert">
+	<?php
+        $errorDir = "/blocks/html/errorMessages";
+
+		foreach ($_SESSION['errorMessages'] as $e) {
+            echo "
+            <article>
+                <header>
+                    <h1>{$this->_('error')}</h1>
+                </header>
+            ";
+			$error = is_string($e) ? $e : $e->getMessage();
+			$file = "$errorDir/$error.inc";
+
+            if ($this->theme
+                && is_file($this->theme.$file)) {
+                include    $this->theme.$file;
+            }
+			elseif (is_file(APPLICATION_HOME.$file)) {
+                include     APPLICATION_HOME.$file;
+			}
+			else {
+				echo "<p>{$this->_($error, 'errors')}</p>";
+			}
+
+			echo "
+			</article>
+			";
+		}
+	?>
+</section>
+<?php
+    unset ($_SESSION['errorMessages']);
+}

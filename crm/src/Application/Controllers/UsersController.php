@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -9,9 +9,9 @@ use Application\Models\Person;
 use Application\Models\PersonTable;
 use Application\Models\DepartmentTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class UsersController extends Controller
 {
@@ -19,14 +19,17 @@ class UsersController extends Controller
 	{
         global $ACL;
 
-		$depts  = new DepartmentTable();
-		$people = new PersonTable();
-		$users  = $people->search(array_merge($_GET, ['user_account'=>true]));
-		$vars   = [
+		$t     = new DepartmentTable();
+		$r     = $t->find();
+		$depts = $r['rows'];
+
+		$t     = new PersonTable();
+		$r     = $t->search(array_merge($_GET, ['user_account'=>true]));
+		$users = $r['rows'];
+		$vars  = [
             'users'                 => $users,
-            'departments'           => $depts->find(),
-            'roles'                 => $ACL->getRoles(),
-            'authenticationMethods' => Person::getAuthenticationMethods()
+            'departments'           => $depts,
+            'roles'                 => $ACL->getRoles()
 		];
 		$this->template->title  = $this->template->_(['user', 'users', 100]);
 		$this->template->blocks = [ new Block('users/findForm.inc', $vars) ];

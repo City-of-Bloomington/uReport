@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -10,18 +10,18 @@ use Application\Database;
 class Action extends ActiveRecord
 {
     // Pre-defined system level actions
-    const OPENED     = 'open';
-    const CLOSED     = 'closed';
-    const ASSIGNED   = 'assignment';
-    const UPDATED    = 'update';
-    const RESPONDED  = 'response';
-    const DUPLICATED = 'duplicate';
-    const COMMENTED  = 'comment';
-    const CHANGED_CATEGORY = 'changeCategory';
-    const CHANGED_LOCATION = 'changeLocation';
-    const UPLOADED_MEDIA   = 'upload_media';
+    public const OPENED     = 'open';
+    public const CLOSED     = 'closed';
+    public const ASSIGNED   = 'assignment';
+    public const UPDATED    = 'update';
+    public const RESPONDED  = 'response';
+    public const DUPLICATED = 'duplicate';
+    public const COMMENTED  = 'comment';
+    public const CHANGED_CATEGORY = 'changeCategory';
+    public const CHANGED_LOCATION = 'changeLocation';
+    public const UPLOADED_MEDIA   = 'upload_media';
 
-	protected $tablename = 'actions';
+	public const TABLENAME = 'actions';
 	public static $types = ['system', 'department'];
 
 	/**
@@ -33,10 +33,8 @@ class Action extends ActiveRecord
 	 * Passing in a scalar will load the data from the database.
 	 * This will load all fields in the table as properties of this class.
 	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
 	 */
-	public function __construct($id=null)
+	public function __construct(array|int|string|null $id=null)
 	{
 		if ($id) {
 			if (is_array($id)) {
@@ -47,10 +45,9 @@ class Action extends ActiveRecord
 					? 'select * from actions where id=?'
 					: 'select * from actions where name=?';
 
-				$db = Database::getConnection();
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('actions/unknown');
@@ -67,7 +64,8 @@ class Action extends ActiveRecord
 
 	/**
 	 * Throws an exception if anything's wrong
-	 * @throws Exception $e
+	 *
+	 * @throws \Exception
 	 */
 	public function validate()
 	{
@@ -86,7 +84,6 @@ class Action extends ActiveRecord
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
 	public function __toString()     { return parent::get('name');        }
-	public function getId()          { return parent::get('id');          }
 	public function getName()        { return parent::get('name');        }
 	public function getDescription() { return parent::get('description'); }
 	public function getType()        { return parent::get('type');        }
@@ -98,19 +95,13 @@ class Action extends ActiveRecord
 	public function setTemplate   ($s) { parent::set('template',    $s); }
 	public function setReplyEmail ($s) { parent::set('replyEmail',  $s); }
 
-	/**
-	 * @param string $string
-	 */
-	public function setType($string)
+	public function setType(string $string)
 	{
 		$string = trim($string);
 		if (in_array($string, self::$types)) { $this->data['type'] = $string; }
 	}
 
-	/**
-	 * @param array $post
-	 */
-	public function handleUpdate($post)
+	public function handleUpdate(array $post)
 	{
         if ($this->getType() !== 'system') {
             $this->setName($post['name']);

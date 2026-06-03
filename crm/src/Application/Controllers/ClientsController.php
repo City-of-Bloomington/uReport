@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -8,9 +8,9 @@ namespace Application\Controllers;
 use Application\Models\Client;
 use Application\Models\ClientTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class ClientsController extends Controller
 {
@@ -19,8 +19,8 @@ class ClientsController extends Controller
 		$table = new ClientTable();
 		$list  = $table->find();
 
-		$this->template->title = $this->template->_(['client', 'clients', count($list)]);
-		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list]);
+		$this->template->title = $this->template->_(['client', 'clients', $list['total']]);
+		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list['rows']]);
 	}
 
 	/**
@@ -29,9 +29,6 @@ class ClientsController extends Controller
 	 * Choosing a person involves going through a whole person finding process
 	 * at a different url.  Once the user has chosen a new person, they will
 	 * return here, passing in the person_id they have chosen
-	 *
-	 * @param REQUEST client_id
-	 * @param REQUEST person_id  The new contactPerson
 	 */
 	public function update()
 	{

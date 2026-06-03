@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  * @param Department $this->currentDepartment
@@ -27,7 +27,7 @@ $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/assignForm-'.VERSIO
                 $table   = new DepartmentTable();
                 $list    = $table->find();
                 $options = [];
-                foreach ($list as $d) {
+                foreach ($list['rows'] as $d) {
                     $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())];
                 }
                 echo $helper->field([

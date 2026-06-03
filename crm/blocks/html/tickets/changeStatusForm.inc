@@ -4,7 +4,7 @@
  *
  * The ticket will already have the new status set.
 *
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
@@ -48,7 +48,7 @@ $action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
 
                 $table = new SubstatusTable();
                 $list  = $table->find(['status'=>$status]);
-                foreach ($list as $s) {
+                foreach ($list['rows'] as $s) {
                     $options[] = ['value'=>$s->getId(), 'label'=>self::escape($s->getName())];
                 }
                 echo $helper->field([

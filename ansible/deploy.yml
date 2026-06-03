@@ -2,9 +2,7 @@
 - hosts: "ureport"
   become: "yes"
   roles:
-    - "City-of-Bloomington.mysql"
     - "City-of-Bloomington.php"
-    - "City-of-Bloomington.solr"
 
   tasks:
     - name: "Install dependencies"
@@ -16,22 +14,6 @@
           - "imagemagick"
           - "php-mysql"
           - "xsltproc"
-
-    - name: "Create mysql database"
-      community.mysql.mysql_db:
-        config_file: "{{ mysql_defaults_extra_file }}"
-        name: "{{ ureport_db.name }}"
-        state: "present"
-      no_log: "True"
-
-    - name: "Create mysql user for site"
-      community.mysql.mysql_user:
-        name:     "{{ ureport_db.user }}"
-        password: "{{ ureport_db.pass }}"
-        priv:     "{{ ureport_db.name }}.*:ALL"
-        state: "present"
-        config_file: "{{ mysql_defaults_extra_file }}"
-      no_log: "True"
 
     - name: "Create directories"
       ansible.builtin.file:
@@ -62,18 +44,10 @@
         dest:  "/etc/apache2/sites-enabled/conf.d/ureport.conf"
       notify:  "apache_restart"
 
-    - include_tasks: "tasks/solr.yml"
-
     - name: "Update uReport site_config"
       ansible.builtin.template:
         src: "site_config.j2"
-        dest: "{{ ureport_site_home }}/site_config.inc"
-
-    - name: "Install CRON backup script"
-      ansible.builtin.template:
-        src: "backup.sh"
-        dest: "/etc/cron.daily/backup.d/ureport"
-        mode: "0755"
+        dest: "{{ ureport_site_home }}/site_config.php"
 
     - name: 'Update directory permissions'
       ansible.builtin.file:

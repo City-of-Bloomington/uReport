@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -8,9 +8,9 @@ namespace Application\Controllers;
 use Application\Models\CategoryGroup;
 use Application\Models\CategoryGroupTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class CategoryGroupsController extends Controller
 {
@@ -18,8 +18,8 @@ class CategoryGroupsController extends Controller
 	{
 		$table = new CategoryGroupTable();
 		$list  = $table->find();
-		$this->template->title = $this->template->_(['categoryGroup', 'categoryGroups', count($list)]);
-		$this->template->blocks[] = new Block('categoryGroups/list.inc', ['categoryGroupList'=>$list]);
+		$this->template->title = $this->template->_(['categoryGroup', 'categoryGroups', $list['total']]);
+		$this->template->blocks[] = new Block('categoryGroups/list.inc', ['categoryGroupList'=>$list['rows']]);
 	}
 
 	public function update()

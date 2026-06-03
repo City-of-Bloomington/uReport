@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
-use Blossom\Classes\Block;
+use Application\Block;
 
 $thumbnail   = new Block('media/thumbnail.inc');
 echo "

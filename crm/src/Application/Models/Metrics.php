@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016 City of Bloomington, Indiana
+ * @copyright 2016-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -10,12 +10,7 @@ use Application\Database;
 
 class Metrics
 {
-    /**
-     * @param  int $category_id
-     * @param  int $numDays
-     * @return int
-     */
-    public static function onTimePercentage($category_id, $numDays, \DateTime $effectiveDate=null)
+    public static function onTimePercentage($category_id, $numDays, ?\DateTime $effectiveDate=null): ?int
     {
         $category_id = (int)$category_id;
         $numDays     = (int)$numDays;
@@ -29,7 +24,6 @@ class Metrics
         $scopeEnd   = $e->format(ActiveRecord::MYSQL_DATETIME_FORMAT);
         $scopeFilter = "('$scopeStart' <= ifnull(closedDate, now()) and '$scopeEnd' >= enteredDate)";
 
-        $db = Database::getConnection();
         $sql = "select x.total, x.ontime, x.effectiveDate, floor(ontime / total * 100) as percentage
                 from (
                     select  count(*) as total,
@@ -40,9 +34,10 @@ class Metrics
                     where t.category_id=?
                     and (? <= ifnull(closedDate, now()) and ? >= enteredDate)
                 ) x";
-        $result = $db->query($sql)->execute([$category_id, $scopeStart, $scopeEnd]);
+        $result = Database::query($sql, [$category_id, $scopeStart, $scopeEnd]);
         if (count($result)) {
-            return $result->current();
+            return (int)$result[0];
         }
+        return null;
     }
 }

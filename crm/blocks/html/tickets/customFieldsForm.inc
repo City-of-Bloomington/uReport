@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Category $this->category
  * @param Ticket   $this->ticket
@@ -13,10 +13,10 @@ if ($category) {
 		$helper = $this->template->getHelper('field');
 
 		foreach ($customFields as $f) {
-			$name  = $f->name;
-			$type  = isset($f->type) ? $f->type : 'string';
-			$label = isset($f->label) ? self::escape($f->label) : self::escape($name);
-			$value = isset($ticketData->$name) ? $ticketData->$name : null;
+			$name  = $f['name'];
+			$type  = $f['type'] ?? 'string';
+			$label = self::escape($f['label'] ?? $name);
+			$value = $ticketData[$name] ?? null;
 
 			$field_name = "customFields[$name]";
 			$field_id   = "customFields-$name";
@@ -29,7 +29,7 @@ if ($category) {
 			switch ($type) {
 				case 'singlevaluelist':
                     $options = [];
-                    foreach ($f->values as $v) {
+                    foreach ($f['values'] as $v) {
                         $v         = self::escape($v);
                         $options[] = ['value'=>$v, 'label'=>$v];
                     }
@@ -41,7 +41,7 @@ if ($category) {
 
 				case 'multivaluelist':
                     $options = [];
-                    foreach ($f->values as $v) {
+                    foreach ($f['values'] as $v) {
                         $v = self::escape($v);
                         $options[] = ['value'=>$v, 'label'=>$v];
                     }

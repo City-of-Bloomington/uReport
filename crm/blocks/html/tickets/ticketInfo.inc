@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2021 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  * @param bool   $this->disableButtons
@@ -8,7 +8,7 @@
 use Application\Models\Person;
 use Application\Templates\Helpers\ButtonLink;
 
-use Blossom\Classes\Block;
+use Application\Block;
 
 $ticket_id = $this->ticket->getId();
 
@@ -51,9 +51,9 @@ $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomF
 if ($cf) {
     $data = $this->ticket->getCustomFields();
     foreach ($cf as $definition) {
-        $fieldname = $definition->name;
-        $label = isset($definition->label) ? self::escape($definition->label) : self::escape($fieldname);
-        $value = isset($data->$fieldname)  ? $data->$fieldname : '';
+        $fieldname = $definition['name'];
+        $label = self::escape($definition['label'] ?? $fieldname);
+        $value = $data[$fieldname] ?? '';
         if (is_string($value)) { $value = self::escape($value); }
         if (is_object($value)) {
             $temp = [];

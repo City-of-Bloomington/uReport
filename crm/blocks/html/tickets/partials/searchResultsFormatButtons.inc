@@ -6,7 +6,7 @@
  * @param bool                 $this->paginated   Whether the response is paginated or not
  */
 use Application\Models\Person;
-use Blossom\Classes\Url;
+use Application\Url;
 
 echo '<div id="resultFormatButtons">';
     $url    = new Url(URl::current_url(BASE_HOST));

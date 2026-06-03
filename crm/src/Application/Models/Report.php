@@ -1,31 +1,24 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
+
 use Application\ActiveRecord;
 use Application\Database;
 
 class Report
 {
-	private static $select;
 	private static $closedAction;
 
-	/**
-	 * @return int
-	 */
-	public static function closedId()
+	public static function closedId(): int
 	{
 		if (!self::$closedAction) { self::$closedAction = new Action('closed'); }
 		return self::$closedAction->getId();
 	}
 
-	/**
-	 * @param array $get The raw GET request
-	 * @return array
-	 */
-	public static function assignments($get)
+	public static function assignments(array $get): array
 	{
 		$closed = self::closedId();
         $options = self::handleSearchParameters($get);
@@ -47,29 +40,24 @@ class Report
 					t.substatus_id, s.name
 				order by p.lastname, p.firstname, c.name, t.status, t.substatus_id";
 
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute();
-		$d = array();
+		$result = Database::query($sql, []);
+		$d      = [];
 		foreach ($result as $r) {
 			$pid = $r['assignedPerson_id'];
 			$cid = $r['category_id'];
 			if (!isset($d[$pid])) { $d[$pid]['name'] = "$r[firstname] $r[lastname]"; }
 			if (!isset($d[$pid]['categories'][$cid])) {
-				$d[$pid]['categories'][$cid] = array(
-					'name'=>$r['category'],
-					'data'=>array()
-				);
+				$d[$pid]['categories'][$cid] = [
+					'name' => $r['category'],
+					'data' => []
+				];
 			}
 			$d[$pid]['categories'][$cid]['data'][] = $r;
 		}
 		return $d;
 	}
 
-	/**
-	 * @param  array $get The raw GET request
-	 * @return array
-	 */
-	public static function categories($get)
+	public static function categories(array $get): array
 	{
 		$closed = self::closedId();
 		$options = self::handleSearchParameters($get);
@@ -89,29 +77,24 @@ class Report
 					p.firstname, p.lastname,
 					s.name
 				order by c.name, p.lastname, p.firstname, t.status desc, t.substatus_id";
-		$db = Database::getConnection();
-		$d = array();
-		$result = $db->query($sql)->execute();
+		$d      = [];
+		$result = Database::query($sql, []);
 		foreach ($result as $r) {
 			$cid = $r['category_id'];
 			$pid = $r['assignedPerson_id'];
 			if (!isset($d[$cid])) { $d[$cid]['name'] = $r['category']; }
 			if (!isset($d[$cid]['people'][$pid])) {
-				$d[$cid]['people'][$pid] = array(
+				$d[$cid]['people'][$pid] = [
 					'name'=>"$r[firstname] $r[lastname]",
-					'data'=> array()
-				);
+					'data'=> []
+				];
 			}
 			$d[$cid]['people'][$pid]['data'][] = $r;
 		}
 		return $d;
 	}
 
-	/**
-	 * @param  array  $get The raw GET request
-	 * @return string
-	 */
-	private static function getInvolvementQuery($get)
+	private static function getInvolvementQuery(array $get): string
 	{
 		$options = self::handleSearchParameters($get);
 
@@ -146,11 +129,7 @@ class Report
         return $sql;
 	}
 
-	/**
-	 * @param  array $get The raw GET request
-	 * @return array
-	 */
-	public static function staff($get)
+	public static function staff(array $get): array
 	{
 		$involvementSelect = self::getInvolvementQuery($get);
 
@@ -162,17 +141,13 @@ class Report
                     $involvementSelect
                 ) as stats
                 group by stats.actionPerson_id";
-        $db = Database::getConnection();
-        $result = $db->query($sql)->execute();
-        return $result;
+        return Database::query($sql, []);
     }
 
-    public static function person($get)
+    public static function person(array $get): array
     {
-        $sql     = self::getInvolvementQuery($get);
-        $db = Database::getConnection();
-        $result  = $db->query($sql)->execute();
-        return $result;
+        $sql = self::getInvolvementQuery($get);
+		return Database::query($sql, []);
     }
 
 	/**
@@ -191,18 +166,15 @@ class Report
 	 *
 	 * For the SQL select string, we need to convert all the ID numbers into
 	 * a safe, comma-separated string of ID numbers.
-	 *
-	 * @param $requestParam
-	 * @return string
 	 */
-	private static function implodeIds($requestParam)
+	private static function implodeIds(array $requestParam): string
 	{
 		$ids = array();
 		foreach (array_keys($requestParam) as $i) { $ids[] = (int)$i; }
 		return implode(',', $ids);
 	}
 
-	private static function parseDate($string)
+	private static function parseDate(string $string): ?string
 	{
         try {
             $d = \DateTime::createFromFormat(DATE_FORMAT, $string);
@@ -212,6 +184,7 @@ class Report
         }
         catch (\Exception $e) {
         }
+        return null;
 	}
 
 	/**
@@ -220,11 +193,8 @@ class Report
 	 * both maintainability and performance reasons.
 	 * Make sure nothing from the $get array is used in a string.
 	 * Everything must be cleaned up before using in the where string
-	 *
-	 * @param array $get
-	 * @return string SQL for the where portion of a select
 	 */
-	private static function handleSearchParameters($get)
+	private static function handleSearchParameters(array $get): string
 	{
 		$options = array();
 		if (!empty($get['enteredDate'])) {
@@ -245,7 +215,7 @@ class Report
 		return $options ? implode(' and ', $options) : '';
 	}
 
-	private static function handleFilters(&$options, $get)
+	private static function handleFilters(array &$options, array $get)
 	{
         if (!empty($get['departments'])) {
             $ids = self::implodeIds($get['departments']);
@@ -289,11 +259,8 @@ class Report
      *
      * So, the date ranges get handled in a special way, but all the
      * other possible filters are handled the same.
-     *
-     * @param array $get The raw GET request
-     * @return string The sql for the where portion of a select
      */
-    private static function volumeOptions($get)
+    private static function volumeOptions(array $get): string
     {
         $options = [];
         if (!empty($get['enteredDate'])) {
@@ -310,9 +277,6 @@ class Report
         return count($options) ? implode(' and ', $options) : '';
     }
 
-	/**
-	 * @return Laminas\Db\ResultSet
-	 */
 	public static function currentOpenTickets()
 	{
 		$sql = "select t.category_id, c.name as category, sum(status='open') as count
@@ -321,14 +285,11 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
 	 * Returns the tickets opened in the past 24 hours
-	 *
-	 * @return Laminas\Db\ResultSet
 	 */
 	public static function openedTickets()
 	{
@@ -339,14 +300,11 @@ class Report
 				group by t.category_id
 				having count>0
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
 	 * Returns the tickets closed in the past 24 hours
-	 *
-	 * @return Laminas\Db\ResultSet
 	 */
 	public static function closedTickets()
 	{
@@ -357,20 +315,15 @@ class Report
 				where t.closedDate > (now() - interval 1 day)
 				group by t.category_id
 				order by count desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
 	 * Returns tickets that were created during a date range
 	 *
 	 * Dates should be strings that are parseable by strtotime
-	 *
-	 * @param string $start
-	 * @param string $end
-	 * @return Laminas\Db\ResultSet
 	 */
-	public static function openTicketsCount($start, $end)
+	public static function openTicketsCount(string $start, string $end)
 	{
 		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
 		$e = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($end));
@@ -379,20 +332,15 @@ class Report
 				where '$s'<=t.enteredDate and t.enteredDate<='$e'
 				group by date
 				order by date";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 	/**
 	 * Returns tickets that were closed during the provided date range
 	 *
 	 * Dates should be strings that are parseable by strtotime
-	 *
-	 * @param string $start
-	 * @param string $end
-	 * @return Laminas\Db\ResultSet ('date'=>xx, 'closed'=>xx)
 	 */
-	public static function closedTicketsCount($start, $end)
+	public static function closedTicketsCount(string $start, string $end)
 	{
 		$closed = self::closedId();
 		$s = date(ActiveRecord::MYSQL_DATE_FORMAT, strtotime($start));
@@ -402,13 +350,9 @@ class Report
 				where '$s'<=t.closedDate and t.closedDate<='$e'
 				group by date
 				order by date";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
-	/**
-	 * @return Laminas\Db\ResultSet
-	 */
 	public static function categoryActivity()
 	{
 		$closed = self::closedId();
@@ -425,8 +369,7 @@ class Report
 				join categories c on t.category_id=c.id
 				group by t.category_id
 				order by currentopen desc";
-		$db = Database::getConnection();
-		return $db->query($sql)->execute();
+		return Database::query($sql, []);
 	}
 
 
@@ -434,12 +377,8 @@ class Report
 	 * The number of tickets that were open on the date provided
 	 *
 	 * Dates should be strings in MySQL Date Format
-	 *
-	 * @param int $timestamp
-	 * @param array $get The raw GET request
-	 * @return int
 	 */
-	public static function outstandingTicketCount($date, $get)
+	public static function outstandingTicketCount(string $date, array $get): int
 	{
 		$sql = "select count(t.id) as count
 				from tickets t
@@ -454,22 +393,16 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute([$date, $date]);
-		$row = $result->current();
-		return $row['count'];
+		$result = Database::query($sql, [$date, $date]);
+		return $result[0]['count'];
 	}
 
 	/**
 	 * Returns the average SLA percentage for tickets closed on the given date
 	 *
 	 * Dates should be strings in MySQL Date Format
-	 *
-	 * @param string $date
-	 * @param array $get The raw GET request
-	 * @return int
 	 */
-	public static function closedTicketsSlaPercentage($date, $get)
+	public static function closedTicketsSlaPercentage(string $date, array $get): int
 	{
 		$sql = "select  round(avg(((datediff(t.closedDate, t.enteredDate) / c.slaDays) * 100))) as slaPercentage
                 from  tickets    t
@@ -485,18 +418,11 @@ class Report
 			$ids = self::implodeIds($get['departments']);
 			$sql.= " and p.department_id in ($ids)";
 		}
-		$db = Database::getConnection();
-		$result = $db->query($sql)->execute([$date, $date]);
-		$row = $result->current();
-		return $row['slaPercentage'];
+		$result = Database::query($sql, [$date, $date]);
+		return $result[0]['slaPercentage'];
 	}
 
-	/**
-	 * @param timestamp $start
-	 * @param timestamp $end
-	 * @return array
-	 */
-	public static function generateDateArray($start, $end)
+	public static function generateDateArray(int $start, int $end): array
 	{
 		$dates = array();
 		while ($start <= $end) {
@@ -507,11 +433,7 @@ class Report
 	}
 
 
-	/**
-	 * @param array $get The raw GET request
-	 * @return array
-	 */
-	public static function volumeByDepartment($get)
+	public static function volumeByDepartment(array $get): array
 	{
         $options = self::volumeOptions($get);
         $where = $options ? "where $options" : '';
@@ -522,9 +444,8 @@ class Report
                 from tickets t
                 join categories p on t.category_id=p.id
                 $where";
-        $result = $db->query($sql)->execute();
-        $row = $result->current();
-        $totalCount = $row['count'];
+        $result = Database::query($sql, []);
+        $totalCount = $result[0]['count'];
 
 
         $sql = "select d.id, d.name, count(*) as count
@@ -533,18 +454,16 @@ class Report
                 join tickets t on p.id=t.category_id
                 $where
                 group by d.id, d.name order by d.name";
-        $result = $db->query($sql)->execute();
+        $result = Database::query($sql, []);
 
         return [ 'totalCount'=>$totalCount, 'result'=>$result ];
 	}
 
 
-	public static function volumeByCategory($get, $department_id)
+	public static function volumeByCategory(array $get, int $department_id): array
 	{
         $options = self::volumeOptions($get);
         $options = $options ? "and $options" : '';
-
-        $db = Database::getConnection();
 
         $sql = "select p.name, count(*) as count
                 from categories p
@@ -552,7 +471,7 @@ class Report
                 where p.department_id=?
                 $options
                 group by p.name order by count desc";
-        $result = $db->query($sql)->execute([$department_id]);
+        $result = Database::query($sql, [$department_id]);
         return ['result'=>$result];
     }
 }

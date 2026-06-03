@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -11,14 +11,17 @@ use Application\Models\Email;
 use Application\Models\Phone;
 use Application\Models\TicketTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
+use Application\Url;
 
 class PeopleController extends Controller
 {
-	private function redirectToErrorUrl(\Exception $e)
+	/**
+	 * @return never
+	 */
+	private function redirectToErrorUrl(\Exception $e): void
 	{
 		$_SESSION['errorMessages'][] = $e;
 		header('Location: '.BASE_URL.'/people');
@@ -31,8 +34,6 @@ class PeopleController extends Controller
 	 * The user can come here from somewhere they need a person
 	 * Choosing a person should send them back where they came from,
 	 * with the chosen person appended to the url
-	 *
-	 * @param GET return_url
 	 */
 	public function index()
 	{
@@ -59,27 +60,13 @@ class PeopleController extends Controller
 		}
 
 		if (count($search)) {
-			if (isset(  $_GET['setOfPeople'])) {
-				switch ($_GET['setOfPeople']) {
-					case 'staff':
-						$search['user_account'] = true;
-						break;
-					case 'public':
-						$search['user_account'] = false;
-						break;
-				}
-			}
-			$table = new PersonTable();
-			$personList = $table->search($search);
-			$searchResults = new Block('people/searchResults.inc', ['personList'=>$personList]);
-			$this->template->blocks[] = $searchResults;
+			$t = new PersonTable();
+			$r = $t->search($search);
+			$b = new Block('people/searchResults.inc', ['personList'=>$r['rows']]);
+			$this->template->blocks[] = $b;
 		}
 	}
 
-	/**
-	 * @param GET person_id
-	 * @param GET disableLinks
-	 */
 	public function view()
 	{
 		$this->template->setFilename('people');
@@ -119,39 +106,27 @@ class PeopleController extends Controller
 
 	/**
 	 * Adds a ticketList about the Person to the template
-	 *
-	 * @param string $panel
-	 * @param string $listType (enteredBy, assigned, reportedBy)
-	 * @param string $title
-	 * @param Person $person
-	 * @param bool $disableLinks
-	 *
-	 * @return int The number of tickets displayed in the list
 	 */
-	private function addTicketList($panel, $listType, $title, Person $person, $disableLinks=false, $disableButtons=false)
+	private function addTicketList(string $panel, string $listType, string $title, Person $person, bool $disableLinks=false, bool $disableButtons=false)
 	{
-		$field = $listType.'Person_id';
+		$field   = $listType.'Person_id';
 
-		$table = new TicketTable();
-		$tickets = $table->find([$field=>$person->getId()], 'tickets.enteredDate desc', true);
-		$tickets->setCurrentPageNumber(1);
-		$tickets->setItemCountPerPage(10);
+		$table   = new TicketTable();
+		$tickets = $table->find([$field=>$person->getId()], 't.enteredDate desc', 10, 1);
 
-		$numPages = count($tickets);
-		if ($numPages) {
+		if (count($tickets['rows'])) {
 			$block = new Block('tickets/ticketList.inc', [
-                'ticketList'    => $tickets,
+                'ticketList'    => $tickets['rows'],
                 'title'         => $title,
                 'disableLinks'  => $disableLinks,
                 'disableButtons'=> $disableButtons,
                 'fields'        => ['status', 'enteredDate', 'category', 'location']
             ]);
-			if ($numPages > 1) {
+			if ($tickets['total'] > 10) {
 				$block->moreLink = BASE_URL."/tickets?{$listType}Person_id={$person->getId()}";
 			}
 			$this->template->blocks[$panel][] = $block;
 		}
-		return $numPages;
 	}
 
 	public function update()
@@ -170,7 +145,7 @@ class PeopleController extends Controller
 		}
 		else {
 			$person = new Person();
-			if (isset($_GET)) { $person->handleUpdate($_GET); }
+			$person->handleUpdate($_GET);
 		}
 
 		if (isset($_POST['firstname'])) {
@@ -238,10 +213,8 @@ class PeopleController extends Controller
 	 * Helper function for handling foreign key object deletions
 	 *
 	 * Email, Phone, and Address are all handled exactly the same way.
-	 *
-	 * @param string $item
 	 */
-	private function deleteLinkedItem($item)
+	private function deleteLinkedItem(string $item)
 	{
 		$class = 'Application\\Models\\'.ucfirst($item);
 
@@ -272,7 +245,7 @@ class PeopleController extends Controller
 	 * @param string $requiredField The field to look for in the POST which
 	 *								determines whether this item has been posted
 	 */
-	private function updateLinkedItem($item, $requiredField)
+	private function updateLinkedItem(string $item, string $requiredField)
 	{
 		$this->template->setFilename('people');
 		$basename = ucfirst($item);
@@ -376,9 +349,6 @@ class PeopleController extends Controller
 	 * Displays the list of distinct values for a given field and term
 	 *
 	 * Used primarily to support autocomplete on the person search form
-	 *
-	 * @param GET field
-	 * @param GET term
 	 */
 	public function distinct()
 	{

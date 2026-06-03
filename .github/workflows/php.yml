@@ -1,0 +1,99 @@
+name: uReport CICD
+
+on: 
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: ureport
+      DB_USER: ureport
+      DB_PASS: ureport
+
+    services:
+      db:
+        image: mariadb:10.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: ureport
+          MYSQL_USER: ureport
+          MYSQL_PASSWORD: ureport
+        ports:
+          - 3306:3306
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.5'
+
+    - name: Validate composer.json
+      run: composer validate --no-check-lock --working-dir=crm
+
+    - name: Cache Composer Packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress --ignore-platform-reqs --working-dir=crm
+
+    - name: PHP Lint
+      working-directory: ./crm
+      run: |
+        set -euo pipefail
+
+        find . \
+          -type f \
+          -name "*.php" \
+          -not -path "./vendor/*" \
+          | while read -r file; do
+            echo "Linting: $file"
+            php -l "$file" > /dev/null
+        done
+
+    - name: Site Configuration Setup
+      run: |
+        mkdir -p crm/src/Test/data
+        cp infra/site_config.test.php crm/src/Test/data/site_config.php
+
+    - name: Wait for database
+      run: ./infra/wait-for-db.sh
+
+    - name: Import schema
+      run: |
+        mysql \
+          -h"$DB_HOST" \
+          -P"$DB_PORT" \
+          -u"$DB_USER" \
+          -p"$DB_PASS" \
+          "$DB_NAME" < crm/scripts/mysql.sql
+
+    - name: Import seed data
+      run: |
+        mysql \
+          -h"$DB_HOST" \
+          -P"$DB_PORT" \
+          -u"$DB_USER" \
+          -p"$DB_PASS" \
+          "$DB_NAME" < infra/seed.sql
+
+    - name: Unit Tests
+      working-directory: ./crm
+      run: vendor/bin/phpunit -c src/Test/phpunit.xml --testsuite Unit

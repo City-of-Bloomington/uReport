@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2016-2020 City of Bloomington, Indiana
+ * @copyright 2016-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param string $this->location
  * @param Ticket $this->ticket   (optional)
@@ -37,8 +37,8 @@ if (defined('ADDRESS_SERVICE')) {
     $data         = $this->ticket->getAdditionalFields();
     if ($data) {
         foreach ($customFields as $key=>$def) {
-            if (!empty($data->$key)) {
-                $value         = parent::escape($data->$key);
+            if (!empty($data[$key])) {
+                $value         = parent::escape($data[$key]);
                 $label         = $def['description'];
                 $addressFields.= "<tr><th>$label</th><td>$value</td></tr>";
             }

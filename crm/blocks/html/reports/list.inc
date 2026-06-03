@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 use Application\Models\BookmarkTable;
-use Blossom\Classes\Block;
+use Application\Block;
 ?>
 <div>
 	<section>
@@ -29,15 +29,9 @@ use Blossom\Classes\Block;
         </ul>
 	</section>
 	<?php
-		$table = new BookmarkTable();
-
-		$bookmarks = new Block('bookmarks/list.inc', [
-            'title'     => 'Saved Reports',
-            'bookmarks' => $table->find([
-                'person_id' => $_SESSION['USER']->getId(),
-                'type'      => 'report'
-            ])
-        ]);
-		echo $bookmarks->render('html', $this->template);
+		$tab = new BookmarkTable();
+        $res = $tab->find(['type'=>'report', 'person_id'=>$_SESSION['USER']->getId()]);
+		$bms = new Block('bookmarks/list.inc', ['title'=>'Saved Reports', 'bookmarks'=>$res['rows']]);
+		echo $bms->render('html', $this->template);
 	?>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2013-2016 City of Bloomington, Indiana
+ * @copyright 2013-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -10,7 +10,7 @@ use Application\Database;
 
 class Address extends ActiveRecord
 {
-	protected $tablename = 'peopleAddresses';
+	public const TABLENAME = 'peopleAddresses';
 	protected $person;
 	public static $LABELS = array('Home', 'Business', 'Rental');
 
@@ -33,11 +33,10 @@ class Address extends ActiveRecord
 				$this->exchangeArray($id);
 			}
 			else {
-				$db = Database::getConnection();
 				$sql = 'select * from peopleAddresses where id=?';
-				$result = $db->createStatement($sql)->execute([$id]);
+				$result = Database::query($sql, [$id]);
 				if (count($result)) {
-					$this->exchangeArray($result->current());
+					$this->exchangeArray($result[0]);
 				}
 				else {
 					throw new \Exception('addresses/unknown');
@@ -79,7 +78,6 @@ class Address extends ActiveRecord
 	//----------------------------------------------------------------
 	// Generic Getters & Setters
 	//----------------------------------------------------------------
-	public function getId()      { return parent::get('id');      }
 	public function getAddress() { return parent::get('address'); }
 	public function getCity()    { return parent::get('city');    }
 	public function getState()   { return parent::get('state');   }

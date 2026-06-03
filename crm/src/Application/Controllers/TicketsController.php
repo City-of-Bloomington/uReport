@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2020 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -16,18 +16,14 @@ use Application\Models\TicketTable;
 use Application\Models\Search;
 use Application\Models\Response;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
-use Blossom\Classes\Url;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
+use Application\Url;
 
 class TicketsController extends Controller
 {
-	/**
-	 * @param string $id
-	 * @return Ticket
-	 */
-	private function loadTicket($id)
+	private function loadTicket(int $id): Ticket
 	{
 		try {
 			$ticket = new Ticket($id);
@@ -134,9 +130,6 @@ class TicketsController extends Controller
 		return $query;
 	}
 
-	/**
-	 * @param GET ticket_id
-	 */
 	public function view()
 	{
         if (!empty($_GET['ticket_id'])) {
@@ -174,12 +167,10 @@ class TicketsController extends Controller
 
 	/**
 	 * Displays thumbnails for all image media attached to tickets
-	 *
-	 * @param GET ticket_id
 	 */
 	public function thumbnails()
 	{
-		$ticket = $this->loadTicket($_GET['ticket_id']);
+		$ticket = $this->loadTicket((int)$_GET['ticket_id']);
 		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
 			$this->template->blocks[] = new Block('tickets/thumbnails.inc', ['ticket'=>$ticket]);
 		}
@@ -188,9 +179,6 @@ class TicketsController extends Controller
 		}
 	}
 
-	/**
-	 *
-	 */
 	public function add()
 	{
 		$ticket = new Ticket();
@@ -275,7 +263,7 @@ class TicketsController extends Controller
 
 	public function update()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['person_id'])) {
 			$ticket->setReportedByPerson_id($_REQUEST['person_id']);
@@ -295,13 +283,9 @@ class TicketsController extends Controller
 		$this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST confirm
-	 */
 	public function delete()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['confirm'])) {
 			$ticket->delete();
@@ -319,13 +303,9 @@ class TicketsController extends Controller
 		);
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param GET department_id
-	 */
 	public function assign()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		// Handle any Department choice passed in
 		if (isset($_GET['department_id'])) {
@@ -374,13 +354,10 @@ class TicketsController extends Controller
 		);
 	}
 
-	/**
-	 * @param POST ticket_id
-	 */
 	public function recordAction()
 	{
         if (!empty($_REQUEST['ticket_id'])) {
-            $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+            $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
         }
         if (!empty($_REQUEST['action_id'])) {
             try { $action = new Action($_REQUEST['action_id']); }
@@ -418,12 +395,9 @@ class TicketsController extends Controller
 		}
 	}
 
-	/**
-	 * @param string $status
-	 */
-	private function changeStatus($status)
+	private function changeStatus(string $status)
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 		$ticket->setStatus($status);
 		$_POST['status'] = $ticket->getStatus();
 
@@ -445,13 +419,9 @@ class TicketsController extends Controller
 	public function close() { $this->template->title = $this->template->_('ticket_close'); $this->changeStatus('closed'); }
 	public function open () { $this->template->title = $this->template->_('ticket_open' ); $this->changeStatus('open'  ); }
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST location
-	 */
 	public function changeLocation()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		// Once the user has chosen a location, they'll pass it in here
 		if (!empty($_REQUEST['location'])) {
@@ -471,13 +441,9 @@ class TicketsController extends Controller
 		];
 	}
 
-	/**
-	 * @param REQUEST ticket_id
-	 * @param REQUEST category_id
-	 */
 	public function changeCategory()
 	{
-		$ticket = $this->loadTicket($_REQUEST['ticket_id']);
+		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_REQUEST['category_id'])) {
 			try {
@@ -502,12 +468,10 @@ class TicketsController extends Controller
 	 * This creates a history entry that a staff person communicated
 	 * with someone.  Thist action does not actually send any messages.
 	 * This is only the logging action.
-	 *
-	 * @param REQUEST ticket_id
 	 */
 	public function respond()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
 		if (isset($_POST['contactMethod_id'])) {
 			try {
@@ -531,7 +495,7 @@ class TicketsController extends Controller
 	 */
 	public function message()
 	{
-        $ticket = $this->loadTicket($_REQUEST['ticket_id']);
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
             if (isset($_POST['message'])) {
@@ -569,17 +533,14 @@ class TicketsController extends Controller
 
 	/**
 	 * Copies all data from one ticket to another, then deletes the empty ticket
-	 *
-	 * @param GET ticket_id_a
-	 * @param GET ticket_id_b
 	 */
 	public function merge()
 	{
 		// Load the two tickets
-		$parent = $this->loadTicket($_REQUEST['parent_ticket_id']);
-		$child  = $this->loadTicket($_REQUEST[ 'child_ticket_id']);
+		$parent = $this->loadTicket((int)$_REQUEST['parent_ticket_id']);
+		$child  = $this->loadTicket((int)$_REQUEST[ 'child_ticket_id']);
 
-		if (!empty($_POST['confirm']) && $_POST['confirm']) {
+		if (!empty($_POST['confirm'])) {
             try {
                 $parent->mergeFrom($child);
                 $this->redirectToTicketView($parent);
@@ -601,14 +562,11 @@ class TicketsController extends Controller
 		$this->template->blocks['right'][] = new Block('ticketHistory/info.inc', ['history'=>$child->getHistory(), 'disableComments'=>true]);
 	}
 
-	/**
-	 * @param Ticket $ticket
-	 */
 	private function redirectToTicketView(Ticket $ticket)
 	{
 		if (isset($_REQUEST['callback'])) {
 			$return_url = new Url(BASE_URL.'/callback');
-			$return_url->callback = $_REQUEST['callback'];
+			$return_url->__set('callback', $_REQUEST['callback']);
 		}
 		else {
 			$return_url = $ticket->getURL();

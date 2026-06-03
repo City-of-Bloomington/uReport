@@ -1,16 +1,18 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
 
 use Application\ActiveRecord;
-use Application\TableGateway;
-use Laminas\Db\Sql\Select;
+use Application\PdoRepository;
 
-class TicketTable extends TableGateway
+class TicketTable extends PdoRepository
 {
+	public const TABLENAME = 'tickets';
+	public const CLASSNAME = __namespace__.'\Ticket';
+
 	/**
 	 * The set of fields we want to display in search results by default
 	 */
@@ -18,70 +20,65 @@ class TicketTable extends TableGateway
 		'enteredDate'=>'on', 'location'=>'on', 'description'=>'on', 'category_id'=>'on', 'status'=>'on'
 	];
 
-	public function __construct() { parent::__construct('tickets', __namespace__.'\Ticket'); }
-
-	/**
-	 * @param array $fields
-	 * @param string|array $order Multi-column sort should be given as an array
-	 * @param bool $paginated Whether to return a paginator or a raw resultSet
-	 * @param int $limit
-	 */
-	public function find($fields=null, $order='tickets.enteredDate desc', $paginated=false, $limit=null)
+    public function find(array $fields=[], ?string $order='t.enteredDate desc', ?int $itemsPerPage=null, ?int $currentPage=null): array
 	{
-		$select = new Select('tickets');
-		$select->join(['c'=>'categories'], 'tickets.category_id=c.id', [], $select::JOIN_LEFT);
+        $select =  'select t.* from tickets t';
+        $joins  = ['left join categories c on c.id=t.category_id'];
+        $where  = [];
+        $params = [];
 
 		if ($fields) {
-			foreach ($fields as $key=>$value) {
-				if ($value) {
-					switch ($key) {
+			foreach ($fields as $k=>$v) {
+				if ($v) {
+					switch ($k) {
                         case 'start_date':
                         case 'end_date':
                         case 'lastModified_before':
                         case 'lastModified_after':
-                            if (get_class($value) !== 'DateTime') { throw new \Exception('invalidDate'); }
-                            $datetime = $value->format(ActiveRecord::MYSQL_DATETIME_FORMAT);
+                            if (get_class($v) !== 'DateTime') { throw new \Exception('invalidDate'); }
+                            $datetime = $v->format(ActiveRecord::MYSQL_DATETIME_FORMAT);
 
-                            switch ($key) {
-                                case          'start_date': $select->where("tickets.enteredDate  >= '$datetime'"); break;
-                                case            'end_date': $select->where("tickets.enteredDate  <= '$datetime'"); break;
-                                case 'lastModified_before': $select->where("tickets.lastModified <= '$datetime'"); break;
-                                case  'lastModified_after': $select->where("tickets.lastModified >= '$datetime'"); break;
+                            switch ($k) {
+								case          'start_date': $where[] = "t.enteredDate  >= '$datetime'"; break;
+                                case            'end_date': $where[] = "t.enteredDate  <= '$datetime'"; break;
+                                case 'lastModified_before': $where[] = "t.lastModified <= '$datetime'"; break;
+                                case  'lastModified_after': $where[] = "t.lastModified >= '$datetime'"; break;
                             }
                         break;
 
 						case 'bbox':
-							$bbox = explode(',', $value);
+							$bbox = explode(',', $v);
 							if (count($bbox) == 4) {
 								$minLat  = (float)$bbox[0];
 								$minLong = (float)$bbox[1];
 								$maxLat  = (float)$bbox[2];
 								$maxLong = (float)$bbox[3];
-								$select->where('tickets.latitude is not null and tickets.longitude is not null');
-								$select->where("tickets.latitude  > $minLat" );
-								$select->where("tickets.longitude > $minLong");
-								$select->where("tickets.latitude  < $maxLat" );
-								$select->where("tickets.longitude < $maxLong");
+								$where[] = 'tickets.latitude is not null and tickets.longitude is not null';
+								$where[] = "tickets.latitude  > $minLat";
+								$where[] = "tickets.longitude > $minLong";
+								$where[] = "tickets.latitude  < $maxLat";
+								$where[] = "tickets.longitude < $maxLong";
 							}
 
 							break;
 						default:
-							$select->where(["tickets.$key"=>$value]);
+							$where[] = "t.$k=:$k";
+							$params[$k] = $v;
 					}
 				}
 			}
 		}
 		// Only get tickets for categories this user is allowed to see
 		if (!isset($_SESSION['USER'])) {
-			$select->where("c.displayPermissionLevel='anonymous'");
+			$where[] = "c.displayPermissionLevel='anonymous'";
 		}
 		elseif (   $_SESSION['USER']->getRole()!='Staff'
 				&& $_SESSION['USER']->getRole()!='Administrator') {
-			$select->where("c.displayPermissionLevel in ('public','anonymous')");
+			$where[] = "c.displayPermissionLevel in ('public','anonymous')";
 		}
 
-
-		return parent::performSelect($select, $order, $paginated, $limit);
+        $sql  = parent::buildSql($select, $joins, $where, null, $order);
+        return  parent::performSelect($sql, $params, $itemsPerPage, $currentPage);
 	}
 
 	/**

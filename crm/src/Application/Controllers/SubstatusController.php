@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -8,9 +8,9 @@ namespace Application\Controllers;
 use Application\Models\Substatus;
 use Application\Models\SubstatusTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class SubstatusController extends Controller
 {
@@ -21,8 +21,8 @@ class SubstatusController extends Controller
 			? $table->find(['status'=>$_REQUEST['status']])
 			: $table->find();
 
-        $this->template->title = $this->template->_(['substatus', 'substatuses', count($list)]);
-		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list]);
+        $this->template->title = $this->template->_(['substatus', 'substatuses', $list['total']]);
+		$this->template->blocks[] = new Block('substatus/list.inc', ['substatusList'=>$list['rows']]);
 	}
 
 	public function update()

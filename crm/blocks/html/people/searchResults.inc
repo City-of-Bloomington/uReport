@@ -6,7 +6,7 @@
  * @param bool $this->disableButtons
  */
 use Application\Models\Person;
-use Blossom\Classes\Url;
+use Application\Url;
 ?>
 <div class="findPeopleResults">
 	<h2><?= $this->_('search_results'); ?></h2>

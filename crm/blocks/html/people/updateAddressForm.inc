@@ -6,7 +6,7 @@
  * @param Address $this->address
  */
 use Application\Models\Address;
-use Blossom\Classes\View;
+use Application\View;
 
 $fields = array(
 	'address','city','state','zip'

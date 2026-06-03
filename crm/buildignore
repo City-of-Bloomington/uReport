@@ -1,0 +1,7 @@
+buildignore
+.git/
+.git*
+.sass-cache
+data/media/*
+data/sessions/*
+data/Themes/COB/vendor

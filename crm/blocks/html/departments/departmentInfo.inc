@@ -6,7 +6,7 @@
  * @param Department $this->department
  */
 use Application\Models\Person;
-use Blossom\Classes\View;
+use Application\View;
 
 $id = $this->department->getId();
 

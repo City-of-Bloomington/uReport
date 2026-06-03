@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -10,8 +10,8 @@ use Application\Models\Media;
 use Application\Models\Action;
 use Application\Models\TicketHistory;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
+use Application\Block;
+use Application\Controller;
 
 class MediaController extends Controller
 {
@@ -33,9 +33,6 @@ class MediaController extends Controller
 	{
 	}
 
-	/**
-	 * @param GET media_id
-	 */
 	public function delete()
 	{
 		$media = new Media($_GET['media_id']);
@@ -46,25 +43,23 @@ class MediaController extends Controller
 		exit();
 	}
 
-	/**
-	 * @param POST issue_id
-	 * @param FILES attachment
-	 */
 	public function upload()
 	{
         $ticket = $this->loadTicket($_REQUEST['ticket_id']);
 
 		if (isset($_FILES['attachment'])) {
+			$media = new Media();
+			$media->setTicket($ticket);
+
+			$history = new TicketHistory();
+			$history->setTicket($media->getTicket());
+			$history->setAction(new Action(Action::UPLOADED_MEDIA));
+			$history->setData(['media_id'=>$media->getId()]);
+
 			try {
-				$media = new Media();
-				$media->setTicket($ticket);
 				$media->setFile($_FILES['attachment']);
 				$media->save();
 
-				$history = new TicketHistory();
-				$history->setTicket($media->getTicket());
-				$history->setAction(new Action(Action::UPLOADED_MEDIA));
-				$history->setData(['media_id'=>$media->getId()]);
 				$history->save();
 			}
 			catch (\Exception $e) {
@@ -90,9 +85,6 @@ class MediaController extends Controller
 
 	/**
 	 * Create and cache a resized image file
-	 *
-	 * @param REQUEST media_id
-	 * @param REQUEST size
 	 */
 	public function resize()
 	{

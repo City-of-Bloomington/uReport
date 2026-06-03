@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  */
 namespace Application\Controllers;
-use Blossom\Classes\Controller;
+use Application\Controller;
 
 class IndexController extends Controller
 {

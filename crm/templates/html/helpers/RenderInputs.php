@@ -6,8 +6,8 @@
  */
 namespace Application\Templates\Helpers;
 
-use Blossom\Classes\Template;
-use Blossom\Classes\View;
+use Application\Template;
+use Application\View;
 
 class RenderInputs
 {

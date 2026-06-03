@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Ticket $this->ticket
  */
@@ -11,7 +11,7 @@ $helper  = $this->template->getHelper('field');
 $table   = new IssueTypeTable();
 $list    = $table->find();
 $options = [];
-foreach ($list as $type) {
+foreach ($list['rows'] as $type) {
     $options[] = ['value'=>$type->getId(), 'label'=>self::escape($type->getName())];
 }
 echo $helper->field([
@@ -34,9 +34,8 @@ echo $helper->field([
 
 $options = [['value'=>'']];
 $table = new ContactMethodTable();
-$contactMethods = $table->find();
-$contactMethods->buffer();
-foreach ($contactMethods as $method) {
+$list  = $table->find();
+foreach ($list['rows'] as $method) {
     $options[] = ['value'=>$method->getId(), 'label'=>self::escape($method->getName())];
 }
 echo $helper->field([

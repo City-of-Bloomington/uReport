@@ -5,7 +5,7 @@
  */
 use Application\Models\Report;
 use Application\ActiveRecord;
-use Blossom\Classes\View;
+use Application\View;
 
 $h = $this->template->getHelper('formatDuration');
 $this->template->addToAsset('scripts', GOOGLE_LOADER);

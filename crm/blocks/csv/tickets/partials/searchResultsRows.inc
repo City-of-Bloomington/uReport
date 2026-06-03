@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2021 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param \Solarium\QueryType\Select\Result\Result $this->result
  * @param array                $this->fields      Ticket fields the user asked to see
@@ -68,8 +68,8 @@ foreach ($tickets as $ticket) {
 
 				default:
 					// Anything else should be a custom field for the ticket
-					if (isset($additionalFields->$field)) {
-						$value = self::escape($additionalFields->$field);
+					if (isset($additionalFields[$field])) {
+						$value = self::escape($additionalFields[$field]);
 					}
 			}
 			$line[] = $value;

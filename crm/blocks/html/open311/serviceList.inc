@@ -5,7 +5,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param CategoryList $this->categoryList
  */
-use Blossom\Classes\View;
+use Application\View;
 
 echo "
 <div class=\"serviceList\">

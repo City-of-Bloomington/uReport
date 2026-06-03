@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2016 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Controllers;
@@ -8,9 +8,9 @@ namespace Application\Controllers;
 use Application\Models\IssueType;
 use Application\Models\IssueTypeTable;
 
-use Blossom\Classes\Block;
-use Blossom\Classes\Controller;
-use Blossom\Classes\Template;
+use Application\Block;
+use Application\Controller;
+use Application\Template;
 
 class IssueTypesController extends Controller
 {
@@ -18,8 +18,8 @@ class IssueTypesController extends Controller
 	{
         $table = new IssueTypeTable();
         $list  = $table->find();
-        $this->template->title = $this->template->_(['issueType', 'issueTypes', count($list)]);
-		$this->template->blocks[] = new Block('issueTypes/list.inc', ['issueTypes'=>$list]);
+        $this->template->title = $this->template->_(['issueType', 'issueTypes', $list['total']]);
+		$this->template->blocks[] = new Block('issueTypes/list.inc', ['issueTypes'=>$list['rows']]);
 	}
 
 	public function update()

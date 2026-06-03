@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2026 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
@@ -15,7 +15,7 @@ header("Content-Disposition: attachment; filename=\"volume.csv\"");
 echo "Department,Category,Count\n";
 
 $out = fopen('php://output', 'w');
-foreach ($list as $d) {
+foreach ($list['rows'] as $d) {
     $data = Report::volumeByCategory($_GET, $d->getId());
     foreach ($data['result'] as $row) {
         fputcsv($out, [$d->getName(), $row['name'], $row['count']]);

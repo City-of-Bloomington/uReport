@@ -6,9 +6,3 @@
 if (isset($_SESSION['oldPostData'])) {
 	unset($_SESSION['oldPostData']);
 }
-
-# Calculate the process time
-global $startTime;
-$endTime = microtime(1);
-$processTime = $endTime - $startTime;
-echo "<!-- Process Time: $processTime -->";

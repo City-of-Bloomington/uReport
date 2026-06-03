@@ -2,8 +2,6 @@
 # Copyright (C) 2016-2020 City of Bloomington
 # This file is distributed under the same license as the Blossom package.
 #
-domain "errors"
-
 msgid ""
 msgstr ""
 "Project-Id-Version: uReport 2.2.1\n"

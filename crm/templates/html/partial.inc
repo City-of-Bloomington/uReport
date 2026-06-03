@@ -15,7 +15,7 @@
  * @author Cliff Ingham <inghamn@bloomington.in.gov>
  * @param REQUEST partial A comma-separated list of blocks or panels
  */
-include BLOSSOM.'/errorMessages.php';
+$this->_include('partials/errorMessages.inc');
 if (false !== strpos($_REQUEST['partial'], ',')) {
 	foreach (explode(',', $_REQUEST['partial']) as $partial) {
 		$partial = trim($partial);

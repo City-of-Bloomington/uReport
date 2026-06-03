@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright 2011-2016 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
- * @param TicketList $this->ticketList
+ * @param array $this->ticketList
  *
  * @param string $this->title
  * @param bool   $this->disableButtons
@@ -10,7 +10,7 @@
  * @param string $this->moreLink
  */
 use Application\Models\Person;
-use Blossom\Classes\Url;
+use Application\Url;
 
 $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'tickets', count($this->ticketList)]);
 ?>

@@ -7,12 +7,20 @@ existing environments.
 ## Installation
 In order to install one of our binary releases, you must have a linux system already set up with:
 
-* [PHP    7.4](http://php.net) or later
+* [PHP    8.5](http://php.net) or later
 * [Apache 2.4](http://httpd.apache.org)
 * [MySQL  5.7](http://dev.mysql.com) or later
 * [Solr   7.4](http://lucene.apache.org/solr)
 
 There are many ways to set up and install your own linux webserver.  Our way is not the only way, though.  It's well worth reading up on all the technologies and deciding what you need for your own hosting.
+
+### Installing with Docker
+The easiest way to set up a development environment is with Docker. We recommend installing Docker for Desktop. Make sure that the commands `docker` and `docker-compose` are added to your system path. Then, in your repo directory:
+
+1. Copy `infra/site_config.docker.php` to `crm/data/site_config.php`.
+2. In the repo directory, run `docker-compose up --build`.
+
+You should see the application running at http://localhost:8080/tickets.
 
 Once you've got hosting sorted out, you can follow the [Wiki instructions](https://github.com/City-of-Bloomington/uReport/wiki/Install) to install uReport on your webserver.
 
@@ -39,7 +47,7 @@ We are always open to new collaborators.  If you are customizing uReport, we wel
 To get started developing uReport, there are some additional requirements in order to build a working copy from source.
 
 * composer
-* node-sass
+* sassc
 * GNU gettext command line tools
 * bash
 
