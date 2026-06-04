@@ -17,12 +17,12 @@
  */
 $this->_include('partials/errorMessages.inc');
 if (false !== strpos($_REQUEST['partial'], ',')) {
-	foreach (explode(',', $_REQUEST['partial']) as $partial) {
-		$partial = trim($partial);
-		echo $this->includeBlocks($partial);
-	}
+    foreach (explode(',', $_REQUEST['partial']) as $partial) {
+        $partial = trim($partial);
+        echo $this->includeBlocks($partial);
+    }
 }
 else {
-	$partial = trim($_REQUEST['partial']);
-	echo $this->includeBlocks($partial);
+    $partial = trim($_REQUEST['partial']);
+    echo $this->includeBlocks($partial);
 }

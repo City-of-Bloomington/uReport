@@ -7,7 +7,7 @@ use Application\Models\CategoryGroupTable;
 ?>
 <section class="categoryGroupReportForm">
     <header><h1><?= $this->template->title; ?></h1>
-	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
+    <form method="post" action="<?= BASE_URI; ?>/categoryGroups/reorder">
         <?php
             $helper = $this->template->getHelper('field');
 
@@ -26,8 +26,8 @@ use Application\Models\CategoryGroupTable;
                     'type'  => 'number'
                 ]);
             }
-			$helper = $this->template->getHelper('saveAndCancelButtons');
-			echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
-		?>
-	</form>
+            $helper = $this->template->getHelper('saveAndCancelButtons');
+            echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
+        ?>
+    </form>
 </section>

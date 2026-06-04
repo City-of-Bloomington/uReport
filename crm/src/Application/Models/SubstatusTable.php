@@ -9,11 +9,11 @@ use Application\PdoRepository;
 
 class SubstatusTable extends PdoRepository
 {
-	public const TABLENAME = 'substatus';
-	public const CLASSNAME = __namespace__.'\Substatus';
+    public const TABLENAME = 'substatus';
+    public const CLASSNAME = __namespace__.'\Substatus';
 
     public function find(array $fields=[], ?string $order='name', ?int $itemsPerPage=null, ?int $currentPage=null): array
-	{
-		return parent::find($fields, $order, $itemsPerPage, $currentPage);
-	}
+    {
+        return parent::find($fields, $order, $itemsPerPage, $currentPage);
+    }
 }

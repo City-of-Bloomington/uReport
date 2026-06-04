@@ -6,13 +6,13 @@
  */
 $days = $this->ticket->getSlaDays();
 if ($days) {
-	$status      = $this->ticket->getStatus();
-	$dateEntered = new \DateTime($this->ticket->getEnteredDate());
-	$targetDate  = $status=='open' ? new \DateTime() : new \DateTime($this->ticket->getClosedDate());
-	$diff        = $targetDate->diff($dateEntered);
-	$daysPassed  = $diff->format('%a');
+    $status      = $this->ticket->getStatus();
+    $dateEntered = new \DateTime($this->ticket->getEnteredDate());
+    $targetDate  = $status=='open' ? new \DateTime() : new \DateTime($this->ticket->getClosedDate());
+    $diff        = $targetDate->diff($dateEntered);
+    $daysPassed  = $diff->format('%a');
 
-	$class  = $daysPassed >= $days ? 'pastDue' : 'onTrack';
-	$notice = sprintf($this->_('sla_status_notice', 'messages'), $days, $daysPassed);
-	echo "<div class=\"slaStatus $class\"><p>$notice</p></div>";
+    $class  = $daysPassed >= $days ? 'pastDue' : 'onTrack';
+    $notice = sprintf($this->_('sla_status_notice', 'messages'), $days, $daysPassed);
+    echo "<div class=\"slaStatus $class\"><p>$notice</p></div>";
 }

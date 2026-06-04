@@ -14,68 +14,68 @@ use Application\Template;
 
 class ClientsController extends Controller
 {
-	public function index()
-	{
-		$table = new ClientTable();
-		$list  = $table->find();
+    public function index()
+    {
+        $table = new ClientTable();
+        $list  = $table->find();
 
-		$this->template->title = $this->template->_(['client', 'clients', $list['total']]);
-		$this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list['rows']]);
-	}
+        $this->template->title = $this->template->_(['client', 'clients', $list['total']]);
+        $this->template->blocks[] = new Block('clients/clientList.inc', ['clientList'=>$list['rows']]);
+    }
 
-	/**
-	 * Handles client editing
-	 *
-	 * Choosing a person involves going through a whole person finding process
-	 * at a different url.  Once the user has chosen a new person, they will
-	 * return here, passing in the person_id they have chosen
-	 */
-	public function update()
-	{
-		// Load the $client for editing
-		if (isset($_REQUEST['client_id']) && $_REQUEST['client_id']) {
-			try {
-				$client = new Client($_REQUEST['client_id']);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.BASE_URL.'/clients');
-				exit();
-			}
-		}
-		else {
-			$client = new Client();
-		}
+    /**
+     * Handles client editing
+     *
+     * Choosing a person involves going through a whole person finding process
+     * at a different url.  Once the user has chosen a new person, they will
+     * return here, passing in the person_id they have chosen
+     */
+    public function update()
+    {
+        // Load the $client for editing
+        if (isset($_REQUEST['client_id']) && $_REQUEST['client_id']) {
+            try {
+                $client = new Client($_REQUEST['client_id']);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+                header('Location: '.BASE_URL.'/clients');
+                exit();
+            }
+        }
+        else {
+            $client = new Client();
+        }
 
-		if (isset($_REQUEST['person_id'])) {
-			$client->setContactPerson_id($_REQUEST['person_id']);
-		}
+        if (isset($_REQUEST['person_id'])) {
+            $client->setContactPerson_id($_REQUEST['person_id']);
+        }
 
-		// Handle stuff the user POSTS
-		if (isset($_POST['name'])) {
-			$client->handleUpdate($_POST);
-			try {
-				$client->save();
-				header('Location: '.BASE_URL.'/clients');
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+        // Handle stuff the user POSTS
+        if (isset($_POST['name'])) {
+            $client->handleUpdate($_POST);
+            try {
+                $client->save();
+                header('Location: '.BASE_URL.'/clients');
+                exit();
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		$this->template->title = $client->getId()
+        $this->template->title = $client->getId()
             ? $this->template->_('client_edit')
             : $this->template->_('client_add');
-		$this->template->blocks[] = new Block('clients/updateClientForm.inc', ['client'=>$client]);
-	}
+        $this->template->blocks[] = new Block('clients/updateClientForm.inc', ['client'=>$client]);
+    }
 
-	public function delete()
-	{
-		$client = new Client($_REQUEST['client_id']);
-		$client->delete();
+    public function delete()
+    {
+        $client = new Client($_REQUEST['client_id']);
+        $client->delete();
 
-		header('Location: '.BASE_URL.'/clients');
-		exit();
-	}
+        header('Location: '.BASE_URL.'/clients');
+        exit();
+    }
 }

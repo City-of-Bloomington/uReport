@@ -6,19 +6,19 @@
  * @param Department $this->department
  */
 $department = array(
-	'id'              =>$this->department->getId(),
-	'name'            =>$this->department->getName(),
-	'defaultPerson_id'=>$this->department->getDefaultPerson_id()
+    'id'              =>$this->department->getId(),
+    'name'            =>$this->department->getName(),
+    'defaultPerson_id'=>$this->department->getDefaultPerson_id()
 );
 $categories = array();
 foreach ($this->department->getCategories() as $id=>$c) {
-	$categories[] = array('id'=>$id, 'name'=>$c->getName());
+    $categories[] = array('id'=>$id, 'name'=>$c->getName());
 }
 $department['categories'] = $categories;
 
 $actions = array();
 foreach ($this->department->getActions()    as $id=>$a) {
-	$actions[]    = array('id'=>$id, 'name'=>$a->getName());
+    $actions[]    = array('id'=>$id, 'name'=>$a->getName());
 }
 $department['actions'] = $actions;
 

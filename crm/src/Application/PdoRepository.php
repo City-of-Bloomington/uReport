@@ -25,8 +25,8 @@ abstract class PdoRepository
         $where  = [];
         $params = [];
 
-		if ($fields) {
-			foreach ($fields as $k=>$v) {
+        if ($fields) {
+            foreach ($fields as $k=>$v) {
                 if (isset($this->columns)) {
                     if (in_array($k, $this->columns)) {
                         $where[]    = "$k=:$k";
@@ -37,10 +37,10 @@ abstract class PdoRepository
                     $where[]    = "$k=:$k";
                     $params[$k] = $v;
                 }
-			}
-		}
+            }
+        }
         $sql = self::buildSql($select, $joins, $where, null, $order);
-		return $this->performSelect($sql, $params, $itemsPerPage, $currentPage);
+        return $this->performSelect($sql, $params, $itemsPerPage, $currentPage);
     }
 
     public static function buildSql(string $select, array $joins, array $where, ?string $group=null, ?string $order=null): string
@@ -53,9 +53,9 @@ abstract class PdoRepository
         return $sql;
     }
 
-	protected function performSelect(string $select, array $params, ?int $itemsPerPage=null, ?int $currentPage=null): array
+    protected function performSelect(string $select, array $params, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
-		$total = null;
+        $total = null;
         if ($itemsPerPage) {
             $currentPage = $currentPage ? $currentPage : 1;
 
@@ -67,12 +67,12 @@ abstract class PdoRepository
             $select.= " limit $itemsPerPage offset $offset";
         }
 
-		$rows  = [];
-		$query = $this->pdo->prepare($select);
-		$query->execute($params);
-		$res   = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $rows  = [];
+        $query = $this->pdo->prepare($select);
+        $query->execute($params);
+        $res   = $query->fetchAll(\PDO::FETCH_ASSOC);
         $model = static::CLASSNAME;
-		foreach ($res as $r) { $rows[] = new $model($r); }
+        foreach ($res as $r) { $rows[] = new $model($r); }
 
         return [
             'rows'  => $rows,

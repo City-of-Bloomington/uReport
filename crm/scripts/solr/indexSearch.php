@@ -27,7 +27,7 @@ foreach ($result as $c=>$row) {
     $update->addDocument($document);
     $search->solr->update($update);
 
-	echo "$c/$count: {$ticket->getId()}\n";
+    echo "$c/$count: {$ticket->getId()}\n";
 }
 echo "Committing\n";
 $commit = $search->solr->createUpdate();

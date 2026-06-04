@@ -14,25 +14,25 @@ $_SESSION['USER']->setRole('Administrator');
 
 $db  = Database::getConnection();
 $sql = "select distinct assignedPerson_id
-		from tickets
-		where status='open'";
+        from tickets
+        where status='open'";
 $ids = $db->fetchCol($sql);
 foreach ($ids as $id) {
-	$person  = new Person($id);
+    $person  = new Person($id);
 
-	$table   = new TicketTable();
-	$list    = $table->find(['assignedPerson_id'=>$person->getId(), 'status'=>'open']);
+    $table   = new TicketTable();
+    $list    = $table->find(['assignedPerson_id'=>$person->getId(), 'status'=>'open']);
 
-	$template = new Template('email', 'txt');
-	$template->blocks[] = new Block('notifications/digestNotification.inc', ['person'=>$person]);
-	$template->blocks[] = new Block('tickets/ticketList.inc', [
+    $template = new Template('email', 'txt');
+    $template->blocks[] = new Block('notifications/digestNotification.inc', ['person'=>$person]);
+    $template->blocks[] = new Block('tickets/ticketList.inc', [
         'ticketList'    => $list['rows'],
         'title'         => 'Outstanding cases',
         'disableButtons'=> true,
         'fields'        => ['status', 'enteredDate', 'slaPercentage', 'category', 'location']
     ]);
 
-	$text = $template->render();
+    $text = $template->render();
 
-	$person->sendNotification($text, "$list[total] open cases in ".APPLICATION_NAME);
+    $person->sendNotification($text, "$list[total] open cases in ".APPLICATION_NAME);
 }

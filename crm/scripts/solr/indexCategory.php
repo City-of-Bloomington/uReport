@@ -12,29 +12,29 @@ use Application\Models\Ticket;
 use Application\Database;
 
 if (isset($argv[2]) && is_numeric($argv[2])) {
-	$_SERVER['SITE_HOME'] = $argv[1];
-	$openFlag = isset($argv[3]) ? $argv[3] : null;
+    $_SERVER['SITE_HOME'] = $argv[1];
+    $openFlag = isset($argv[3]) ? $argv[3] : null;
 
-	include_once realpath(__DIR__.'/../../bootstrap.php');
+    include_once realpath(__DIR__.'/../../bootstrap.php');
 
-	$sql      = 'select * from tickets where category_id=?';
-	if ($openFlag) { $sql.= ' and closedDate is null'; }
+    $sql      = 'select * from tickets where category_id=?';
+    if ($openFlag) { $sql.= ' and closedDate is null'; }
 
-	$db     = Database::getConnection();
+    $db     = Database::getConnection();
     $result = $db->query($sql)->execute([$argv[2]]);
     $count  = count($result);
 
     $search = new Search();
-	foreach ($result as $c=>$row) {
-		$ticket = new Ticket($row);
-		$search->add($ticket);
-		echo "$c/$count: {$ticket->getId()}\n";
-	}
+    foreach ($result as $c=>$row) {
+        $ticket = new Ticket($row);
+        $search->add($ticket);
+        echo "$c/$count: {$ticket->getId()}\n";
+    }
 
-	echo "Optimizing\n";
-	$commit = $search->solr->createUpdate();
-	$commit->addCommit();
-	$commit->addOptimize();
-	$search->solr->update($commit);
-	echo "Done\n";
+    echo "Optimizing\n";
+    $commit = $search->solr->createUpdate();
+    $commit->addCommit();
+    $commit->addOptimize();
+    $search->solr->update($commit);
+    echo "Done\n";
 }

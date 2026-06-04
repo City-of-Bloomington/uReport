@@ -19,8 +19,8 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
         <h1><?= $title; ?></h1>
     </header>
 
-	<table>
-		<thead>
+    <table>
+        <thead>
             <tr>
             <?php
                 foreach ($this->fields as $f) {
@@ -29,17 +29,17 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
                 echo '<th></th>';
             ?>
             </tr>
-		</thead>
-		<tbody>
-		<?php
-			foreach ($this->ticketList as $ticket) {
-				if ($this->filterTicket
-					&& "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
-					continue;
-				}
+        </thead>
+        <tbody>
+        <?php
+            foreach ($this->ticketList as $ticket) {
+                if ($this->filterTicket
+                    && "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
+                    continue;
+                }
 
-				echo "<tr>";
-				foreach ($this->fields as $f) {
+                echo "<tr>";
+                foreach ($this->fields as $f) {
                     switch ($f) {
                         case 'enteredDate':
                             $value = $ticket->getEnteredDate(DATE_FORMAT);
@@ -63,30 +63,30 @@ $title = $this->title ? self::escape($this->title) : $this->_(['ticket', 'ticket
                     }
 
                     echo "<td>$value</td>";
-				}
-				echo "<td>";
-					if (!$this->disableButtons
+                }
+                echo "<td>";
+                    if (!$this->disableButtons
                         && $this->filterTicket && $this->filterTicket->permitsMerge($ticket)
                         && Person::isAllowed('tickets', 'merge')) {
 
                         $uri = BASE_URI."/tickets/merge?parent_ticket_id={$this->filterTicket->getId()};child_ticket_id={$ticket->getId()}";
 
-						$helper = $this->template->getHelper('buttonLink');
-						echo $helper->buttonLink($uri, $this->_('merge'), '');
-					}
-				echo "</td>";
-				echo "</tr>";
-			}
-		?>
-		</tbody>
-	</table>
-	<?php
-		if ($this->moreLink) {
-			echo "
-			<div>
-				<a href=\"{$this->moreLink}\" class=\"more\">{$this->_('more')}</a>
-			</div>
-			";
-		}
-	?>
+                        $helper = $this->template->getHelper('buttonLink');
+                        echo $helper->buttonLink($uri, $this->_('merge'), '');
+                    }
+                echo "</td>";
+                echo "</tr>";
+            }
+        ?>
+        </tbody>
+    </table>
+    <?php
+        if ($this->moreLink) {
+            echo "
+            <div>
+                <a href=\"{$this->moreLink}\" class=\"more\">{$this->_('more')}</a>
+            </div>
+            ";
+        }
+    ?>
 </section>

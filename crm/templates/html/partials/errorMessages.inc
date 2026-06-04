@@ -6,35 +6,35 @@
 if (isset($_SESSION['errorMessages'])) {
 ?>
 <section id="alert">
-	<?php
+    <?php
         $errorDir = "/blocks/html/errorMessages";
 
-		foreach ($_SESSION['errorMessages'] as $e) {
+        foreach ($_SESSION['errorMessages'] as $e) {
             echo "
             <article>
                 <header>
                     <h1>{$this->_('error')}</h1>
                 </header>
             ";
-			$error = is_string($e) ? $e : $e->getMessage();
-			$file = "$errorDir/$error.inc";
+            $error = is_string($e) ? $e : $e->getMessage();
+            $file = "$errorDir/$error.inc";
 
             if ($this->theme
                 && is_file($this->theme.$file)) {
                 include    $this->theme.$file;
             }
-			elseif (is_file(APPLICATION_HOME.$file)) {
+            elseif (is_file(APPLICATION_HOME.$file)) {
                 include     APPLICATION_HOME.$file;
-			}
-			else {
-				echo "<p>{$this->_($error, 'errors')}</p>";
-			}
+            }
+            else {
+                echo "<p>{$this->_($error, 'errors')}</p>";
+            }
 
-			echo "
-			</article>
-			";
-		}
-	?>
+            echo "
+            </article>
+            ";
+        }
+    ?>
 </section>
 <?php
     unset ($_SESSION['errorMessages']);

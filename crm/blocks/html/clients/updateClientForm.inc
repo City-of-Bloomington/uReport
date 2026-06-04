@@ -13,12 +13,12 @@ foreach ($fields as $f) {
 }
 ?>
 <div class="updateClientForm">
-	<h1><?= $this->template->title; ?></h1>
-	<form method="post" action="<?= BASE_URL; ?>/clients/update">
-		<fieldset>
-			<legend><?= $this->_('client').' '.$this->_('info'); ?></legend>
-			<input name="client_id" type="hidden" value="<?= $this->client->getId(); ?>" />
-			<?php
+    <h1><?= $this->template->title; ?></h1>
+    <form method="post" action="<?= BASE_URL; ?>/clients/update">
+        <fieldset>
+            <legend><?= $this->_('client').' '.$this->_('info'); ?></legend>
+            <input name="client_id" type="hidden" value="<?= $this->client->getId(); ?>" />
+            <?php
                 $helper = $this->template->getHelper('field');
                 echo $helper->field(['name'=>'name',    'id'=>'name',    'label'=>$this->_('name'),    'value'=>$name,    'required'=>true]);
                 echo $helper->field(['name'=>'url',     'id'=>'url',     'label'=>$this->_('url'),     'value'=>$url]);
@@ -38,11 +38,11 @@ foreach ($fields as $f) {
                     'type'    => 'select',
                     'options' => $options
                 ]);
-			?>
-		</fieldset>
-		<fieldset>
-			<legend><?= $this->_('contact').' '.$this->_('info'); ?></legend>
-			<?php
+            ?>
+        </fieldset>
+        <fieldset>
+            <legend><?= $this->_('contact').' '.$this->_('info'); ?></legend>
+            <?php
                 echo $helper->field([
                     'name'  => 'contactPerson',
                     'id'    => 'contactPerson',
@@ -50,13 +50,13 @@ foreach ($fields as $f) {
                     'value' => $this->client->getContactPerson(),
                     'type'  => 'person'
                 ]);
-			?>
-		</fieldset>
-		<fieldset>
-			<?php
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons(BASE_URI.'/clients');
-			?>
-		</fieldset>
-	</form>
+            ?>
+        </fieldset>
+        <fieldset>
+            <?php
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons(BASE_URI.'/clients');
+            ?>
+        </fieldset>
+    </form>
 </div>

@@ -7,18 +7,18 @@
 use Application\Models\Phone;
 ?>
 <fieldset><legend><?= $this->_('phone'); ?></legend>
-	<label>
-		<?= $this->_('label'); ?>
-		<select name="label" id="label">
-		<?php
-			foreach (Phone::$LABELS as $label) {
-				$selected = $this->phone->getLabel()== $label
-					? 'selected="selected"'
-					: '';
-				echo "<option $selected>$label</option>";
-			}
-		?>
-		</select>
-	</label>
-	<input name="number" value="<?= self::escape($this->phone->getNumber()); ?>" type="tel" required="true" />
+    <label>
+        <?= $this->_('label'); ?>
+        <select name="label" id="label">
+        <?php
+            foreach (Phone::$LABELS as $label) {
+                $selected = $this->phone->getLabel()== $label
+                    ? 'selected="selected"'
+                    : '';
+                echo "<option $selected>$label</option>";
+            }
+        ?>
+        </select>
+    </label>
+    <input name="number" value="<?= self::escape($this->phone->getNumber()); ?>" type="tel" required="true" />
 </fieldset>

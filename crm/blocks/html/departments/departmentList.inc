@@ -11,15 +11,15 @@ use Application\Models\Person;
         <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
-			if (Person::isAllowed('departments','update')) {
-				$helper = $this->template->getHelper('buttonLink');
-				echo $helper->buttonLink(
-					BASE_URI.'/departments/update',
-					$this->_('add'),
-					'add'
-				);
-			}
-		?>
+            if (Person::isAllowed('departments','update')) {
+                $helper = $this->template->getHelper('buttonLink');
+                echo $helper->buttonLink(
+                    BASE_URI.'/departments/update',
+                    $this->_('add'),
+                    'add'
+                );
+            }
+        ?>
         </div>
     </header>
     <table>
@@ -47,5 +47,5 @@ use Application\Models\Person;
             }
         ?>
         </tbody>
-	</table>
+    </table>
 </section>

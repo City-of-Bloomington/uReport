@@ -9,8 +9,8 @@ use Application\Helper;
 
 class Dropdown extends Helper
 {
-	public function dropdown(array $links, $title, $id, $class=null)
-	{
+    public function dropdown(array $links, $title, $id, $class=null)
+    {
         $html = "
         <nav class=\"dropdown $class\">
             <button id=\"$id\" class=\"launcher\" aria-haspopup=\"true\" aria-expanded=\"false\">$title</button>
@@ -20,10 +20,10 @@ class Dropdown extends Helper
         </nav>
         ";
         return $html;
-	}
+    }
 
-	private function renderLinks(array $links)
-	{
+    private function renderLinks(array $links)
+    {
         $html = '';
         foreach ($links as $l) {
 
@@ -40,5 +40,5 @@ class Dropdown extends Helper
                 : "<div class=\"subgroup\">{$this->renderLinks($l['subgroup'])}</div>";
         }
         return $html;
-	}
+    }
 }

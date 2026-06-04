@@ -27,26 +27,26 @@ $SLA_DATA = [
 
 $this->_include('reports/parameters.inc');
 $start = !empty($_REQUEST['enteredDate']['start'])
-	? strtotime($_REQUEST['enteredDate']['start'])
-	: strtotime('-1 month');
+    ? strtotime($_REQUEST['enteredDate']['start'])
+    : strtotime('-1 month');
 $end =   !empty($_REQUEST['enteredDate']['end'])
-	? strtotime($_REQUEST['enteredDate']['end'])
-	: time();
+    ? strtotime($_REQUEST['enteredDate']['end'])
+    : time();
 ?>
 <style type="text/css">
-	.chart { width:100%; height:250px; }
-	.charts-tooltip div { color:infotext; }
+    .chart { width:100%; height:250px; }
+    .charts-tooltip div { color:infotext; }
 </style>
 <section id="slaReport" class="searchResults">
     <header>
         <h1><?= $this->template->title; ?></h1>
     </h1>
-	<div class="chartData">
-		<h2>Outstanding Open Cases</h2>
-		<div id="openTicketCounts" class="chart"></div>
+    <div class="chartData">
+        <h2>Outstanding Open Cases</h2>
+        <div id="openTicketCounts" class="chart"></div>
 
-		<h2>SLA Percentages</h2>
-		<div id="slaPercentages" class="chart"></div>
+        <h2>SLA Percentages</h2>
+        <div id="slaPercentages" class="chart"></div>
 
         <script type="text/javascript">
             <?php
@@ -85,5 +85,5 @@ $end =   !empty($_REQUEST['enteredDate']['end'])
                 }
             };
         </script>
-	</div>
+    </div>
 </section>

@@ -8,16 +8,16 @@ $name = self::escape($this->categoryGroup->getName());
 ?>
 <section class="updateCategoryGroupForm">
     <header><h1><?= $this->template->title; ?></h1></header>
-	<form method="post" action="<?= BASE_URI; ?>/categoryGroups/update">
-		<fieldset>
-			<input name="categoryGroup_id" type="hidden" value="<?= $this->categoryGroup->getId(); ?>" />
-			<?php
+    <form method="post" action="<?= BASE_URI; ?>/categoryGroups/update">
+        <fieldset>
+            <input name="categoryGroup_id" type="hidden" value="<?= $this->categoryGroup->getId(); ?>" />
+            <?php
                 $helper = $this->template->getHelper('field');
                 echo $helper->field(['name'=>'name', 'id'=>'name', 'label'=>$this->_('name'), 'value'=>$name, 'required'=>true]);
 
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
-			?>
-		</fieldset>
-	</form>
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons(BASE_URI.'/categoryGroups');
+            ?>
+        </fieldset>
+    </form>
 </section>

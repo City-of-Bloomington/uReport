@@ -10,27 +10,27 @@ use Application\Template;
 
 class FormatDuration
 {
-	private $template;
+    private $template;
 
-	public function __construct(Template $template)
-	{
-		$this->template = $template;
-	}
+    public function __construct(Template $template)
+    {
+        $this->template = $template;
+    }
 
-	public function formatDuration($durationInSeconds) {
-		$duration = '';
-		$days     = floor($durationInSeconds / 86400);
-		$durationInSeconds -= $days * 86400;
-		$hours    = floor($durationInSeconds / 3600);
-		$durationInSeconds -= $hours * 3600;
-		$minutes  = floor($durationInSeconds / 60);
-		$seconds  = $durationInSeconds - $minutes * 60;
+    public function formatDuration($durationInSeconds) {
+        $duration = '';
+        $days     = floor($durationInSeconds / 86400);
+        $durationInSeconds -= $days * 86400;
+        $hours    = floor($durationInSeconds / 3600);
+        $durationInSeconds -= $hours * 3600;
+        $minutes  = floor($durationInSeconds / 60);
+        $seconds  = $durationInSeconds - $minutes * 60;
 
-		if     ($days    > 0) { $duration = "$days days";       }
-		elseif ($hours   > 0) { $duration = "$hours hours";     }
-		elseif ($minutes > 0) { $duration = "$minutes minutes"; }
-		else                  { $duration = "$seconds seconds"; }
+        if     ($days    > 0) { $duration = "$days days";       }
+        elseif ($hours   > 0) { $duration = "$hours hours";     }
+        elseif ($minutes > 0) { $duration = "$minutes minutes"; }
+        else                  { $duration = "$seconds seconds"; }
 
-		return $duration;
-	}
+        return $duration;
+    }
 }

@@ -13,19 +13,19 @@
 echo $this->title ? $this->title : 'Cases';
 echo "\n---------------------------------------------------------------------\n";
 foreach ($this->ticketList as $ticket) {
-	if ($this->filterTicket
-		&& "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
-		continue;
-	}
-	$status      = $ticket->getStatus();
-	$location    = $ticket->getLocation();
-	$enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
-	$sla         = $ticket->getSlaPercentage();
-	$sla = $sla ? "$sla%" : '';
-	$sla = str_pad($sla,             4, ' ', STR_PAD_RIGHT);
+    if ($this->filterTicket
+        && "{$this->filterTicket->getId()}"=="{$ticket->getId()}") {
+        continue;
+    }
+    $status      = $ticket->getStatus();
+    $location    = $ticket->getLocation();
+    $enteredDate = $ticket->getEnteredDate(DATE_FORMAT);
+    $sla         = $ticket->getSlaPercentage();
+    $sla = $sla ? "$sla%" : '';
+    $sla = str_pad($sla,             4, ' ', STR_PAD_RIGHT);
 
-	$category = $ticket->getCategory_id()
-		? $ticket->getCategory()->getName()
-		: '';
-	echo "$status $enteredDate $sla $category $location\n";
+    $category = $ticket->getCategory_id()
+        ? $ticket->getCategory()->getName()
+        : '';
+    echo "$status $enteredDate $sla $category $location\n";
 }

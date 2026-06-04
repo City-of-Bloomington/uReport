@@ -6,13 +6,13 @@
  */
 echo "
 <div class=\"distinctFieldValues\">
-	<ul>
+    <ul>
 ";
-	foreach ($this->results as $value) {
-		$value = self::escape($value);
-		echo "<li>$value</li>";
-	}
+    foreach ($this->results as $value) {
+        $value = self::escape($value);
+        echo "<li>$value</li>";
+    }
 echo "
-	</ul>
+    </ul>
 </div>
 ";

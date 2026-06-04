@@ -7,12 +7,12 @@ require_once '../../bootstrap.inc';
 
 $files = glob(APPLICATION_HOME.'/data/media/*/*/*/*/*');
 foreach ($files as $file) {
-	unlink($file);
-	echo "Removed $file\n";
+    unlink($file);
+    echo "Removed $file\n";
 }
 
 $directories = glob(APPLICATION_HOME.'/data/media/*/*/*/*/', GLOB_ONLYDIR);
 foreach ($directories as $dir) {
-	rmdir($dir);
-	echo "Removed $dir\n";
+    rmdir($dir);
+    echo "Removed $dir\n";
 }

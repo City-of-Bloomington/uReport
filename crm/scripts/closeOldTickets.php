@@ -22,27 +22,27 @@ $closedAction = new Action('close');
 $cutoff_date = '2009-01-01';
 
 $sql = "select t.id, t.enteredDate, t.assignedPerson_id
-		from tickets t
-		where t.status='open'
-		and t.enteredDate<'$cutoff_date'";
+        from tickets t
+        where t.status='open'
+        and t.enteredDate<'$cutoff_date'";
 $result = $db->fetchAll($sql);
 foreach ($result as $row) {
-	$sql = 'select max(actionDate) from ticketHistory where ticket_id=?';
-	$actionDate = $db->fetchOne($sql, array($row['id']));
-	$history = array(
-		'ticket_id'=>$row['id'],
-		'actionPerson_id'=>$row['assignedPerson_id'],
-		'action_id'=>$closedAction->getId(),
-		'actionDate'=>$actionDate ? $actionDate : $row['enteredDate'],
-		'notes'=>'[data cleanup] Closed old ticket from ReqPro'
-	);
-	$db->insert('ticketHistory', $history);
-	$db->update('tickets', array('status'=>'closed'), 'id='.$row['id']);
+    $sql = 'select max(actionDate) from ticketHistory where ticket_id=?';
+    $actionDate = $db->fetchOne($sql, array($row['id']));
+    $history = array(
+        'ticket_id'=>$row['id'],
+        'actionPerson_id'=>$row['assignedPerson_id'],
+        'action_id'=>$closedAction->getId(),
+        'actionDate'=>$actionDate ? $actionDate : $row['enteredDate'],
+        'notes'=>'[data cleanup] Closed old ticket from ReqPro'
+    );
+    $db->insert('ticketHistory', $history);
+    $db->update('tickets', array('status'=>'closed'), 'id='.$row['id']);
 
-	$ticket = new Ticket($row['id']);
-	$search = new Search();
-	$search->add($ticket);
-	$search->solrClient->commit();
+    $ticket = new Ticket($row['id']);
+    $search = new Search();
+    $search->add($ticket);
+    $search->solrClient->commit();
 
-	echo "$row[id] $row[enteredDate] $history[actionDate]\n";
+    echo "$row[id] $row[enteredDate] $history[actionDate]\n";
 }

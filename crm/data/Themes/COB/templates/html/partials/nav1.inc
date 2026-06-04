@@ -3,7 +3,7 @@ use Application\Models\Person;
 ?>
 <nav id="nav1">
     <div class="container">
-	<?php
+    <?php
         $li = '<a href="%s">%s</a>';
         echo     sprintf($li, BASE_URI.'/tickets'  ,   $this->_(['ticket'  ,'tickets'  , 2]));
         echo     sprintf($li, BASE_URI.'/locations',   $this->_(['location','locations', 2]));

@@ -33,8 +33,8 @@ if (Person::isAllowed('categories', 'update')) {
         <h1><?= $name; ?></h1>
         <div class="tools"><?= $editButton; ?></div>
     </header>
-	<p><?= $description; ?></p>
-	<?php
+    <p><?= $description; ?></p>
+    <?php
         $autoCloseActive = $this->category->autoCloseIsActive() ? $this->_('active_yes') : $this->_('active_no');
         $status          = $this->category->isActive()          ? $this->_('active_yes') : $this->_('active_no');
         $featured        = $this->category->isFeatured()        ? $this->_('featured')   : '';
@@ -56,13 +56,13 @@ if (Person::isAllowed('categories', 'update')) {
         $this->_include('responseTemplates/list.inc');
     ?>
 
-	<form method="get">
-		<fieldset id="customFields">
+    <form method="get">
+        <fieldset id="customFields">
             <legend><?= $this->_('custom_fields'); ?></legend>
             <?php
                 $this->ticket = new Ticket();
                 $this->_include('tickets/customFieldsForm.inc');
             ?>
-		</fieldset>
-	</form>
+        </fieldset>
+    </form>
 </section>

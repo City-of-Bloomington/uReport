@@ -39,14 +39,14 @@ $maxSizeHelp = sprintf($this->_('file_max_size',    'messages'), $maxSize);
 $acceptHelp  = sprintf($this->_('file_type_accept', 'messages'), $accept);
 ?>
 <div class="uploadForm">
-	<form method="post" action="<?= BASE_URL; ?>/media/upload" enctype="multipart/form-data">
-		<fieldset><legend><?= $this->_('upload_media'); ?></legend>
-			<input name="ticket_id"   type="hidden" value="<?= $this->ticket->getId(); ?>" />
-			<input name="attachment" type="file" accept="<?= $accept; ?>" />
-			<button type="submit" class="upload"><?= $this->_('upload'); ?></button>
-			<?php
-				$h = $this->template->getHelper('buttonLink');
-				echo $h->buttonLink($this->ticket->getURL(), $this->_('cancel'), 'cancel' );
+    <form method="post" action="<?= BASE_URL; ?>/media/upload" enctype="multipart/form-data">
+        <fieldset><legend><?= $this->_('upload_media'); ?></legend>
+            <input name="ticket_id"   type="hidden" value="<?= $this->ticket->getId(); ?>" />
+            <input name="attachment" type="file" accept="<?= $accept; ?>" />
+            <button type="submit" class="upload"><?= $this->_('upload'); ?></button>
+            <?php
+                $h = $this->template->getHelper('buttonLink');
+                echo $h->buttonLink($this->ticket->getURL(), $this->_('cancel'), 'cancel' );
 
                 echo "
                 <input name=\"MAX_FILE_SIZE\" type=\"hidden\" value=\"$maxBytes\" />
@@ -54,7 +54,7 @@ $acceptHelp  = sprintf($this->_('file_type_accept', 'messages'), $accept);
                 <div>$acceptHelp</div>
                 ";
 
-			?>
-		</fieldset>
-	</form>
+            ?>
+        </fieldset>
+    </form>
 </div>

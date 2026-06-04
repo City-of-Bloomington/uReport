@@ -15,24 +15,24 @@ class MasterAddress implements AddressService
     const FIELD_NEIGHBORHOOD = 'neighborhoodAssociation';
     const FIELD_TOWNSHIP     = 'township';
 
-	/**
-	 * Define custom form fields for dealing with AddressServiceCache data
-	 *
-	 * AddressServiceCache fields can be included in forms, such as search,
-	 * and displayed with the rest of the ticket information.
-	 *
-	 * When the sytem displays ticket information, it will look at this
-	 * array for any additional fields of information to display
-	 *
-	 * When the system draws a search form, a call will be made to get this
-	 * description of any custom fields to include.
-	 * The description will be used as the label
-	 * The formElement controls what HTML form element to render.
-	 *		If the formElement is "select", then a drop down will be created,
-	 *		populated with all possible values from the addressServiceCache
-	 *
-	 *		All other form elements will be rendered as a plain text input
-	 */
+    /**
+     * Define custom form fields for dealing with AddressServiceCache data
+     *
+     * AddressServiceCache fields can be included in forms, such as search,
+     * and displayed with the rest of the ticket information.
+     *
+     * When the sytem displays ticket information, it will look at this
+     * array for any additional fields of information to display
+     *
+     * When the system draws a search form, a call will be made to get this
+     * description of any custom fields to include.
+     * The description will be used as the label
+     * The formElement controls what HTML form element to render.
+     *        If the formElement is "select", then a drop down will be created,
+     *        populated with all possible values from the addressServiceCache
+     *
+     *        All other form elements will be rendered as a plain text input
+     */
     public static function customFieldDefinitions(): array
     {
         return [
@@ -47,28 +47,28 @@ class MasterAddress implements AddressService
         ];
     }
 
-	/**
-	 * Loads the data from your address service for the location
-	 *
-	 * This function is where you can add any extra, custom fields that this
-	 * application will keep track of.
-	 *
-	 * Your address system should have only one entry matching the location string.
-	 * If there is not exactly one entry, the returned data will be empty
-	 * This can be used to see if the location string is a valid address
-	 * in your address system
-	 *
-	 * It's important to match $data fieldnames with Ticket fieldnames.
-	 * When this data is given to a Ticket, any fields that have the same name as Ticket
-	 * properties will update the appropriate Ticket property.
-	 */
-	public static function getLocationData(string $location): array
-	{
-		$data     = [];
-		$location = trim($location);
-		$parse    = self::parseAddress($location);
+    /**
+     * Loads the data from your address service for the location
+     *
+     * This function is where you can add any extra, custom fields that this
+     * application will keep track of.
+     *
+     * Your address system should have only one entry matching the location string.
+     * If there is not exactly one entry, the returned data will be empty
+     * This can be used to see if the location string is a valid address
+     * in your address system
+     *
+     * It's important to match $data fieldnames with Ticket fieldnames.
+     * When this data is given to a Ticket, any fields that have the same name as Ticket
+     * properties will update the appropriate Ticket property.
+     */
+    public static function getLocationData(string $location): array
+    {
+        $data     = [];
+        $location = trim($location);
+        $parse    = self::parseAddress($location);
 
-		if (!empty($parse['street_number']) && !empty($parse['street_name'])) {
+        if (!empty($parse['street_number']) && !empty($parse['street_name'])) {
             $url  = self::addressSearchUrl($location);
             $json = self::doJsonRequest($url);
             if (isset($json['locations'])) {
@@ -78,15 +78,15 @@ class MasterAddress implements AddressService
                                         self::getCustomFieldData($address['address_id']));
                 }
             }
-		}
-		return $data;
-	}
+        }
+        return $data;
+    }
 
-	/**
-	 * @return array   Address data
-	 */
-	private static function chooseMatch(array $locations, array $parse): ?array
-	{
+    /**
+     * @return array   Address data
+     */
+    private static function chooseMatch(array $locations, array $parse): ?array
+    {
         foreach ($locations as $a) {
             if (empty($parse['subunitIdentifier'])) {
                 if (empty($a['subunit_id'])) { return $a; }
@@ -96,11 +96,11 @@ class MasterAddress implements AddressService
             }
         }
         return null;
-	}
+    }
 
-	public static function searchAddresses(string $query): array
-	{
-		$results = [];
+    public static function searchAddresses(string $query): array
+    {
+        $results = [];
         $url     = self::addressSearchUrl($query);
         $json    = self::doJsonRequest($url);
         if (isset($json['locations'])) {
@@ -109,30 +109,30 @@ class MasterAddress implements AddressService
                 $results[$data['location']] = $data;
             }
         }
-		return $results;
-	}
+        return $results;
+    }
 
-	private static function addressSearchUrl(string $query): string
-	{
+    private static function addressSearchUrl(string $query): string
+    {
         return ADDRESS_SERVICE_URL.'/locations?'.http_build_query(['format'   => 'json',
                                                                    'active'   => 1,
                                                                    'location' => $query], '', ';');
-	}
+    }
 
-	public static function parseAddress(string $address): ?array
-	{
+    public static function parseAddress(string $address): ?array
+    {
         $url = ADDRESS_SERVICE_URL.'/addresses/parse?'.http_build_query(['format'=>'json', 'address'=>$address], '', ';');
         return self::doJsonRequest($url);
-	}
+    }
 
-	/**
-	 * Translate Master Address fields into uReport ticket fields
-	 * @param  array $address        The address json data
-	 * @param  array $parsedAddress
-	 * @return array
-	 */
-	private static function extractUreportData(array $address): array
-	{
+    /**
+     * Translate Master Address fields into uReport ticket fields
+     * @param  array $address        The address json data
+     * @param  array $parsedAddress
+     * @return array
+     */
+    private static function extractUreportData(array $address): array
+    {
         return [
             'location'  => $address['streetAddress'],
             'addressId' => $address['address_id'   ],
@@ -142,10 +142,10 @@ class MasterAddress implements AddressService
             'latitude'  => $address['latitude'     ],
             'longitude' => $address['longitude'    ]
         ];
-	}
+    }
 
-	private static function getCustomFieldData(int $address_id): array
-	{
+    private static function getCustomFieldData(int $address_id): array
+    {
         $data = [];
         $url  = ADDRESS_SERVICE_URL."/addresses/$address_id?format=json";
         $json = self::doJsonRequest($url);
@@ -161,23 +161,23 @@ class MasterAddress implements AddressService
             }
         }
         return $data;
-	}
+    }
 
-	private static function get(string $url): ?string
-	{
-		$request = curl_init($url);
-		curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
-		$res     = curl_exec($request);
-		return $res ? $res : null;
-	}
+    private static function get(string $url): ?string
+    {
+        $request = curl_init($url);
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($request, CURLOPT_FOLLOWLOCATION, true);
+        $res     = curl_exec($request);
+        return $res ? $res : null;
+    }
 
-	private static function doJsonRequest(string $url): ?array
-	{
+    private static function doJsonRequest(string $url): ?array
+    {
         $res = self::get($url);
         if ($res) {
             return json_decode($res, true);
         }
         return null;
-	}
+    }
 }

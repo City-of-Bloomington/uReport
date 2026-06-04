@@ -11,21 +11,21 @@ use Application\Models\Ticket;
 
 class TicketTest extends TestCase
 {
-	public function testChangingWillUpdateClusters()
-	{
-		$ticket = new Ticket();
-		$this->assertFalse($ticket->willUpdateClustersOnSave());
-		$ticket->setLatitude(39.123);
-		$this->assertTrue($ticket->willUpdateClustersOnSave());
-	}
+    public function testChangingWillUpdateClusters()
+    {
+        $ticket = new Ticket();
+        $this->assertFalse($ticket->willUpdateClustersOnSave());
+        $ticket->setLatitude(39.123);
+        $this->assertTrue($ticket->willUpdateClustersOnSave());
+    }
 
-	public function testLatLngShouldNotAllowZeros()
-	{
-		$ticket = new Ticket();
-		$ticket->setLatitude (0);
-		$ticket->setLongitude(0);
+    public function testLatLngShouldNotAllowZeros()
+    {
+        $ticket = new Ticket();
+        $ticket->setLatitude (0);
+        $ticket->setLongitude(0);
 
-		$this->assertNull($ticket->getLatitude ());
-		$this->assertNull($ticket->getLongitude());
-	}
+        $this->assertNull($ticket->getLatitude ());
+        $this->assertNull($ticket->getLongitude());
+    }
 }

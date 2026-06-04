@@ -7,11 +7,11 @@
  */
 $output = array();
 foreach ($this->substatusList as $s) {
-	$output[] = array(
-		'id'         => $s->getId(),
-		'name'       => $s->getName(),
-		'status'     => $s->getStatus(),
-		'description'=> $s->getDescription()
-	);
+    $output[] = array(
+        'id'         => $s->getId(),
+        'name'       => $s->getName(),
+        'status'     => $s->getStatus(),
+        'description'=> $s->getDescription()
+    );
 }
 echo json_encode($output);

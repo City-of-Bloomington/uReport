@@ -11,40 +11,40 @@ use Application\Models\Person;
         <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
-			if (Person::isAllowed('clients','update')) {
-				$helper = $this->template->getHelper('buttonLink');
-				echo $helper->buttonLink(
-					BASE_URI.'/clients/update',
-					$this->_('add'),
-					'add'
-				);
-			}
-		?>
-		</div>
+            if (Person::isAllowed('clients','update')) {
+                $helper = $this->template->getHelper('buttonLink');
+                echo $helper->buttonLink(
+                    BASE_URI.'/clients/update',
+                    $this->_('add'),
+                    'add'
+                );
+            }
+        ?>
+        </div>
     </header>
-	<p><?= $this->_('clients_description', 'messages'); ?></p>
-	<?php
-		foreach ($this->clientList as $client) {
-			$editButton   = '';
-			$deleteButton = '';
-			if (Person::isAllowed('clients','update')) {
-				$editButton = $helper->buttonLink(
-					BASE_URI.'/clients/update?client_id='.$client->getId(),
-					$this->_('edit'),
-					'edit'
-				);
-				$deleteButton = $helper->buttonLink(
-					BASE_URI.'/clients/delete?client_id='.$client->getId(),
-					$this->_('delete'),
-					'delete'
-				);
-			}
-			$url         = $client->getURL();
-			$contact     = $client->getContactPerson();
-			$name        = self::escape($client->getName());
-			$contactName = self::escape($contact->getFullname());
-			echo "
-			<article>
+    <p><?= $this->_('clients_description', 'messages'); ?></p>
+    <?php
+        foreach ($this->clientList as $client) {
+            $editButton   = '';
+            $deleteButton = '';
+            if (Person::isAllowed('clients','update')) {
+                $editButton = $helper->buttonLink(
+                    BASE_URI.'/clients/update?client_id='.$client->getId(),
+                    $this->_('edit'),
+                    'edit'
+                );
+                $deleteButton = $helper->buttonLink(
+                    BASE_URI.'/clients/delete?client_id='.$client->getId(),
+                    $this->_('delete'),
+                    'delete'
+                );
+            }
+            $url         = $client->getURL();
+            $contact     = $client->getContactPerson();
+            $name        = self::escape($client->getName());
+            $contactName = self::escape($contact->getFullname());
+            echo "
+            <article>
                 <header>
                     <h1>$name</h1>
                     <div class=\"tools\">
@@ -64,8 +64,8 @@ use Application\Models\Person;
                 <dl><dt>{$this->_('contact')}</dt>
                     <dd><a href=\"{$contact->getURL()}\">$contactName</a></dd>
                 </dl>
-			</article>
-			";
-		}
-	?>
+            </article>
+            ";
+        }
+    ?>
 </section>

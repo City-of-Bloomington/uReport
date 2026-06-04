@@ -12,26 +12,26 @@ if (count($this->mediaList)) {
     $userCanDelete = Person::isAllowed('media', 'delete');
     $h             = $this->template->getHelper('buttonLink');
 
-	echo "<table class=\"mediaList\">";
-	foreach ($this->mediaList as $media) {
-		$deleteButton = '';
-		if (!$this->disableButtons && $userCanDelete) {
-			$deleteButton = $h->buttonLink(
-				BASE_URI.'/media/delete?media_id='.$media->getId(),
-				$this->_('delete'),
-				'delete',
-				ButtonLink::SIZE_ICON
-			);
-		}
-		echo "
-		<tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
-					{$media->getInternalFilename()}
-				</a>
-			</td>
-			<td>{$media->getUploaded(DATE_FORMAT)}</td>
-			<td>$deleteButton</td>
-		</tr>
-		";
-	}
-	echo "</table>";
+    echo "<table class=\"mediaList\">";
+    foreach ($this->mediaList as $media) {
+        $deleteButton = '';
+        if (!$this->disableButtons && $userCanDelete) {
+            $deleteButton = $h->buttonLink(
+                BASE_URI.'/media/delete?media_id='.$media->getId(),
+                $this->_('delete'),
+                'delete',
+                ButtonLink::SIZE_ICON
+            );
+        }
+        echo "
+        <tr><td><a href=\"{$media->getURL()}\" class=\"{$media->getExtension()}\">
+                    {$media->getInternalFilename()}
+                </a>
+            </td>
+            <td>{$media->getUploaded(DATE_FORMAT)}</td>
+            <td>$deleteButton</td>
+        </tr>
+        ";
+    }
+    echo "</table>";
 }

@@ -9,10 +9,10 @@
     <header>
         <h1><?= $this->template->title; ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URI; ?>/tickets/message">
-		<fieldset>
-			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
-			<?php
+    <form method="post" action="<?= BASE_URI; ?>/tickets/message">
+        <fieldset>
+            <input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
+            <?php
                 $helper = $this->template->getHelper('field');
 
                 $options = [];
@@ -37,16 +37,16 @@
                     'label' => $this->_('message'),
                     'type'  => 'textarea'
                 ]);
-			?>
-			<button type="submit" class="submit"><?= $this->_('message_send'); ?></button>
-			<?php
+            ?>
+            <button type="submit" class="submit"><?= $this->_('message_send'); ?></button>
+            <?php
                 $helper = $this->template->getHelper('buttonLink');
                 echo $helper->buttonLink(
                     $this->ticket->getURL(),
                     $this->_('cancel'),
                     'cancel'
                 );
-			?>
-		</fieldset>
-	</form>
+            ?>
+        </fieldset>
+    </form>
 </section>

@@ -8,10 +8,10 @@ $name = self::escape($this->issueType->getName());
 ?>
 <section>
     <header><h1><?= $this->template->title; ?></h1></header>
-	<form method="post" action="<?= BASE_URI; ?>/issueTypes/update">
-		<input type="hidden" name="issueType_id" value="<?= $this->issueType->getId(); ?>" />
+    <form method="post" action="<?= BASE_URI; ?>/issueTypes/update">
+        <input type="hidden" name="issueType_id" value="<?= $this->issueType->getId(); ?>" />
 
-		<fieldset>
+        <fieldset>
         <?php
             $helper = $this->template->getHelper('field');
             echo $helper->field(['name'=>'name', 'id'=>'name', 'label'=>$this->_('name'), 'value'=>$name, 'required'=>true]);
@@ -19,6 +19,6 @@ $name = self::escape($this->issueType->getName());
             $helper = $this->template->getHelper('saveAndCancelButtons');
             echo $helper->saveAndCancelButtons(BASE_URI.'/issueTypes');
         ?>
-		</fieldset>
-	</form>
+        </fieldset>
+    </form>
 </div>

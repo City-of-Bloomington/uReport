@@ -14,18 +14,18 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
     <header>
         <h1><?= self::escape($title); ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URL; ?>/tickets/add">
-		<fieldset><legend><?= $this->_('category'); ?></legend>
-		<?php
-			$this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory-'.VERSION.'.js');
-			$this->return_url = BASE_URL.'/tickets/add';
-			$this->_include('tickets/partials/chooseCategoryFields.inc');
-		?>
-		</fieldset>
+    <form method="post" action="<?= BASE_URL; ?>/tickets/add">
+        <fieldset><legend><?= $this->_('category'); ?></legend>
+        <?php
+            $this->template->addToAsset('scripts', BASE_URI.'/js/tickets/chooseCategory-'.VERSION.'.js');
+            $this->return_url = BASE_URL.'/tickets/add';
+            $this->_include('tickets/partials/chooseCategoryFields.inc');
+        ?>
+        </fieldset>
 
-		<fieldset class="locationFields">
-			<legend><?= $this->_('info_location'); ?></legend>
-			<?php
+        <fieldset class="locationFields">
+            <legend><?= $this->_('info_location'); ?></legend>
+            <?php
                 $this->_include('tickets/chooseLocation.inc');
 
                 $helper = $this->template->getHelper('field');
@@ -35,11 +35,11 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
 
                     echo $helper->field(['name'=>$f, 'id'=>$f, 'label'=>$this->_($f), 'value'=>$$f]);
                 }
-			?>
-		</fieldset>
-		<fieldset class="issueFields">
-			<legend><?= $this->_('info_issue'); ?></legend>
-			<?php $this->_include('tickets/issueFields.inc'); ?>
+            ?>
+        </fieldset>
+        <fieldset class="issueFields">
+            <legend><?= $this->_('info_issue'); ?></legend>
+            <?php $this->_include('tickets/issueFields.inc'); ?>
 
             <div id="customFields">
             <?php
@@ -47,20 +47,20 @@ $title       = $category ? "New {$category->getName()} Case" : 'New Case';
                 $this->_include('tickets/customFieldsForm.inc');
             ?>
             </div>
-		</fieldset>
-		<fieldset class="assignmentFields">
-			<legend><?= $this->_('info_assignment'); ?></legend>
-			<?php
-				$this->_include('tickets/assignTicketFields.inc');
-			?>
-		</fieldset>
+        </fieldset>
+        <fieldset class="assignmentFields">
+            <legend><?= $this->_('info_assignment'); ?></legend>
+            <?php
+                $this->_include('tickets/assignTicketFields.inc');
+            ?>
+        </fieldset>
 
 
-		<fieldset>
-			<?php
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons(BASE_URI.'/tickets');
-			?>
-		</fieldset>
-	</form>
+        <fieldset>
+            <?php
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons(BASE_URI.'/tickets');
+            ?>
+        </fieldset>
+    </form>
 </section>

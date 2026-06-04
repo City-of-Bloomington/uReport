@@ -7,27 +7,27 @@
  */
 $category = $this->category;
 if ($category) {
-	$customFields = $category->getCustomFields();
-	if ($customFields) {
-		$ticketData = $this->ticket->getCustomFields();
-		$helper = $this->template->getHelper('field');
+    $customFields = $category->getCustomFields();
+    if ($customFields) {
+        $ticketData = $this->ticket->getCustomFields();
+        $helper = $this->template->getHelper('field');
 
-		foreach ($customFields as $f) {
-			$name  = $f['name'];
-			$type  = $f['type'] ?? 'string';
-			$label = self::escape($f['label'] ?? $name);
-			$value = $ticketData[$name] ?? null;
+        foreach ($customFields as $f) {
+            $name  = $f['name'];
+            $type  = $f['type'] ?? 'string';
+            $label = self::escape($f['label'] ?? $name);
+            $value = $ticketData[$name] ?? null;
 
-			$field_name = "customFields[$name]";
-			$field_id   = "customFields-$name";
+            $field_name = "customFields[$name]";
+            $field_id   = "customFields-$name";
 
-			$inputParameters = [
+            $inputParameters = [
                 'name'  => $field_name,
                 'id'    => $field_id,
                 'label' => $label
-			];
-			switch ($type) {
-				case 'singlevaluelist':
+            ];
+            switch ($type) {
+                case 'singlevaluelist':
                     $options = [];
                     foreach ($f['values'] as $v) {
                         $v         = self::escape($v);
@@ -37,9 +37,9 @@ if ($category) {
                     $inputParameters['type'   ] = 'select';
                     $inputParameters['options'] = $options;
                     echo $helper->field($inputParameters);
-					break;
+                    break;
 
-				case 'multivaluelist':
+                case 'multivaluelist':
                     $options = [];
                     foreach ($f['values'] as $v) {
                         $v = self::escape($v);
@@ -49,18 +49,18 @@ if ($category) {
                     $inputParameters['type'   ] = 'checkbox';
                     $inputParameters['options'] = $options;
                     echo $helper->field($inputParameters);
-					break;
+                    break;
 
-				case 'text':
-					$inputParameters['value'] = self::escape($value);
-					$inputParameters['type' ] = 'textarea';
-					echo $helper->field($inputParameters);
-					break;
+                case 'text':
+                    $inputParameters['value'] = self::escape($value);
+                    $inputParameters['type' ] = 'textarea';
+                    echo $helper->field($inputParameters);
+                    break;
 
-				default:
+                default:
                     $inputParameters['value'] = self::escape($value);
                     echo $helper->field($inputParameters);
-			}
-		}
-	}
+            }
+        }
+    }
 }

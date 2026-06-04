@@ -13,38 +13,38 @@ $id = $this->department->getId();
 $editButton   = '';
 $deleteButton = '';
 if (Person::isAllowed('departments','update')) {
-	$helper = $this->template->getHelper('buttonLink');
+    $helper = $this->template->getHelper('buttonLink');
 
-	$editButton = $helper->buttonLink(
-		BASE_URI.'/departments/update?department_id='.$id,
-		$this->_('edit'),
-		'edit'
-	);
-	// Make sure this would not violate any foreign keys
-	if ($this->department->isSafeToDelete()) {
-		$deleteButton = $helper->buttonLink(
-			BASE_URI.'/departments/delete?department_id='.$id,
-			$this->_('delete'),
-			'delete'
-		);
-	}
+    $editButton = $helper->buttonLink(
+        BASE_URI.'/departments/update?department_id='.$id,
+        $this->_('edit'),
+        'edit'
+    );
+    // Make sure this would not violate any foreign keys
+    if ($this->department->isSafeToDelete()) {
+        $deleteButton = $helper->buttonLink(
+            BASE_URI.'/departments/delete?department_id='.$id,
+            $this->_('delete'),
+            'delete'
+        );
+    }
 }
 $name = self::escape($this->department->getName());
 
 $defaultPerson = $this->department->getDefaultPerson();
 if ($defaultPerson) {
-	$defaultPerson = self::escape($defaultPerson->getFullname());
+    $defaultPerson = self::escape($defaultPerson->getFullname());
 }
 
 $categories = [];
 foreach ($this->department->getCategories() as $category) {
-	$categories[] = self::escape($category->getName());
+    $categories[] = self::escape($category->getName());
 }
 $categories = implode(', ',$categories);
 
 $actions = [];
 foreach ($this->department->getActions() as $action) {
-	$actions[] = self::escape($action->getName());
+    $actions[] = self::escape($action->getName());
 }
 $actions = implode(', ',$actions);
 

@@ -16,17 +16,17 @@ foreach ($fields as $f) {
         <p><?= $this->_('actions_description', 'messages'); ?></p>
     </header>
 
-	<dl><dt>{enteredByPerson}</dt>
+    <dl><dt>{enteredByPerson}</dt>
         <dd><?= $this->_('actions_enteredByPerson', 'messages'); ?></td>
     </dl>
     <dl><dt>{actionPerson}</th>
         <dd><?= $this->_('actions_actionPerson', 'messages'); ?></dd>
     </dl>
 
-	<form method="post" action="<?= BASE_URI; ?>/actions/update">
-		<fieldset><legend><?= $this->_('action'); ?></legend>
-			<input name="action_id" type="hidden" value="<?= $id; ?>" />
-			<?php
+    <form method="post" action="<?= BASE_URI; ?>/actions/update">
+        <fieldset><legend><?= $this->_('action'); ?></legend>
+            <input name="action_id" type="hidden" value="<?= $id; ?>" />
+            <?php
                 $h = $this->template->getHelper('field');
 
                 if ($this->action->getType() === 'system') {
@@ -54,9 +54,9 @@ foreach ($fields as $f) {
                     'required' => true
                 ]);
 
-			?>
-		</fieldset>
-		<fieldset><legend><?= $this->_('responseTemplate'); ?></legend>
+            ?>
+        </fieldset>
+        <fieldset><legend><?= $this->_('responseTemplate'); ?></legend>
             <?php
                 echo $h->field([
                     'name'  => 'replyEmail',
@@ -73,12 +73,12 @@ foreach ($fields as $f) {
                     'type'  => 'textarea'
                 ]);
             ?>
-		</fieldset>
-		<fieldset>
+        </fieldset>
+        <fieldset>
             <?php
                 $helper = $this->template->getHelper('saveAndCancelButtons');
                 echo $helper->saveAndCancelButtons(BASE_URI.'/actions');
             ?>
-		</fieldset>
-	</form>
+        </fieldset>
+    </form>
 </section>

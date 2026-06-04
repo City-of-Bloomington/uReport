@@ -6,8 +6,8 @@
 ?>
 <div id="location_map"></div>
 <script type="text/javascript">
-	var DEFAULT_LATITUDE  = <?= DEFAULT_LATITUDE; ?>,
-		DEFAULT_LONGITUDE = <?= DEFAULT_LONGITUDE; ?>;
+    var DEFAULT_LATITUDE  = <?= DEFAULT_LATITUDE; ?>,
+        DEFAULT_LONGITUDE = <?= DEFAULT_LONGITUDE; ?>;
 </script>
 <button type="button" id="useThisLocation" class="submit"><?= $this->_('use_location'); ?></button>
 <?php

@@ -9,6 +9,6 @@ use Application\PdoRepository;
 
 class BookmarkTable extends PdoRepository
 {
-	public const TABLENAME = 'bookmarks';
-	public const CLASSNAME = __namespace__.'\Bookmark';
+    public const TABLENAME = 'bookmarks';
+    public const CLASSNAME = __namespace__.'\Bookmark';
 }

@@ -7,12 +7,12 @@
  */
 $departments = array();
 foreach ($this->departmentList as $department) {
-	$departments[] = array(
-		'id'              => $department->getId(),
-		'name'            => $department->getName(),
-		'defaultPerson_id'=> $department->getDefaultPerson_id(),
-		'categories'      => $department->getCategories(),
-		'actions'         => $department->getActions()
-	);
+    $departments[] = array(
+        'id'              => $department->getId(),
+        'name'            => $department->getName(),
+        'defaultPerson_id'=> $department->getDefaultPerson_id(),
+        'categories'      => $department->getCategories(),
+        'actions'         => $department->getActions()
+    );
 }
 echo json_encode($departments);

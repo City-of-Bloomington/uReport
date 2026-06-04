@@ -10,11 +10,11 @@ use Application\PdoRepository;
 
 class CategoryGroupTable extends PdoRepository
 {
-	public const TABLENAME = 'categoryGroups';
-	public const CLASSNAME = __namespace__.'\CategoryGroup';
+    public const TABLENAME = 'categoryGroups';
+    public const CLASSNAME = __namespace__.'\CategoryGroup';
 
-	public function find(array $fields=[], ?string $order='ordering, name', ?int $itemsPerPage=null, ?int $currentPage=null): array
-	{
+    public function find(array $fields=[], ?string $order='ordering, name', ?int $itemsPerPage=null, ?int $currentPage=null): array
+    {
         return  parent::find($fields, $order, $itemsPerPage, $currentPage);
-	}
+    }
 }

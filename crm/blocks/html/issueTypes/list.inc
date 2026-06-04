@@ -11,16 +11,16 @@ use Application\Models\Person;
         <h1><?= $this->template->title; ?></h1>
         <div class="tools">
         <?php
-			if (Person::isAllowed('issueTypes','update')) {
-				$helper = $this->template->getHelper('buttonLink');
-				echo $helper->buttonLink(
-					BASE_URI.'/issueTypes/update',
-					$this->_('add'),
-					'add'
-				);
-			}
-		?>
-		</div>
+            if (Person::isAllowed('issueTypes','update')) {
+                $helper = $this->template->getHelper('buttonLink');
+                echo $helper->buttonLink(
+                    BASE_URI.'/issueTypes/update',
+                    $this->_('add'),
+                    'add'
+                );
+            }
+        ?>
+        </div>
     </header>
     <?php
         if (count($this->issueTypes)) {

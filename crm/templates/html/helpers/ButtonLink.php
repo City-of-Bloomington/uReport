@@ -11,11 +11,11 @@ use Application\Helper;
 
 class ButtonLink extends Helper
 {
-	const SIZE_BUTTON = 'button';
-	const SIZE_ICON   = 'icon';
+    const SIZE_BUTTON = 'button';
+    const SIZE_ICON   = 'icon';
 
-	public function buttonLink($url, $label, $type=null, $size=self::SIZE_BUTTON, array $additionalAttributes=[])
-	{
+    public function buttonLink($url, $label, $type=null, $size=self::SIZE_BUTTON, array $additionalAttributes=[])
+    {
         if (!$size) { $size = self::SIZE_BUTTON; }
 
         $attrs = '';
@@ -23,5 +23,5 @@ class ButtonLink extends Helper
             $attrs.= " $key=\"$value\"";
         }
         return "<a href=\"$url\" class=\"$size $type\" $attrs>$label</a>";
-	}
+    }
 }

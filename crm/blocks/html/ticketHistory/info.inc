@@ -13,7 +13,7 @@ use Application\Models\Person;
     <header>
         <h1><?= $this->_('history'); ?></h1>
     </header>
-	<?php
+    <?php
         $canViewPeople = Person::isAllowed('people', 'view');
 
         foreach ($this->history as $event) {
@@ -44,5 +44,5 @@ use Application\Models\Person;
             }
             echo "</article>";
         }
-	?>
+    ?>
 </section>

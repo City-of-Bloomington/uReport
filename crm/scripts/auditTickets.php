@@ -12,11 +12,11 @@ $sql   = 'select * from tickets';
 $db    = Database::getConnection();
 $query = $db->query($sql);
 while ($row = $query->fetch()) {
-	$ticket = new Ticket($row);
-	try {
-		$ticket->validate();
-	}
-	catch (Exception $e) {
-		echo "Ticket {$ticket->getId()} fails validation: {$e->getMessage()}\n";
-	}
+    $ticket = new Ticket($row);
+    try {
+        $ticket->validate();
+    }
+    catch (Exception $e) {
+        echo "Ticket {$ticket->getId()} fails validation: {$e->getMessage()}\n";
+    }
 }

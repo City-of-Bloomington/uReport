@@ -15,12 +15,12 @@ $currentDepartment = $this->currentDepartment ? $this->currentDepartment : new D
 // Otherwise, use the default person from the currently chosen department
 $assignedPerson = $this->ticket->getAssignedPerson();
 if (!$assignedPerson) {
-	$assignedPerson = $_SESSION['USER'];
+    $assignedPerson = $_SESSION['USER'];
 }
 
 $selected_id = $assignedPerson->getDepartment_id() == $currentDepartment->getId()
-	? $assignedPerson->getId()
-	: $currentDepartment->getDefaultPerson_id();
+    ? $assignedPerson->getId()
+    : $currentDepartment->getDefaultPerson_id();
 
 
 $helper  = $this->template->getHelper('field');

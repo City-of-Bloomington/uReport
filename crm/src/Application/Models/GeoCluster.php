@@ -11,148 +11,148 @@ use Application\Database;
 class GeoCluster extends ActiveRecord
 {
     public const CLUSTER_UNIT_SIZE = 0.0001; // 10 Meters (very roughly)
-	public const TABLENAME         = 'geoclusters';
+    public const TABLENAME         = 'geoclusters';
 
-	/**
-	 * Populates the object with data
-	 *
-	 * Passing in an associative array of data will populate this object without
-	 * hitting the database.
-	 *
-	 * Passing in a scalar will load the data from the database.
-	 * This will load all fields in the table as properties of this class.
-	 * You may want to replace this with, or add your own extra, custom loading
-	 */
-	public function __construct($id=null)
-	{
-		if ($id) {
-			if (is_array($id)) {
+    /**
+     * Populates the object with data
+     *
+     * Passing in an associative array of data will populate this object without
+     * hitting the database.
+     *
+     * Passing in a scalar will load the data from the database.
+     * This will load all fields in the table as properties of this class.
+     * You may want to replace this with, or add your own extra, custom loading
+     */
+    public function __construct($id=null)
+    {
+        if ($id) {
+            if (is_array($id)) {
                 $this->exchangeArray($id);
-			}
-			else {
-				$sql = "select id, level, ST_X(center) as longitude, ST_Y(center) as latitude
-						from geoclusters where id=?";
-				$result = Database::query($sql, [$id]);
+            }
+            else {
+                $sql = "select id, level, ST_X(center) as longitude, ST_Y(center) as latitude
+                        from geoclusters where id=?";
+                $result = Database::query($sql, [$id]);
                 if (count($result)) {
                     $this->exchangeArray($result[0]);
                 }
-				else {
-					throw new \Exception('geoclusters/unknown');
-				}
-			}
-		}
-		else {
-			// This is where the code goes to generate a new, empty instance.
-			// Set any default values for properties that need it here
-		}
-	}
+                else {
+                    throw new \Exception('geoclusters/unknown');
+                }
+            }
+        }
+        else {
+            // This is where the code goes to generate a new, empty instance.
+            // Set any default values for properties that need it here
+        }
+    }
 
-	public function validate()
-	{
-		if (!isset($this->data['level'])
-			|| !$this->getLatitude() || !$this->getLongitude()) {
-			throw new \Exception('missingRequiredFields');
-		}
-	}
+    public function validate()
+    {
+        if (!isset($this->data['level'])
+            || !$this->getLatitude() || !$this->getLongitude()) {
+            throw new \Exception('missingRequiredFields');
+        }
+    }
 
-	public function save()
-	{
-		 // We cannot use the default ActiveRecord save,
-		 // because the center point must use mysql spatial functions
-		$this->validate();
-		$point = ($this->getLatitude() && $this->getLongitude())
+    public function save()
+    {
+         // We cannot use the default ActiveRecord save,
+         // because the center point must use mysql spatial functions
+        $this->validate();
+        $point = ($this->getLatitude() && $this->getLongitude())
                     ? "ST_PointFromText('Point({$this->getLatitude()} {$this->getLongitude()})', 0)"
                     : 'null';
 
-		if ($this->getId()) {
-			$sql = "update geoclusters set level=?, center=$point where id=?";
-			Database::execute($sql, [$this->getLevel(), $this->getId()]);
-		}
-		else {
-			$pdo = Database::getConnection();
-			$sql = "insert geoclusters set level=?, center=$point";
-			$ins = $pdo->prepare($sql);
-			$ins->execute([$this->getLevel()]);
+        if ($this->getId()) {
+            $sql = "update geoclusters set level=?, center=$point where id=?";
+            Database::execute($sql, [$this->getLevel(), $this->getId()]);
+        }
+        else {
+            $pdo = Database::getConnection();
+            $sql = "insert geoclusters set level=?, center=$point";
+            $ins = $pdo->prepare($sql);
+            $ins->execute([$this->getLevel()]);
             $this->data['id'] = $pdo->lastInsertId();
-		}
-	}
+        }
+    }
 
-	//----------------------------------------------------------------
-	// Generic Getters & Setters
-	//----------------------------------------------------------------
-	public function getLevel()     { return   (int)parent::get('level'    ); }
-	public function getLatitude()  { return (float)parent::get('latitude' ); }
-	public function getLongitude() { return (float)parent::get('longitude'); }
+    //----------------------------------------------------------------
+    // Generic Getters & Setters
+    //----------------------------------------------------------------
+    public function getLevel()     { return   (int)parent::get('level'    ); }
+    public function getLatitude()  { return (float)parent::get('latitude' ); }
+    public function getLongitude() { return (float)parent::get('longitude'); }
 
-	public function setLatitude ($f) { $this->data['latitude' ] = $f ? (float)$f : null; }
-	public function setLongitude($f) { $this->data['longitude'] = $f ? (float)$f : null; }
-	public function setLevel    ($i) { $this->data['level'    ] = $i ?   (int)$i : null; }
+    public function setLatitude ($f) { $this->data['latitude' ] = $f ? (float)$f : null; }
+    public function setLongitude($f) { $this->data['longitude'] = $f ? (float)$f : null; }
+    public function setLevel    ($i) { $this->data['level'    ] = $i ?   (int)$i : null; }
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	public static function updateTicketClusters(Ticket $ticket)
-	{
-		if ($ticket->getId()) {
-			$db = Database::getConnection();
-			Database::query('delete from ticket_geodata where ticket_id=?', [$ticket->getId()]);
+    //----------------------------------------------------------------
+    // Custom Functions
+    //----------------------------------------------------------------
+    public static function updateTicketClusters(Ticket $ticket)
+    {
+        if ($ticket->getId()) {
+            $db = Database::getConnection();
+            Database::query('delete from ticket_geodata where ticket_id=?', [$ticket->getId()]);
 
-			if ($ticket->getLatitude() && $ticket->getLongitude()) {
-				$c = ['ticket_id=:ticket_id'];
-				$data['ticket_id'] = $ticket->getId();
+            if ($ticket->getLatitude() && $ticket->getLongitude()) {
+                $c = ['ticket_id=:ticket_id'];
+                $data['ticket_id'] = $ticket->getId();
 
-				for ($i=0; $i<=6; $i++) {
-					$k   = "cluster_id_$i";
-					$c[] = "$k=:$k";
-					$data[$k] = self::assignClusterIdForLevel($ticket, $i);
-				}
-				$set = 'set '.implode(',', $c);
-				Database::execute("insert into ticket_geodata $set", $data);
-			}
-		}
-	}
+                for ($i=0; $i<=6; $i++) {
+                    $k   = "cluster_id_$i";
+                    $c[] = "$k=:$k";
+                    $data[$k] = self::assignClusterIdForLevel($ticket, $i);
+                }
+                $set = 'set '.implode(',', $c);
+                Database::execute("insert into ticket_geodata $set", $data);
+            }
+        }
+    }
 
-	/**
-	 * Finds or creates a cluster for the given Ticket
-	 *
-	 * If there is already a cluster within a certain distance,
-	 * this will return the ID for that cluster.
-	 * If it doesn't find a nearby cluster, this will add a
-	 * new cluster to the database and return the new ID.
-	 *
-	 * @param Ticket $ticket
-	 * @param int $level
-	 */
-	public static function assignClusterIdForLevel(Ticket $ticket, $level)
-	{
-		$lat   = $ticket->getLatitude ();
-		$lng   = $ticket->getLongitude();
-		$point = "ST_PointFromText('Point($lat $lng)', 0)";
-		$dist  = self::CLUSTER_UNIT_SIZE * pow(2, $level * 2);
+    /**
+     * Finds or creates a cluster for the given Ticket
+     *
+     * If there is already a cluster within a certain distance,
+     * this will return the ID for that cluster.
+     * If it doesn't find a nearby cluster, this will add a
+     * new cluster to the database and return the new ID.
+     *
+     * @param Ticket $ticket
+     * @param int $level
+     */
+    public static function assignClusterIdForLevel(Ticket $ticket, $level)
+    {
+        $lat   = $ticket->getLatitude ();
+        $lng   = $ticket->getLongitude();
+        $point = "ST_PointFromText('Point($lat $lng)', 0)";
+        $dist  = self::CLUSTER_UNIT_SIZE * pow(2, $level * 2);
 
-		$minX = $lng - $dist;
-		$maxX = $lng + $dist;
-		$minY = $lat - $dist;
-		$maxY = $lat + $dist;
-		$bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 0)";
+        $minX = $lng - $dist;
+        $maxX = $lng + $dist;
+        $minY = $lat - $dist;
+        $maxY = $lat + $dist;
+        $bbox = "ST_GeomFromText('Linestring($minX $minY,$maxX $maxY)', 0)";
 
-		$sql  = <<<END
-		SELECT id, ST_Distance(center, $point) as distance
-		FROM geoclusters
-		WHERE level=? and ST_Distance(center, $point) < $dist
-		order by distance limit 1
-		END;
-		$result = Database::query($sql, [$level]);
-		if (count($result)) {
-			return $result[0]['id'];
-		}
-		else {
-			$cluster = new GeoCluster();
-			$cluster->setLevel($level);
-			$cluster->setLatitude ($lat);
-			$cluster->setLongitude($lng);
-			$cluster->save();
-			return $cluster->getId();
-		}
-	}
+        $sql  = <<<END
+        SELECT id, ST_Distance(center, $point) as distance
+        FROM geoclusters
+        WHERE level=? and ST_Distance(center, $point) < $dist
+        order by distance limit 1
+        END;
+        $result = Database::query($sql, [$level]);
+        if (count($result)) {
+            return $result[0]['id'];
+        }
+        else {
+            $cluster = new GeoCluster();
+            $cluster->setLevel($level);
+            $cluster->setLatitude ($lat);
+            $cluster->setLongitude($lng);
+            $cluster->save();
+            return $cluster->getId();
+        }
+    }
 }

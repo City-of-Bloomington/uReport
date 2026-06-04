@@ -45,11 +45,11 @@ use Application\Url;
         ?>
         </div>
     </header>
-	<form method="get" action="<?= BASE_URI; ?>/tickets">
-		<fieldset>
+    <form method="get" action="<?= BASE_URI; ?>/tickets">
+        <fieldset>
             <input name="query" value="<?= !empty($_GET['query']) ? self::escape($_GET['query']) : ''; ?>" />
-		</fieldset>
-		<fieldset id="advanced-search">
+        </fieldset>
+        <fieldset id="advanced-search">
             <?php
                 $currentUrl = new Url(Url::current_url(BASE_HOST));
                 if ($currentUrl->page) { unset($currentUrl->page); }
@@ -159,58 +159,58 @@ use Application\Url;
                 ";
 
 
-				/**
-				 * Any additional filters that are not being displayed as facets
-				 */
-// 				foreach ($currentFilters as $key=>$f) {
+                /**
+                 * Any additional filters that are not being displayed as facets
+                 */
+//                 foreach ($currentFilters as $key=>$f) {
 //                     $label = $key === 'bbox' ? $this->_($key) : $this->_($key).':'.$f['value'];
 //                     echo $helper->buttonLink($f['deleteUrl'], $label, 'delete');
-// 				}
-				echo $html;
-			?>
-		</fieldset>
+//                 }
+                echo $html;
+            ?>
+        </fieldset>
 
 
-		<details>
+        <details>
             <summary><?= $this->_('display_fields'); ?></summary>
             <fieldset id="display_fields">
-			<?php
-				// Default columns to display
-				if (!isset($_GET['fields'])) {
-					$_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
-				}
+            <?php
+                // Default columns to display
+                if (!isset($_GET['fields'])) {
+                    $_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
+                }
 
-				$values  = [];
-				$options = [];
-				foreach (TicketTable::getDisplayableFields() as $field=>$name) {
-					if ($field != 'id') {
+                $values  = [];
+                $options = [];
+                foreach (TicketTable::getDisplayableFields() as $field=>$name) {
+                    if ($field != 'id') {
                         $options[] = ['value'=>$field, 'label'=>$this->_($field)];
                         if (isset($_GET['fields'][$field])) { $values[] = $field; }
-					}
-				}
-				echo $fieldHelper->field([
+                    }
+                }
+                echo $fieldHelper->field([
                     'name'    => 'fields',
                     'type'    => 'checkbox',
                     'value'   => $values,
                     'options' => $options
-				]);
-			?>
+                ]);
+            ?>
             </fieldset>
         </details>
 
 
-		<fieldset>
-			<?php
-				$h = $this->template->getHelper('renderInputs');
-				echo $h->renderInputs($_GET, null, ['query', 'fields']);
-			?>
-			<button type="submit" class="search"><?= $this->_('search'); ?></button>
-		</fieldset>
-	</form>
-	<?php
+        <fieldset>
+            <?php
+                $h = $this->template->getHelper('renderInputs');
+                echo $h->renderInputs($_GET, null, ['query', 'fields']);
+            ?>
+            <button type="submit" class="search"><?= $this->_('search'); ?></button>
+        </fieldset>
+    </form>
+    <?php
         if (Person::isAllowed('bookmarks', 'update')) {
             $bookmarkForm = new Block('bookmarks/updateForm.inc', ['type'=>'search']);
             echo $bookmarkForm->render('html', $this->template);
         }
-	?>
+    ?>
 </section>

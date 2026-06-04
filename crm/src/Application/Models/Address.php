@@ -10,45 +10,45 @@ use Application\Database;
 
 class Address extends ActiveRecord
 {
-	public const TABLENAME = 'peopleAddresses';
-	protected $person;
-	public static $LABELS = array('Home', 'Business', 'Rental');
+    public const TABLENAME = 'peopleAddresses';
+    protected $person;
+    public static $LABELS = array('Home', 'Business', 'Rental');
 
-	/**
-	 * Populates the object with data
-	 *
-	 * Passing in an associative array of data will populate this object without
-	 * hitting the database.
-	 *
-	 * Passing in a scalar will load the data from the database.
-	 * This will load all fields in the table as properties of this class.
-	 * You may want to replace this with, or add your own extra, custom loading
-	 *
-	 * @param int|array $id
-	 */
-	public function __construct($id=null)
-	{
-		if ($id) {
-			if (is_array($id)) {
-				$this->exchangeArray($id);
-			}
-			else {
-				$sql = 'select * from peopleAddresses where id=?';
-				$result = Database::query($sql, [$id]);
-				if (count($result)) {
-					$this->exchangeArray($result[0]);
-				}
-				else {
-					throw new \Exception('addresses/unknown');
-				}
-			}
-		}
-		else {
-			// This is where the code goes to generate a new, empty instance.
-			// Set any default values for properties that need it here
-			$this->setLabel('Home');
-		}
-	}
+    /**
+     * Populates the object with data
+     *
+     * Passing in an associative array of data will populate this object without
+     * hitting the database.
+     *
+     * Passing in a scalar will load the data from the database.
+     * This will load all fields in the table as properties of this class.
+     * You may want to replace this with, or add your own extra, custom loading
+     *
+     * @param int|array $id
+     */
+    public function __construct($id=null)
+    {
+        if ($id) {
+            if (is_array($id)) {
+                $this->exchangeArray($id);
+            }
+            else {
+                $sql = 'select * from peopleAddresses where id=?';
+                $result = Database::query($sql, [$id]);
+                if (count($result)) {
+                    $this->exchangeArray($result[0]);
+                }
+                else {
+                    throw new \Exception('addresses/unknown');
+                }
+            }
+        }
+        else {
+            // This is where the code goes to generate a new, empty instance.
+            // Set any default values for properties that need it here
+            $this->setLabel('Home');
+        }
+    }
 
     /**
      * When repopulating with fresh data, make sure to set default
@@ -64,45 +64,45 @@ class Address extends ActiveRecord
     }
 
 
-	public function validate()
-	{
-		if (!$this->getAddress() || !$this->getPerson_id()) {
+    public function validate()
+    {
+        if (!$this->getAddress() || !$this->getPerson_id()) {
             throw new \Exception('missingRequiredFields');
         }
-		if (!$this->getLabel()) { $this->setLabel('Home'); }
-	}
+        if (!$this->getLabel()) { $this->setLabel('Home'); }
+    }
 
-	public function save()   { parent::save();   }
-	public function delete() { parent::delete(); }
+    public function save()   { parent::save();   }
+    public function delete() { parent::delete(); }
 
-	//----------------------------------------------------------------
-	// Generic Getters & Setters
-	//----------------------------------------------------------------
-	public function getAddress() { return parent::get('address'); }
-	public function getCity()    { return parent::get('city');    }
-	public function getState()   { return parent::get('state');   }
-	public function getZip()     { return parent::get('zip');     }
-	public function getLabel()   { return parent::get('label');   }
+    //----------------------------------------------------------------
+    // Generic Getters & Setters
+    //----------------------------------------------------------------
+    public function getAddress() { return parent::get('address'); }
+    public function getCity()    { return parent::get('city');    }
+    public function getState()   { return parent::get('state');   }
+    public function getZip()     { return parent::get('zip');     }
+    public function getLabel()   { return parent::get('label');   }
 
-	public function setAddress($s) { parent::set('address', $s); }
-	public function setCity   ($s) { parent::set('city',    $s); }
-	public function setState  ($s) { parent::set('state',   $s); }
-	public function setZip    ($s) { parent::set('zip',     $s); }
-	public function setLabel  ($s) { parent::set('label',   $s); }
+    public function setAddress($s) { parent::set('address', $s); }
+    public function setCity   ($s) { parent::set('city',    $s); }
+    public function setState  ($s) { parent::set('state',   $s); }
+    public function setZip    ($s) { parent::set('zip',     $s); }
+    public function setLabel  ($s) { parent::set('label',   $s); }
 
-	public function getPerson_id() { return parent::get('person_id'); }
-	public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
-	public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
-	public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
+    public function getPerson_id() { return parent::get('person_id'); }
+    public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
+    public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
+    public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
 
-	public function handleUpdate($post)
-	{
-		$fields = ['label', 'address', 'city', 'state', 'zip', 'person_id'];
-		foreach ($fields as $key) {
-			if (isset($post[$key])) {
-				$set = 'set'.ucfirst($key);
-				$this->$set($post[$key]);
-			}
-		}
-	}
+    public function handleUpdate($post)
+    {
+        $fields = ['label', 'address', 'city', 'state', 'zip', 'person_id'];
+        foreach ($fields as $key) {
+            if (isset($post[$key])) {
+                $set = 'set'.ucfirst($key);
+                $this->$set($post[$key]);
+            }
+        }
+    }
 }

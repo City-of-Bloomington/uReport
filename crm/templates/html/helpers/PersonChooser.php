@@ -29,33 +29,33 @@ use Application\View;
 
 class PersonChooser extends Helper
 {
-	/**
-	 * @param string $fieldname The name of the person field
-	 * @param Person $person The currently selected Person object
-	 * @return string
-	 */
-	public function personChooser($fieldname, ?Person $person=null)
-	{
-		$this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser-'.VERSION.'.js');
+    /**
+     * @param string $fieldname The name of the person field
+     * @param Person $person The currently selected Person object
+     * @return string
+     */
+    public function personChooser($fieldname, ?Person $person=null)
+    {
+        $this->template->addToAsset('scripts', BASE_URI.'/js/people/personChooser-'.VERSION.'.js');
 
-		$id   = '';
-		$name = '';
-		if ($person) {
-			$id   = $person->getId();
-			$name = View::escape($person->getFullname());
-		}
-		$return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
-		$personChooser = BASE_URI.'/people?return_url='.$return_url;
+        $id   = '';
+        $name = '';
+        if ($person) {
+            $id   = $person->getId();
+            $name = View::escape($person->getFullname());
+        }
+        $return_url = new Url($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+        $personChooser = BASE_URI.'/people?return_url='.$return_url;
 
-		$html = "
-		<input type=\"hidden\" name=\"{$fieldname}_id\" id=\"{$fieldname}_id\" value=\"$id\" />
-		<span id=\"{$fieldname}-name\">$name</span>
-		<a class=\"user button\"
-			href=\"$personChooser\"
-			onclick=\"PERSON_CHOOSER.open(event, '$fieldname');\">
-			Change Person
-		</a>
-		";
-		return $html;
-	}
+        $html = "
+        <input type=\"hidden\" name=\"{$fieldname}_id\" id=\"{$fieldname}_id\" value=\"$id\" />
+        <span id=\"{$fieldname}-name\">$name</span>
+        <a class=\"user button\"
+            href=\"$personChooser\"
+            onclick=\"PERSON_CHOOSER.open(event, '$fieldname');\">
+            Change Person
+        </a>
+        ";
+        return $html;
+    }
 }

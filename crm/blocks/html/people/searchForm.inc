@@ -10,40 +10,40 @@ $title = $this->title ? self::escape($this->title) : $this->_('find_person');
     <header>
         <h1><?= $title; ?></h1>
     </header>
-	<form method="get" action="<?= BASE_URI; ?>/people">
-		<fieldset>
-			<?php
+    <form method="get" action="<?= BASE_URI; ?>/people">
+        <fieldset>
+            <?php
                 $fields = ['firstname', 'lastname', 'email', 'organization'];
-				$helper = $this->template->getHelper('field');
+                $helper = $this->template->getHelper('field');
 
-				// Preserve any extra parameters passed in
-				foreach ($_REQUEST as $key=>$value) {
-					if (!in_array($key, $fields)) {
-						$key   = self::escape($key);
-						$value = self::escape($value);
-						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
-					}
-				}
+                // Preserve any extra parameters passed in
+                foreach ($_REQUEST as $key=>$value) {
+                    if (!in_array($key, $fields)) {
+                        $key   = self::escape($key);
+                        $value = self::escape($value);
+                        echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+                    }
+                }
 
-				foreach ($fields as $f) {
-					echo $helper->field([
+                foreach ($fields as $f) {
+                    echo $helper->field([
                         'name'  => $f,
                         'id'    => $f,
                         'label' => $this->_($f),
                         'value' => isset($_GET[$f]) ? self::escape($_GET[$f]) : ''
-					]);
-				}
-			?>
-			<button type="submit" class="search"><?= $this->_('search'); ?></button>
-			<?php
-				if (isset($_REQUEST['callback'])) {
-					echo "
-					<button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
-						{$this->_('cancel')}
-					</button>
-					";
-				}
-			?>
-		</fieldset>
-	</form>
+                    ]);
+                }
+            ?>
+            <button type="submit" class="search"><?= $this->_('search'); ?></button>
+            <?php
+                if (isset($_REQUEST['callback'])) {
+                    echo "
+                    <button type=\"button\" class=\"cancel\" onclick=\"self.close();\">
+                        {$this->_('cancel')}
+                    </button>
+                    ";
+                }
+            ?>
+        </fieldset>
+    </form>
 </section>

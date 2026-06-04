@@ -9,11 +9,11 @@ use Application\PdoRepository;
 
 class ContactMethodTable extends PdoRepository
 {
-	public const TABLENAME = 'contactMethods';
-	public const CLASSNAME = __namespace__.'\ContactMethod';
+    public const TABLENAME = 'contactMethods';
+    public const CLASSNAME = __namespace__.'\ContactMethod';
 
     public function find(array $fields=[], ?string $order='name', ?int $itemsPerPage=null, ?int $currentPage=null): array
-	{
-		return parent::find($fields, $order, $itemsPerPage, $currentPage);
-	}
+    {
+        return parent::find($fields, $order, $itemsPerPage, $currentPage);
+    }
 }

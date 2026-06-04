@@ -14,12 +14,12 @@ $ticket_id = $this->ticket->getId();
 
 $status = $this->ticket->getStatus();
 if ($this->ticket->getSubstatus()) {
-	$status.= ': '.$this->ticket->getSubstatus();
+    $status.= ': '.$this->ticket->getSubstatus();
 }
 
 $category = $this->ticket->getCategory_id()
-	? self::escape($this->ticket->getCategory()->getName())
-	: '';
+    ? self::escape($this->ticket->getCategory()->getName())
+    : '';
 $issueType = $this->ticket->getIssueType_id()
     ? self::escape($this->ticket->getIssueType()->getName())
     : '';
@@ -89,5 +89,5 @@ if ($cf) {
     ?>
 </section>
 <script type="text/javascript">
-	CRM.ticket_id = <?= $ticket_id; ?>;
+    CRM.ticket_id = <?= $ticket_id; ?>;
 </script>

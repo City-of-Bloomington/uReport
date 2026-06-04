@@ -10,9 +10,9 @@ $description = self::escape($this->substatus->getDescription());
 <section>
 <header><h1><?= $this->template->title  ; ?></h1></header>
 <form method="post" action="<?= BASE_URL; ?>/substatus/update">
-	<fieldset><legend><?= $this->_('substatus'); ?></legend>
-		<input name="substatus_id" type="hidden" value="<?= "{$this->substatus->getId()}"; ?>" />
-		<?php
+    <fieldset><legend><?= $this->_('substatus'); ?></legend>
+        <input name="substatus_id" type="hidden" value="<?= "{$this->substatus->getId()}"; ?>" />
+        <?php
             $helper = $this->template->getHelper('field');
             echo $helper->field([
                 'name'     => 'status',
@@ -34,9 +34,9 @@ $description = self::escape($this->substatus->getDescription());
                 'value'   => [$this->substatus->isDefault() ? 1 : 0],
                 'options' => [['value'=>1, 'label'=>$this->_('default')]]
             ]);
-			$helper = $this->template->getHelper('saveAndCancelButtons');
-			echo $helper->saveAndCancelButtons(BASE_URI.'/substatus');
-		?>
-	</fieldset>
+            $helper = $this->template->getHelper('saveAndCancelButtons');
+            echo $helper->saveAndCancelButtons(BASE_URI.'/substatus');
+        ?>
+    </fieldset>
 </form>
 </section>

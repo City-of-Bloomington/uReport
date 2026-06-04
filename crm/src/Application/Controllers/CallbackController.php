@@ -8,8 +8,8 @@ use Application\Controller;
 
 class CallbackController extends Controller
 {
-	public function index()
-	{
-		$this->template->setFilename('callback');
-	}
+    public function index()
+    {
+        $this->template->setFilename('callback');
+    }
 }

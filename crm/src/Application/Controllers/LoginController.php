@@ -14,15 +14,15 @@ use Application\Template;
 
 class LoginController extends Controller
 {
-	private $return_url;
+    private $return_url;
 
-	public function __construct(Template $template)
-	{
-		parent::__construct($template);
-		$this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
-	}
+    public function __construct(Template $template)
+    {
+        parent::__construct($template);
+        $this->return_url = !empty($_REQUEST['return_url']) ? $_REQUEST['return_url'] : BASE_URL;
+    }
 
-	public function oidc()
+    public function oidc()
     {
         // If they don't have OpenID configured, send them onto the application's
         // internal authentication system
@@ -58,26 +58,26 @@ class LoginController extends Controller
         exit();
     }
 
-	public function index()
-	{
-		header('Location: '.BASE_URL.'/login/oidc');
-		exit();
-	}
+    public function index()
+    {
+        header('Location: '.BASE_URL.'/login/oidc');
+        exit();
+    }
 
-	public function logout()
-	{
-		session_destroy();
-		header('Location: '.$this->return_url);
-		exit();
-	}
+    public function logout()
+    {
+        session_destroy();
+        header('Location: '.$this->return_url);
+        exit();
+    }
 
-	/**
-	 * Checks for a user account with the given username.
-	 * If they exist it will register the user into the session and redirect.
-	 * Writes to $_SESSION[errorMessages] if there's a problem.
-	 */
-	private function registerUser(string $username)
-	{
+    /**
+     * Checks for a user account with the given username.
+     * If they exist it will register the user into the session and redirect.
+     * Writes to $_SESSION[errorMessages] if there's a problem.
+     */
+    private function registerUser(string $username)
+    {
         try {
             $user = Person::findByUsername($username);
             if ($user) {
@@ -90,5 +90,5 @@ class LoginController extends Controller
         catch (\Exception $e) {
             $_SESSION['errorMessages'][] = $e;
         }
-	}
+    }
 }

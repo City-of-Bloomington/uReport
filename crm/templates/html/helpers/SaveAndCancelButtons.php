@@ -9,23 +9,23 @@ use Application\Template;
 
 class SaveAndCancelButtons
 {
-	private $template;
+    private $template;
 
-	public function __construct(Template $template)
-	{
-		$this->template = $template;
-	}
+    public function __construct(Template $template)
+    {
+        $this->template = $template;
+    }
 
-	public function saveAndCancelButtons($cancelURL)
-	{
-		$helper = $this->template->getHelper('buttonLink');
+    public function saveAndCancelButtons($cancelURL)
+    {
+        $helper = $this->template->getHelper('buttonLink');
 
-		$buttons = "<button type=\"submit\" class=\"save\">{$this->template->translate('save')}</button>\n";
-		$buttons.=$helper->buttonLink(
-			$cancelURL,
-			$this->template->translate('cancel'),
-			'cancel'
-		);
-		return $buttons;
-	}
+        $buttons = "<button type=\"submit\" class=\"save\">{$this->template->translate('save')}</button>\n";
+        $buttons.=$helper->buttonLink(
+            $cancelURL,
+            $this->template->translate('cancel'),
+            'cancel'
+        );
+        return $buttons;
+    }
 }

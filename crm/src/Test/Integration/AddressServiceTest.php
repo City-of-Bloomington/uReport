@@ -17,17 +17,17 @@ class AddressServiceTest extends TestCase
         $this->assertEquals(2, count($result));
     }
 
-	public function testGetLocationData()
-	{
+    public function testGetLocationData()
+    {
         $result = call_user_func(ADDRESS_SERVICE.'::getLocationData', '410 W 4th');
-		$this->assertEquals('410 W 4th ST',  $result['location'],                'Failed loading location results from Master Address');
-		$this->assertEquals('Bloomington',   $result['township'],                'Failed reading township from Master Address');
-		$this->assertEquals('Prospect Hill', $result['neighborhoodAssociation'], 'Failed reading Neighorhood Association from Master Address');
-	}
+        $this->assertEquals('410 W 4th ST',  $result['location'],                'Failed loading location results from Master Address');
+        $this->assertEquals('Bloomington',   $result['township'],                'Failed reading township from Master Address');
+        $this->assertEquals('Prospect Hill', $result['neighborhoodAssociation'], 'Failed reading Neighorhood Association from Master Address');
+    }
 
-	public function testSearchAddresses()
-	{
+    public function testSearchAddresses()
+    {
         $result = call_user_func(ADDRESS_SERVICE.'::searchAddresses', 'Somersbe Pl');
-		$this->assertEquals(20, count($result));
-	}
+        $this->assertEquals(20, count($result));
+    }
 }

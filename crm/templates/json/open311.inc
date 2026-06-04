@@ -11,9 +11,9 @@
 header('Content-type: application/json; charset=utf-8');
 $this->_include('partials/errorMessages.inc');
 if (isset($_GET['callback'])) {
-	echo $_GET['callback'].'(';
+    echo $_GET['callback'].'(';
 }
 echo $this->includeBlocks();
 if (isset($_GET['callback'])) {
-	echo ');';
+    echo ');';
 };

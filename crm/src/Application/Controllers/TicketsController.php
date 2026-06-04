@@ -23,25 +23,25 @@ use Application\Url;
 
 class TicketsController extends Controller
 {
-	private function loadTicket(int $id): Ticket
-	{
-		try {
-			$ticket = new Ticket($id);
-			return $ticket;
-		}
-		catch (\Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-			header('Location: '.BASE_URL.'/tickets');
-			exit();
-		}
-	}
+    private function loadTicket(int $id): Ticket
+    {
+        try {
+            $ticket = new Ticket($id);
+            return $ticket;
+        }
+        catch (\Exception $e) {
+            $_SESSION['errorMessages'][] = $e;
+            header('Location: '.BASE_URL.'/tickets');
+            exit();
+        }
+    }
 
 
-	/**
-	 * Provides ticket searching
-	 */
-	public function index()
-	{
+    /**
+     * Provides ticket searching
+     */
+    public function index()
+    {
         foreach ($_GET as $k=>$v) {
             if (substr($k, -3) == '_id') {
                 if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
@@ -74,9 +74,9 @@ class TicketsController extends Controller
             $this->template->setFilename('search');
         }
 
-		$search = new Search();
-		$query  = self::prepareSolrQuery();
-		try {
+        $search = new Search();
+        $query  = self::prepareSolrQuery();
+        try {
             $result = $search->query($query, !$paginated);
         }
         catch (\Exception $e) {
@@ -85,31 +85,31 @@ class TicketsController extends Controller
             $this->template->blocks = [ new Block('400.inc') ];
             return;
         }
-		$params = [
+        $params = [
             'result'     => $result,
             'paginated'  => $paginated,
             'fields'     => $fields
-		];
+        ];
         $this->template->blocks = [
             new Block($format == 'map' ? 'tickets/searchResultsMap.inc' : 'tickets/searchResults.inc', $params)
         ];
         if ($this->template->outputFormat == 'html') {
             $this->template->blocks['panel-one'] = [ new Block('tickets/searchForm.inc', $params) ];
         }
-	}
+    }
 
-	/**
-	 * Read HTML form parameters and prepare the Solr query
-	 *
-	 * Dates need to be converted to PHP DateTimes.
-	 * The HTML form parameters match the names of the Solr query parameters,
-	 * so for the most part we can just use the GET array as-is.
-	 */
-	private static function prepareSolrQuery(): array
-	{
-		$query  = $_GET;
+    /**
+     * Read HTML form parameters and prepare the Solr query
+     *
+     * Dates need to be converted to PHP DateTimes.
+     * The HTML form parameters match the names of the Solr query parameters,
+     * so for the most part we can just use the GET array as-is.
+     */
+    private static function prepareSolrQuery(): array
+    {
+        $query  = $_GET;
 
-		if (isset     ($query['enteredDate']['start'])) {
+        if (isset     ($query['enteredDate']['start'])) {
             if (!empty($query['enteredDate']['start'])) {
                 try {  $query['enteredDate']['start'] = new \DateTime($query['enteredDate']['start'].' 00:00:00'); }
                 catch (\Exception $e) {
@@ -117,8 +117,8 @@ class TicketsController extends Controller
                 }
             }
             else {  unset($query['enteredDate']['start']); }
-		}
-		if (isset     ($query['enteredDate']['end'])) {
+        }
+        if (isset     ($query['enteredDate']['end'])) {
             if (!empty($query['enteredDate']['end'])) {
                 try {  $query['enteredDate']['end'] = new \DateTime($query['enteredDate']['end'].' 11:59:59'); }
                 catch (\Exception $e) {
@@ -126,12 +126,12 @@ class TicketsController extends Controller
                 }
             }
             else {  unset($query['enteredDate']['end']); }
-		}
-		return $query;
-	}
+        }
+        return $query;
+    }
 
-	public function view()
-	{
+    public function view()
+    {
         if (!empty($_GET['ticket_id'])) {
             try { $ticket = $this->loadTicket((int)$_GET['ticket_id']); }
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
@@ -163,111 +163,111 @@ class TicketsController extends Controller
         else {
             $this->template->blocks[] = new Block('404.inc');
         }
-	}
+    }
 
-	/**
-	 * Displays thumbnails for all image media attached to tickets
-	 */
-	public function thumbnails()
-	{
-		$ticket = $this->loadTicket((int)$_GET['ticket_id']);
-		if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
-			$this->template->blocks[] = new Block('tickets/thumbnails.inc', ['ticket'=>$ticket]);
-		}
-		else {
-			$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
-		}
-	}
+    /**
+     * Displays thumbnails for all image media attached to tickets
+     */
+    public function thumbnails()
+    {
+        $ticket = $this->loadTicket((int)$_GET['ticket_id']);
+        if ($ticket->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
+            $this->template->blocks[] = new Block('tickets/thumbnails.inc', ['ticket'=>$ticket]);
+        }
+        else {
+            $_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
+        }
+    }
 
-	public function add()
-	{
-		$ticket = new Ticket();
+    public function add()
+    {
+        $ticket = new Ticket();
 
-		// Categories are required before starting the process
-		// Handle any Category choice passed in
-		if (!empty($_REQUEST['category_id'])) {
-			$category = new Category($_REQUEST['category_id']);
-			if ($category->allowsPosting($_SESSION['USER'])) {
-				$ticket->setCategory($category);
-			}
-			else {
-				$_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
-				header('Location: '.BASE_URL);
-				exit();
-			}
-		}
+        // Categories are required before starting the process
+        // Handle any Category choice passed in
+        if (!empty($_REQUEST['category_id'])) {
+            $category = new Category($_REQUEST['category_id']);
+            if ($category->allowsPosting($_SESSION['USER'])) {
+                $ticket->setCategory($category);
+            }
+            else {
+                $_SESSION['errorMessages'][] = new \Exception('noAccessAllowed');
+                header('Location: '.BASE_URL);
+                exit();
+            }
+        }
 
-		// Handle any Location choice passed in
-		if (!empty($_GET['location'])) {
-			$ticket->setLocation($_GET['location']);
-			if (defined('ADDRESS_SERVICE')) {
+        // Handle any Location choice passed in
+        if (!empty($_GET['location'])) {
+            $ticket->setLocation($_GET['location']);
+            if (defined('ADDRESS_SERVICE')) {
                 $ticket->setAddressServiceData(call_user_func(ADDRESS_SERVICE.'::getLocationData', $ticket->getLocation()));
             }
-		}
+        }
 
-		// Handle any Person choice passed in
-		if (!empty($_REQUEST['reportedByPerson_id'])) {
-			$ticket->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
-		}
+        // Handle any Person choice passed in
+        if (!empty($_REQUEST['reportedByPerson_id'])) {
+            $ticket->setReportedByPerson_id($_REQUEST['reportedByPerson_id']);
+        }
 
-		// Handle any Department choice passed in
-		// Choosing a department here will cause the assignment form
-		// to pre-select that department's defaultPerson
-		$currentDepartment = null;
-		if (isset($_GET['department_id'])) {
-			try {
-				$currentDepartment = new Department($_GET['department_id']);
-			}
-			catch (\Exception $e) {
-				// Ignore any bad departments passed in
-			}
-		}
-		// If they haven't chosen a department, start by assigning
-		// the ticket to the current User, and use the current user's department
-		if (!isset($currentDepartment)) {
-			$ticket->setAssignedPerson($_SESSION['USER']);
+        // Handle any Department choice passed in
+        // Choosing a department here will cause the assignment form
+        // to pre-select that department's defaultPerson
+        $currentDepartment = null;
+        if (isset($_GET['department_id'])) {
+            try {
+                $currentDepartment = new Department($_GET['department_id']);
+            }
+            catch (\Exception $e) {
+                // Ignore any bad departments passed in
+            }
+        }
+        // If they haven't chosen a department, start by assigning
+        // the ticket to the current User, and use the current user's department
+        if (!isset($currentDepartment)) {
+            $ticket->setAssignedPerson($_SESSION['USER']);
 
-			if ($_SESSION['USER']->getDepartment()) {
-				$currentDepartment = $_SESSION['USER']->getDepartment();
-			}
-		}
+            if ($_SESSION['USER']->getDepartment()) {
+                $currentDepartment = $_SESSION['USER']->getDepartment();
+            }
+        }
 
-		// Process the ticket form when it's posted
-		if (isset($_POST['category_id'])) {
-			try {
-				$ticket->handleAdd($_POST); // Calls save as needed - no need to save() again
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+        // Process the ticket form when it's posted
+        if (isset($_POST['category_id'])) {
+            try {
+                $ticket->handleAdd($_POST); // Calls save as needed - no need to save() again
+                $this->redirectToTicketView($ticket);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		$this->template->title = $this->template->_('add_ticket');
-		if (!empty($_REQUEST['partial']) && $_REQUEST['partial'] === 'tickets/customFieldsForm.inc'
+        $this->template->title = $this->template->_('add_ticket');
+        if (!empty($_REQUEST['partial']) && $_REQUEST['partial'] === 'tickets/customFieldsForm.inc'
             && $ticket->getCategory_id()) {
 
             $this->template->blocks[] = new Block('tickets/customFieldsForm.inc', [
                 'ticket'   => $ticket,
                 'category' => $ticket->getCategory()
             ]);
-		}
-		else {
+        }
+        else {
             // Display all the forms
             $this->template->blocks[] = new Block('tickets/addTicketForm.inc', [
                 'ticket'           => $ticket,
                 'currentDepartment'=> $currentDepartment
             ]);
         }
-	}
+    }
 
-	public function update()
-	{
+    public function update()
+    {
         $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
-		if (isset($_REQUEST['person_id'])) {
-			$ticket->setReportedByPerson_id($_REQUEST['person_id']);
-		}
+        if (isset($_REQUEST['person_id'])) {
+            $ticket->setReportedByPerson_id($_REQUEST['person_id']);
+        }
 
         if (isset($_POST['ticket_id'])) {
             try {
@@ -278,84 +278,84 @@ class TicketsController extends Controller
             catch (\Exception $e) { $_SESSION['errorMessages'][] = $e; }
         }
 
-		$this->template->title = $this->template->_('update_ticket');
-		$this->template->blocks[] = new Block('tickets/updateIssueForm.inc', ['ticket'=>$ticket]);
-		$this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
-	}
+        $this->template->title = $this->template->_('update_ticket');
+        $this->template->blocks[] = new Block('tickets/updateIssueForm.inc', ['ticket'=>$ticket]);
+        $this->template->blocks[] = new Block('tickets/ticketInfo.inc',      ['ticket'=>$ticket,'disableButtons'=>true]);
+    }
 
-	public function delete()
-	{
-		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
+    public function delete()
+    {
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
-		if (isset($_REQUEST['confirm'])) {
-			$ticket->delete();
-			header('Location: '.BASE_URL.'/tickets');
-			exit();
-		}
+        if (isset($_REQUEST['confirm'])) {
+            $ticket->delete();
+            header('Location: '.BASE_URL.'/tickets');
+            exit();
+        }
 
-		$this->template->blocks[] = new Block(
-			'confirmForm.inc',
-			['title'=>'Confirm Delete', 'return_url'=>$ticket->getURL()]
-		);
-		$this->template->blocks[] = new Block(
-			'tickets/ticketInfo.inc',
-			['ticket'=>$ticket, 'disableButtons'=>true]
-		);
-	}
+        $this->template->blocks[] = new Block(
+            'confirmForm.inc',
+            ['title'=>'Confirm Delete', 'return_url'=>$ticket->getURL()]
+        );
+        $this->template->blocks[] = new Block(
+            'tickets/ticketInfo.inc',
+            ['ticket'=>$ticket, 'disableButtons'=>true]
+        );
+    }
 
-	public function assign()
-	{
-		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
+    public function assign()
+    {
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
-		// Handle any Department choice passed in
-		if (isset($_GET['department_id'])) {
-			try { $currentDepartment = new Department($_GET['department_id']); }
-			catch (\Exception $e) { }
-		}
-		if (!isset($currentDepartment)) {
+        // Handle any Department choice passed in
+        if (isset($_GET['department_id'])) {
+            try { $currentDepartment = new Department($_GET['department_id']); }
+            catch (\Exception $e) { }
+        }
+        if (!isset($currentDepartment)) {
             $person = $ticket->getAssignedPerson();
             if ($person) {
                 $d = $person->getDepartment();
                 if ($d) { $currentDepartment = $d; }
             }
-		}
-		if (!isset($currentDepartment)) {
+        }
+        if (!isset($currentDepartment)) {
             $currentDepartment = $_SESSION['USER']->getDepartment();
-		}
+        }
 
-		// Handle any stuff the user posts
-		if (isset($_REQUEST['assignedPerson_id'])) {
-			try {
-				$ticket->setAssignedPerson_id($_REQUEST['assignedPerson_id']);
-				$ticket->save();
+        // Handle any stuff the user posts
+        if (isset($_REQUEST['assignedPerson_id'])) {
+            try {
+                $ticket->setAssignedPerson_id($_REQUEST['assignedPerson_id']);
+                $ticket->save();
 
-				// add a record to ticket history
-				$history = new TicketHistory();
-				$history->setTicket($ticket);
-				$history->setAction(new Action(Action::ASSIGNED));
-				$history->setEnteredByPerson($_SESSION['USER']);
-				$history->setActionPerson($ticket->getAssignedPerson());
-				$history->setNotes($_REQUEST['notes']);
-				$history->save();
+                // add a record to ticket history
+                $history = new TicketHistory();
+                $history->setTicket($ticket);
+                $history->setAction(new Action(Action::ASSIGNED));
+                $history->setEnteredByPerson($_SESSION['USER']);
+                $history->setActionPerson($ticket->getAssignedPerson());
+                $history->setNotes($_REQUEST['notes']);
+                $history->save();
 
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+                $this->redirectToTicketView($ticket);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		// Display the view
-		$this->template->setFilename('tickets');
-		$this->template->title = $this->template->_('assign_ticket');
-		$this->template->blocks[] = new Block(
-			'tickets/assignTicketForm.inc',
-			['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
-		);
-	}
+        // Display the view
+        $this->template->setFilename('tickets');
+        $this->template->title = $this->template->_('assign_ticket');
+        $this->template->blocks[] = new Block(
+            'tickets/assignTicketForm.inc',
+            ['ticket'=>$ticket, 'currentDepartment'=>$currentDepartment]
+        );
+    }
 
-	public function recordAction()
-	{
+    public function recordAction()
+    {
         if (!empty($_REQUEST['ticket_id'])) {
             $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
         }
@@ -389,112 +389,112 @@ class TicketsController extends Controller
             $this->template->title = $action->getName();
             $this->template->blocks[] = new Block('tickets/actionForm.inc', ['ticketHistory'=>$history]);
         }
-		else {
-			header('Location: '.BASE_URL.'/tickets');
-			exit();
-		}
-	}
+        else {
+            header('Location: '.BASE_URL.'/tickets');
+            exit();
+        }
+    }
 
-	private function changeStatus(string $status)
-	{
-		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
-		$ticket->setStatus($status);
-		$_POST['status'] = $ticket->getStatus();
+    private function changeStatus(string $status)
+    {
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
+        $ticket->setStatus($status);
+        $_POST['status'] = $ticket->getStatus();
 
-		if (isset($_POST['ticket_id'])) {
-			try {
+        if (isset($_POST['ticket_id'])) {
+            try {
                 // This function will call $ticket->save() internally
                 $ticket->handleChangeStatus($_POST);
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+                $this->redirectToTicketView($ticket);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		// Display the view
-		$this->template->setFilename('tickets');
-		$this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
-	}
-	public function close() { $this->template->title = $this->template->_('ticket_close'); $this->changeStatus('closed'); }
-	public function open () { $this->template->title = $this->template->_('ticket_open' ); $this->changeStatus('open'  ); }
+        // Display the view
+        $this->template->setFilename('tickets');
+        $this->template->blocks[] = new Block('tickets/changeStatusForm.inc', ['ticket'=>$ticket]);
+    }
+    public function close() { $this->template->title = $this->template->_('ticket_close'); $this->changeStatus('closed'); }
+    public function open () { $this->template->title = $this->template->_('ticket_open' ); $this->changeStatus('open'  ); }
 
-	public function changeLocation()
-	{
-		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
-
-		// Once the user has chosen a location, they'll pass it in here
-		if (!empty($_REQUEST['location'])) {
-			try {
-                $ticket->handleChangeLocation($_REQUEST);
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		$_REQUEST['return_url'] = BASE_URL.'/tickets/changeLocation?ticket_id='.$ticket->getId();
-		$this->template->title  = $this->template->_('change_location');
-		$this->template->blocks = [
-            new Block('tickets/changeLocationForm.inc', ['ticket' => $ticket])
-		];
-	}
-
-	public function changeCategory()
-	{
-		$ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
-
-		if (isset($_REQUEST['category_id'])) {
-			try {
-                $ticket->handleChangeCategory($_REQUEST);
-				$this->redirectToTicketView($ticket);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-
-		// Display the view
-		$this->template->setFilename('tickets');
-		$this->template->title = $this->template->_('change_category');
-		$this->template->title = 'Change Category';
-		$this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
-	}
-
-	/**
-	 * Saves a response log entry
-	 *
-	 * This creates a history entry that a staff person communicated
-	 * with someone.  Thist action does not actually send any messages.
-	 * This is only the logging action.
-	 */
-	public function respond()
-	{
+    public function changeLocation()
+    {
         $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
-		if (isset($_POST['contactMethod_id'])) {
-			try {
+        // Once the user has chosen a location, they'll pass it in here
+        if (!empty($_REQUEST['location'])) {
+            try {
+                $ticket->handleChangeLocation($_REQUEST);
+                $this->redirectToTicketView($ticket);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
+
+        $_REQUEST['return_url'] = BASE_URL.'/tickets/changeLocation?ticket_id='.$ticket->getId();
+        $this->template->title  = $this->template->_('change_location');
+        $this->template->blocks = [
+            new Block('tickets/changeLocationForm.inc', ['ticket' => $ticket])
+        ];
+    }
+
+    public function changeCategory()
+    {
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
+
+        if (isset($_REQUEST['category_id'])) {
+            try {
+                $ticket->handleChangeCategory($_REQUEST);
+                $this->redirectToTicketView($ticket);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
+
+        // Display the view
+        $this->template->setFilename('tickets');
+        $this->template->title = $this->template->_('change_category');
+        $this->template->title = 'Change Category';
+        $this->template->blocks[] = new Block('tickets/changeCategoryForm.inc', ['ticket'=>$ticket]);
+    }
+
+    /**
+     * Saves a response log entry
+     *
+     * This creates a history entry that a staff person communicated
+     * with someone.  Thist action does not actually send any messages.
+     * This is only the logging action.
+     */
+    public function respond()
+    {
+        $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
+
+        if (isset($_POST['contactMethod_id'])) {
+            try {
                 $ticket->handleResponse($_POST);
-				header('Location: '.$ticket->getURL());
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+                header('Location: '.$ticket->getURL());
+                exit();
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		// Display the view
-		$this->template->setFilename('tickets');
-		$this->template->title = $this->template->_('add_response');
-		$this->template->blocks[] = new Block('tickets/responseForm.inc', ['ticket'=>$ticket]);
-	}
+        // Display the view
+        $this->template->setFilename('tickets');
+        $this->template->title = $this->template->_('add_response');
+        $this->template->blocks[] = new Block('tickets/responseForm.inc', ['ticket'=>$ticket]);
+    }
 
-	/**
-	 * Sends an email to the chosen person
-	 */
-	public function message()
-	{
+    /**
+     * Sends an email to the chosen person
+     */
+    public function message()
+    {
         $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);
 
         if (defined('NOTIFICATIONS_ENABLED') && NOTIFICATIONS_ENABLED) {
@@ -529,49 +529,49 @@ class TicketsController extends Controller
         else {
             $_SESSION['errorMessages'][] = new \Exception('notificationsDisabled');
         }
-	}
+    }
 
-	/**
-	 * Copies all data from one ticket to another, then deletes the empty ticket
-	 */
-	public function merge()
-	{
-		// Load the two tickets
-		$parent = $this->loadTicket((int)$_REQUEST['parent_ticket_id']);
-		$child  = $this->loadTicket((int)$_REQUEST[ 'child_ticket_id']);
+    /**
+     * Copies all data from one ticket to another, then deletes the empty ticket
+     */
+    public function merge()
+    {
+        // Load the two tickets
+        $parent = $this->loadTicket((int)$_REQUEST['parent_ticket_id']);
+        $child  = $this->loadTicket((int)$_REQUEST[ 'child_ticket_id']);
 
-		if (!empty($_POST['confirm'])) {
+        if (!empty($_POST['confirm'])) {
             try {
                 $parent->mergeFrom($child);
                 $this->redirectToTicketView($parent);
             }
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		// Display the form
-		$this->template->setFilename('merging');
-		$this->template->title = $this->template->_('merge_tickets');
-		$this->template->blocks[] = new Block('tickets/mergeForm.inc', ['parent'=>$parent, 'child'=>$child]);
+        // Display the form
+        $this->template->setFilename('merging');
+        $this->template->title = $this->template->_('merge_tickets');
+        $this->template->blocks[] = new Block('tickets/mergeForm.inc', ['parent'=>$parent, 'child'=>$child]);
 
-		$this->template->blocks['left' ][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$parent,'disableButtons'=>true]);
-		$this->template->blocks['left' ][] = new Block('ticketHistory/info.inc', ['history'=>$parent->getHistory(), 'disableComments'=>true]);
+        $this->template->blocks['left' ][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$parent,'disableButtons'=>true]);
+        $this->template->blocks['left' ][] = new Block('ticketHistory/info.inc', ['history'=>$parent->getHistory(), 'disableComments'=>true]);
 
-		$this->template->blocks['right'][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$child, 'disableButtons'=>true]);
-		$this->template->blocks['right'][] = new Block('ticketHistory/info.inc', ['history'=>$child->getHistory(), 'disableComments'=>true]);
-	}
+        $this->template->blocks['right'][] = new Block('tickets/ticketInfo.inc', ['ticket' =>$child, 'disableButtons'=>true]);
+        $this->template->blocks['right'][] = new Block('ticketHistory/info.inc', ['history'=>$child->getHistory(), 'disableComments'=>true]);
+    }
 
-	private function redirectToTicketView(Ticket $ticket)
-	{
-		if (isset($_REQUEST['callback'])) {
-			$return_url = new Url(BASE_URL.'/callback');
-			$return_url->__set('callback', $_REQUEST['callback']);
-		}
-		else {
-			$return_url = $ticket->getURL();
-		}
-		header("Location: $return_url");
-		exit();
-	}
+    private function redirectToTicketView(Ticket $ticket)
+    {
+        if (isset($_REQUEST['callback'])) {
+            $return_url = new Url(BASE_URL.'/callback');
+            $return_url->__set('callback', $_REQUEST['callback']);
+        }
+        else {
+            $return_url = $ticket->getURL();
+        }
+        header("Location: $return_url");
+        exit();
+    }
 }

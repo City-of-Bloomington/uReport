@@ -43,8 +43,8 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
         $tickets = $list['rows'];
     }
 
-	echo "
-	<section id=\"locationInfo\">
+    echo "
+    <section id=\"locationInfo\">
         $header
     ";
         if ($this->ticket || $tickets) {
@@ -86,6 +86,6 @@ if ($this->location || ($this->ticket->getLatitude() && $this->ticket->getLongit
         }
         */
     echo "
-	</section>
-	";
+    </section>
+    ";
 }

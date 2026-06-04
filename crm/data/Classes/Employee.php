@@ -26,43 +26,43 @@ use Domain\Auth\ExternalIdentity;
 
 class Employee implements IdentityInterface
 {
-	private static $connection;
-	private $config;
+    private static $connection;
+    private $config;
 
 
-	public function __construct(array $config)
-	{
+    public function __construct(array $config)
+    {
         $this->config = $config;
-	}
+    }
 
-	public function identify(string $username): ?ExternalIdentity
-	{
-		$this->openConnection();
+    public function identify(string $username): ?ExternalIdentity
+    {
+        $this->openConnection();
 
-		$result = ldap_search(
-			self::$connection,
-			$this->config['base_dn'],
-			$this->config['username_attribute']."=$username",
-			array_values(self::$fieldmap)
-		);
-		if (ldap_count_entries(self::$connection,$result)) {
-			$entries = ldap_get_entries(self::$connection, $result);
-			$entry   = $entries[0];
-			$id      = [];
-			foreach (self::$fieldmap as $personField => $ldapField) {
+        $result = ldap_search(
+            self::$connection,
+            $this->config['base_dn'],
+            $this->config['username_attribute']."=$username",
+            array_values(self::$fieldmap)
+        );
+        if (ldap_count_entries(self::$connection,$result)) {
+            $entries = ldap_get_entries(self::$connection, $result);
+            $entry   = $entries[0];
+            $id      = [];
+            foreach (self::$fieldmap as $personField => $ldapField) {
                 if (isset($entry[$ldapField])) {
                     $id[$personField] = $entry[$ldapField][0];
                 }
-			}
-			return new ExternalIdentity($id);
-		}
-		return null;
-	}
+            }
+            return new ExternalIdentity($id);
+        }
+        return null;
+    }
 
-	/**
-	 * Maps uReport Person fields to LDAP fields
-	 */
-	public static $fieldmap = [
+    /**
+     * Maps uReport Person fields to LDAP fields
+     */
+    public static $fieldmap = [
         // Person   => Ldap
         'username'  => 'samaccountname',
         'firstname' => 'givenname',
@@ -73,35 +73,35 @@ class Employee implements IdentityInterface
         'city'      => 'l',
         'state'     => 'st',
         'zip'       => 'postalcode'
-	];
+    ];
 
-	/**
-	 * Creates the connection to the LDAP server
-	 */
-	private function openConnection()
-	{
-		if (!self::$connection) {
-			if (self::$connection = ldap_connect($this->config['server'])) {
-				ldap_set_option(self::$connection, LDAP_OPT_PROTOCOL_VERSION,3);
-				ldap_set_option(self::$connection, LDAP_OPT_REFERRALS, 0);
-				if (!empty($this->config['admin_binding'])) {
-					if (!ldap_bind(
-							self::$connection,
-							$this->config['admin_binding'],
-							$this->config['admin_pass']
-						)) {
-						throw new \Exception(ldap_error(self::$connection));
-					}
-				}
-				else {
-					if (!ldap_bind(self::$connection)) {
-						throw new \Exception(ldap_error(self::$connection));
-					}
-				}
-			}
-			else {
-				throw new \Exception(ldap_error(self::$connection));
-			}
-		}
-	}
+    /**
+     * Creates the connection to the LDAP server
+     */
+    private function openConnection()
+    {
+        if (!self::$connection) {
+            if (self::$connection = ldap_connect($this->config['server'])) {
+                ldap_set_option(self::$connection, LDAP_OPT_PROTOCOL_VERSION,3);
+                ldap_set_option(self::$connection, LDAP_OPT_REFERRALS, 0);
+                if (!empty($this->config['admin_binding'])) {
+                    if (!ldap_bind(
+                            self::$connection,
+                            $this->config['admin_binding'],
+                            $this->config['admin_pass']
+                        )) {
+                        throw new \Exception(ldap_error(self::$connection));
+                    }
+                }
+                else {
+                    if (!ldap_bind(self::$connection)) {
+                        throw new \Exception(ldap_error(self::$connection));
+                    }
+                }
+            }
+            else {
+                throw new \Exception(ldap_error(self::$connection));
+            }
+        }
+    }
 }

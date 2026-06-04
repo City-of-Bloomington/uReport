@@ -24,22 +24,22 @@ $action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
     <header>
         <h1><?= $title ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URI; ?>/tickets/<?= $action; ?>">
-		<fieldset>
-			<input name="ticket_id" type="hidden" value="<?= $id; ?>" />
-			<?php
-				// Preserve any extra parameters passed in
-				foreach ($_REQUEST as $key=>$value) {
-					if ($key!='ticket_id' && $key!='return_url') {
-						$key   = self::escape($key);
-						$value = self::escape($value);
-						echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
-					}
-				}
+    <form method="post" action="<?= BASE_URI; ?>/tickets/<?= $action; ?>">
+        <fieldset>
+            <input name="ticket_id" type="hidden" value="<?= $id; ?>" />
+            <?php
+                // Preserve any extra parameters passed in
+                foreach ($_REQUEST as $key=>$value) {
+                    if ($key!='ticket_id' && $key!='return_url') {
+                        $key   = self::escape($key);
+                        $value = self::escape($value);
+                        echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
+                    }
+                }
 
-				echo $this->_('tickets/missingClosingComment', 'errors');
+                echo $this->_('tickets/missingClosingComment', 'errors');
 
-				$helper = $this->template->getHelper('field');
+                $helper = $this->template->getHelper('field');
 
                 $options = [];
                 // Open tickets do not require substatus
@@ -101,11 +101,11 @@ $action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
                     'type'     => 'textarea'
                 ]);
 
-				$this->_include('tickets/partials/submitAndCancelButtons.inc');
-			?>
-		</fieldset>
-	</form>
-	<?php
+                $this->_include('tickets/partials/submitAndCancelButtons.inc');
+            ?>
+        </fieldset>
+    </form>
+    <?php
         $contacts = [];
         foreach ($people as $person) {
             if (!array_key_exists($person->getId(), $recipients)) {
@@ -126,5 +126,5 @@ $action = $this->ticket->getStatus() === 'open' ? 'open' : 'close';
             </div>
             ";
         }
-	?>
+    ?>
 </section>

@@ -54,7 +54,7 @@ $ACL->allow(null, 'solr', 'index');
 // Staff permission
 // Staff has full permission to these controllers
 $ACL->allow('Staff', [
-	'account','people','media','reports','bookmarks'
+    'account','people','media','reports','bookmarks'
 ]);
 
 // Staff has limited permission to these controllers
@@ -62,8 +62,8 @@ $ACL->allow('Staff','departments',['index', 'view', 'choose']);
 $ACL->allow('Staff','categories', ['index', 'view']);
 $ACL->allow('Staff','substatus',  ['index']);
 $ACL->allow('Staff','tickets', [
-	'add', 'update', 'merge', 'delete','assign', 'print', 'respond', 'message',
-	'changeCategory', 'changeLocation', 'open', 'close', 'recordAction'
+    'add', 'update', 'merge', 'delete','assign', 'print', 'respond', 'message',
+    'changeCategory', 'changeLocation', 'open', 'close', 'recordAction'
 ]);
 
 

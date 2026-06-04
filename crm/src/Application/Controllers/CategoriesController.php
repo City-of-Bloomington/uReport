@@ -15,89 +15,89 @@ use Application\Url;
 
 class CategoriesController extends Controller
 {
-	public function index()
-	{
-		$table = new CategoryTable;
-		$list  = $table->find();
+    public function index()
+    {
+        $table = new CategoryTable;
+        $list  = $table->find();
 
-		$this->template->title = $this->template->_(['category', 'categories', $list['total']]);
-		$this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$list['rows']]);
-	}
+        $this->template->title = $this->template->_(['category', 'categories', $list['total']]);
+        $this->template->blocks[] = new Block('categories/categoryList.inc', ['categoryList'=>$list['rows']]);
+    }
 
-	public function view()
-	{
-		if (!empty($_REQUEST['category_id'])) {
-			try {
-				$category = new Category($_REQUEST['category_id']);
-				$this->template->title = $category->getName();
-				$this->template->blocks[] = new Block('categories/info.inc', ['category'=>$category]);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
-	}
+    public function view()
+    {
+        if (!empty($_REQUEST['category_id'])) {
+            try {
+                $category = new Category($_REQUEST['category_id']);
+                $this->template->title = $category->getName();
+                $this->template->blocks[] = new Block('categories/info.inc', ['category'=>$category]);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
+    }
 
-	public function update()
-	{
-		// Load the $category for editing
-		if (isset($_REQUEST['category_id']) && $_REQUEST['category_id']) {
-			try {
-				$category = new Category($_REQUEST['category_id']);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.BASE_URL.'/categories');
-				exit();
-			}
-		}
-		else {
-			$category = new Category();
-		}
+    public function update()
+    {
+        // Load the $category for editing
+        if (isset($_REQUEST['category_id']) && $_REQUEST['category_id']) {
+            try {
+                $category = new Category($_REQUEST['category_id']);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+                header('Location: '.BASE_URL.'/categories');
+                exit();
+            }
+        }
+        else {
+            $category = new Category();
+        }
 
 
-		if (isset($_POST['name'])) {
-			try {
-				$category->handleUpdate($_POST);
-				$category->save();
-				header('Location: '.BASE_URL.'/categories');
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+        if (isset($_POST['name'])) {
+            try {
+                $category->handleUpdate($_POST);
+                $category->save();
+                header('Location: '.BASE_URL.'/categories');
+                exit();
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		$this->template->title = $category->getId()
+        $this->template->title = $category->getId()
             ? $this->template->_('category_edit')
             : $this->template->_('category_add');
-		$this->template->blocks[] = new Block('categories/updateCategoryForm.inc', ['category'=>$category]);
-	}
+        $this->template->blocks[] = new Block('categories/updateCategoryForm.inc', ['category'=>$category]);
+    }
 
-	/**
-	 * A form for updating the SLA times for all categories at once
-	 */
-	public function sla()
-	{
-		if (isset($_POST['categories'])) {
-			try {
-				foreach ($_POST['categories'] as $id=>$post) {
-					$category = new Category($id);
-					$category->setSlaDays($post['slaDays']);
-					$category->save();
-				}
-				header('Location: '.BASE_URL.'/categories');
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+    /**
+     * A form for updating the SLA times for all categories at once
+     */
+    public function sla()
+    {
+        if (isset($_POST['categories'])) {
+            try {
+                foreach ($_POST['categories'] as $id=>$post) {
+                    $category = new Category($id);
+                    $category->setSlaDays($post['slaDays']);
+                    $category->save();
+                }
+                header('Location: '.BASE_URL.'/categories');
+                exit();
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		$t = new CategoryTable();
-		$r = $t->find();
+        $t = new CategoryTable();
+        $r = $t->find();
 
-		$this->template->title = $this->template->_('service_level_agreement');
-		$this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$r['rows']]);
-	}
+        $this->template->title = $this->template->_('service_level_agreement');
+        $this->template->blocks[] = new Block('categories/slaForm.inc', ['categoryList'=>$r['rows']]);
+    }
 }

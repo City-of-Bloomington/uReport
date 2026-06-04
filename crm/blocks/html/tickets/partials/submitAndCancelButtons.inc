@@ -5,8 +5,8 @@
  * @param Ticket $this->ticket
  */
 $onclick = isset($_REQUEST['callback'])
-	? 'onclick="self.close();"'
-	: '';
+    ? 'onclick="self.close();"'
+    : '';
 echo "
 <button type=\"submit\" class=\"submit\">{$this->_('submit')}</button>
 <a class=\"cancel button\" href=\"{$this->ticket->getURL()}\" $onclick>{$this->_('cancel')}</a>

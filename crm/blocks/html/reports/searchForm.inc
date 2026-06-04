@@ -18,46 +18,46 @@ $helper = $this->template->getHelper('field');
     <header>
         <h1><?= $this->_('search'); ?></h1>
     </header>
-	<form method="get">
-		<fieldset>
-			<details>
-				<summary><?= $this->_('category'); ?></summary>
-				<?php
-					$table   = new CategoryTable();
-					$list    = $table->find();
+    <form method="get">
+        <fieldset>
+            <details>
+                <summary><?= $this->_('category'); ?></summary>
+                <?php
+                    $table   = new CategoryTable();
+                    $list    = $table->find();
                     $options = [];
                     $values  = (!empty($_GET['categories']) && is_array($_GET['categories']))
                                 ? array_keys($_GET['categories'])
                                 : [];
-					foreach ($list['rows'] as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
-					echo $helper->field([
+                    foreach ($list['rows'] as $c) { $options[] = ['value'=>$c->getId(), 'label'=>self::escape($c->getName())]; }
+                    echo $helper->field([
                         'name'    => 'categories',
                         'type'    => 'checkbox',
                         'value'   => $values,
                         'options' => $options
-					]);
+                    ]);
 
-				?>
-			</details>
-			<details>
+                ?>
+            </details>
+            <details>
                 <summary><?= $this->_('department'); ?></summary>
-				<?php
-					$table   = new DepartmentTable();
-					$list    = $table->find();
-					$options = [];
-					$values  = (!empty($_GET['departments']) && is_array($_GET['departments']))
+                <?php
+                    $table   = new DepartmentTable();
+                    $list    = $table->find();
+                    $options = [];
+                    $values  = (!empty($_GET['departments']) && is_array($_GET['departments']))
                                 ? array_keys($_GET['departments'])
                                 : [];
-					foreach ($list['rows'] as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
-					echo $helper->field([
+                    foreach ($list['rows'] as $d) { $options[] = ['value'=>$d->getId(), 'label'=>self::escape($d->getName())]; }
+                    echo $helper->field([
                         'name'    => 'departments',
                         'type'    => 'checkbox',
                         'value'   => $values,
                         'options' => $options
-					]);
-				?>
-			</details>
-			<details>
+                    ]);
+                ?>
+            </details>
+            <details>
                 <summary><?= $this->_('enteredDate'); ?></summary>
                 <?php
                     foreach (['start', 'end'] as $d) {
@@ -75,7 +75,7 @@ $helper = $this->template->getHelper('field');
                     }
                 ?>
             </details>
-			<details>
+            <details>
                 <summary><?= $this->_('postingPermissionLevel'); ?></summary>
                 <?php
                     $value   = !empty($_GET['postingPermissionLevel'])
@@ -92,7 +92,7 @@ $helper = $this->template->getHelper('field');
                         'options' => $options
                     ]);
                 ?>
-			</details>
+            </details>
             <details>
                 <summary><?= $this->_('client'); ?></summary>
                 <?php
@@ -138,7 +138,7 @@ $helper = $this->template->getHelper('field');
                 $ignore[] = 'enteredDate';
                 echo $helper->renderInputs($_GET, null, $ignore);
             ?>
-			<button type="submit" class="submit"><?= $this->template->_('submit'); ?></button>
-		</fieldset>
-	</form>
+            <button type="submit" class="submit"><?= $this->template->_('submit'); ?></button>
+        </fieldset>
+    </form>
 </section>

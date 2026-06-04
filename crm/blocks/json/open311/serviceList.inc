@@ -6,16 +6,16 @@
  */
 $services = [];
 foreach ($this->categoryList as $category) {
-	$s = [
-		'service_code' => "{$category->getId()}",
-		'service_name' => $category->getName(),
-		'type'         => 'realtime',
-		'description'  => $category->getDescription(),
-		'metadata'     => $category->getCustomFields() ? true : false,
-		'keywords'     => "",
-		'group'        => "{$category->getCategoryGroup()}"
-	];
-	if ($category->isFeatured()) { $s['featured'] = 1; }
-	$services[] = $s;
+    $s = [
+        'service_code' => "{$category->getId()}",
+        'service_name' => $category->getName(),
+        'type'         => 'realtime',
+        'description'  => $category->getDescription(),
+        'metadata'     => $category->getCustomFields() ? true : false,
+        'keywords'     => "",
+        'group'        => "{$category->getCategoryGroup()}"
+    ];
+    if ($category->isFeatured()) { $s['featured'] = 1; }
+    $services[] = $s;
 }
 echo json_encode($services);

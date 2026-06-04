@@ -18,55 +18,55 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Search
 {
-	public $solr;
-	public static $defaultSort = ['enteredDate'=>'desc'];
+    public $solr;
+    public static $defaultSort = ['enteredDate'=>'desc'];
 
-	const ITEMS_PER_PAGE  = 10;
-	const MAX_RAW_RESULTS = 10000;
-	const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
+    const ITEMS_PER_PAGE  = 10;
+    const MAX_RAW_RESULTS = 10000;
+    const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
 
-	const SLA_OVERDUE_FUNCTION = '{!frange l=0}if(exists(slaDays),sub(if(exists(closedDate),ms(closedDate,enteredDate),ms(NOW,enteredDate)),product(slaDays,86400000)),-1)';
+    const SLA_OVERDUE_FUNCTION = '{!frange l=0}if(exists(slaDays),sub(if(exists(closedDate),ms(closedDate,enteredDate),ms(NOW,enteredDate)),product(slaDays,86400000)),-1)';
 
-	/**
-	 * The full list of fields that can be searched on
-	 *
-	 * Security Notice:
-	 * Make sure to keep this initial list limited to "safe" fields.
-	 * That is: fields that are okay to display to any anonymous person.
-	 * Use __construct() to add fields that should be kept hidden
-	 * unless a person is authorized to see them.
-	 */
-	public static $searchableFields = [
-		'id',
-		'department_id',
-		'category_id',
-		'client_id',
-		'status',
-		'substatus_id',
-		'addressId',
-		'location',
-		'city',
-		'state',
-		'zip',
-		'issueType_id',
-		'contactMethod_id',
-		'enteredDate',
-		'bbox',
-		'sla'
-	];
+    /**
+     * The full list of fields that can be searched on
+     *
+     * Security Notice:
+     * Make sure to keep this initial list limited to "safe" fields.
+     * That is: fields that are okay to display to any anonymous person.
+     * Use __construct() to add fields that should be kept hidden
+     * unless a person is authorized to see them.
+     */
+    public static $searchableFields = [
+        'id',
+        'department_id',
+        'category_id',
+        'client_id',
+        'status',
+        'substatus_id',
+        'addressId',
+        'location',
+        'city',
+        'state',
+        'zip',
+        'issueType_id',
+        'contactMethod_id',
+        'enteredDate',
+        'bbox',
+        'sla'
+    ];
 
-	/**
-	 * These are the base facets
-	 *
-	 * http://wiki.apache.org/solr/SolrFacetingOverview
-	 *
-	 * Security Notice:
-	 * Make sure to keep this initial list limited to "safe" fields.
-	 * That is: fields that are okay to display to any anonymous person.
-	 * Use __construct() to add fields that should be kept hidden
-	 * unless a person is authorized to see them.
-	 */
-	public static $facetFields = [
+    /**
+     * These are the base facets
+     *
+     * http://wiki.apache.org/solr/SolrFacetingOverview
+     *
+     * Security Notice:
+     * Make sure to keep this initial list limited to "safe" fields.
+     * That is: fields that are okay to display to any anonymous person.
+     * Use __construct() to add fields that should be kept hidden
+     * unless a person is authorized to see them.
+     */
+    public static $facetFields = [
         ['type'=>'field', 'field'=>'category_id'     , 'local_key'=>'category_id'     ],
         ['type'=>'field', 'field'=>'department_id'   , 'local_key'=>'department_id'   ],
         ['type'=>'field', 'field'=>'status'          , 'local_key'=>'status'          ],
@@ -74,28 +74,28 @@ class Search
         ['type'=>'field', 'field'=>'issueType_id'    , 'local_key'=>'issueType_id'    ],
         ['type'=>'field', 'field'=>'contactMethod_id', 'local_key'=>'contactMethod_id'],
         ['type'=>'query', 'key'  =>'overdue'         , 'local_key'=>'overdue', 'query'=>self::SLA_OVERDUE_FUNCTION]
-	];
+    ];
 
-	/**
-	 * These are the fields that you can sort on
-	 *
-	 * Many of the fields we search on are ID fields.
-	 * Rather than sorting on the ID fields, we really want to
-	 * be able to sort on the string values they represent.
-	 * Make sure the fields for the string values are indexed
-	 */
-	public static $sortableFields = [
+    /**
+     * These are the fields that you can sort on
+     *
+     * Many of the fields we search on are ID fields.
+     * Rather than sorting on the ID fields, we really want to
+     * be able to sort on the string values they represent.
+     * Make sure the fields for the string values are indexed
+     */
+    public static $sortableFields = [
         'enteredDate',
         'status',
         'location','city','state','zip',
         'department', 'category'
-	];
+    ];
 
-	/**
-	 * Connects to Solr and adds additional facet fields
-	 */
-	public function __construct()
-	{
+    /**
+     * Connects to Solr and adds additional facet fields
+     */
+    public function __construct()
+    {
         global $SOLR;
         $config = $SOLR['ureport'];
         $curl   = new Curl();
@@ -104,8 +104,8 @@ class Search
                                  new EventDispatcher(),
                                  ['endpoint'=>['solr'=>$config]]);
 
-		// Add facets for the AddressService custom fields
-		if (defined('ADDRESS_SERVICE')) {
+        // Add facets for the AddressService custom fields
+        if (defined('ADDRESS_SERVICE')) {
             $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
             foreach ($fields as $key) {
                 self::$searchableFields[] = $key;
@@ -113,45 +113,45 @@ class Search
                 self::$sortableFields  [] = $key;
             }
         }
-		// Add facets that are only to be used if the current user is authorized
-		if (Person::isAllowed('people', 'view')) {
-			self::$searchableFields[] =  'enteredByPerson_id';
-			self::$searchableFields[] =   'assignedPerson_id';
-			self::$searchableFields[] = 'reportedByPerson_id';
+        // Add facets that are only to be used if the current user is authorized
+        if (Person::isAllowed('people', 'view')) {
+            self::$searchableFields[] =  'enteredByPerson_id';
+            self::$searchableFields[] =   'assignedPerson_id';
+            self::$searchableFields[] = 'reportedByPerson_id';
 
-			self::$facetFields[] = ['field'=>'assignedPerson_id', 'local_key'=>'assignedPerson_id', 'type'=>'field'];
+            self::$facetFields[] = ['field'=>'assignedPerson_id', 'local_key'=>'assignedPerson_id', 'type'=>'field'];
 
-			self::$sortableFields[] = 'enteredByPerson';
-			self::$sortableFields[] = 'assignedPerson';
-			self::$sortableFields[] = 'reportedByPerson';
-		}
-	}
+            self::$sortableFields[] = 'enteredByPerson';
+            self::$sortableFields[] = 'assignedPerson';
+            self::$sortableFields[] = 'reportedByPerson';
+        }
+    }
 
-	public static function getDefaultFilterQuery(): array
-	{
-		// User permissions
-		if (!isset($_SESSION['USER'])
-			|| !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
-			$permissions = 'anonymous';
-			if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
-				$permissions.= ' OR public';
-			}
-			return [
+    public static function getDefaultFilterQuery(): array
+    {
+        // User permissions
+        if (!isset($_SESSION['USER'])
+            || !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
+            $permissions = 'anonymous';
+            if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
+                $permissions.= ' OR public';
+            }
+            return [
                 ['query'=>"displayPermissionLevel:$permissions"]
             ];
-		}
-		return [];
-	}
+        }
+        return [];
+    }
 
-	/**
-	 * Use the $raw flag to ask for raw results.  This will
-	 * disable facetting and pagination.  It will return up to
-	 * MAX_RAW_RESULTS.
-	 *
-	 * @throws \Exception
-	 */
-	public function query(array $get, ?bool $raw=false): Result
-	{
+    /**
+     * Use the $raw flag to ask for raw results.  This will
+     * disable facetting and pagination.  It will return up to
+     * MAX_RAW_RESULTS.
+     *
+     * @throws \Exception
+     */
+    public function query(array $get, ?bool $raw=false): Result
+    {
         if (!empty($get['query'])) {
             $get['query'] = trim($get['query']);
             $get['query'] = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $get['query']);
@@ -161,41 +161,41 @@ class Search
             }
         }
 
-		// Start with all the default query values
-		$query = !empty($get['query']) ? "{!df=description}$get[query]" : '*:*';
-		$sort  = self::$defaultSort;
-		$fq    = self::getDefaultFilterQuery();
+        // Start with all the default query values
+        $query = !empty($get['query']) ? "{!df=description}$get[query]" : '*:*';
+        $sort  = self::$defaultSort;
+        $fq    = self::getDefaultFilterQuery();
 
-		// Pagination
-		$rows = $raw ? self::MAX_RAW_RESULTS : self::ITEMS_PER_PAGE;
-		$startingPage = 0;
-		if (!$raw && !empty($get['page'])) {
-			$page = (int)$get['page'];
-			if ($page < 1) { $page = 1; }
+        // Pagination
+        $rows = $raw ? self::MAX_RAW_RESULTS : self::ITEMS_PER_PAGE;
+        $startingPage = 0;
+        if (!$raw && !empty($get['page'])) {
+            $page = (int)$get['page'];
+            if ($page < 1) { $page = 1; }
 
-			// Solr rows start at 0, but pages start at 1
-			$startingPage = ($page - 1) * $rows;
-		}
+            // Solr rows start at 0, but pages start at 1
+            $startingPage = ($page - 1) * $rows;
+        }
 
-		// Sorting
-		if (isset($get['sort']) && is_array($get['sort'])) {
-			$keys = array_keys($get['sort']);
-			$k    = $keys[0];
-			$dir  = ($get['sort'][$k] == 'asc') ? 'asc' : 'desc';
+        // Sorting
+        if (isset($get['sort']) && is_array($get['sort'])) {
+            $keys = array_keys($get['sort']);
+            $k    = $keys[0];
+            $dir  = ($get['sort'][$k] == 'asc') ? 'asc' : 'desc';
             $sort = [$k => $dir];
-		}
+        }
 
-		// Filter Query aka Search Parameters
-		foreach (self::$searchableFields as $field) {
-			if (substr($field, -3) == '_id' && isset($get[$field])) {
+        // Filter Query aka Search Parameters
+        foreach (self::$searchableFields as $field) {
+            if (substr($field, -3) == '_id' && isset($get[$field])) {
                 if (is_numeric(trim($get[$field]))) { $get[$field] = (int)$get[$field]; }
                 else { unset($get[$field]); }
-			}
-			if (!empty($get[$field])) {
-				if (false !== strpos($field, 'Date')) {
+            }
+            if (!empty($get[$field])) {
+                if (false !== strpos($field, 'Date')) {
                     $utc = new \DateTimeZone('UTC');
 
-					if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
+                    if (!empty($get[$field]['start']) || !empty($get[$field]['end'])) {
                         if (!empty(  $get[$field]['start'])) {
                                      $get[$field]['start']->setTimezone($utc);
                             $start = $get[$field]['start']->format(self::DATE_FORMAT);
@@ -209,34 +209,34 @@ class Search
                         }
                         else { $end = '*'; }
 
-						$fq[] = ['query' => "$field:[$start TO $end]"];
-					}
-				}
-				// coordinates is a not a numeric value but does not need to be quoted.
-				elseif (false !== strpos($field, 'bbox')) {
-					$key = 'coordinates';
-					$b   = explode(',', $get['bbox']);
-					if (count($b) == 4) {
-						$minLat = is_numeric($b[0]) ? (float)$b[0] : null;
-						$minLng = is_numeric($b[1]) ? (float)$b[1] : null;
-						$maxLat = is_numeric($b[2]) ? (float)$b[2] : null;
-						$maxLng = is_numeric($b[3]) ? (float)$b[3] : null;
+                        $fq[] = ['query' => "$field:[$start TO $end]"];
+                    }
+                }
+                // coordinates is a not a numeric value but does not need to be quoted.
+                elseif (false !== strpos($field, 'bbox')) {
+                    $key = 'coordinates';
+                    $b   = explode(',', $get['bbox']);
+                    if (count($b) == 4) {
+                        $minLat = is_numeric($b[0]) ? (float)$b[0] : null;
+                        $minLng = is_numeric($b[1]) ? (float)$b[1] : null;
+                        $maxLat = is_numeric($b[2]) ? (float)$b[2] : null;
+                        $maxLng = is_numeric($b[3]) ? (float)$b[3] : null;
 
-						$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
-						$fq[] = ['query' => "$key:$value"];
-					}
-				}
-				elseif ($field == 'sla' && $get[$field] == 'overdue') {
+                        $value = "[$minLat,$minLng TO $maxLat,$maxLng]";
+                        $fq[] = ['query' => "$key:$value"];
+                    }
+                }
+                elseif ($field == 'sla' && $get[$field] == 'overdue') {
                     $fq[] = ['query' => self::SLA_OVERDUE_FUNCTION];
-				}
-				else {
-					$value = is_numeric($get[$field])
-						? $get[$field]
-						: "\"$get[$field]\"";
-					$fq[] = ['query' => "$field:$value"];
-				}
-			}
-		}
+                }
+                else {
+                    $value = is_numeric($get[$field])
+                        ? $get[$field]
+                        : "\"$get[$field]\"";
+                    $fq[] = ['query' => "$field:$value"];
+                }
+            }
+        }
 
         $select = $this->solr->createSelect([
             'query' => $query,
@@ -248,11 +248,11 @@ class Search
                 'facetset' => ['facet' => self::$facetFields]
             ]
         ]);
-		return $this->solr->select($select);
-	}
+        return $this->solr->select($select);
+    }
 
-	public function facetValues(string $field): array
-	{
+    public function facetValues(string $field): array
+    {
         $select = $this->solr->createSelect([
             'query'     => '*:*',
             'rows'      => 1,
@@ -267,87 +267,87 @@ class Search
         $values  = array_keys($facets[$field]->getValues());
         ksort($values);
         return $values;
-	}
+    }
 
-	/**
-	 * @return array An array of CRM models based on the search results
-	 */
-	public static function hydrateDocs(Result $result): array
-	{
-		$models = [];
-		if (count($result)) {
-			foreach ($result as $doc) {
-				switch ($doc->recordType) {
-					case 'ticket':
-						// Check to make sure the ticket permits viewing
-						// The search engine could be out of sync with the database record
-						try {
-							$t = new Ticket($doc->id);
-							if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
-								$models[] = new Ticket($doc->id);
-							}
-						}
-						catch (\Exception $e) {
-							// Ignore search records that are no longer in the database
-						}
-						break;
-				}
-			}
-		}
-		else {
-			header('HTTP/1.1 404 Not Found', true, 404);
-		}
-		return $models;
-	}
+    /**
+     * @return array An array of CRM models based on the search results
+     */
+    public static function hydrateDocs(Result $result): array
+    {
+        $models = [];
+        if (count($result)) {
+            foreach ($result as $doc) {
+                switch ($doc->recordType) {
+                    case 'ticket':
+                        // Check to make sure the ticket permits viewing
+                        // The search engine could be out of sync with the database record
+                        try {
+                            $t = new Ticket($doc->id);
+                            if ($t->allowsDisplay(isset($_SESSION['USER']) ? $_SESSION['USER'] : null)) {
+                                $models[] = new Ticket($doc->id);
+                            }
+                        }
+                        catch (\Exception $e) {
+                            // Ignore search records that are no longer in the database
+                        }
+                        break;
+                }
+            }
+        }
+        else {
+            header('HTTP/1.1 404 Not Found', true, 404);
+        }
+        return $models;
+    }
 
-	/**
-	 * Indexes a single record in Solr
-	 */
-	public function add(Ticket $ticket)
-	{
+    /**
+     * Indexes a single record in Solr
+     */
+    public function add(Ticket $ticket)
+    {
         $update   = $this->solr->createUpdate();
-		$document = $this->createDocument($ticket, $update);
-		$update->addDocument($document);
-		$update->addCommit();
-		$this->solr->update($update);
-	}
+        $document = $this->createDocument($ticket, $update);
+        $update->addDocument($document);
+        $update->addCommit();
+        $this->solr->update($update);
+    }
 
-	/**
-	 * Removes a single record from Solr
-	 */
-	public function delete(Ticket $ticket)
-	{
+    /**
+     * Removes a single record from Solr
+     */
+    public function delete(Ticket $ticket)
+    {
         $update = $this->solr->createUpdate();
         $update->addDeleteById('t_'.$ticket->getId());
         $update->addCommit();
         $this->solr->update($update);
-	}
+    }
 
-	/**
-	 * Prepares a Solr Document with the correct fields for the record type
-	 */
-	public function createDocument(Ticket $ticket, UpdateQuery $update): Document
-	{
-		// These are the fields from the tickets table that we're indexing
-		//
-		// Note: enteredDate, latitude, longitude are indexed as well, even
-		// though they are not in this list.
-		// They are just handled slightly differently from the generic fields listed
-		$ticketFields = [
-			'id', 'category_id', 'client_id',
-			'enteredByPerson_id', 'assignedPerson_id',
-			'addressId', 'location', 'city', 'state', 'zip',
-			'status', 'substatus_id',
-			'contactMethod_id', 'issueType_id', 'reportedByPerson_id',
-			'description'
-			// enteredDate, latitude, longitude
-		];
+    /**
+     * Prepares a Solr Document with the correct fields for the record type
+     */
+    public function createDocument(Ticket $ticket, UpdateQuery $update): Document
+    {
+        // These are the fields from the tickets table that we're indexing
+        //
+        // Note: enteredDate, latitude, longitude are indexed as well, even
+        // though they are not in this list.
+        // They are just handled slightly differently from the generic fields listed
+        $ticketFields = [
+            'id', 'category_id', 'client_id',
+            'enteredByPerson_id', 'assignedPerson_id',
+            'addressId', 'location', 'city', 'state', 'zip',
+            'status', 'substatus_id',
+            'contactMethod_id', 'issueType_id', 'reportedByPerson_id',
+            'description'
+            // enteredDate, latitude, longitude
+        ];
 
         /** @var Document $document */
-		$document = $update->createDocument();
-		$document->setField('recordKey',  "t_{$ticket->getId()}");
-		$document->setField('recordType', 'ticket');
-		$document->setField('enteredDate', $ticket->getEnteredDate(Search::DATE_FORMAT));
+        $document = $update->createDocument();
+        $document->setField('recordKey',  "t_{$ticket->getId()}");
+        $document->setField('recordType', 'ticket');
+        $document->setField('enteredDate', $ticket->getEnteredDate(Search::DATE_FORMAT));
         if ($ticket->getClosedDate()) {
             $document->setField('closedDate', $ticket->getClosedDate(Search::DATE_FORMAT));
         }
@@ -404,74 +404,74 @@ class Search
         }
 
         return $document;
-	}
+    }
 
-	/**
-	 * Returns a string for the provided *_id field
-	 *
-	 * For sorting, we need to index the string values of fields,
-	 * even though we're searching on the *_id value
-	 *
-	 * @param Ticket $record
-	 * @param string $field
-	 * @return string
-	 */
-	public static function sortableString($record, $field)
-	{
-		$n = substr($field, 0, -3);
-		$get = 'get'.ucfirst($n);
-		$o = $record->$get();
-		if (false !== strpos($field, 'Person')) {
-			return "{$o->getLastname()} {$o->getFirstname()}";
-		}
-		else {
-			return $o->getName();
-		}
-	}
+    /**
+     * Returns a string for the provided *_id field
+     *
+     * For sorting, we need to index the string values of fields,
+     * even though we're searching on the *_id value
+     *
+     * @param Ticket $record
+     * @param string $field
+     * @return string
+     */
+    public static function sortableString($record, $field)
+    {
+        $n = substr($field, 0, -3);
+        $get = 'get'.ucfirst($n);
+        $o = $record->$get();
+        if (false !== strpos($field, 'Person')) {
+            return "{$o->getLastname()} {$o->getFirstname()}";
+        }
+        else {
+            return $o->getName();
+        }
+    }
 
-	/**
-	 * Returns the display name of a CRM object corresponding to a search field
-	 *
-	 * For each of the self::$searchableFields we need a way to look up the CRM
-	 * object corresponding to the value in the search index.
-	 * Example: self::getDisplayName('department_id', 32);
-	 *
-	 * Returns null if the value is an invalid ID
-	 */
-	public static function getDisplayName(string $fieldname, string $value): ?string
-	{
+    /**
+     * Returns the display name of a CRM object corresponding to a search field
+     *
+     * For each of the self::$searchableFields we need a way to look up the CRM
+     * object corresponding to the value in the search index.
+     * Example: self::getDisplayName('department_id', 32);
+     *
+     * Returns null if the value is an invalid ID
+     */
+    public static function getDisplayName(string $fieldname, string $value): ?string
+    {
         if (in_array($fieldname, self::$searchableFields)) {
-			if (false !== strpos($fieldname, 'Date')) {
-				// Reformat Solr date ranges
-				// enteredDate:[2011-06-15T00:00:00Z TO 2011-06-30T00:00:00Z]
-				preg_match('/\[(.+)\sTO\s(.+)\]/', $value, $matches);
-				$start = substr($matches[1], 0, 10);
-				$end   = substr($matches[2], 0, 10);
-				return "$start - $end";
-			}
-			elseif (false !== strpos($fieldname, 'Person_id')) {
-				try {
-					$o = new Person($value);
-					return $o->getFullname();
-				}
-				catch (\Exception $e) {
-					// Returns null if person is invalid
-				}
-			}
-			elseif (false !== strpos($fieldname, '_id')) {
-				try {
-					$class = 'Application\\Models\\'.ucfirst(substr($fieldname, 0, -3));
-					$o = new $class($value);
-					return $o->getName();
-				}
-				catch (\Exception $e) {
-					// Returns null if the $class ID is invalid
-				}
-			}
-			else {
-				return $value;
-			}
-		}
-		return null;
-	}
+            if (false !== strpos($fieldname, 'Date')) {
+                // Reformat Solr date ranges
+                // enteredDate:[2011-06-15T00:00:00Z TO 2011-06-30T00:00:00Z]
+                preg_match('/\[(.+)\sTO\s(.+)\]/', $value, $matches);
+                $start = substr($matches[1], 0, 10);
+                $end   = substr($matches[2], 0, 10);
+                return "$start - $end";
+            }
+            elseif (false !== strpos($fieldname, 'Person_id')) {
+                try {
+                    $o = new Person($value);
+                    return $o->getFullname();
+                }
+                catch (\Exception $e) {
+                    // Returns null if person is invalid
+                }
+            }
+            elseif (false !== strpos($fieldname, '_id')) {
+                try {
+                    $class = 'Application\\Models\\'.ucfirst(substr($fieldname, 0, -3));
+                    $o = new $class($value);
+                    return $o->getName();
+                }
+                catch (\Exception $e) {
+                    // Returns null if the $class ID is invalid
+                }
+            }
+            else {
+                return $value;
+            }
+        }
+        return null;
+    }
 }

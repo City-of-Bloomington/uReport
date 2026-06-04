@@ -21,36 +21,36 @@ $zipcode = self::escape($this->ticket->getZip());
 $media_url = '';
 $media = $this->ticket->getMedia();
 if (count($media)) {
-	$m = $media[0];
-	$media_url = $m->getURL();
+    $m = $media[0];
+    $media_url = $m->getURL();
 }
 
 $agency_responsible = '';
 $p = $this->ticket->getAssignedPerson();
 if ($p) {
-	$d = $p->getDepartment();
-	if ($d) {
-		$agency_responsible = self::escape($d->getName());
-	}
+    $d = $p->getDepartment();
+    if ($d) {
+        $agency_responsible = self::escape($d->getName());
+    }
 }
 
 echo "
 <service_requests>
-	<request>
-		<service_request_id>{$this->ticket->getId()}</service_request_id>
-		<status>$status</status>
-		<service_name>$service_name</service_name>
-		<service_code>$service_code</service_code>
-		<description>$description</description>
-		<agency_responsible>$agency_responsible</agency_responsible>
-		<requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
-		<updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
-		<address>$address</address>
-		<address_id>{$this->ticket->getAddressId()}</address_id>
-		<zipcode>$zipcode</zipcode>
-		<lat>{$this->ticket->getLatitude()}</lat>
-		<long>{$this->ticket->getLongitude()}</long>
-		<media_url>$media_url</media_url>
-	</request>
+    <request>
+        <service_request_id>{$this->ticket->getId()}</service_request_id>
+        <status>$status</status>
+        <service_name>$service_name</service_name>
+        <service_code>$service_code</service_code>
+        <description>$description</description>
+        <agency_responsible>$agency_responsible</agency_responsible>
+        <requested_datetime>{$this->ticket->getEnteredDate('c')}</requested_datetime>
+        <updated_datetime>{$history->getEnteredDate('c')}</updated_datetime>
+        <address>$address</address>
+        <address_id>{$this->ticket->getAddressId()}</address_id>
+        <zipcode>$zipcode</zipcode>
+        <lat>{$this->ticket->getLatitude()}</lat>
+        <long>{$this->ticket->getLongitude()}</long>
+        <media_url>$media_url</media_url>
+    </request>
 </service_requests>
 ";

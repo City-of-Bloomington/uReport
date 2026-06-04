@@ -22,20 +22,20 @@ if ($totalItemCount) {
     $this->_include('tickets/partials/searchResultsRows.inc');
 }
 else {
-	echo "<header><h1>{$this->_('no_tickets_found', 'messages')}</h1></header>";
+    echo "<header><h1>{$this->_('no_tickets_found', 'messages')}</h1></header>";
 }
 
 if ($this->paginated && $totalItemCount > Search::ITEMS_PER_PAGE) {
-	// Solr rows start at 0, but pages start at 1
-	$options     = $this->result->getQuery()->getOptions();
-	$pageNumber  = round($options['start'] / Search::ITEMS_PER_PAGE) + 1;
+    // Solr rows start at 0, but pages start at 1
+    $options     = $this->result->getQuery()->getOptions();
+    $pageNumber  = round($options['start'] / Search::ITEMS_PER_PAGE) + 1;
 
-	$block = new Block('pageNavigation.inc', [
-		'totalItemCount' => $totalItemCount,
-		'itemsPerPage'   => Search::ITEMS_PER_PAGE,
-		'pageNumber'     => $pageNumber
-	]);
-	echo $block->render('html', $this->template);
+    $block = new Block('pageNavigation.inc', [
+        'totalItemCount' => $totalItemCount,
+        'itemsPerPage'   => Search::ITEMS_PER_PAGE,
+        'pageNumber'     => $pageNumber
+    ]);
+    echo $block->render('html', $this->template);
 }
 ?>
 </section>

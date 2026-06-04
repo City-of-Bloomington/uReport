@@ -13,8 +13,8 @@ $helper = $this->template->getHelper('buttonLink');
 $this->mediaList = $this->ticket->getMedia();
 
 if (count($this->mediaList)) {
-	echo "
-	<div class=\"issueAttachments\">
+    echo "
+    <div class=\"issueAttachments\">
         <header>
             <h2>{$this->_(['media', 'medias', 2])}</h2>
         </header>
@@ -24,14 +24,14 @@ if (count($this->mediaList)) {
             </a>
         </div>
         ";
-		$profileImage = $this->ticket->getProfileImage();
-		if ($profileImage) {
-			$thumbnail = new Block('media/thumbnail.inc', [
+        $profileImage = $this->ticket->getProfileImage();
+        if ($profileImage) {
+            $thumbnail = new Block('media/thumbnail.inc', [
                 'media'          => $profileImage,
                 'disableButtons' => $this->disableButtons
             ]);
-			echo $thumbnail->render('html', $this->template);
-		}
-		$this->_include('media/mediaList.inc');
-	echo "</div>";
+            echo $thumbnail->render('html', $this->template);
+        }
+        $this->_include('media/mediaList.inc');
+    echo "</div>";
 }

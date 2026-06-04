@@ -8,10 +8,10 @@ $name = self::escape($this->person->getFullname());
 ?>
 <p>
 <?php
-	echo sprintf($this->_('digestNotification', 'messages'),
-		$name,
-		APPLICATION_NAME,
-		$this->person->getURL()
-	);
+    echo sprintf($this->_('digestNotification', 'messages'),
+        $name,
+        APPLICATION_NAME,
+        $this->person->getURL()
+    );
 ?>
 </p>

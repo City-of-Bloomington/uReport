@@ -10,62 +10,62 @@ use Application\Database;
 
 class Ticket extends ActiveRecord
 {
-	public const TABLENAME = 'tickets';
+    public const TABLENAME = 'tickets';
 
-	protected $substatus;
-	protected $category;
-	protected $client;
-	protected $enteredByPerson;
-	protected $reportedByPerson;
-	protected $assignedPerson;
-	protected $contactMethod;
-	protected $responseMethod;
-	protected $issueType;
+    protected $substatus;
+    protected $category;
+    protected $client;
+    protected $enteredByPerson;
+    protected $reportedByPerson;
+    protected $assignedPerson;
+    protected $contactMethod;
+    protected $responseMethod;
+    protected $issueType;
 
-	private $needToUpdateClusters = false;
+    private $needToUpdateClusters = false;
 
-	const CLOSE_ENOUGH = 0.0015; // ~50 meters
+    const CLOSE_ENOUGH = 0.0015; // ~50 meters
 
-	/**
-	 * Populates the object with data
-	 *
-	 * Passing in an associative array of data will populate this object without
-	 * hitting the database.
-	 *
-	 * Passing in a scalar will load the data from the database.
-	 * This will load all fields in the table as properties of this class.
-	 * You may want to replace this with, or add your own extra, custom loading
-	 */
-	public function __construct($id=null)
-	{
-		if ($id) {
-			if (is_array($id)) {
+    /**
+     * Populates the object with data
+     *
+     * Passing in an associative array of data will populate this object without
+     * hitting the database.
+     *
+     * Passing in a scalar will load the data from the database.
+     * This will load all fields in the table as properties of this class.
+     * You may want to replace this with, or add your own extra, custom loading
+     */
+    public function __construct($id=null)
+    {
+        if ($id) {
+            if (is_array($id)) {
                 $this->exchangeArray($id);
-			}
-			else {
+            }
+            else {
                 $db = Database::getConnection();
-				$sql = 'select * from tickets where id=?';
-				$result = Database::query($sql, [$id]);
+                $sql = 'select * from tickets where id=?';
+                $result = Database::query($sql, [$id]);
                 if (count($result)) {
                     $this->exchangeArray($result[0]);
                 }
-				else {
-					throw new \Exception('tickets/unknown');
-				}
-			}
-		}
-		else {
-			// This is where the code goes to generate a new, empty instance.
-			// Set any default values for properties that need it here
-			$this->setEnteredDate('now');
-			$this->setStatus('open');
-			$this->setCity(DEFAULT_CITY);
-			$this->setState(DEFAULT_STATE);
-			if (isset($_SESSION['USER'])) {
-				$this->setEnteredByPerson($_SESSION['USER']);
-			}
-		}
-	}
+                else {
+                    throw new \Exception('tickets/unknown');
+                }
+            }
+        }
+        else {
+            // This is where the code goes to generate a new, empty instance.
+            // Set any default values for properties that need it here
+            $this->setEnteredDate('now');
+            $this->setStatus('open');
+            $this->setCity(DEFAULT_CITY);
+            $this->setState(DEFAULT_STATE);
+            if (isset($_SESSION['USER'])) {
+                $this->setEnteredByPerson($_SESSION['USER']);
+            }
+        }
+    }
 
     /**
      * When repopulating with fresh data, make sure to set default
@@ -88,139 +88,139 @@ class Ticket extends ActiveRecord
         $this->needToUpdateClusters = false;
     }
 
-	/**
-	 * Throws an exception if anything's wrong
-	 *
-	 * @throws \Exception
-	 */
-	public function validate()
-	{
-		// Check for required fields here.  Throw an exception if anything is missing.
-		if (!$this->getCategory()) {
-			throw new \Exception('tickets/missingCategory');
-		}
+    /**
+     * Throws an exception if anything's wrong
+     *
+     * @throws \Exception
+     */
+    public function validate()
+    {
+        // Check for required fields here.  Throw an exception if anything is missing.
+        if (!$this->getCategory()) {
+            throw new \Exception('tickets/missingCategory');
+        }
 
-		// We need at least a location (address or lat/long) or a description
-		// an empty ticket does us no good
-		$lat  = $this->getLatitude();
-		$long = $this->getLongitude();
-		if (!$this->getDescription() && !$this->getLocation() && !($lat && $long)) {
-			throw new \Exception('missingRequiredFields');
-		}
-		if (($this->getLatitude() && $this->getLongitude())
-			&& (   defined('MIN_LATITUDE')  && defined('MAX_LATITUDE')
-				&& defined('MIN_LONGITUDE') && defined('MAX_LONGITUDE'))) {
-			if (!(   MIN_LATITUDE <=$lat  && $lat <=MAX_LATITUDE
-				  && MIN_LONGITUDE<=$long && $long<=MAX_LONGITUDE)) {
-				throw new \Exception('tickets/locationOutOfBounds');
-			}
-		}
+        // We need at least a location (address or lat/long) or a description
+        // an empty ticket does us no good
+        $lat  = $this->getLatitude();
+        $long = $this->getLongitude();
+        if (!$this->getDescription() && !$this->getLocation() && !($lat && $long)) {
+            throw new \Exception('missingRequiredFields');
+        }
+        if (($this->getLatitude() && $this->getLongitude())
+            && (   defined('MIN_LATITUDE')  && defined('MAX_LATITUDE')
+                && defined('MIN_LONGITUDE') && defined('MAX_LONGITUDE'))) {
+            if (!(   MIN_LATITUDE <=$lat  && $lat <=MAX_LATITUDE
+                  && MIN_LONGITUDE<=$long && $long<=MAX_LONGITUDE)) {
+                throw new \Exception('tickets/locationOutOfBounds');
+            }
+        }
 
-		// The rest of these fields can be populated, if they're not provided
-		if (!$this->getStatus()) { $this->setStatus('open'); }
-		if ($this->getSubstatus_id()) {
-			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
-				throw new \Exception('tickets/statusMismatch');
-			}
-		}
-		else {
-			if ($this->getStatus()=='closed') {
-				throw new \Exception('tickets/missingResolution');
-			}
-		}
+        // The rest of these fields can be populated, if they're not provided
+        if (!$this->getStatus()) { $this->setStatus('open'); }
+        if ($this->getSubstatus_id()) {
+            if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
+                throw new \Exception('tickets/statusMismatch');
+            }
+        }
+        else {
+            if ($this->getStatus()=='closed') {
+                throw new \Exception('tickets/missingResolution');
+            }
+        }
 
-		if (!$this->data['enteredDate']) {
-			$this->setEnteredDate('now');
-		}
+        if (!$this->data['enteredDate']) {
+            $this->setEnteredDate('now');
+        }
 
-		// Don't auto-populate the enteredByPerson except during ticket creation
-		if (!$this->getId() && !$this->getEnteredByPerson_id()) {
-			if (isset($_SESSION['USER'])) {
-				$this->setEnteredByPerson($_SESSION['USER']);
-			}
-		}
+        // Don't auto-populate the enteredByPerson except during ticket creation
+        if (!$this->getId() && !$this->getEnteredByPerson_id()) {
+            if (isset($_SESSION['USER'])) {
+                $this->setEnteredByPerson($_SESSION['USER']);
+            }
+        }
 
-		if (!$this->getAssignedPerson_id()) {
-			$category = $this->getCategory();
-			$person   = null;
-			if ($category->getDefaultPerson_id()) {
+        if (!$this->getAssignedPerson_id()) {
+            $category = $this->getCategory();
+            $person   = null;
+            if ($category->getDefaultPerson_id()) {
                 $person = $category->getDefaultPerson();
-			}
-			elseif ($category->getDepartment_id()) {
-				$person = $category->getDepartment()->getDefaultPerson();
-			}
+            }
+            elseif ($category->getDepartment_id()) {
+                $person = $category->getDepartment()->getDefaultPerson();
+            }
 
-			if ($person) {
-				$this->setAssignedPerson($person);
-			}
-			elseif (isset($_SESSION['USER'])) {
-				$this->setAssignedPerson($_SESSION['USER']);
-			}
-			else {
-				$this->setAssignedPerson_id(1);
-			}
-		}
-	}
+            if ($person) {
+                $this->setAssignedPerson($person);
+            }
+            elseif (isset($_SESSION['USER'])) {
+                $this->setAssignedPerson($_SESSION['USER']);
+            }
+            else {
+                $this->setAssignedPerson_id(1);
+            }
+        }
+    }
 
-	public function updateSearchIndex()
-	{
-		$search = new Search();
-		$search->add($this);
-	}
+    public function updateSearchIndex()
+    {
+        $search = new Search();
+        $search->add($this);
+    }
 
-	public function save()
-	{
-		$this->setLastModified('now');
-		parent::save();
-		if ($this->needToUpdateClusters) { GeoCluster::updateTicketClusters($this); }
-		$this->updateSearchIndex();
-	}
+    public function save()
+    {
+        $this->setLastModified('now');
+        parent::save();
+        if ($this->needToUpdateClusters) { GeoCluster::updateTicketClusters($this); }
+        $this->updateSearchIndex();
+    }
 
-	public function delete()
-	{
+    public function delete()
+    {
         foreach ($this->getMedia() as $m) { $m->delete(); }
 
-		Database::execute('delete from ticketHistory where ticket_id=?', [$this->getId()]);
+        Database::execute('delete from ticketHistory where ticket_id=?', [$this->getId()]);
 
-		$search = new Search();
-		$search->delete($this);
+        $search = new Search();
+        $search->delete($this);
 
-		parent::delete();
-	}
+        parent::delete();
+    }
 
-	//----------------------------------------------------------------
-	// Generic Getters & Setters
-	//----------------------------------------------------------------
-	public function getAddressId()    { return parent::get('addressId');  }
-	public function getLocation()     { return parent::get('location');   }
-	public function getCity()         { return parent::get('city');       }
-	public function getState()        { return parent::get('state');      }
-	public function getZip()          { return parent::get('zip');        }
-	public function getStatus()       { return parent::get('status');     }
-	public function getEnteredDate (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
-	public function getLastModified(?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
-	public function getClosedDate  (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
-	public function getParent_id()           { return parent::get('parent_id');           }
-	public function getSubstatus_id()        { return parent::get('substatus_id');        }
-	public function getCategory_id()         { return parent::get('category_id');         }
-	public function getIssueType_id()        { return parent::get('issueType_id');        }
-	public function getClient_id()           { return parent::get('client_id');           }
-	public function getEnteredByPerson_id()  { return parent::get('enteredByPerson_id');  }
-	public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
-	public function getAssignedPerson_id()   { return parent::get('assignedPerson_id');   }
-	public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
-	public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
-	public function getDescription()         { return parent::get('description');         }
-	public function getParent()           { return parent::getForeignKeyObject(__namespace__.'\Ticket',        'ticket_id');           }
-	public function getSubstatus()        { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'substatus_id');        }
-	public function getCategory()         { return parent::getForeignKeyObject(__namespace__.'\Category',      'category_id');         }
-	public function getIssueType()        { return parent::getForeignKeyObject(__namespace__.'\IssueType',     'issueType_id');        }
-	public function getClient()           { return parent::getForeignKeyObject(__namespace__.'\Client',        'client_id');           }
-	public function getEnteredByPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id');  }
-	public function getReportedByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id'); }
-	public function getAssignedPerson()   { return parent::getForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id');   }
-	public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
-	public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
+    //----------------------------------------------------------------
+    // Generic Getters & Setters
+    //----------------------------------------------------------------
+    public function getAddressId()    { return parent::get('addressId');  }
+    public function getLocation()     { return parent::get('location');   }
+    public function getCity()         { return parent::get('city');       }
+    public function getState()        { return parent::get('state');      }
+    public function getZip()          { return parent::get('zip');        }
+    public function getStatus()       { return parent::get('status');     }
+    public function getEnteredDate (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('enteredDate',  $f, $tz); }
+    public function getLastModified(?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('lastModified', $f, $tz); }
+    public function getClosedDate  (?string $f=null, ?\DateTimeZone $tz=null) { return parent::getDateData('closedDate',   $f, $tz); }
+    public function getParent_id()           { return parent::get('parent_id');           }
+    public function getSubstatus_id()        { return parent::get('substatus_id');        }
+    public function getCategory_id()         { return parent::get('category_id');         }
+    public function getIssueType_id()        { return parent::get('issueType_id');        }
+    public function getClient_id()           { return parent::get('client_id');           }
+    public function getEnteredByPerson_id()  { return parent::get('enteredByPerson_id');  }
+    public function getReportedByPerson_id() { return parent::get('reportedByPerson_id'); }
+    public function getAssignedPerson_id()   { return parent::get('assignedPerson_id');   }
+    public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
+    public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
+    public function getDescription()         { return parent::get('description');         }
+    public function getParent()           { return parent::getForeignKeyObject(__namespace__.'\Ticket',        'ticket_id');           }
+    public function getSubstatus()        { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'substatus_id');        }
+    public function getCategory()         { return parent::getForeignKeyObject(__namespace__.'\Category',      'category_id');         }
+    public function getIssueType()        { return parent::getForeignKeyObject(__namespace__.'\IssueType',     'issueType_id');        }
+    public function getClient()           { return parent::getForeignKeyObject(__namespace__.'\Client',        'client_id');           }
+    public function getEnteredByPerson()  { return parent::getForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id');  }
+    public function getReportedByPerson() { return parent::getForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id'); }
+    public function getAssignedPerson()   { return parent::getForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id');   }
+    public function getContactMethod()    { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id');    }
+    public function getResponseMethod()   { return parent::getForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id');   }
     public function getLatitude(): ?float
     {
         $l = parent::get('latitude');
@@ -232,37 +232,37 @@ class Ticket extends ActiveRecord
         return $l ? (float)$l : null;
     }
 
-	public function setAddressId  ($s) { parent::set('addressId',   $s); }
-	public function setLocation   ($s) { parent::set('location',    $s); }
-	public function setCity       ($s) { parent::set('city',        $s); }
-	public function setState      ($s) { parent::set('state',       $s); }
-	public function setZip        ($s) { parent::set('zip',         $s); }
-	public function setDescription($s) { parent::set('description', $s); }
-	public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
-	public function setLastModified($date) { parent::setDateData('lastModified', $date); }
-	public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
-	public function setParent_id          ($id) { parent::setForeignKeyField(__namespace__.'\Ticket',        'ticket_id',           $id); }
-	public function setSubstatus_id       ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',     'substatus_id',        $id); }
-	public function setCategory_id        ($id) { parent::setForeignKeyField(__namespace__.'\Category',      'category_id',         $id); }
-	public function setIssueType_id       ($id) { parent::setForeignKeyField(__namespace__.'\IssueType',     'issueType_id',        $id); }
-	public function setClient_id          ($id) { parent::setForeignKeyField(__namespace__.'\Client',        'client_id',           $id); }
-	public function setEnteredByPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'enteredByPerson_id',  $id); }
-	public function setReportedByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',        'reportedByPerson_id', $id); }
-	public function setAssignedPerson_id  ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'assignedPerson_id',   $id); }
-	public function setContactMethod_id   ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id',    $id); }
-	public function setResponseMethod_id  ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'responseMethod_id',   $id); }
-	public function setParent          (Ticket        $o) { parent::setForeignKeyObject(__namespace__.'\Ticket',        'ticket_id',          $o); }
-	public function setSubstatus       (Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'substatus_id',       $o); }
-	public function setCategory        (Category      $o) { parent::setForeignKeyObject(__namespace__.'\Category',      'category_id',        $o); }
-	public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject(__namespace__.'\IssueType',     'issueType_id',       $o); }
-	public function setClient          (Client        $o) { parent::setForeignKeyObject(__namespace__.'\Client',        'client_id',          $o); }
-	public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id', $o); }
-	public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id',$o); }
-	public function setAssignedPerson  (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id',  $o); }
-	public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id',   $o); }
-	public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',  $o); }
+    public function setAddressId  ($s) { parent::set('addressId',   $s); }
+    public function setLocation   ($s) { parent::set('location',    $s); }
+    public function setCity       ($s) { parent::set('city',        $s); }
+    public function setState      ($s) { parent::set('state',       $s); }
+    public function setZip        ($s) { parent::set('zip',         $s); }
+    public function setDescription($s) { parent::set('description', $s); }
+    public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
+    public function setLastModified($date) { parent::setDateData('lastModified', $date); }
+    public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
+    public function setParent_id          ($id) { parent::setForeignKeyField(__namespace__.'\Ticket',        'ticket_id',           $id); }
+    public function setSubstatus_id       ($id) { parent::setForeignKeyField(__namespace__.'\Substatus',     'substatus_id',        $id); }
+    public function setCategory_id        ($id) { parent::setForeignKeyField(__namespace__.'\Category',      'category_id',         $id); }
+    public function setIssueType_id       ($id) { parent::setForeignKeyField(__namespace__.'\IssueType',     'issueType_id',        $id); }
+    public function setClient_id          ($id) { parent::setForeignKeyField(__namespace__.'\Client',        'client_id',           $id); }
+    public function setEnteredByPerson_id ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'enteredByPerson_id',  $id); }
+    public function setReportedByPerson_id($id) { parent::setForeignKeyField(__namespace__.'\Person',        'reportedByPerson_id', $id); }
+    public function setAssignedPerson_id  ($id) { parent::setForeignKeyField(__namespace__.'\Person',        'assignedPerson_id',   $id); }
+    public function setContactMethod_id   ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'contactMethod_id',    $id); }
+    public function setResponseMethod_id  ($id) { parent::setForeignKeyField(__namespace__.'\ContactMethod', 'responseMethod_id',   $id); }
+    public function setParent          (Ticket        $o) { parent::setForeignKeyObject(__namespace__.'\Ticket',        'ticket_id',          $o); }
+    public function setSubstatus       (Substatus     $o) { parent::setForeignKeyObject(__namespace__.'\Substatus',     'substatus_id',       $o); }
+    public function setCategory        (Category      $o) { parent::setForeignKeyObject(__namespace__.'\Category',      'category_id',        $o); }
+    public function setIssueType       (IssueType     $o) { parent::setForeignKeyObject(__namespace__.'\IssueType',     'issueType_id',       $o); }
+    public function setClient          (Client        $o) { parent::setForeignKeyObject(__namespace__.'\Client',        'client_id',          $o); }
+    public function setEnteredByPerson (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'enteredByPerson_id', $o); }
+    public function setReportedByPerson(Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'reportedByPerson_id',$o); }
+    public function setAssignedPerson  (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id',  $o); }
+    public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id',   $o); }
+    public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',  $o); }
 
-	public function setLatitude ($s)  {
+    public function setLatitude ($s)  {
         if (!empty($s)) {
             if ($this->getLatitude() != (float)$s) { $this->needToUpdateClusters = true; }
         }
@@ -270,10 +270,10 @@ class Ticket extends ActiveRecord
             $s = null;
             if ($this->getLatitude()) { $this->needToUpdateClusters = true; }
         }
-		parent::set('latitude',  $s);
-	}
+        parent::set('latitude',  $s);
+    }
 
-	public function setLongitude($s)  {
+    public function setLongitude($s)  {
         if (!empty($s)) {
             if ($this->getLongitude() != (float)$s) { $this->needToUpdateClusters = true; }
         }
@@ -281,167 +281,167 @@ class Ticket extends ActiveRecord
             $s = null;
             if ($this->getLongitude()) { $this->needToUpdateClusters = true; }
         }
-		parent::set('longitude', $s);
-	}
+        parent::set('longitude', $s);
+    }
 
-	/**
-	 * Update the status and substatus
-	 *
-	 * The new status will delete the current substatus if
-	 * the current substatus is not valid for the new status
-	 */
-	public function setStatus(string $status, ?int $substatus_id=null)
-	{
-		$oldStatus      = $this->getStatus();
-		$oldSubStatusId = $this->getSubstatus_id();
+    /**
+     * Update the status and substatus
+     *
+     * The new status will delete the current substatus if
+     * the current substatus is not valid for the new status
+     */
+    public function setStatus(string $status, ?int $substatus_id=null)
+    {
+        $oldStatus      = $this->getStatus();
+        $oldSubStatusId = $this->getSubstatus_id();
 
-		parent::set('status', $status);
+        parent::set('status', $status);
 
-		if ($substatus_id) {
-			try {
-				$substatus = new Substatus($substatus_id);
-				if ($substatus->getStatus() == $this->getStatus()) {
-					$this->setSubstatus($substatus);
-				}
-			}
-			catch (\Exception $e) {
-				// Invalid substatus will just ignored
-			}
-		}
-		else {
-			// See if there's a default substatus to set
-			$result = Database::query('select * from substatus where status=? and isDefault=1', [$this->getStatus()]);
-			if (count($result)) {
-				$this->setSubstatus(new Substatus($result[0]));
-			}
-		}
+        if ($substatus_id) {
+            try {
+                $substatus = new Substatus($substatus_id);
+                if ($substatus->getStatus() == $this->getStatus()) {
+                    $this->setSubstatus($substatus);
+                }
+            }
+            catch (\Exception $e) {
+                // Invalid substatus will just ignored
+            }
+        }
+        else {
+            // See if there's a default substatus to set
+            $result = Database::query('select * from substatus where status=? and isDefault=1', [$this->getStatus()]);
+            if (count($result)) {
+                $this->setSubstatus(new Substatus($result[0]));
+            }
+        }
 
-		if ($this->getSubstatus_id()) {
-			if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
-				$this->setSubstatus_id(null);
-			}
-		}
+        if ($this->getSubstatus_id()) {
+            if ($this->getSubstatus()->getStatus() != $this->getStatus()) {
+                $this->setSubstatus_id(null);
+            }
+        }
 
-		// See if we need to update the closedDate
-		$newStatus = $this->getStatus();
-		if ($newStatus == 'closed') {
-			if ($newStatus != $oldStatus || $this->getSubstatus_id() != $oldSubStatusId) {
-				$this->setClosedDate('now');
-			}
-		}
-	}
+        // See if we need to update the closedDate
+        $newStatus = $this->getStatus();
+        if ($newStatus == 'closed') {
+            if ($newStatus != $oldStatus || $this->getSubstatus_id() != $oldSubStatusId) {
+                $this->setClosedDate('now');
+            }
+        }
+    }
 
-	public function getAdditionalFields(): array
-	{
-		return isset($this->data['additionalFields'])
-			? json_decode($this->data['additionalFields'], true)
-			: [];
-	}
+    public function getAdditionalFields(): array
+    {
+        return isset($this->data['additionalFields'])
+            ? json_decode($this->data['additionalFields'], true)
+            : [];
+    }
 
-	public function setAdditionalFields(array $data)
-	{
-		$this->data['additionalFields'] = json_encode($data);
-	}
+    public function setAdditionalFields(array $data)
+    {
+        $this->data['additionalFields'] = json_encode($data);
+    }
 
-	public function getCustomFields(): array
-	{
-		return isset($this->data['customFields'])
-			? json_decode($this->data['customFields'], true)
-			: [];
-	}
+    public function getCustomFields(): array
+    {
+        return isset($this->data['customFields'])
+            ? json_decode($this->data['customFields'], true)
+            : [];
+    }
 
-	public function setCustomFields(array $data)
-	{
-		$this->data['customFields'] = json_encode($data);
-	}
+    public function setCustomFields(array $data)
+    {
+        $this->data['customFields'] = json_encode($data);
+    }
 
-	//----------------------------------------------------------------
-	// Custom functions
-	//----------------------------------------------------------------
-	public function willUpdateClustersOnSave()
-	{
-		return $this->needToUpdateClusters;
-	}
+    //----------------------------------------------------------------
+    // Custom functions
+    //----------------------------------------------------------------
+    public function willUpdateClustersOnSave()
+    {
+        return $this->needToUpdateClusters;
+    }
 
-	/**
-	 * Returns the department of the person this ticket is assigned to.
-	 */
-	public function getDepartment(): ?Department
-	{
-		$person = $this->getAssignedPerson();
-		if ($person && $person->getDepartment_id()) {
-			return $person->getDepartment();
-		}
-		return null;
-	}
+    /**
+     * Returns the department of the person this ticket is assigned to.
+     */
+    public function getDepartment(): ?Department
+    {
+        $person = $this->getAssignedPerson();
+        if ($person && $person->getDepartment_id()) {
+            return $person->getDepartment();
+        }
+        return null;
+    }
 
-	public function getLatLong(): ?string
-	{
-		if ($this->getLatitude() && $this->getLongitude()) {
-			return "{$this->getLatitude()},{$this->getLongitude()}";
-		}
-		return null;
-	}
+    public function getLatLong(): ?string
+    {
+        if ($this->getLatitude() && $this->getLongitude()) {
+            return "{$this->getLatitude()},{$this->getLongitude()}";
+        }
+        return null;
+    }
 
-	/**
-	 * Returns an array of cluster_ids as key=>value
-	 */
-	public function getClusterIds(): array
-	{
-		$db = Database::getConnection();
+    /**
+     * Returns an array of cluster_ids as key=>value
+     */
+    public function getClusterIds(): array
+    {
+        $db = Database::getConnection();
 
-		// We may want to redefine cluster_ids in the future
-		// Just select all the fields that are in the table, and
-		// we'll remove the ticket_id field.
-		// All the rest of the fields should be cluster_ids
-		$result = Database::query('select * from ticket_geodata where ticket_id=?', [$this->getId()]);
-		unset( $result[0]['ticket_id']);
-		return $result[0];
-	}
+        // We may want to redefine cluster_ids in the future
+        // Just select all the fields that are in the table, and
+        // we'll remove the ticket_id field.
+        // All the rest of the fields should be cluster_ids
+        $result = Database::query('select * from ticket_geodata where ticket_id=?', [$this->getId()]);
+        unset( $result[0]['ticket_id']);
+        return $result[0];
+    }
 
-	public function getMedia(): array
-	{
-		$out = [];
-		$sql = 'select * from media where ticket_id=?';
-		$res = Database::query($sql, [$this->getId()]);
-		foreach ($res as $r) { $out[] = new Media($r); }
-		return $out;
-	}
+    public function getMedia(): array
+    {
+        $out = [];
+        $sql = 'select * from media where ticket_id=?';
+        $res = Database::query($sql, [$this->getId()]);
+        foreach ($res as $r) { $out[] = new Media($r); }
+        return $out;
+    }
 
-	/**
-	 * Returns the profile picture for this issue
-	 *
-	 * Currently the profile picture is the first image that was uploaded
-	 */
-	public function getProfileImage(): ?Media
-	{
-		foreach ($this->getMedia() as $media) {
-			if ($media->getMedia_type() == 'image') {
-				return $media;
-			}
-		}
-		return null;
-	}
+    /**
+     * Returns the profile picture for this issue
+     *
+     * Currently the profile picture is the first image that was uploaded
+     */
+    public function getProfileImage(): ?Media
+    {
+        foreach ($this->getMedia() as $media) {
+            if ($media->getMedia_type() == 'image') {
+                return $media;
+            }
+        }
+        return null;
+    }
 
-	public function getHistory(): array
-	{
-		$history = [];
+    public function getHistory(): array
+    {
+        $history = [];
 
-		$sql = 'select * from ticketHistory where ticket_id=? order by enteredDate desc';
-		$result = Database::query($sql, [$this->getId()]);
-		foreach ($result as $row) {
-			$history[] = new TicketHistory($row);
-		}
-		return $history;
-	}
+        $sql = 'select * from ticketHistory where ticket_id=? order by enteredDate desc';
+        $result = Database::query($sql, [$this->getId()]);
+        foreach ($result as $row) {
+            $history[] = new TicketHistory($row);
+        }
+        return $history;
+    }
 
-	public function getURL(): string
-	{
-		return BASE_URL."/tickets/view?ticket_id={$this->getId()}";
-	}
+    public function getURL(): string
+    {
+        return BASE_URL."/tickets/view?ticket_id={$this->getId()}";
+    }
 
-	public function permitsMerge(Ticket $ticket): bool
-	{
+    public function permitsMerge(Ticket $ticket): bool
+    {
         // Both tickets need to be open
         if ($this->getStatus() == 'closed' || $ticket->getStatus() == 'closed') { return false; }
 
@@ -457,33 +457,33 @@ class Ticket extends ActiveRecord
         }
 
         return true;
-	}
+    }
 
-	/**
-	 * Marks another ticket as a duplicate of this one
-	 */
-	public function mergeFrom(Ticket $ticket)
-	{
-		if ($this->getId() && $this->permitsMerge($ticket)) {
-			Database::execute('update tickets set parent_id=? where id=?', [$this->getId(), $ticket->getId()]);
+    /**
+     * Marks another ticket as a duplicate of this one
+     */
+    public function mergeFrom(Ticket $ticket)
+    {
+        if ($this->getId() && $this->permitsMerge($ticket)) {
+            Database::execute('update tickets set parent_id=? where id=?', [$this->getId(), $ticket->getId()]);
 
-			$history = new TicketHistory();
-			$history->setTicket($this);
-			$history->setAction(new Action(Action::DUPLICATED));
-			$history->setData(['duplicate'=>['ticket_id'=>$ticket->getId()]]);
-			$history->save();
-		}
-	}
+            $history = new TicketHistory();
+            $history->setTicket($this);
+            $history->setAction(new Action(Action::DUPLICATED));
+            $history->setData(['duplicate'=>['ticket_id'=>$ticket->getId()]]);
+            $history->save();
+        }
+    }
 
-	/**
-	 * Populates ticket data from the AddressService
-	 *
-	 * Preserves any fields that are already set...except...
-	 * We always update the ticket with the address string that
-	 * comes from the AddressService.
-	 */
-	public function setAddressServiceData(array $data)
-	{
+    /**
+     * Populates ticket data from the AddressService
+     *
+     * Preserves any fields that are already set...except...
+     * We always update the ticket with the address string that
+     * comes from the AddressService.
+     */
+    public function setAddressServiceData(array $data)
+    {
         foreach ($data as $key=>$value) {
             $get = 'get'.ucfirst($key);
             $set = 'set'.ucfirst($key);
@@ -519,31 +519,31 @@ class Ticket extends ActiveRecord
                 $this->setAdditionalFields($d);
             }
         }
-	}
+    }
 
-	public static function distance(float $latA, float $lonA, float $latB, float $lonB): float
-	{
+    public static function distance(float $latA, float $lonA, float $latB, float $lonB): float
+    {
         return sqrt(pow($latA - $latB, 2) + pow($lonA - $lonB, 2));
-	}
+    }
 
-	/**
-	 * Empties out the fields that can be populated from the AddressService
-	 *
-	 * New AddressService data may not include all the possible fields
-	 * that were set from a previous attempt.  This function will clear
-	 * out all possible fields.
-	 */
-	public function clearAddressServiceData()
-	{
-		// Used to identify fields that can be updated from the AddressService
-		$addressServiceFields = array(
-			'location','addressId','city','state','zip','latitude','longitude'
-		);
-		foreach ($addressServiceFields as $field) {
-			$set = 'set'.ucfirst($field);
-			$this->$set('');
-		}
-		if (defined('ADDRESS_SERVICE')) {
+    /**
+     * Empties out the fields that can be populated from the AddressService
+     *
+     * New AddressService data may not include all the possible fields
+     * that were set from a previous attempt.  This function will clear
+     * out all possible fields.
+     */
+    public function clearAddressServiceData()
+    {
+        // Used to identify fields that can be updated from the AddressService
+        $addressServiceFields = array(
+            'location','addressId','city','state','zip','latitude','longitude'
+        );
+        foreach ($addressServiceFields as $field) {
+            $set = 'set'.ucfirst($field);
+            $this->$set('');
+        }
+        if (defined('ADDRESS_SERVICE')) {
             $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
             foreach ($fields as $key) {
                 $d = $this->getAdditionalFields();
@@ -551,10 +551,10 @@ class Ticket extends ActiveRecord
                 $this->setAdditionalFields($d);
             }
         }
-	}
+    }
 
-	public function handleUpdate(array $post)
-	{
+    public function handleUpdate(array $post)
+    {
         $changed = false;
         $data    = [];
         $fields  = [
@@ -586,22 +586,22 @@ class Ticket extends ActiveRecord
             $history->setData($data);
             $history->save();
         }
-	}
+    }
 
-	/**
-	 * Does all the database work for TicketController::add
-	 *
-	 * Saves the ticket, the issue, and creates history entries
-	 * for the open and assignment actions.
-	 *
-	 * This function calls save() as needed.  After using this function,
-	 * there's no need to make an additional save() call.
-	 */
-	public function handleAdd(array $post)
-	{
-		$pdo = Database::getConnection();
-		$pdo->beginTransaction();
-		try {
+    /**
+     * Does all the database work for TicketController::add
+     *
+     * Saves the ticket, the issue, and creates history entries
+     * for the open and assignment actions.
+     *
+     * This function calls save() as needed.  After using this function,
+     * there's no need to make an additional save() call.
+     */
+    public function handleAdd(array $post)
+    {
+        $pdo = Database::getConnection();
+        $pdo->beginTransaction();
+        try {
             // Set all the location information using any fields the user posted
             $fields = [
                 'category_id', 'client_id', 'assignedPerson_id',
@@ -623,19 +623,19 @@ class Ticket extends ActiveRecord
                     $this->setAddressServiceData($data);
                 }
             }
-			$this->save();
+            $this->save();
 
-			$this->getCategory()->onTicketAdd($this);
-		}
-		catch (\Exception $e) {
-			$pdo->rollBack();
+            $this->getCategory()->onTicketAdd($this);
+        }
+        catch (\Exception $e) {
+            $pdo->rollBack();
 
-			$search = new Search();
-			$search->delete($this);
+            $search = new Search();
+            $search->delete($this);
 
-			throw $e;
-		}
-		$pdo->commit();
+            throw $e;
+        }
+        $pdo->commit();
 
         // Create the entry in the history log
         $history = new TicketHistory();
@@ -658,18 +658,18 @@ class Ticket extends ActiveRecord
             $history->setEnteredByPerson_id($this->getEnteredByPerson_id());
         }
         $history->save();
-	}
+    }
 
-	/**
-	 * Does all the database work for TicketController::changeStatus
-	 *
-	 * Saves the ticket and creates history entries for the status change
-	 *
-	 * This function calls save() as needed.  After using this function,
-	 * there's no need to make an additional save() call.
-	 */
-	public function handleChangeStatus(array $post)
-	{
+    /**
+     * Does all the database work for TicketController::changeStatus
+     *
+     * Saves the ticket and creates history entries for the status change
+     *
+     * This function calls save() as needed.  After using this function,
+     * there's no need to make an additional save() call.
+     */
+    public function handleChangeStatus(array $post)
+    {
         $substatus_id = !empty($post['substatus_id']) ? (int)$post['substatus_id'] : null;
         $this->setStatus($post['status'], $substatus_id);
 
@@ -699,16 +699,16 @@ class Ticket extends ActiveRecord
                 }
             }
         }
-	}
+    }
 
-	/**
-	 * Does all the database work for updating the ticket location
-	 *
-	 * This function calls save() as needed.  After using this function,
-	 * there's no need to make an additional save() call.
-	 */
-	public function handleChangeLocation(array $post)
-	{
+    /**
+     * Does all the database work for updating the ticket location
+     *
+     * This function calls save() as needed.  After using this function,
+     * there's no need to make an additional save() call.
+     */
+    public function handleChangeLocation(array $post)
+    {
         $data['original']['location'] = $this->getLocation();
 
         $this->clearAddressServiceData();
@@ -730,16 +730,16 @@ class Ticket extends ActiveRecord
         $history->setAction(new Action(Action::CHANGED_LOCATION));
         $history->setData($data);
         $history->save();
-	}
+    }
 
-	/**
-	 * Does all the database work for changing the category
-	 *
-	 * This function calls save() as needed.  After using this function,
-	 * there's no need to make an additional save() call.
-	 */
-	public function handleChangeCategory(array $post)
-	{
+    /**
+     * Does all the database work for changing the category
+     *
+     * This function calls save() as needed.  After using this function,
+     * there's no need to make an additional save() call.
+     */
+    public function handleChangeCategory(array $post)
+    {
         $data['original']['category_id'] = $this->getCategory_id();
 
         $this->setCategory_id($post['category_id']);
@@ -752,16 +752,16 @@ class Ticket extends ActiveRecord
         $history->setAction(new Action(Action::CHANGED_CATEGORY));
         $history->setData($data);
         $history->save();
-	}
+    }
 
-	/**
-	 * Does all the database work for creating a reponse history
-	 *
-	 * This function calls save() as needed.  After using this function,
-	 * there's no need to make an additional save() call.
-	 */
-	public function handleResponse(array $post)
-	{
+    /**
+     * Does all the database work for creating a reponse history
+     *
+     * This function calls save() as needed.  After using this function,
+     * there's no need to make an additional save() call.
+     */
+    public function handleResponse(array $post)
+    {
         $history = new TicketHistory();
         $history->setTicket($this);
         $history->setAction(new Action(Action::RESPONDED));
@@ -770,42 +770,42 @@ class Ticket extends ActiveRecord
         $history->setActionPerson_id($post['person_id']);
         $history->setNotes($post['notes']);
         $history->save();
-	}
+    }
 
-	/**
-	 * Checks whether the user is supposed to be allowed to see this ticket
-	 */
-	public function allowsDisplay(?Person $person=null): bool
-	{
-		$category = $this->getCategory_id() ? $this->getCategory() : new Category();
-		return $category->allowsDisplay($person);
-	}
+    /**
+     * Checks whether the user is supposed to be allowed to see this ticket
+     */
+    public function allowsDisplay(?Person $person=null): bool
+    {
+        $category = $this->getCategory_id() ? $this->getCategory() : new Category();
+        return $category->allowsDisplay($person);
+    }
 
-	public function getSlaDays()
-	{
-		$category = $this->getCategory();
-		if ($category) {
-			return $category->getSlaDays();
-		}
-	}
+    public function getSlaDays()
+    {
+        $category = $this->getCategory();
+        if ($category) {
+            return $category->getSlaDays();
+        }
+    }
 
-	public function getSlaPercentage(): ?int
-	{
-		$days = $this->getSlaDays();
-		if ($days) {
-			$dateEntered = new \DateTime($this->getEnteredDate());
-			$targetDate = $this->getStatus()=='open'
-				? new \DateTime()
-				: new \DateTime($this->getClosedDate());
-			$diff = $targetDate->diff($dateEntered);
-			$daysPassed = $diff->format('%a');
-			return (int)round($daysPassed/$days*100);
-		}
-		return null;
-	}
+    public function getSlaPercentage(): ?int
+    {
+        $days = $this->getSlaDays();
+        if ($days) {
+            $dateEntered = new \DateTime($this->getEnteredDate());
+            $targetDate = $this->getStatus()=='open'
+                ? new \DateTime()
+                : new \DateTime($this->getClosedDate());
+            $diff = $targetDate->diff($dateEntered);
+            $daysPassed = $diff->format('%a');
+            return (int)round($daysPassed/$days*100);
+        }
+        return null;
+    }
 
-	public function getExpectedDate(string $format='c', ?\DateTimeZone $tz=null): ?string
-	{
+    public function getExpectedDate(string $format='c', ?\DateTimeZone $tz=null): ?string
+    {
         $days = $this->getSlaDays();
         if ($days) {
             $date = new \DateTime(parent::get('enteredDate'));
@@ -814,29 +814,29 @@ class Ticket extends ActiveRecord
             return $date->format($format);
         }
         return null;
-	}
+    }
 
-	/**
-	 * Returns an array of Tickets that are children of this ticket
-	 */
-	public function getChildren(?bool $recursive=false): array
-	{
+    /**
+     * Returns an array of Tickets that are children of this ticket
+     */
+    public function getChildren(?bool $recursive=false): array
+    {
         $tickets = [];
-		$sql = 'select * from tickets where parent_id=?';
-		$res = Database::query($sql, [$this->getId()]);
+        $sql = 'select * from tickets where parent_id=?';
+        $res = Database::query($sql, [$this->getId()]);
         foreach ($res as $t) {
-			$ticket = new Ticket($t);
+            $ticket = new Ticket($t);
             if ($recursive) { $tickets = array_merge($tickets, $ticket->getChildren($recursive)); }
             $tickets[] = $ticket;
         }
         return $tickets;
-	}
+    }
 
-	/**
-	 * Returns an array of all the people involved with this ticket
-	 */
-	public function getPeople(?bool $recursive=false): array
-	{
+    /**
+     * Returns an array of all the people involved with this ticket
+     */
+    public function getPeople(?bool $recursive=false): array
+    {
         $people = [];
         $add    = function (Ticket $t) use (&$people) {
             $id  = (int)$t->getId();
@@ -857,13 +857,13 @@ class Ticket extends ActiveRecord
         if ($recursive) { foreach ($this->getChildren() as $t) { $add($t); }}
         $add($this);
         return $people;
-	}
+    }
 
-	/**
-	 * Returns everyone involved with this ticket who has an email address
-	 */
-	public function getNotificationPeople(): array
-	{
+    /**
+     * Returns everyone involved with this ticket who has an email address
+     */
+    public function getNotificationPeople(): array
+    {
         $people = [];
         $sql = "select distinct p.* from (
                     select enteredByPerson_id  person_id from tickets where id=? and enteredByPerson_id  is not null
@@ -879,5 +879,5 @@ class Ticket extends ActiveRecord
         $result  = Database::query($sql, [$id, $id, $id]);
         foreach ($result as $row) { $people[] = new Person($row); }
         return $people;
-	}
+    }
 }

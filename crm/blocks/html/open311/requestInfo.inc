@@ -18,8 +18,8 @@ $zipcode     = self::escape($this->ticket->getZip());
 $media_url = '';
 $media = $this->ticket->getMedia();
 if (count($media)) {
-	$m = $media[0];
-	$media_url = $m->getURL();
+    $m = $media[0];
+    $media_url = $m->getURL();
 }
 $image = $media_url ? "<img src=\"$media_url\" />" : '';
 

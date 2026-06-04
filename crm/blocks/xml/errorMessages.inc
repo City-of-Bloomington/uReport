@@ -19,7 +19,7 @@ foreach ($this->errorMessages as $e) {
         include     APPLICATION_HOME.$file;
     }
     else {
-		echo "<error><description>$error</description></error>";
+        echo "<error><description>$error</description></error>";
     }
     $errors[] = ob_get_clean();
 }

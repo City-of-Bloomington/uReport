@@ -10,10 +10,10 @@ use Application\Models\ContactMethodTable;
     <header>
         <h1><?= $this->template->title; ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URI; ?>/tickets/respond">
-		<fieldset><legend><?= $this->_('how_did_you_respond', 'messages'); ?></legend>
-			<input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
-			<?php
+    <form method="post" action="<?= BASE_URI; ?>/tickets/respond">
+        <fieldset><legend><?= $this->_('how_did_you_respond', 'messages'); ?></legend>
+            <input name="ticket_id" type="hidden" value="<?= $this->ticket->getId(); ?>" />
+            <?php
                 $helper = $this->template->getHelper('field');
 
                 $options = [];
@@ -48,9 +48,9 @@ use Application\Models\ContactMethodTable;
                     'type'  => 'textarea'
                 ]);
 
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons($this->ticket->getURL());
-			?>
-		</fieldset>
-	</form>
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons($this->ticket->getURL());
+            ?>
+        </fieldset>
+    </form>
 </section>

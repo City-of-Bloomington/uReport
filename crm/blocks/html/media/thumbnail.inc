@@ -12,13 +12,13 @@ use Application\Templates\Helpers\ButtonLink;
 
 $deleteButton = '';
 if (!$this->disableButtons && Person::isAllowed('media', 'delete')) {
-	$h = $this->template->getHelper('buttonLink');
-	$deleteButton = $h->buttonLink(
-		BASE_URI.'/media/delete?media_id='.$this->media->getId(),
-		$this->_('delete'),
-		'delete',
-		ButtonLink::SIZE_ICON
-	);
+    $h = $this->template->getHelper('buttonLink');
+    $deleteButton = $h->buttonLink(
+        BASE_URI.'/media/delete?media_id='.$this->media->getId(),
+        $this->_('delete'),
+        'delete',
+        ButtonLink::SIZE_ICON
+    );
 }
 
 $img = $this->media->getMedia_type() == 'image'
@@ -27,12 +27,12 @@ $img = $this->media->getMedia_type() == 'image'
 
 echo "
 <div class=\"thumbnail\">
-	<div class=\"image\">
-		<a href=\"{$this->media->getURL()}\">$img</a>
-	</div>
-	<div class=\"date\">
-		{$this->media->getUploaded(DATE_FORMAT)}
-		$deleteButton
-	</div>
+    <div class=\"image\">
+        <a href=\"{$this->media->getURL()}\">$img</a>
+    </div>
+    <div class=\"date\">
+        {$this->media->getUploaded(DATE_FORMAT)}
+        $deleteButton
+    </div>
 </div>
 ";

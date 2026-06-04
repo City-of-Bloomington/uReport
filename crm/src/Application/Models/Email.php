@@ -10,44 +10,44 @@ use Application\Database;
 
 class Email extends ActiveRecord
 {
-	public const TABLENAME = 'peopleEmails';
-	protected $person;
+    public const TABLENAME = 'peopleEmails';
+    protected $person;
 
-	public static $LABELS = array('Work','Home','Other');
+    public static $LABELS = array('Work','Home','Other');
 
-	/**
-	 * Populates the object with data
-	 *
-	 * Passing in an associative array of data will populate this object without
-	 * hitting the database.
-	 *
-	 * Passing in a scalar will load the data from the database.
-	 * This will load all fields in the table as properties of this class.
-	 * You may want to replace this with, or add your own extra, custom loading
-	 */
-	public function __construct($id=null)
-	{
-		if ($id) {
-			if (is_array($id)) {
+    /**
+     * Populates the object with data
+     *
+     * Passing in an associative array of data will populate this object without
+     * hitting the database.
+     *
+     * Passing in a scalar will load the data from the database.
+     * This will load all fields in the table as properties of this class.
+     * You may want to replace this with, or add your own extra, custom loading
+     */
+    public function __construct($id=null)
+    {
+        if ($id) {
+            if (is_array($id)) {
                 $this->exchangeArray($id);
-			}
-			else {
-				$sql = 'select * from peopleEmails where id=?';
-				$result = Database::query($sql, [$id]);
+            }
+            else {
+                $sql = 'select * from peopleEmails where id=?';
+                $result = Database::query($sql, [$id]);
                 if (count($result)) {
                     $this->exchangeArray($result[0]);
                 }
                 else {
                     throw new \Exception('emails/unknown');
                 }
-			}
-		}
-		else {
-			// This is where the code goes to generate a new, empty instance.
-			// Set any default values for properties that need it here
-			$this->setLabel('Other');
-		}
-	}
+            }
+        }
+        else {
+            // This is where the code goes to generate a new, empty instance.
+            // Set any default values for properties that need it here
+            $this->setLabel('Other');
+        }
+    }
 
     /**
      * When repopulating with fresh data, make sure to set default
@@ -60,87 +60,87 @@ class Email extends ActiveRecord
         $this->person = null;
     }
 
-	public function validate()
-	{
+    public function validate()
+    {
         if (!self::isValidFormat($this->getEmail())) { throw new \Exception('email/invalidFormat'); }
 
-		if (!$this->getLabel()) { $this->setLabel('Other'); }
-		if (!$this->getPerson_id()) { throw new \Exception('missingRequiredFields'); }
+        if (!$this->getLabel()) { $this->setLabel('Other'); }
+        if (!$this->getPerson_id()) { throw new \Exception('missingRequiredFields'); }
 
-		// Make sure there's at least one email used for notifications
-		$notificationEmails = $this->getPerson()->getNotificationEmails();
-		if (!count($notificationEmails)) { $this->setUsedForNotifications(true); }
-		if  (count($notificationEmails) == 1) {
-			$e = $notificationEmails[0];
-			if ($e->getId()==$this->getId()) { $this->setUsedForNotifications(true); }
-		}
+        // Make sure there's at least one email used for notifications
+        $notificationEmails = $this->getPerson()->getNotificationEmails();
+        if (!count($notificationEmails)) { $this->setUsedForNotifications(true); }
+        if  (count($notificationEmails) == 1) {
+            $e = $notificationEmails[0];
+            if ($e->getId()==$this->getId()) { $this->setUsedForNotifications(true); }
+        }
 
-		// Required for the MySQL null default handler to be used
-		if (!$this->isUsedForNotifications()) {
-			unset($this->data['usedForNotifications']);
-		}
-	}
+        // Required for the MySQL null default handler to be used
+        if (!$this->isUsedForNotifications()) {
+            unset($this->data['usedForNotifications']);
+        }
+    }
 
-	public function save()   { parent::save();   }
-	public function delete()
-	{
-		$person = $this->getPerson();
+    public function save()   { parent::save();   }
+    public function delete()
+    {
+        $person = $this->getPerson();
 
-		parent::delete();
+        parent::delete();
 
-		// If we delete the only email used for notifications,
-		// we need to mark one of the other email addresses.
-		$sql    = 'select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?';
-		$result = Database::query($sql, [$person->getId()]);
-		if (!$result[0]['c']) {
-			$list = $person->getEmails();
-			if (count($list)) {
-				$e = $list[0];
-				$e->setUsedForNotifications(true);
-				$e->save();
-			}
-		}
-	}
+        // If we delete the only email used for notifications,
+        // we need to mark one of the other email addresses.
+        $sql    = 'select count(*) as c from peopleEmails where usedForNotifications=1 and person_id=?';
+        $result = Database::query($sql, [$person->getId()]);
+        if (!$result[0]['c']) {
+            $list = $person->getEmails();
+            if (count($list)) {
+                $e = $list[0];
+                $e->setUsedForNotifications(true);
+                $e->save();
+            }
+        }
+    }
 
-	//----------------------------------------------------------------
-	// Generic Getters & Setters
-	//----------------------------------------------------------------
-	public function getEmail() { return parent::get('email'); }
-	public function getLabel() { return parent::get('label'); }
+    //----------------------------------------------------------------
+    // Generic Getters & Setters
+    //----------------------------------------------------------------
+    public function getEmail() { return parent::get('email'); }
+    public function getLabel() { return parent::get('label'); }
 
-	public function setEmail($s) { parent::set('email', $s); }
-	public function setLabel($s) { parent::set('label', $s); }
+    public function setEmail($s) { parent::set('email', $s); }
+    public function setLabel($s) { parent::set('label', $s); }
 
-	public function getPerson_id() { return parent::get('person_id'); }
-	public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
-	public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
-	public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
+    public function getPerson_id() { return parent::get('person_id'); }
+    public function getPerson()    { return parent::getForeignKeyObject(__namespace__.'\Person', 'person_id');      }
+    public function setPerson_id($id)     { parent::setForeignKeyField (__namespace__.'\Person', 'person_id', $id); }
+    public function setPerson(Person $p)  { parent::setForeignKeyObject(__namespace__.'\Person', 'person_id', $p);  }
 
-	public function getUsedForNotifications() { return parent::get('usedForNotifications') ? true : false; }
-	public function setUsedForNotifications($b)      { $this->data['usedForNotifications'] = $b ? 1 : 0; }
+    public function getUsedForNotifications() { return parent::get('usedForNotifications') ? true : false; }
+    public function setUsedForNotifications($b)      { $this->data['usedForNotifications'] = $b ? 1 : 0; }
 
-	public function handleUpdate($post)
-	{
-		$fields = array('email', 'label', 'person_id', 'usedForNotifications');
-		foreach ($fields as $f) {
-			if (isset($post[$f])) {
-				$set = 'set'.ucfirst($f);
-				$this->$set($post[$f]);
-			}
-		}
-	}
+    public function handleUpdate($post)
+    {
+        $fields = array('email', 'label', 'person_id', 'usedForNotifications');
+        foreach ($fields as $f) {
+            if (isset($post[$f])) {
+                $set = 'set'.ucfirst($f);
+                $this->$set($post[$f]);
+            }
+        }
+    }
 
-	//----------------------------------------------------------------
-	// Custom Functions
-	//----------------------------------------------------------------
-	public function __toString() { return "{$this->getEmail()}"; }
+    //----------------------------------------------------------------
+    // Custom Functions
+    //----------------------------------------------------------------
+    public function __toString() { return "{$this->getEmail()}"; }
 
-	/**
-	 * Alias for ::getUsedForNotifications
-	 *
-	 * @return bool
-	 */
-	public function isUsedForNotifications() { return $this->getUsedForNotifications(); }
+    /**
+     * Alias for ::getUsedForNotifications
+     *
+     * @return bool
+     */
+    public function isUsedForNotifications() { return $this->getUsedForNotifications(); }
 
     public static function isValidFormat(string $email): bool
     {

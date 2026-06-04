@@ -9,15 +9,15 @@ abstract class View
 {
     protected $theme;
     protected $theme_config = [];
-	protected $vars         = [];
+    protected $vars         = [];
 
-	abstract public function render();
+    abstract public function render();
 
-	/**
-	 * Configures the gettext translations
-	 */
-	public function __construct(?array $vars=null)
-	{
+    /**
+     * Configures the gettext translations
+     */
+    public function __construct(?array $vars=null)
+    {
         if (defined('THEME')) {
             $dir = SITE_HOME.'/Themes/'.THEME;
 
@@ -29,11 +29,11 @@ abstract class View
             }
         }
 
-		if ($vars) {
-			foreach ($vars as $name=>$value) {
-				$this->vars[$name] = $value;
-			}
-		}
+        if ($vars) {
+            foreach ($vars as $name=>$value) {
+                $this->vars[$name] = $value;
+            }
+        }
 
         $locale = LOCALE.'.utf8';
 
@@ -43,49 +43,49 @@ abstract class View
         bindtextdomain('messages', APPLICATION_HOME.'/language');
         bindtextdomain('errors',   APPLICATION_HOME.'/language');
         textdomain('labels');
-	}
+    }
 
-	/**
-	 * Magic Method for setting object properties
-	 *
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function __set($key,$value) {
-		$this->vars[$key] = $value;
-	}
-	/**
-	 * Magic method for getting object properties
-	 *
-	 * @param string $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		if (isset($this->vars[$key])) {
-			return $this->vars[$key];
-		}
-		return null;
-	}
-
-	/**
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function __isset(string $key): bool
+    /**
+     * Magic Method for setting object properties
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function __set($key,$value) {
+        $this->vars[$key] = $value;
+    }
+    /**
+     * Magic method for getting object properties
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function __get($key)
     {
-		return array_key_exists($key,$this->vars);
-	}
+        if (isset($this->vars[$key])) {
+            return $this->vars[$key];
+        }
+        return null;
+    }
 
-	/**
-	 * Cleans strings for output
-	 *
-	 * There are more bad characters than htmlspecialchars deals with.  We just want
-	 * to add in some other characters to clean.  While here, we might as well
-	 * have it trim out the whitespace too.
-	 */
-	public static function escape(array|string|null $input, int $quotes=ENT_QUOTES): ?string
-	{
+    /**
+     * @param string $key
+     * @return boolean
+     */
+    public function __isset(string $key): bool
+    {
+        return array_key_exists($key,$this->vars);
+    }
+
+    /**
+     * Cleans strings for output
+     *
+     * There are more bad characters than htmlspecialchars deals with.  We just want
+     * to add in some other characters to clean.  While here, we might as well
+     * have it trim out the whitespace too.
+     */
+    public static function escape(array|string|null $input, int $quotes=ENT_QUOTES): ?string
+    {
         if ($input) {
             if (is_array($input)) {
                 foreach ($input as $key=>$value) {
@@ -97,14 +97,14 @@ abstract class View
             }
         }
 
-		return $input;
-	}
+        return $input;
+    }
 
-	/**
-	 * Reverses the escaping done by View::escape()
-	 */
-	public static function unescape(array|string|null $input): ?string
-	{
+    /**
+     * Reverses the escaping done by View::escape()
+     */
+    public static function unescape(array|string|null $input): ?string
+    {
         if ($input) {
             if (is_array($input)) {
                 foreach ($input as $key=>$value) {
@@ -116,7 +116,7 @@ abstract class View
             }
         }
         return $input;
-	}
+    }
 
     /**
      * Returns the gettext translation of msgid

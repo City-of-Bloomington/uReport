@@ -15,17 +15,17 @@ use Application\Template;
 
 class DepartmentsController extends Controller
 {
-	public function index()
-	{
-		$table = new DepartmentTable();
-		$list = $table->find();
+    public function index()
+    {
+        $table = new DepartmentTable();
+        $list = $table->find();
 
-		$this->template->title = $this->template->_(['department', 'departments', $list['total']]);
-		$this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$list['rows']]);
-	}
+        $this->template->title = $this->template->_(['department', 'departments', $list['total']]);
+        $this->template->blocks[] = new Block('departments/departmentList.inc', ['departmentList'=>$list['rows']]);
+    }
 
-	public function view()
-	{
+    public function view()
+    {
         if (!empty($_GET['department_id'])) {
             $department = new Department($_GET['department_id']);
         }
@@ -42,60 +42,60 @@ class DepartmentsController extends Controller
             header('HTTP/1.1 404 Not Found', true, 404);
             $this->template->blocks[] = new Block('404.inc');
         }
-	}
+    }
 
-	public function update()
-	{
-		// Load the department for editing
-		if (isset($_REQUEST['department_id']) && $_REQUEST['department_id']) {
-			try {
-				$department = new Department($_REQUEST['department_id']);
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-				header('Location: '.BASE_URL.'/departments');
-				exit();
-			}
-		}
-		else {
-			$department = new Department();
-		}
+    public function update()
+    {
+        // Load the department for editing
+        if (isset($_REQUEST['department_id']) && $_REQUEST['department_id']) {
+            try {
+                $department = new Department($_REQUEST['department_id']);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+                header('Location: '.BASE_URL.'/departments');
+                exit();
+            }
+        }
+        else {
+            $department = new Department();
+        }
 
-		if (isset($_POST['name'])) {
-			try {
+        if (isset($_POST['name'])) {
+            try {
                 // The department will call save() as needed
-				$department->handleUpdate($_POST);
-				$department->save();
+                $department->handleUpdate($_POST);
+                $department->save();
 
-				header('Location: '.BASE_URL.'/departments/view?department_id='.$department->getId());
-				exit();
-			}
-			catch (\Exception $e) {
-				$_SESSION['errorMessages'][] = $e;
-			}
-		}
+                header('Location: '.BASE_URL.'/departments/view?department_id='.$department->getId());
+                exit();
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
 
-		$this->template->title = $department->getId()
+        $this->template->title = $department->getId()
             ? $this->template->_('department_edit')
             : $this->template->_('department_add');
-		$this->template->blocks[] = new Block('departments/updateDepartmentForm.inc', [
+        $this->template->blocks[] = new Block('departments/updateDepartmentForm.inc', [
             'department' => $department,
             'action'     => BASE_URI.'/departments/update',
             'return_url' => BASE_URI.'/departments'
         ]);
-	}
+    }
 
-	public function delete()
-	{
-		try {
-			$department = new Department($_GET['department_id']);
-			$department->delete();
-		}
-		catch (\Exception $e) {
-			$_SESSION['errorMessages'][] = $e;
-		}
+    public function delete()
+    {
+        try {
+            $department = new Department($_GET['department_id']);
+            $department->delete();
+        }
+        catch (\Exception $e) {
+            $_SESSION['errorMessages'][] = $e;
+        }
 
-		header('Location: '.BASE_URL.'/departments');
-		exit();
-	}
+        header('Location: '.BASE_URL.'/departments');
+        exit();
+    }
 }

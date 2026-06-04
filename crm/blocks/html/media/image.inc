@@ -20,6 +20,6 @@ header("Content-type: $mime");
 header("Content-Disposition: $disposition; filename=$filename");
 
 if ($this->media->getMedia_type() === 'image') {
-	$image = new Image($this->media);
-	$image->output($this->size);
+    $image = new Image($this->media);
+    $image->output($this->size);
 }

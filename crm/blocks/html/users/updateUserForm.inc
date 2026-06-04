@@ -17,8 +17,8 @@ foreach ($fields as $f) {
     <header>
         <h1><?= $this->template->title; ?></h1>
     </header>
-	<form method="post" action="<?= BASE_URL; ?>/users/update">
-		<fieldset><legend><?= $this->_('login'); ?></legend>
+    <form method="post" action="<?= BASE_URL; ?>/users/update">
+        <fieldset><legend><?= $this->_('login'); ?></legend>
             <?php
                 $field = $this->template->getHelper('field');
 
@@ -49,8 +49,8 @@ foreach ($fields as $f) {
                     'options' => $options
                 ]);
             ?>
-			<p><?= $this->_('employee_authentication_description', 'messages'); ?></p>
-		</fieldset>
+            <p><?= $this->_('employee_authentication_description', 'messages'); ?></p>
+        </fieldset>
 
         <?php
             $fields = ['firstname','middlename','lastname','organization'];
@@ -80,11 +80,11 @@ foreach ($fields as $f) {
             ?>
         </fieldset>
 
-		<fieldset><legend><?= $this->_('submit'); ?></legend>
-			<?php
-				$helper = $this->template->getHelper('saveAndCancelButtons');
-				echo $helper->saveAndCancelButtons(BASE_URI.'/users');
-			?>
-		</fieldset>
-	</form>
+        <fieldset><legend><?= $this->_('submit'); ?></legend>
+            <?php
+                $helper = $this->template->getHelper('saveAndCancelButtons');
+                echo $helper->saveAndCancelButtons(BASE_URI.'/users');
+            ?>
+        </fieldset>
+    </form>
 </section>

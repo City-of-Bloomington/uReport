@@ -9,6 +9,6 @@
     <script type="text/javascript">
         CRM.BASE_URI = '<?= BASE_URI; ?>';
         CRM.BASE_URL = '<?= BASE_URL; ?>';
-	</script>
+    </script>
     <title><?= APPLICATION_NAME; ?>: <?= self::escape($this->title); ?></title>
 </head>

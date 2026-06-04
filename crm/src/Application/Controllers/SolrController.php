@@ -18,24 +18,24 @@ use Application\Url;
 
 class SolrController extends Controller
 {
-	public function index()
-	{
-		if (!empty($_GET['wt']) && $_GET['wt'] == 'json') {
-			header('Content-type: text/json; charset=utf-8');
-		}
-		else {
-			header('Content-type: text/xml; charset=utf-8');
-		}
+    public function index()
+    {
+        if (!empty($_GET['wt']) && $_GET['wt'] == 'json') {
+            header('Content-type: text/json; charset=utf-8');
+        }
+        else {
+            header('Content-type: text/xml; charset=utf-8');
+        }
 
-		global $SOLR;
-		$config = $SOLR['ureport'];
+        global $SOLR;
+        $config = $SOLR['ureport'];
 
-		$protocol = $config['port']==443 ? 'http://' : 'http://';
-		$url = $protocol.$config['host'];
-		if ($config['port'] != 80) { $url.= ':'.$config['port']; }
-		$url.= '/solr/'.$config['core'].'/select?'.$_SERVER['QUERY_STRING'];
+        $protocol = $config['port']==443 ? 'http://' : 'http://';
+        $url = $protocol.$config['host'];
+        if ($config['port'] != 80) { $url.= ':'.$config['port']; }
+        $url.= '/solr/'.$config['core'].'/select?'.$_SERVER['QUERY_STRING'];
 
-		echo Url::get($url);
-		exit();
-	}
+        echo Url::get($url);
+        exit();
+    }
 }
