@@ -215,9 +215,16 @@ class Search
 				// coordinates is a not a numeric value but does not need to be quoted.
 				elseif (false !== strpos($field, 'bbox')) {
 					$key = 'coordinates';
-					list($minLat, $minLng, $maxLat, $maxLng) = explode(',', $get[$field]);
-					$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
-					$fq[] = ['query' => "$key:$value"];
+					$b   = explode(',', $get['bbox']);
+					if (count($b) == 4) {
+						$minLat = is_numeric($b[0]) ? (float)$b[0] : null;
+						$minLng = is_numeric($b[1]) ? (float)$b[1] : null;
+						$maxLat = is_numeric($b[2]) ? (float)$b[2] : null;
+						$maxLng = is_numeric($b[3]) ? (float)$b[3] : null;
+
+						$value = "[$minLat,$minLng TO $maxLat,$maxLng]";
+						$fq[] = ['query' => "$key:$value"];
+					}
 				}
 				elseif ($field == 'sla' && $get[$field] == 'overdue') {
                     $fq[] = ['query' => self::SLA_OVERDUE_FUNCTION];
