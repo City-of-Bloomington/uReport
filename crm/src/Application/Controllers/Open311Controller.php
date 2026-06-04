@@ -140,8 +140,8 @@ class Open311Controller extends Controller
 				// Unknown ticket
 				header('HTTP/1.0 404 Not Found', true, 404);
 				$_SESSION['errorMessages'][] = $e;
-				return;
 			}
+			return;
 		}
 		// Handle POST Service Request
 		elseif (isset($_POST['service_code'])) {

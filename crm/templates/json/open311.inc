@@ -9,6 +9,7 @@
  * is wrapped in a call to the function they requested.
  */
 header('Content-type: application/json; charset=utf-8');
+$this->_include('partials/errorMessages.inc');
 if (isset($_GET['callback'])) {
 	echo $_GET['callback'].'(';
 }
