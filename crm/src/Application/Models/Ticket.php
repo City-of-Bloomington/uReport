@@ -825,8 +825,9 @@ class Ticket extends ActiveRecord
 		$sql = 'select * from tickets where parent_id=?';
 		$res = Database::query($sql, [$this->getId()]);
         foreach ($res as $t) {
-            if ($recursive) { $tickets = array_merge($tickets, $t->getChildren($recursive)); }
-            $tickets[] = $t;
+			$ticket = new Ticket($t);
+            if ($recursive) { $tickets = array_merge($tickets, $ticket->getChildren($recursive)); }
+            $tickets[] = $ticket;
         }
         return $tickets;
 	}
