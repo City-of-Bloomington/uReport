@@ -2,6 +2,7 @@ buildignore
 .git/
 .git*
 .sass-cache
+site_config.php
 data/media/*
 data/sessions/*
 data/Themes/COB/vendor
