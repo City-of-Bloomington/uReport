@@ -196,7 +196,7 @@ class TicketHistory extends ActiveRecord
         }
 
 		foreach ($placeholders as $key=>$value) {
-			$message = preg_replace("/\{$key\}/", $value, $message);
+			$message = preg_replace("/\{$key\}/", $value ?? '', $message);
 		}
 		return $message;
 	}

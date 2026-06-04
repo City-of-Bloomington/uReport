@@ -161,7 +161,7 @@ abstract class ActiveRecord
      * Loads the object record for the foreign key and caches
      * the object in a private variable
      */
-    protected function setForeignKeyField(string $class, string $field, string $id)
+    protected function setForeignKeyField(string $class, string $field, ?string $id=null)
     {
         $var = preg_replace('/_id$/', '', $field);
 
