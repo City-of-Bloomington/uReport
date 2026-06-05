@@ -103,8 +103,9 @@ class TicketsController extends Controller
         $fields = [];
         $displayable = TicketTable::getDisplayableFields();
 
-        if (is_array($_GET['fields'])) {
-            foreach ($_GET['fields'] as $f=>$v) {
+        if (      isset($_GET['fields'])
+            && is_array($_GET['fields'])) {
+            foreach (   $_GET['fields'] as $f=>$v) {
                 if (array_key_exists($f, $displayable)) {
                     $fields[] = $f;
                 }
