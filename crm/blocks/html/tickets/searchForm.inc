@@ -177,7 +177,9 @@ use Application\Url;
             <?php
                 // Default columns to display
                 if (!isset($_GET['fields'])) {
-                    $_GET['fields'] = TicketTable::$defaultFieldsToDisplay;
+                    foreach (TicketTable::$defaultFieldsToDisplay as $f) {
+                        $_GET['fields'][$f] = $f;
+                    }
                 }
 
                 $values  = [];

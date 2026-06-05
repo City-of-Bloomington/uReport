@@ -57,7 +57,6 @@ class TicketsController extends Controller
 
         $paginated = true;
         $format    = $_GET['format'] ?? 'html';
-        $fields    = $_GET['fields'] ?? TicketTable::$defaultFieldsToDisplay;
 
         if (($format == 'print' || $format == 'csv') && Person::isAllowed('tickets', 'print')) {
             $paginated = false;
@@ -85,10 +84,11 @@ class TicketsController extends Controller
             $this->template->blocks = [ new Block('400.inc') ];
             return;
         }
+
         $params = [
             'result'     => $result,
             'paginated'  => $paginated,
-            'fields'     => $fields
+            'fields'     => self::fieldsToDisplay()
         ];
         $this->template->blocks = [
             new Block($format == 'map' ? 'tickets/searchResultsMap.inc' : 'tickets/searchResults.inc', $params)
@@ -96,6 +96,22 @@ class TicketsController extends Controller
         if ($this->template->outputFormat == 'html') {
             $this->template->blocks['panel-one'] = [ new Block('tickets/searchForm.inc', $params) ];
         }
+    }
+
+    private static function fieldsToDisplay(): array
+    {
+        $fields = [];
+        $displayable = TicketTable::getDisplayableFields();
+
+        if (is_array($_GET['fields'])) {
+            foreach ($_GET['fields'] as $f=>$v) {
+                if (array_key_exists($f, $displayable)) {
+                    $fields[] = $f;
+                }
+            }
+        }
+
+        return $fields ? $fields : TicketTable::$defaultFieldsToDisplay;
     }
 
     /**

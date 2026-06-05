@@ -27,7 +27,7 @@ foreach ($tickets as $ticket) {
 
     $dl = [];
 
-    foreach ($this->fields as $field=>$value) {
+    foreach ($this->fields as $field) {
         // Make sure the user is allowed to see this field
         if (array_key_exists($field, $displayableFields)) {
             // Format the data being asked for

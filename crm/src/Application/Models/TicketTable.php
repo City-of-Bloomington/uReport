@@ -17,7 +17,7 @@ class TicketTable extends PdoRepository
      * The set of fields we want to display in search results by default
      */
     public static $defaultFieldsToDisplay = [
-        'enteredDate'=>'on', 'location'=>'on', 'description'=>'on', 'category_id'=>'on', 'status'=>'on'
+        'enteredDate', 'location', 'description', 'category_id', 'status'
     ];
 
     public function find(array $fields=[], ?string $order='t.enteredDate desc', ?int $itemsPerPage=null, ?int $currentPage=null): array
