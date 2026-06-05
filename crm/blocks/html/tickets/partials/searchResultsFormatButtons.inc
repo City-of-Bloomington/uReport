@@ -18,10 +18,10 @@ echo '<div id="resultFormatButtons">';
                              $this->_('search_results_text'),
                              $format == 'text' ? 'text current' : 'text');
 
-    $url->format = 'map';
-    echo $helper->buttonLink($url,
-                             $this->_('search_results_map'),
-                             $format == 'map' ? 'map current' : 'map');
+    // $url->format = 'map';
+    // echo $helper->buttonLink($url,
+    //                          $this->_('search_results_map'),
+    //                          $format == 'map' ? 'map current' : 'map');
 
     // Users should filter the results somehow before they are allowed to
     // call for the full, raw results

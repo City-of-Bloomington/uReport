@@ -13,6 +13,7 @@
  */
 namespace Application\Controllers;
 
+use Application\Block;
 use Application\Controller;
 use Application\Url;
 
@@ -20,22 +21,26 @@ class SolrController extends Controller
 {
     public function index()
     {
-        if (!empty($_GET['wt']) && $_GET['wt'] == 'json') {
-            header('Content-type: text/json; charset=utf-8');
-        }
-        else {
-            header('Content-type: text/xml; charset=utf-8');
-        }
+        http_response_code(404);
+        header('HTTP/1.1 404 Not Found', true, 404);
+        $this->template->blocks = [ new Block('404.inc') ];
 
-        global $SOLR;
-        $config = $SOLR['ureport'];
-
-        $protocol = $config['port']==443 ? 'http://' : 'http://';
-        $url = $protocol.$config['host'];
-        if ($config['port'] != 80) { $url.= ':'.$config['port']; }
-        $url.= '/solr/'.$config['core'].'/select?'.$_SERVER['QUERY_STRING'];
-
-        echo Url::get($url);
-        exit();
+        // if (!empty($_GET['wt']) && $_GET['wt'] == 'json') {
+        //     header('Content-type: text/json; charset=utf-8');
+        // }
+        // else {
+        //     header('Content-type: text/xml; charset=utf-8');
+        // }
+        //
+        // global $SOLR;
+        // $config = $SOLR['ureport'];
+        //
+        // $protocol = $config['port']==443 ? 'http://' : 'http://';
+        // $url = $protocol.$config['host'];
+        // if ($config['port'] != 80) { $url.= ':'.$config['port']; }
+        // $url.= '/solr/'.$config['core'].'/select?'.$_SERVER['QUERY_STRING'];
+        //
+        // echo Url::get($url);
+        // exit();
     }
 }
