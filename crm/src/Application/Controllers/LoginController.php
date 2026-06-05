@@ -71,6 +71,13 @@ class LoginController extends Controller
         exit();
     }
 
+    public function cas()
+    {
+        http_response_code(404);
+        header('HTTP/1.1 404 Not Found', true, 404);
+        $this->template->blocks = [ new Block('404.inc') ];
+    }
+
     /**
      * Checks for a user account with the given username.
      * If they exist it will register the user into the session and redirect.
