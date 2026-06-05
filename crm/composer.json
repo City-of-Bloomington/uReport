@@ -4,7 +4,7 @@
     "require": {
         "php": ">=8.5",
         "graylog2/gelf-php":               "@stable",
-        "jumbojett/openid-connect-php":    "@stable",
+        "jumbojett/openid-connect-php":    "dev-master",
         "solarium/solarium":               "@stable",
         "symfony/event-dispatcher":        "@stable",
         "phpmailer/phpmailer":             "@stable",
