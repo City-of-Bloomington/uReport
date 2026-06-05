@@ -107,7 +107,6 @@ class Category extends ActiveRecord
     public function getCategoryGroup_id()       { return parent::get('categoryGroup_id');       }
     public function getDescription()            { return parent::get('description');            }
     public function getActive()                 { return parent::get('active');                 }
-    public function getFeatured()               { return parent::get('featured');               }
     public function getPostingPermissionLevel() { return parent::get('postingPermissionLevel'); }
     public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
     public function getSlaDays(): ?int          { return $this->data['slaDays'] ?? null;        }
@@ -123,7 +122,6 @@ class Category extends ActiveRecord
     public function setName                  ($s) { parent::set('name',                  $s); }
     public function setDescription           ($s) { parent::set('description',           $s); }
     public function setActive                ($s) { $this->data['active'  ] = $s ? 1 : 0; }
-    public function setFeatured              ($s) { $this->data['featured'] = $s ? 1 : 0; }
     public function setPostingPermissionLevel($s) { parent::set('postingPermissionLevel',$s); }
     public function setNotificationReplyEmail($s) { parent::set('notificationReplyEmail',$s); }
     public function setAutoCloseIsActive     ($b) { $this->data['autoCloseIsActive'] = $b ? 1 : 0; }
@@ -164,7 +162,7 @@ class Category extends ActiveRecord
         $fields = [
             'name', 'description', 'department_id', 'defaultPerson_id', 'categoryGroup_id',
             'postingPermissionLevel', 'displayPermissionLevel',
-            'customFields', 'slaDays', 'notificationReplyEmail',
+            'customFields', 'notificationReplyEmail',
             'autoCloseIsActive', 'autoCloseSubstatus_id'
         ];
         foreach ($fields as $f) {
@@ -172,8 +170,8 @@ class Category extends ActiveRecord
             $this->$set($post[$f]);
         }
 
-        $this->setActive  (!empty($post['active'  ]) ? $post['active'  ] : false);
-        $this->setFeatured(!empty($post['featured']) ? $post['featured'] : false);
+        $this->setSlaDays(!empty($post['slaDays']) ? (int)$post['slaDays'] : null);
+        $this->setActive (!empty($post['active' ]) ?      $post['active' ] : false);
     }
 
     //----------------------------------------------------------------
@@ -181,7 +179,6 @@ class Category extends ActiveRecord
     //----------------------------------------------------------------
     public function autoCloseIsActive(): bool { return $this->getAutoCloseIsActive() ? true : false; }
     public function isActive()         : bool { return $this->getActive()            ? true : false; }
-    public function isFeatured()       : bool { return $this->getFeatured()          ? true : false; }
 
     /**
      * Event handler called from Ticket::handleAdd()

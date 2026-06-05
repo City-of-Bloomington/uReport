@@ -15,7 +15,6 @@ foreach ($this->categoryList as $category) {
         'keywords'     => "",
         'group'        => "{$category->getCategoryGroup()}"
     ];
-    if ($category->isFeatured()) { $s['featured'] = 1; }
     $services[] = $s;
 }
 echo json_encode($services);

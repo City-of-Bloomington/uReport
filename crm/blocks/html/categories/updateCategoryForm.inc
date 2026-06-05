@@ -11,7 +11,7 @@ use Application\Models\SubstatusTable;
 $fields = [
     'id', 'name', 'description', 'postingPermissionLevel', 'displayPermissionLevel',
     'categoryGroup_id', 'department_id', 'defaultPerson_id', 'notificationReplyEmail',
-    'active', 'featured'
+    'active'
 ];
 foreach ($fields as $field) {
     $get = 'get'.ucfirst($field);
@@ -37,13 +37,6 @@ $helper = $this->template->getHelper('field');
                     ['value'=>1, 'label'=>$this->_('active_yes')],
                     ['value'=>0, 'label'=>$this->_('active_no' )]
                 ]
-            ]);
-            echo $helper->field([
-                'name'    => 'featured',
-                'label'   => $this->_('featured'),
-                'type'    => 'checkbox',
-                'value'   => [$featured],
-                'options' => [['value'=>1, 'label'=>'']]
             ]);
 
             $t = new CategoryGroupTable();
