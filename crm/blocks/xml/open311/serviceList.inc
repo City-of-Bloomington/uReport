@@ -11,11 +11,10 @@ foreach ($this->categoryList as $category) {
     $group        = self::escape($category->getCategoryGroup());
     $description  = self::escape($category->getDescription());
     $metadata     = $category->getCustomFields() ? 'true' : 'false';
-    $featured     = $category->isFeatured() ? 'featured="true"' : '';
 
 
     echo "
-    <service $featured>
+    <service>
         <service_code>$service_code</service_code>
         <service_name>$service_name</service_name>
         <type>realtime</type>
