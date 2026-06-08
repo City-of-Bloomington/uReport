@@ -61,7 +61,14 @@ if (isset($resource) && isset($action) && $ACL->hasResource($resource)) {
     if ($ACL->isAllowed($role, $resource, $action)) {
         $controller = 'Application\\Controllers\\'.ucfirst($resource).'Controller';
         $c = new $controller($template);
-        $c->$action();
+        if (method_exists($c, $action)) {
+            $c->$action();
+        }
+        else {
+            http_response_code(404);
+            header('HTTP/1.1 404 Not Found', true, 404);
+            $template->blocks[] = new Block('404.inc');
+        }
     }
     else {
         header('HTTP/1.1 403 Forbidden', true, 403);
