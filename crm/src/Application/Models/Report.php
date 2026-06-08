@@ -196,7 +196,8 @@ class Report
      */
     private static function handleSearchParameters(array $get): string
     {
-        $options = array();
+        $options = ['t.category_id is not null'];
+
         if (!empty($get['enteredDate'])) {
             if (!empty($get['enteredDate']['start'])) {
                 $start = self::parseDate($get['enteredDate']['start']);
