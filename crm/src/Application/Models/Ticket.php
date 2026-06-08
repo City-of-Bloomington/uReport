@@ -395,8 +395,11 @@ class Ticket extends ActiveRecord
         // we'll remove the ticket_id field.
         // All the rest of the fields should be cluster_ids
         $result = Database::query('select * from ticket_geodata where ticket_id=?', [$this->getId()]);
-        unset( $result[0]['ticket_id']);
-        return $result[0];
+        if (count($result)) {
+            unset( $result[0]['ticket_id']);
+            return $result[0];
+        }
+        return [];
     }
 
     public function getMedia(): array
