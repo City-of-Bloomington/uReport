@@ -6,6 +6,11 @@ parameters:
     - Application\Template
     - Application\View
     - Application\Url
+    - Solarium\Core\Query\DocumentInterface
+  dynamicConstantNames:
+    NOTIFICATIONS_ENABLED: bool
+    GRAYLOG_DOMAIN:        string
+    ADDRESS_SERVICE:       string
   paths:
     - src/Application
     - src/Domain
