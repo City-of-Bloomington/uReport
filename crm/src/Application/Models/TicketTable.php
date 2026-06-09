@@ -69,12 +69,9 @@ class TicketTable extends PdoRepository
             }
         }
         // Only get tickets for categories this user is allowed to see
-        if (!isset($_SESSION['USER'])) {
-            $where[] = "c.displayPermissionLevel='anonymous'";
-        }
-        elseif (   $_SESSION['USER']->getRole()!='Staff'
-                && $_SESSION['USER']->getRole()!='Administrator') {
-            $where[] = "c.displayPermissionLevel in ('public','anonymous')";
+        if (   !isset   ($_SESSION['USER'])
+            || !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
+            $where[] = "c.displayPermissionLevel='public'";
         }
 
         $sql  = parent::buildSql($select, $joins, $where, null, $order);

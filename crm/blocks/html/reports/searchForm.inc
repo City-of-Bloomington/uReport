@@ -79,11 +79,11 @@ $helper = $this->template->getHelper('field');
                 <summary><?= $this->_('postingPermissionLevel'); ?></summary>
                 <?php
                     $value   = !empty($_GET['postingPermissionLevel'])
-                                ? $_GET['postingPermissionLevel']
-                                : '';
+                             ? self::escape($_GET['postingPermissionLevel'])
+                             : '';
                     $options = [
-                        ['value' => 'anonymous'],
-                        ['value' => 'staff']
+                        ['value' => 'public' ],
+                        ['value' => 'private']
                     ];
                     echo $helper->field([
                         'name'    => 'postingPermissionLevel',

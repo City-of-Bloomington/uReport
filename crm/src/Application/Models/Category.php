@@ -247,32 +247,18 @@ class Category extends ActiveRecord
         }
     }
 
-    public function allowsDisplay(?Person $person=null): bool
+    public function allowsDisplay(?Person $p=null): bool
     {
-        if (!$person) {
-            return $this->getDisplayPermissionLevel()==='anonymous';
-        }
-        elseif ($person->getRole()!=='Staff' && $person->getRole()!=='Administrator') {
-            return in_array(
-                $this->getDisplayPermissionLevel(),
-                ['public','anonymous']
-            );
-        }
-        return true;
+        return ($p && in_array($p->getRole(), ['Administrator', 'Staff']))
+            ? true
+            : $this->getDisplayPermissionLevel() == 'public';
     }
 
-    public function allowsPosting(?Person $person=null): bool
+    public function allowsPosting(?Person $p=null): bool
     {
-        if (!$person) {
-            return $this->getPostingPermissionLevel()==='anonymous';
-        }
-        elseif ($person->getRole()!=='Staff' && $person->getRole()!=='Administrator') {
-            return in_array(
-                $this->getPostingPermissionLevel(),
-                ['public','anonymous']
-            );
-        }
-        return true;
+        return ($p && in_array($p->getRole(), ['Administrator', 'Staff']))
+            ? true
+            : $this->getPostingPermissionLevel() == 'public';
     }
 
     /**

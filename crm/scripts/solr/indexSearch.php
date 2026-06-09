@@ -17,7 +17,7 @@ $delete->addCommit();
 $search->solr->update($delete);
 
 
-$sql    = 'select * from tickets';
+$sql    = 'select * from tickets order by id desc';
 $result = Database::query($sql, []);
 $count  = count($result);
 foreach ($result as $c=>$row) {
