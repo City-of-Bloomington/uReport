@@ -160,6 +160,10 @@ class Ticket extends ActiveRecord
                 $this->setAssignedPerson_id(1);
             }
         }
+
+        if (!$this->getId() && !$this->getReportedByPerson_id()) {
+            $this->setDisplayPermissionLevel('private');
+        }
     }
 
     public function updateSearchIndex()
