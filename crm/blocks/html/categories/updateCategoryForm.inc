@@ -101,9 +101,7 @@ $helper = $this->template->getHelper('field');
     </fieldset>
     <fieldset><legend><?= $this->_('permissions_required'); ?></legend>
         <?php
-            global $ACL;
-            $options = [];
-            foreach ($ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
+            $options = [['value'=>'public'], ['value'=>'private']];
             echo $helper->field([
                 'name'    => 'postingPermissionLevel',
                 'id'      => 'postingPermissionLevel',
@@ -112,8 +110,6 @@ $helper = $this->template->getHelper('field');
                 'value'   => $postingPermissionLevel,
                 'options' => $options
             ]);
-            $options = [];
-            foreach ($ACL->getRoles() as $role) { $options[] = ['value'=>strtolower($role), 'label'=>"$role"]; }
             echo $helper->field([
                 'name'    => 'displayPermissionLevel',
                 'id'      => 'displayPermissionLevel',

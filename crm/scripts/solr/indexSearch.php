@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2021 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -17,7 +17,7 @@ $delete->addCommit();
 $search->solr->update($delete);
 
 
-$sql    = 'select * from tickets order by enteredDate desc';
+$sql    = 'select * from tickets order by id desc';
 $result = Database::query($sql, []);
 $count  = count($result);
 foreach ($result as $c=>$row) {

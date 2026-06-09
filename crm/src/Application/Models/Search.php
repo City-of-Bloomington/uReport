@@ -129,18 +129,12 @@ class Search
 
     public static function getDefaultFilterQuery(): array
     {
-        // User permissions
-        if (!isset($_SESSION['USER'])
-            || !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
-            $permissions = 'anonymous';
-            if (isset($_SESSION['USER']) && $_SESSION['USER']->getRole()=='Public') {
-                $permissions.= ' OR public';
-            }
-            return [
-                ['query'=>"displayPermissionLevel:$permissions"]
-            ];
+        if (   isset   ($_SESSION['USER'])
+            && in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
+            return [];
         }
-        return [];
+
+        return [['query'=>"displayPermissionLevel:public"]];
     }
 
     /**

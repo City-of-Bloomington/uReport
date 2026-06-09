@@ -231,9 +231,9 @@ class Report
             $options[] = "t.client_id in ($ids)";
         }
         if (!empty($get['postingPermissionLevel'])) {
-            $v = $get['postingPermissionLevel']=='anonymous'
-                ? 'anonymous'
-                : 'staff';
+            $v = $get['postingPermissionLevel']=='public'
+                ? 'public'
+                : 'private';
             $options[] = "postingPermissionLevel='$v'";
         }
         if (!empty(    $get['actionPerson_id'])) {

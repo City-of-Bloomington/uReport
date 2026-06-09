@@ -30,31 +30,23 @@ class CategoryTable extends PdoRepository
                         break;
 
                     case 'postableBy':
-                        // If they're authenticated, but they are not staff
-                        if ($v instanceof Person) {
-                            if ($v->getRole()!='Staff' && $v->getRole()!='Administrator') {
-                                // Limit them to public and anonymous categories
-                                $where[] = "c.postingPermissionLevel in ('public', 'anonymous')";
-                            }
+                        // If they are staff
+                        if ($v instanceof Person && in_array($v->getRole(), ['Administrator', 'Staff'])) {
+                            // no filtering
+                            break;
                         }
-                        // They are not logged in. Limit them to anonymous categories
-                        else {
-                            $where[] = "c.postingPermissionLevel='anonymous'";
-                        }
+
+                        $where[] = "c.postingPermissionLevel='public'";
                         break;
 
                     case 'displayableTo':
-                        // If they're authenticated, but they are not staff
-                        if ($v instanceof Person) {
-                            if ($v->getRole()!='Staff' && $v->getRole()!='Administrator') {
-                                // Limit them to public and anonymous categories
-                                $where[] = "c.displayPermissionLevel in ('public', 'anonymous')";
-                            }
+                        // If they are staff
+                        if ($v instanceof Person && in_array($v->getRole(), ['Administrator', 'Staff'])) {
+                            // no filtering
+                            break;
                         }
-                        // They are not logged in. Limit them to anonymous categories
-                        else {
-                            $where[] = "c.displayPermissionLevel='anonymous'";
-                        }
+
+                        $where[] = "c.displayPermissionLevel='public'";
                         break;
 
                     case 'department_id':
@@ -72,11 +64,9 @@ class CategoryTable extends PdoRepository
             }
         }
         // Only get categories this user is allowed to see or post to
-        if (!isset($_SESSION['USER'])) {
-            $where[] = "(c.postingPermissionLevel='anonymous' or c.displayPermissionLevel='anonymous')";
-        }
-        elseif ($_SESSION['USER']->getRole()!='Staff' && $_SESSION['USER']->getRole()!='Administrator') {
-            $where[] = "(c.postingPermissionLevel in ('public','anonymous') or c.displayPermissionLevel in ('public','anonymous'))";
+        if (   !isset   ($_SESSION['USER'])
+            || !in_array($_SESSION['USER']->getRole(), ['Administrator', 'Staff'])) {
+            $where[] = "(c.postingPermissionLevel='public' or c.displayPermissionLevel='public')";
         }
 
         $sql  = parent::buildSql($select, $joins, $where, null, $order);
