@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2012-2025 City of Bloomington, Indiana
+ * @copyright 2012-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 namespace Application\Models;
@@ -9,9 +9,9 @@ use Application\Url;
 
 use Solarium\Client;
 use Solarium\Core\Client\Adapter\Curl;
+use Solarium\Core\Query\DocumentInterface;
 use Solarium\Exception\ExceptionInterface;
 use Solarium\QueryType\Select\Result\Result;
-use Solarium\QueryType\Update\Query\Document;
 use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -320,13 +320,9 @@ class Search
     /**
      * Prepares a Solr Document with the correct fields for the record type
      */
-    public function createDocument(Ticket $ticket, UpdateQuery $update): Document
+    public function createDocument(Ticket $ticket, UpdateQuery $update): DocumentInterface
     {
         // These are the fields from the tickets table that we're indexing
-        //
-        // Note: enteredDate, latitude, longitude are indexed as well, even
-        // though they are not in this list.
-        // They are just handled slightly differently from the generic fields listed
         $ticketFields = [
             'id', 'category_id', 'client_id',
             'enteredByPerson_id', 'assignedPerson_id',
@@ -334,26 +330,30 @@ class Search
             'status', 'substatus_id',
             'contactMethod_id', 'issueType_id', 'reportedByPerson_id',
             'description'
-            // enteredDate, latitude, longitude
         ];
 
-        /** @var Document $document */
         $document = $update->createDocument();
-        $document->setField('recordKey',  "t_{$ticket->getId()}");
-        $document->setField('recordType', 'ticket');
-        $document->setField('enteredDate', $ticket->getEnteredDate(Search::DATE_FORMAT));
+        $document->recordKey   = "t_{$ticket->getId()}";
+        $document->recordType  = 'ticket';
+        $document->enteredDate = $ticket->getEnteredDate(Search::DATE_FORMAT);
+
+        $v = $ticket->getDisplayPermissionLevel()
+           ? $ticket->getDisplayPermissionLevel()
+           : ($ticket->getCategory_id() ? $ticket->getCategory()->getDisplayPermissionLevel() : 'private');
+        $document->displayPermissionLevel = $v;
+
         if ($ticket->getClosedDate()) {
-            $document->setField('closedDate', $ticket->getClosedDate(Search::DATE_FORMAT));
+            $document->closedDate = $ticket->getClosedDate(Search::DATE_FORMAT);
         }
 
         if ($ticket->getLatLong()) {
-            $document->setField('coordinates', $ticket->getLatLong());
+            $document->coordinates = $ticket->getLatLong();
         }
+
         if ($ticket->getCategory()) {
             $c = $ticket->getCategory();
-            $document->setField('displayPermissionLevel', $c->getDisplayPermissionLevel());
             if ($c->getSlaDays()) {
-                $document->setField('slaDays', $c->getSlaDays());
+                $document->slaDays = $c->getSlaDays();
             }
         }
 
@@ -361,19 +361,19 @@ class Search
         foreach ($ticketFields as $f) {
             $get = 'get'.ucfirst($f);
             if ($ticket->$get()) {
-                $document->setField($f, $ticket->$get());
+                $document->$f = $ticket->$get();
                 // For the _id fields, also add a string value
                 // ie. category_id=12, category='Graffiti'
                 if (substr($f, -3) == '_id') {
                     $o = substr($f, 0, -3);
-                    $document->setField($o, self::sortableString($ticket, $f));
+                    $document->$o = self::sortableString($ticket, $f);
                 }
             }
         }
         $person = $ticket->getAssignedPerson();
         if ($person && $person->getDepartment_id()) {
-            $document->setField('department_id', $person->getDepartment_id());
-            $document->setField('department',    self::sortableString($person, 'department_id'));
+            $document->department_id = $person->getDepartment_id();
+            $document->department    = self::sortableString($person, 'department_id');
         }
 
         // Index extra fields provided by the AddressService
@@ -381,7 +381,7 @@ class Search
         if ($additionalFields) {
             foreach ($additionalFields as $key=>$value) {
                 if ($value) {
-                    $document->setField($key, $value);
+                    $document->$key = $value;
                 }
             }
         }
@@ -389,11 +389,11 @@ class Search
         if ($ticket->getLatitude() && $ticket->getLongitude()) {
             $latitude  = $ticket->getLatitude();
             $longitude = $ticket->getLongitude();
-            $document->setField('latitude',  $latitude);
-            $document->setField('longitude', $longitude);
+            $document->latitude  = $latitude;
+            $document->longitude = $longitude;
 
             foreach ($ticket->getClusterIds() as $key=>$value) {
-                $document->setField($key, $value);
+                $document->$key = $value;
             }
         }
 

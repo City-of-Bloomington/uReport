@@ -47,6 +47,12 @@ if ($person && ($person->getUsername() || $canView)) {
     $fields.= "<dl><dt>{$this->_('assignedPerson_id')}</dt><dd>$name</dd></dl>";
 }
 
+if ($canView) {
+    $c =  $this->ticket->getDisplayPermissionLevel()
+      ?? ($this->ticket->getCategory_id() ? $this->ticket->getCategory()->getDisplayPermissionLevel() : '');
+    $fields.= "<dl><dt>{$this->_('displayPermissionLevel')}</dt><dd>$c</dd></dl>";
+}
+
 $cf = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getCustomFields() : null;
 if ($cf) {
     $data = $this->ticket->getCustomFields();

@@ -1,16 +1,18 @@
 <?php
 /**
- * @copyright 2019 City of Bloomington, Indiana
+ * @copyright 2019-2026 City of Bloomington, Indiana
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
 namespace Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+
 use Application\Models\Category;
 use Application\Models\Department;
 use Application\Models\Person;
 use Application\Models\Substatus;
+use Application\Models\Person;
 use Application\Models\Ticket;
 
 class TicketTest extends TestCase
@@ -348,5 +350,25 @@ class TicketTest extends TestCase
             'latitude'    => 39.170085621693396,
             'longitude'   => -86.53678539714889
         ]);
+    }
+
+    public function testDisplayPermission()
+    {
+        $ticket = new Ticket();
+        $ticket->setDisplayPermissionLevel('private');
+
+        $this->assertEquals('private', $ticket->getDisplayPermissionLevel());
+        $this->assertFalse($ticket->allowsDisplay());
+
+        $p = new Person();
+        $p->setRole('Staff');
+        $this->assertTrue($ticket->allowsDisplay($p));
+
+        $p->setRole('Administrator');
+        $this->assertTrue($ticket->allowsDisplay($p));
+
+        $ticket->setDisplayPermissionLevel('public');
+        $this->assertEquals('public', $ticket->getDisplayPermissionLevel());
+        $this->assertTrue($ticket->allowsDisplay());
     }
 }

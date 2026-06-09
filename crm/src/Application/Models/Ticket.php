@@ -211,6 +211,7 @@ class Ticket extends ActiveRecord
     public function getContactMethod_id()    { return parent::get('contactMethod_id');    }
     public function getResponseMethod_id()   { return parent::get('responseMethod_id');   }
     public function getDescription()         { return parent::get('description');         }
+    public function getDisplayPermissionLevel() { return parent::get('displayPermissionLevel'); }
     public function getParent()           { return parent::getForeignKeyObject(__namespace__.'\Ticket',        'ticket_id');           }
     public function getSubstatus()        { return parent::getForeignKeyObject(__namespace__.'\Substatus',     'substatus_id');        }
     public function getCategory()         { return parent::getForeignKeyObject(__namespace__.'\Category',      'category_id');         }
@@ -238,6 +239,7 @@ class Ticket extends ActiveRecord
     public function setState      ($s) { parent::set('state',       $s); }
     public function setZip        ($s) { parent::set('zip',         $s); }
     public function setDescription($s) { parent::set('description', $s); }
+    public function setDisplayPermissionLevel($s) { parent::set('displayPermissionLevel', $s); }
     public function setEnteredDate ($date) { parent::setDateData('enteredDate',  $date); }
     public function setLastModified($date) { parent::setDateData('lastModified', $date); }
     public function setClosedDate  ($date) { parent::setDateData('closedDate',   $date); }
@@ -261,6 +263,7 @@ class Ticket extends ActiveRecord
     public function setAssignedPerson  (Person        $o) { parent::setForeignKeyObject(__namespace__.'\Person',        'assignedPerson_id',  $o); }
     public function setContactMethod   (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'contactMethod_id',   $o); }
     public function setResponseMethod  (ContactMethod $o) { parent::setForeignKeyObject(__namespace__.'\ContactMethod', 'responseMethod_id',  $o); }
+
 
     public function setLatitude ($s)  {
         if (!empty($s)) {
@@ -578,6 +581,18 @@ class Ticket extends ActiveRecord
                 }
             }
         }
+
+        $v = !empty($post['displayPermissionLevel'])
+                 ? ($post['displayPermissionLevel']=='public' ? 'public' : 'private')
+                 : null;
+        $c = $this->getDisplayPermissionLevel();
+        if ($v != $c) {
+            $changed = true;
+            $this->setDisplayPermissionLevel($v);
+            $data['original']['displayPermissionLevel'] = $c;
+            $data['updated' ]['displayPermissionLevel'] = $v;
+        }
+
         if ($changed) {
             $this->save();
 
@@ -777,10 +792,15 @@ class Ticket extends ActiveRecord
     /**
      * Checks whether the user is supposed to be allowed to see this ticket
      */
-    public function allowsDisplay(?Person $person=null): bool
+    public function allowsDisplay(?Person $p=null): bool
     {
-        $category = $this->getCategory_id() ? $this->getCategory() : new Category();
-        return $category->allowsDisplay($person);
+        if ($this->getDisplayPermissionLevel()) {
+            return $this->getDisplayPermissionLevel() == 'public'
+                || ($p && in_array($p->getRole(), ['Administrator', 'Staff']));
+        }
+        return $this->getCategory_id()
+             ? $this->getCategory()->allowsDisplay($p)
+             : false;
     }
 
     public function getSlaDays()

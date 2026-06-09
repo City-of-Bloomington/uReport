@@ -10,3 +10,5 @@ alter table categories drop displayPermissionLevel;
 alter table categories drop postingPermissionLevel;
 alter table categories rename column temp_display to displayPermissionLevel;
 alter table categories rename column temp_posting to postingPermissionLevel;
+
+alter table tickets add displayPermissionLevel enum('private', 'public') after substatus_id;
