@@ -187,6 +187,7 @@ create table tickets (
 	status              varchar(20) not null default 'open',
 	closedDate          timestamp   null,
 	substatus_id        int         unsigned,
+	displayPermissionLevel enum('private', 'public'),
 	additionalFields    varchar(255),  -- Extra location fields from AddressService
 	customFields        text,          -- Custom user-provided data defined in the Category
 	description         text,

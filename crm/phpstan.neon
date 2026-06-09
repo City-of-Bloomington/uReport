@@ -6,6 +6,7 @@ parameters:
     - Application\Template
     - Application\View
     - Application\Url
+    - Solarium\Core\Query\DocumentInterface
   paths:
     - src/Application
     - src/Domain

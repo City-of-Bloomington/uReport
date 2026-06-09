@@ -10,7 +10,7 @@ use Application\Models\IssueTypeTable;
 $helper  = $this->template->getHelper('field');
 $table   = new IssueTypeTable();
 $list    = $table->find();
-$options = [];
+$options = [['value'=>'']];
 foreach ($list['rows'] as $type) {
     $options[] = ['value'=>$type->getId(), 'label'=>self::escape($type->getName())];
 }
@@ -19,7 +19,6 @@ echo $helper->field([
     'id'       => 'issueType_id',
     'label'    => $this->_('type'),
     'value'    => $this->ticket->getIssueType_id(),
-    'required' => true,
     'type'     => 'select',
     'options'  => $options
 ]);
@@ -63,4 +62,16 @@ echo $helper->field([
     'label' => $this->_('description'),
     'type'  => 'textarea',
     'value' => self::escape($this->ticket->getDescription())
+]);
+
+$c = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getDisplayPermissionLevel() : '';
+if ($c) { $help = $this->_('category').": $c"; }
+echo $helper->field([
+    'name'    => 'displayPermissionLevel',
+    'id'      => 'displayPermissionLevel',
+    'label'   => $this->_('displayPermissionLevel'),
+    'type'    => 'select',
+    'value'   => $this->ticket->getDisplayPermissionLevel(),
+    'options' => [['value'=>''], ['value'=>'public'], ['value'=>'private']],
+    'help'    => $help
 ]);

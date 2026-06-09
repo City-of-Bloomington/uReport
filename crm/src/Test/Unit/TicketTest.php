@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Application\Models\Person;
 use Application\Models\Ticket;
 
 class TicketTest extends TestCase
@@ -27,5 +28,25 @@ class TicketTest extends TestCase
 
         $this->assertNull($ticket->getLatitude ());
         $this->assertNull($ticket->getLongitude());
+    }
+
+    public function testDisplayPermission()
+    {
+        $ticket = new Ticket();
+        $ticket->setDisplayPermissionLevel('private');
+
+        $this->assertEquals('private', $ticket->getDisplayPermissionLevel());
+        $this->assertFalse($ticket->allowsDisplay());
+
+        $p = new Person();
+        $p->setRole('Staff');
+        $this->assertTrue($ticket->allowsDisplay($p));
+
+        $p->setRole('Administrator');
+        $this->assertTrue($ticket->allowsDisplay($p));
+
+        $ticket->setDisplayPermissionLevel('public');
+        $this->assertEquals('public', $ticket->getDisplayPermissionLevel());
+        $this->assertTrue($ticket->allowsDisplay());
     }
 }
