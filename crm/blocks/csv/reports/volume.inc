@@ -18,7 +18,7 @@ $out = fopen('php://output', 'w');
 foreach ($list['rows'] as $d) {
     $data = Report::volumeByCategory($_GET, $d->getId());
     foreach ($data['result'] as $row) {
-        fputcsv($out, [$d->getName(), $row['name'], $row['count']]);
+        fputcsv(stream: $out, escape: '', fields: [$d->getName(), $row['name'], $row['count']]);
     }
 }
 fclose($out);

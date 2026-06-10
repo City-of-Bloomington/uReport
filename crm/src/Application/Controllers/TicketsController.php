@@ -70,6 +70,7 @@ class TicketsController extends Controller
             }
         }
         else {
+            $this->template->setOutputFormat('html');
             $this->template->setFilename('search');
         }
 

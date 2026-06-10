@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2011-2020 City of Bloomington, Indiana
+ * @copyright 2011-2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param Apache_Solr_Response $this->solrObject
  * @param array                $this->fields      Ticket fields the user asked to see
@@ -22,5 +22,5 @@ foreach ($this->fields as $name => $checked) {
     }
 }
 
-fputcsv($OUT, $labels);
+fputcsv(stream: $OUT, fields: $labels, escape: '');
 fclose($OUT);

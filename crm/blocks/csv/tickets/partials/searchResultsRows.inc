@@ -75,6 +75,6 @@ foreach ($tickets as $ticket) {
             $line[] = $value;
         }
     }
-    fputcsv($OUT, $line);
+    fputcsv(stream: $OUT, fields: $line, escape: '');
 }
 fclose($OUT);
