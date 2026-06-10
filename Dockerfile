@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
     && update-locale LANG=en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
+# Install pcov for test coverage analysis
+RUN pecl install pcov \
+    && docker-php-ext-enable pcov
+
 # Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs

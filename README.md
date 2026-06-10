@@ -22,6 +22,21 @@ The easiest way to set up a development environment is with Docker. We recommend
 
 You should see the application running at http://localhost:8080/tickets.
 
+To run unit tests in Docker:
+```
+docker compose exec -w /var/www/html/crm app vendor/bin/phpunit -c src/Test/phpunit.xml --testsuite Unit
+```
+
+To run test coverage analysis:
+```
+docker compose exec -w /var/www/html/crm app vendor/bin/phpunit -c src/Test/phpunit.xml --testsuite Unit --coverage-text
+```
+
+To run PHPStan:
+```
+docker compose exec -w /var/www/html/crm app vendor/bin/phpstan analyse -l 5 --memory-limit 1G
+```
+
 Once you've got hosting sorted out, you can follow the [Wiki instructions](https://github.com/City-of-Bloomington/uReport/wiki/Install) to install uReport on your webserver.
 
 ## Running Tests

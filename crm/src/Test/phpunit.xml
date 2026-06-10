@@ -2,6 +2,12 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.4/phpunit.xsd"
     bootstrap="bootstrap.php"
     backupGlobals="false">
+    <source>
+        <include>
+            <directory>../../src/Application</directory>
+            <directory>../../src/Domain</directory>
+        </include>
+    </source>
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">Unit</directory>
