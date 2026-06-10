@@ -73,6 +73,10 @@ jobs:
         mkdir -p crm/src/Test/data
         cp infra/site_config.test.php crm/src/Test/data/site_config.php
 
+    - name: PHP Stan
+      working-directory: ./crm
+      run: vendor/bin/phpstan analyse -l 5 --memory-limit 1G
+
     - name: Wait for database
       run: ./infra/wait-for-db.sh
 
