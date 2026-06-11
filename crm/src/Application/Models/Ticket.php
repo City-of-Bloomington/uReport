@@ -129,7 +129,7 @@ class Ticket extends ActiveRecord
             }
         }
 
-        if (!$this->data['enteredDate']) {
+        if (empty($this->data['enteredDate'])) {
             $this->setEnteredDate('now');
         }
 

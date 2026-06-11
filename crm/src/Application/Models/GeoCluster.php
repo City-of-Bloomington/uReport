@@ -77,20 +77,10 @@ class GeoCluster extends ActiveRecord
         }
     }
 
-    //----------------------------------------------------------------
-    // Generic Getters & Setters
-    //----------------------------------------------------------------
     public function getLevel()     { return   (int)parent::get('level'    ); }
     public function getLatitude()  { return (float)parent::get('latitude' ); }
     public function getLongitude() { return (float)parent::get('longitude'); }
 
-    public function setLatitude ($f) { $this->data['latitude' ] = $f ? (float)$f : null; }
-    public function setLongitude($f) { $this->data['longitude'] = $f ? (float)$f : null; }
-    public function setLevel    ($i) { $this->data['level'    ] = $i ?   (int)$i : null; }
-
-    //----------------------------------------------------------------
-    // Custom Functions
-    //----------------------------------------------------------------
     public static function updateTicketClusters(Ticket $ticket)
     {
         if ($ticket->getId()) {
@@ -119,11 +109,8 @@ class GeoCluster extends ActiveRecord
      * this will return the ID for that cluster.
      * If it doesn't find a nearby cluster, this will add a
      * new cluster to the database and return the new ID.
-     *
-     * @param Ticket $ticket
-     * @param int $level
      */
-    public static function assignClusterIdForLevel(Ticket $ticket, $level)
+    public static function assignClusterIdForLevel(Ticket $ticket, int $level)
     {
         $lat   = $ticket->getLatitude ();
         $lng   = $ticket->getLongitude();
@@ -147,10 +134,11 @@ class GeoCluster extends ActiveRecord
             return $result[0]['id'];
         }
         else {
-            $cluster = new GeoCluster();
-            $cluster->setLevel($level);
-            $cluster->setLatitude ($lat);
-            $cluster->setLongitude($lng);
+            $cluster = new GeoCluster([
+                'level'     => $level,
+                'latitude'  => $lat,
+                'longitude' => $lng
+            ]);
             $cluster->save();
             return $cluster->getId();
         }

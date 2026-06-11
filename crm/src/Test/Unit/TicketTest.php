@@ -28,4 +28,23 @@ class TicketTest extends TestCase
         $this->assertNull($ticket->getLatitude ());
         $this->assertNull($ticket->getLongitude());
     }
+
+    public function testValidateRequiredFields()
+    {
+        $this->expectNotToPerformAssertions();
+        $ticket = new Ticket([
+            'category_id' => 12,
+            'location'    => 'Rev. Ernest D. Butler Park',
+            'latitude'    => 39.17112475449202,
+            'longitude'   => -86.54195584130858
+        ]);
+        $ticket->validate();
+
+        $ticket = new Ticket([
+            'category_id' => 12,
+            'description' => 'Testing'
+        ]);
+        $ticket->validate();
+
+    }
 }
