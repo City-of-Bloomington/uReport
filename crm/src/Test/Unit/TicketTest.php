@@ -33,7 +33,7 @@ class TicketTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
         $ticket = new Ticket([
-            'category_id' => 12,
+            'category_id' => 1,
             'location'    => 'Rev. Ernest D. Butler Park',
             'latitude'    => 39.17112475449202,
             'longitude'   => -86.54195584130858
@@ -41,7 +41,7 @@ class TicketTest extends TestCase
         $ticket->validate();
 
         $ticket = new Ticket([
-            'category_id' => 12,
+            'category_id' => 1,
             'description' => 'Testing'
         ]);
         $ticket->validate();
