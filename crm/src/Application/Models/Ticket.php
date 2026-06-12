@@ -539,12 +539,11 @@ class Ticket extends ActiveRecord
     public function clearAddressServiceData()
     {
         // Used to identify fields that can be updated from the AddressService
-        $addressServiceFields = array(
+        $addressServiceFields = [
             'location','addressId','city','state','zip','latitude','longitude'
-        );
-        foreach ($addressServiceFields as $field) {
-            $set = 'set'.ucfirst($field);
-            $this->$set('');
+        ];
+        foreach ($addressServiceFields as $f) {
+            $this->data[$f] = null;
         }
         if (defined('ADDRESS_SERVICE')) {
             $fields = array_keys(call_user_func(ADDRESS_SERVICE.'::customFieldDefinitions'));
