@@ -160,7 +160,10 @@ a.current { border:2px solid $color-calltoaction-background; }
     padding-left:1rem;
 
     h1 { font-size:$font-size-normal; }
-    .sentNotification .message { white-space: pre; }
+    .sentNotification .message {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
 }
 
 #location_map { margin-top:$size-gutter; }
