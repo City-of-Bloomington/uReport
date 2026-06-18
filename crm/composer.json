@@ -3,8 +3,9 @@
     "description": "uReport",
     "require": {
         "php": ">=8.5",
+        "facile-it/php-openid-client":     "@stable",
         "graylog2/gelf-php":               "@stable",
-        "jumbojett/openid-connect-php":    "dev-master",
+        "guzzlehttp/guzzle":               "@stable",
         "solarium/solarium":               "@stable",
         "symfony/event-dispatcher":        "@stable",
         "phpmailer/phpmailer":             "@stable",
@@ -19,6 +20,11 @@
             "Application\\": "src/Application",
             "Domain\\":      "src/Domain",
             "Test\\":        "src/Test"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }

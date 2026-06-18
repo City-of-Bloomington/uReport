@@ -6,7 +6,13 @@
 namespace Application\Controllers;
 
 use Application\Models\Person;
-use Jumbojett\OpenIDConnectClient;
+
+use Facile\OpenIDClient\Client\ClientBuilder;
+use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
+use Facile\OpenIDClient\Service\Builder\AuthorizationServiceBuilder;
+use Facile\OpenIDClient\Service\Builder\UserInfoServiceBuilder;
+use GuzzleHttp\Psr7\ServerRequest;
 
 use Application\Block;
 use Application\Controller;
@@ -28,34 +34,69 @@ class LoginController extends Controller
         // internal authentication system
         global $AUTHENTICATION;
         if ( !empty(  $AUTHENTICATION['oidc']['client_id'])) {
-            $config = $AUTHENTICATION['oidc'];
-            $oidc   = new OpenIDConnectClient($config['server'], $config['client_id'], $config['client_secret']);
-            $oidc->addScope(['openid', 'allatclaims', 'profile']);
-            $oidc->setAllowImplicitFlow(true);
-            $oidc->setRedirectURL(BASE_URL.'/login/oidc');
+            $config   = $AUTHENTICATION['oidc'];
+            $request  = ServerRequest::fromGlobals();
 
-            $success = null;
-            try { $success = $oidc->authenticate(); }
-            catch (\Exception $e) { }
-            if (!$success) {
-                $_SESSION['errorMessages'][] = 'invalidLogin';
+            $issuer   = (new IssuerBuilder())->build("$config[server]/.well-known/openid-configuration");
+            $metadata = ClientMetadata::fromArray(['client_id'     => $config['client_id'    ],
+                                                   'client_secret' => $config['client_secret'],
+                                                   'redirect_uris' => [BASE_URL.'/login/oidc'],
+                                                   'token_endpoint_auth_method' => 'client_secret_basic'
+                                                  ]);
+            $service  = (new AuthorizationServiceBuilder())->build();
+            $client   = (new ClientBuilder())
+                      ->setIssuer($issuer)
+                      ->setClientMetadata($metadata)
+                      ->build();
+
+
+            if (isset($_REQUEST['id_token'])) {
+                $params  = $service->getCallbackParams($request, $client);
+                $tokens  = $service->callback($client, $params);
+                $idToken = $tokens->getIdToken();
+                /** @var array<string, mixed> $claims */
+                $claims  = $tokens->claims();
+
+                $nonce   = $_SESSION['nonce'] ?? '';
+                if (!isset($claims['nonce']) || $claims['nonce']!=$nonce) {
+                    header('HTTP/1.1 403 Forbidden', true, 403);
+                    $_SESSION['errorMessages'][] = 'noAccessAllowed';
+                    return;
+                }
+
+                unset($_SESSION['nonce']);
+
+                if (empty($claims[$config['claims']['username']])) {
+                    header('HTTP/1.1 403 Forbidden', true, 403);
+                    $_SESSION['errorMessages'][] = 'ldap/unknownUser';
+                    return;
+                }
+
+                $user = Person::findByUsername($claims[$config['claims']['username']]);
+                if ($user) {
+                    $_SESSION['USER'] = $user;
+                    header("Location: {$this->return_url}");
+                    exit();
+                }
+                else {
+                    header('HTTP/1.1 403 Forbidden', true, 403);
+                    $_SESSION['errorMessages'][] = 'people/unknown';
+                    return;
+                }
             }
 
-            // at this step, the user has been authenticated by the OIDC server
-            $info = $oidc->getVerifiedClaims();
-
-            if (!$info->{$config['claims']['username']}) {
-                $_SESSION['errorMessages'][] = 'ldap/unknownUser';
-            }
-            // They may be authenticated according to ADFS,
-            // but that doesn't mean they have person record
-            // and even if they have a person record, they may not
-            // have a user account for that person record.
-            $this->registerUser($info->{$config['claims']['username']});
+            $_SESSION['nonce'] = bin2hex(random_bytes(32));
+            $idp_url  = $service->getAuthorizationUri($client, [
+                            'response_mode' => 'form_post',
+                            'response_type' => 'id_token',
+                            'nonce'         => $_SESSION['nonce']
+                        ]);
+            header("Location: $idp_url");
+            exit();
         }
 
-        header('Location: '.BASE_URL.'/login?return_url='.$this->return_url);
-        exit();
+        header('HTTP/1.1 404 Not Found', true, 404);
+        $this->template->blocks[] = new Block('404.inc');
     }
 
     public function index()
@@ -69,33 +110,5 @@ class LoginController extends Controller
         session_destroy();
         header('Location: '.$this->return_url);
         exit();
-    }
-
-    public function cas()
-    {
-        http_response_code(404);
-        header('HTTP/1.1 404 Not Found', true, 404);
-        $this->template->blocks = [ new Block('404.inc') ];
-    }
-
-    /**
-     * Checks for a user account with the given username.
-     * If they exist it will register the user into the session and redirect.
-     * Writes to $_SESSION[errorMessages] if there's a problem.
-     */
-    private function registerUser(string $username)
-    {
-        try {
-            $user = Person::findByUsername($username);
-            if ($user) {
-                $_SESSION['USER'] = $user;
-                header("Location: {$this->return_url}");
-                exit();
-            }
-            throw new \Exception('people/unknown');
-        }
-        catch (\Exception $e) {
-            $_SESSION['errorMessages'][] = $e;
-        }
     }
 }
