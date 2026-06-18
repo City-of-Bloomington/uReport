@@ -23,12 +23,6 @@ abstract class View
 
             if (is_dir($dir)) {
                 $this->theme = $dir;
-                $config_file = $dir.'/theme_config.inc';
-
-                if (is_file($config_file)) { 
-                    // @phpstan-ignore require.fileNotFound
-                    $this->theme_config = require $config_file; 
-                }
             }
         }
 
