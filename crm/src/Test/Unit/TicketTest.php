@@ -123,7 +123,7 @@ class TicketTest extends TestCase
 
     public function testValidateSetsDefaultStatus() : void
     {
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -137,28 +137,26 @@ class TicketTest extends TestCase
     {
         $this->expectExceptionMessage('tickets/statusMismatch');
 
-        $subStatus = $this->createStub(Substatus::class);
-
-        $subStatus->method('getId')
-                  ->willReturn(1);
+        $subStatus = new Substatus([
+            'id' => 1
+        ]);
 
         $ticket = new Ticket([
             'category_id' => 1,
             'department_id' => 99,
+            'substatus_id' => $subStatus->getId(),
             'location'    => '401 N Morton St',
             'latitude'    => 39.170085621693396,
             'longitude'   => -86.53678539714889,
             'status'      => 'open'
         ]);
 
-        $ticket->setSubstatus($subStatus);
-
         $ticket->validate();
     }
 
     public function testValidateSetsDefaultEnteredDate() : void
     {
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -172,14 +170,13 @@ class TicketTest extends TestCase
 
     public function testValidateSetsEnteredByPerson(): void
     {
-        $user = $this->createStub(Person::class);
-
-        $user->method('getId')
-             ->willReturn(123);
+        $user = new Person([
+            'id' => 123
+        ]);
 
         $_SESSION['USER'] = $user;
 
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -193,7 +190,7 @@ class TicketTest extends TestCase
     {
         unset($_SESSION['USER']);
 
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -202,18 +199,22 @@ class TicketTest extends TestCase
 
     public function testValidateDoesNotOverwriteExistingEnteredByPerson(): void
     {
-        $originalUser = $this->createStub(Person::class);
-        $sessionUser  = $this->createStub(Person::class);
+        $originalUser = new Person([
+            'id' => 123
+        ]);
 
-        $originalUser->method('getId')
-                     ->willReturn(123);
-        $sessionUser->method('getId')
-                     ->willReturn(456);
+        $_SESSION['USER'] = new Person([
+            'id' => 456
+        ]);
 
-        $_SESSION['USER'] = $sessionUser;
-
-        $ticket = $this->createValidTicket();
-        $ticket->setEnteredByPerson($originalUser);
+        $ticket = new Ticket([
+            'category_id' => 1,
+            'department_id' => 99,
+            'enteredByPerson_id' => $originalUser->getId(),
+            'location'    => '401 N Morton St',
+            'latitude'    => 39.170085621693396,
+            'longitude'   => -86.53678539714889
+        ]);
 
         $ticket->validate();
 
@@ -225,14 +226,18 @@ class TicketTest extends TestCase
 
     public function testValidateDoesNotOverwriteExistingAssignedPerson(): void
     {
-        $user = $this->createStub(Person::class);
+        $user = new Person([
+            'id' => 123
+        ]);
 
-        $user->method('getId')
-             ->willReturn(123);
-
-        $ticket = $this->createValidTicket();
-        $ticket->setCategory_id(1);
-        $ticket->setAssignedPerson($user);
+        $ticket = new Ticket([
+            'category_id' => 1,
+            'department_id' => 99,
+            'assignedPerson_id' => $user->getId(),
+            'location'    => '401 N Morton St',
+            'latitude'    => 39.170085621693396,
+            'longitude'   => -86.53678539714889
+        ]);
 
         $ticket->validate();
 
@@ -251,12 +256,12 @@ class TicketTest extends TestCase
                       ->willReturn(123);
 
         $category->method('getDefaultPerson_id')
-                 ->willReturn(123);
+                 ->willReturn($defaultPerson->getId());
 
         $category->method('getDefaultPerson')
                  ->willReturn($defaultPerson);
 
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
 
         $ticket->validate();
@@ -291,7 +296,7 @@ class TicketTest extends TestCase
         $category->method('getDepartment')
                  ->willReturn($department);
 
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
 
         $ticket->validate();
@@ -304,14 +309,13 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsPersonFromSession(): void
     {
-        $user = $this->createStub(Person::class);
-
-        $user->method('getId')
-             ->willReturn(123);
+        $user = new Person([
+            'id' => 123
+        ]);
 
         $_SESSION['USER'] = $user;
 
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -323,7 +327,7 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsPersonFallback(): void
     {
-        $ticket = $this->createValidTicket();
+        $ticket = $this->createMinimumValidTicket();
 
         $ticket->validate();
 
@@ -333,7 +337,7 @@ class TicketTest extends TestCase
         );
     }
 
-    private function createValidTicket(): Ticket
+    private function createMinimumValidTicket(): Ticket
     {
         return new Ticket([
             'category_id' => 1,
