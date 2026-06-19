@@ -72,8 +72,14 @@ class TicketTest extends TestCase
     {
         $this->expectExceptionMessage('tickets/missingResolution');
 
-        $ticket = $this->createValidTicket();
-        $ticket->setStatus('closed');
+        $ticket = new Ticket([
+            'category_id' => 1,
+            'department_id' => 99,
+            'location'    => '401 N Morton St',
+            'latitude'    => 39.170085621693396,
+            'longitude'   => -86.53678539714889,
+            'status'      => 'closed'
+        ]);
 
         $ticket->validate();
     }
