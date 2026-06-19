@@ -315,7 +315,13 @@ class TicketTest extends TestCase
 
         $_SESSION['USER'] = $user;
 
+        $category = $this->createStub(Category::class);
+
+        $category->method('getDefaultPerson_id')
+                 ->willReturn(null);
+
         $ticket = $this->createMinimumValidTicket();
+        $ticket->setCategory($category);
 
         $ticket->validate();
 
@@ -327,7 +333,13 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsPersonFallback(): void
     {
+        $category = $this->createStub(Category::class);
+
+        $category->method('getDefaultPerson_id')
+                 ->willReturn(null);
+
         $ticket = $this->createMinimumValidTicket();
+        $ticket->setCategory($category);
 
         $ticket->validate();
 
