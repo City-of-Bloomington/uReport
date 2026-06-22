@@ -249,17 +249,15 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsCategoryDefaultPerson(): void
     {
-        $defaultPerson = $this->createStub(Person::class);
-        $category = $this->createStub(Category::class);
+        $defaultPerson = new Person([
+            'id' => 123
+        ]);
 
-        $defaultPerson->method('getId')
-                      ->willReturn(123);
+        $category = new Category([
+            'id' => 77
+        ]);
 
-        $category->method('getDefaultPerson_id')
-                 ->willReturn($defaultPerson->getId());
-
-        $category->method('getDefaultPerson')
-                 ->willReturn($defaultPerson);
+        $category->setDefaultPerson($defaultPerson);
 
         $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
@@ -274,27 +272,21 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsDepartmentDefaultPerson(): void
     {
-        $defaultPerson = $this->createStub(Person::class);
-        $department = $this->createStub(Department::class);
-        $category = $this->createStub(Category::class);
+        $defaultPerson = new Person([
+            'id' => 123
+        ]);
 
-        $defaultPerson->method('getId')
-                      ->willReturn(123);
+        $department = new Department([
+            'id'               => 99, 
+            'defaultPerson_id' => 123
+        ]);
 
-        $department->method('getId')
-                      ->willReturn(99);
+        $category = new Category([
+            'id' => 77
+        ]);
 
-        $department->method('getDefaultPerson_id')
-                 ->willReturn(123);
-
-        $department->method('getDefaultPerson')
-                 ->willReturn($defaultPerson);
-
-        $category->method('getDepartment_id')
-                 ->willReturn(99);
-
-        $category->method('getDepartment')
-                 ->willReturn($department);
+        $category->setDepartment($department);
+        $department->setDefaultPerson($defaultPerson);
 
         $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
@@ -309,16 +301,15 @@ class TicketTest extends TestCase
 
     public function testValidateAssignsPersonFromSession(): void
     {
-        $user = new Person([
+        $sessionUser = new Person([
             'id' => 123
         ]);
 
-        $_SESSION['USER'] = $user;
+        $_SESSION['USER'] = $sessionUser;
 
-        $category = $this->createStub(Category::class);
-
-        $category->method('getDefaultPerson_id')
-                 ->willReturn(null);
+        $category = new Category([
+            'id' => 77
+        ]);
 
         $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
@@ -326,17 +317,16 @@ class TicketTest extends TestCase
         $ticket->validate();
 
         $this->assertSame(
-            $user->getId(),
+            $sessionUser->getId(),
             $ticket->getAssignedPerson_id()
         );
     }
 
     public function testValidateAssignsPersonFallback(): void
     {
-        $category = $this->createStub(Category::class);
-
-        $category->method('getDefaultPerson_id')
-                 ->willReturn(null);
+        $category = new Category([
+            'id' => 77
+        ]);
 
         $ticket = $this->createMinimumValidTicket();
         $ticket->setCategory($category);
