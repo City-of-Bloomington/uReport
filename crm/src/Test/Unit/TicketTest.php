@@ -144,12 +144,12 @@ class TicketTest extends TestCase
         $ticket = new Ticket([
             'category_id' => 1,
             'department_id' => 99,
-            'substatus_id' => $subStatus->getId(),
             'location'    => '401 N Morton St',
             'latitude'    => 39.170085621693396,
             'longitude'   => -86.53678539714889,
             'status'      => 'open'
         ]);
+        $ticket->setSubstatus($subStatus);
 
         $ticket->validate();
     }
