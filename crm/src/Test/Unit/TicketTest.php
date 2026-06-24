@@ -12,7 +12,6 @@ use Application\Models\Category;
 use Application\Models\Department;
 use Application\Models\Person;
 use Application\Models\Substatus;
-use Application\Models\Person;
 use Application\Models\Ticket;
 
 class TicketTest extends TestCase

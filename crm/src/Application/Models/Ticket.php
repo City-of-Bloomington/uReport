@@ -57,10 +57,12 @@ class Ticket extends ActiveRecord
         else {
             // This is where the code goes to generate a new, empty instance.
             // Set any default values for properties that need it here
-            $this->setEnteredDate('now');
-            $this->setStatus('open');
-            $this->setCity(DEFAULT_CITY);
-            $this->setState(DEFAULT_STATE);
+            $this->data = [
+                'enteredDate' => date(ActiveRecord::MYSQL_DATETIME_FORMAT),
+                'status'      => 'open',
+                'city'        => DEFAULT_CITY,
+                'state'       => DEFAULT_STATE
+            ];
             if (isset($_SESSION['USER'])) {
                 $this->setEnteredByPerson($_SESSION['USER']);
             }
