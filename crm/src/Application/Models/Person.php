@@ -115,6 +115,7 @@ class Person extends ActiveRecord
             Database::execute('delete from peopleAddresses where person_id=?', [$this->getId()]);
             Database::execute('delete from peoplePhones    where person_id=?', [$this->getId()]);
             Database::execute('delete from peopleEmails    where person_id=?', [$this->getId()]);
+            Database::execute('delete from bookmarks       where person_id=?', [$this->getId()]);
 
             parent::delete();
         }
