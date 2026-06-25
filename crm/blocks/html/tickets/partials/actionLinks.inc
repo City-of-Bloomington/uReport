@@ -74,6 +74,12 @@ use Application\Models\Department;
             'attrs' => ['data-callback'=>'changeLocation']
         ];
     }
+    if (Person::isAllowed('tickets', 'changeVisibility')) {
+        $subgroup[] = [
+            'url'   => BASE_URI.'/tickets/changeVisibility?ticket_id='.$ticket_id,
+            'label' => 'Change Visibility'
+        ];
+    }
     if (Person::isAllowed('media', 'upload')) {
         $subgroup[] = [
             'url'   => BASE_URI.'/media/upload?ticket_id='.$ticket_id,

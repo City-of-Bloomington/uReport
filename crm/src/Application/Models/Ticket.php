@@ -588,17 +588,6 @@ class Ticket extends ActiveRecord
             }
         }
 
-        $v = !empty($post['displayPermissionLevel'])
-                 ? ($post['displayPermissionLevel']=='public' ? 'public' : 'private')
-                 : null;
-        $c = $this->getDisplayPermissionLevel();
-        if ($v != $c) {
-            $changed = true;
-            $this->setDisplayPermissionLevel($v);
-            $data['original']['displayPermissionLevel'] = $c;
-            $data['updated' ]['displayPermissionLevel'] = $v;
-        }
-
         if ($changed) {
             $this->save();
 

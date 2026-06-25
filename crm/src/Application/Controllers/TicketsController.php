@@ -459,6 +459,31 @@ class TicketsController extends Controller
         ];
     }
 
+    public function changeVisibility()
+    {
+        $t = $this->loadTicket((int)$_REQUEST['ticket_id']);
+
+        if (isset($_POST['ticket_id'])) {
+            $v = !empty($_POST['displayPermissionLevel'])
+                     ? ($_POST['displayPermissionLevel']=='public' ? 'public' : 'private')
+                     : null;
+            $t->setDisplayPermissionLevel($v);
+            try {
+                $t->save();
+                $this->redirectToTicketView($t);
+            }
+            catch (\Exception $e) {
+                $_SESSION['errorMessages'][] = $e;
+            }
+        }
+
+        $this->template->title = 'Change Visibility';
+        $this->template->blocks = [
+            new Block('tickets/changeVisibilityForm.inc', ['ticket'=>$t]),
+            new Block('tickets/ticketInfo.inc',           ['ticket'=>$t,'disableButtons'=>true])
+        ];
+    }
+
     public function changeCategory()
     {
         $ticket = $this->loadTicket((int)$_REQUEST['ticket_id']);

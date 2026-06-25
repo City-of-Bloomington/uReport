@@ -63,15 +63,3 @@ echo $helper->field([
     'type'  => 'textarea',
     'value' => self::escape($this->ticket->getDescription())
 ]);
-
-$c = $this->ticket->getCategory_id() ? $this->ticket->getCategory()->getDisplayPermissionLevel() : '';
-if ($c) { $help = $this->_('category').": $c"; }
-echo $helper->field([
-    'name'    => 'displayPermissionLevel',
-    'id'      => 'displayPermissionLevel',
-    'label'   => $this->_('displayPermissionLevel'),
-    'type'    => 'select',
-    'value'   => $this->ticket->getDisplayPermissionLevel(),
-    'options' => [['value'=>''], ['value'=>'public'], ['value'=>'private']],
-    'help'    => $help
-]);
