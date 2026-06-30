@@ -21,9 +21,9 @@ INSERT INTO categories (
     displayPermissionLevel, postingPermissionLevel,
     customFields, lastModified, slaDays
 ) VALUES
-(1, 'Test Category', NULL, 1, 1, 'staff', 'staff', NULL, '2013-09-11 03:45:27', 1),
-(2, 'Another Category', NULL, 1, 1, 'staff', 'staff', NULL, '2014-07-10 16:43:01', 1),
-(3, 'Public Category', NULL, 1, 1, 'anonymous', 'anonymous', NULL, '2014-07-10 16:43:01', 1);
+(1, 'Test Category', NULL, 1, 1, 'private', 'private', NULL, '2013-09-11 03:45:27', 1),
+(2, 'Another Category', NULL, 1, 1, 'private', 'private', NULL, '2014-07-10 16:43:01', 1),
+(3, 'Public Category', NULL, 1, 1, 'public', 'public', NULL, '2014-07-10 16:43:01', 1);
 
 -- department_categories
 INSERT INTO department_categories (department_id, category_id) VALUES
