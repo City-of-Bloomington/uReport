@@ -150,3 +150,9 @@ msgstr "The password you entered is not correct"
 
 msgid "users/passwordsDontMatch"
 msgstr "The new passwords you typed do not match"
+
+msgid "solr/searchError"
+msgstr "A search query error occurred"
+
+msgid "solr/indexingError"
+msgstr "An error occurred updating the search index"

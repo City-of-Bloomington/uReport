@@ -80,8 +80,11 @@ class TicketsController extends Controller
             $result = $search->query($query, !$paginated);
         }
         catch (\Exception $e) {
+            $log = get_exception_handler();
+            if (is_callable($log)) { $log($e); }
+
             header('HTTP/1.1 400 Bad Request', true, 400);
-            $_SESSION['errorMessages'][] = $e;
+            $_SESSION['errorMessages'][] = 'solr/searchError';
             $this->template->blocks = [ new Block('400.inc') ];
             return;
         }
