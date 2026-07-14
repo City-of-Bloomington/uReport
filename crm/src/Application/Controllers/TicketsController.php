@@ -48,6 +48,7 @@ class TicketsController extends Controller
                 case 'addressId':
                 case 'issueType_id':
                 case 'contactMethod_id':
+                case 'page':
                     if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
                     else { unset($_GET[$k]); }
                 break;
@@ -76,6 +77,11 @@ class TicketsController extends Controller
     public function index()
     {
         self::cleanRequestParameters();
+        if ($_GET['page'] > Search::MAX_PAGE) {
+            header('HTTP/1.1 404 Not Found', true, 404);
+            $this->template->blocks = [ new Block('404.inc') ];
+            return;
+        }
 
         $paginated = true;
         $format    = $_GET['format'] ?? 'html';

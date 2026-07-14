@@ -22,6 +22,7 @@ class Search
     public static $defaultSort = ['enteredDate'=>'desc'];
 
     const ITEMS_PER_PAGE  = 10;
+    const MAX_PAGE        = 40000;
     const MAX_RAW_RESULTS = 10000;
     const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
 
