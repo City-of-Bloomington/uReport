@@ -36,24 +36,46 @@ class TicketsController extends Controller
         }
     }
 
+    private static function cleanRequestParameters()
+    {
+        foreach ($_GET as $k=>$v) {
+            switch ($k) {
+                case 'id':
+                case 'department_id':
+                case 'category_id':
+                case 'client_id':
+                case 'substatus_id':
+                case 'addressId':
+                case 'issueType_id':
+                case 'contactMethod_id':
+                    if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
+                    else { unset($_GET[$k]); }
+                break;
+
+                case 'enteredDate':
+                    $r = '/[^\d\/]/';
+                    if (isset($_GET['enteredDate']['start'])) { $_GET['enteredDate']['start'] = preg_replace($r, '', $_GET['enteredDate']['start']); }
+                    if (isset($_GET['enteredDate']['end'  ])) { $_GET['enteredDate']['end'  ] = preg_replace($r, '', $_GET['enteredDate']['end'  ]); }
+                break;
+
+                case 'bbox':
+                    $r = '/[^\d\.\-\,]/';
+                    $_GET['bbox'] = preg_replace($r, '', $_GET['bbox']);
+                break;
+
+                default:
+                    $r = '/[^\w\x20]/';
+            }
+        }
+    }
+
 
     /**
      * Provides ticket searching
      */
     public function index()
     {
-        foreach ($_GET as $k=>$v) {
-            if (substr($k, -3) == '_id') {
-                if (is_numeric(trim($v))) { $_GET[$k] = (int)$v; }
-                else {
-                    unset($_GET[$k]);
-                    header('HTTP/1.1 400 Bad Request', true, 400);
-                    $_SESSION['errorMessages'][] = new \Exception("invalid $k");
-                    $this->template->blocks = [ new Block('400.inc') ];
-                    return;
-                }
-            }
-        }
+        self::cleanRequestParameters();
 
         $paginated = true;
         $format    = $_GET['format'] ?? 'html';
