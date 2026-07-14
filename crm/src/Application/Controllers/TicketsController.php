@@ -77,7 +77,7 @@ class TicketsController extends Controller
     public function index()
     {
         self::cleanRequestParameters();
-        if ($_GET['page'] > Search::MAX_PAGE) {
+        if (isset($_GET['page']) && $_GET['page'] > Search::MAX_PAGE) {
             header('HTTP/1.1 404 Not Found', true, 404);
             $this->template->blocks = [ new Block('404.inc') ];
             return;
