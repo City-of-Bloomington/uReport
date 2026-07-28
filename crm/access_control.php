@@ -42,11 +42,10 @@ $ACL->addResource(new Resource('solr'));
 $ACL->addResource(new Resource('open311'));
 $ACL->addResource(new Resource('clients'));
 $ACL->addResource(new Resource('reports'));
-$ACL->addResource(new Resource('metrics'));
 $ACL->addResource(new Resource('bookmarks'));
 
 // Permissions for non-authenticated web browsing
-$ACL->allow(null,['callback', 'login', 'open311', 'metrics']);
+$ACL->allow(null,['callback', 'login', 'open311']);
 $ACL->allow(null, ['index','tickets','locations'], ['index','view', 'thumbnails']);
 $ACL->allow(null, 'media', 'resize');
 $ACL->allow(null, 'solr', 'index');
