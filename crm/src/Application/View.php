@@ -132,6 +132,7 @@ abstract class View
                 : ngettext (         $msgid[0], $msgid[1], $msgid[2]);
         }
         else {
+            if (strlen($msgid) > 64) { return $msgid; }
             return $domain
                 ? dgettext($domain, $msgid)
                 : gettext (         $msgid);
