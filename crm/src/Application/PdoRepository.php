@@ -18,6 +18,9 @@ abstract class PdoRepository
         $this->pdo = Database::getConnection();
     }
 
+    /**
+     * @throws \PDOException
+     */
     public function find(array $fields=[], ?string $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select = 'select * from '.static::TABLENAME;
@@ -53,6 +56,9 @@ abstract class PdoRepository
         return $sql;
     }
 
+    /**
+     * @throws \PDOException
+     */
     protected function performSelect(string $select, array $params, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $total = null;

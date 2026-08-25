@@ -20,6 +20,9 @@ class TicketTable extends PdoRepository
         'enteredDate', 'location', 'description', 'category_id', 'status'
     ];
 
+    /**
+     * @throws \Exception
+     */
     public function find(array $fields=[], ?string $order='t.enteredDate desc', ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select =  'select t.* from tickets t';

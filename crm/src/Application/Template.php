@@ -38,6 +38,9 @@ class Template extends View
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setFilename(string $filename)
     {
         if ($this->theme
@@ -54,6 +57,9 @@ class Template extends View
         $this->filename = $filename;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setOutputFormat(string $format)
     {
         $format = preg_replace('/[^a-zA-Z]/','',$format);

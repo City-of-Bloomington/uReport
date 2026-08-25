@@ -168,12 +168,18 @@ class Ticket extends ActiveRecord
         // }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function updateSearchIndex()
     {
         $search = new Search();
         $search->add($this);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function save()
     {
         $this->setLastModified('now');
@@ -182,6 +188,9 @@ class Ticket extends ActiveRecord
         $this->updateSearchIndex();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function delete()
     {
         foreach ($this->getMedia() as $m) { $m->delete(); }
@@ -611,32 +620,32 @@ class Ticket extends ActiveRecord
      */
     public function handleAdd(array $post)
     {
+        // Set all the location information using any fields the user posted
+        $fields = [
+            'category_id', 'client_id', 'assignedPerson_id',
+            'location', 'latitude', 'longitude', 'city', 'state', 'zip',
+            'issueType_id', 'description', 'customFields',
+            'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
+        ];
+        foreach ($fields as $field) {
+            if (isset($post[$field])) {
+                $set = 'set'.ucfirst($field);
+                $this->$set($post[$field]);
+            }
+        }
+
+        // If they gave us an address, try and get data from Master Address
+        if (defined('ADDRESS_SERVICE') && $this->getLocation()) {
+            $data = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
+            if ($data) {
+                $this->setAddressServiceData($data);
+            }
+        }
+
         $pdo = Database::getConnection();
         $pdo->beginTransaction();
         try {
-            // Set all the location information using any fields the user posted
-            $fields = [
-                'category_id', 'client_id', 'assignedPerson_id',
-                'location', 'latitude', 'longitude', 'city', 'state', 'zip',
-                'issueType_id', 'description', 'customFields',
-                'reportedByPerson_id', 'contactMethod_id', 'responseMethod_id'
-            ];
-            foreach ($fields as $field) {
-                if (isset($post[$field])) {
-                    $set = 'set'.ucfirst($field);
-                    $this->$set($post[$field]);
-                }
-            }
-
-            // If they gave us an address, try and get data from Master Address
-            if (defined('ADDRESS_SERVICE') && $this->getLocation()) {
-                $data = call_user_func(ADDRESS_SERVICE.'::getLocationData', $this->getLocation());
-                if ($data) {
-                    $this->setAddressServiceData($data);
-                }
-            }
             $this->save();
-
             $this->getCategory()->onTicketAdd($this);
         }
         catch (\Exception $e) {

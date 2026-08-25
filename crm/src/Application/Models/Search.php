@@ -246,6 +246,9 @@ class Search
         return $this->solr->select($select);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function facetValues(string $field): array
     {
         $select = $this->solr->createSelect([
@@ -297,6 +300,8 @@ class Search
 
     /**
      * Indexes a single record in Solr
+     *
+     * @throws \Exception
      */
     public function add(Ticket $ticket)
     {
@@ -309,6 +314,8 @@ class Search
 
     /**
      * Removes a single record from Solr
+     *
+     * @throws \Exception
      */
     public function delete(Ticket $ticket)
     {

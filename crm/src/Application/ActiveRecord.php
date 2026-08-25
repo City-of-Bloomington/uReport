@@ -22,6 +22,9 @@ abstract class ActiveRecord
 
     public function getId(): ?int { return $this->data['id'] ?? null; }
 
+    /**
+     * @throws \PDOException
+     */
     protected function save()
     {
         $this->validate();
@@ -49,6 +52,8 @@ abstract class ActiveRecord
 
     /**
      * Removes this record from the database
+     *
+     * @throws \PDOException
      */
     protected function delete()
     {
@@ -81,6 +86,8 @@ abstract class ActiveRecord
      * Format is specified using PHP's date() syntax
      * http://www.php.net/manual/en/function.date.php
      * If no format is given, the database's raw data is returned
+     *
+     * @throws \DateMalformedStringException
      */
     protected function getDateData(string $dateField, ?string $format=null, ?\DateTimeZone $timezone=null): ?string
     {
@@ -104,6 +111,8 @@ abstract class ActiveRecord
      * If we cannot parse the string using DATETIME_FORMAT, we will
      * fall back to trying something strtotime() understands
      * http://www.php.net/manual/en/function.strtotime.php
+     *
+     * @thows \Exception
      */
     protected function setDateData(string $dateField, string $date, string $format=DATETIME_FORMAT, string $databaseFormat=self::MYSQL_DATETIME_FORMAT)
     {
@@ -130,6 +139,8 @@ abstract class ActiveRecord
      * If we cannot parse the string using $format, we will
      * fall back to trying something strtotime() understands
      * http://www.php.net/manual/en/function.strtotime.php
+     *
+     * @throws \DateMalformedStringException
      */
     public static function parseDate(string $date, string $format=DATETIME_FORMAT): \DateTime
     {
@@ -137,6 +148,7 @@ abstract class ActiveRecord
         if (!$d) {
             $d = new \DateTime($date);
         }
+
         return $d;
     }
 
@@ -160,6 +172,8 @@ abstract class ActiveRecord
      *
      * Loads the object record for the foreign key and caches
      * the object in a private variable
+     *
+     * @throws \Exception
      */
     protected function setForeignKeyField(string $class, string $field, ?string $id=null)
     {

@@ -19,6 +19,9 @@ class TicketHistory extends ActiveRecord
     protected $ticket;
     protected $action;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct($id=null)
     {
         if ($id) {
@@ -205,6 +208,8 @@ class TicketHistory extends ActiveRecord
      * Send a notification to all people involved with the ticket
      *
      * Right now, this is only via email
+     *
+     * @throws \PDOException
      */
     public function sendNotifications()
     {

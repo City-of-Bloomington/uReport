@@ -25,6 +25,9 @@ class Database
         return self::$connections[$db];
     }
 
+    /**
+     * @throws \PDOException
+     */
     public static function query(string $sql, array $params, string $db='default'): array
     {
         $pdo = self::getConnection($db);
@@ -33,6 +36,9 @@ class Database
         return $q->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @throws \PDOException
+     */
     public static function execute(string $sql, array $params, string $db='default')
     {
         $pdo = self::getConnection($db);

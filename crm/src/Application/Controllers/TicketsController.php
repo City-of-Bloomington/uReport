@@ -70,7 +70,6 @@ class TicketsController extends Controller
         }
     }
 
-
     /**
      * Provides ticket searching
      */
