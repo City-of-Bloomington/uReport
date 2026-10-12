@@ -12,3 +12,4 @@ alter table categories rename column temp_display to displayPermissionLevel;
 alter table categories rename column temp_posting to postingPermissionLevel;
 
 alter table tickets add displayPermissionLevel enum('private', 'public') after substatus_id;
+alter table tickets add index (location, displayPermissionLevel);

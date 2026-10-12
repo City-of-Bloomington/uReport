@@ -196,7 +196,8 @@ create table tickets (
 	constraint FK_tickets_client_id          foreign key (client_id)          references clients    (id),
 	constraint FK_tickets_enteredByPerson_id foreign key (enteredByPerson_id) references people     (id),
 	constraint FK_tickets_assignedPerson_id  foreign key (assignedPerson_id)  references people     (id),
-	constraint FK_tickets_substatus_id       foreign key (substatus_id)       references substatus  (id)
+	constraint FK_tickets_substatus_id       foreign key (substatus_id)       references substatus  (id),
+	index (location, displayPermissionLevel)
 );
 
 create table issueTypes (
